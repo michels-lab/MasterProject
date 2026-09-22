@@ -1,0 +1,39 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  13
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    format      ascii;
+    class       dictionary;
+    location    "system";
+    object      functions;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+
+    temperatureProbe
+    {
+        // Mandatory entries
+        type            probes;
+        libs            ("libfieldFunctionObjects.so");
+
+
+        fields          (T);
+
+        probeLocations
+        (
+            (0.02 0.02 0.005)
+        );
+
+        // Optional entries
+        executeControl  timeStep;
+        executeInterval 1;
+        writeControl    timeStep;
+        writeInterval   1;
+        writeToFile     true;    
+    }
+
+

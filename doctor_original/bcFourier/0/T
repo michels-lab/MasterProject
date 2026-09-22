@@ -1,0 +1,63 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  13
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    format      ascii;
+    class       volScalarField;
+    location    "0";
+    object      T;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+dimensions      [0 0 0 1 0 0 0];
+
+internalField   uniform 1500;
+
+boundaryField
+{
+    frontAndBack
+    {
+        type            empty;
+    }
+
+    top
+    {
+        type            externalWallHeatFluxTemperature;
+        h               50;
+        Ta              300;
+        value           $internalField;
+        emmisivity      0.3;
+    }
+
+    bottom
+    {
+        type            externalWallHeatFluxTemperature;
+        h               50;
+        Ta              600;
+        value           $internalField;
+    }
+
+    left
+    {
+        type            externalWallHeatFluxTemperature;
+        h               50;
+        Ta              600;
+        value           $internalField;
+    }
+
+    right
+    {
+        type            externalWallHeatFluxTemperature;
+        h               50;
+        Ta              600;
+        value           $internalField;
+    }
+}
+
+
+// ************************************************************************* //

@@ -1,0 +1,68 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  13
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    format      ascii;
+    class       volScalarField;
+    object      T;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+dimensions      [0 0 0 1 0 0 0];
+
+internalField   uniform 300;
+
+moldAir
+{
+        type            externalWallHeatFluxTemperature;
+        mode            coefficient;
+        h               10;
+        Ta              300;
+        kappaMethod     solidThermo;
+        emissivity      0.5;
+        value           $internalField;    
+}
+
+boundaryField
+{
+    frontAndBack
+    {
+        type            empty;
+    }
+
+    moldTop
+    {
+        $moldAir;
+    }
+
+    moldBottom
+    {
+        $moldAir;
+    }
+
+    moldLeft
+    {
+        $moldAir;
+    }
+
+    moldRight
+    {
+        $moldAir;
+    }
+
+    mold_to_metal
+    {
+        type            coupledTemperature;
+        thicknessLayers   (2e-4); // list of optional wall layer thicknesses (air gap)
+        kappaLayers       (1e-1); // list of optinal wall layer thermal conductivities [W/(m.K)]
+        value           uniform     300;
+    }
+}
+
+
+// ************************************************************************* //
