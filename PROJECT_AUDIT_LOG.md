@@ -1719,3 +1719,62 @@ Doubling the energy-correction count does not materially change the central ther
 Single-run wall/CPU timings are descriptive only; the fact that B4 was slightly faster than B3 despite more energy solves indicates that these timings are not suitable for a strict performance conclusion without repeated runs under controlled machine load.
 
 **Status:** ✅ B4/C4 energy-corrector convergence check complete; B3/C3 result is thermally robust to `nEnergyCorrectors = 2`. Next controlled test: B5/C5 outer-corrector comparison.
+
+
+---
+
+## 2026-09-24 — AUD-047 — Controlled B4/C4 energy-corrector comparison
+**[RUN-VERIFIED] [GIT-VERIFIED]**
+
+The controlled `B4_energy2` and `C4_energy2` cases were completed to 10 s and their solver logs and central temperature/phase probes were committed to Git.
+
+These cases test the effect of setting root `nEnergyCorrectors = 2` relative to the B3/C3 reference configuration.
+
+### Solver behavior
+
+B4:
+- peak metal Courant number: **0.176643**,
+- final Co: mean **0.0154719**, max **0.0602696**,
+- final cumulative continuity: **1.67018e-4**,
+- ExecutionTime: **240.667 s**,
+- ClockTime: **248 s**,
+- no `FOAM FATAL` and no `WARNING` entries,
+- normal `End`.
+
+C4:
+- peak metal Courant number: **0.0700709**,
+- final Co: mean **0.0093469**, max **0.0241928**,
+- final cumulative continuity: **1.78349e-4**,
+- ExecutionTime: **225.476 s**,
+- ClockTime: **226 s**,
+- no `FOAM FATAL` and no `WARNING` entries,
+- normal `End`.
+
+### Central thermal/phase effect of the extra energy corrector
+
+B3 → B4:
+- maximum absolute central-temperature difference: approximately **0.19 K**,
+- maximum absolute central liquid-fraction difference: approximately **5.22e-4**,
+- first downward 1473 K crossing shifts only from **6.666 s** to **6.678 s**,
+- final center temperature changes from **1467.45 K** to **1467.53 K**,
+- final `alpha1` changes from **0.978184** to **0.978506**.
+
+C3 → C4:
+- maximum absolute central-temperature difference: approximately **0.01 K**,
+- maximum absolute central liquid-fraction difference: approximately **1e-6**,
+- first downward 1473 K crossing remains **3.386 s**,
+- final center state remains **1461.60 K**, `alpha1 = 0.954394` at recorded precision.
+
+### Controlled B4/C4 difference
+
+- maximum absolute central-temperature separation: approximately **33.42 K**,
+- maximum absolute central liquid-fraction separation: approximately **0.067017**,
+- C4 retains the same non-monotonic thermal/phase behavior as C3, with center `T_min = 1456.25 K` at 4.822 s and `alpha1_min = 0.932983` at 4.878 s, followed by warming/remelting.
+
+### Conclusion
+
+For this 0–10 s controlled series, increasing `nEnergyCorrectors` from 1 to 2 has negligible effect on the central temperature and liquid-fraction histories. The large B-versus-C thermal separation and C-series rebound/remelting are therefore robust to this specific convergence change.
+
+Timing differences are descriptive single-run observations only and should not be generalized as a computational-cost conclusion without repeated benchmarking.
+
+**Status:** ✅ B4/C4 comparison complete; proceed to B5/C5 outer-corrector test.
