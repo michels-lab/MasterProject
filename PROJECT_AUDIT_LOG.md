@@ -919,3 +919,22 @@ Potential center lines of the 40 × 40 mm metal section include:
 - [ ] Add OpenFOAM-native line sampling for (U), (T) and (alpha_l) without changing solver physics.
 - [ ] Define a reproducible plotting pipeline for velocity/temperature profiles.
 - [ ] Continue experimental/JMatPro validation and keep recalescence interpretation separate from equilibrium remelting.
+
+---
+
+## 2026-09-24 — AUD-033 — B/C comparison contains an additional thermal-boundary difference
+**[GIT-VERIFIED]**
+
+A repository audit found that the current B2–B5 and C2–C5 descendants differ not only in the buoyancy formulation, but also in the external heat-transfer coefficient at `metalTop`:
+
+- B2–B5: `h = 10 W/(m²·K)`
+- C2–C5: `h = 50 W/(m²·K)`
+
+This difference was already present in the initial repository commit (`206f9594`) and remains present in the current files.
+
+**Impact:** if B and C are intended as a controlled comparison of buoyancy formulations, the B/C thermal curves cannot be attributed uniquely to buoyancy while `h` also differs.
+
+**Required action before interpretation:** determine whether the B/C heat-transfer coefficient difference is an intentional representation of two different physical/experimental conditions or an unintended confounding variable. Until that is resolved, report B/C comparisons as multi-parameter comparisons rather than buoyancy-only comparisons.
+
+**Status:** ⚠️ open methodological issue; do not change historical cases retroactively.
+
