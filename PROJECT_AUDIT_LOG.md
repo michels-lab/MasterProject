@@ -1273,3 +1273,32 @@ The controlled 3/4/5 series is suitable for objective B-vs-C numerical compariso
 
 **Status:** ✅ input-set audit passed; simulations may now be run from a clean state.
 
+---
+
+## 2026-09-24 — AUD-041 — README and Audit Log synchronization rule established
+**[PROCESS RULE] [IMPLEMENTED]**
+
+The controlled-series documentation now follows a two-document maintenance rule:
+
+1. `PROJECT_AUDIT_LOG.md` preserves the chronological technical history: what changed, why, evidence, impact and status.
+2. `cases_controlled_buoyancy/README.md` describes the current accepted configuration and workflow of the controlled thesis cases.
+
+Whenever a relevant model change is made — including physics, material properties, boundary conditions, numerical settings, mesh, timestep controls, probes, post-processing, naming or comparison methodology — both documents must be updated.
+
+The controlled-series README was expanded to include:
+
+- purpose of the clean B/C series,
+- case matrix,
+- common B/C settings,
+- current B and C buoyancy formulations,
+- `h = 10 W/(m²·K)`,
+- `startFrom startTime`,
+- C-family `rho = rhoRef = 6820 kg/m³`,
+- pairwise SHA validation,
+- recommended run order,
+- quantities to compare,
+- planned OpenFOAM line-profile work,
+- this maintenance rule.
+
+**Status:** ✅ documentation synchronization rule active.
+
