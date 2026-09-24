@@ -144,7 +144,7 @@ If any additional input file differs in a future revision, that difference must 
 
 | Pair | Run status | Log status | Analysis |
 |---|---|---|---|
-| `B3_reference` / `C3_reference` | Completed locally | `log.foamMultiRun` committed to Git | Pending quantitative review |
+| `B3_reference` / `C3_reference` | Completed to 10 s | `log.foamMultiRun` committed to Git | Solver-log review complete; thermal-probe comparison pending |
 | `B4_energy2` / `C4_energy2` | Pending | Pending | Pending |
 | `B5_outer3` / `C5_outer3` | Pending | Pending | Pending |
 
@@ -171,6 +171,28 @@ For each fresh simulation:
 ./Allclean
 ./Allrun
 ```
+
+
+### B3/C3 reference-run solver metrics
+
+The committed `log.foamMultiRun` files were parsed over the complete 0–10 s run (10,000 steps, `deltaT = 0.001 s`).
+
+| Metric | B3_reference | C3_reference |
+|---|---:|---:|
+| End time | 10 s | 10 s |
+| Time steps | 10,000 | 10,000 |
+| Peak metal Courant number | 0.175912 at 0.283 s | 0.0700709 at 2.510 s |
+| Last reported metal Co max | 0.0606638 | 0.0241928 |
+| Final cumulative continuity | 1.66260e-4 | 1.78349e-4 |
+| Final `h` residual | 8.73216e-11 | 2.46231e-11 |
+| Final `e` residual | 3.73694e-10 | 3.76994e-10 |
+| Final `p_rgh` residual | 3.88108e-8 | 2.68792e-8 |
+| Execution time | 249.556 s | 224.372 s |
+| Clock time | 258 s | 225 s |
+| Fatal errors | 0 | 0 |
+| Warnings | 0 | 0 |
+
+Both reference cases completed normally. The solver-log audit alone does not determine the physical difference between the B and C formulations; that comparison requires the central `T(t)` and `phaseChangeSource:alpha1(t)` probe data.
 
 ## Quantities to compare
 
