@@ -144,7 +144,7 @@ If any additional input file differs in a future revision, that difference must 
 
 | Pair | Run status | Log status | Analysis |
 |---|---|---|---|
-| `B3_reference` / `C3_reference` | Completed to 10 s | `log.foamMultiRun` committed to Git | Solver-log review complete; thermal-probe comparison pending |
+| `B3_reference` / `C3_reference` | Completed to 10 s | Solver logs + central probes committed to Git | Solver and central thermal/phase comparison complete; velocity-field comparison pending |
 | `B4_energy2` / `C4_energy2` | Pending | Pending | Pending |
 | `B5_outer3` / `C5_outer3` | Pending | Pending | Pending |
 
@@ -192,7 +192,7 @@ The committed `log.foamMultiRun` files were parsed over the complete 0–10 s ru
 | Fatal errors | 0 | 0 |
 | Warnings | 0 | 0 |
 
-Both reference cases completed normally. The solver-log audit alone does not determine the physical difference between the B and C formulations; that comparison requires the central `T(t)` and `phaseChangeSource:alpha1(t)` probe data.
+Both reference cases completed normally. The central `T(t)` and `phaseChangeSource:alpha1(t)` probe histories have now also been reviewed; the solver metrics above should therefore be interpreted together with the thermal/phase results below.
 
 
 ## B3/C3 reference-run results
@@ -218,7 +218,36 @@ Interpretation at this stage:
 - B3 requires approximately 11% more CPU time than C3;
 - continuity accumulation is of the same order in both cases.
 
-These differences must not yet be interpreted as definitive physical superiority or as a complete buoyancy comparison. Temperature, phase fraction and velocity-field outputs still need to be compared.
+These solver differences must not be interpreted as definitive physical superiority. Central temperature and phase fraction have now been compared, but velocity-field/profile analysis and comparison with experimental thermal curves are still required before judging which formulation better represents the physical system.
+
+
+### Central thermal/phase probe comparison
+
+The central probe is located at `(0.02 0.02 0.005) m`. Both files contain 10,001 samples from 0 to 10 s at 0.001 s spacing.
+
+| Metric | B3_reference | C3_reference |
+|---|---:|---:|
+| Initial temperature | 1500 K | 1500 K |
+| Initial liquid fraction | 1.000000 | 1.000000 |
+| First downward crossing of liquidus, 1473 K | 6.666 s | 3.386 s |
+| First departure of `alpha1` from 1 | 6.668 s | 3.388 s |
+| Time to `alpha1 = 0.99` | 9.619 s | 3.654 s |
+| Minimum central temperature over 0–10 s | 1467.45 K at 10 s | 1456.25 K at 4.822 s |
+| Minimum central liquid fraction over 0–10 s | 0.978184 at 10 s | 0.932983 at 4.878 s |
+| Final temperature at 10 s | 1467.45 K | 1461.60 K |
+| Final liquid fraction at 10 s | 0.978184 | 0.954394 |
+
+Additional controlled-pair observations:
+
+- C3 reaches the liquidus approximately **3.280 s earlier** than B3.
+- The maximum absolute central-temperature difference is approximately **33.42 K** at **4.644 s** (`B3 = 1489.92 K`, `C3 = 1456.50 K`).
+- The maximum absolute central liquid-fraction difference is approximately **0.0670** at **4.878 s**.
+- C3 reaches a local temperature minimum of **1456.25 K** at 4.822 s and then rises to **1461.60 K** by 10 s, a rebound of about **5.35 K**.
+- C3 liquid fraction reaches **0.932983** at 4.878 s and then increases to **0.954394** by 10 s, which is direct evidence of **local remelting in the model** after the minimum liquid fraction.
+- B3 also shows a smaller transient phase reversal: after first crossing 1473 K at 6.666 s, `alpha1` falls to about **0.997042** at 7.045 s, returns to **1.0** at 7.460 s, and the central temperature crosses back above 1473 K at about 7.447 s before crossing downward again near 9.069 s.
+- At 10 s, B3 is **5.85 K hotter** at the center and has a liquid fraction higher by about **0.02379**.
+
+These non-monotonic center histories must **not** be labeled physical recalescence from the probe alone. In this equilibrium enthalpy-porosity model, convection/mixing and local remelting can produce temperature rebounds. Velocity fields/profiles and experimental thermal curves are required to determine the mechanism and physical validity.
 
 ## Quantities to compare
 

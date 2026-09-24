@@ -1530,3 +1530,63 @@ The higher Courant number in B3 is consistent with stronger velocity magnitudes 
 
 **Status:** ✅ B3/C3 solver-level comparison complete; thermal/phase/velocity comparison pending.
 
+
+
+---
+
+## 2026-09-24 — AUD-046 — Controlled B3/C3 central thermal/phase probe analysis
+**[RUN-VERIFIED] [GIT-VERIFIED]**
+
+The central probe outputs committed for `B3_reference` and `C3_reference` were compared directly:
+
+- `postProcessing/metal/temperatureProbe/0/T`
+- `postProcessing/metal/temperatureProbe/0/phaseChangeSource:alpha1`
+
+Each file contains 10,001 samples from 0 to 10 s at `deltaT = 0.001 s` for the central location `(0.02 0.02 0.005) m`.
+
+### Main thermal/phase metrics
+
+B3:
+- first downward liquidus crossing (1473 K): **6.666 s**,
+- first departure of `alpha1` from 1: **6.668 s**,
+- `alpha1 = 0.99`: approximately **9.619 s**,
+- final center temperature at 10 s: **1467.45 K**,
+- final `alpha1`: **0.978184**.
+
+C3:
+- first downward liquidus crossing (1473 K): **3.386 s**,
+- first departure of `alpha1` from 1: **3.388 s**,
+- `alpha1 = 0.99`: approximately **3.654 s**,
+- minimum center temperature: **1456.25 K at 4.822 s**,
+- minimum `alpha1`: **0.932983 at 4.878 s**,
+- final center temperature at 10 s: **1461.60 K**,
+- final `alpha1`: **0.954394**.
+
+Controlled-pair differences:
+- C3 reaches liquidus approximately **3.280 s earlier** than B3.
+- Maximum absolute central-temperature difference: approximately **33.42 K at 4.644 s**.
+- Maximum absolute central liquid-fraction difference: approximately **0.067017 at 4.878 s**.
+- At 10 s B3 is **5.85 K hotter** and its central liquid fraction is higher by approximately **0.02379**.
+
+### Non-monotonic behavior
+
+C3 shows a clear local rebound after its minimum:
+- `T`: 1456.25 K at 4.822 s → 1461.60 K at 10 s (**+5.35 K**),
+- `alpha1`: 0.932983 at 4.878 s → 0.954394 at 10 s (**+0.021411**).
+
+The simultaneous increase in temperature and liquid fraction is direct evidence of **local remelting in the numerical model**.
+
+B3 shows a smaller transient reversal:
+- first downward liquidus crossing: 6.666 s,
+- local `alpha1` minimum in the first phase-change episode: **0.997042 at 7.045 s**,
+- `alpha1` returns to **1.0 at 7.460 s**,
+- center temperature crosses upward through 1473 K at approximately **7.447 s**,
+- a second downward liquidus crossing occurs at approximately **9.069 s**.
+
+### Interpretation boundary
+
+The probe comparison demonstrates that the two controlled buoyancy/density formulations produce materially different central thermal and phase histories even though their solver settings and boundary conditions are controlled.
+
+However, the observed rebounds must **not** be called physical recalescence from these data alone. The present equilibrium enthalpy-porosity formulation can show non-monotonic local temperature through convective transport/mixing and can locally remelt material. Velocity-field/profile analysis and comparison with experimental thermal curves are required to identify the mechanism and judge physical validity.
+
+**Status:** ✅ B3/C3 solver + central thermal/phase comparison complete; 🟡 velocity/profile and experimental validation pending.
