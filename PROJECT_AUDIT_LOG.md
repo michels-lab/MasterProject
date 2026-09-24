@@ -1167,3 +1167,57 @@ This change should be made deliberately in the new controlled lineage, not retro
 
 **Status:** ✅ `rhoConst=6820` decided; `rhoRef=6820` recommended for internal Boussinesq consistency in the new C cases.
 
+---
+
+## 2026-09-24 — AUD-039 — Controlled buoyancy comparison series created
+**[GIT-VERIFIED] [IMPLEMENTED]**
+
+A new controlled case family was created outside the historical `cases_buoyancy/` directory:
+
+`cases_controlled_buoyancy/`
+
+The historical buoyancy-development cases remain unchanged.
+
+### Controlled cases
+
+- `B3_reference` — derived from historical `B3_docFV`
+- `C3_reference` — derived from historical `C3_docFV`
+- `B4_energy2` — derived from historical `B4_energy2`
+- `C4_energy2` — derived from historical `C4_energy2`
+- `B5_outer3` — derived from historical `B5_outer3`
+- `C5_outer3` — derived from historical `C5_outer3`
+
+### Normalizations applied to all controlled B/C pairs
+
+1. `metalTop h = 10 W/(m²·K)`
+2. `startFrom startTime`
+3. Historical numerical settings for the 3/4/5 experiments are otherwise preserved.
+
+### C-family reference-density update
+
+The controlled C cases use:
+
+- `equationOfState rhoConst`
+- `rho = 6820 kg/m³`
+- `beta = 1.13e-04 1/K`
+- `rhoRef = 6820 kg/m³`
+
+### B-family buoyancy formulation
+
+The controlled B cases preserve:
+
+- `equationOfState icoTabulated`
+- temperature-dependent density
+- `beta = 0` in `solidificationMeltingSource`
+
+### Reproducibility rule
+
+The controlled 3/4/5 pairs are intended to be identical in all tracked inputs except the files defining the two buoyancy formulations:
+
+- `constant/metal/fvModels`
+- `constant/metal/materials/castIron`
+
+A pairwise SHA audit must be performed after creation and before the cases are run.
+
+**Status:** ✅ controlled series created; pairwise SHA verification follows.
+
