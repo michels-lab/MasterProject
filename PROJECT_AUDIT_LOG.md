@@ -1348,3 +1348,30 @@ Generated solution-time directories, meshes, post-processing folders, media and 
 
 **Status:** ✅ repository-wide simulation-log retention rule active.
 
+---
+
+## 2026-09-24 — AUD-044 — Controlled B3/C3 simulation logs committed
+**[GIT-VERIFIED] [RUN ARTIFACTS PRESERVED]**
+
+The controlled reference cases `B3_reference` and `C3_reference` were run locally and their primary OpenFOAM solver logs were committed to Git.
+
+Verified tracked files:
+
+- `cases_controlled_buoyancy/B3_reference/log.foamMultiRun`
+- `cases_controlled_buoyancy/C3_reference/log.foamMultiRun`
+
+Git commit containing the logs:
+
+`d6c307c8ac62755bf103fc15f4505874904c9bb9`
+
+Approximate tracked log sizes:
+
+- B3: 19.61 MB
+- C3: 19.61 MB
+
+No quantitative convergence or thermal interpretation is recorded in this entry yet. Courant number, residuals, continuity, execution time, temperature and phase-fraction metrics must be extracted from the preserved logs/post-processing data before comparison.
+
+The controlled-series README was updated to mark B3/C3 as completed with quantitative review pending.
+
+**Status:** ✅ B3/C3 run artifacts preserved; quantitative analysis pending.
+
