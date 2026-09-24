@@ -49,52 +49,7 @@ temperatureProbe
     writeToFile     true;
 }
 
-horizontalProfiles
-{
-    type            sets;
-    libs            ("libsampling.so");
 
-    // Sample only the fluid metal region
-    region          metal;
-
-    // Write profiles at the case write times
-    writeControl    writeTime;
-
-    interpolationScheme cellPoint;
-    setFormat       raw;
-
-    // U is written as a vector, so the raw profile contains Ux, Uy and Uz.
-    // |U| is derived exactly during analysis from the sampled components.
-    fields
-    (
-        U
-        T
-        phaseChangeSource:alpha1
-    );
-
-    sets
-    {
-        // Horizontal profile at mid-height: y = 20 mm
-        line_y20mm
-        {
-            type        lineUniform;
-            axis        x;
-            start       (0.00025 0.020 0.005);
-            end         (0.03975 0.020 0.005);
-            nPoints     80;
-        }
-
-        // Horizontal profile closer to the free surface: y = 30 mm
-        // The metal top is y = 40 mm, so this line is 10 mm below it.
-        line_y30mm
-        {
-            type        lineUniform;
-            axis        x;
-            start       (0.00025 0.030 0.005);
-            end         (0.03975 0.030 0.005);
-            nPoints     80;
-        }
-    }
-}
+#include "lineProfiles"
 
 // ************************************************************************* //
