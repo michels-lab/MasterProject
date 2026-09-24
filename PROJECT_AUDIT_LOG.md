@@ -1375,3 +1375,97 @@ The controlled-series README was updated to mark B3/C3 as completed with quantit
 
 **Status:** ✅ B3/C3 run artifacts preserved; quantitative analysis pending.
 
+---
+
+## 2026-09-24 — AUD-045 — Controlled B3/C3 solver-log analysis
+**[RUN-VERIFIED] [GIT-VERIFIED]**
+
+The committed `log.foamMultiRun` files for `B3_reference` and `C3_reference` were parsed over the complete controlled 0–10 s simulations.
+
+Both cases:
+
+- executed 10,000 time steps at `deltaT = 0.001 s`,
+- reached `Time = 10`,
+- terminated with `End`,
+- contained no `FOAM FATAL` entries,
+- contained no `WARNING` entries.
+
+### Courant number
+
+B3:
+
+- peak metal `Co_max = 0.175912` at approximately `t = 0.283 s`,
+- mean Co at that instant = `0.00742715`,
+- last reported `Co_max = 0.0606638` near 10 s.
+
+C3:
+
+- peak metal `Co_max = 0.0700709` at approximately `t = 2.510 s`,
+- mean Co at that instant = `0.0205809`,
+- last reported `Co_max = 0.0241928` near 10 s.
+
+Both peaks remain below the case's documented `maxCo = 0.25`; because `adjustTimeStep no`, this value is a comparison threshold rather than an active timestep controller.
+
+### Continuity
+
+B3:
+
+- largest absolute cumulative continuity value observed: approximately `1.70032e-4`,
+- final cumulative continuity: `1.66260e-4`.
+
+C3:
+
+- largest absolute cumulative continuity value observed: approximately `1.78360e-4`,
+- final cumulative continuity: `1.78349e-4`.
+
+At the final reported correction, the global continuity terms were approximately:
+
+- B3: `-1.14209e-11`,
+- C3: `1.25471e-13`.
+
+### Final solver residuals at 10 s
+
+B3:
+
+- metal enthalpy `h`: `8.73216e-11`,
+- mold energy `e`: `3.73694e-10`,
+- final `p_rgh`: `3.88108e-8`.
+
+C3:
+
+- metal enthalpy `h`: `2.46231e-11`,
+- mold energy `e`: `3.76994e-10`,
+- final `p_rgh`: `2.68792e-8`.
+
+After the initial transient (t >= 0.1 s), the maximum final residuals observed for the thermal equations were below approximately:
+
+- B3: `4.27e-7` for metal `h`, `6.03e-8` for mold `e`,
+- C3: `3.76e-7` for metal `h`, `6.01e-8` for mold `e`.
+
+### Computational cost
+
+B3:
+
+- ExecutionTime = `249.556 s`,
+- ClockTime = `258 s`.
+
+C3:
+
+- ExecutionTime = `224.372 s`,
+- ClockTime = `225 s`.
+
+In these specific runs, B3 used approximately 11.2% more execution time and 14.7% more wall-clock time than C3. This timing difference is descriptive for these runs and should not yet be treated as a general model-cost conclusion without repetitions or comparable machine-load conditions.
+
+### Interpretation boundary
+
+The solver logs support that both controlled reference cases completed numerically without solver failure. They do **not** by themselves establish the thermal/phase difference between the two buoyancy formulations.
+
+The next required evidence is the controlled probe output for:
+
+- central `T(t)`,
+- central `phaseChangeSource:alpha1(t)`.
+
+Those files are generated under `postProcessing/`, which remains ignored by the repository's default generated-output rule and has not yet been committed for these runs.
+
+**Status:** ✅ B3/C3 solver-log audit complete; 🟡 thermal/phase comparison pending probe data.
+
