@@ -193,6 +193,28 @@ Planned outputs include:
 
 Any post-processing addition must not change solver physics.
 
+
+## Versioned simulation logs
+
+The primary solver log from each controlled simulation is intentionally versioned in Git:
+
+```text
+log.foamMultiRun
+```
+
+These logs are treated as part of the scientific record because they preserve evidence such as:
+
+- successful solver completion,
+- Courant-number evolution,
+- solver residuals,
+- continuity behavior,
+- iteration history,
+- CPU and wall-clock timing.
+
+The repository still ignores general OpenFOAM logs, calculated time directories, meshes, and other generated output by default. Only `log.foamMultiRun` inside `cases_controlled_buoyancy/` is explicitly exempted from the log ignore rule.
+
+After completing a controlled run, its `log.foamMultiRun` should be committed together with any deliberately selected compact post-processing data needed for analysis.
+
 ## Maintenance rule
 
 This README is a **living description of the current controlled model**.
