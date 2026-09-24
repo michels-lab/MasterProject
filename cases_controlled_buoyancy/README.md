@@ -139,6 +139,17 @@ Those two differences are intentional and define the alternative buoyancy formul
 
 If any additional input file differs in a future revision, that difference must be reviewed before interpreting B-vs-C results as a controlled comparison.
 
+
+## Current run status
+
+| Pair | Run status | Log status | Analysis |
+|---|---|---|---|
+| `B3_reference` / `C3_reference` | Completed locally | `log.foamMultiRun` committed to Git | Pending quantitative review |
+| `B4_energy2` / `C4_energy2` | Pending | Pending | Pending |
+| `B5_outer3` / `C5_outer3` | Pending | Pending | Pending |
+
+The B3/C3 controlled logs were committed in Git commit `d6c307c8`.
+
 ## Recommended run order
 
 Run:
