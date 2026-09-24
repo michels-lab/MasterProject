@@ -965,3 +965,25 @@ No recovered Project Audit Log entry or conversation decision documents a delibe
 
 **Status:** ⚠️ unresolved origin; preserve historical cases and investigate before physical interpretation.
 
+---
+
+## 2026-09-24 — AUD-035 — Common convection coefficient recommended for controlled B/C rerun
+**[GIT-VERIFIED] [LITERATURE-SUPPORTED] [DECISION]**
+
+For the planned controlled B/C comparison, the top free-surface convection coefficient should be made identical in both branches.
+
+Recommended baseline:
+
+`metalTop h = 10 W/(m²·K)`
+
+Rationale:
+
+- OpenFOAM treats `h` as the external convective heat-transfer coefficient and `emissivity` as a separate radiative contribution to the ambient boundary.
+- The Quick-Cup geometry represents a small open-top molten-metal sample exposed to ambient air.
+- Natural-convection correlations for a hot upward-facing horizontal plate place the expected convection coefficient in the order of magnitude of ~10 W/(m²·K) for this small characteristic length; `h = 50 W/(m²·K)` would be more consistent with significant forced airflow or with an effective coefficient that lumps additional heat-transfer modes.
+- Because radiation is already represented explicitly with `emissivity = 0.3`, the convective `h` should not be inflated to account for radiation.
+
+**Implementation rule:** preserve historical B5/C5 unchanged. Create a new controlled comparison derived from B5/C5 in which the only intended B/C physical difference is the buoyancy formulation and both cases use the same `metalTop h = 10 W/(m²·K)`.
+
+**Status:** ✅ baseline choice established; new controlled cases not yet created/run.
+
