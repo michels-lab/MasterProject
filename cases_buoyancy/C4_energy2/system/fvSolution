@@ -1,0 +1,58 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  13
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    format      ascii;
+    class       dictionary;
+    object      fvSolution;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+PIMPLE
+{
+    nOuterCorrectors        2;
+    nCorrectors             2;
+    nNonOrthogonalCorrectors 1;
+    nEnergyCorrectors       2;
+
+/*
+    residualControl
+    {
+        "(h|e).*"           1e-6;
+        //"U.*"               1e-3; // coment when momentumPredictor no
+        "p_rgh.*"           1e-3;
+    }
+*/
+}
+
+relaxationFactors
+{
+    fields
+    {
+        rho             1.0;
+        rhoFinal        1.0;
+
+        p_rgh           1.0;
+        p_rghFinal      1.0;
+    }
+    equations
+    {
+        U               1.0;
+        UFinal          1.0;
+
+        h               1.0;
+        hFinal          1.0;
+
+        e               1.0;
+        eFinal          1.0;
+
+        "(k|epsilon|omega)"         1.0;
+        "(k|epsilon|omega)Final"    1.0;
+    }
+}
+// ************************************************************************* //
