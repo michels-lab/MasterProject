@@ -1221,3 +1221,55 @@ A pairwise SHA audit must be performed after creation and before the cases are r
 
 **Status:** ✅ controlled series created; pairwise SHA verification follows.
 
+---
+
+## 2026-09-24 — AUD-040 — Controlled series passes pairwise SHA verification
+**[GIT-VERIFIED] [VALIDATED INPUT SET]**
+
+The newly created `cases_controlled_buoyancy/` series was audited pair-by-pair after construction.
+
+### Pairwise SHA result
+
+For all three controlled pairs:
+
+- `B3_reference ↔ C3_reference`
+- `B4_energy2 ↔ C4_energy2`
+- `B5_outer3 ↔ C5_outer3`
+
+the only differing tracked case files are:
+
+1. `constant/metal/fvModels`
+2. `constant/metal/materials/castIron`
+
+No other case-input file differs within each B/C pair.
+
+### Normalized common settings verified
+
+Both B and C branches now use:
+
+- `metalTop h = 10 W/(m²·K)`
+- `startFrom startTime`
+
+### Controlled C density settings verified
+
+The C branch now uses:
+
+- `equationOfState rhoConst`
+- `rho = 6820 kg/m³`
+- `beta = 1.13e-04 1/K`
+- `rhoRef = 6820 kg/m³`
+
+### Controlled B formulation verified
+
+The B branch preserves:
+
+- `equationOfState icoTabulated`
+- temperature-dependent density
+- `beta = 0` in `solidificationMeltingSource`
+
+### Conclusion
+
+The controlled 3/4/5 series is suitable for objective B-vs-C numerical comparison because each pair is identical in all tracked inputs except the intended buoyancy/density formulation files.
+
+**Status:** ✅ input-set audit passed; simulations may now be run from a clean state.
+
