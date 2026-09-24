@@ -1469,3 +1469,64 @@ Those files are generated under `postProcessing/`, which remains ignored by the 
 
 **Status:** ✅ B3/C3 solver-log audit complete; 🟡 thermal/phase comparison pending probe data.
 
+---
+
+## 2026-09-24 — AUD-045 — Controlled B3/C3 reference runs quantitatively reviewed
+**[RUN-VERIFIED] [GIT-VERIFIED]**
+
+The versioned `log.foamMultiRun` files for the controlled reference pair were parsed and reviewed.
+
+### Completion
+
+Both cases reached:
+
+`Time = 10s`
+
+and terminated with:
+
+`End`
+
+No solver failure was observed in either log.
+
+### B3_reference
+
+- CPU time: **249.556 s**
+- Clock time: **258 s**
+- Maximum observed Courant number: **0.175912**
+- Final Courant number: mean **0.0154644**, max **0.0606638**
+- Final cumulative continuity error: **1.66260e-4**
+
+Representative final solves:
+
+- metal energy `h`: initial residual `4.54417e-05` → final `9.91429e-09`
+- final second metal energy solve: `8.43592e-08` → `8.73216e-11`
+- final pressure correction: `p_rgh` final residual **3.88108e-08**
+
+### C3_reference
+
+- CPU time: **224.372 s**
+- Clock time: **225 s**
+- Maximum observed Courant number: **0.0700709**
+- Final Courant number: mean **0.00934688**, max **0.0241928**
+- Final cumulative continuity error: **1.78349e-4**
+
+Representative final solves:
+
+- metal energy `h`: initial residual `5.6893e-05` → final `9.49871e-09`
+- final second metal energy solve: `3.18791e-08` → `2.46231e-11`
+- final pressure correction: `p_rgh` final residual **2.68792e-08**
+
+### Controlled comparison
+
+Relative to C3, B3 used approximately **11.2% more CPU time** and reached a maximum Courant number approximately **2.51×** larger.
+
+Both cases remain comfortably below Courant number 1 and completed without numerical divergence.
+
+The final cumulative continuity errors are of the same order (~`1e-4`), with C3 slightly higher.
+
+### Interpretation limit
+
+The higher Courant number in B3 is consistent with stronger velocity magnitudes somewhere in the domain, but the log alone does not establish the spatial flow mechanism or its thermal significance. Velocity fields/profiles, central temperature and phase-fraction histories must be examined before making a physical buoyancy interpretation.
+
+**Status:** ✅ B3/C3 solver-level comparison complete; thermal/phase/velocity comparison pending.
+
