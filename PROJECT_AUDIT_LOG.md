@@ -1323,3 +1323,28 @@ The controlled-series README was updated with the same policy.
 
 **Status:** ✅ controlled `log.foamMultiRun` files are part of the versioned scientific record.
 
+---
+
+## 2026-09-24 — AUD-043 — Simulation logs are tracked by default
+**[PROCESS RULE] [IMPLEMENTED]**
+
+The repository log-retention policy was broadened.
+
+Previous policy:
+
+- general logs were ignored,
+- only `cases_controlled_buoyancy/**/log.foamMultiRun` was explicitly exempted.
+
+Current policy:
+
+- simulation and runtime logs are **not ignored by default**,
+- broad ignore rules such as `**/log.*`, `**/*.log` and `**/nohup.out` were removed,
+- logs are treated as part of the numerical/scientific evidence,
+- editor-specific temporary logs such as `.vscode/*.log` may remain ignored because they are unrelated to solver reproducibility.
+
+Generated solution-time directories, meshes, post-processing folders, media and build artifacts remain ignored unless deliberately selected.
+
+**Impact:** future OpenFOAM logs can be added to Git normally without `git add -f`.
+
+**Status:** ✅ repository-wide simulation-log retention rule active.
+
