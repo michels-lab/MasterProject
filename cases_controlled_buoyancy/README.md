@@ -194,6 +194,32 @@ The committed `log.foamMultiRun` files were parsed over the complete 0–10 s ru
 
 Both reference cases completed normally. The solver-log audit alone does not determine the physical difference between the B and C formulations; that comparison requires the central `T(t)` and `phaseChangeSource:alpha1(t)` probe data.
 
+
+## B3/C3 reference-run results
+
+Both controlled reference cases completed successfully to **10 s** with `End`.
+
+| Metric | B3_reference | C3_reference |
+|---|---:|---:|
+| Final simulated time | 10 s | 10 s |
+| CPU time | 249.556 s | 224.372 s |
+| Clock time | 258 s | 225 s |
+| Maximum Courant number | 0.175912 | 0.0700709 |
+| Final Courant number | 0.0606638 | 0.0241928 |
+| Final mean Courant number | 0.0154644 | 0.00934688 |
+| Final cumulative continuity error | 1.66260e-4 | 1.78349e-4 |
+
+At the final time, both cases show strongly reduced energy residuals and pressure corrections reaching final residuals below approximately `1e-7` in the final pressure solve.
+
+Interpretation at this stage:
+
+- both runs are numerically stable over 0–10 s;
+- B3 reaches a substantially higher Courant number than C3;
+- B3 requires approximately 11% more CPU time than C3;
+- continuity accumulation is of the same order in both cases.
+
+These differences must not yet be interpreted as definitive physical superiority or as a complete buoyancy comparison. Temperature, phase fraction and velocity-field outputs still need to be compared.
+
 ## Quantities to compare
 
 Record at minimum:
