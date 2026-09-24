@@ -17,15 +17,11 @@
 
 
 # ============================================================
-# OpenFOAM logs
+# OpenFOAM / simulation logs
 # ============================================================
 
-**/log.*
-**/*.log
-**/nohup.out
-
-# Preserve primary solver logs for controlled thesis cases
-!cases_controlled_buoyancy/**/log.foamMultiRun
+# Simulation/runtime logs are intentionally tracked as part of the
+# numerical record. Do not add broad log.* or *.log ignore rules here.
 
 
 # ============================================================
@@ -122,7 +118,6 @@
 
 **/core
 **/core.*
-**/nohup.out
 
 
 # ============================================================
