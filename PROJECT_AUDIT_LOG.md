@@ -1302,3 +1302,24 @@ The controlled-series README was expanded to include:
 
 **Status:** ✅ documentation synchronization rule active.
 
+---
+
+## 2026-09-24 — AUD-042 — Controlled solver logs are now versioned
+**[PROCESS RULE] [IMPLEMENTED]**
+
+The repository log policy was refined for the controlled thesis simulations.
+
+General OpenFOAM logs remain ignored by default, but the following path is now explicitly tracked:
+
+`cases_controlled_buoyancy/**/log.foamMultiRun`
+
+### Rationale
+
+The primary `foamMultiRun` log is part of the numerical evidence for each controlled case because it contains diagnostics needed for reproducibility and convergence review, including Courant numbers, residual behavior, continuity information, solver progress and timing.
+
+Calculated time directories, generated meshes, general logs and other large runtime outputs remain ignored unless deliberately selected for a specific analysis.
+
+The controlled-series README was updated with the same policy.
+
+**Status:** ✅ controlled `log.foamMultiRun` files are part of the versioned scientific record.
+
