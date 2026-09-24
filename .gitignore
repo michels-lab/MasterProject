@@ -24,6 +24,9 @@
 **/*.log
 **/nohup.out
 
+# Preserve primary solver logs for controlled thesis cases
+!cases_controlled_buoyancy/**/log.foamMultiRun
+
 
 # ============================================================
 # OpenFOAM post-processing
