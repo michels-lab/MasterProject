@@ -987,3 +987,37 @@ Rationale:
 
 **Status:** ✅ baseline choice established; new controlled cases not yet created/run.
 
+---
+
+## 2026-09-24 — AUD-036 — Controlled B/C series must be rerun with common thermal boundary
+**[METHODOLOGICAL DECISION] [GIT-VERIFIED BASIS]**
+
+Because the B2–B5 and C2–C5 lineages use different `metalTop` convection coefficients (`h=10` in B and `h=50` in C), those historical cases are not valid for a direct controlled comparison between the B and C buoyancy formulations.
+
+### Consequence
+
+- Historical B2–B5/C2–C5 cases remain useful as development history and for within-family numerical observations.
+- They are **not** suitable for attributing B-vs-C differences uniquely to buoyancy formulation.
+- The numerical-convergence sequence must be repeated with a common `metalTop h` if the thesis requires an objective B-vs-C comparison.
+
+### New controlled-series rule
+
+Use the same thermal boundary in both families, with the current baseline recommendation:
+
+`metalTop h = 10 W/(m²·K)`
+
+Then reproduce the intended numerical sequence symmetrically for B and C:
+
+1. common baseline / test case,
+2. documented reference with `nOuterCorrectors=2`,
+3. energy-corrector test with `nEnergyCorrectors=2`,
+4. outer-corrector test with `nOuterCorrectors=3`.
+
+All other intended physical and numerical settings must remain matched except for the buoyancy formulation itself.
+
+### Preservation rule
+
+Do not overwrite or delete historical B2–B5/C2–C5 cases. Preserve them as an auditable development record and create a new clean controlled lineage for thesis comparison.
+
+**Status:** ✅ methodological correction established; reruns pending.
+
