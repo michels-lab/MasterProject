@@ -196,24 +196,26 @@ Any post-processing addition must not change solver physics.
 
 ## Versioned simulation logs
 
-The primary solver log from each controlled simulation is intentionally versioned in Git:
+Simulation and runtime logs are intentionally **not ignored** in this repository.
 
-```text
-log.foamMultiRun
-```
+Logs are treated as part of the numerical/scientific record because they can preserve evidence such as:
 
-These logs are treated as part of the scientific record because they preserve evidence such as:
-
-- successful solver completion,
+- successful or failed solver completion,
 - Courant-number evolution,
 - solver residuals,
 - continuity behavior,
 - iteration history,
+- warnings and runtime diagnostics,
 - CPU and wall-clock timing.
 
-The repository still ignores general OpenFOAM logs, calculated time directories, meshes, and other generated output by default. Only `log.foamMultiRun` inside `cases_controlled_buoyancy/` is explicitly exempted from the log ignore rule.
+This policy applies generally to OpenFOAM and project runtime logs, not only to `log.foamMultiRun`.
 
-After completing a controlled run, its `log.foamMultiRun` should be committed together with any deliberately selected compact post-processing data needed for analysis.
+Large generated solution fields, calculated time directories, meshes, post-processing output, media and temporary build artifacts remain ignored unless deliberately selected for versioning.
+
+Editor-specific temporary logs such as `.vscode/*.log` may remain ignored because they are not part of the simulation record.
+
+After completing a controlled run, relevant logs should be committed so the numerical history can be audited later.
+
 
 ## Maintenance rule
 
