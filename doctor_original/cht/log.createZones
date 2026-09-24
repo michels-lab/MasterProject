@@ -1,0 +1,29 @@
+/*---------------------------------------------------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  13
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+Build  : 13-58ed5c2046ef
+Exec   : createZones
+Date   : Jul 28 2026
+Time   : 15:39:21
+Host   : "Michel-DuarteHP"
+PID    : 2725
+I/O    : uncollated
+Case   : /home/michel/OpenFOAM/michel-13/run/ProyectoTesis/cht
+nProcs : 1
+sigFpe : Enabling floating point exception trapping (FOAM_SIGFPE).
+fileModificationChecking : Monitoring run-time modified files using timeStampMaster (fileModificationSkew 10)
+allowSystemOperations : Allowing user-supplied system call operations
+
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+Create time
+
+Create mesh for time = 0
+
+Reading "createZonesDict"
+
+End
+
