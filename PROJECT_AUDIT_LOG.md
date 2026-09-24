@@ -1021,3 +1021,113 @@ Do not overwrite or delete historical B2–B5/C2–C5 cases. Preserve them as an
 
 **Status:** ✅ methodological correction established; reruns pending.
 
+---
+
+## 2026-09-24 — AUD-037 — Pairwise B/C audit identifies the clean comparison series
+**[GIT-VERIFIED] [METHODOLOGICAL CORRECTION]**
+
+A full pairwise SHA audit was performed for:
+
+- `B2_test ↔ C2_test`
+- `B3_docFV ↔ C3_docFV`
+- `B4_energy2 ↔ C4_energy2`
+- `B5_outer3 ↔ C5_outer3`
+
+### B2/C2
+
+B2 and C2 differ in **six** tracked files:
+
+1. `0/metal/T`
+2. `constant/metal/fvModels`
+3. `constant/metal/materials/castIron`
+4. `system/controlDict`
+5. `system/fvSolution`
+6. `system/metal/fvSolution`
+
+Important numerical mismatch:
+
+- B2 root: `nOuterCorrectors 1`
+- C2 root: `nOuterCorrectors 4`, `nEnergyCorrectors 1`
+
+Therefore B2/C2 were transitional development cases, not a controlled B-vs-C pair.
+
+### B3/C3
+
+B3/C3 differ in only **four** tracked files:
+
+1. `0/metal/T`
+   - B3: `h = 10 W/(m²·K)`
+   - C3: `h = 50 W/(m²·K)`
+2. `constant/metal/fvModels`
+   - B3: `beta = 0`
+   - C3: `beta = 1.13e-04`
+3. `constant/metal/materials/castIron`
+   - B3: `icoTabulated` temperature-dependent density
+   - C3: `rhoConst = 6930 kg/m³`
+4. `system/controlDict`
+   - B3: `startFrom latestTime`
+   - C3: `startFrom startTime`
+
+All other tracked files are identical by SHA.
+
+### B4/C4
+
+B4/C4 also differ in exactly the same four files listed above.
+
+Both use the same numerical experiment:
+
+- `nOuterCorrectors 2`
+- `nCorrectors 2`
+- `nNonOrthogonalCorrectors 1`
+- `nEnergyCorrectors 2`
+
+All other tracked files are identical by SHA.
+
+### B5/C5
+
+B5/C5 also differ in exactly the same four files listed above.
+
+Both use the same numerical experiment:
+
+- `nOuterCorrectors 3`
+- `nCorrectors 2`
+- `nNonOrthogonalCorrectors 1`
+
+All other tracked files are identical by SHA.
+
+### Classification of the four B3–B5 / C3–C5 differences
+
+**Intended physical differences to preserve:**
+
+1. `fvModels/beta`
+2. `castIron/equationOfState`
+
+These define the two alternative buoyancy formulations.
+
+**Non-physical differences to normalize:**
+
+3. `metalTop/h`
+4. `controlDict/startFrom`
+
+For the controlled rerun, use:
+
+- `metalTop h = 10 W/(m²·K)` in both families.
+- `startFrom startTime` in both families.
+- run each case from a clean state.
+
+### Corrected rerun plan
+
+The scientifically useful convergence series begins at B3/C3. B2/C2 should remain historical transitional cases and should **not** be recreated as if they were a controlled pair.
+
+The controlled rerun therefore requires **six cases**, not eight:
+
+- B3-controlled / C3-controlled — reference
+- B4-controlled / C4-controlled — `nEnergyCorrectors=2`
+- B5-controlled / C5-controlled — `nOuterCorrectors=3`
+
+Within each pair, every tracked input must be identical except for the two intended buoyancy-model differences.
+
+This entry supersedes the earlier broad wording in AUD-036 that suggested rerunning B2–B5/C2–C5 as a single controlled sequence.
+
+**Status:** ✅ complete pairwise audit; canonical controlled-case construction pending.
+
