@@ -286,6 +286,56 @@ Therefore increasing `nEnergyCorrectors` from 1 to 2 produces negligible changes
 
 This does not yet establish physical validity. Velocity-field/profile analysis and experimental comparison are still required, and B5/C5 remain the planned outer-corrector convergence test.
 
+
+### B4/C4 energy-corrector comparison
+
+B4/C4 increase root `nEnergyCorrectors` from the B3/C3 reference value to **2** while preserving the controlled B/C physical formulations.
+
+The solver logs confirm that the second energy corrector was actually executed:
+
+| Case | `h` solves | `e` solves | `p_rgh` solves |
+|---|---:|---:|---:|
+| B3_reference | 20,000 | 20,000 | 40,000 |
+| B4_energy2 | 40,000 | 40,000 | 40,000 |
+| C3_reference | 20,000 | 20,000 | 40,000 |
+| C4_energy2 | 40,000 | 40,000 | 40,000 |
+
+Despite doubling the energy solves, the central thermal/phase solution changes only minimally.
+
+| Comparison | Maximum | Location/time |
+|---|---:|---:|
+| `|T_B3 - T_B4|` | **0.19 K** | 7.456 s |
+| `|alpha_B3 - alpha_B4|` | **5.22e-4** | 7.413 s |
+| `|T_C3 - T_C4|` | **0.01 K** | 4.607 s |
+| `|alpha_C3 - alpha_C4|` | **1e-6** | 3.819 s |
+
+Key B4/C4 center metrics:
+
+| Metric | B4_energy2 | C4_energy2 |
+|---|---:|---:|
+| First downward 1473 K crossing | 6.678 s | 3.386 s |
+| First departure of `alpha1` from 1 | 6.681 s | 3.388 s |
+| `alpha1 = 0.99` | 9.636 s | 3.654 s |
+| Minimum center temperature | 1467.53 K at 10 s | 1456.25 K at 4.822 s |
+| Minimum center liquid fraction | 0.978506 at 10 s | 0.932983 at 4.878 s |
+| Final temperature at 10 s | 1467.53 K | 1461.60 K |
+| Final liquid fraction at 10 s | 0.978506 | 0.954394 |
+
+The B4/C4 controlled difference remains large: maximum central-temperature separation is **33.42 K** at 4.637 s, and maximum central liquid-fraction separation is **0.067017** at 4.878 s.
+
+Solver-log metrics:
+
+| Metric | B4_energy2 | C4_energy2 |
+|---|---:|---:|
+| Peak metal Courant number | 0.176643 | 0.0700709 |
+| Final metal Co max | 0.0602696 | 0.0241928 |
+| Final cumulative continuity | 1.67018e-4 | 1.78349e-4 |
+| Execution time | 240.667 s | 225.476 s |
+| Clock time | 248 s | 226 s |
+| Fatal errors / warnings | 0 / 0 | 0 / 0 |
+
+Interpretation: increasing `nEnergyCorrectors` from 1 to 2 does **not materially alter the controlled central thermal or phase histories**. The large B-vs-C difference therefore persists under the additional energy correction. The single-run timing values should not be treated as a clean cost benchmark because machine load and run-to-run variability were not controlled or replicated.
+
 ## Quantities to compare
 
 Record at minimum:

@@ -1654,3 +1654,68 @@ Thus the B/C difference observed in B3/C3 is robust to this tested energy-correc
 This is a numerical-convergence statement only; it does not establish which buoyancy formulation is physically correct.
 
 **Status:** ✅ B4/C4 energy-corrector convergence test complete; 🟡 B5/C5 outer-corrector test and velocity/experimental validation pending.
+
+
+---
+
+## 2026-09-24 — AUD-047 — B4/C4 energy-corrector convergence check
+**[RUN-VERIFIED] [GIT-VERIFIED]**
+
+The controlled `B4_energy2` and `C4_energy2` cases were completed to 10 s and compared against the B3/C3 reference pair.
+
+### Verification that the energy-corrector change was active
+
+Log counts show:
+
+- B3/C3: 20,000 metal `h` solves and 20,000 mold `e` solves,
+- B4/C4: 40,000 metal `h` solves and 40,000 mold `e` solves,
+- all four cases: 40,000 `p_rgh` solves.
+
+Thus `nEnergyCorrectors = 2` in B4/C4 was active and doubled the energy-equation solve count.
+
+### Solver metrics
+
+B4:
+- peak metal Courant number: **0.176643**,
+- final metal Co max: **0.0602696**,
+- final cumulative continuity: **1.67018e-4**,
+- ExecutionTime: **240.667 s**,
+- ClockTime: **248 s**,
+- no fatal errors or warnings.
+
+C4:
+- peak metal Courant number: **0.0700709**,
+- final metal Co max: **0.0241928**,
+- final cumulative continuity: **1.78349e-4**,
+- ExecutionTime: **225.476 s**,
+- ClockTime: **226 s**,
+- no fatal errors or warnings.
+
+### Central-probe convergence relative to B3/C3
+
+B3 → B4:
+- maximum absolute temperature change: **0.19 K**,
+- maximum absolute liquid-fraction change: **5.22e-4**,
+- first downward liquidus crossing: 6.666 s → **6.678 s**.
+
+C3 → C4:
+- maximum absolute temperature change: **0.01 K**,
+- maximum absolute liquid-fraction change: **1e-6**,
+- first downward liquidus crossing remains **3.386 s**.
+
+### Controlled B4/C4 difference
+
+B4 vs C4:
+- maximum absolute central-temperature difference: **33.42 K at 4.637 s**,
+- maximum absolute central liquid-fraction difference: **0.067017 at 4.878 s**,
+- first downward liquidus crossing: **6.678 s vs 3.386 s**.
+
+The C4 center history reproduces the same non-monotonic temperature/liquid-fraction behavior documented for C3. B4 retains the smaller transient reversal observed in B3.
+
+### Interpretation
+
+Doubling the energy-correction count does not materially change the central thermal/phase solution in either controlled formulation. The B-vs-C difference therefore survives this convergence test and is not explained by insufficient root energy correction in the B3/C3 reference configuration.
+
+Single-run wall/CPU timings are descriptive only; the fact that B4 was slightly faster than B3 despite more energy solves indicates that these timings are not suitable for a strict performance conclusion without repeated runs under controlled machine load.
+
+**Status:** ✅ B4/C4 energy-corrector convergence check complete; B3/C3 result is thermally robust to `nEnergyCorrectors = 2`. Next controlled test: B5/C5 outer-corrector comparison.
