@@ -1861,3 +1861,61 @@ For the present 0–10 s calculations, the B3/C3 reference solver configuration 
 This conclusion addresses numerical sensitivity only. It does not establish whether the B or C buoyancy formulation is physically superior. That requires velocity-field/profile analysis and validation against experimental cooling curves.
 
 **Status:** ✅ B3/B4/B5 and C3/C4/C5 controlled numerical-sensitivity series complete; 🟡 velocity/profile analysis and experimental physical validation remain.
+
+
+---
+
+## 2026-09-24 — AUD-049 — Horizontal OpenFOAM line profiles configured
+**[CONFIG-VERIFIED] [GIT-VERIFIED]**
+
+A common line-sampling function object was added to `system/functions` in all six controlled cases:
+
+- `B3_reference`
+- `C3_reference`
+- `B4_energy2`
+- `C4_energy2`
+- `B5_outer3`
+- `C5_outer3`
+
+The implementation uses the OpenFOAM v14 sampling `sets` function object with `lineUniform` sets, which is the underlying mechanism used by the packaged `graphUniform` graph function.
+
+### Profile geometry
+
+Both lines lie in the metal mid-plane at `z = 0.005 m` and run horizontally in x from `0.00025` to `0.03975 m`.
+
+1. `line_y20mm`
+   - `y = 0.020 m`,
+   - geometric mid-height of the 40 mm metal domain.
+
+2. `line_y30mm`
+   - `y = 0.030 m`,
+   - 10 mm below the top metal surface at `y = 0.040 m`.
+
+Each line uses 80 uniformly distributed sample points and `axis x`. With the controlled 80-cell / 40-mm x mesh, the x spacing between the first and last cell-centre positions is 0.5 mm.
+
+### Sampled fields
+
+The function object samples:
+
+- `U` — the vector output contains `Ux`, `Uy` and `Uz`,
+- `T`,
+- `phaseChangeSource:alpha1` — liquid fraction.
+
+Velocity magnitude is intentionally derived from the sampled components during analysis:
+
+`|U| = sqrt(Ux^2 + Uy^2 + Uz^2)`.
+
+This avoids introducing an additional derived field dependency into the line sampler while preserving all velocity-direction information.
+
+### Output control and impact
+
+- region: `metal`,
+- interpolation: `cellPoint`,
+- format: `raw`,
+- `writeControl writeTime`.
+
+This is a post-processing-only addition. No mesh, material property, boundary condition, phase-change model, timestep, or solver-corrector setting was changed.
+
+The configuration has been checked against the OpenFOAM Foundation v14 `graphUniform` / `lineUniform` implementation. Runtime generation of the profile files from the already completed controlled solutions is still pending.
+
+**Status:** ✅ common profile configuration committed; 🟡 runtime profile extraction and B-vs-C velocity interpretation pending.

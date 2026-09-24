@@ -406,21 +406,32 @@ Record at minimum:
 
 The purpose of the 3/4/5 sequence is to determine whether additional energy or outer correctors materially change the physical solution or mainly increase computational cost.
 
-## Planned OpenFOAM line profiles
+## OpenFOAM horizontal line profiles
 
 The thesis advisor requested velocity and temperature profiles extracted directly from OpenFOAM rather than ParaView.
 
-Line sampling has not yet been added.
+A `sets` / `lineUniform` function object is now configured identically in all six controlled cases. It samples the `metal` region on two horizontal lines at the mid-plane `z = 0.005 m`:
 
-Planned outputs include:
+- **20 mm height:** `y = 0.020 m`, corresponding to the geometric mid-height of the 40 mm metal domain.
+- **30 mm height:** `y = 0.030 m`, 10 mm below the top metal surface at `y = 0.040 m`.
 
-- `T(x,t)`
-- `U(x,t)`
-- `|U|(x,t)`
-- `phaseChangeSource:alpha1(x,t)`
-- derived `|U| = f(T)`
+Both profiles span `x = 0.00025` to `0.03975 m`, remaining inside the metal and matching the first/last x-cell-center positions of the 0.5 mm mesh. Each line uses **80 uniformly distributed sample points** and `axis x`.
 
-Any post-processing addition must not change solver physics.
+Fields sampled directly:
+
+- `U(x)` — vector velocity; raw output preserves `Ux`, `Uy` and `Uz`,
+- `T(x)`,
+- `phaseChangeSource:alpha1(x)` — liquid fraction.
+
+Velocity magnitude is derived from the sampled vector components as
+
+`|U| = sqrt(Ux^2 + Uy^2 + Uz^2)`.
+
+For this quasi-2D model, `Uz` should be negligible, but it is retained in the raw sampled vector rather than assumed to be zero.
+
+The profiles use `writeControl writeTime`; they therefore produce spatial profiles at the case's stored output times. The configuration is post-processing only and does not alter solver physics.
+
+**Runtime status:** configuration committed; profile output still requires execution/post-processing on the existing saved solution times.
 
 
 ## Versioned simulation logs
