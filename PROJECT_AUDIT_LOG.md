@@ -1131,3 +1131,39 @@ This entry supersedes the earlier broad wording in AUD-036 that suggested rerunn
 
 **Status:** ✅ complete pairwise audit; canonical controlled-case construction pending.
 
+---
+
+## 2026-09-24 — AUD-038 — Controlled C branch will use rhoConst = 6820 kg/m³
+**[USER DECISION] [GIT-CONTEXT VERIFIED] [SOURCE-CHECKED]**
+
+For the new controlled buoyancy-comparison series, the C-family constant-density equation of state will use:
+
+`rho = 6820 kg/m³`
+
+instead of the historical `6930 kg/m³`.
+
+Rationale from the current B-family material definition:
+
+- B-family `icoTabulated` uses `rho0 = 6820 kg/m³` at `T0 = 1473 K`.
+- The tabulated density also gives approximately `rho = 6820 kg/m³` at the liquidus reference temperature (~1473 K).
+
+This makes `6820 kg/m³` the selected constant-density reference for the new C controlled cases.
+
+### Important coupled parameter
+
+OpenFOAM's `solidificationMelting` momentum buoyancy source uses:
+
+`Sb = rhoRef * g * beta * deltaT`
+
+so `rhoRef` directly scales the Boussinesq buoyancy source. OpenFOAM documents `rhoRef` as the reference density used by this model.
+
+Therefore, if the controlled C branch is intended to use a self-consistent single reference density of 6820 kg/m³, `constant/metal/fvModels` should also use:
+
+`rhoRef 6820;`
+
+rather than leaving the historical `rhoRef 6930;`.
+
+This change should be made deliberately in the new controlled lineage, not retroactively in historical cases.
+
+**Status:** ✅ `rhoConst=6820` decided; `rhoRef=6820` recommended for internal Boussinesq consistency in the new C cases.
+
