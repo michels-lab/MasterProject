@@ -938,3 +938,30 @@ This difference was already present in the initial repository commit (`206f9594`
 
 **Status:** ⚠️ open methodological issue; do not change historical cases retroactively.
 
+---
+
+## 2026-09-24 — AUD-034 — B2 thermal-boundary change has no recovered design justification
+**[CHAT-RECOVERED] [GIT-VERIFIED]**
+
+Historical conversation context confirms that:
+
+- `B2_test` was created by copying `B1_alphaini`.
+- `C2_test` was created by copying `C1_alphaini`.
+- B2/C2 were intended as short (~10 s) numerical/convergence tests.
+- Subsequent documented changes concerned timestep stability, e.g. an attempted `deltaT=0.1` that failed and a return to `deltaT=0.001`, plus output cadence.
+
+Current Git history shows:
+
+- `B1_alphaini/0/metal/T`: `metalTop h = 50 W/(m²·K)`
+- `B2_test/0/metal/T`: `metalTop h = 10 W/(m²·K)`
+- `C1_alphaini/0/metal/T`: `metalTop h = 50 W/(m²·K)`
+- `C2_test/0/metal/T`: `metalTop h = 50 W/(m²·K)`
+
+No recovered Project Audit Log entry or conversation decision documents a deliberate physical reason for changing the B branch heat-transfer coefficient from 50 to 10 when creating B2.
+
+**Interpretation rule:** the B1→B2 change in `h` is therefore an **undocumented model change**, not a validated design decision. It must not be assumed intentional or accidental without further evidence.
+
+**Impact:** B2–B5 vs C2–C5 comparisons are thermally confounded unless a controlled common-`h` comparison is created.
+
+**Status:** ⚠️ unresolved origin; preserve historical cases and investigate before physical interpretation.
+
