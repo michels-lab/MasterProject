@@ -146,7 +146,7 @@ If any additional input file differs in a future revision, that difference must 
 |---|---|---|---|
 | `B3_reference` / `C3_reference` | Completed to 10 s | Solver logs + central probes committed to Git | Solver and central thermal/phase comparison complete; velocity-field comparison pending |
 | `B4_energy2` / `C4_energy2` | Completed to 10 s | Solver logs + central probes committed to Git | Solver and central thermal/phase comparison complete |
-| `B5_outer3` / `C5_outer3` | Pending | Pending | Pending |
+| `B5_outer3` / `C5_outer3` | Completed to 10 s | Solver logs + central probes committed to Git | Solver and central thermal/phase comparison complete |
 
 The B3/C3 controlled logs were committed in Git commit `d6c307c8`.
 
@@ -335,6 +335,60 @@ Solver-log metrics:
 | Fatal errors / warnings | 0 / 0 | 0 / 0 |
 
 Interpretation: increasing `nEnergyCorrectors` from 1 to 2 does **not materially alter the controlled central thermal or phase histories**. The large B-vs-C difference therefore persists under the additional energy correction. The single-run timing values should not be treated as a clean cost benchmark because machine load and run-to-run variability were not controlled or replicated.
+
+
+### B5/C5 outer-corrector convergence result
+
+B5/C5 increase the root `nOuterCorrectors` from the B3/C3 reference value of 2 to **3**, while returning `nEnergyCorrectors` to the reference/default value. Both cases completed 10,000 time steps to 10 s with `End`, no `FOAM FATAL` entries and no warnings.
+
+| Metric | B3_reference | B5_outer3 | C3_reference | C5_outer3 |
+|---|---:|---:|---:|---:|
+| Peak metal Courant number | 0.175912 | 0.175874 | 0.0700709 | 0.0700712 |
+| Final metal Co max | 0.0606638 | 0.0602937 | 0.0241928 | 0.0241931 |
+| Final cumulative continuity | 1.66260e-4 | 1.65205e-4 | 1.78349e-4 | 1.78172e-4 |
+| Metal `h` solves | 20,000 | 30,000 | 20,000 | 30,000 |
+| Mold `e` solves | 20,000 | 30,000 | 20,000 | 30,000 |
+| Execution time | 249.556 s | 291.137 s | 224.372 s | 272.125 s |
+| Clock time | 258 s | 298 s | 225 s | 273 s |
+
+The third outer correction was therefore active: B5/C5 execute 30,000 metal-`h` and mold-`e` solves over the 10,000-step run, compared with 20,000 in B3/C3.
+
+Central probe sensitivity to the extra outer corrector is very small:
+
+| Comparison | Maximum | Time |
+|---|---:|---:|
+| `|T_B3 - T_B5|` | **0.22 K** | 7.443 s |
+| `|alpha_B3 - alpha_B5|` | **6.48e-4** | 7.399 s |
+| `|T_C3 - T_C5|` | **0.01 K** | 2.649 s |
+| `|alpha_C3 - alpha_C5|` | **4e-6** | 9.607 s |
+
+Key B5/C5 center metrics:
+
+| Metric | B5_outer3 | C5_outer3 |
+|---|---:|---:|
+| First liquidus crossing, 1473 K | 6.683 s | 3.386 s |
+| `alpha_l = 0.99` | 9.633 s | 3.654 s |
+| Minimum center temperature | 1467.52 K at ~10 s | 1456.25 K at 4.822 s |
+| Minimum `alpha_l` | 0.978433 at 10 s | 0.932984 at 4.876 s |
+| Final temperature | 1467.52 K | 1461.60 K |
+| Final `alpha_l` | 0.978433 | 0.954397 |
+
+B5/C5 preserve the large controlled B-vs-C separation: maximum center-temperature difference is **33.42 K** and maximum center liquid-fraction difference is approximately **0.067016**. C5 reproduces the C-series warming/remelting behavior, while B5 preserves the much smaller B-series transient reversal.
+
+Relative to B3/C3, B5/C5 increase single-run execution time by approximately **16.7%** for B and **21.3%** for C without materially changing the central thermal/phase solution.
+
+### Numerical convergence conclusion for the 3/4/5 series
+
+Across the tested controlled sequence:
+
+- doubling `nEnergyCorrectors` from 1 to 2 changes the central solution negligibly;
+- increasing `nOuterCorrectors` from 2 to 3 also changes the central solution negligibly;
+- the large B-vs-C thermal/phase difference persists in B3/C3, B4/C4 and B5/C5;
+- the C-series rebound/remelting behavior is reproduced under both numerical-sensitivity changes.
+
+For the present 0–10 s controlled simulations, the **B3/C3 reference solver configuration (`nOuterCorrectors = 2`, reference/default energy correction)** is therefore the efficient numerical baseline: the more expensive B4/C4 and B5/C5 settings do not provide a material change in the monitored center solution.
+
+This is a numerical-convergence conclusion, not a physical-validation conclusion. Velocity profiles/fields and comparison with experimental cooling curves remain necessary before selecting between the B and C physical buoyancy formulations.
 
 ## Quantities to compare
 

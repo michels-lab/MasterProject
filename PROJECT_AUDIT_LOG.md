@@ -1778,3 +1778,86 @@ For this 0–10 s controlled series, increasing `nEnergyCorrectors` from 1 to 2 
 Timing differences are descriptive single-run observations only and should not be generalized as a computational-cost conclusion without repeated benchmarking.
 
 **Status:** ✅ B4/C4 comparison complete; proceed to B5/C5 outer-corrector test.
+
+
+---
+
+## 2026-09-24 — AUD-048 — B5/C5 outer-corrector convergence and 3/4/5 series conclusion
+**[RUN-VERIFIED] [GIT-VERIFIED]**
+
+The controlled `B5_outer3` and `C5_outer3` simulations, solver logs and central probe data were committed in Git commit `0619b7af` and compared against the B3/C3 reference pair and the B4/C4 energy-corrector pair.
+
+Both B5 and C5:
+- completed 10,000 steps to 10 s,
+- terminated with `End`,
+- contained no `FOAM FATAL` entries,
+- contained no warnings,
+- executed 30,000 metal-`h` solves and 30,000 mold-`e` solves, confirming that the third outer correction was active.
+
+### Solver metrics
+
+B5:
+- peak metal Courant number: **0.175874 at 0.284 s**,
+- final metal Co: mean **0.0154835**, max **0.0602937**,
+- largest absolute cumulative continuity value: approximately **1.70120e-4**,
+- final cumulative continuity: **1.65205e-4**,
+- final metal-`h` residual: **4.72045e-12**,
+- final mold-`e` residual: **5.80792e-10**,
+- final `p_rgh` residual: **9.77911e-8**,
+- ExecutionTime: **291.137 s**,
+- ClockTime: **298 s**.
+
+C5:
+- peak metal Courant number: **0.0700712 at 2.510 s**,
+- final metal Co: mean **0.0093466**, max **0.0241931**,
+- largest absolute cumulative continuity value: approximately **1.78180e-4**,
+- final cumulative continuity: **1.78172e-4**,
+- final metal-`h` residual: **1.19093e-10**,
+- final mold-`e` residual: **5.78841e-10**,
+- final `p_rgh` residual: **5.2433e-8**,
+- ExecutionTime: **272.125 s**,
+- ClockTime: **273 s**.
+
+After 0.1 s, maximum final residuals observed for the thermal equations remained on the same order as the reference runs:
+- B5: metal `h` approximately **4.27e-7**, mold `e` approximately **6.02e-8**,
+- C5: metal `h` approximately **3.76e-7**, mold `e` approximately **6.01e-8**.
+
+### Central thermal/phase sensitivity
+
+B3 → B5:
+- maximum `|Delta T|`: **0.22 K** at 7.443 s,
+- maximum `|Delta alpha_l|`: **6.48e-4** at 7.399 s,
+- first liquidus crossing: 6.666 s → **6.683 s**,
+- `alpha_l = 0.99`: 9.619 s → **9.633 s**,
+- final center temperature: 1467.45 K → **1467.52 K**,
+- final `alpha_l`: 0.978184 → **0.978433**.
+
+C3 → C5:
+- maximum `|Delta T|`: **0.01 K**,
+- maximum `|Delta alpha_l|`: **4e-6**,
+- first liquidus crossing remains **3.386 s**,
+- `alpha_l = 0.99` remains approximately **3.654 s**,
+- minimum center temperature remains **1456.25 K at 4.822 s**,
+- minimum `alpha_l` is **0.932984 at 4.876 s**,
+- final center temperature remains **1461.60 K**,
+- final `alpha_l` is **0.954397**.
+
+B5 vs C5:
+- maximum absolute center-temperature difference: **33.42 K**,
+- maximum absolute center liquid-fraction difference: approximately **0.067016**.
+
+Thus the B-vs-C thermal/phase separation and C-series warming/remelting behavior survive the outer-corrector sensitivity test.
+
+### 3/4/5 convergence conclusion
+
+The complete controlled numerical-sensitivity sequence shows:
+1. B4/C4 (`nEnergyCorrectors = 2`) produces negligible thermal/phase changes relative to B3/C3.
+2. B5/C5 (`nOuterCorrectors = 3`) also produces negligible thermal/phase changes relative to B3/C3.
+3. B5/C5 requires substantially more solve calls and, in these runs, approximately **16.7%** more B-series CPU time and **21.3%** more C-series CPU time than B3/C3.
+4. The large controlled B-vs-C difference is reproduced by all three numerical configurations.
+
+For the present 0–10 s calculations, the B3/C3 reference solver configuration is accepted as the efficient numerical baseline. The additional energy or outer corrections tested here do not materially improve the monitored center solution.
+
+This conclusion addresses numerical sensitivity only. It does not establish whether the B or C buoyancy formulation is physically superior. That requires velocity-field/profile analysis and validation against experimental cooling curves.
+
+**Status:** ✅ B3/B4/B5 and C3/C4/C5 controlled numerical-sensitivity series complete; 🟡 velocity/profile analysis and experimental physical validation remain.
