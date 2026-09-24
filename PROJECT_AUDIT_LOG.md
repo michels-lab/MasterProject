@@ -1590,3 +1590,67 @@ The probe comparison demonstrates that the two controlled buoyancy/density formu
 However, the observed rebounds must **not** be called physical recalescence from these data alone. The present equilibrium enthalpy-porosity formulation can show non-monotonic local temperature through convective transport/mixing and can locally remelt material. Velocity-field/profile analysis and comparison with experimental thermal curves are required to identify the mechanism and judge physical validity.
 
 **Status:** ✅ B3/C3 solver + central thermal/phase comparison complete; 🟡 velocity/profile and experimental validation pending.
+
+
+---
+
+## 2026-09-24 — AUD-047 — B4/C4 energy-corrector convergence test
+**[RUN-VERIFIED] [GIT-VERIFIED]**
+
+The controlled `B4_energy2` and `C4_energy2` simulations and central probe data were committed in Git commit `2e49c91a` and compared directly against the B3/C3 reference pair.
+
+The only intended convergence change from the corresponding B3/C3 cases is the increase of root `nEnergyCorrectors` from 1 to 2.
+
+### Solver completion
+
+Both B4 and C4:
+- reached 10 s,
+- terminated with `End`,
+- contained no `FOAM FATAL` entries,
+- contained no warnings.
+
+B4:
+- peak metal `Co_max = 0.176643` near 0.290 s,
+- final metal `Co_max = 0.0602696`,
+- final cumulative continuity = **1.67018e-4**,
+- ExecutionTime = **240.667 s**,
+- ClockTime = **248 s**.
+
+C4:
+- peak metal `Co_max = 0.0700709` near 2.510 s,
+- final metal `Co_max = 0.0241928`,
+- final cumulative continuity = **1.78349e-4**,
+- ExecutionTime = **225.476 s**,
+- ClockTime = **226 s**.
+
+The energy corrector increase doubled the number of metal-`h` and mold-`e` solver calls from 20,000 to 40,000 in each 10 s run.
+
+Single-run timing did not scale monotonically: B4 was approximately 3.6% faster than B3, while C4 was approximately 0.5% slower than C3. These differences are treated as machine/run variability rather than a model-cost conclusion.
+
+### Central thermal/phase convergence
+
+B3 vs B4:
+- maximum absolute center-temperature difference: **0.19 K**,
+- maximum absolute center liquid-fraction difference: **5.22e-4**,
+- first liquidus crossing: 6.666 s vs **6.678 s**,
+- `alpha_l = 0.99`: 9.619 s vs **9.636 s**.
+
+C3 vs C4:
+- maximum absolute center-temperature difference: **0.01 K**,
+- maximum absolute center liquid-fraction difference: **1.0e-6**,
+- first liquidus crossing: **3.386 s in both**,
+- `alpha_l = 0.99`: **3.654 s in both**,
+- center minimum temperature: **1456.25 K at 4.822 s in both**,
+- center minimum `alpha_l`: **0.932983 at 4.878 s in both**.
+
+B4 vs C4 still shows a maximum absolute center-temperature difference of **33.42 K** and a maximum absolute center liquid-fraction difference of **0.067017**.
+
+### Interpretation
+
+Increasing `nEnergyCorrectors` from 1 to 2 does **not** materially change the controlled central thermal/phase solution over 0–10 s. The large B-vs-C difference and the C-series temperature rebound/local-remelting behavior persist essentially unchanged.
+
+Thus the B/C difference observed in B3/C3 is robust to this tested energy-corrector increase and is not explained by insufficient `nEnergyCorrectors = 1`.
+
+This is a numerical-convergence statement only; it does not establish which buoyancy formulation is physically correct.
+
+**Status:** ✅ B4/C4 energy-corrector convergence test complete; 🟡 B5/C5 outer-corrector test and velocity/experimental validation pending.

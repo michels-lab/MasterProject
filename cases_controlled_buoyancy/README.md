@@ -145,7 +145,7 @@ If any additional input file differs in a future revision, that difference must 
 | Pair | Run status | Log status | Analysis |
 |---|---|---|---|
 | `B3_reference` / `C3_reference` | Completed to 10 s | Solver logs + central probes committed to Git | Solver and central thermal/phase comparison complete; velocity-field comparison pending |
-| `B4_energy2` / `C4_energy2` | Pending | Pending | Pending |
+| `B4_energy2` / `C4_energy2` | Completed to 10 s | Solver logs + central probes committed to Git | Solver and central thermal/phase comparison complete |
 | `B5_outer3` / `C5_outer3` | Pending | Pending | Pending |
 
 The B3/C3 controlled logs were committed in Git commit `d6c307c8`.
@@ -248,6 +248,43 @@ Additional controlled-pair observations:
 - At 10 s, B3 is **5.85 K hotter** at the center and has a liquid fraction higher by about **0.02379**.
 
 These non-monotonic center histories must **not** be labeled physical recalescence from the probe alone. In this equilibrium enthalpy-porosity model, convection/mixing and local remelting can produce temperature rebounds. Velocity fields/profiles and experimental thermal curves are required to determine the mechanism and physical validity.
+
+
+### B4/C4 energy-corrector convergence result
+
+B4/C4 repeat the controlled B/C comparison with `nEnergyCorrectors = 2` instead of the B3/C3 reference value of 1. All four runs reached 10 s with `End`, with no `FOAM FATAL` entries or warnings.
+
+| Metric | B3_reference | B4_energy2 | C3_reference | C4_energy2 |
+|---|---:|---:|---:|---:|
+| Peak metal Courant number | 0.175912 | 0.176643 | 0.0700709 | 0.0700709 |
+| Final metal Co max | 0.0606638 | 0.0602696 | 0.0241928 | 0.0241928 |
+| Final cumulative continuity | 1.66260e-4 | 1.67018e-4 | 1.78349e-4 | 1.78349e-4 |
+| Execution time | 249.556 s | 240.667 s | 224.372 s | 225.476 s |
+| Thermal solves (`h`) | 20,000 | 40,000 | 20,000 | 40,000 |
+| Mold-energy solves (`e`) | 20,000 | 40,000 | 20,000 | 40,000 |
+
+The doubled energy-corrector setting does in fact double the number of `h` and `e` solve calls. The observed wall/CPU times, however, do not scale monotonically in these single runs: B4 was about 3.6% faster than B3, while C4 was about 0.5% slower than C3. This timing variability should not be interpreted as an intrinsic performance advantage without repeated runs under controlled machine load.
+
+Central-probe convergence is much clearer:
+
+| Comparison | Maximum absolute ΔT | Maximum absolute Δalpha_l |
+|---|---:|---:|
+| B3 vs B4 | 0.19 K | 5.22e-4 |
+| C3 vs C4 | 0.01 K | 1.0e-6 |
+| B4 vs C4 | 33.42 K | 0.067017 |
+
+Key event times remain essentially unchanged:
+
+- B3 liquidus crossing: 6.666 s; B4: **6.678 s**.
+- C3 liquidus crossing: 3.386 s; C4: **3.386 s**.
+- B3 `alpha_l = 0.99`: 9.619 s; B4: **9.636 s**.
+- C3 `alpha_l = 0.99`: 3.654 s; C4: **3.654 s**.
+- C4 reproduces the C3 minimum center temperature of **1456.25 K at 4.822 s** and minimum `alpha_l = 0.932983 at 4.878 s`.
+- At 10 s, B4 gives **1467.53 K** and `alpha_l = 0.978506`; C4 gives **1461.60 K** and `alpha_l = 0.954394`.
+
+Therefore increasing `nEnergyCorrectors` from 1 to 2 produces negligible changes in the controlled central thermal/phase histories relative to the much larger B-vs-C formulation difference. The B/C separation and the C-series rebound/remelting behavior are robust to this energy-corrector change over the tested 0–10 s interval.
+
+This does not yet establish physical validity. Velocity-field/profile analysis and experimental comparison are still required, and B5/C5 remain the planned outer-corrector convergence test.
 
 ## Quantities to compare
 
