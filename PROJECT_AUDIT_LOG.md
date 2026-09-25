@@ -1919,3 +1919,80 @@ This is a post-processing-only addition. No mesh, material property, boundary co
 The configuration has been checked against the OpenFOAM Foundation v14 `graphUniform` / `lineUniform` implementation. Runtime generation of the profile files from the already completed controlled solutions is still pending.
 
 **Status:** ✅ common profile configuration committed; 🟡 runtime profile extraction and B-vs-C velocity interpretation pending.
+
+
+---
+
+## 2026-09-25 — AUD-050 — Controlled horizontal profile execution and spatial B3/C3 analysis
+**[RUN-VERIFIED] [GIT-VERIFIED]**
+
+The OpenFOAM horizontal line profiles configured in AUD-049 were executed for all saved times from 0 to 10 s in all six controlled cases.
+
+Each case generated:
+- 101 saved times,
+- 2 horizontal lines per time,
+- 202 profile files per case.
+
+Total controlled profile files: 1,212.
+
+The raw profile columns are:
+- x,
+- Ux,
+- Uy,
+- Uz,
+- T,
+- phaseChangeSource:alpha1.
+
+Observed Uz is zero in the inspected profiles, consistent with the quasi-2D setup.
+
+### B3/C3 center-flow reversal
+
+At x ≈ 19.75 mm, the B and C formulations show opposite vertical-flow directions during the early phase-change interval.
+
+At 3.4 s:
+- 20 mm: B3 Uy = -0.01437 m/s; C3 Uy = +0.00962 m/s.
+- 30 mm: B3 Uy = -0.02419 m/s; C3 Uy = +0.00357 m/s.
+
+At 4.8 s:
+- 20 mm: B3 Uy = -0.01104 m/s; C3 Uy = +0.01821 m/s.
+- 30 mm: B3 Uy = -0.01492 m/s; C3 Uy = +0.00299 m/s.
+
+Thus B3 has downward center flow at both sampled heights while C3 has upward center flow at both heights over this interval.
+
+### Vertical thermal stratification
+
+At 4.8 s and x ≈ 19.75 mm:
+- B3: T(20 mm) = 1489.50 K; T(30 mm) = 1485.99 K.
+- C3: T(20 mm) = 1456.46 K; T(30 mm) = 1483.24 K.
+
+C3 therefore has approximately 26.78 K vertical separation between the two sampled heights at the center, compared with only about 3.51 K in B3 (with the opposite sign).
+
+At the same 4.8 s time, the maximum B3/C3 temperature difference on the 20-mm profile is approximately 33.05 K near x ≈ 20.25 mm.
+
+### Velocity-profile differences
+
+Representative maximum absolute B3/C3 Uy differences:
+- 3.4 s, 20 mm: ~0.02399 m/s,
+- 3.4 s, 30 mm: ~0.02776 m/s,
+- 4.8 s, 20 mm: ~0.02925 m/s,
+- 6.7 s, 30 mm: ~0.02949 m/s,
+- 10 s, 30 mm: ~0.02916 m/s.
+
+The B formulation can have higher local and upper-layer speeds even though the C formulation cools/solidifies the center earlier. Therefore global Courant number or peak velocity alone is not an adequate proxy for thermal transport at the center.
+
+### Spatial convergence check
+
+At representative 4.8 s and 10 s profiles:
+- C3/C4/C5 are effectively coincident at the sampled precision, with temperature differences ≤ ~0.01 K and velocity differences generally around 1e-6 m/s or smaller.
+- B3/B4/B5 show small but measurable spatial sensitivity: checked temperature differences are up to ~0.6–0.7 K and checked Uy differences up to ~0.0015 m/s.
+- These B-family spatial differences remain much smaller than the B-vs-C formulation differences and do not change the qualitative circulation structure.
+
+### Interpretation
+
+The controlled B-vs-C thermal difference is associated with a materially different flow topology and vertical heat redistribution, not simply a scalar increase or decrease in velocity magnitude.
+
+The C-series develops persistent upward center flow and strong early vertical thermal stratification, consistent with a different convective transport pathway that can explain why the center reaches liquidus and begins phase change much earlier than in B.
+
+This is a mechanistic numerical interpretation, not physical validation. Experimental thermal curves and further field-level comparison are still required before selecting a physically preferred buoyancy formulation.
+
+**Status:** ✅ profile generation and initial spatial B3/C3 interpretation complete; 🟡 graphical thesis figures and experimental validation remain.

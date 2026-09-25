@@ -431,8 +431,35 @@ For this quasi-2D model, `Uz` should be negligible, but it is retained in the ra
 
 The profiles use `writeControl writeTime`; they therefore produce spatial profiles at the case's stored output times. The configuration is post-processing only and does not alter solver physics.
 
-**Runtime status:** configuration committed; profile output still requires execution/post-processing on the existing saved solution times.
+**Runtime status:** complete for all six controlled cases. Each case contains 202 profile files (101 saved times × 2 heights) over 0–10 s.
 
+
+### B3/C3 spatial-profile interpretation
+
+The completed horizontal profiles show that the B-vs-C difference is not explained by a simple overall velocity-magnitude difference. The flow topology and vertical thermal stratification differ materially.
+
+Representative center-line values at x ≈ 19.75 mm:
+
+| Time | Height | B3 Uy (m/s) | C3 Uy (m/s) | B3 T (K) | C3 T (K) |
+|---|---:|---:|---:|---:|---:|
+| 3.4 s | 20 mm | -0.01437 | +0.00962 | 1490.19 | 1473.18 |
+| 3.4 s | 30 mm | -0.02419 | +0.00357 | 1489.63 | 1497.32 |
+| 4.8 s | 20 mm | -0.01104 | +0.01821 | 1489.50 | 1456.46 |
+| 4.8 s | 30 mm | -0.01492 | +0.00299 | 1485.99 | 1483.24 |
+| 6.7 s | 20 mm | +0.00016 | +0.01564 | 1473.74 | 1458.17 |
+| 6.7 s | 30 mm | -0.02188 | +0.00705 | 1476.39 | 1463.42 |
+| 10 s | 20 mm | +0.00183 | +0.00960 | 1468.30 | 1461.75 |
+| 10 s | 30 mm | -0.01908 | +0.00985 | 1470.97 | 1462.80 |
+
+At 3.4–4.8 s the B3 center column is predominantly downward at both sampled heights, while C3 is upward at both heights. At 4.8 s C3 also shows a strong center vertical thermal stratification: approximately 1456.46 K at 20 mm versus 1483.24 K at 30 mm, while B3 is much less vertically separated (1489.50 K versus 1485.99 K).
+
+The maximum B3/C3 vertical-velocity difference at the sampled positions reaches approximately 0.0293 m/s at 4.8 s on the 20-mm line and approximately 0.0295 m/s at 6.7 s on the 30-mm line. At 4.8 s the maximum temperature separation on the 20-mm profile is approximately 33.05 K.
+
+The C-series therefore redistributes momentum and heat very differently in space. The larger B-series global Courant number must not be interpreted as uniformly stronger or more thermally effective convection at the center. B3 exhibits stronger upper-layer/downward velocities at several sampled times, whereas C3 develops a persistent upward center flow and, during the early phase-change interval, substantially stronger vertical thermal stratification.
+
+Spatial numerical sensitivity is also small relative to the B-vs-C formulation difference. C3/C4/C5 profiles are nearly identical at the checked times. B4/B5 show small but measurable spatial changes relative to B3 (up to roughly 0.6–0.7 K in temperature and ~0.0015 m/s in Uy at the checked locations/times), without changing the qualitative circulation pattern or the B-vs-C conclusion.
+
+These profiles support a transport-based explanation for the earlier C-series center cooling/phase change, but they do not by themselves establish that either buoyancy formulation is physically correct. Experimental cooling curves and, ideally, comparison of full velocity/temperature fields are still required.
 
 ## Versioned simulation logs
 
