@@ -9,34 +9,19 @@ FoamFile
 {
     format      ascii;
     class       dictionary;
-    object      fvSolution;
+    location    "constant";
+    object      physicalProperties;
 }
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-solvers
-{
-    "(h|e)"
-    {
-        solver           PCG;
-        preconditioner   DIC;
-        tolerance        1e-06;
-        relTol           0.05;
-    }
+simulationType laminar;
 
-    "(h|e)Final"
-    {
-        solver           PCG;
-        preconditioner   DIC;
-        tolerance        1e-06;
-        relTol           0;
-    }
-}
-
-PIMPLE
+RAS
 {
-    nOuterCorrectors 1;
-    nCorrectors 2;
-    nNonOrthogonalCorrectors 0;
+    model               kOmegaSST;
+
+    turbulence          off;
+
 }
 
 
