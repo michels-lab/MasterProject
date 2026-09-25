@@ -24,7 +24,7 @@ phaseChangeSource
 
     // Thermophysical linking
     thermoMode      thermo;
-    beta            1.13e-04;   // Thermal expansion coefficient [1/K]
+    beta            0;   // Thermal expansion coefficient [1/K]
     rhoRef          6820;       // reference solid density
 
     // --- Energy and phase bounds

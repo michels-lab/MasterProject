@@ -7,10 +7,10 @@
 \*---------------------------------------------------------------------------*/
 Build  : 14-7b05503f98a8
 Exec   : splitMeshRegions -cellZones all
-Date   : Sep 24 2026
-Time   : 13:28:32
+Date   : Sep 25 2026
+Time   : 13:23:26
 Host   : "Michel-DuarteHP"
-PID    : 15969
+PID    : 40297
 I/O    : uncollated
 Case   : /home/michel/OpenFOAM/QuickCup_Solidification/cases_controlled_buoyancy/B3_reference
 nProcs : 1
