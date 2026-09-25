@@ -25,9 +25,7 @@ solvers
 
     "(h|e)Final"
     {
-        solver           PCG;
-        preconditioner   DIC;
-        tolerance        1e-06;
+        $h;
         relTol           0;
     }
 }

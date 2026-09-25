@@ -2253,3 +2253,54 @@ The B/C physical formulations are unchanged.
 Because V7 now changes both the number of outer correctors and the time-step strategy relative to V5, it is **not** a single-variable convergence test. Any V7-vs-V5 difference must be interpreted as the combined effect of `nOuterCorrectors=4` and adaptive time stepping.
 
 **Status:** ✅ V7 adaptive time stepping enabled and documented.
+
+
+---
+
+## 2026-09-25 — AUD-056 — Finalize V6 adaptive timestep and V7 outer-corrector tests
+**[CONFIGURATION-CHANGE] [CONTROLLED-SERIES] [SUPERSEDES-AUD-055]**
+
+The V6/V7 experimental design was revised to preserve one numerical variable per comparison.
+
+### V6 — adaptive time stepping
+
+The previous `B6_fvSolution` and `C6_fvSolution` directories were removed before execution and replaced by:
+
+- `B6_adaptiveDt`
+- `C6_adaptiveDt`
+
+Both are copied from the clean V5 configuration and change only:
+
+`adjustTimeStep yes;`
+
+They retain:
+
+- `nOuterCorrectors = 3`
+- initial `deltaT = 0.001 s`
+- `maxCo = 0.25`
+- `maxDeltaT = 0.1 s`
+
+The B/C physical formulations are unchanged.
+
+### V7 — outer-corrector sensitivity
+
+The temporary AUD-055 setting that combined `nOuterCorrectors=4` with adaptive time stepping was reverted before execution.
+
+Final V7 configuration:
+
+- `B7_outer4`
+- `C7_outer4`
+- `nOuterCorrectors = 4`
+- `adjustTimeStep = no`
+- fixed `deltaT = 0.001 s`
+
+Thus V7 changes only the number of outer correctors relative to V5.
+
+### Interpretation
+
+- V5 vs V6 isolates time-step strategy.
+- V5 vs V7 isolates outer-corrector count.
+
+AUD-055 remains in the history as a transient configuration decision but is superseded by this entry.
+
+**Status:** ✅ V6 adaptive-timestep cases defined; ✅ V7 restored to fixed timestep with outerCorrectors=4; ✅ one-variable-at-a-time design restored.
