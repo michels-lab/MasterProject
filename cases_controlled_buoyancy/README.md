@@ -531,3 +531,21 @@ Important traceability notes:
 - C5's current dictionaries were edited after the historical C5 run used in the convergence analysis. The analysed C5 run used `beta=1.13e-4` and fixed `deltaT=0.001`; the current C5 dictionary has `beta=0` and `adjustTimeStep yes`.
 - The explicit `"(h|e)Final"` PCG/DIC block currently unique to B3 matches the numerical settings inherited by the OpenFOAM v14 template form `$h; relTol 0;`; it is not presently treated as a distinct controlled variable.
 - A future controlled case must be constructed from a known clean baseline and change only one variable.
+
+
+### V6 and V7 controlled tests
+
+The historical V3/V5 configurations were restored before defining the next controlled cases.
+
+- **B6_fvSolution / C6_fvSolution** — clean V5 base with the advisor's explicit final solid-energy solver definition in `system/mold/fvSolution` as the controlled change. The final `(h|e)Final` solve explicitly uses PCG, DIC, `tolerance 1e-06`, and `relTol 0`.
+- **B7_outer4 / C7_outer4** — clean V5 base with `nOuterCorrectors 4` as the controlled change.
+
+All V6/V7 cases retain fixed `deltaT=0.001` and `adjustTimeStep no`. B retains `icoTabulated + beta=0`; C retains `rhoConst=6820 + beta=1.13e-04`.
+
+### Standard foamLog post-processing
+
+For V3 through V7, `Allrun` now executes `foamLog log.foamMultiRun` automatically after `foamMultiRun`. The resulting case-level `logs/` directory is considered standard derived post-processing data and is intentionally tracked in Git when generated.
+
+Typical series include Courant number, continuity errors, solver initial/final residuals, iteration counts, execution/clock time, and density/enthalpy/pressure diagnostics when present in the solver log.
+
+`Allclean` explicitly removes `logs/` so a clean rerun cannot accidentally mix parsed diagnostics from different runs.

@@ -2149,3 +2149,60 @@ The next controlled experiment must preserve the intended physical formulation o
 Only one numerical variable should then be changed at a time. If the advisor's repeated `adjustTimeStep yes` change is to be tested, it should be isolated from `nOuterCorrectors`. A separate no-buoyancy case (`rhoConst` + `beta=0`) should be given its own explicit name if intentionally studied rather than being silently folded into C5.
 
 **Status:** ✅ six-case configuration divergence identified; 🟡 next controlled-case definition pending.
+
+
+---
+
+## 2026-09-25 — AUD-053 — Controlled V6/V7 definition and foamLog workflow
+**[CONFIGURATION-RESTORE] [CONTROLLED-SERIES] [POST-PROCESSING]**
+
+### Historical-case restoration
+
+The temporary advisor-session edits were removed from the historical cases:
+
+- B3: `adjustTimeStep` restored to `no`; mold `(h|e)Final` restored to the inherited `$h; relTol 0;` form.
+- C5: `adjustTimeStep` restored to `no`; `solidificationMelting beta` restored to `1.13e-04 1/K`.
+
+B3 generated data that belonged to the later adaptive-time-step rerun were replaced by the pre-advisor fixed-step B3 outputs from repository history. The adaptive B3 `logs/` set was removed because it did not correspond to the restored B3 reference configuration.
+
+The original C5 `foamLog` parsed `logs/` data were restored from repository history after having been accidentally removed during synchronization.
+
+### V6 controlled test
+
+Created `B6_fvSolution` and `C6_fvSolution` from the clean V5 basis.
+
+Controlled change: the mold-region final energy solver is written explicitly as:
+
+```
+"(h|e)Final"
+{
+    solver          PCG;
+    preconditioner  DIC;
+    tolerance       1e-06;
+    relTol          0;
+}
+```
+
+Everything else remains at the V5 controlled configuration.
+
+### V7 controlled test
+
+Created `B7_outer4` and `C7_outer4` from the clean V5 basis.
+
+Controlled change:
+
+`nOuterCorrectors 4;`
+
+Everything else remains at the V5 controlled configuration.
+
+### Standardized solver-log post-processing
+
+All controlled cases V3-V7 now execute:
+
+`foamLog log.foamMultiRun`
+
+automatically from `Allrun` after the solver finishes. Before parsing, any previous `logs/` directory and `log.foamLog` are removed so diagnostics cannot be mixed across runs.
+
+The generated case-level `logs/` directory is now part of the standard post-processing record and is intended to be tracked in Git. `Allclean` explicitly removes this directory.
+
+**Status:** ✅ V3/V5 restored; ✅ V6 fvSolution cases defined; ✅ V7 outer-corrector=4 cases defined; ✅ foamLog standardized for V3-V7.

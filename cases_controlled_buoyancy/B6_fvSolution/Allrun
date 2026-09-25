@@ -6,10 +6,17 @@ cd ${0%/*} || exit 1    # Run from this directory
 
 runApplication blockMesh
 ##runApplication createZones
-runApplication splitMeshRegions -cellZones all 
+runApplication splitMeshRegions -cellZones all
 ##splitMeshRegions -cellZones 'metal mold'
 
 runApplication foamMultiRun
+
+# Standard derived solver diagnostics for post-processing.
+# foamLog parses log.foamMultiRun into the case-level logs/ directory
+# (Courant number, residuals, continuity, iterations, execution time, etc.).
+rm -rf logs
+rm -f log.foamLog
+runApplication foamLog log.foamMultiRun
 
 touch buoyant.foam
 
