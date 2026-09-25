@@ -549,3 +549,8 @@ For V3 through V7, `Allrun` now executes `foamLog log.foamMultiRun` automaticall
 Typical series include Courant number, continuity errors, solver initial/final residuals, iteration counts, execution/clock time, and density/enthalpy/pressure diagnostics when present in the solver log.
 
 `Allclean` explicitly removes `logs/` so a clean rerun cannot accidentally mix parsed diagnostics from different runs.
+
+
+### C5 parsed logs regeneration note
+
+The previously restored historical `C5_outer3/logs/` directory was removed from the repository. C5 parsed diagnostics must now be regenerated directly from the tracked `C5_outer3/log.foamMultiRun` with `foamLog log.foamMultiRun`, matching the standardized post-processing workflow used for the other controlled cases.

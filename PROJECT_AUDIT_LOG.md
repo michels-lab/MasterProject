@@ -2206,3 +2206,19 @@ automatically from `Allrun` after the solver finishes. Before parsing, any previ
 The generated case-level `logs/` directory is now part of the standard post-processing record and is intended to be tracked in Git. `Allclean` explicitly removes this directory.
 
 **Status:** ✅ V3/V5 restored; ✅ V6 fvSolution cases defined; ✅ V7 outer-corrector=4 cases defined; ✅ foamLog standardized for V3-V7.
+
+
+---
+
+## 2026-09-25 — AUD-054 — Remove stale restored C5 foamLog outputs
+**[CORRECTION] [POST-PROCESSING] [TRACEABILITY]**
+
+The historical `C5_outer3/logs/` directory that had been restored from an earlier commit in AUD-053 was removed. Restoring those derived files was inconsistent with the standardized workflow, which requires `logs/` to be regenerated from the tracked case-level `log.foamMultiRun`.
+
+The source solver log `C5_outer3/log.foamMultiRun` remains unchanged and tracked. New C5 `logs/` must be produced with:
+
+`foamLog log.foamMultiRun`
+
+This ensures the parsed diagnostics are derived explicitly from the current tracked solver log rather than copied from a historical `logs/` snapshot.
+
+**Status:** ✅ stale C5 parsed logs removed; source solver log retained.
