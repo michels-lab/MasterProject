@@ -538,9 +538,9 @@ Important traceability notes:
 The historical V3/V5 configurations were restored before defining the next controlled cases.
 
 - **B6_fvSolution / C6_fvSolution** — clean V5 base with the advisor's explicit final solid-energy solver definition in `system/mold/fvSolution` as the controlled change. The final `(h|e)Final` solve explicitly uses PCG, DIC, `tolerance 1e-06`, and `relTol 0`.
-- **B7_outer4 / C7_outer4** — clean V5 base with `nOuterCorrectors 4` as the controlled change.
+- **B7_outer4 / C7_outer4** — clean V5 base with `nOuterCorrectors 4` **and** adaptive time stepping enabled (`adjustTimeStep yes`). The initial `deltaT` remains `0.001 s`, with `maxCo 0.25` and `maxDeltaT 0.1 s`.
 
-All V6/V7 cases retain fixed `deltaT=0.001` and `adjustTimeStep no`. B retains `icoTabulated + beta=0`; C retains `rhoConst=6820 + beta=1.13e-04`.
+V6 retains fixed `deltaT=0.001` with `adjustTimeStep no`. V7 uses adaptive time stepping. B retains `icoTabulated + beta=0`; C retains `rhoConst=6820 + beta=1.13e-04`.
 
 ### Standard foamLog post-processing
 

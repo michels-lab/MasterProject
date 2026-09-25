@@ -2222,3 +2222,34 @@ The source solver log `C5_outer3/log.foamMultiRun` remains unchanged and tracked
 This ensures the parsed diagnostics are derived explicitly from the current tracked solver log rather than copied from a historical `logs/` snapshot.
 
 **Status:** ✅ stale C5 parsed logs removed; source solver log retained.
+
+
+---
+
+## 2026-09-25 — AUD-055 — Enable adaptive time stepping in V7
+**[CONFIGURATION-CHANGE] [V7] [TIME-STEPPING]**
+
+By user decision, both V7 cases now combine:
+
+- `nOuterCorrectors = 4`
+- `adjustTimeStep = yes`
+
+The initial time-step remains:
+
+- `deltaT = 0.001 s`
+
+Adaptive control remains bounded by:
+
+- `maxCo = 0.25`
+- `maxDeltaT = 0.1 s`
+
+This applies to:
+
+- `B7_outer4`
+- `C7_outer4`
+
+The B/C physical formulations are unchanged.
+
+Because V7 now changes both the number of outer correctors and the time-step strategy relative to V5, it is **not** a single-variable convergence test. Any V7-vs-V5 difference must be interpreted as the combined effect of `nOuterCorrectors=4` and adaptive time stepping.
+
+**Status:** ✅ V7 adaptive time stepping enabled and documented.
