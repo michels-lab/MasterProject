@@ -2073,3 +2073,79 @@ Previous B-vs-C flow and thermal differences remain numerically real, but they m
 A physically preferred thesis formulation cannot be selected solely from numerical convergence. The next model-selection step must compare the intended physical approximation (variable-density vs Boussinesq/phase-source buoyancy) against experimental cooling curves and the expected thermophysical behavior of the cast iron.
 
 **Status:** ✅ implementation mechanism verified in OpenFOAM v14 source; 🟡 physical model selection still pending experimental validation.
+
+
+---
+
+## 2026-09-25 — AUD-052 — Post-advisor configuration divergence audit
+**[CONFIGURATION-AUDIT] [TRACEABILITY] [CONTROLLED-SERIES]**
+
+The six controlled cases were re-audited after local changes made during/after the advisor session were synchronized to `main`.
+
+### Current configuration matrix
+
+| Case | `nOuterCorrectors` | `nEnergyCorrectors` | `adjustTimeStep` | Metal EOS | `solidificationMelting beta` |
+|---|---:|---:|---|---|---:|
+| B3_reference | 2 | default (1) | **yes** | `icoTabulated` | 0 |
+| C3_reference | 2 | default (1) | no | `rhoConst` | 1.13e-4 |
+| B4_energy2 | 2 | 2 | no | `icoTabulated` | 0 |
+| C4_energy2 | 2 | 2 | no | `rhoConst` | 1.13e-4 |
+| B5_outer3 | 3 | default (1) | no | `icoTabulated` | 0 |
+| C5_outer3 | 3 | default (1) | **yes** | `rhoConst` | **0** |
+
+### B3 is no longer the original fixed-time-step reference on the current branch
+
+`B3_reference/system/controlDict` currently has `adjustTimeStep yes`.
+
+The newly generated `B3_reference/logs/Time_0` contains 2811 reported time values. The first reported time is 0.0012 s and the final reported time is 9.999798 s. `logs/deltaT_0` confirms adaptive stepping: the first reported time-step value is 0.0012 s and it evolves during the run, reaching about 0.00532 s near 10 s.
+
+Therefore the current B3 run output is an adaptive-time-step rerun and is not the same numerical experiment as the original B3 fixed-`deltaT=0.001` dataset used in the earlier B3/C3 convergence comparison. The original fixed-step data remain recoverable from Git history.
+
+### C5 current configuration does not match the C5 run previously analysed
+
+The C5 foamLog data were generated and committed before the latest configuration edits. At that time C5 used:
+
+- `rhoConst = 6820 kg/m3`
+- `beta = 1.13e-4 1/K`
+- `adjustTimeStep no`
+- `nOuterCorrectors = 3`
+
+The current `C5_outer3` configuration now contains:
+
+- `rhoConst = 6820 kg/m3`
+- `beta = 0`
+- `adjustTimeStep yes`
+- `nOuterCorrectors = 3`
+
+Thus the current C5 dictionaries must **not** be assumed to describe the historical C5 results already analysed. With `rhoConst` and `beta=0`, thermal buoyancy is disabled in the presently configured C5 case; this is a different physical problem from the original C-family Boussinesq case.
+
+### B3 mold fvSolution change
+
+Only B3 currently has an explicit final solid-energy solver block:
+
+```
+"(h|e)Final"
+{
+    solver          PCG;
+    preconditioner  DIC;
+    tolerance       1e-06;
+    relTol          0;
+}
+```
+
+A root-level `fvSolution.txt` contains the same block. The other five cases use `$h; relTol 0;`.
+
+OpenFOAM Foundation v14's own multi-region CHT templates use the `$h; relTol 0;` form for `"(h|e)Final"`. The explicit B3 block reproduces the same PCG/DIC/tolerance values used by the base `"(h|e)"` solver and sets the final relative tolerance to zero. It should therefore be treated as an explicit restatement of the final solver settings rather than as a meaningful controlled numerical variable unless a future test demonstrates otherwise.
+
+### Controlled-series implication
+
+Do not create the next case by blindly copying the current C5 directory.
+
+The next controlled experiment must preserve the intended physical formulation of each family:
+
+- B-family: `icoTabulated`, `beta=0`.
+- C-family: `rhoConst=6820`, `beta=1.13e-4`.
+
+Only one numerical variable should then be changed at a time. If the advisor's repeated `adjustTimeStep yes` change is to be tested, it should be isolated from `nOuterCorrectors`. A separate no-buoyancy case (`rhoConst` + `beta=0`) should be given its own explicit name if intentionally studied rather than being silently folded into C5.
+
+**Status:** ✅ six-case configuration divergence identified; 🟡 next controlled-case definition pending.

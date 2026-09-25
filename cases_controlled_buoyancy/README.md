@@ -510,3 +510,24 @@ Whenever a relevant change is made to the controlled series — including physic
 The Audit Log preserves history. This README describes the current state.
 
 No model change should be treated as part of the controlled thesis configuration until both documents reflect it.
+
+
+### Current working-tree divergence after advisor changes
+
+The current dictionaries in `main` are no longer a perfectly uniform continuation of the original B3/C3 → B4/C4 → B5/C5 controlled series.
+
+| Case | Outer | Energy | Adaptive dt | EOS | beta |
+|---|---:|---:|---|---|---:|
+| B3 | 2 | 1 | **yes** | `icoTabulated` | 0 |
+| C3 | 2 | 1 | no | `rhoConst` | 1.13e-4 |
+| B4 | 2 | 2 | no | `icoTabulated` | 0 |
+| C4 | 2 | 2 | no | `rhoConst` | 1.13e-4 |
+| B5 | 3 | 1 | no | `icoTabulated` | 0 |
+| C5 | 3 | 1 | **yes** | `rhoConst` | **0** |
+
+Important traceability notes:
+
+- B3 has been rerun with adaptive time stepping and its current output should not be mixed with the original fixed-`deltaT=0.001` B3 dataset without explicitly identifying the run version.
+- C5's current dictionaries were edited after the historical C5 run used in the convergence analysis. The analysed C5 run used `beta=1.13e-4` and fixed `deltaT=0.001`; the current C5 dictionary has `beta=0` and `adjustTimeStep yes`.
+- The explicit `"(h|e)Final"` PCG/DIC block currently unique to B3 matches the numerical settings inherited by the OpenFOAM v14 template form `$h; relTol 0;`; it is not presently treated as a distinct controlled variable.
+- A future controlled case must be constructed from a known clean baseline and change only one variable.
