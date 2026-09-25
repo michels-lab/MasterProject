@@ -433,6 +433,17 @@ The profiles use `writeControl writeTime`; they therefore produce spatial profil
 
 **Runtime status:** complete for all six controlled cases. Each case contains 202 profile files (101 saved times × 2 heights) over 0–10 s.
 
+ 
+### Verified buoyancy implementation in B and C
+
+Source-level audit against OpenFOAM Foundation v14 shows that the B and C series do **not** represent "no buoyancy" versus "double buoyancy". They use two different, non-equivalent buoyancy mechanisms:
+
+- **B series:** `icoTabulated` gives temperature-dependent density. Because the case uses `p_rgh`, OpenFOAM's buoyant pressure correction contributes the density-gradient term `-ghf*snGrad(rho)`. In the `solidificationMelting` model, `beta=0`, so its explicit thermal-buoyancy source is zero. Therefore B has buoyancy through the variable-density pressure formulation.
+- **C series:** `rhoConst` makes the native `snGrad(rho)` buoyancy term vanish (apart from numerical roundoff), while `solidificationMelting` uses `beta=1.13e-4` and adds the explicit source `rhoRef*g*beta*deltaT`. Therefore C has buoyancy through the phase-change model source, not twice.
+
+These two approaches are not mathematically equivalent in the present setup. In particular, the B density table is strongly non-linear. Between 1423.15 K and 1473.15 K it changes from 6900 to 6820 kg/m3, corresponding to an effective local thermal expansion coefficient of roughly 2.3e-4 1/K, about twice the constant `beta=1.13e-4 1/K` used in C. Above liquidus, between 1473.15 K and 1573.15 K, the same table corresponds to roughly 1.2e-4 1/K, much closer to C.
+
+Also, the C source uses the `solidificationMelting` model's internal `deltaT`, which is measured relative to the phase-equilibrium relation and depends on liquid fraction, rather than simply applying a global linear `T-Tref` Boussinesq relation. This is another reason the two formulations can produce markedly different flow and thermal histories.
 
 ### B3/C3 spatial-profile interpretation
 

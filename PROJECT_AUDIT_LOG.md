@@ -1996,3 +1996,80 @@ The C-series develops persistent upward center flow and strong early vertical th
 This is a mechanistic numerical interpretation, not physical validation. Experimental thermal curves and further field-level comparison are still required before selecting a physically preferred buoyancy formulation.
 
 **Status:** ✅ profile generation and initial spatial B3/C3 interpretation complete; 🟡 graphical thesis figures and experimental validation remain.
+
+
+---
+
+## 2026-09-25 — AUD-051 — Source-level buoyancy implementation audit
+**[SOURCE-VERIFIED] [INTERPRETATION-CORRECTION]**
+
+A source-level audit was performed after observing large B-vs-C differences in temperature and velocity.
+
+### Verified B implementation
+
+`B3_reference/constant/metal/materials/castIron` uses:
+
+- `equationOfState icoTabulated`
+- temperature-dependent density table
+- density from 6900 kg/m3 at 1423.15 K to 6820 kg/m3 at 1473.15 K.
+
+`B3_reference/constant/metal/fvModels` uses:
+
+- `beta 0`
+- `rhoRef 6930`.
+
+OpenFOAM Foundation v14's buoyant pressure correction for `p_rgh` explicitly includes:
+
+`ghGradRhof = -ghf*fvc::snGrad(rho)*mesh.magSf()`
+
+and adds this density-gradient contribution to the pressure/velocity correction.
+
+Therefore B is **not a zero-buoyancy case**. Its buoyancy is generated through the temperature-dependent density field and the native `p_rgh` buoyancy formulation. Setting `beta=0` only disables the additional explicit buoyancy source inside `solidificationMelting`.
+
+### Verified C implementation
+
+`C3_reference/constant/metal/materials/castIron` uses:
+
+- `equationOfState rhoConst`
+- `rho = 6820 kg/m3`.
+
+`C3_reference/constant/metal/fvModels` uses:
+
+- `beta = 1.13e-4 1/K`
+- `rhoRef = 6820 kg/m3`.
+
+For constant density, the native `-ghf*snGrad(rho)` buoyancy term is zero apart from numerical roundoff.
+
+OpenFOAM Foundation v14's `solidificationMelting` momentum source adds:
+
+`Sb = rhoRef*g*beta*deltaT`
+
+Hence C is **not a double-buoyancy case**. Its thermal buoyancy is supplied by the explicit `solidificationMelting` source while the native density-gradient buoyancy is inactive because density is constant.
+
+### Why B and C differ strongly
+
+The two formulations are not equivalent.
+
+The B density table gives an effective thermal-expansion strength that changes with temperature. Across 1423.15–1473.15 K:
+
+- rho decreases by 80 kg/m3 over 50 K,
+- effective beta is approximately 2.3e-4 1/K.
+
+This is roughly twice the constant `beta = 1.13e-4 1/K` used in C.
+
+Across 1473.15–1573.15 K:
+
+- rho decreases by 80 kg/m3 over 100 K,
+- effective beta is approximately 1.2e-4 1/K,
+
+which is much closer to C.
+
+Additionally, the C source uses the phase model's internal `deltaT`, which is defined relative to the current phase-equilibrium relation and therefore depends on the liquid-fraction state. It is not simply a globally linear Boussinesq `T-Tref` term.
+
+### Impact
+
+Previous B-vs-C flow and thermal differences remain numerically real, but they must be interpreted as consequences of **two different buoyancy models**, not as evidence of "no buoyancy" in B or "double counting" in C.
+
+A physically preferred thesis formulation cannot be selected solely from numerical convergence. The next model-selection step must compare the intended physical approximation (variable-density vs Boussinesq/phase-source buoyancy) against experimental cooling curves and the expected thermophysical behavior of the cast iron.
+
+**Status:** ✅ implementation mechanism verified in OpenFOAM v14 source; 🟡 physical model selection still pending experimental validation.
