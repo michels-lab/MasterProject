@@ -2588,3 +2588,187 @@ Es una modificación exclusivamente de postprocesamiento. No cambia:
 Los casos B6/C6/B7/C7 ya habían comenzado a ejecutarse localmente antes de que esta configuración se añadiera al repositorio. Por tanto, esta modificación en Git no altera corridas locales que ya están en curso. Sus perfiles verticales pueden generarse posteriormente a partir de los tiempos guardados una vez sincronizada la configuración local.
 
 **Estado:** ✅ configuración vertical añadida a B3–B7/C3–C7; 🟡 extracción/análisis de los nuevos perfiles pendiente.
+
+
+---
+
+## 2026-09-26 — Paquete completo de diagnósticos de solidificación añadido a V3–V7
+**[POST-PROCESSING] [CONFIG-VERIFIED] [GIT-VERIFIED] [NOT-YET-RUN-VERIFIED]**
+
+Se añadió a los diez casos controlados B3–B7/C3–C7 un paquete común de diagnósticos basado únicamente en function objects nativos de OpenFOAM Foundation v14.
+
+Commit principal de implementación:
+
+`bd77587a4bf8c813c40512cfdfc3a27ae4e0168f`
+
+La modificación es exclusivamente de postprocesamiento. No cambia malla, propiedades, condiciones de frontera, modelo de solidificación, timestep, PIMPLE ni ecuaciones.
+
+### Probe central ampliado
+
+El probe en `(0.020 0.020 0.005) m` ahora registra en cada timestep:
+
+- `U`
+- `T`
+- `p_rgh`
+- `rho`
+- `phaseChangeSource:alpha1`
+
+Esto permite correlacionar directamente presión modificada, densidad, velocidad, temperatura y fracción líquida en el mismo punto.
+
+### Gradiente térmico
+
+Se añadieron:
+
+- `gradT = grad(T)`
+- `magGradT = |grad(T)|`
+
+También se registra el máximo espacial de `magGradT` y su localización mediante `metalMaxThermalGradient`.
+
+### Tasa térmica local
+
+Se añadió el function object nativo `ddt`:
+
+- `dTdt = dT/dt`
+- `coolingRate = -dTdt`
+
+Convención:
+
+- `coolingRate > 0`: enfriamiento local
+- `coolingRate < 0`: calentamiento local
+
+Se añade además `metalMeanCoolingRate`.
+
+### Gradiente de densidad
+
+Se añadieron:
+
+- `gradRho = grad(rho)`
+- `magGradRho = |grad(rho)|`
+- `metalMaxDensityGradient` con localización
+
+Objetivo: comparar directamente las rutas de buoyancy B/C.
+
+En B, la densidad depende de T y el gradiente de densidad participa en la buoyancy nativa de `p_rgh`.
+
+En C, `rho` es constante, por lo que `gradRho` debería ser aproximadamente cero. Esto constituye además una comprobación interna útil de la formulación.
+
+### Tasa de cambio de fase
+
+Se añadieron:
+
+- `dAlphaLdt = d(alpha_l)/dt`
+- `solidificationRate = -dAlphaLdt`
+
+Convención:
+
+- `solidificationRate > 0`: solidificación local
+- `solidificationRate < 0`: refusión local
+
+Se verificó en el código fuente de OpenFOAM v14 que `solidificationMeltingSource` actualiza explícitamente `alpha1_.oldTime()`, por lo que el campo dispone del historial temporal requerido durante ejecución.
+
+### Tasa de calor latente
+
+Se verificó que los diez casos usan:
+
+`L = 2.286e5 J/kg`
+
+Se crea un campo uniforme nativo `latentHeat` con dimensiones físicas `J/kg`, y mediante `multiply` se calcula:
+
+`latentHeatRateVol = rho * L * solidificationRate`
+
+Dimensiones:
+
+`W/m3`
+
+Convención:
+
+- valor positivo: liberación de calor latente por solidificación
+- valor negativo: absorción de calor durante refusión
+
+Se integra además sobre todo el metal:
+
+`metalLatentHeatPower = integral(latentHeatRateVol dV)`
+
+con resultado en W.
+
+### Courant espacial
+
+Se añadió el function object nativo:
+
+`CoCell`
+
+usando `phi` y `rho`. En v14, `CourantNo` detecta el flujo másico y divide por densidad internamente cuando corresponde.
+
+También se registra:
+
+`metalMaxCourant`
+
+con valor y ubicación.
+
+### Perfiles espaciales ampliados
+
+Las dos líneas horizontales y la línea vertical central ahora muestrean:
+
+- `U`
+- `T`
+- `p_rgh`
+- `rho`
+- `phaseChangeSource:alpha1`
+- `vorticity`
+- `flowType`
+- `magSqrDevGradU`
+- `gradT`
+- `magGradT`
+- `dTdt`
+- `coolingRate`
+- `gradRho`
+- `magGradRho`
+- `dAlphaLdt`
+- `solidificationRate`
+- `latentHeatRateVol`
+- `CoCell`
+
+Esto permite estudiar espacialmente, sobre exactamente las mismas líneas, flujo, presión, buoyancy, gradiente térmico, enfriamiento, avance/refusión de fase, liberación latente y carga numérica local.
+
+### Diagnósticos energéticos ya presentes
+
+Se conservan y quedan integrados con este paquete:
+
+- `energyAdvectiveFlux`
+- `heatFlux`
+- `energyFlux`
+- potencia en `metalTop`
+- potencia en `metal_to_mold`
+- potencia neta en ambas fronteras
+- `metalSensibleEnthalpy`
+- `metalMeanLiquidFraction`
+- `vorticity`
+- `flowType`
+
+### Limitación importante de OpenFOAM v14
+
+El propio código fuente de `functionObjects::ddt` indica que **`ddt` no está soportado por `foamPostProcess`**.
+
+Por tanto, los campos:
+
+- `dTdt`
+- `coolingRate`
+- `dAlphaLdt`
+- `solidificationRate`
+- `latentHeatRateVol`
+
+deben generarse DURANTE una corrida del solver.
+
+No pueden reconstruirse retrospectivamente con el `foamPostProcess` estándar de v14 a partir de una corrida ya terminada.
+
+Para corridas antiguas, PostPlotter podrá estimar derivados temporales a partir de los datos almacenados; esas estimaciones deben distinguirse explícitamente de la evaluación nativa runtime `fvc::ddt`.
+
+### Estado
+
+- ✅ configuración añadida a B3–B7/C3–C7
+- ✅ sintaxis y disponibilidad de `grad`, `mag`, `ddt`, `uniform`, `multiply` y `CourantNo` verificadas contra el código/caseDicts oficiales de OpenFOAM Foundation v14
+- ✅ L verificado idéntico en los diez casos
+- ✅ dependencias colocadas antes de `lineProfiles`
+- 🟡 todavía no validado mediante una ejecución real del solver con este paquete completo
+- 🟡 B6/C6/B7/C7 que ya estuvieran corriendo localmente antes de esta modificación no reciben estos nuevos function objects automáticamente
+
