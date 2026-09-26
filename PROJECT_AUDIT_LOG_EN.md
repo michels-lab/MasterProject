@@ -2650,3 +2650,53 @@ The app should evolve from a viewer of individual `p_rgh_0`, `p_rgh_1`, etc. fil
 - cross-case comparison by `nOuterCorrectors`.
 
 **Status:** ✅ B3–B5/C3–C5 Initial residuals audited; ✅ `p_rgh` identified as the primary coupling signal; 🟡 B7/C7 pending for the `nOuterCorrectors=4` test.
+
+
+---
+
+## 2026-09-25 — Distinguishing linear-solver convergence from PIMPLE coupling convergence
+**[RUN-VERIFIED] [COUPLING-DIAGNOSTIC]**
+
+After auditing the `p_rgh` Initial residuals, B5 and C5 `p_rghFinalRes_*` data were also analysed to separate two different phenomena:
+
+1. convergence of each linear pressure solve;
+2. convergence of the outer PIMPLE coupling.
+
+### B5
+
+For t>=0.1 s:
+
+- `p_rghFinalRes_1`: median ≈ **6.68e-8**
+- `p_rghFinalRes_3`: median ≈ **5.00e-8**
+- `p_rghFinalRes_5`: median ≈ **3.91e-8**
+
+The second pressure solve in each outer cycle consistently finishes near the 1e-8–1e-7 range.
+
+However, the Initial residual of the next outer cycle can return to the 1e-3–1e-2 range.
+
+### C5
+
+For t>=0.1 s:
+
+- `p_rghFinalRes_1`: median ≈ **6.76e-8**
+- `p_rghFinalRes_3`: median ≈ **5.55e-8**
+- `p_rghFinalRes_5`: median ≈ **5.09e-8**
+
+Again, each linear solve can finish with a small residual while the following coupling cycle starts with a much larger Initial residual.
+
+### Interpretation
+
+A persistent `p_rgh` Initial residual should therefore not automatically be interpreted as failure of the linear pressure solver.
+
+In the audited cases, the linear solver reduces its residual correctly, but coupled updates of velocity, pressure, energy, density/phase and model sources can cause the next pressure correction to start from a materially different state.
+
+The diagnostic must explicitly separate:
+
+- **linear-solver convergence:** Initial residual → Final residual within one pressure solve;
+- **PIMPLE/nonlinear coupling convergence:** Initial residual from one outer cycle → Initial residual in the next outer cycle.
+
+### App implication
+
+OpenFOAM PostPlotter should display these two metrics separately. A small `Final residual` must not hide persistent coupling behaviour, and a high `Initial residual` must not be labelled a linear-solver failure when that pressure solve itself converges successfully.
+
+**Status:** ✅ linear-solver and PIMPLE-coupling convergence separated using real B5/C5 data.
