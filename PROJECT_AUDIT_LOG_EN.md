@@ -2400,3 +2400,24 @@ Earlier project commands were backfilled rather than treating the manual as star
 Only commands or workflows with explicit historical evidence should be labeled as coming from or motivated by the doctor. Other recovered commands are documented as project-history commands without unsupported attribution.
 
 **Status:** ✅ bilingual selector active; ✅ Spanish and English manuals synchronized; ✅ first historical backfill completed.
+
+
+---
+
+## 2026-09-25 — Bilingual Project Audit Log
+
+### Documentation change
+
+The Project Audit Log now follows the same bilingual structure as the OpenFOAM command manual:
+
+- `PROJECT_AUDIT_LOG.md` — language selector.
+- `PROJECT_AUDIT_LOG_ES.md` — complete Spanish version.
+- `PROJECT_AUDIT_LOG_EN.md` — complete English version.
+
+Both versions preserve the same technical record: dates, AUD identifiers, evidence labels, commands, filenames, numerical values, decisions, interpretations, and status. Only the narrative language changes.
+
+### Maintenance rule
+
+Every new technical audit entry must be added to both the Spanish and English versions so neither language becomes more current than the other.
+
+**Status:** ✅ bilingual audit-log structure active.
