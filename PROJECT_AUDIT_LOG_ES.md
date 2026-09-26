@@ -2942,3 +2942,70 @@ Al mismo tiempo, B puede presentar máximos de `p_rgh_0` mayores que C. Por tant
 La diferencia puede estar relacionada con las formulaciones físicas B/C, pero no se etiqueta aquí como “estabilidad superior/inferior” sin más evidencia.
 
 **Estado:** ✅ logs finales V3–V7 versionados; ✅ outer2/3/4 auditado; ✅ V6 adaptive auditado numéricamente; ✅ convergencia lineal separada de coupling; 🟡 comparación física completa de V6/V7 con los nuevos outputs de `researchDiagnostics` todavía pendiente.
+
+
+---
+
+## 2026-09-26 — Auditoría numérica final V3–V7 desde resultados sincronizados
+**[RUN-VERIFIED] [GIT-VERIFIED] [NUMERICAL-AUDIT]**
+
+Los resultados finales de los diez casos controlados V3–V7 fueron sincronizados desde la estación de trabajo local al repositorio y auditados directamente desde los `log.foamMultiRun` y `logs/` versionados.
+
+Commits de resultados:
+- `5d5ccb00f1b3...` — actualización de logs finales V3–V7.
+- `54182ef3cab9...` — sincronización restante de datos locales.
+
+### Comparación de costo y coupling de `p_rgh` (startup excluido: t < 0.1 s)
+
+| Caso | Pasos | Max p0 | Mediana p0 | Mediana R | p95 R | R>1 | Co max | Exec. s |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| B3_reference | 10000 | 0.0343238 | 0.00835789 | 0.605438 | 0.945131 | 2.62% | 0.175912 | 202.005 |
+| C3_reference | 10000 | 0.0173881 | 0.00748726 | 0.812747 | 1.05934 | 10.08% | 0.0700709 | 196.543 |
+| B4_energy2 | 10000 | 0.0307308 | 0.00835290 | 0.604283 | 0.943883 | 2.92% | 0.176643 | 250.984 |
+| C4_energy2 | 10000 | 0.0179951 | 0.00751839 | 0.813191 | 1.06310 | 10.62% | 0.0700709 | 220.093 |
+| B5_outer3 | 10000 | 0.0317178 | 0.00825669 | 0.597503 | 0.950764 | 3.62% | 0.175874 | 282.222 |
+| C5_outer3 | 10000 | 0.0178995 | 0.00775813 | 0.800997 | 1.04147 | 8.22% | 0.0700712 | 273.060 |
+| B6_adaptiveDt | 2810 | 0.0186405 | 0.00236917 | 0.374538 | 0.764803 | 1.59% | 0.287759 | 80.778 |
+| C6_adaptiveDt | 1584 | 0.0223995 | 0.00898528 | 0.794831 | 1.03491 | 7.58% | 0.287049 | 47.336 |
+| B7_outer4 | 10000 | 0.0362977 | 0.00831734 | 0.603163 | 0.950615 | 2.96% | 0.175849 | 381.367 |
+| C7_outer4 | 10000 | 0.0174552 | 0.00759476 | 0.808822 | 1.08250 | 10.65% | 0.0700710 | 365.418 |
+
+Aquí `R = p_rgh,last(initial) / p_rgh,first(initial)` dentro del timestep. `R>1` significa que el Initial residual aumentó a través del coupling; no implica por sí solo fallo del solver lineal.
+
+Los últimos solves lineales de presión siguen terminando con residual final típicamente de orden `10^-8` a `10^-7` en todos los casos, por lo que debe mantenerse separada la interpretación de convergencia lineal y convergencia del acoplamiento PIMPLE.
+
+### Resultado de outer correctors
+
+Comparando el baseline V3 con V5 y V7:
+
+- B: mediana R = 0.6054 → 0.5975 → 0.6032 para outer 2 → 3 → 4.
+- C: mediana R = 0.8127 → 0.8010 → 0.8088.
+- El costo de B7 frente a B3 aumenta de 202.0 s a 381.4 s (~89%).
+- El costo de C7 frente a C3 aumenta de 196.5 s a 365.4 s (~86%).
+
+La cuarta outer correction no produce una mejora monotónica en la mediana de R respecto a outer3, mientras el costo aumenta fuertemente. Esto refuerza el resultado previo de diminishing returns para el rango probado. No se interpreta como una selección de modelo físico.
+
+### Resultado de energy correctors
+
+B4/C4 mantienen métricas de coupling muy próximas a B3/C3, mientras incrementan el costo. Esto es consistente con la sensibilidad térmica/central previamente observada como pequeña.
+
+### Adaptive timestep V6
+
+V6 reduce fuertemente el número de pasos y el tiempo de ejecución:
+
+- B6: 2810 pasos, 80.78 s.
+- C6: 1584 pasos, 47.34 s.
+
+`deltaT` observado:
+- B6: mediana 0.003954 s, máximo 0.005321 s.
+- C6: mediana 0.005902 s, máximo 0.026623 s.
+
+El Courant máximo registrado alcanza ~0.288 en ambos casos, por encima del `maxCo=0.25` configurado, mientras los valores finales quedan aproximadamente en 0.25. Esto se registra como un sobrepaso observado del target durante la adaptación y requiere interpretación en contexto del algoritmo de ajuste; no se etiqueta automáticamente como inestabilidad.
+
+La continuidad acumulada final es mayor en V6:
+- B6: 2.4498e-4.
+- C6: 2.71897e-4.
+
+Antes de aceptar V6 como sustituto del timestep fijo se requiere comparar los resultados físicos (T, fase, perfiles, gradientes y energía), no solo costo y residuals.
+
+**Estado:** auditoría numérica final V3–V7 completada desde datos versionados. Siguiente etapa: comparación física de outputs de postProcessing.

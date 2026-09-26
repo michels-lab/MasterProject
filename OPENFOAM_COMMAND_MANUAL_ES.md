@@ -720,3 +720,25 @@ Si un output ignorado debe conservarse científicamente, primero decidir qué su
 ### No usar
 
 No usar `git push --force` para resolver un rechazo por non-fast-forward cuando existen resultados locales válidos. Preferir `git pull --rebase` después de haber hecho commit de los cambios locales.
+
+
+## Sincronización de resultados finales con Git (flujo NARANJA)
+
+Cuando una tanda de OpenFOAM se ejecuta en la estación local y los resultados versionables deben convertirse en la nueva fuente de verdad:
+
+1. Preservar primero los resultados locales válidos.
+2. Añadir y confirmar los logs/resultados versionables.
+3. Integrar después los commits remotos con `git pull --rebase`.
+4. Subir con `git push`.
+5. Solo después actualizar bitácoras, manuales o conclusiones de análisis.
+
+Ejemplo:
+
+```bash
+git add -A
+git commit -m "results: sync remaining local controlled-case data"
+git pull --rebase origin main
+git push origin main
+```
+
+No usar `force push` para resolver un remoto adelantado. Este flujo evita que documentación remota más reciente sustituya o confunda resultados que todavía existen únicamente en la máquina local.

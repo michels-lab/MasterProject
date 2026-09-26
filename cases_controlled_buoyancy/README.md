@@ -720,3 +720,23 @@ Key numerical conclusions from the final rerun:
 - V6 also shows larger final cumulative continuity values than V5; this and the physical histories must be checked before selecting adaptive timestep as the accepted production setup.
 
 The next decision should therefore be based on **physical equivalence/sensitivity** (temperature, liquid fraction, velocity topology, phase-change rates, gradients, latent-heat and energy diagnostics), not on runtime alone.
+
+
+## Final V3–V7 numerical audit (2026-09-26)
+
+The final synchronized run logs confirm a strong computational-cost increase with additional outer correctors but only small changes in typical pressure-coupling reduction.
+
+| Case | Steps | Median coupling R | R > 1 | Max Co | Execution time (s) |
+|---|---:|---:|---:|---:|---:|
+| B3_reference | 10000 | 0.6054 | 2.62% | 0.1759 | 202.0 |
+| C3_reference | 10000 | 0.8127 | 10.08% | 0.0701 | 196.5 |
+| B5_outer3 | 10000 | 0.5975 | 3.62% | 0.1759 | 282.2 |
+| C5_outer3 | 10000 | 0.8010 | 8.22% | 0.0701 | 273.1 |
+| B7_outer4 | 10000 | 0.6032 | 2.96% | 0.1758 | 381.4 |
+| C7_outer4 | 10000 | 0.8088 | 10.65% | 0.0701 | 365.4 |
+| B6_adaptiveDt | 2810 | 0.3745 | 1.59% | 0.2878 | 80.8 |
+| C6_adaptiveDt | 1584 | 0.7948 | 7.58% | 0.2870 | 47.3 |
+
+The outer-4 cases therefore show no monotonic coupling improvement over outer-3 while costing substantially more. Adaptive V6 greatly reduces runtime, but its physical equivalence to the fixed-timestep cases remains to be checked before acceptance.
+
+For V6, observed maximum Courant reaches about 0.288 despite `maxCo=0.25`; final Courant values are near 0.25. This is treated as an observed adaptation overshoot, not automatically as solver instability.

@@ -3125,3 +3125,70 @@ At the same time, B can show larger `p_rgh_0` maxima than C. Two questions must 
 The difference may be related to the B/C physical formulations, but it is not labelled here as “better/worse stability” without further evidence.
 
 **Status:** ✅ final V3–V7 logs versioned; ✅ outer2/3/4 audited; ✅ V6 adaptive timestep numerically audited; ✅ linear convergence separated from coupling; 🟡 complete physical comparison of V6/V7 using the new `researchDiagnostics` outputs remains pending.
+
+
+---
+
+## 2026-09-26 — Final V3–V7 numerical audit from synchronized results
+**[RUN-VERIFIED] [GIT-VERIFIED] [NUMERICAL-AUDIT]**
+
+Final results for all ten controlled V3–V7 cases were synchronized from the local workstation to the repository and audited directly from the versioned `log.foamMultiRun` and `logs/` data.
+
+Result commits:
+- `5d5ccb00f1b3...` — final V3–V7 log update.
+- `54182ef3cab9...` — remaining local-data synchronization.
+
+### Cost and `p_rgh` coupling comparison (startup excluded: t < 0.1 s)
+
+| Case | Steps | Max p0 | Median p0 | Median R | p95 R | R>1 | Max Co | Exec. s |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| B3_reference | 10000 | 0.0343238 | 0.00835789 | 0.605438 | 0.945131 | 2.62% | 0.175912 | 202.005 |
+| C3_reference | 10000 | 0.0173881 | 0.00748726 | 0.812747 | 1.05934 | 10.08% | 0.0700709 | 196.543 |
+| B4_energy2 | 10000 | 0.0307308 | 0.00835290 | 0.604283 | 0.943883 | 2.92% | 0.176643 | 250.984 |
+| C4_energy2 | 10000 | 0.0179951 | 0.00751839 | 0.813191 | 1.06310 | 10.62% | 0.0700709 | 220.093 |
+| B5_outer3 | 10000 | 0.0317178 | 0.00825669 | 0.597503 | 0.950764 | 3.62% | 0.175874 | 282.222 |
+| C5_outer3 | 10000 | 0.0178995 | 0.00775813 | 0.800997 | 1.04147 | 8.22% | 0.0700712 | 273.060 |
+| B6_adaptiveDt | 2810 | 0.0186405 | 0.00236917 | 0.374538 | 0.764803 | 1.59% | 0.287759 | 80.778 |
+| C6_adaptiveDt | 1584 | 0.0223995 | 0.00898528 | 0.794831 | 1.03491 | 7.58% | 0.287049 | 47.336 |
+| B7_outer4 | 10000 | 0.0362977 | 0.00831734 | 0.603163 | 0.950615 | 2.96% | 0.175849 | 381.367 |
+| C7_outer4 | 10000 | 0.0174552 | 0.00759476 | 0.808822 | 1.08250 | 10.65% | 0.0700710 | 365.418 |
+
+Here `R = p_rgh,last(initial) / p_rgh,first(initial)` within each timestep. `R>1` means the Initial residual increased across coupling; it does not by itself imply linear-solver failure.
+
+The final pressure solves still terminate with final residuals typically of order `10^-8` to `10^-7` in all cases, so linear convergence and PIMPLE-coupling convergence must remain separate interpretations.
+
+### Outer-corrector result
+
+Comparing V3, V5 and V7:
+
+- B: median R = 0.6054 → 0.5975 → 0.6032 for outer 2 → 3 → 4.
+- C: median R = 0.8127 → 0.8010 → 0.8088.
+- B7 cost increases from 202.0 s to 381.4 s relative to B3 (~89%).
+- C7 cost increases from 196.5 s to 365.4 s relative to C3 (~86%).
+
+The fourth outer correction does not provide a monotonic improvement in median R relative to outer3 while computational cost increases strongly. This supports the previously observed diminishing-return behavior over the tested range. It is not a physical-model selection.
+
+### Energy-corrector result
+
+B4/C4 retain coupling metrics close to B3/C3 while increasing cost, consistent with the previously small central thermal/phase sensitivity.
+
+### Adaptive timestep V6
+
+V6 strongly reduces step count and execution time:
+
+- B6: 2810 steps, 80.78 s.
+- C6: 1584 steps, 47.34 s.
+
+Observed `deltaT`:
+- B6: median 0.003954 s, maximum 0.005321 s.
+- C6: median 0.005902 s, maximum 0.026623 s.
+
+Recorded maximum Courant reaches ~0.288 in both cases, above the configured `maxCo=0.25`, while final values are approximately 0.25. This is recorded as an observed overshoot of the adaptation target and requires interpretation in the context of the timestep-adjustment algorithm; it is not automatically labeled instability.
+
+Final cumulative continuity is larger in V6:
+- B6: 2.4498e-4.
+- C6: 2.71897e-4.
+
+V6 should not be accepted as a replacement for fixed timestep until the physical outputs (T, phase, profiles, gradients and energy) are compared, not merely cost and residuals.
+
+**Status:** final V3–V7 numerical audit completed from versioned data. Next stage: physical comparison of postProcessing outputs.

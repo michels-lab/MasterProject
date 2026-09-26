@@ -720,3 +720,25 @@ If an ignored output is scientifically worth preserving, first choose the useful
 ### Do not use
 
 Do not use `git push --force` to resolve a non-fast-forward rejection when valid local results exist. Prefer `git pull --rebase` after committing the local changes.
+
+
+## Synchronizing final run results with Git (NARANJA workflow)
+
+When an OpenFOAM batch is run on the local workstation and versionable outputs must become the new source of truth:
+
+1. Preserve valid local results first.
+2. Stage and commit versionable logs/results.
+3. Integrate newer remote commits afterward with `git pull --rebase`.
+4. Push with `git push`.
+5. Only then update audit logs, manuals, or analysis conclusions.
+
+Example:
+
+```bash
+git add -A
+git commit -m "results: sync remaining local controlled-case data"
+git pull --rebase origin main
+git push origin main
+```
+
+Do not use `force push` merely to resolve an ahead remote. This workflow prevents newer remote documentation from replacing or confusing simulation results that still exist only on the local workstation.
