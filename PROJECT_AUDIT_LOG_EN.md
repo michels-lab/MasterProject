@@ -3192,3 +3192,28 @@ Final cumulative continuity is larger in V6:
 V6 should not be accepted as a replacement for fixed timestep until the physical outputs (T, phase, profiles, gradients and energy) are compared, not merely cost and residuals.
 
 **Status:** final V3–V7 numerical audit completed from versioned data. Next stage: physical comparison of postProcessing outputs.
+
+
+---
+
+## 2026-09-26 — Validation matrix and experimental Quick-Cup parity audit
+**[VALIDATION-GATE] [SOURCE-AUDIT] [NO-PHYSICS-CHANGE]**
+
+The controlled V3–V7 configuration was audited against the hypoeutectic Quick-Cup benchmark described by Chiumenti et al.
+
+Main findings:
+
+- V3–V7 remain frozen as the numerical-sensitivity and buoyancy-formulation study.
+- The C3/C4/C5 thermal rebound (+5.35 K) is reproduced with essentially the same Tmin and liquid-fraction recovery under the tested numerical changes. In the current model it coincides with local remelting and is not labelled nucleation-driven recalescence.
+- The current case is not yet an aligned experimental benchmark: initial metal temperature is 1500 K versus 1573.15 K in the paper Quick-Cup, external HTC is 10 versus 50 W/m2K, and mould properties differ.
+- The current 0.2 mm interface layer with k=0.1 W/mK corresponds to an effective resistance of approximately 500 W/m2K and therefore matches the paper's casting–mould HTC.
+- The current initial temperature (1226.85 °C) is about 33 °C below the T_start_L=1260 °C used by the paper's hypoeutectic model.
+- Standard `solidificationMelting` uses a single melt-fraction variable tied to an equilibrium relation, whereas the paper model separates dendritic and eutectic transformations with time-dependent kinetic laws and undercooling.
+- No raw/CSV experimental time series was found in the repository or available files, so RMSE/MAE values are not fabricated.
+
+Added:
+- `VALIDATION_MATRIX.md`
+- `VALIDATION_MATRIX_ES.md`
+- `VALIDATION_MATRIX_EN.md`
+
+**Decision:** construct an experiment-aligned equilibrium case before writing a kinetic fvModel. The kinetic branch is opened only if that case demonstrates a structural limitation of the equilibrium model.

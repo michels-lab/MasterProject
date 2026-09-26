@@ -3009,3 +3009,28 @@ La continuidad acumulada final es mayor en V6:
 Antes de aceptar V6 como sustituto del timestep fijo se requiere comparar los resultados físicos (T, fase, perfiles, gradientes y energía), no solo costo y residuals.
 
 **Estado:** auditoría numérica final V3–V7 completada desde datos versionados. Siguiente etapa: comparación física de outputs de postProcessing.
+
+
+---
+
+## 2026-09-26 — Matriz de validación y auditoría de paridad con Quick-Cup experimental
+**[VALIDATION-GATE] [SOURCE-AUDIT] [NO-PHYSICS-CHANGE]**
+
+Se completó una auditoría de la configuración controlada V3–V7 contra el benchmark Quick-Cup hipereutéctico/hipoeutéctico descrito por Chiumenti et al.
+
+Hallazgos principales:
+
+- V3–V7 permanecen congelados como estudio de sensibilidad numérica y de formulación de buoyancy.
+- El rebound térmico de C3/C4/C5 (+5.35 K) se reproduce con prácticamente la misma Tmin y recuperación de fracción líquida bajo los cambios numéricos probados, por lo que no es un artefacto de elegir B3/C3 frente a B4/C4/B5/C5. En el modelo actual coincide con remelting local y no se etiqueta como recalescencia por nucleación.
+- El caso actual no es todavía un benchmark experimental alineado: 1500 K iniciales frente a 1573.15 K en el Quick-Cup del paper, HTC exterior 10 frente a 50 W/m2K y propiedades de molde distintas.
+- La resistencia de la capa de interfaz actual, 0.2 mm con k=0.1 W/mK, equivale a aproximadamente 500 W/m2K y sí coincide con el HTC metal–molde del paper.
+- La temperatura inicial actual (1226.85 °C) está ~33 °C por debajo del T_start_L=1260 °C utilizado por el modelo hipereutéctico/hipoeutéctico del paper.
+- El `solidificationMelting` estándar usa una sola variable de fracción líquida ligada a una relación de equilibrio, mientras el modelo del paper usa transformaciones dendrítica y eutéctica con leyes cinéticas temporales y subenfriamiento.
+- No se localizó en el repositorio ni en los archivos disponibles una serie temporal experimental raw/CSV; por tanto no se fabrican RMSE/MAE.
+
+Se añadieron:
+- `VALIDATION_MATRIX.md`
+- `VALIDATION_MATRIX_ES.md`
+- `VALIDATION_MATRIX_EN.md`
+
+**Decisión:** antes de escribir un fvModel cinético, construir un caso de equilibrio alineado con las condiciones experimentales. La rama cinética se abre solo si ese caso demuestra una limitación estructural del modelo de equilibrio.
