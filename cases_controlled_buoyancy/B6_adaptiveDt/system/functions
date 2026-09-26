@@ -50,6 +50,7 @@ temperatureProbe
 }
 
 
+#include "researchDiagnostics"
 #include "lineProfiles"
 
 // ************************************************************************* //

@@ -1,0 +1,195 @@
+// QuickCup research diagnostics — OpenFOAM Foundation v14
+//
+// These function objects are post-processing only. They do not alter the
+// governing equations, material properties, boundary conditions or mesh.
+//
+// Execution is limited to case write times to reduce runtime overhead.
+
+vorticityField
+{
+    type            vorticity;
+    libs            ("libfieldFunctionObjects.so");
+    region          metal;
+
+    executeControl  writeTime;
+    executeInterval 1;
+    writeControl    writeTime;
+    writeInterval   1;
+}
+
+flowTopology
+{
+    type            flowType;
+    libs            ("libfieldFunctionObjects.so");
+    region          metal;
+
+    executeControl  writeTime;
+    executeInterval 1;
+    writeControl    writeTime;
+    writeInterval   1;
+}
+
+// OpenFOAM v14 native energy-flux decomposition.
+// All three result fields are surfaceScalarFields with power dimensions.
+energyAdvectiveFlux
+{
+    type            energyAdvectiveFlux;
+    libs            ("libfieldFunctionObjects.so");
+    region          metal;
+
+    executeControl  writeTime;
+    executeInterval 1;
+    writeControl    writeTime;
+    writeInterval   1;
+}
+
+heatFlux
+{
+    type            heatFlux;
+    libs            ("libfieldFunctionObjects.so");
+    region          metal;
+
+    executeControl  writeTime;
+    executeInterval 1;
+    writeControl    writeTime;
+    writeInterval   1;
+}
+
+energyFlux
+{
+    type            energyFlux;
+    libs            ("libfieldFunctionObjects.so");
+    region          metal;
+
+    executeControl  writeTime;
+    executeInterval 1;
+    writeControl    writeTime;
+    writeInterval   1;
+}
+
+// Net power [W] across the exposed metal surface.
+metalTopEnergyPower
+{
+    type            surfaceFieldValue;
+    libs            ("libfieldFunctionObjects.so");
+    region          metal;
+
+    log             true;
+    executeControl  writeTime;
+    executeInterval 1;
+    writeControl    writeTime;
+    writeInterval   1;
+
+    writeFields     false;
+    surfaceFormat   none;
+    patch           metalTop;
+    operation       sum;
+
+    fields
+    (
+        energyAdvectiveFlux
+        heatFlux
+        energyFlux
+    );
+}
+
+// Net power [W] exchanged through the metal-to-mold interface.
+metalMoldEnergyPower
+{
+    type            surfaceFieldValue;
+    libs            ("libfieldFunctionObjects.so");
+    region          metal;
+
+    log             true;
+    executeControl  writeTime;
+    executeInterval 1;
+    writeControl    writeTime;
+    writeInterval   1;
+
+    writeFields     false;
+    surfaceFormat   none;
+    patch           metal_to_mold;
+    operation       sum;
+
+    fields
+    (
+        energyAdvectiveFlux
+        heatFlux
+        energyFlux
+    );
+}
+
+// Net power [W] through all non-empty metal boundaries considered here.
+metalBoundaryEnergyPower
+{
+    type            surfaceFieldValue;
+    libs            ("libfieldFunctionObjects.so");
+    region          metal;
+
+    log             true;
+    executeControl  writeTime;
+    executeInterval 1;
+    writeControl    writeTime;
+    writeInterval   1;
+
+    writeFields     false;
+    surfaceFormat   none;
+    patches         (metalTop metal_to_mold);
+    operation       sum;
+
+    fields
+    (
+        energyAdvectiveFlux
+        heatFlux
+        energyFlux
+    );
+}
+
+// Sensible enthalpy inventory: integral(rho*h dV) [J].
+// This is deliberately NOT labelled "total energy" because latent heat is
+// handled by the phase-change model and must be analysed separately.
+metalSensibleEnthalpy
+{
+    type            volFieldValue;
+    libs            ("libfieldFunctionObjects.so");
+    region          metal;
+
+    log             true;
+    executeControl  writeTime;
+    executeInterval 1;
+    writeControl    writeTime;
+    writeInterval   1;
+
+    writeFields     false;
+    cellZone        all;
+    operation       volIntegrate;
+    weightField     rho;
+
+    fields
+    (
+        h
+    );
+}
+
+// Volume-average liquid fraction; useful alongside front tracking.
+metalMeanLiquidFraction
+{
+    type            volFieldValue;
+    libs            ("libfieldFunctionObjects.so");
+    region          metal;
+
+    log             true;
+    executeControl  writeTime;
+    executeInterval 1;
+    writeControl    writeTime;
+    writeInterval   1;
+
+    writeFields     false;
+    cellZone        all;
+    operation       volAverage;
+
+    fields
+    (
+        phaseChangeSource:alpha1
+    );
+}

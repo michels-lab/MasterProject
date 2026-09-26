@@ -19,6 +19,9 @@ horizontalProfiles
         U
         T
         phaseChangeSource:alpha1
+        vorticity
+        flowType
+        magSqrDevGradU
     );
 
     sets
@@ -67,6 +70,9 @@ verticalProfiles
         U
         T
         phaseChangeSource:alpha1
+        vorticity
+        flowType
+        magSqrDevGradU
     );
 
     sets
