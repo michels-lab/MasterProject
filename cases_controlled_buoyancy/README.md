@@ -685,3 +685,38 @@ The OpenFOAM v14 `ddt` function object is **not supported by `foamPostProcess`**
 
 For already completed runs, equivalent temporal derivatives can still be estimated later from stored probe/profile data, but they are not identical to the native runtime `fvc::ddt` evaluation.
 
+
+
+---
+
+## Final V3–V7 rerun — numerical audit (2026-09-26)
+
+The current versioned solver-log dataset now covers all controlled V3–V7 cases. The latest rerun should be used for numerical-cost and coupling comparisons; older execution-time tables above are retained as historical records of earlier runs and should not be mixed with the final rerun timing values.
+
+| Case | Root test | Steps | Execution (s) | Max Co | Median coupling R | R > 1 |
+|---|---|---:|---:|---:|---:|---:|
+| B3_reference | outer=2 | 10000 | 202.005 | 0.175912 | 0.605438 | 2.62% |
+| C3_reference | outer=2 | 10000 | 196.543 | 0.0700709 | 0.812747 | 10.08% |
+| B4_energy2 | energy correctors=2 | 10000 | 250.984 | 0.176643 | 0.604283 | 2.92% |
+| C4_energy2 | energy correctors=2 | 10000 | 220.093 | 0.0700709 | 0.813191 | 10.62% |
+| B5_outer3 | outer=3 | 10000 | 282.222 | 0.175874 | 0.597503 | 3.62% |
+| C5_outer3 | outer=3 | 10000 | 273.060 | 0.0700712 | 0.800997 | 8.22% |
+| B6_adaptiveDt | outer=3 + adaptive dt | 2810 | 80.778 | 0.287759 | 0.374538 | 1.59% |
+| C6_adaptiveDt | outer=3 + adaptive dt | 1584 | 47.336 | 0.287049 | 0.794831 | 7.58% |
+| B7_outer4 | outer=4 | 10000 | 381.367 | 0.175849 | 0.603163 | 2.96% |
+| C7_outer4 | outer=4 | 10000 | 365.418 | 0.0700710 | 0.808822 | 10.65% |
+
+For this table, `R` is calculated from `p_rgh` Initial residuals after excluding startup (`t >= 0.1 s`):
+
+`R = last Initial residual / first Initial residual`.
+
+Key numerical conclusions from the final rerun:
+
+- The last linear `p_rgh` solve converges to approximately `1e-7` or below in all cases; the open numerical question is outer/nonlinear coupling, not failure of the pressure linear solve.
+- Increasing outer correctors 2→3 gives only a small change in median R; outer4 is not monotonically better than outer3.
+- Outer4 increases execution time by about 86–89% relative to outer2 in the final rerun without a proportional coupling improvement.
+- The adaptive-timestep V6 cases reduce runtime strongly relative to V5: ~3.49× faster for B and ~5.77× faster for C.
+- V6 reaches transient Co maxima near 0.287 even though `maxCo=0.25`; OpenFOAM v14 uses the observed Co to choose the following timestep, so `maxCo` is a timestep-control target rather than a strict instantaneous clamp.
+- V6 also shows larger final cumulative continuity values than V5; this and the physical histories must be checked before selecting adaptive timestep as the accepted production setup.
+
+The next decision should therefore be based on **physical equivalence/sensitivity** (temperature, liquid fraction, velocity topology, phase-change rates, gradients, latent-heat and energy diagnostics), not on runtime alone.

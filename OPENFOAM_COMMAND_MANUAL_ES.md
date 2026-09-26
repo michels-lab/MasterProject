@@ -685,3 +685,38 @@ Este manual crecerá con los comandos que realmente usemos en la tesis, entre el
 - comandos Git específicos del proyecto cuando sean necesarios para reproducibilidad.
 
 La regla será: **si durante el proyecto usamos un comando útil y reutilizable, se documenta aquí con explicación y bloque listo para copiar.**
+
+
+---
+
+## Flujo NARANJA — sincronizar resultados locales antes de documentar
+
+**NARANJA** es el flujo de seguridad usado cuando la computadora local contiene resultados de simulación más recientes que GitHub.
+
+Orden obligatorio:
+
+1. **Local/PC primero.** Preservar y versionar los resultados válidos que ya existen en la computadora.
+2. **GitHub después.** Integrar cualquier cambio remoto sin hacer `force push`.
+3. **Análisis.** Usar el repositorio ya sincronizado como fuente de verdad para extraer métricas.
+4. **Documentación al final.** Actualizar Audit Log, README y Command Manual solo después de que los resultados reales estén en GitHub.
+
+Flujo estándar desde la raíz del repositorio:
+
+```bash
+git add -A
+git commit -m "results: sync local simulation outputs"
+git pull --rebase origin main
+git push origin main
+```
+
+Si `git commit` responde `nothing to commit`, continuar con `git pull --rebase origin main` y `git push origin main`.
+
+### Importante sobre `.gitignore`
+
+`git add -A` **no añade archivos nuevos ignorados**. En este proyecto, directorios de tiempos calculados y la mayor parte de `postProcessing/` se ignoran deliberadamente para evitar inflar el repositorio.
+
+Si un output ignorado debe conservarse científicamente, primero decidir qué subconjunto es útil y pequeño; luego añadir solo ese path de forma deliberada (por ejemplo con una excepción de `.gitignore` o, de forma puntual, `git add -f <path>`). No forzar automáticamente todos los time directories.
+
+### No usar
+
+No usar `git push --force` para resolver un rechazo por non-fast-forward cuando existen resultados locales válidos. Preferir `git pull --rebase` después de haber hecho commit de los cambios locales.

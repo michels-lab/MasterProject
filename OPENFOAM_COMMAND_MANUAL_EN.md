@@ -685,3 +685,38 @@ This manual will expand with commands actually used in the thesis, including:
 - project-specific Git commands when useful for reproducibility.
 
 The rule is: **if we use a reusable command during the project, it gets documented here with an explanation and a copy-ready block.**
+
+
+---
+
+## NARANJA workflow — synchronize local results before documentation
+
+**NARANJA** is the safety workflow used when the local computer contains simulation results newer than GitHub.
+
+Required order:
+
+1. **Local/PC first.** Preserve and version valid results already present on the computer.
+2. **GitHub second.** Integrate remote changes without using `force push`.
+3. **Analysis.** Use the synchronized repository as the source of truth for metric extraction.
+4. **Documentation last.** Update the Audit Log, README, and Command Manual only after the real results are present on GitHub.
+
+Standard workflow from the repository root:
+
+```bash
+git add -A
+git commit -m "results: sync local simulation outputs"
+git pull --rebase origin main
+git push origin main
+```
+
+If `git commit` reports `nothing to commit`, continue with `git pull --rebase origin main` and `git push origin main`.
+
+### Important note about `.gitignore`
+
+`git add -A` **does not add newly ignored files**. In this project, calculated time directories and most of `postProcessing/` are deliberately ignored to prevent repository bloat.
+
+If an ignored output is scientifically worth preserving, first choose the useful lightweight subset and then add only that path deliberately (for example via a `.gitignore` exception or, for a one-off case, `git add -f <path>`). Do not force-add all calculated time directories automatically.
+
+### Do not use
+
+Do not use `git push --force` to resolve a non-fast-forward rejection when valid local results exist. Prefer `git pull --rebase` after committing the local changes.

@@ -3030,3 +3030,98 @@ Commit:
 This makes the field name canonical and consistent with `lineProfiles` and the future PostPlotter parser.
 
 **Status:** ✅ B3 validated the diagnostics package; ✅ naming inconsistency identified and fixed; 🟡 rerun B3 with the final batch so all datasets are fully homogeneous.
+
+
+---
+
+## 2026-09-26 — Final V3–V7 numerical audit after complete rerun
+**[RUN-DATA-COMMITTED] [NUMERICAL-AUDIT] [COUPLING] [ADAPTIVE-DT]**
+
+Final logs for all ten controlled cases were synchronized after executing the V3–V7 matrix. Result commits include `5d5ccb00f1b3` (final logs) and `54182ef3cab9` (remaining local synchronization).
+
+The following analysis uses the versioned `foamLog` files directly from GitHub. For `p_rgh` coupling metrics, startup was excluded using `t >= 0.1 s`.
+
+### Summary
+
+| Case | Configuration | Steps | Parsed final time (s) | Exec. (s) | Max Co | max `p_rgh_0` post-startup | Median R | P95 R | R>1 |
+|---|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| B3_reference | outer=2, fixed dt | 10000 | 10.000000 | 202.005 | 0.175912 | 0.0343238 @ 0.592 s | 0.605438 | 0.945131 | 2.62% |
+| C3_reference | outer=2, fixed dt | 10000 | 10.000000 | 196.543 | 0.0700709 | 0.0173881 @ 9.985 s | 0.812747 | 1.059338 | 10.08% |
+| B4_energy2 | outer=2, energy=2 | 10000 | 10.000000 | 250.984 | 0.176643 | 0.0307308 @ 0.591 s | 0.604283 | 0.943883 | 2.92% |
+| C4_energy2 | outer=2, energy=2 | 10000 | 10.000000 | 220.093 | 0.0700709 | 0.0179951 @ 9.999 s | 0.813191 | 1.063103 | 10.62% |
+| B5_outer3 | outer=3, fixed dt | 10000 | 10.000000 | 282.222 | 0.175874 | 0.0317178 @ 0.573 s | 0.597503 | 0.950764 | 3.62% |
+| C5_outer3 | outer=3, fixed dt | 10000 | 10.000000 | 273.060 | 0.0700712 | 0.0178995 @ 9.981 s | 0.800997 | 1.041475 | 8.22% |
+| B6_adaptiveDt | outer=3, adaptive dt | 2810 | 9.999657 | 80.778 | 0.287759 | 0.0186405 @ 0.784957 s | 0.374538 | 0.764803 | 1.59% |
+| C6_adaptiveDt | outer=3, adaptive dt | 1584 | 10.003410 | 47.336 | 0.287049 | 0.0223995 @ 9.983344 s | 0.794831 | 1.034915 | 7.58% |
+| B7_outer4 | outer=4, fixed dt | 10000 | 10.000000 | 381.367 | 0.175849 | 0.0362977 @ 0.731 s | 0.603163 | 0.950615 | 2.96% |
+| C7_outer4 | outer=4, fixed dt | 10000 | 10.000000 | 365.418 | 0.0700710 | 0.0174552 @ 9.996 s | 0.808822 | 1.082497 | 10.65% |
+
+where:
+
+`R = p_rgh(last outer Initial residual) / p_rgh(first outer Initial residual)`.
+
+### Linear solver vs coupling
+
+Across all ten cases, the `Final residual` of the last `p_rgh` solve remains extremely low:
+
+- median approximately `3.9e-8 → 5.7e-8`;
+- P99 approximately `< 1e-7`;
+- observed maximum approximately `< 1e-7`.
+
+This reinforces the established distinction: the pressure linear solver converges strongly within each solve, while the evolution of the **Initial residual across outer corrections** describes nonlinear coupling behavior. `R>1` does not by itself mean linear-solver failure.
+
+### Outer-corrector sensitivity: diminishing returns
+
+For the fixed-timestep branches:
+
+- B: median R = 0.6054 (outer2), 0.5975 (outer3), 0.6032 (outer4).
+- C: median R = 0.8127 (outer2), 0.8010 (outer3), 0.8088 (outer4).
+
+The 2→3 change is small and 3→4 is **not monotonically better**; outer4 returns toward values close to outer2.
+
+Cost rises clearly in this rerun:
+
+- B5 outer3 costs ~39.7% more than B3.
+- B7 outer4 costs ~88.8% more than B3.
+- C5 outer3 costs ~38.9% more than C3.
+- C7 outer4 costs ~85.9% more than C3.
+
+Thus, for these cases over 0–10 s, outer4 adds substantial cost without evidence of proportional improvement in `p_rgh` coupling. This is evidence of **diminishing returns**, not a universal OpenFOAM rule.
+
+### Energy-corrector sensitivity
+
+B4/C4 retain coupling metrics essentially equal to B3/C3, while execution time in this rerun rises by ~24.2% for B and ~12.0% for C.
+
+This is consistent with the previous thermal conclusion: `nEnergyCorrectors=2` does not materially change the monitored solution and also shows no clear coupling improvement that justifies the added cost in this matrix.
+
+### Adaptive timestep V6
+
+Relative to V5, which also uses `nOuterCorrectors=3`:
+
+- B6 reduces steps 10000→2810 and runtime 282.222→80.778 s: ~3.49× faster.
+- C6 reduces steps 10000→1584 and runtime 273.060→47.336 s: ~5.77× faster.
+- Median `deltaT`: B6 ≈ 0.003954 s; C6 ≈ 0.005902 s.
+- Maximum observed `deltaT`: B6 ≈ 0.005321 s; C6 ≈ 0.026623 s.
+- Maximum Co: B6 = 0.287759; C6 = 0.287049, above configured `maxCo=0.25`.
+
+Source inspection of OpenFOAM Foundation v14, `src/finiteVolume/cfdTools/general/include/setDeltaT.H`, confirms that `adjustTimeStep` computes the **next** `deltaT` from the observed Co and limits timestep growth to 1.2× per adjustment. Therefore `maxCo` acts as a timestep-control target and is not a mathematical guarantee that no reported Co can transiently exceed it.
+
+The reported final cumulative continuity value is also higher in V6:
+
+- B6: 2.44980e-4 vs B5: 1.65205e-4.
+- C6: 2.71897e-4 vs C5: 1.78172e-4.
+
+This deserves follow-up; it is not by itself evidence of physical invalidity. Before adopting V6 as the production configuration, its thermal histories, phase behavior, profiles, and physical diagnostics should be compared against V5.
+
+### B/C coupling difference
+
+Fixed-timestep B branches show stronger relative Initial-residual reduction (median R ~0.60) and fewer `R>1` events (~2.6–3.6%) than C (~0.80 and ~8.2–10.6%).
+
+At the same time, B can show larger `p_rgh_0` maxima than C. Two questions must therefore remain separate:
+
+1. mismatch magnitude at the start of the solve;
+2. relative reduction achieved during coupling.
+
+The difference may be related to the B/C physical formulations, but it is not labelled here as “better/worse stability” without further evidence.
+
+**Status:** ✅ final V3–V7 logs versioned; ✅ outer2/3/4 audited; ✅ V6 adaptive timestep numerically audited; ✅ linear convergence separated from coupling; 🟡 complete physical comparison of V6/V7 using the new `researchDiagnostics` outputs remains pending.

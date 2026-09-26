@@ -2847,3 +2847,98 @@ Commit:
 Con esto el nombre del campo queda canónico y consistente con `lineProfiles` y con el futuro parser de PostPlotter.
 
 **Estado:** ✅ B3 validó el paquete de diagnósticos; ✅ inconsistencia de nombre identificada y corregida; 🟡 repetir B3 junto con la tanda final para producir un dataset completamente homogéneo.
+
+
+---
+
+## 2026-09-26 — Auditoría numérica final V3–V7 después del rerun completo
+**[RUN-DATA-COMMITTED] [NUMERICAL-AUDIT] [COUPLING] [ADAPTIVE-DT]**
+
+Los logs finales de los diez casos controlados fueron sincronizados al repositorio después de ejecutar la matriz V3–V7. Los commits de resultados incluyen `5d5ccb00f1b3` (logs finales) y `54182ef3cab9` (sincronización local restante).
+
+El análisis siguiente usa los archivos `foamLog` versionados directamente en GitHub. Para las métricas de coupling de `p_rgh` se excluyó el startup y se usó `t >= 0.1 s`.
+
+### Resumen
+
+| Caso | Configuración | Pasos | Tiempo final parseado (s) | Exec. (s) | Co max | max `p_rgh_0` post-startup | Mediana R | P95 R | R>1 |
+|---|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| B3_reference | outer=2, dt fijo | 10000 | 10.000000 | 202.005 | 0.175912 | 0.0343238 @ 0.592 s | 0.605438 | 0.945131 | 2.62% |
+| C3_reference | outer=2, dt fijo | 10000 | 10.000000 | 196.543 | 0.0700709 | 0.0173881 @ 9.985 s | 0.812747 | 1.059338 | 10.08% |
+| B4_energy2 | outer=2, energy=2 | 10000 | 10.000000 | 250.984 | 0.176643 | 0.0307308 @ 0.591 s | 0.604283 | 0.943883 | 2.92% |
+| C4_energy2 | outer=2, energy=2 | 10000 | 10.000000 | 220.093 | 0.0700709 | 0.0179951 @ 9.999 s | 0.813191 | 1.063103 | 10.62% |
+| B5_outer3 | outer=3, dt fijo | 10000 | 10.000000 | 282.222 | 0.175874 | 0.0317178 @ 0.573 s | 0.597503 | 0.950764 | 3.62% |
+| C5_outer3 | outer=3, dt fijo | 10000 | 10.000000 | 273.060 | 0.0700712 | 0.0178995 @ 9.981 s | 0.800997 | 1.041475 | 8.22% |
+| B6_adaptiveDt | outer=3, dt adaptativo | 2810 | 9.999657 | 80.778 | 0.287759 | 0.0186405 @ 0.784957 s | 0.374538 | 0.764803 | 1.59% |
+| C6_adaptiveDt | outer=3, dt adaptativo | 1584 | 10.003410 | 47.336 | 0.287049 | 0.0223995 @ 9.983344 s | 0.794831 | 1.034915 | 7.58% |
+| B7_outer4 | outer=4, dt fijo | 10000 | 10.000000 | 381.367 | 0.175849 | 0.0362977 @ 0.731 s | 0.603163 | 0.950615 | 2.96% |
+| C7_outer4 | outer=4, dt fijo | 10000 | 10.000000 | 365.418 | 0.0700710 | 0.0174552 @ 9.996 s | 0.808822 | 1.082497 | 10.65% |
+
+donde:
+
+`R = p_rgh(last outer Initial residual) / p_rgh(first outer Initial residual)`.
+
+### Solver lineal vs coupling
+
+En los diez casos, el `Final residual` del último solve de `p_rgh` permanece extremadamente bajo:
+
+- mediana aproximadamente `3.9e-8 → 5.7e-8`;
+- P99 aproximadamente `< 1e-7`;
+- máximo observado aproximadamente `< 1e-7`.
+
+Esto refuerza la separación ya establecida: el solver lineal de presión converge fuertemente dentro de cada solve, mientras que la evolución del **Initial residual entre outer corrections** describe el comportamiento del coupling no lineal. Un `R>1` no significa por sí mismo fallo del solver lineal.
+
+### Outer-corrector sensitivity: diminishing returns
+
+En las ramas de timestep fijo:
+
+- B: mediana R = 0.6054 (outer2), 0.5975 (outer3), 0.6032 (outer4).
+- C: mediana R = 0.8127 (outer2), 0.8010 (outer3), 0.8088 (outer4).
+
+El cambio 2→3 es pequeño y 3→4 **no produce una mejora monotónica**; outer4 regresa hacia valores cercanos a outer2.
+
+El costo sí crece con claridad en este rerun:
+
+- B5 outer3 cuesta ~39.7% más que B3.
+- B7 outer4 cuesta ~88.8% más que B3.
+- C5 outer3 cuesta ~38.9% más que C3.
+- C7 outer4 cuesta ~85.9% más que C3.
+
+Por tanto, para estos casos y este intervalo de 0–10 s, outer4 añade costo sustancial sin evidencia de una mejora proporcional del coupling de `p_rgh`. Esto es evidencia de **diminishing returns**, no una regla universal para otros casos OpenFOAM.
+
+### Energy-corrector sensitivity
+
+B4/C4 mantienen métricas de coupling prácticamente iguales a B3/C3, mientras que en este rerun el tiempo de ejecución aumenta ~24.2% para B y ~12.0% para C.
+
+Esto es consistente con la conclusión térmica previa: `nEnergyCorrectors=2` no modifica materialmente la solución monitoreada y tampoco muestra una mejora clara de coupling que justifique el costo adicional en esta matriz.
+
+### Adaptive timestep V6
+
+Respecto a V5, que comparte `nOuterCorrectors=3`:
+
+- B6 reduce los pasos 10000→2810 y el tiempo 282.222→80.778 s: ~3.49× más rápido.
+- C6 reduce los pasos 10000→1584 y el tiempo 273.060→47.336 s: ~5.77× más rápido.
+- Mediana de `deltaT`: B6 ≈ 0.003954 s; C6 ≈ 0.005902 s.
+- Máximo `deltaT` observado: B6 ≈ 0.005321 s; C6 ≈ 0.026623 s.
+- Co máximo: B6 = 0.287759; C6 = 0.287049, por encima del `maxCo=0.25` configurado.
+
+La revisión del fuente oficial de OpenFOAM Foundation v14, `src/finiteVolume/cfdTools/general/include/setDeltaT.H`, confirma que `adjustTimeStep` calcula el **siguiente** `deltaT` usando el Co observado y limita el crecimiento a 1.2× por ajuste. Por ello `maxCo` funciona como objetivo/controlador para la actualización del timestep y no como garantía matemática de que ningún Co reportado pueda sobrepasarlo transitoriamente.
+
+El acumulado final de continuidad reportado también es mayor en V6:
+
+- B6: 2.44980e-4 vs B5: 1.65205e-4.
+- C6: 2.71897e-4 vs C5: 1.78172e-4.
+
+Esto merece seguimiento; no debe interpretarse por sí solo como invalidez física. Antes de seleccionar V6 como configuración productiva hay que comparar sus historias térmicas, fase, perfiles y diagnósticos físicos contra V5.
+
+### Diferencia B/C en coupling
+
+Las ramas B de timestep fijo muestran una reducción relativa de Initial residual más fuerte (mediana R ~0.60) y menos eventos `R>1` (~2.6–3.6%) que las C (~0.80 y ~8.2–10.6%).
+
+Al mismo tiempo, B puede presentar máximos de `p_rgh_0` mayores que C. Por tanto deben mantenerse separadas dos preguntas:
+
+1. magnitud del mismatch al inicio del solve;
+2. reducción relativa conseguida durante el coupling.
+
+La diferencia puede estar relacionada con las formulaciones físicas B/C, pero no se etiqueta aquí como “estabilidad superior/inferior” sin más evidencia.
+
+**Estado:** ✅ logs finales V3–V7 versionados; ✅ outer2/3/4 auditado; ✅ V6 adaptive auditado numéricamente; ✅ convergencia lineal separada de coupling; 🟡 comparación física completa de V6/V7 con los nuevos outputs de `researchDiagnostics` todavía pendiente.
