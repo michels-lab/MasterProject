@@ -2370,3 +2370,31 @@ No evidence from the pasted terminal output indicates that B6 itself failed; its
 - Practical command manual created at repository root.
 - Correct subshell/path behavior documented.
 - Future reusable OpenFOAM/Linux commands should be added to the command manual in parallel with technical events being recorded here.
+
+
+## 2026-09-25 — Bilingual command manual and historical command backfill
+
+### Documentation change
+The OpenFOAM command manual was split into a language selector plus two synchronized versions:
+
+- `OPENFOAM_COMMAND_MANUAL.md` — language selector.
+- `OPENFOAM_COMMAND_MANUAL_ES.md` — Spanish.
+- `OPENFOAM_COMMAND_MANUAL_EN.md` — English.
+
+Both language versions should preserve the same command set and structure.
+
+### Historical recovery
+Earlier project commands were backfilled rather than treating the manual as starting only on 2026-09-25. Recovered workflows include:
+
+- `paraFoam -builtin &` from historical B2/C2 work;
+- `foamPostProcess -region metal -solver fluid -latestTime` in the workflow developed after the doctor's suggestion to obtain velocity–temperature line profiles (“plotline”);
+- previously considered line-sampling elements `lineUniform`, `graphUniform`, `graphCell`, and fields `U T phaseChangeSource:alpha1`;
+- `find . -name "openfoam-solidification.agent.md"`;
+- `git check-ignore -v cases_buoyancy/B2_test/10`;
+- the project's standard Git pull/status/add/commit/push workflow;
+- deliberate `git add -f` use for selected ignored post-processing outputs.
+
+### Attribution rule
+Only commands or workflows with explicit historical evidence should be labeled as coming from or motivated by the doctor. Other recovered commands are documented as project-history commands without unsupported attribution.
+
+**Status:** ✅ bilingual selector active; ✅ Spanish and English manuals synchronized; ✅ first historical backfill completed.
