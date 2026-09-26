@@ -33,6 +33,13 @@
 17. [Case 6 and 7 recipes](#17-case-6-and-7-recipes)
 18. [What Ctrl+C does](#18-what-ctrlc-does)
 19. [Rules for clean comparisons](#19-rules-for-clean-comparisons)
+20. [Open a case in ParaView](#20-open-a-case-in-paraview)
+21. [Velocity-temperature line profiles — doctor's suggestion](#21-velocity-temperature-line-profiles--doctors-suggestion)
+22. [Find a file inside the project](#22-find-a-file-inside-the-project)
+23. [Check why Git ignores a file](#23-check-why-git-ignores-a-file)
+24. [Pull and push repository changes](#24-pull-and-push-repository-changes)
+25. [Deliberately add a Git-ignored file](#25-deliberately-add-a-git-ignored-file)
+26. [Historical B2/C2 workflow](#26-historical-b2c2-workflow)
 
 ---
 
@@ -477,6 +484,186 @@ It stops only the live `tail` view.
 6. When comparing computational cost, avoid running the compared cases at the same time.
 7. Change one main numerical variable per test whenever possible.
 8. Record every relevant change in `PROJECT_AUDIT_LOG.md` as well.
+
+---
+
+
+## 20. Open a case in ParaView
+
+### Origin
+This command was already used in the project's historical B2/C2 cases.
+
+### What it does
+`paraFoam -builtin` prepares/opens the OpenFOAM case in ParaView using the built-in reader. The `&` leaves ParaView running in the background and returns control of the terminal.
+
+### Command
+
+```bash
+paraFoam -builtin &
+```
+
+In earlier cases this workflow could create a `.foam` file, for example `C2_test.foam`.
+
+---
+
+## 21. Velocity-temperature line profiles — doctor's suggestion
+
+### Context
+The doctor suggested obtaining **velocity–temperature profiles** in OpenFOAM, referred to in the conversation as “plotline”. The post-processing workflow developed for that request uses line sampling in the metal region.
+
+### Run post-processing on the latest time
+
+```bash
+foamPostProcess -region metal -solver fluid -latestTime
+```
+
+### Meaning
+- `-region metal`: operate on the `metal` region.
+- `-solver fluid`: use the fluid-solver context for post-processing.
+- `-latestTime`: process only the latest available time.
+
+### Sampling elements previously considered
+The line-profile setup included concepts/configuration elements such as:
+
+```text
+lineUniform
+graphUniform
+graphCell
+fields (U T phaseChangeSource:alpha1);
+```
+
+These are sampling-configuration elements, **not independent terminal commands**. The full recipe will be preserved here once the project's final sampling dictionary is fixed.
+
+---
+
+## 22. Find a file inside the project
+
+### What it does
+`find` recursively searches folders and subfolders for matching names.
+
+### Historical command used
+
+```bash
+find . -name "openfoam-solidification.agent.md"
+```
+
+### Meaning
+- `.`: start from the current folder.
+- `-name`: match an exact filename.
+
+---
+
+## 23. Check why Git ignores a file
+
+### What it does
+`git check-ignore -v` reports whether a path is ignored and shows which `.gitignore` rule caused it.
+
+### Historical command used
+
+```bash
+git check-ignore -v cases_buoyancy/B2_test/10
+```
+
+This is useful when a result exists on your computer but does not appear as a file available to commit.
+
+---
+
+## 24. Pull and push repository changes
+
+### Pull remote changes first
+
+```bash
+cd ~/OpenFOAM/QuickCup_Solidification
+git pull
+```
+
+### Check what changed
+
+```bash
+git status
+```
+
+### Stage all changes
+
+```bash
+git add -A
+```
+
+### Create the commit
+
+```bash
+git commit -m "Describe the change here"
+```
+
+### Push to GitHub
+
+```bash
+git push origin main
+```
+
+### Complete workflow
+
+```bash
+cd ~/OpenFOAM/QuickCup_Solidification
+git pull
+git status
+git add -A
+git commit -m "Describe the change here"
+git push origin main
+```
+
+**Important:** inspect `git status` before `git add -A` so you do not accidentally version large simulation output or unwanted files.
+
+---
+
+## 25. Deliberately add a Git-ignored file
+
+### What it does
+`git add -f` forces Git to stage a path even if a `.gitignore` rule normally excludes it.
+
+### Template
+
+```bash
+git add -f cases_controlled_buoyancy/<CASE>/postProcessing/<PATH>
+```
+
+Replace `<CASE>` and `<PATH>` with the real path.
+
+### Caution
+Use this only when you **deliberately** want to version that result. Do not force entire result folders without checking their size and usefulness.
+
+---
+
+## 26. Historical B2/C2 workflow
+
+These commands appeared in the early buoyancy-case tests and remain useful as a basic recipe.
+
+### C2 example
+
+```bash
+cd ~/OpenFOAM/QuickCup_Solidification/cases_buoyancy/C2_test
+./Allclean
+./Allrun
+paraFoam -builtin &
+```
+
+### B2 example
+
+```bash
+cd ~/OpenFOAM/QuickCup_Solidification/cases_buoyancy/B2_test
+./Allclean
+./Allrun
+paraFoam -builtin &
+```
+
+### Useful historical error
+If you run `cd ..` and then execute:
+
+```bash
+./Allclean
+```
+
+from a folder that does not contain that script, Bash returns `No such file or directory`. Use `pwd` and `ls` before running scripts whenever your location is uncertain.
 
 ---
 
