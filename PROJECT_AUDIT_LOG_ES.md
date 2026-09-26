@@ -2463,3 +2463,53 @@ La app debe evolucionar desde un visor de archivos `p_rgh_0`, `p_rgh_1`, etc. ha
 - comparación entre casos con diferente `nOuterCorrectors`.
 
 **Estado:** ✅ Initial residuals B3–B5/C3–C5 auditados; ✅ `p_rgh` identificado como principal señal de acoplamiento; 🟡 B7/C7 pendientes para evaluar `nOuterCorrectors=4`.
+
+
+---
+
+## 2026-09-25 — Distinción entre convergencia del solver lineal y convergencia del acoplamiento PIMPLE
+**[RUN-VERIFIED] [COUPLING-DIAGNOSTIC]**
+
+Después de auditar los Initial residuals de `p_rgh`, se compararon también los `p_rghFinalRes_*` de B5 y C5 para distinguir dos fenómenos diferentes:
+
+1. qué tan bien converge cada solve lineal de presión;
+2. qué tan bien se cierra el acoplamiento entre outer iterations.
+
+### B5
+
+Para t>=0.1 s:
+
+- `p_rghFinalRes_1`: mediana ≈ **6.68e-8**
+- `p_rghFinalRes_3`: mediana ≈ **5.00e-8**
+- `p_rghFinalRes_5`: mediana ≈ **3.91e-8**
+
+Los segundos solves de presión de cada outer terminan consistentemente cerca del orden 1e-8–1e-7.
+
+Sin embargo, los Initial residuals del siguiente outer pueden volver a valores de orden 1e-3–1e-2.
+
+### C5
+
+Para t>=0.1 s:
+
+- `p_rghFinalRes_1`: mediana ≈ **6.76e-8**
+- `p_rghFinalRes_3`: mediana ≈ **5.55e-8**
+- `p_rghFinalRes_5`: mediana ≈ **5.09e-8**
+
+De nuevo, cada solve lineal puede terminar con residual pequeño mientras el siguiente ciclo de acoplamiento comienza con un Initial residual mucho mayor.
+
+### Interpretación
+
+Esto indica que un residual inicial persistente de `p_rgh` no debe interpretarse automáticamente como incapacidad del solver lineal para resolver la ecuación de presión.
+
+En los casos auditados, el solver lineal reduce correctamente su residual final, pero las actualizaciones acopladas de velocidad, presión, energía, densidad/fase y fuentes pueden hacer que la siguiente corrección de presión vuelva a comenzar con una discrepancia apreciable.
+
+Por tanto, el diagnóstico debe separar explícitamente:
+
+- **linear-solver convergence:** Initial residual → Final residual dentro de un único pressure solve;
+- **PIMPLE/nonlinear coupling convergence:** Initial residual de un outer → Initial residual del siguiente outer.
+
+### Implicación para la app
+
+OpenFOAM PostPlotter debe mostrar estas dos métricas por separado. Un `Final residual` pequeño no debe ocultar un acoplamiento persistente, y un `Initial residual` alto no debe etiquetarse como fallo del solver lineal si ese solve converge correctamente.
+
+**Estado:** ✅ solver lineal vs acoplamiento PIMPLE diferenciados con datos reales B5/C5.
