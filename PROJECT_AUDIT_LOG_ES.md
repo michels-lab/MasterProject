@@ -2289,3 +2289,177 @@ Determinar el punto de **rendimientos decrecientes**: el menor número de outer 
 Esta observación motiva un módulo de diagnóstico de acoplamiento que no solo grafique `p_rgh_0`, `p_rgh_1`, etc., sino que reconstruya automáticamente la reducción de residual dentro de cada timestep y entre outer correctors.
 
 **Estado:** 🟡 observación del asesor documentada; valor máximo ensayado por el asesor no confirmado; prueba controlada propia pendiente.
+
+
+---
+
+## 2026-09-25 — Auditoría completa de Initial residuals: el comportamiento relevante está en `p_rgh`
+**[RUN-VERIFIED] [GIT-VERIFIED] [COUPLING-DIAGNOSTIC]**
+
+Se analizaron los archivos `foamLog` de Initial residual para los casos controlados disponibles B3/B4/B5 y C3/C4/C5. El análisis excluyó el primer transitorio de arranque al estudiar el comportamiento persistente (`t >= 0.1 s`).
+
+### Familias de residual auditadas
+
+Los `foamLog` disponibles contienen Initial residuals para:
+
+- `p_rgh`
+- `h`
+- `e`
+- `rho`
+
+### `rho`
+
+Todos los archivos `rho_*` de B3/B4/B5/C3/C4/C5 tienen el mismo blob SHA y contienen valores cero. No aportan una señal útil de convergencia en estos casos.
+
+### `h` — entalpía del metal
+
+El primer solve de `h` parte alrededor de 1.67–1.69e-3 a 0.1 s y disminuye de manera suave conforme avanza la simulación.
+
+Los solves posteriores dentro del timestep reducen el residual a órdenes mucho menores. No se encontró una familia de spikes intermedios comparable con `p_rgh`.
+
+Ejemplos:
+
+- B3 `h_0`: máximo para t>=0.1 s = 1.67278e-3 a 0.1 s; mediana ≈ 1.029e-4.
+- B5 `h_0`: 1.67354e-3 a 0.1 s; mediana ≈ 1.028e-4.
+- C3/C5 `h_0`: 1.69063e-3 a 0.1 s; mediana ≈ 1.158e-4.
+
+Los correctores adicionales llevan los `h` posteriores a aproximadamente 1e-7–1e-9 según configuración.
+
+### `e` — energía del molde
+
+`e_0` muestra una disminución suave desde aproximadamente 1.84e-3 a 0.1 s.
+
+Los correctores posteriores están típicamente en órdenes 1e-8–1e-10. Tampoco se encontró una inestabilidad intermedia comparable con presión.
+
+### `p_rgh` — residual no monótono y persistente
+
+`p_rgh` es la familia que presenta el comportamiento de acoplamiento numéricamente interesante.
+
+El pico de ~0.973 en t=0.001 s se considera un transitorio de inicialización y NO es la única evidencia relevante. Después de 0.1 s reaparecen residuals elevados durante la simulación.
+
+#### Familia B
+
+B3 (`nOuterCorrectors=2`), `p_rgh_0`:
+- máximo post-arranque: **0.0343238 a 0.592 s**
+- 2–4 s: máximo **0.0118509**
+- 4–6 s: máximo **0.0153241 a 5.781 s**
+- 6–8 s: máximo **0.012815 a 6.249 s**
+- 8–10 s: máximo **0.00976308**
+
+B5 (`nOuterCorrectors=3`), `p_rgh_0`:
+- máximo post-arranque: **0.0317178 a 0.573 s**
+- 2–4 s: máximo **0.0107382**
+- 4–6 s: máximo **0.015842 a 5.791 s**
+- 6–8 s: máximo **0.0128389 a 6.250 s**
+- 8–10 s: máximo **0.0095283**
+
+En B, por tanto, existen eventos importantes de residual alrededor de 5.3–6.25 s además del transitorio temprano.
+
+#### Familia C
+
+C3 `p_rgh_0`:
+- 0.1–2 s: máximo **0.0112909**
+- 2–4 s: máximo **0.0100891**
+- 4–6 s: máximo **0.0121034**
+- 6–8 s: máximo **0.0121384**
+- 8–10 s: máximo **0.0173881 cerca de 9.985 s**
+
+C5 `p_rgh_0`:
+- 0.1–2 s: máximo **0.0105247**
+- 2–4 s: máximo **0.0105513**
+- 4–6 s: máximo **0.0120312**
+- 6–8 s: máximo **0.0122043**
+- 8–10 s: máximo **0.0178995 cerca de 9.981 s**
+
+La rama C presenta un patrón diferente: el residual de presión vuelve a crecer hacia el final de la ventana 0–10 s.
+
+### Persistencia de residuals altos
+
+Para t>=0.1 s:
+
+B3:
+- `p_rgh_0 > 0.01` en 2100 de 9901 timesteps.
+- `p_rgh_3 > 0.01` en 430 de 9901.
+
+B5:
+- `p_rgh_0 > 0.01` en 2036 de 9901.
+- `p_rgh_5 > 0.01` en 428 de 9901.
+
+C3:
+- `p_rgh_0 > 0.01` en 1366 de 9901.
+- `p_rgh_3 > 0.01` en 404 de 9901.
+
+C5:
+- `p_rgh_0 > 0.01` en 1427 de 9901.
+- `p_rgh_5 > 0.01` en 245 de 9901.
+
+### Efecto real de aumentar nOuterCorrectors 2 → 3
+
+Se definió descriptivamente la razón:
+
+`R = p_rgh_last / p_rgh_0`
+
+dentro del mismo timestep, usando el último pressure solve disponible.
+
+Para t>=0.1 s:
+
+- B3 (2 outer): mediana R = **0.6054**
+- B5 (3 outer): mediana R = **0.5975**
+- C3 (2 outer): mediana R = **0.8127**
+- C5 (3 outer): mediana R = **0.8010**
+
+Por tanto, añadir un tercer outer corrector produce solo una mejora pequeña en la reducción típica del Initial residual de `p_rgh`.
+
+Además, existen timesteps donde el residual del último pressure solve es mayor que el del primero:
+
+- B3: ~2.62% de los timesteps auditados.
+- B5: ~3.62%.
+- C3: ~10.08%.
+- C5: ~8.22%.
+
+Ejemplos claros:
+
+- B5 a 6.126 s: el residual aumenta de `p_rgh_0 = 0.00621936` a `p_rgh_5 = 0.00841035`, razón ≈ **1.35**.
+- C5 alrededor de 8.0 s presenta eventos donde los outer correctors posteriores terminan con residuals aproximadamente **1.5–1.56×** el primer residual del timestep.
+
+### Relación con pruebas numéricas previas
+
+B4/C4 (`nEnergyCorrectors=2`) conserva esencialmente el mismo patrón de `p_rgh` que B3/C3. Aumentar correctores de energía no resuelve el comportamiento de acoplamiento de presión.
+
+B5/C5 (`nOuterCorrectors=3`) ya había mostrado cambios térmicos/de fase despreciables frente a B3/C3 pero mayor costo computacional. Esta auditoría añade que el tercer outer corrector tampoco produce una mejora grande del residual típico de presión.
+
+### Interpretación
+
+El diagnóstico correcto no debe ser únicamente “el residual inicial es alto”. Debe distinguir:
+
+1. transitorio de arranque,
+2. spikes persistentes durante la corrida,
+3. reducción entre outer correctors,
+4. stagnation (`R≈1`),
+5. deterioration (`R>1`),
+6. comportamiento de cada formulación B/C.
+
+El valor absoluto de un Initial residual aislado no debe etiquetarse automáticamente como error; se requiere observar su evolución dentro del timestep y en el tiempo.
+
+### Siguiente prueba crítica
+
+El caso V7 con `nOuterCorrectors=4` permitirá comprobar si aparece una reducción sustancial que no se observó al pasar de 2 a 3.
+
+Si el asesor efectivamente observó mejoras claras con valores mayores, una serie posterior 4→5→6→7 deberá realizarse de forma controlada y con timestep fijo antes de concluir un valor óptimo.
+
+### Implicación para OpenFOAM PostPlotter
+
+La app debe evolucionar desde un visor de archivos `p_rgh_0`, `p_rgh_1`, etc. hacia un diagnóstico de acoplamiento que reconstruya automáticamente, por timestep:
+
+- outer corrector,
+- pressure corrector interno,
+- `p_rgh_0 → ... → p_rgh_last`,
+- razón `R = last/first`,
+- reducción en órdenes de magnitud,
+- eventos donde `R≈1`,
+- eventos donde `R>1`,
+- ranking de los peores timesteps,
+- exclusión configurable del startup,
+- comparación entre casos con diferente `nOuterCorrectors`.
+
+**Estado:** ✅ Initial residuals B3–B5/C3–C5 auditados; ✅ `p_rgh` identificado como principal señal de acoplamiento; 🟡 B7/C7 pendientes para evaluar `nOuterCorrectors=4`.
