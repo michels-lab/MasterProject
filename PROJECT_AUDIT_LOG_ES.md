@@ -2772,3 +2772,78 @@ Para corridas antiguas, PostPlotter podrá estimar derivados temporales a partir
 - 🟡 todavía no validado mediante una ejecución real del solver con este paquete completo
 - 🟡 B6/C6/B7/C7 que ya estuvieran corriendo localmente antes de esta modificación no reciben estos nuevos function objects automáticamente
 
+
+
+---
+
+## 2026-09-26 — Validación real B3 del paquete de diagnósticos y corrección de nombre de `flowType`
+**[RUN-VERIFIED] [BUG-FOUND] [FIXED]**
+
+Se ejecutó `B3_reference` completo de 0 a 10 s con el paquete ampliado de diagnósticos.
+
+La corrida terminó correctamente y `foamLog` se ejecutó al final.
+
+### Campos verificados en `10/metal`
+
+Se encontraron:
+
+- `CoCell`
+- `coolingRate`
+- `dAlphaLdt`
+- `dTdt`
+- `gradRho`
+- `gradT`
+- `latentHeat`
+- `latentHeatRateVol`
+- `magGradRho`
+- `magGradT`
+- `magSqrDevGradU`
+- `solidificationRate`
+- `vorticity`
+
+### Postprocesamiento verificado
+
+Se generaron correctamente:
+
+- `horizontalProfiles`
+- `verticalProfiles`
+- `metalBoundaryEnergyPower`
+- `metalLatentHeatPower`
+- `metalMaxCourant`
+- `metalMaxDensityGradient`
+- `metalMaxThermalGradient`
+- `metalMeanCoolingRate`
+- `metalMeanLiquidFraction`
+- `metalMeanSolidificationRate`
+- `metalMoldEnergyPower`
+- `metalSensibleEnthalpy`
+- `metalTopEnergyPower`
+- `temperatureProbe`
+
+### Hallazgo
+
+No apareció un archivo llamado `flowType`.
+
+La revisión del código fuente oficial de OpenFOAM Foundation v14 mostró que el function object `flowType` usa por defecto como nombre del campo de salida el **nombre del bloque function object**, salvo que se especifique explícitamente `result`.
+
+La configuración usaba:
+
+`flowTopology { type flowType; ... }`
+
+por lo que el campo generado se denominaba `flowTopology`, mientras que los perfiles solicitaban `flowType`.
+
+### Corrección
+
+Se añadió a los diez casos:
+
+`result flowType;`
+
+dentro del bloque `flowTopology`.
+
+Commit:
+
+`c92c282ca7cb549b4efdd88b402191163c706066`
+
+Con esto el nombre del campo queda canónico y consistente con `lineProfiles` y con el futuro parser de PostPlotter.
+
+**Estado:** ✅ B3 validó el paquete de diagnósticos; ✅ inconsistencia de nombre identificada y corregida; 🟡 repetir B3 junto con la tanda final para producir un dataset completamente homogéneo.
