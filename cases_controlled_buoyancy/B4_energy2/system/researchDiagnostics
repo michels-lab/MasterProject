@@ -23,6 +23,9 @@ flowTopology
     libs            ("libfieldFunctionObjects.so");
     region          metal;
 
+    // Keep a stable canonical field name for sampling/PostPlotter.
+    result          flowType;
+
     executeControl  writeTime;
     executeInterval 1;
     writeControl    writeTime;
