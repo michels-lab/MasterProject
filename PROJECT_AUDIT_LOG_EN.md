@@ -2478,3 +2478,175 @@ Identify the **diminishing-returns point**: the smallest number of outer correct
 This observation motivates a coupling-diagnostics module that does more than plot `p_rgh_0`, `p_rgh_1`, etc. It should automatically reconstruct residual reduction within each timestep and across outer-corrector cycles.
 
 **Status:** 🟡 advisor observation documented; advisor's maximum tested value unconfirmed; controlled reproduction in the user's cases pending.
+
+
+---
+
+## 2026-09-25 — Full Initial-residual audit: the relevant coupling behaviour is concentrated in `p_rgh`
+**[RUN-VERIFIED] [GIT-VERIFIED] [COUPLING-DIAGNOSTIC]**
+
+The available `foamLog` Initial-residual files were audited for controlled cases B3/B4/B5 and C3/C4/C5. Persistent behaviour was analysed separately from startup by excluding the first transient when appropriate (`t >= 0.1 s`).
+
+### Residual families audited
+
+Available Initial-residual families are:
+
+- `p_rgh`
+- `h`
+- `e`
+- `rho`
+
+### `rho`
+
+All `rho_*` files in B3/B4/B5/C3/C4/C5 have the same blob SHA and contain zero values. They do not provide a useful convergence signal in these cases.
+
+### `h` — metal enthalpy
+
+The first `h` solve starts around 1.67–1.69e-3 at 0.1 s and decreases smoothly with simulation time.
+
+Later solves within the timestep reduce the residual to much smaller orders. No intermediate spike family comparable to `p_rgh` was found.
+
+Examples:
+
+- B3 `h_0`: maximum for t>=0.1 s = 1.67278e-3 at 0.1 s; median ≈ 1.029e-4.
+- B5 `h_0`: 1.67354e-3 at 0.1 s; median ≈ 1.028e-4.
+- C3/C5 `h_0`: 1.69063e-3 at 0.1 s; median ≈ 1.158e-4.
+
+Additional correctors reduce later `h` residuals to approximately 1e-7–1e-9 depending on configuration.
+
+### `e` — mold energy
+
+`e_0` decreases smoothly from approximately 1.84e-3 at 0.1 s.
+
+Later corrections are typically in the 1e-8–1e-10 range. No pressure-like intermediate instability was found.
+
+### `p_rgh` — non-monotonic and persistent behaviour
+
+`p_rgh` is the numerically interesting coupling family.
+
+The ~0.973 residual at t=0.001 s is treated as a startup transient and is not the only relevant evidence. Elevated residuals reappear throughout the run after 0.1 s.
+
+#### B family
+
+B3 (`nOuterCorrectors=2`), `p_rgh_0`:
+- post-startup maximum: **0.0343238 at 0.592 s**
+- 2–4 s maximum: **0.0118509**
+- 4–6 s maximum: **0.0153241 at 5.781 s**
+- 6–8 s maximum: **0.012815 at 6.249 s**
+- 8–10 s maximum: **0.00976308**
+
+B5 (`nOuterCorrectors=3`), `p_rgh_0`:
+- post-startup maximum: **0.0317178 at 0.573 s**
+- 2–4 s maximum: **0.0107382**
+- 4–6 s maximum: **0.015842 at 5.791 s**
+- 6–8 s maximum: **0.0128389 at 6.250 s**
+- 8–10 s maximum: **0.0095283**
+
+Thus the B family contains meaningful pressure-residual events around 5.3–6.25 s in addition to early transients.
+
+#### C family
+
+C3 `p_rgh_0`:
+- 0.1–2 s maximum: **0.0112909**
+- 2–4 s: **0.0100891**
+- 4–6 s: **0.0121034**
+- 6–8 s: **0.0121384**
+- 8–10 s: **0.0173881 near 9.985 s**
+
+C5 `p_rgh_0`:
+- 0.1–2 s: **0.0105247**
+- 2–4 s: **0.0105513**
+- 4–6 s: **0.0120312**
+- 6–8 s: **0.0122043**
+- 8–10 s: **0.0178995 near 9.981 s**
+
+The C branch shows a different pattern, with pressure residuals increasing again toward the end of the 0–10 s window.
+
+### Persistence of elevated residuals
+
+For t>=0.1 s:
+
+B3:
+- `p_rgh_0 > 0.01` in 2100 of 9901 timesteps.
+- `p_rgh_3 > 0.01` in 430 of 9901.
+
+B5:
+- `p_rgh_0 > 0.01` in 2036 of 9901.
+- `p_rgh_5 > 0.01` in 428 of 9901.
+
+C3:
+- `p_rgh_0 > 0.01` in 1366 of 9901.
+- `p_rgh_3 > 0.01` in 404 of 9901.
+
+C5:
+- `p_rgh_0 > 0.01` in 1427 of 9901.
+- `p_rgh_5 > 0.01` in 245 of 9901.
+
+### Actual effect of increasing nOuterCorrectors from 2 to 3
+
+A descriptive within-timestep ratio was defined:
+
+`R = p_rgh_last / p_rgh_0`
+
+for t>=0.1 s.
+
+- B3 (2 outer): median R = **0.6054**
+- B5 (3 outer): median R = **0.5975**
+- C3 (2 outer): median R = **0.8127**
+- C5 (3 outer): median R = **0.8010**
+
+Adding a third outer corrector therefore produces only a small improvement in the typical reduction of the `p_rgh` Initial residual.
+
+There are also timesteps where the final pressure-solve Initial residual is larger than the first:
+
+- B3: ~2.62% of audited timesteps.
+- B5: ~3.62%.
+- C3: ~10.08%.
+- C5: ~8.22%.
+
+Examples:
+
+- B5 at 6.126 s: `p_rgh_0 = 0.00621936` and `p_rgh_5 = 0.00841035`, ratio ≈ **1.35**.
+- C5 around 8.0 s includes events where later outer corrections end with residuals approximately **1.5–1.56×** the first residual in the timestep.
+
+### Relation to previous numerical tests
+
+B4/C4 (`nEnergyCorrectors=2`) retains essentially the same `p_rgh` behaviour as B3/C3. Extra energy correctors do not resolve the pressure-coupling behaviour.
+
+B5/C5 (`nOuterCorrectors=3`) already showed negligible thermal/phase change relative to B3/C3 at a higher computational cost. This audit additionally shows that the third outer corrector does not substantially improve the typical pressure residual reduction.
+
+### Interpretation
+
+The correct diagnostic is not simply “the initial residual is high.” It must separate:
+
+1. startup transient,
+2. persistent spikes during the run,
+3. reduction across outer correctors,
+4. stagnation (`R≈1`),
+5. deterioration (`R>1`),
+6. formulation-specific B/C behaviour.
+
+An isolated absolute Initial-residual value must not automatically be labelled an error; its within-timestep and temporal evolution must be examined.
+
+### Next critical test
+
+V7 with `nOuterCorrectors=4` will show whether a meaningful reduction begins beyond the 2→3 range.
+
+If the advisor's larger-`nOuterCorrectors` runs truly show a strong improvement, a later controlled 4→5→6→7 series should use fixed timestep and otherwise identical settings before an optimum is claimed.
+
+### OpenFOAM PostPlotter implication
+
+The app should evolve from a viewer of individual `p_rgh_0`, `p_rgh_1`, etc. files into a coupling diagnostic that reconstructs, for every timestep:
+
+- outer corrector,
+- internal pressure corrector,
+- `p_rgh_0 → ... → p_rgh_last`,
+- `R = last/first`,
+- orders-of-magnitude reduction,
+- `R≈1` stagnation events,
+- `R>1` deterioration events,
+- worst-timestep ranking,
+- configurable startup exclusion,
+- cross-case comparison by `nOuterCorrectors`.
+
+**Status:** ✅ B3–B5/C3–C5 Initial residuals audited; ✅ `p_rgh` identified as the primary coupling signal; 🟡 B7/C7 pending for the `nOuterCorrectors=4` test.
