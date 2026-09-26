@@ -2421,3 +2421,60 @@ Both versions preserve the same technical record: dates, AUD identifiers, eviden
 Every new technical audit entry must be added to both the Spanish and English versions so neither language becomes more current than the other.
 
 **Status:** ✅ bilingual audit-log structure active.
+
+
+---
+
+## 2026-09-25 — Advisor observation: `p_rgh` coupling sensitivity to `nOuterCorrectors`
+**[ADVISOR-OBSERVATION] [USER-REPORTED] [OPEN]**
+
+### Observation reported during parallel work
+
+The advisor is running his own simulations in parallel with the user's cases. According to the user's report, the advisor observed that increasing `nOuterCorrectors` substantially reduced the initial `p_rgh` residuals.
+
+The user remembers that the advisor may have tested relatively high `nOuterCorrectors` values, possibly around **7**, but the exact value is not confirmed and must not be treated as verified until the corresponding log, configuration, or direct confirmation is available.
+
+### Related evidence from the user's cases
+
+The controlled logs already preserved in the project show an initial `p_rgh` residual close to unity in the first timestep of several cases. For example, B5 shows:
+
+- `p_rgh_0 = 0.973321` at `t = 0.001 s`
+- `p_rgh_1 = 0.00750951`
+- `p_rgh_2 = 0.00516345`
+- `p_rgh_3 = 2.51636e-05`
+- `p_rgh_4 = 8.23277e-05`
+- `p_rgh_5 = 7.45313e-07`
+
+Thus, although the first pressure correction begins with an order-one residual, the PIMPLE corrections reduce it by several orders of magnitude within the same timestep.
+
+A similar ~0.973 first-timestep spike also appears in B3, B4, C3, and C4, so it should not automatically be interpreted as a failure unique to one physical formulation.
+
+### Hypothesis to reproduce
+
+Run a controlled sensitivity study using:
+
+`nOuterCorrectors = 2, 3, 4, 5, 6, 7`
+
+while keeping all other numerical and physical variables fixed.
+
+Metrics should include:
+
+- maximum initial `p_rgh` residual,
+- final `p_rgh` residual after the last corrector,
+- total within-timestep residual reduction,
+- number of timesteps containing large spikes,
+- persistence or disappearance of spikes after startup,
+- continuity,
+- Courant number,
+- CPU/wall time,
+- actual effect on temperature and liquid fraction.
+
+### Objective
+
+Identify the **diminishing-returns point**: the smallest number of outer correctors that provides sufficiently robust coupling without unnecessary computational cost.
+
+### OpenFOAM PostPlotter implication
+
+This observation motivates a coupling-diagnostics module that does more than plot `p_rgh_0`, `p_rgh_1`, etc. It should automatically reconstruct residual reduction within each timestep and across outer-corrector cycles.
+
+**Status:** 🟡 advisor observation documented; advisor's maximum tested value unconfirmed; controlled reproduction in the user's cases pending.
