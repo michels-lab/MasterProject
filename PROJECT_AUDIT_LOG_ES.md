@@ -2513,3 +2513,78 @@ Por tanto, el diagnóstico debe separar explícitamente:
 OpenFOAM PostPlotter debe mostrar estas dos métricas por separado. Un `Final residual` pequeño no debe ocultar un acoplamiento persistente, y un `Initial residual` alto no debe etiquetarse como fallo del solver lineal si ese solve converge correctamente.
 
 **Estado:** ✅ solver lineal vs acoplamiento PIMPLE diferenciados con datos reales B5/C5.
+
+
+---
+
+## 2026-09-25 — Perfil vertical central añadido a la serie controlada
+**[POST-PROCESSING] [CONFIG-VERIFIED] [GIT-VERIFIED]**
+
+Se añadió un segundo function object de muestreo, `verticalProfiles`, a los diez casos controlados:
+
+- B3_reference / C3_reference
+- B4_energy2 / C4_energy2
+- B5_outer3 / C5_outer3
+- B6_adaptiveDt / C6_adaptiveDt
+- B7_outer4 / C7_outer4
+
+### Geometría
+
+Nueva línea:
+
+`line_x20mm`
+
+con:
+
+- x = **0.020 m**
+- z = **0.005 m**
+- y = **0.00025 → 0.03975 m**
+- 80 puntos uniformes
+- `axis y`
+
+La línea atraviesa el centro geométrico del metal y la ubicación del probe central en x=20 mm, z=5 mm.
+
+### Campos
+
+Se conservan exactamente los mismos campos que en los perfiles horizontales:
+
+- `U`
+- `T`
+- `phaseChangeSource:alpha1`
+
+Por tanto, del vector `U` pueden analizarse Ux, Uy, Uz y |U|.
+
+### Razón física
+
+La gravedad del caso actúa en Y:
+
+`g = (0, -9.81, 0)`
+
+y el análisis espacial previo encontró que B y C presentan signos opuestos de `Uy` en el centro durante parte de la solidificación.
+
+Las líneas horizontales existentes `line_y20mm` y `line_y30mm` cortan la circulación a alturas fijas. La nueva línea vertical permite observar la estructura completa de abajo hacia arriba y responder:
+
+- dónde `Uy > 0`,
+- dónde `Uy < 0`,
+- dónde cambia de signo,
+- cómo se relaciona con T(y),
+- cómo se relaciona con alpha_l(y),
+- si existe una celda de recirculación y cómo difiere entre B y C.
+
+### Impacto
+
+Es una modificación exclusivamente de postprocesamiento. No cambia:
+
+- malla,
+- propiedades,
+- fronteras,
+- modelo de cambio de fase,
+- timestep,
+- correctores,
+- solución física.
+
+### Nota de ejecución
+
+Los casos B6/C6/B7/C7 ya habían comenzado a ejecutarse localmente antes de que esta configuración se añadiera al repositorio. Por tanto, esta modificación en Git no altera corridas locales que ya están en curso. Sus perfiles verticales pueden generarse posteriormente a partir de los tiempos guardados una vez sincronizada la configuración local.
+
+**Estado:** ✅ configuración vertical añadida a B3–B7/C3–C7; 🟡 extracción/análisis de los nuevos perfiles pendiente.
