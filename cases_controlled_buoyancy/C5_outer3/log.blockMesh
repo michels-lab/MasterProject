@@ -7,10 +7,10 @@
 \*---------------------------------------------------------------------------*/
 Build  : 14-7b05503f98a8
 Exec   : blockMesh
-Date   : Sep 24 2026
-Time   : 15:21:44
+Date   : Sep 26 2026
+Time   : 13:24:33
 Host   : "Michel-DuarteHP"
-PID    : 17836
+PID    : 68518
 I/O    : uncollated
 Case   : /home/michel/OpenFOAM/QuickCup_Solidification/cases_controlled_buoyancy/C5_outer3
 nProcs : 1
