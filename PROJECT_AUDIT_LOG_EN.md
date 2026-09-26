@@ -2955,3 +2955,78 @@ For older runs, PostPlotter can later estimate temporal derivatives from stored 
 - 🟡 not yet validated by an actual solver run with the full package enabled
 - 🟡 B6/C6/B7/C7 local runs already in progress before this repository change will not automatically contain the newly added function objects
 
+
+
+---
+
+## 2026-09-26 — Real B3 validation of diagnostics package and `flowType` naming fix
+**[RUN-VERIFIED] [BUG-FOUND] [FIXED]**
+
+`B3_reference` was run from 0 to 10 s with the expanded diagnostics package.
+
+The run completed successfully and `foamLog` executed at the end.
+
+### Fields verified in `10/metal`
+
+Found:
+
+- `CoCell`
+- `coolingRate`
+- `dAlphaLdt`
+- `dTdt`
+- `gradRho`
+- `gradT`
+- `latentHeat`
+- `latentHeatRateVol`
+- `magGradRho`
+- `magGradT`
+- `magSqrDevGradU`
+- `solidificationRate`
+- `vorticity`
+
+### Verified post-processing outputs
+
+Successfully generated:
+
+- `horizontalProfiles`
+- `verticalProfiles`
+- `metalBoundaryEnergyPower`
+- `metalLatentHeatPower`
+- `metalMaxCourant`
+- `metalMaxDensityGradient`
+- `metalMaxThermalGradient`
+- `metalMeanCoolingRate`
+- `metalMeanLiquidFraction`
+- `metalMeanSolidificationRate`
+- `metalMoldEnergyPower`
+- `metalSensibleEnthalpy`
+- `metalTopEnergyPower`
+- `temperatureProbe`
+
+### Finding
+
+No file named `flowType` appeared.
+
+Inspection of the official OpenFOAM Foundation v14 source showed that the `flowType` function object uses the **function-object block name** as its default result field name unless `result` is explicitly specified.
+
+The configuration used:
+
+`flowTopology { type flowType; ... }`
+
+so the generated field was named `flowTopology`, while the profile samplers requested `flowType`.
+
+### Fix
+
+The following was added to all ten cases:
+
+`result flowType;`
+
+inside the `flowTopology` block.
+
+Commit:
+
+`c92c282ca7cb549b4efdd88b402191163c706066`
+
+This makes the field name canonical and consistent with `lineProfiles` and the future PostPlotter parser.
+
+**Status:** ✅ B3 validated the diagnostics package; ✅ naming inconsistency identified and fixed; 🟡 rerun B3 with the final batch so all datasets are fully homogeneous.
