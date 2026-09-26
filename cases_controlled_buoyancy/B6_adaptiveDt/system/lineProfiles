@@ -18,10 +18,32 @@ horizontalProfiles
     (
         U
         T
+        p_rgh
+        rho
         phaseChangeSource:alpha1
+
+        // Flow topology
         vorticity
         flowType
         magSqrDevGradU
+
+        // Thermal-gradient and cooling diagnostics
+        gradT
+        magGradT
+        dTdt
+        coolingRate
+
+        // Density-gradient / buoyancy diagnostics
+        gradRho
+        magGradRho
+
+        // Phase-change-rate diagnostics
+        dAlphaLdt
+        solidificationRate
+        latentHeatRateVol
+
+        // Numerical field
+        CoCell
     );
 
     sets
@@ -69,10 +91,32 @@ verticalProfiles
     (
         U
         T
+        p_rgh
+        rho
         phaseChangeSource:alpha1
+
+        // Flow topology
         vorticity
         flowType
         magSqrDevGradU
+
+        // Thermal-gradient and cooling diagnostics
+        gradT
+        magGradT
+        dTdt
+        coolingRate
+
+        // Density-gradient / buoyancy diagnostics
+        gradRho
+        magGradRho
+
+        // Phase-change-rate diagnostics
+        dAlphaLdt
+        solidificationRate
+        latentHeatRateVol
+
+        // Numerical field
+        CoCell
     );
 
     sets

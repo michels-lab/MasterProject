@@ -27,7 +27,10 @@ temperatureProbe
     // Campos registrados
     fields
     (
+        U
         T
+        p_rgh
+        rho
         phaseChangeSource:alpha1
     );
 
