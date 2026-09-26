@@ -541,3 +541,27 @@ Typical series include Courant number, continuity errors, solver initial/final r
 ### C5 parsed logs regeneration note
 
 The previously restored historical `C5_outer3/logs/` directory was removed from the repository. C5 parsed diagnostics must now be regenerated directly from the tracked `C5_outer3/log.foamMultiRun` with `foamLog log.foamMultiRun`, matching the standardized post-processing workflow used for the other controlled cases.
+
+
+### Vertical centerline profiles
+
+A second sampling function object, `verticalProfiles`, is now present in every controlled V3–V7 case.
+
+It adds:
+
+- `line_x20mm`
+- `x = 0.020 m`
+- `z = 0.005 m`
+- `y = 0.00025 → 0.03975 m`
+- 80 uniformly distributed points
+- `axis y`
+
+The sampled fields are identical to the horizontal profiles:
+
+- `U`
+- `T`
+- `phaseChangeSource:alpha1`
+
+The purpose is to resolve transport **along the gravity direction** and through the geometric center/probe location. The existing horizontal lines show how quantities vary from left to right at fixed heights; the vertical centerline shows how `Uy`, temperature and liquid fraction vary from the bottom to the top of the metal.
+
+This is a post-processing-only addition. It does not change the mesh, material properties, boundary conditions, phase-change model, timestep, or solver settings.
