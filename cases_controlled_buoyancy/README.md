@@ -565,3 +565,123 @@ The sampled fields are identical to the horizontal profiles:
 The purpose is to resolve transport **along the gravity direction** and through the geometric center/probe location. The existing horizontal lines show how quantities vary from left to right at fixed heights; the vertical centerline shows how `Uy`, temperature and liquid fraction vary from the bottom to the top of the metal.
 
 This is a post-processing-only addition. It does not change the mesh, material properties, boundary conditions, phase-change model, timestep, or solver settings.
+
+
+### Full solidification diagnostics package
+
+All controlled V3–V7 cases now include a common OpenFOAM Foundation v14 post-processing package in `system/researchDiagnostics`.
+
+The package is post-processing only and does not change the governing equations or physical/numerical settings.
+
+#### Raw fields added to the central probe
+
+The center probe at `(0.020 0.020 0.005) m` now records every timestep:
+
+- `U`
+- `T`
+- `p_rgh`
+- `rho`
+- `phaseChangeSource:alpha1`
+
+#### Flow structure
+
+Generated at case write times:
+
+- `vorticity`
+- `flowType`
+- `magSqrDevGradU`
+
+#### Thermal-gradient diagnostics
+
+- `gradT = grad(T)`
+- `magGradT = |grad(T)|`
+- `dTdt = dT/dt`
+- `coolingRate = -dT/dt`
+
+Positive `coolingRate` means local cooling; negative values mean local heating.
+
+#### Density-gradient / buoyancy diagnostics
+
+- `gradRho = grad(rho)`
+- `magGradRho = |grad(rho)|`
+
+This is especially useful for contrasting the B and C buoyancy formulations. The B family uses temperature-dependent density, whereas the C family uses constant `rho`; therefore `gradRho` is expected to carry physical information in B and be approximately zero in C.
+
+#### Phase-change rates
+
+- `dAlphaLdt = d(alpha_l)/dt`
+- `solidificationRate = -dAlphaLdt`
+
+Sign convention:
+
+- `solidificationRate > 0`: local solidification
+- `solidificationRate < 0`: local remelting
+
+OpenFOAM's `solidificationMeltingSource` explicitly stores the old-time liquid-fraction field, allowing the runtime `ddt` function object to evaluate the derivative.
+
+#### Latent-heat release/absorption
+
+All V3–V7 cases use:
+
+`L = 2.286e5 J/kg`
+
+A native v14 uniform field named `latentHeat` is created with the correct `J/kg` dimensions, and the package evaluates:
+
+`latentHeatRateVol = rho * L * solidificationRate`
+
+with dimensions `W/m3`.
+
+Sign convention:
+
+- positive: latent-heat release during solidification
+- negative: latent-heat absorption during local remelting
+
+The corresponding domain integral `metalLatentHeatPower` is written in watts.
+
+#### Spatial Courant number
+
+The native v14 `CourantNo` function object generates:
+
+- `CoCell`
+
+A `metalMaxCourant` summary also records the maximum value and its location at every write time.
+
+#### Integrated / summary diagnostics
+
+The package additionally writes:
+
+- `metalMeanLiquidFraction`
+- `metalSensibleEnthalpy`
+- `metalMeanCoolingRate`
+- `metalMeanSolidificationRate`
+- `metalLatentHeatPower`
+- `metalMaxCourant` with location
+- `metalMaxThermalGradient` with location
+- `metalMaxDensityGradient` with location
+- advective, conductive and total energy powers across `metalTop`, `metal_to_mold`, and their combined boundary set
+
+#### Spatial profiles
+
+Both horizontal profiles and the vertical centerline now sample:
+
+- `U`
+- `T`
+- `p_rgh`
+- `rho`
+- liquid fraction
+- `vorticity`
+- `flowType`
+- `magSqrDevGradU`
+- `gradT`, `magGradT`
+- `dTdt`, `coolingRate`
+- `gradRho`, `magGradRho`
+- `dAlphaLdt`, `solidificationRate`
+- `latentHeatRateVol`
+- `CoCell`
+
+#### Important runtime limitation
+
+The OpenFOAM v14 `ddt` function object is **not supported by `foamPostProcess`**. Therefore `dTdt`, `dAlphaLdt`, `coolingRate`, `solidificationRate`, and `latentHeatRateVol` must be generated during a solver run.
+
+For already completed runs, equivalent temporal derivatives can still be estimated later from stored probe/profile data, but they are not identical to the native runtime `fvc::ddt` evaluation.
+
