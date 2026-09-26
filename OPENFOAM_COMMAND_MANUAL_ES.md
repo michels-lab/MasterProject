@@ -33,6 +33,13 @@
 17. [Recetas específicas: casos 6 y 7](#17-recetas-específicas-casos-6-y-7)
 18. [Qué hace Ctrl+C](#18-qué-hace-ctrlc)
 19. [Reglas para no contaminar comparaciones](#19-reglas-para-no-contaminar-comparaciones)
+20. [Abrir un caso en ParaView](#20-abrir-un-caso-en-paraview)
+21. [Perfiles lineales velocidad-temperatura — sugerencia del doctor](#21-perfiles-lineales-velocidad-temperatura--sugerencia-del-doctor)
+22. [Buscar un archivo dentro del proyecto](#22-buscar-un-archivo-dentro-del-proyecto)
+23. [Comprobar por qué Git ignora un archivo](#23-comprobar-por-qué-git-ignora-un-archivo)
+24. [Actualizar y subir cambios del repositorio](#24-actualizar-y-subir-cambios-del-repositorio)
+25. [Agregar deliberadamente un archivo ignorado por Git](#25-agregar-deliberadamente-un-archivo-ignorado-por-git)
+26. [Flujo histórico B2/C2](#26-flujo-histórico-b2c2)
 
 ---
 
@@ -477,6 +484,186 @@ Detiene únicamente la visualización en vivo de `tail`.
 6. Para comparar costo computacional, evitar correr los casos comparados al mismo tiempo.
 7. Cambiar una variable numérica principal por prueba siempre que sea posible.
 8. Registrar cada cambio relevante también en `PROJECT_AUDIT_LOG.md`.
+
+---
+
+
+## 20. Abrir un caso en ParaView
+
+### Origen
+Este comando ya se había usado en los casos históricos B2/C2 del proyecto.
+
+### Para qué sirve
+`paraFoam -builtin` prepara/abre el caso de OpenFOAM en ParaView usando el lector incorporado. El `&` deja ParaView ejecutándose en segundo plano y devuelve el control de la terminal.
+
+### Comando
+
+```bash
+paraFoam -builtin &
+```
+
+En los casos anteriores este flujo podía crear un archivo `.foam`, por ejemplo `C2_test.foam`.
+
+---
+
+## 21. Perfiles lineales velocidad-temperatura — sugerencia del doctor
+
+### Contexto
+El doctor comentó obtener perfiles de **velocidad–temperatura** en OpenFOAM, referido en la conversación como “plotline”. El flujo de postproceso trabajado para esa indicación usa muestreo lineal sobre la región metálica.
+
+### Ejecutar postproceso sobre el último tiempo
+
+```bash
+foamPostProcess -region metal -solver fluid -latestTime
+```
+
+### Qué significa
+- `-region metal`: trabaja sobre la región `metal`.
+- `-solver fluid`: usa el contexto de solver fluido para el postproceso.
+- `-latestTime`: procesa únicamente el último tiempo disponible.
+
+### Elementos del muestreo que ya habíamos considerado
+Para construir los perfiles se trabajó con conceptos/configuraciones como:
+
+```text
+lineUniform
+graphUniform
+graphCell
+fields (U T phaseChangeSource:alpha1);
+```
+
+Estos últimos son elementos de configuración de muestreo, **no comandos de terminal independientes**. La receta completa se irá conservando aquí conforme quede fijado el diccionario definitivo del proyecto.
+
+---
+
+## 22. Buscar un archivo dentro del proyecto
+
+### Para qué sirve
+`find` recorre carpetas y subcarpetas buscando nombres que coincidan.
+
+### Comando histórico usado
+
+```bash
+find . -name "openfoam-solidification.agent.md"
+```
+
+### Qué significa
+- `.`: empieza a buscar desde la carpeta actual.
+- `-name`: busca por nombre exacto.
+
+---
+
+## 23. Comprobar por qué Git ignora un archivo
+
+### Para qué sirve
+`git check-ignore -v` indica si una ruta está siendo ignorada y muestra qué regla del `.gitignore` lo provoca.
+
+### Comando histórico usado
+
+```bash
+git check-ignore -v cases_buoyancy/B2_test/10
+```
+
+Es especialmente útil cuando un resultado existe en tu computadora pero no aparece para hacer commit.
+
+---
+
+## 24. Actualizar y subir cambios del repositorio
+
+### Descargar primero los cambios remotos
+
+```bash
+cd ~/OpenFOAM/QuickCup_Solidification
+git pull
+```
+
+### Ver qué cambió
+
+```bash
+git status
+```
+
+### Preparar todos los cambios
+
+```bash
+git add -A
+```
+
+### Crear el commit
+
+```bash
+git commit -m "Describe aquí el cambio"
+```
+
+### Subir a GitHub
+
+```bash
+git push origin main
+```
+
+### Flujo completo
+
+```bash
+cd ~/OpenFOAM/QuickCup_Solidification
+git pull
+git status
+git add -A
+git commit -m "Describe aquí el cambio"
+git push origin main
+```
+
+**Importante:** revisa `git status` antes de `git add -A` para no subir resultados pesados o archivos que no quieras versionar.
+
+---
+
+## 25. Agregar deliberadamente un archivo ignorado por Git
+
+### Para qué sirve
+`git add -f` fuerza la incorporación de una ruta aunque una regla de `.gitignore` normalmente la excluya.
+
+### Plantilla
+
+```bash
+git add -f cases_controlled_buoyancy/<CASO>/postProcessing/<RUTA>
+```
+
+Sustituye `<CASO>` y `<RUTA>` por la ruta real.
+
+### Precaución
+Úsalo solo cuando **deliberadamente** quieras versionar ese resultado. No conviene forzar carpetas completas de resultados sin revisar su tamaño y utilidad.
+
+---
+
+## 26. Flujo histórico B2/C2
+
+Estos comandos aparecieron en las primeras pruebas de los casos de buoyancy y siguen siendo útiles como receta básica.
+
+### Ejemplo C2
+
+```bash
+cd ~/OpenFOAM/QuickCup_Solidification/cases_buoyancy/C2_test
+./Allclean
+./Allrun
+paraFoam -builtin &
+```
+
+### Ejemplo B2
+
+```bash
+cd ~/OpenFOAM/QuickCup_Solidification/cases_buoyancy/B2_test
+./Allclean
+./Allrun
+paraFoam -builtin &
+```
+
+### Error histórico útil
+Si haces `cd ..` y después ejecutas:
+
+```bash
+./Allclean
+```
+
+desde una carpeta que no contiene ese script, Bash responderá `No such file or directory`. Usa `pwd` y `ls` antes de ejecutar scripts cuando tengas duda sobre tu ubicación.
 
 ---
 
