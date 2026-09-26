@@ -40,6 +40,14 @@
 !**/postProcessing/
 !**/postProcessing/**
 
+# Curated scientific exports/results are also always tracked. Use these
+# directories when a derived field, table, profile, comparison or diagnostic
+# is selected as thesis evidence but does not naturally live in postProcessing/.
+!**/analysis_results/
+!**/analysis_results/**
+!**/scientific_results/
+!**/scientific_results/**
+
 
 # ============================================================
 # Parallel decomposition
