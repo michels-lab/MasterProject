@@ -45,3 +45,42 @@ horizontalProfiles
         }
     }
 }
+
+verticalProfiles
+{
+    type            sets;
+    libs            ("libsampling.so");
+
+    // Sample the fluid metal region along the gravity direction (Y).
+    region          metal;
+
+    // Write profiles at the case write times.
+    writeControl    writeTime;
+
+    interpolationScheme cellPoint;
+    setFormat       raw;
+
+    // Keep the same fields as the horizontal profiles so both orientations
+    // can be compared directly in PostPlotter.
+    fields
+    (
+        U
+        T
+        phaseChangeSource:alpha1
+    );
+
+    sets
+    {
+        // Vertical centerline through the central probe:
+        // x = 20 mm, z = 5 mm, from the first to last metal-cell-centre height.
+        line_x20mm
+        {
+            type        lineUniform;
+            axis        y;
+            start       (0.020 0.00025 0.005);
+            end         (0.020 0.03975 0.005);
+            nPoints     80;
+        }
+    }
+}
+
