@@ -27,10 +27,18 @@
 
 
 # ============================================================
-# OpenFOAM post-processing
+# OpenFOAM post-processing / scientific results
 # ============================================================
 
-**/postProcessing/
+# postProcessing/ is intentionally TRACKED.
+# Residual summaries, probes, sampled velocity/temperature/phase profiles,
+# integrals, extrema and other derived diagnostics are part of the scientific
+# record and must remain available for reproducible analysis.
+#
+# The explicit negations below also override the generic numeric-directory
+# rule above for postProcessing time folders such as 0.1/, 4.8/ and 10/.
+!**/postProcessing/
+!**/postProcessing/**
 
 
 # ============================================================
