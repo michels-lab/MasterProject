@@ -2304,3 +2304,69 @@ Thus V7 changes only the number of outer correctors relative to V5.
 AUD-055 remains in the history as a transient configuration decision but is superseded by this entry.
 
 **Status:** ✅ V6 adaptive-timestep cases defined; ✅ V7 restored to fixed timestep with outerCorrectors=4; ✅ one-variable-at-a-time design restored.
+
+
+## 2026-09-25 — Parallel documentation workflow: Audit Log + practical OpenFOAM manual
+
+### Decision
+From this date onward, project documentation is maintained in two parallel layers:
+
+1. **PROJECT_AUDIT_LOG.md** — chronological technical record of changes, tests, discrepancies, evidence, results, impact, and status.
+2. **OPENFOAM_COMMAND_MANUAL.md** — practical tutorial-style command reference with copy-ready terminal blocks, explanations of what each command does, and project-specific recipes.
+
+### Rationale
+The audit log answers **what happened and why**. The command manual answers **how to reproduce it quickly**. Reusable commands introduced during the project should be added to the manual when they are useful beyond a single isolated action.
+
+### Case 6/7 execution-chain path issue
+
+A sequential shell block was launched from:
+
+```text
+~/OpenFOAM/QuickCup_Solidification/cases_controlled_buoyancy
+```
+
+B6 completed its scripted sequence through `foamLog`, but the next subshell attempted:
+
+```bash
+cd ../C6_adaptiveDt
+```
+
+and failed with:
+
+```text
+-bash: cd: ../C6_adaptiveDt: No such file or directory
+```
+
+### Cause
+Each parenthesized block such as:
+
+```bash
+(cd B6_adaptiveDt && ./Allclean && ./Allrun)
+```
+
+runs in a subshell. When that subshell ends, the parent shell remains in `cases_controlled_buoyancy`. Therefore the next case must be addressed as `C6_adaptiveDt`, not `../C6_adaptiveDt`.
+
+### Correct sequential pattern
+
+```bash
+(cd B6_adaptiveDt && ./Allclean && ./Allrun) && \
+(cd C6_adaptiveDt && ./Allclean && ./Allrun) && \
+(cd B7_outer4 && ./Allclean && ./Allrun) && \
+(cd C7_outer4 && ./Allclean && ./Allrun)
+```
+
+If B6 has already completed:
+
+```bash
+(cd C6_adaptiveDt && ./Allclean && ./Allrun) && \
+(cd B7_outer4 && ./Allclean && ./Allrun) && \
+(cd C7_outer4 && ./Allclean && ./Allrun)
+```
+
+### Impact
+No evidence from the pasted terminal output indicates that B6 itself failed; its `Allrun` reached the `foamLog` stage. The chain stopped only when attempting to enter the incorrectly referenced C6 path.
+
+### Status
+- Practical command manual created at repository root.
+- Correct subshell/path behavior documented.
+- Future reusable OpenFOAM/Linux commands should be added to the command manual in parallel with technical events being recorded here.
