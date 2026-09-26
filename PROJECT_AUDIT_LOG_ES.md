@@ -2232,3 +2232,60 @@ Solo cambia el idioma de la narrativa.
 Cada nueva entrada técnica deberá añadirse tanto a la versión española como a la inglesa para evitar que una se vuelva más actual que la otra.
 
 **Estado:** ✅ estructura bilingüe establecida y traducción española creada.
+
+
+---
+
+## 2026-09-25 — Observación del asesor: sensibilidad del acoplamiento de `p_rgh` a `nOuterCorrectors`
+**[ADVISOR-OBSERVATION] [USER-REPORTED] [OPEN]**
+
+### Observación comunicada durante trabajo paralelo
+
+El asesor está realizando sus propias corridas en paralelo a las simulaciones del usuario. Según lo reportado por el usuario, el asesor observó que al aumentar `nOuterCorrectors` disminuían de forma importante los residuals iniciales de `p_rgh`.
+
+El usuario recuerda que el asesor pudo haber probado valores altos de `nOuterCorrectors`, posiblemente alrededor de **7**, pero el valor exacto no está confirmado y no debe tratarse como dato verificado hasta disponer del log, configuración o confirmación directa correspondiente.
+
+### Evidencia propia relacionada
+
+En los logs controlados ya preservados del proyecto, el primer timestep de varios casos muestra un `Initial residual` de `p_rgh` cercano a 1. Por ejemplo, en B5:
+
+- `p_rgh_0 = 0.973321` a `t = 0.001 s`
+- `p_rgh_1 = 0.00750951`
+- `p_rgh_2 = 0.00516345`
+- `p_rgh_3 = 2.51636e-05`
+- `p_rgh_4 = 8.23277e-05`
+- `p_rgh_5 = 7.45313e-07`
+
+Por tanto, aunque la primera corrección de presión comienza con un residual de orden unidad, las correcciones PIMPLE reducen el residual varios órdenes de magnitud dentro del mismo timestep.
+
+El mismo pico inicial ~0.973 aparece también en B3, B4, C3 y C4 en el primer timestep, por lo que no debe interpretarse automáticamente como una falla exclusiva de una formulación física.
+
+### Hipótesis a reproducir
+
+Probar de forma controlada la sensibilidad del acoplamiento presión–velocidad frente a:
+
+`nOuterCorrectors = 2, 3, 4, 5, 6, 7`
+
+manteniendo constantes las demás variables numéricas y físicas.
+
+Las métricas deberán incluir:
+
+- residual inicial máximo de `p_rgh`,
+- residual de `p_rgh` después del último corrector,
+- reducción total dentro del timestep,
+- número de timesteps con spikes elevados,
+- persistencia o desaparición de spikes después del arranque,
+- continuidad,
+- Courant,
+- tiempo de CPU/reloj,
+- efecto real sobre T y fracción líquida.
+
+### Objetivo
+
+Determinar el punto de **rendimientos decrecientes**: el menor número de outer correctors que logra un acoplamiento suficientemente robusto sin aumentar costo computacional de forma innecesaria.
+
+### Implicación para OpenFOAM PostPlotter
+
+Esta observación motiva un módulo de diagnóstico de acoplamiento que no solo grafique `p_rgh_0`, `p_rgh_1`, etc., sino que reconstruya automáticamente la reducción de residual dentro de cada timestep y entre outer correctors.
+
+**Estado:** 🟡 observación del asesor documentada; valor máximo ensayado por el asesor no confirmado; prueba controlada propia pendiente.
