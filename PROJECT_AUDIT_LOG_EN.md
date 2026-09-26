@@ -2700,3 +2700,78 @@ The diagnostic must explicitly separate:
 OpenFOAM PostPlotter should display these two metrics separately. A small `Final residual` must not hide persistent coupling behaviour, and a high `Initial residual` must not be labelled a linear-solver failure when that pressure solve itself converges successfully.
 
 **Status:** ✅ linear-solver and PIMPLE-coupling convergence separated using real B5/C5 data.
+
+
+---
+
+## 2026-09-25 — Vertical centerline profile added to the controlled series
+**[POST-PROCESSING] [CONFIG-VERIFIED] [GIT-VERIFIED]**
+
+A second sampling function object, `verticalProfiles`, was added to all ten controlled cases:
+
+- B3_reference / C3_reference
+- B4_energy2 / C4_energy2
+- B5_outer3 / C5_outer3
+- B6_adaptiveDt / C6_adaptiveDt
+- B7_outer4 / C7_outer4
+
+### Geometry
+
+New line:
+
+`line_x20mm`
+
+with:
+
+- x = **0.020 m**
+- z = **0.005 m**
+- y = **0.00025 → 0.03975 m**
+- 80 uniformly distributed points
+- `axis y`
+
+The line crosses the geometric center of the metal and the central probe location in x-z.
+
+### Fields
+
+The same fields as the horizontal profiles are sampled:
+
+- `U`
+- `T`
+- `phaseChangeSource:alpha1`
+
+Therefore Ux, Uy, Uz and |U| can be analysed from the sampled vector field.
+
+### Physical rationale
+
+Gravity acts in the Y direction:
+
+`g = (0, -9.81, 0)`
+
+and the previous spatial analysis showed that B and C can have opposite signs of `Uy` at the center during part of solidification.
+
+The existing `line_y20mm` and `line_y30mm` horizontal profiles cut through the circulation at fixed heights. The vertical centerline instead resolves the full bottom-to-top structure and can show:
+
+- where `Uy > 0`,
+- where `Uy < 0`,
+- where `Uy` changes sign,
+- how the velocity structure relates to T(y),
+- how it relates to alpha_l(y),
+- whether a recirculation cell exists and how it differs between B and C.
+
+### Impact
+
+This is strictly a post-processing change. It does not alter:
+
+- mesh,
+- material properties,
+- boundary conditions,
+- phase-change model,
+- timestep,
+- correctors,
+- physical solution.
+
+### Execution note
+
+B6/C6/B7/C7 had already started running locally before this repository configuration was added. Therefore the Git change does not alter local runs already in progress. Their vertical profiles can be generated later from saved times after the local configuration is synchronized.
+
+**Status:** ✅ vertical profile configuration added to B3–B7/C3–C7; 🟡 extraction/analysis pending.
