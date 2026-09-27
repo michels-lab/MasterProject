@@ -3233,3 +3233,28 @@ Diagnóstico: los function objects de `system/momentumPostProcessing` (`momentum
 Corrección: se añadió `region metal;` a los cuatro function objects en B3–B7 y C3–C7.
 
 El error ocurrió antes del cálculo de estadísticas/perfiles y no afecta las simulaciones CFD ni los campos volumétricos ya escritos.
+
+
+### Validación de momentumPostProcessing en B3
+
+La ejecución retrospectiva de `foamPostProcess` sobre `B3_reference` completó correctamente hasta `End`, confirmando que:
+
+- los campos volumétricos nuevos se leen correctamente desde los directorios de tiempo;
+- `momentumMean` y `momentumMax` funcionan sobre la región `metal`;
+- la configuración multirregión corregida es válida en OpenFOAM Foundation v14.
+
+Valores a `t=10 s`:
+
+- fracción sólida media = 0.126972;
+- coeficiente Darcy medio = 5.58325e6 1/s;
+- `phaseChangeModelDeltaT` medio = -1.13266 K;
+- aceleración Darcy media = 7.7232 m/s2;
+- aceleración buoyancy media = 0 m/s2;
+- aceleración media asociada a gradiente de `p_rgh` = 0.0967021 m/s2;
+- máximo coeficiente Darcy = 1e8 1/s;
+- máximo `|DarcyAccel|` = 334.288 m/s2;
+- máximo `|pRghAccel|` = 1.72493 m/s2.
+
+El valor de buoyancy igual a cero es consistente con la configuración B (`beta=0`). Los máximos globales no deben compararse entre sí como prueba directa de dominancia local.
+
+**Estado:** retrospective momentum post-processing validation PASSED for B3.
