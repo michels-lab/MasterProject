@@ -3159,3 +3159,21 @@ Con `Cu=1e5 1/s`, `q=1e-3` y `alpha_l=0`, el límite sólido es `D=1e8 1/s`.
 Advertencia de interpretación: los máximos globales de Darcy y presión pueden ocurrir en celdas distintas y no deben dividirse entre sí para inferir dominancia local. Para esa comparación deben usarse los campos celda-a-celda `phaseChangeDragToPressure` y `phaseChangeDragToBuoyancy`, junto con `alpha_l`, `U` y las magnitudes absolutas.
 
 **Estado:** B7 diagnostic runtime validation PASSED. Siguiente caso de validación: C7.
+
+
+### Validación runtime C7 del diagnóstico de momento
+
+La corrida completa de `C7_outer4` compiló y ejecutó correctamente el bloque `solidificationMeltingMomentumDiagnostics` bajo OpenFOAM Foundation v14.
+
+Valores observados al final de la corrida:
+
+- `max(phaseChangeDarcyCoeff) = 1e8 1/s`.
+- `max(|phaseChangeDarcyAcceleration|)` disminuyó aproximadamente de 422.25 a 418.58 m/s2 en las últimas escrituras mostradas.
+- `max(|phaseChangeBuoyancyAcceleration|)` se mantuvo alrededor de 0.1070–0.1074 m/s2.
+- `max(|pRghAcceleration|)` aumentó ligeramente de aproximadamente 0.08177 a 0.08247 m/s2.
+
+A diferencia de la familia B, donde `beta=0` y la contribución de flotación del `solidificationMeltingSource` es nula, C7 presenta una contribución de flotación distinta de cero, consistente con `beta=1.13e-4 1/K`.
+
+Advertencia: los máximos globales de Darcy, buoyancy y presión no necesariamente ocurren en la misma celda. Para evaluar dominancia local deben analizarse `phaseChangeDragToBuoyancy`, `phaseChangeDragToPressure`, `phaseChangeSource:alpha1` y `U` celda a celda.
+
+**Estado:** C7 diagnostic runtime validation PASSED. El paquete de diagnóstico de momento queda validado para ambas formulaciones B y C.
