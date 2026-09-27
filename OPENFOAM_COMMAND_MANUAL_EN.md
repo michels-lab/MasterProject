@@ -818,3 +818,27 @@ cd cases_controlled_buoyancy/B7_outer4
 ./Allclean
 ./Allrun
 ```
+
+
+### Foundation v14 `timeName()` and `gMax(...).value()` errors
+
+If dynamic-code compilation reports:
+
+```text
+no matching function for call to Foam::Time::timeName() const
+request for member 'value' ... gMax ... non-class type 'double'
+```
+
+use the API currently adopted by this project:
+
+```cpp
+m.time().timeName(m.time().timeOutputValue())
+gMax(field)
+```
+
+rather than:
+
+```cpp
+m.time().timeName()
+gMax(field).value()
+```
