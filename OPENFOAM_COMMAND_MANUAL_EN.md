@@ -870,3 +870,6 @@ sh postprocess_momentum_all.sh
 ```
 
 Each case stores the post-processing console output in `log.momentumPostProcess`.
+
+
+Multi-region note: function objects used with `foamPostProcess` must explicitly declare `region metal;`; passing `-region metal` on the command line is not sufficient if the object otherwise resolves the default region `region0`.
