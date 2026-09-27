@@ -796,3 +796,25 @@ phaseChangeDragToPressure
 - `phaseChangeDragToPressure`: razón entre amortiguamiento Darcy y gradiente de presión.
 
 No interpretar una razón grande cerca de denominadores casi nulos como evidencia física por sí sola; revisar también las magnitudes absolutas y la fracción líquida.
+
+
+### Error de compilación `fvCFD.H` en coded function objects
+
+Si aparece:
+
+```text
+fatal error: fvCFD.H: No such file or directory
+Failed wmake "dynamicCode/..."
+```
+
+no interpretar esto como fallo del solver. Es un error de compilación del código dinámico. En este proyecto se corrigió reemplazando el include agregado `fvCFD.H` por headers específicos compatibles con OpenFOAM Foundation v14.
+
+Después de sincronizar la corrección, limpiar y relanzar B7:
+
+```bash
+cd ~/OpenFOAM/QuickCup_Solidification
+git pull origin main
+cd cases_controlled_buoyancy/B7_outer4
+./Allclean
+./Allrun
+```
