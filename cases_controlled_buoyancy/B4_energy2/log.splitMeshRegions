@@ -8,9 +8,9 @@
 Build  : 14-7b05503f98a8
 Exec   : splitMeshRegions -cellZones all
 Date   : Sep 26 2026
-Time   : 13:11:26
+Time   : 21:36:47
 Host   : "Michel-DuarteHP"
-PID    : 66329
+PID    : 255623
 I/O    : uncollated
 Case   : /home/michel/OpenFOAM/QuickCup_Solidification/cases_controlled_buoyancy/B4_energy2
 nProcs : 1

@@ -8,9 +8,9 @@
 Build  : 14-7b05503f98a8
 Exec   : blockMesh
 Date   : Sep 26 2026
-Time   : 13:30:44
+Time   : 22:03:43
 Host   : "Michel-DuarteHP"
-PID    : 69923
+PID    : 291487
 I/O    : uncollated
 Case   : /home/michel/OpenFOAM/QuickCup_Solidification/cases_controlled_buoyancy/C6_adaptiveDt
 nProcs : 1
