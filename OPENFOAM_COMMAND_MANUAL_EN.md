@@ -796,3 +796,25 @@ Quick interpretation:
 - `phaseChangeDragToPressure`: Darcy-damping to pressure-gradient ratio.
 
 Do not interpret very large ratios near nearly-zero denominators in isolation; inspect the absolute magnitudes and liquid fraction as well.
+
+
+### `fvCFD.H` compilation error in coded function objects
+
+If the log shows:
+
+```text
+fatal error: fvCFD.H: No such file or directory
+Failed wmake "dynamicCode/..."
+```
+
+do not treat it as a solver failure. It is a dynamic-code compilation issue. In this project, it was corrected by replacing the aggregate `fvCFD.H` include with specific OpenFOAM Foundation v14-compatible headers.
+
+After synchronizing the fix, clean and rerun B7:
+
+```bash
+cd ~/OpenFOAM/QuickCup_Solidification
+git pull origin main
+cd cases_controlled_buoyancy/B7_outer4
+./Allclean
+./Allrun
+```
