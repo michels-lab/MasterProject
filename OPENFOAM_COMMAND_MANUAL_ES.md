@@ -877,3 +877,13 @@ foamPostProcess \
 Las salidas aparecen en `postProcessing/` y sí se versionan con Git.
 
 En corridas futuras, `Allrun` ejecuta este paso automáticamente después de `foamMultiRun` si el log alcanzó `End`.
+
+
+Para regenerar este postproceso sobre todos los casos controlados existentes sin repetir CFD:
+
+```bash
+cd ~/OpenFOAM/QuickCup_Solidification/cases_controlled_buoyancy
+sh postprocess_momentum_all.sh
+```
+
+Cada caso escribe su salida de consola en `log.momentumPostProcess`.
