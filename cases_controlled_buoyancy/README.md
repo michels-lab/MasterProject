@@ -774,3 +774,12 @@ Runtime validation is intentionally staged on B7 and C7 before a full V3–V7 re
 ## Compact momentum post-processing
 
 All controlled B3–B7/C3–C7 cases contain `system/momentumPostProcessing`. It reduces the volumetric phase-change momentum diagnostics into Git-trackable volume statistics and horizontal/vertical profiles under `postProcessing/`. Future `Allrun` executions invoke this reduction automatically after a successful solver run; existing local time directories can be post-processed directly with `foamPostProcess` without rerunning CFD.
+
+
+Batch helper for existing runs:
+
+```bash
+sh postprocess_momentum_all.sh
+```
+
+It processes only cases whose `log.foamMultiRun` reached `End` and writes `log.momentumPostProcess` per case.
