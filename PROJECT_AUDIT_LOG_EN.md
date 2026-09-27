@@ -3273,3 +3273,14 @@ This addition does not replace the previous numerical conclusions:
 The diagnostic code is versioned but the new fields still require a short B7/C7 runtime validation under OpenFOAM Foundation v14 before the full matrix is rerun.
 
 **Next gate:** compile/run B7 and C7, verify all new fields are written, then use the diagnostic for the V3–V7 physical comparison.
+
+
+### Compatibility correction found during B7 validation
+
+The first B7 validation failed before solver execution while compiling the `coded` function object:
+
+`fatal error: fvCFD.H: No such file or directory`
+
+This was confirmed to be a dynamic-code include-path compatibility issue under OpenFOAM Foundation v14, not a physical or numerical failure of the case.
+
+`fvCFD.H` was replaced by specific compatible headers (`fvMesh.H`, `volFields.H`, `uniformDimensionedFields.H`, `IOdictionary.H`, `zeroGradientFvPatchFields.H`, `fvcGrad.H`) in all ten V3–V7 cases. B7 must be revalidated before C7 or the full matrix is executed.
