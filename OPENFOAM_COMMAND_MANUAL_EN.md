@@ -860,3 +860,13 @@ foamPostProcess \
 Outputs are written under `postProcessing/` and are intentionally tracked by Git.
 
 For future runs, `Allrun` performs this stage automatically after `foamMultiRun` when the solver log reached `End`.
+
+
+To regenerate this post-processing for all existing controlled cases without rerunning CFD:
+
+```bash
+cd ~/OpenFOAM/QuickCup_Solidification/cases_controlled_buoyancy
+sh postprocess_momentum_all.sh
+```
+
+Each case stores the post-processing console output in `log.momentumPostProcess`.
