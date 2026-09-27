@@ -887,3 +887,6 @@ sh postprocess_momentum_all.sh
 ```
 
 Cada caso escribe su salida de consola en `log.momentumPostProcess`.
+
+
+Nota para casos multirregión: los function objects usados con `foamPostProcess` deben declarar explícitamente `region metal;`; no basta con pasar `-region metal` en la línea de comandos si el objeto intenta resolver la región por defecto `region0`.
