@@ -859,3 +859,21 @@ m.time().timeName(m.time().value())
 ```
 
 La interfaz de `Time` de OpenFOAM 14 define `timeName(const scalar, ...)`; no usar `timeOutputValue()` en este proyecto.
+
+
+## Postprocesar diagnósticos de momento sin rerun
+
+Los casos controlados B3–B7/C3–C7 incluyen `system/momentumPostProcessing`. Si los directorios de tiempo ya existen, no es necesario repetir la simulación para generar las tablas y perfiles compactos:
+
+```bash
+cd <caso>
+foamPostProcess \
+    -region metal \
+    -dict system/momentumPostProcessing \
+    -time '0:' \
+    -fields '(phaseChangeSolidFraction phaseChangeDarcyCoeff phaseChangeModelDeltaT phaseChangeDarcyAcceleration phaseChangeBuoyancyAcceleration pRghAcceleration magPhaseChangeDarcyAcceleration magPhaseChangeBuoyancyAcceleration magPRghAcceleration phaseChangeDragToBuoyancy phaseChangeDragToPressure)'
+```
+
+Las salidas aparecen en `postProcessing/` y sí se versionan con Git.
+
+En corridas futuras, `Allrun` ejecuta este paso automáticamente después de `foamMultiRun` si el log alcanzó `End`.
