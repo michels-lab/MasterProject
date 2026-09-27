@@ -842,3 +842,20 @@ y no:
 m.time().timeName()
 gMax(field).value()
 ```
+
+
+### `timeOutputValue()` no existe en OpenFOAM Foundation v14
+
+Si aparece:
+
+```text
+const class Foam::Time has no member named timeOutputValue
+```
+
+usar:
+
+```cpp
+m.time().timeName(m.time().value())
+```
+
+La interfaz de `Time` de OpenFOAM 14 define `timeName(const scalar, ...)`; no usar `timeOutputValue()` en este proyecto.
