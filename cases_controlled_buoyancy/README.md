@@ -769,3 +769,8 @@ Key outputs:
 This is post-processing only and does not modify the governing equations. Its purpose is to connect the already documented V6/V7 numerical behavior with the actual local phase-change momentum balance.
 
 Runtime validation is intentionally staged on B7 and C7 before a full V3–V7 rerun.
+
+
+## Compact momentum post-processing
+
+All controlled B3–B7/C3–C7 cases contain `system/momentumPostProcessing`. It reduces the volumetric phase-change momentum diagnostics into Git-trackable volume statistics and horizontal/vertical profiles under `postProcessing/`. Future `Allrun` executions invoke this reduction automatically after a successful solver run; existing local time directories can be post-processed directly with `foamPostProcess` without rerunning CFD.
