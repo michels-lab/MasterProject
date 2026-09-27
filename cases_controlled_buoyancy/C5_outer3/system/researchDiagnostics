@@ -539,7 +539,11 @@ solidificationMeltingMomentumDiagnostics
 
     codeInclude
     #{
-        #include "fvCFD.H"
+        #include "fvMesh.H"
+        #include "volFields.H"
+        #include "uniformDimensionedFields.H"
+        #include "IOdictionary.H"
+        #include "zeroGradientFvPatchFields.H"
         #include "fvcGrad.H"
     #};
 
