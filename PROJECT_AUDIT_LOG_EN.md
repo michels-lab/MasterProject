@@ -3308,3 +3308,24 @@ The third validation showed that `Time::timeOutputValue()` is not part of the in
 `m.time().timeName(m.time().value())`
 
 The correction was applied to all ten controlled V3–V7 cases. This remains strictly a dynamic post-processing compilation issue.
+
+
+### Compact export of momentum diagnostics to postProcessing
+
+Added `system/momentumPostProcessing` to B3–B7 and C3–C7 and integrated it into `Allrun` after a solver run that reaches `End`.
+
+Purpose: preserve useful scientific evidence from `solidificationMeltingMomentumDiagnostics` in Git without versioning every OpenFOAM time directory.
+
+The post-processing stage reloads the written volumetric fields and generates:
+
+- `momentumMean`: volume averages of solid fraction, Darcy coefficient, model deltaT, and Darcy, buoyancy and `p_rgh`-gradient acceleration magnitudes.
+- `momentumMax`: maxima and their locations for the same fields.
+- `momentumHorizontalProfiles`: profiles at y=20 mm and y=30 mm.
+- `momentumVerticalProfiles`: profile at x=20 mm.
+- Profiles include vectors, magnitudes, and local Darcy/buoyancy and Darcy/pressure ratios.
+
+Ratios are retained as local diagnostics; physical dominance must not be inferred from ratios of unrelated global maxima or from very large ratios caused by near-zero denominators.
+
+`Allrun` performs this reduction only when `log.foamMultiRun` contains `End`, preventing a failed run from being packaged as valid results.
+
+Full calculated time directories remain ignored by Git; `postProcessing/` remains tracked.
