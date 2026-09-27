@@ -740,3 +740,32 @@ The final synchronized run logs confirm a strong computational-cost increase wit
 The outer-4 cases therefore show no monotonic coupling improvement over outer-3 while costing substantially more. Adaptive V6 greatly reduces runtime, but its physical equivalence to the fixed-timestep cases remains to be checked before acceptance.
 
 For V6, observed maximum Courant reaches about 0.288 despite `maxCo=0.25`; final Courant values are near 0.25. This is treated as an observed adaptation overshoot, not automatically as solver instability.
+
+
+---
+
+## `solidificationMeltingSource` momentum diagnostics
+
+The V3–V7 controlled matrix now includes a direct diagnostic of the momentum terms associated with `solidificationMeltingSource`.
+
+The diagnostic reads each case's own `Cu`, `q`, `beta`, `rhoRef`, `Tsol`, `Tliq`, and `alpha1e` from `constant/metal/fvModels`, then writes Darcy damping, model buoyancy, and `p_rgh` acceleration fields at write times.
+
+Key outputs:
+
+- `phaseChangeSolidFraction`
+- `phaseChangeDarcyCoeff`
+- `phaseChangeDarcySp`
+- `phaseChangeDarcyAcceleration`
+- `phaseChangeModelDeltaT`
+- `phaseChangeBuoyancyAcceleration`
+- `phaseChangeBuoyancySu`
+- `pRghAcceleration`
+- `magPhaseChangeDarcyAcceleration`
+- `magPhaseChangeBuoyancyAcceleration`
+- `magPRghAcceleration`
+- `phaseChangeDragToBuoyancy`
+- `phaseChangeDragToPressure`
+
+This is post-processing only and does not modify the governing equations. Its purpose is to connect the already documented V6/V7 numerical behavior with the actual local phase-change momentum balance.
+
+Runtime validation is intentionally staged on B7 and C7 before a full V3–V7 rerun.
