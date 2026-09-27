@@ -3034,3 +3034,73 @@ Se añadieron:
 - `VALIDATION_MATRIX_EN.md`
 
 **Decisión:** antes de escribir un fvModel cinético, construir un caso de equilibrio alineado con las condiciones experimentales. La rama cinética se abre solo si ese caso demuestra una limitación estructural del modelo de equilibrio.
+
+
+---
+
+## 2026-09-26 — Diagnóstico directo de términos de momento de `solidificationMeltingSource`
+**[POSTPROCESSING] [PHYSICS-DIAGNOSTICS] [NO-PHYSICS-CHANGE]**
+
+Después de completar la auditoría numérica V3–V7, se añadió un diagnóstico específico para determinar si las diferencias observadas en velocidad y comportamiento de la zona pastosa provienen del acoplamiento presión–velocidad, de la flotación o del amortiguamiento Darcy del modelo `solidificationMeltingSource`.
+
+El nuevo bloque `solidificationMeltingMomentumDiagnostics` fue añadido a:
+
+- B3_reference
+- B4_energy2
+- B5_outer3
+- B6_adaptiveDt
+- B7_outer4
+- C3_reference
+- C4_energy2
+- C5_outer3
+- C6_adaptiveDt
+- C7_outer4
+
+El diagnóstico lee directamente de `constant/metal/fvModels` los parámetros `Cu`, `q`, `beta`, `rhoRef`, `Tsol`, `Tliq` y `alpha1e`; por lo tanto no duplica manualmente la parametrización entre casos.
+
+Se reconstruye el coeficiente de amortiguamiento Darcy:
+
+`D = Cu (1-alpha_l)^2 / (alpha_l^3 + q)`
+
+y su contribución de aceleración:
+
+`a_D = -D U`.
+
+También se reconstruyen:
+
+- `phaseChangeModelDeltaT`: diferencia térmica usada por el modelo de cambio de fase.
+- `phaseChangeBuoyancyAcceleration`: escala de aceleración `g beta DeltaT`.
+- `phaseChangeBuoyancySu`: fuente explícita de flotación `rhoRef g beta DeltaT`.
+- `pRghAcceleration`: `-grad(p_rgh)/rho`.
+- razones locales `phaseChangeDragToBuoyancy` y `phaseChangeDragToPressure`.
+
+Campos escritos:
+
+- `phaseChangeSolidFraction`
+- `phaseChangeDarcyCoeff`
+- `phaseChangeDarcySp`
+- `phaseChangeDarcyAcceleration`
+- `phaseChangeModelDeltaT`
+- `phaseChangeBuoyancyAcceleration`
+- `phaseChangeBuoyancySu`
+- `pRghAcceleration`
+- `magPhaseChangeDarcyAcceleration`
+- `magPhaseChangeBuoyancyAcceleration`
+- `magPRghAcceleration`
+- `phaseChangeDragToBuoyancy`
+- `phaseChangeDragToPressure`
+
+### Relación con los resultados V6 y V7 ya documentados
+
+Esta ampliación no modifica las conclusiones numéricas previas:
+
+- V6 sigue siendo la rama de timestep adaptativo, con fuerte reducción de costo pero necesidad de comprobar equivalencia física.
+- V7 sigue siendo la prueba de cuatro outer correctors, con costo mucho mayor y sin mejora monotónica clara del coupling respecto a V5.
+- Los residuals lineales de presión siguen terminando típicamente en el orden de 10^-8–10^-7; el problema abierto no es un fallo simple del solver lineal.
+- La siguiente comparación debe usar simultáneamente los resultados ya registrados de V3–V7 y los nuevos campos de fuerza/amortiguamiento.
+
+### Estado de validación
+
+El código de diagnóstico está versionado, pero sus nuevos campos todavía deben validarse mediante una corrida corta de B7 y C7 en OpenFOAM Foundation v14 antes de relanzar toda la matriz.
+
+**Siguiente gate:** compilar/ejecutar B7 y C7, comprobar escritura de los campos nuevos y, si pasa, aplicar el diagnóstico a la comparación física V3–V7.
