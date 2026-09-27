@@ -3329,3 +3329,16 @@ Ratios are retained as local diagnostics; physical dominance must not be inferre
 `Allrun` performs this reduction only when `log.foamMultiRun` contains `End`, preventing a failed run from being packaged as valid results.
 
 Full calculated time directories remain ignored by Git; `postProcessing/` remains tracked.
+
+
+### Fix to batch post-processing validation
+
+The first corrected version of `postprocess_momentum_all.sh` still used `grep "^End$"` on `log.foamMultiRun` as its validity criterion. Valid controlled-case runs do not necessarily contain a line matching that exact pattern, so every case was incorrectly skipped.
+
+That dependency was removed. The helper now requires:
+1. an existing `log.foamMultiRun`; and
+2. locally available `phaseChangeDarcyCoeff` fields in calculated time directories.
+
+For future runs, `Allrun` captures the exit status of `foamMultiRun` immediately and performs the momentum reduction only when the solver returns status 0.
+
+This issue affected only post-processing automation and does not invalidate the completed simulations.
