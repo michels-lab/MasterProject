@@ -3217,3 +3217,59 @@ Added:
 - `VALIDATION_MATRIX_EN.md`
 
 **Decision:** construct an experiment-aligned equilibrium case before writing a kinetic fvModel. The kinetic branch is opened only if that case demonstrates a structural limitation of the equilibrium model.
+
+
+---
+
+## 2026-09-26 — Direct `solidificationMeltingSource` momentum-term diagnostics
+**[POSTPROCESSING] [PHYSICS-DIAGNOSTICS] [NO-PHYSICS-CHANGE]**
+
+After completing the V3–V7 numerical audit, a dedicated diagnostic was added to determine whether the observed velocity and mushy-zone differences originate from pressure–velocity coupling, buoyancy, or Darcy damping from `solidificationMeltingSource`.
+
+The new `solidificationMeltingMomentumDiagnostics` block was added to all ten controlled cases:
+
+- B3_reference through B7_outer4
+- C3_reference through C7_outer4
+
+The diagnostic reads `Cu`, `q`, `beta`, `rhoRef`, `Tsol`, `Tliq`, and `alpha1e` directly from `constant/metal/fvModels`, avoiding duplicated manual parameter definitions.
+
+It reconstructs the Darcy damping coefficient:
+
+`D = Cu (1-alpha_l)^2 / (alpha_l^3 + q)`
+
+and its acceleration contribution:
+
+`a_D = -D U`.
+
+It also reconstructs the model temperature departure, Boussinesq acceleration/source, the `p_rgh` pressure-gradient acceleration, and local drag-to-buoyancy / drag-to-pressure ratios.
+
+Written fields:
+
+- `phaseChangeSolidFraction`
+- `phaseChangeDarcyCoeff`
+- `phaseChangeDarcySp`
+- `phaseChangeDarcyAcceleration`
+- `phaseChangeModelDeltaT`
+- `phaseChangeBuoyancyAcceleration`
+- `phaseChangeBuoyancySu`
+- `pRghAcceleration`
+- `magPhaseChangeDarcyAcceleration`
+- `magPhaseChangeBuoyancyAcceleration`
+- `magPRghAcceleration`
+- `phaseChangeDragToBuoyancy`
+- `phaseChangeDragToPressure`
+
+### Relation to the already documented V6/V7 results
+
+This addition does not replace the previous numerical conclusions:
+
+- V6 remains the adaptive-timestep branch: much lower computational cost, but physical equivalence must still be demonstrated.
+- V7 remains the four-outer-corrector test: substantially higher cost without a clear monotonic coupling improvement over V5.
+- Linear pressure solves still typically end around 10^-8–10^-7 final residuals; the open issue is not a simple linear-solver failure.
+- The next physical comparison must combine the existing V3–V7 results with the new force/damping fields.
+
+### Validation status
+
+The diagnostic code is versioned but the new fields still require a short B7/C7 runtime validation under OpenFOAM Foundation v14 before the full matrix is rerun.
+
+**Next gate:** compile/run B7 and C7, verify all new fields are written, then use the diagnostic for the V3–V7 physical comparison.
