@@ -1,6 +1,7 @@
 #!/bin/sh
 
-cd "${0%/*}" || exit 1
+SCRIPT_DIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd) || exit 1
+cd "$SCRIPT_DIR" || exit 1
 
 cases="
 B3_reference
