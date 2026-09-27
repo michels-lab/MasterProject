@@ -3104,3 +3104,14 @@ Esta ampliación no modifica las conclusiones numéricas previas:
 El código de diagnóstico está versionado, pero sus nuevos campos todavía deben validarse mediante una corrida corta de B7 y C7 en OpenFOAM Foundation v14 antes de relanzar toda la matriz.
 
 **Siguiente gate:** compilar/ejecutar B7 y C7, comprobar escritura de los campos nuevos y, si pasa, aplicar el diagnóstico a la comparación física V3–V7.
+
+
+### Corrección de compatibilidad detectada en validación B7
+
+La primera validación de B7 falló antes de ejecutar el solver por compilación del `coded` function object:
+
+`fatal error: fvCFD.H: No such file or directory`
+
+Se confirmó que el problema era exclusivamente de includes del código dinámico bajo OpenFOAM Foundation v14; no correspondía a un fallo físico ni numérico del caso.
+
+Se sustituyó `fvCFD.H` por headers específicos compatibles (`fvMesh.H`, `volFields.H`, `uniformDimensionedFields.H`, `IOdictionary.H`, `zeroGradientFvPatchFields.H`, `fvcGrad.H`) en los diez casos V3–V7. La validación B7 debe repetirse antes de ejecutar C7 o la matriz completa.
