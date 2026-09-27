@@ -742,3 +742,57 @@ git push origin main
 ```
 
 No usar `force push` para resolver un remoto adelantado. Este flujo evita que documentación remota más reciente sustituya o confunda resultados que todavía existen únicamente en la máquina local.
+
+
+---
+
+## Validar el diagnóstico de `solidificationMeltingSource`
+
+El bloque `solidificationMeltingMomentumDiagnostics` forma parte de `system/researchDiagnostics` en los casos controlados V3–V7. No cambia la física del caso; solo escribe campos derivados durante el solver.
+
+Después de sincronizar:
+
+```bash
+cd ~/OpenFOAM/QuickCup_Solidification
+git pull origin main
+```
+
+Antes de correr toda la matriz, validar primero B7 y C7.
+
+Comprobar que el bloque existe:
+
+```bash
+grep -n "solidificationMeltingMomentumDiagnostics" \
+  cases_controlled_buoyancy/B7_outer4/system/researchDiagnostics
+
+grep -n "solidificationMeltingMomentumDiagnostics" \
+  cases_controlled_buoyancy/C7_outer4/system/researchDiagnostics
+```
+
+Durante la corrida, buscar en el log:
+
+```bash
+grep "solidificationMelting diagnostics" log.foamMultiRun
+```
+
+Después de una escritura válida, los directorios de tiempo de la región `metal` deben contener, entre otros:
+
+```text
+phaseChangeDarcyCoeff
+phaseChangeDarcyAcceleration
+phaseChangeBuoyancyAcceleration
+pRghAcceleration
+phaseChangeDragToBuoyancy
+phaseChangeDragToPressure
+```
+
+### Interpretación rápida
+
+- `phaseChangeDarcyCoeff` [1/s]: intensidad local del amortiguamiento de zona pastosa.
+- `magPhaseChangeDarcyAcceleration` [m/s²]: magnitud de la desaceleración Darcy.
+- `magPhaseChangeBuoyancyAcceleration` [m/s²]: escala local de flotación del modelo.
+- `magPRghAcceleration` [m/s²]: escala de aceleración asociada al gradiente de `p_rgh`.
+- `phaseChangeDragToBuoyancy`: razón entre amortiguamiento Darcy y flotación.
+- `phaseChangeDragToPressure`: razón entre amortiguamiento Darcy y gradiente de presión.
+
+No interpretar una razón grande cerca de denominadores casi nulos como evidencia física por sí sola; revisar también las magnitudes absolutas y la fracción líquida.
