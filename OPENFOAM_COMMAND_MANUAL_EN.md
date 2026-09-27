@@ -842,3 +842,21 @@ rather than:
 m.time().timeName()
 gMax(field).value()
 ```
+
+
+## Post-process momentum diagnostics without rerunning CFD
+
+Controlled cases B3–B7/C3–C7 include `system/momentumPostProcessing`. If calculated time directories already exist, the compact tables and profiles can be generated without repeating the simulation:
+
+```bash
+cd <case>
+foamPostProcess \
+    -region metal \
+    -dict system/momentumPostProcessing \
+    -time '0:' \
+    -fields '(phaseChangeSolidFraction phaseChangeDarcyCoeff phaseChangeModelDeltaT phaseChangeDarcyAcceleration phaseChangeBuoyancyAcceleration pRghAcceleration magPhaseChangeDarcyAcceleration magPhaseChangeBuoyancyAcceleration magPRghAcceleration phaseChangeDragToBuoyancy phaseChangeDragToPressure)'
+```
+
+Outputs are written under `postProcessing/` and are intentionally tracked by Git.
+
+For future runs, `Allrun` performs this stage automatically after `foamMultiRun` when the solver log reached `End`.
