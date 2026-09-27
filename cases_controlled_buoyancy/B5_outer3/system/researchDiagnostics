@@ -510,3 +510,309 @@ metalMaxDensityGradient
     );
 }
 
+
+
+// ------------------------------------------------------------------------- //
+// solidificationMeltingSource momentum diagnostics
+//
+// Reconstructs the exact Darcy coefficient used by OpenFOAM:
+//   S = -Cu*(1-alphaL)^2/(alphaL^3 + q)
+//
+// It also reconstructs the model's buoyancy temperature departure and writes
+// acceleration-scale fields for Darcy damping, Boussinesq buoyancy and p_rgh.
+// Values Cu, q, beta, rhoRef, Tsol, Tliq and alpha1e are read directly from
+// constant/metal/fvModels, so B- and C-family cases remain self-consistent.
+//
+// Diagnostics only: governing equations are NOT modified.
+// ------------------------------------------------------------------------- //
+
+solidificationMeltingMomentumDiagnostics
+{
+    type            coded;
+    libs            ("libutilityFunctionObjects.so");
+    region          metal;
+
+    executeControl  writeTime;
+    executeInterval 1;
+    writeControl    writeTime;
+    writeInterval   1;
+
+    codeInclude
+    #{
+        #include "fvCFD.H"
+        #include "fvcGrad.H"
+    #};
+
+    codeWrite
+    #{
+        const fvMesh& m = mesh();
+
+        const volScalarField& alphaL =
+            m.lookupObject<volScalarField>("phaseChangeSource:alpha1");
+        const volVectorField& U =
+            m.lookupObject<volVectorField>("U");
+        const volScalarField& T =
+            m.lookupObject<volScalarField>("T");
+        const volScalarField& rho =
+            m.lookupObject<volScalarField>("rho");
+        const volScalarField& pRgh =
+            m.lookupObject<volScalarField>("p_rgh");
+        const uniformDimensionedVectorField& g =
+            m.lookupObject<uniformDimensionedVectorField>("g");
+
+        IOdictionary fvModelsDict
+        (
+            IOobject
+            (
+                "fvModels",
+                m.time().constant(),
+                m,
+                IOobject::MUST_READ,
+                IOobject::NO_WRITE
+            )
+        );
+
+        const dictionary& pc = fvModelsDict.subDict("phaseChangeSource");
+
+        const scalar Cu = pc.lookupOrDefault<scalar>("Cu", 1e5);
+        const scalar q = pc.lookupOrDefault<scalar>("q", 1e-3);
+        const scalar beta = pc.lookup<scalar>("beta");
+        const scalar rhoRef = pc.lookup<scalar>("rhoRef");
+        const scalar Tsol = pc.lookup<scalar>("Tsol");
+        const scalar Tliq = pc.lookupOrDefault<scalar>("Tliq", Tsol);
+        const scalar alpha1e = pc.lookupOrDefault<scalar>("alpha1e", 0.0);
+
+        const dimensionedScalar CuD("Cu", dimless/dimTime, Cu);
+        const dimensionedScalar qD("q", dimless, q);
+        const dimensionedScalar betaD
+        (
+            "beta",
+            dimless/dimTemperature,
+            beta
+        );
+        const dimensionedScalar rhoRefD("rhoRef", dimDensity, rhoRef);
+        const dimensionedScalar accelFloor
+        (
+            "accelFloor",
+            dimLength/sqr(dimTime),
+            SMALL
+        );
+
+        volScalarField solidFraction
+        (
+            IOobject
+            (
+                "phaseChangeSolidFraction",
+                m.time().timeName(),
+                m,
+                IOobject::NO_READ,
+                IOobject::NO_WRITE
+            ),
+            scalar(1) - alphaL
+        );
+
+        // Positive damping coefficient D [1/s].
+        // OpenFOAM inserts S=-D into the momentum matrix diagonal.
+        volScalarField darcyCoeff
+        (
+            IOobject
+            (
+                "phaseChangeDarcyCoeff",
+                m.time().timeName(),
+                m,
+                IOobject::NO_READ,
+                IOobject::NO_WRITE
+            ),
+            CuD*sqr(scalar(1) - alphaL)/(pow3(alphaL) + qD)
+        );
+
+        volScalarField darcySp
+        (
+            IOobject
+            (
+                "phaseChangeDarcySp",
+                m.time().timeName(),
+                m,
+                IOobject::NO_READ,
+                IOobject::NO_WRITE
+            ),
+            -darcyCoeff
+        );
+
+        // Acceleration-scale representation of the implicit Darcy resistance.
+        volVectorField darcyAccel
+        (
+            IOobject
+            (
+                "phaseChangeDarcyAcceleration",
+                m.time().timeName(),
+                m,
+                IOobject::NO_READ,
+                IOobject::NO_WRITE
+            ),
+            -darcyCoeff*U
+        );
+
+        // Reconstruct deltaT exactly as solidificationMeltingSource does.
+        volScalarField modelDeltaT
+        (
+            IOobject
+            (
+                "phaseChangeModelDeltaT",
+                m.time().timeName(),
+                m,
+                IOobject::NO_READ,
+                IOobject::NO_WRITE
+            ),
+            m,
+            dimensionedScalar("zero", dimTemperature, 0),
+            zeroGradientFvPatchScalarField::typeName
+        );
+
+        forAll(modelDeltaT, celli)
+        {
+            const scalar a = alphaL[celli];
+
+            const scalar Tphase =
+                max
+                (
+                    Tsol,
+                    Tsol
+                  + (Tliq - Tsol)*(a - alpha1e)/(1.0 - alpha1e)
+                );
+
+            modelDeltaT[celli] = T[celli] - Tphase;
+        }
+        modelDeltaT.correctBoundaryConditions();
+
+        const dimensionedVector gD("g", g.dimensions(), g.value());
+
+        // Physical acceleration scale g*beta*deltaT [m/s2].
+        volVectorField buoyancyAccel
+        (
+            IOobject
+            (
+                "phaseChangeBuoyancyAcceleration",
+                m.time().timeName(),
+                m,
+                IOobject::NO_READ,
+                IOobject::NO_WRITE
+            ),
+            gD*betaD*modelDeltaT
+        );
+
+        // Exact explicit source vector Sb used by solidificationMeltingSource.
+        volVectorField buoyancySu
+        (
+            IOobject
+            (
+                "phaseChangeBuoyancySu",
+                m.time().timeName(),
+                m,
+                IOobject::NO_READ,
+                IOobject::NO_WRITE
+            ),
+            rhoRefD*buoyancyAccel
+        );
+
+        // Pressure-gradient acceleration from the solved p_rgh field.
+        volVectorField pressureAccel
+        (
+            IOobject
+            (
+                "pRghAcceleration",
+                m.time().timeName(),
+                m,
+                IOobject::NO_READ,
+                IOobject::NO_WRITE
+            ),
+            -fvc::grad(pRgh)/rho
+        );
+
+        volScalarField magDarcyAccel
+        (
+            IOobject
+            (
+                "magPhaseChangeDarcyAcceleration",
+                m.time().timeName(),
+                m,
+                IOobject::NO_READ,
+                IOobject::NO_WRITE
+            ),
+            mag(darcyAccel)
+        );
+
+        volScalarField magBuoyancyAccel
+        (
+            IOobject
+            (
+                "magPhaseChangeBuoyancyAcceleration",
+                m.time().timeName(),
+                m,
+                IOobject::NO_READ,
+                IOobject::NO_WRITE
+            ),
+            mag(buoyancyAccel)
+        );
+
+        volScalarField magPressureAccel
+        (
+            IOobject
+            (
+                "magPRghAcceleration",
+                m.time().timeName(),
+                m,
+                IOobject::NO_READ,
+                IOobject::NO_WRITE
+            ),
+            mag(pressureAccel)
+        );
+
+        volScalarField dragToBuoyancy
+        (
+            IOobject
+            (
+                "phaseChangeDragToBuoyancy",
+                m.time().timeName(),
+                m,
+                IOobject::NO_READ,
+                IOobject::NO_WRITE
+            ),
+            magDarcyAccel/(magBuoyancyAccel + accelFloor)
+        );
+
+        volScalarField dragToPressure
+        (
+            IOobject
+            (
+                "phaseChangeDragToPressure",
+                m.time().timeName(),
+                m,
+                IOobject::NO_READ,
+                IOobject::NO_WRITE
+            ),
+            magDarcyAccel/(magPressureAccel + accelFloor)
+        );
+
+        solidFraction.write();
+        darcyCoeff.write();
+        darcySp.write();
+        darcyAccel.write();
+        modelDeltaT.write();
+        buoyancyAccel.write();
+        buoyancySu.write();
+        pressureAccel.write();
+        magDarcyAccel.write();
+        magBuoyancyAccel.write();
+        magPressureAccel.write();
+        dragToBuoyancy.write();
+        dragToPressure.write();
+
+        Info<< "solidificationMelting diagnostics: "
+            << "max(DarcyCoeff)=" << gMax(darcyCoeff).value()
+            << "  max(|DarcyAccel|)=" << gMax(magDarcyAccel).value()
+            << "  max(|BuoyancyAccel|)=" << gMax(magBuoyancyAccel).value()
+            << "  max(|pRghAccel|)=" << gMax(magPressureAccel).value()
+            << nl;
+    #};
+}
