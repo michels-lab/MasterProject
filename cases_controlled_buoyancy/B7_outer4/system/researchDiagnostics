@@ -607,7 +607,7 @@ solidificationMeltingMomentumDiagnostics
             IOobject
             (
                 "phaseChangeSolidFraction",
-                m.time().timeName(m.time().timeOutputValue()),
+                m.time().timeName(m.time().value()),
                 m,
                 IOobject::NO_READ,
                 IOobject::NO_WRITE
@@ -622,7 +622,7 @@ solidificationMeltingMomentumDiagnostics
             IOobject
             (
                 "phaseChangeDarcyCoeff",
-                m.time().timeName(m.time().timeOutputValue()),
+                m.time().timeName(m.time().value()),
                 m,
                 IOobject::NO_READ,
                 IOobject::NO_WRITE
@@ -635,7 +635,7 @@ solidificationMeltingMomentumDiagnostics
             IOobject
             (
                 "phaseChangeDarcySp",
-                m.time().timeName(m.time().timeOutputValue()),
+                m.time().timeName(m.time().value()),
                 m,
                 IOobject::NO_READ,
                 IOobject::NO_WRITE
@@ -649,7 +649,7 @@ solidificationMeltingMomentumDiagnostics
             IOobject
             (
                 "phaseChangeDarcyAcceleration",
-                m.time().timeName(m.time().timeOutputValue()),
+                m.time().timeName(m.time().value()),
                 m,
                 IOobject::NO_READ,
                 IOobject::NO_WRITE
@@ -663,7 +663,7 @@ solidificationMeltingMomentumDiagnostics
             IOobject
             (
                 "phaseChangeModelDeltaT",
-                m.time().timeName(m.time().timeOutputValue()),
+                m.time().timeName(m.time().value()),
                 m,
                 IOobject::NO_READ,
                 IOobject::NO_WRITE
@@ -697,7 +697,7 @@ solidificationMeltingMomentumDiagnostics
             IOobject
             (
                 "phaseChangeBuoyancyAcceleration",
-                m.time().timeName(m.time().timeOutputValue()),
+                m.time().timeName(m.time().value()),
                 m,
                 IOobject::NO_READ,
                 IOobject::NO_WRITE
@@ -711,7 +711,7 @@ solidificationMeltingMomentumDiagnostics
             IOobject
             (
                 "phaseChangeBuoyancySu",
-                m.time().timeName(m.time().timeOutputValue()),
+                m.time().timeName(m.time().value()),
                 m,
                 IOobject::NO_READ,
                 IOobject::NO_WRITE
@@ -725,7 +725,7 @@ solidificationMeltingMomentumDiagnostics
             IOobject
             (
                 "pRghAcceleration",
-                m.time().timeName(m.time().timeOutputValue()),
+                m.time().timeName(m.time().value()),
                 m,
                 IOobject::NO_READ,
                 IOobject::NO_WRITE
@@ -738,7 +738,7 @@ solidificationMeltingMomentumDiagnostics
             IOobject
             (
                 "magPhaseChangeDarcyAcceleration",
-                m.time().timeName(m.time().timeOutputValue()),
+                m.time().timeName(m.time().value()),
                 m,
                 IOobject::NO_READ,
                 IOobject::NO_WRITE
@@ -751,7 +751,7 @@ solidificationMeltingMomentumDiagnostics
             IOobject
             (
                 "magPhaseChangeBuoyancyAcceleration",
-                m.time().timeName(m.time().timeOutputValue()),
+                m.time().timeName(m.time().value()),
                 m,
                 IOobject::NO_READ,
                 IOobject::NO_WRITE
@@ -764,7 +764,7 @@ solidificationMeltingMomentumDiagnostics
             IOobject
             (
                 "magPRghAcceleration",
-                m.time().timeName(m.time().timeOutputValue()),
+                m.time().timeName(m.time().value()),
                 m,
                 IOobject::NO_READ,
                 IOobject::NO_WRITE
@@ -777,7 +777,7 @@ solidificationMeltingMomentumDiagnostics
             IOobject
             (
                 "phaseChangeDragToBuoyancy",
-                m.time().timeName(m.time().timeOutputValue()),
+                m.time().timeName(m.time().value()),
                 m,
                 IOobject::NO_READ,
                 IOobject::NO_WRITE
@@ -790,7 +790,7 @@ solidificationMeltingMomentumDiagnostics
             IOobject
             (
                 "phaseChangeDragToPressure",
-                m.time().timeName(m.time().timeOutputValue()),
+                m.time().timeName(m.time().value()),
                 m,
                 IOobject::NO_READ,
                 IOobject::NO_WRITE
