@@ -24,6 +24,7 @@ momentumMean
 {
     type            volFieldValue;
     libs            ("libfieldFunctionObjects.so");
+    region          metal;
 
     log             true;
     writeControl    timeStep;
@@ -50,6 +51,7 @@ momentumMax
 {
     type            volFieldValue;
     libs            ("libfieldFunctionObjects.so");
+    region          metal;
 
     log             true;
     writeControl    timeStep;
@@ -77,6 +79,7 @@ momentumHorizontalProfiles
 {
     type            sets;
     libs            ("libsampling.so");
+    region          metal;
 
     writeControl    timeStep;
     writeInterval   1;
@@ -128,6 +131,7 @@ momentumVerticalProfiles
 {
     type            sets;
     libs            ("libsampling.so");
+    region          metal;
 
     writeControl    timeStep;
     writeInterval   1;
