@@ -3139,3 +3139,23 @@ La tercera validación mostró que `Time::timeOutputValue()` no existe en la API
 `m.time().timeName(m.time().value())`
 
 Esta corrección fue aplicada a los diez casos controlados V3–V7. El fallo sigue siendo exclusivamente de compilación del postproceso dinámico.
+
+
+### Validación runtime B7 del diagnóstico de momento
+
+La corrida completa de `B7_outer4` compiló y ejecutó correctamente el bloque `solidificationMeltingMomentumDiagnostics` bajo OpenFOAM Foundation v14.
+
+Valores observados al final de la corrida:
+
+- `max(phaseChangeDarcyCoeff) = 1e8 1/s`.
+- `max(|phaseChangeDarcyAcceleration|)` disminuyó aproximadamente de 546.7 a 332.0 m/s2 en las últimas escrituras mostradas.
+- `max(|phaseChangeBuoyancyAcceleration|) = 0`, consistente con `beta = 0` en la familia B.
+- `max(|pRghAcceleration|)` disminuyó aproximadamente de 1.897 a 1.723 m/s2.
+
+El valor máximo de Darcy es consistente con la forma del modelo:
+`D = Cu(1-alpha_l)^2/(alpha_l^3 + q)`.
+Con `Cu=1e5 1/s`, `q=1e-3` y `alpha_l=0`, el límite sólido es `D=1e8 1/s`.
+
+Advertencia de interpretación: los máximos globales de Darcy y presión pueden ocurrir en celdas distintas y no deben dividirse entre sí para inferir dominancia local. Para esa comparación deben usarse los campos celda-a-celda `phaseChangeDragToPressure` y `phaseChangeDragToBuoyancy`, junto con `alpha_l`, `U` y las magnitudes absolutas.
+
+**Estado:** B7 diagnostic runtime validation PASSED. Siguiente caso de validación: C7.
