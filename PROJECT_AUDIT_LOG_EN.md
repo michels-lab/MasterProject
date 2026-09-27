@@ -3284,3 +3284,18 @@ The first B7 validation failed before solver execution while compiling the `code
 This was confirmed to be a dynamic-code include-path compatibility issue under OpenFOAM Foundation v14, not a physical or numerical failure of the case.
 
 `fvCFD.H` was replaced by specific compatible headers (`fvMesh.H`, `volFields.H`, `uniformDimensionedFields.H`, `IOdictionary.H`, `zeroGradientFvPatchFields.H`, `fvcGrad.H`) in all ten V3–V7 cases. B7 must be revalidated before C7 or the full matrix is executed.
+
+
+### Second B7 compatibility correction
+
+The second diagnostic-compilation validation exposed two additional OpenFOAM Foundation v14 API differences:
+
+- `Time::timeName()` requires an explicit time argument in this dynamic-code context.
+- `gMax(field)` returns a `scalar` directly, so `.value()` must not be called.
+
+Corrections applied to all ten V3–V7 cases:
+
+- `m.time().timeName()` → `m.time().timeName(m.time().timeOutputValue())`
+- `gMax(...).value()` → `gMax(...)`
+
+This remains a dynamic post-processing compilation issue, not solver instability or a physical-model failure.
