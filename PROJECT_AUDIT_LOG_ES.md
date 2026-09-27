@@ -3207,3 +3207,16 @@ La primera ejecución de `sh postprocess_momentum_all.sh` falló antes de llamar
 Se sustituyó por una resolución robusta del directorio del script mediante `dirname "$0"`, de modo que el helper sea location-independent y funcione tanto con `sh postprocess_momentum_all.sh` como desde otras rutas.
 
 No hubo fallo de solver ni pérdida de resultados; el error ocurrió antes de iniciar el postprocesado.
+
+
+### Corrección de validación previa al postprocesado por lote
+
+La primera versión corregida de `postprocess_momentum_all.sh` todavía usaba `grep "^End$"` sobre `log.foamMultiRun` como criterio de validez. Las corridas válidas de los casos controlados no contienen necesariamente una línea que coincida exactamente con ese patrón, por lo que todos los casos fueron omitidos con `SKIP`.
+
+Se eliminó esa dependencia. El helper ahora exige:
+1. existencia de `log.foamMultiRun`; y
+2. existencia local de campos `phaseChangeDarcyCoeff` en los directorios de tiempo.
+
+Para corridas futuras, `Allrun` captura inmediatamente el código de salida de `foamMultiRun` y solo ejecuta la reducción de momentum cuando el solver devuelve estado 0.
+
+Este problema afectó únicamente la automatización del postprocesado; no invalida las simulaciones ya calculadas.
