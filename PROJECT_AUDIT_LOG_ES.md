@@ -3177,3 +3177,24 @@ A diferencia de la familia B, donde `beta=0` y la contribución de flotación de
 Advertencia: los máximos globales de Darcy, buoyancy y presión no necesariamente ocurren en la misma celda. Para evaluar dominancia local deben analizarse `phaseChangeDragToBuoyancy`, `phaseChangeDragToPressure`, `phaseChangeSource:alpha1` y `U` celda a celda.
 
 **Estado:** C7 diagnostic runtime validation PASSED. El paquete de diagnóstico de momento queda validado para ambas formulaciones B y C.
+
+
+### Exportación compacta de diagnósticos de momento a postProcessing
+
+Se añadió `system/momentumPostProcessing` a B3–B7 y C3–C7 y se integró en `Allrun` después de una corrida que alcance `End`.
+
+Objetivo: conservar en Git evidencia científica útil de los campos volumétricos de `solidificationMeltingMomentumDiagnostics` sin versionar todos los directorios temporales OpenFOAM.
+
+El postproceso relee los campos volumétricos ya escritos y genera:
+
+- `momentumMean`: promedios volumétricos de fracción sólida, coeficiente Darcy, deltaT del modelo y magnitudes de aceleración Darcy, buoyancy y gradiente de `p_rgh`.
+- `momentumMax`: máximos y ubicación de los mismos campos.
+- `momentumHorizontalProfiles`: perfiles en y=20 mm y y=30 mm.
+- `momentumVerticalProfiles`: perfil en x=20 mm.
+- Los perfiles incluyen vectores, magnitudes y ratios locales Darcy/buoyancy y Darcy/pressure.
+
+Los ratios se conservan como diagnóstico local; no debe inferirse dominancia física dividiendo máximos globales o interpretando ratios grandes cuando el denominador es casi cero.
+
+`Allrun` ejecuta esta reducción únicamente si `log.foamMultiRun` contiene `End`, evitando generar un paquete de resultados de una corrida fallida.
+
+Los directorios temporales completos siguen ignorados por Git; `postProcessing/` permanece versionado.
