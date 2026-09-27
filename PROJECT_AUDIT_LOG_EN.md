@@ -3342,3 +3342,16 @@ That dependency was removed. The helper now requires:
 For future runs, `Allrun` captures the exit status of `foamMultiRun` immediately and performs the momentum reduction only when the solver returns status 0.
 
 This issue affected only post-processing automation and does not invalidate the completed simulations.
+
+
+### Region fix in momentumPostProcessing
+
+The first real `foamPostProcess` execution failed in every case with:
+
+`request for objectRegistry region0 from objectRegistry <case> failed; available objects: metal`.
+
+Diagnosis: the function objects in `system/momentumPostProcessing` (`momentumMean`, `momentumMax`, `momentumHorizontalProfiles`, `momentumVerticalProfiles`) did not explicitly declare `region metal;`. Even though `foamPostProcess` was launched with `-region metal`, the region-aware function objects still resolved the default region as `region0`.
+
+Fix: added `region metal;` to all four function objects in B3–B7 and C3–C7.
+
+The failure occurred before statistics/profiles were evaluated and does not affect the CFD simulations or the already-written volumetric fields.
