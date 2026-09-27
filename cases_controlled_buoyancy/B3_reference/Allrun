@@ -11,6 +11,21 @@ runApplication splitMeshRegions -cellZones all
 
 runApplication foamMultiRun
 
+# Reduce the volumetric solidificationMelting momentum diagnostics to
+# Git-trackable postProcessing tables and line profiles.
+# Only run this stage after a solver run that reached End.
+if grep -q "^End$" log.foamMultiRun
+then
+    runApplication foamPostProcess \
+        -region metal \
+        -dict system/momentumPostProcessing \
+        -time '0:' \
+        -fields '(phaseChangeSolidFraction phaseChangeDarcyCoeff phaseChangeModelDeltaT phaseChangeDarcyAcceleration phaseChangeBuoyancyAcceleration pRghAcceleration magPhaseChangeDarcyAcceleration magPhaseChangeBuoyancyAcceleration magPRghAcceleration phaseChangeDragToBuoyancy phaseChangeDragToPressure)'
+else
+    echo "Skipping momentum post-processing: foamMultiRun did not reach End."
+fi
+
+
 # Standard derived solver diagnostics for post-processing.
 # foamLog parses log.foamMultiRun into the case-level logs/ directory
 # (Courant number, residuals, continuity, iterations, execution time, etc.).
