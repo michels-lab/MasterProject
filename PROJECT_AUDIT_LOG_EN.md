@@ -3299,3 +3299,12 @@ Corrections applied to all ten V3–V7 cases:
 - `gMax(...).value()` → `gMax(...)`
 
 This remains a dynamic post-processing compilation issue, not solver instability or a physical-model failure.
+
+
+### Third B7 compatibility correction
+
+The third validation showed that `Time::timeOutputValue()` is not part of the installed OpenFOAM Foundation v14 API. The OpenFOAM 14 `Time` interface confirms that `timeName` accepts an explicit scalar time, so the code was changed to:
+
+`m.time().timeName(m.time().value())`
+
+The correction was applied to all ten controlled V3–V7 cases. This remains strictly a dynamic post-processing compilation issue.
