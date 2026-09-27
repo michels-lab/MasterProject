@@ -3198,3 +3198,12 @@ Los ratios se conservan como diagnóstico local; no debe inferirse dominancia f�
 `Allrun` ejecuta esta reducción únicamente si `log.foamMultiRun` contiene `End`, evitando generar un paquete de resultados de una corrida fallida.
 
 Los directorios temporales completos siguen ignorados por Git; `postProcessing/` permanece versionado.
+
+
+### Corrección del helper de postprocesado por lote
+
+La primera ejecución de `sh postprocess_momentum_all.sh` falló antes de llamar a `foamPostProcess` porque el script usaba `cd ${0%/*}`. Cuando el script se invoca como `sh postprocess_momentum_all.sh`, `$0` no contiene una barra y esa expansión produce el propio nombre del archivo, por lo que `cd` intenta entrar a un archivo.
+
+Se sustituyó por una resolución robusta del directorio del script mediante `dirname "$0"`, de modo que el helper sea location-independent y funcione tanto con `sh postprocess_momentum_all.sh` como desde otras rutas.
+
+No hubo fallo de solver ni pérdida de resultados; el error ocurrió antes de iniciar el postprocesado.
