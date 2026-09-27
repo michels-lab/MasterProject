@@ -26,9 +26,16 @@ do
     echo "Momentum post-processing: $c"
     echo "============================================================"
 
-    if [ ! -f "$c/log.foamMultiRun" ] || ! grep -q "^End$" "$c/log.foamMultiRun"
+    if [ ! -f "$c/log.foamMultiRun" ]
     then
-        echo "SKIP: solver log is missing or did not reach End."
+        echo "SKIP: solver log is missing."
+        status=1
+        continue
+    fi
+
+    if ! find "$c" -mindepth 3 -maxdepth 3 -path "*/metal/phaseChangeDarcyCoeff" -print -quit | grep -q .
+    then
+        echo "SKIP: no calculated phaseChangeDarcyCoeff fields were found."
         status=1
         continue
     fi
