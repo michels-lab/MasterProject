@@ -742,3 +742,57 @@ git push origin main
 ```
 
 Do not use `force push` merely to resolve an ahead remote. This workflow prevents newer remote documentation from replacing or confusing simulation results that still exist only on the local workstation.
+
+
+---
+
+## Validating the `solidificationMeltingSource` diagnostic
+
+The `solidificationMeltingMomentumDiagnostics` block is included in `system/researchDiagnostics` for the controlled V3–V7 cases. It does not change the case physics; it only writes derived fields during solver execution.
+
+After synchronizing:
+
+```bash
+cd ~/OpenFOAM/QuickCup_Solidification
+git pull origin main
+```
+
+Validate B7 and C7 before rerunning the full matrix.
+
+Check that the block is present:
+
+```bash
+grep -n "solidificationMeltingMomentumDiagnostics" \
+  cases_controlled_buoyancy/B7_outer4/system/researchDiagnostics
+
+grep -n "solidificationMeltingMomentumDiagnostics" \
+  cases_controlled_buoyancy/C7_outer4/system/researchDiagnostics
+```
+
+During the run, inspect:
+
+```bash
+grep "solidificationMelting diagnostics" log.foamMultiRun
+```
+
+After a valid write, the `metal` time directories should contain fields including:
+
+```text
+phaseChangeDarcyCoeff
+phaseChangeDarcyAcceleration
+phaseChangeBuoyancyAcceleration
+pRghAcceleration
+phaseChangeDragToBuoyancy
+phaseChangeDragToPressure
+```
+
+Quick interpretation:
+
+- `phaseChangeDarcyCoeff` [1/s]: local mushy-zone damping strength.
+- `magPhaseChangeDarcyAcceleration` [m/s²]: Darcy deceleration magnitude.
+- `magPhaseChangeBuoyancyAcceleration` [m/s²]: local model buoyancy acceleration.
+- `magPRghAcceleration` [m/s²]: acceleration scale associated with the `p_rgh` gradient.
+- `phaseChangeDragToBuoyancy`: Darcy-damping to buoyancy ratio.
+- `phaseChangeDragToPressure`: Darcy-damping to pressure-gradient ratio.
+
+Do not interpret very large ratios near nearly-zero denominators in isolation; inspect the absolute magnitudes and liquid fraction as well.
