@@ -3863,3 +3863,20 @@ The effective metal settings in the current cases are:
 Thus root `nNonOrthogonalCorrectors = 1` must not be reported as the effective metal setting.
 
 Historical cases were not modified. Future cases should avoid duplicated root entries that are not effective for the regional solver to reduce ambiguity.
+
+
+## B9 topFixedFlux — closed-domain mass incompatibility
+
+**[RUN-VERIFIED] [SOURCE-VERIFIED]**
+
+B9 started correctly with `fixedFluxPressure` and the internal pressure reference, but aborted near t=0.016 s when T reached 1782.04 K, above the `icoTabulated rho(T)` upper limit of 1773.15 K. C9 completed successfully.
+
+In OF14, `icoTabulated` uses `rho=rho(T)` and `psi=d(rho)/d(p)=0`. The `fluid` solver enforces continuity with `ddt(rho)+div(phi)=source(rho)`.
+
+In a rigid, closed, impermeable domain with no mass source, total mass must remain constant. Cooling, however, makes the B density table demand an increase in density. Because pressure cannot modify rho and the top no longer permits mass flux, the model has no mechanism to accommodate thermal contraction.
+
+This explains the rapid early growth of cumulative continuity error and the subsequent out-of-range temperature failure.
+
+Historical B cases with `metalTop: totalPressure` allowed mass exchange through the top. The previously observed ~-970 J top advective-energy term should therefore be interpreted as evidence of that exchange, not as a fixed impermeable free surface.
+
+For the current fixed-volume geometry without moving free-surface or shrinkage physics, C (`rhoConst` + beta buoyancy) is internally consistent. B would require additional volume-change, free-surface, feeding, or shrinkage physics. Artificially extending the rho table is not recommended merely to force B9 to continue.
