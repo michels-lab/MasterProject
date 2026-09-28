@@ -4043,3 +4043,31 @@ Se añadió `analysis_tools/pressure_stagnation_analysis.py`, que descubre autom
 El indicador automático de meseta es deliberadamente conservador y se usa solo como cribado: un cambio menor de 0.25 décadas log10 en la mediana del residual durante el 25 % final de las muestras se marca como `plateau_candidate`. Esta bandera no sustituye la inspección de magnitudes, continuidad ni campos físicos.
 
 **Estado:** ✅ regla incorporada al flujo de revisión.
+
+
+---
+
+## 2026-09-28 — Regla permanente de impermeabilidad / advección
+
+### AUD-TOP-FLUX — La alerta que motivó V9 pasa a ser obligatoria
+**[GIT-VERIFIED]**
+
+La revisión de `metalTop` se formaliza como requisito permanente para todos los casos B/C.
+
+La señal histórica que motivó V9 fue la presencia de transporte advectivo de energía a través de una tapa destinada a ser impermeable:
+
+- B5: energía advectiva integrada por `metalTop` ≈ -970.358 J;
+- C5: ≈ +6.841 J.
+
+Después de cambiar `metalTop/p_rgh` a `fixedFluxPressure`:
+
+- B9: energía advectiva integrada ≈ -5.0×10^-16 J y max |sum(phi)| ≈ 2.54×10^-21;
+- C9: energía advectiva integrada = 0 J y sum(phi)=0 en los diagnósticos almacenados.
+
+OpenFOAM Foundation v14 calcula el término advectivo mediante `fvc::flux(alphaRhoPhi, hs)`; por tanto, el diagnóstico representa transporte de entalpía sensible asociado al flujo másico del solver, no conducción/radiación.
+
+Se establece que `U=slip` no basta para declarar una frontera impermeable. Todo caso futuro debe comprobar tanto `sum(phi)` como `energyAdvectiveFlux` en `metalTop`.
+
+Se añadió `analysis_tools/boundary_flux_audit.py` y se incorporó `metalTopPhiSum` a B10/C10 para futuras ejecuciones. La corrida local que ya estaba en marcha antes de esta modificación no adquiere retrospectivamente ese function object; en ella la alerta advectiva sigue disponible mediante `metalTopEnergyPower`.
+
+**Estado:** ✅ alerta V9 convertida en regla permanente.
