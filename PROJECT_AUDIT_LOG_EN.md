@@ -3929,3 +3929,24 @@ Main result:
 Conclusion: historical `totalPressure` had negligible physical impact on C but major impact on B. Historical B-vs-C differences are therefore not a clean buoyancy-formulation comparison. For the current fixed-volume Quick-Cup model, C9 is the cleaner baseline for continued physical validation.
 
 Caveat: B9 required a diagnostic linear rho(T) extension above 1773.15 K, so B9-vs-B5 is no longer a strict single-change test.
+
+
+## V9 — causality of Uy reversals
+
+**[ANALYSIS-VERIFIED]**
+
+All resolved Uy sign reversals in B9 and C9 were correlated with alphaL, grad(rho), vorticity, flowType, Darcy acceleration and p_rgh acceleration.
+
+Important methodological correction: B9 uses beta=0 in solidificationMeltingSource, so its buoyancy cannot be evaluated with phaseChangeBuoyancyAcceleration. For B9 the solver variable-density term was reconstructed as a_rho=-(gh/rho)grad(rho), with hRef=0 and gh=-9.81*y.
+
+Result:
+- B9 y30 mainly preserves the classical symmetric reversal pair in predominantly liquid metal. Across all resolved y30 crossings, a_rho is the largest of the sampled density/pressure/Darcy acceleration scales in 72% of samples; Darcy is never the largest. This supports a physical variable-density-convection origin.
+- B9 y20 develops a transient secondary structure. Four resolved reversals already occur at 5 s while liquid; at 10 s all four lie near alphaL~0.94. The outer 10-s reversals have strong vorticity and large Darcy magnitude; the inner reversals show near cancellation a_rho,y ~ -0.073 and a_p,y ~ +0.0735 m/s2, with comparable Darcy magnitude. The structure is symmetric and systematic rather than consistent with simple random numerical noise.
+- B9 centerline vertical Uy reversals occur, but centerline vorticity is nearly zero. They should not be called additional vortices/cells without 2-D fields.
+- C9 keeps the simpler two-cell structure. Its late cell boundaries are also strongly influenced by Darcy as the phase-change region advances.
+- The earlier B9 y30 interpretation is corrected: several tiny extra sign flips detected without a velocity threshold occur near Uy=0 and should not be counted as dynamically resolved cells.
+
+Limitation: versioned results contain line profiles but not the complete final volumetric fields, so geometric closure of each cell by streamlines cannot be proven from the current repository.
+
+Reproducible summary: analysis_results/v9_flow_causality/summary.md
+Analyzer: analysis_tools/v9_flow_causality_analysis.py
