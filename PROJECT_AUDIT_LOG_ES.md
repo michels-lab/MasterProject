@@ -3944,3 +3944,29 @@ Esto explica el fuerte crecimiento temprano del error acumulado de continuidad y
 Los casos B históricos con `metalTop: totalPressure` permitían intercambio de masa a través del top. El término advectivo de energía ~-970 J observado allí debe interpretarse como evidencia de ese intercambio, no como una superficie superior impermeable.
 
 Para la geometría actual de volumen fijo sin superficie libre móvil ni shrinkage, la formulación C (`rhoConst` + buoyancy mediante beta) es internamente consistente. La formulación B requeriría física adicional de cambio de volumen, superficie libre, alimentación o shrinkage. No se recomienda extender artificialmente la tabla de rho para forzar B9 a continuar.
+
+
+## Corrección posterior: B9 completó 10 s con la tabla rho(T) extendida
+
+**[RUN-VERIFIED BY USER OUTPUT] [INTERPRETATION UPDATE]**
+
+La interpretación anterior de B9 como un caso incapaz de continuar en dominio cerrado fue demasiado fuerte. Tras extender diagnósticamente la tabla rho(T) más allá de 1773.15 K, B9 completó los 10 s.
+
+Resultados finales reportados:
+- metalTopPhiSum = 0;
+- metalTop energyAdvectiveFlux = 0;
+- metal_to_mold energyAdvectiveFlux ~ 7.3e-15 W;
+- metalTop heatFlux = 36.603 W;
+- metal_to_mold heatFlux = 342.301 W;
+- total boundary heatFlux = 378.904 W;
+- max Co ~ 0.0301;
+- cumulative continuity = -0.0460268.
+
+La conclusión correcta es ahora:
+1. fixedFluxPressure + slip sí elimina el flujo de masa/energía advectiva por metalTop;
+2. B9 puede evolucionar hasta 10 s si la tabla rho(T) cubre el overshoot térmico temprano;
+3. la métrica cumulative continuity queda mucho peor que en B5, por lo que sigue existiendo una tensión importante entre la densidad termodinámica rho(T) y la continuidad;
+4. el valor cumulative no debe interpretarse como una pérdida final de 4.6% de masa: en OF14 es la suma acumulada de la discrepancia normalizada entre rho y thermo.rho() durante las correcciones;
+5. el fallo original a 1782.04 K debe reinterpretarse como salida del rango tabulado durante un overshoot temprano, no como prueba suficiente de runaway térmico irreversible.
+
+Se requiere comparar el transitorio completo B9 vs B5 una vez subidos los resultados.
