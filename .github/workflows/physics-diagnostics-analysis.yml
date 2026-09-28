@@ -1,0 +1,35 @@
+name: Physics diagnostics analysis
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'analysis_tools/physics_diagnostics_analysis.py'
+      - 'analysis_tools/physics_diagnostics_trigger.txt'
+      - '.github/workflows/physics-diagnostics-analysis.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run physics diagnostics analysis
+        run: python3 analysis_tools/physics_diagnostics_analysis.py
+
+      - name: Commit generated analysis
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add analysis_results/physics_diagnostics/
+          if git diff --cached --quiet; then
+            echo "No analysis changes to commit."
+          else
+            git commit -m "results: add physics diagnostics analysis [skip ci]"
+            git push
+          fi
