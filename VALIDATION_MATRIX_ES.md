@@ -211,3 +211,35 @@ Cuando exista la curva digitalizada/raw, las métricas mínimas serán:
 2. **No se modifica todavía `solidificationMelting` para forzar recalescencia.**
 3. El siguiente caso científico debe ser un **benchmark de equilibrio alineado con el experimento**.
 4. Si ese benchmark demuestra una limitación estructural del modelo de equilibrio, se implementará el `fvModel` cinético de dos transformaciones.
+
+
+---
+
+## Regla permanente de revisión numérica — residuos de presión
+
+A partir del 28 de septiembre de 2026, **todo caso controlado B/C nuevo o reejecutado** debe incluir una auditoría explícita de la evolución de los residuos de presión antes de considerarse numéricamente revisado.
+
+La revisión mínima obligatoria es:
+
+1. evolución temporal del residual inicial de cada solve de `p_rgh`;
+2. evolución temporal de `p_rghFinalRes`;
+3. las mismas series respecto al índice de timestep, además del tiempo físico;
+4. contracción lineal por solve:
+   `C_p = p_rghFinal / p_rghInitial`;
+5. contracción del acoplamiento exterior presión–velocidad:
+   `R_p_outer = r_p(first solve, last outer) / r_p(first solve, first outer)`;
+6. fracción de timesteps con `R_p_outer > 1`;
+7. continuidad acumulada/global;
+8. Courant máximo;
+9. costo computacional;
+10. comparación de los campos físicos para confirmar que una mejora aparente de residuos no cambia indebidamente la solución.
+
+Un paso de tiempo menor **no se considera automáticamente mejor**. Si `p_rgh` y/o `p_rghFinalRes` muestran una meseta mientras aumenta el número de timesteps y el costo, debe reportarse como posible estancamiento del acoplamiento presión–velocidad.
+
+El script oficial para esta auditoría es:
+
+`analysis_tools/pressure_stagnation_analysis.py`
+
+El script descubre automáticamente todos los directorios B/C que contengan `logs/`, por lo que la regla se extiende a casos futuros sin necesidad de añadirlos manualmente.
+
+La etiqueta `plateau_candidate` del script es únicamente un indicador de cribado: significa que la mediana del residual cambia menos de 0.25 décadas log10 durante el 25 % final de las muestras disponibles. **No constituye por sí sola un criterio de convergencia.** La magnitud del residual, las curvas completas, la continuidad y la solución física deben revisarse conjuntamente.
