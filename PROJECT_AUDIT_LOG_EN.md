@@ -3880,3 +3880,29 @@ This explains the rapid early growth of cumulative continuity error and the subs
 Historical B cases with `metalTop: totalPressure` allowed mass exchange through the top. The previously observed ~-970 J top advective-energy term should therefore be interpreted as evidence of that exchange, not as a fixed impermeable free surface.
 
 For the current fixed-volume geometry without moving free-surface or shrinkage physics, C (`rhoConst` + beta buoyancy) is internally consistent. B would require additional volume-change, free-surface, feeding, or shrinkage physics. Artificially extending the rho table is not recommended merely to force B9 to continue.
+
+
+## Later correction: B9 completed 10 s with the extended rho(T) table
+
+**[RUN-VERIFIED BY USER OUTPUT] [INTERPRETATION UPDATE]**
+
+The earlier interpretation that B9 could not continue as a closed-domain case was too strong. After diagnostically extending rho(T) beyond 1773.15 K, B9 completed the full 10 s.
+
+Reported final values:
+- metalTopPhiSum = 0;
+- metalTop energyAdvectiveFlux = 0;
+- metal_to_mold energyAdvectiveFlux ~ 7.3e-15 W;
+- metalTop heatFlux = 36.603 W;
+- metal_to_mold heatFlux = 342.301 W;
+- total boundary heatFlux = 378.904 W;
+- max Co ~ 0.0301;
+- cumulative continuity = -0.0460268.
+
+Updated interpretation:
+1. fixedFluxPressure + slip does eliminate top mass/advective-energy flux;
+2. B9 can evolve to 10 s if the rho(T) table covers the early thermal overshoot;
+3. cumulative continuity is far worse than B5, indicating a significant mismatch between thermodynamic rho(T) and continuity;
+4. cumulative continuity is not a literal final 4.6% mass loss; in OF14 it accumulates the normalized rho-vs-thermo.rho mismatch over corrections;
+5. the original 1782.04 K failure should be treated as a table-range failure during an early overshoot, not proof of irreversible thermal runaway.
+
+A full B9-vs-B5 transient comparison remains required after the run results are pushed.
