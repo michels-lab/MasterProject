@@ -3851,3 +3851,79 @@ Conclusión C: el cuarto outer mejora modestamente la métrica de pressure coupl
 V8 es un caso de rendimientos decrecientes y no se recomienda como configuración de producción. La diferencia V5↔V6/V8 proviene de la trayectoria de timestep adaptativo/discretización temporal, no de un número insuficiente de outer correctors.
 
 Se mantiene V5 fixed como referencia física. V6 queda, en todo caso, como estudio explícito de trade-off velocidad/precisión. V8 se conserva solo como evidencia de independencia respecto al número de outer correctors.
+
+
+## Auditoría de jerarquía PIMPLE en foamMultiRun (OpenFOAM Foundation v14)
+
+**[SOURCE-VERIFIED] [LOG-VERIFIED]**
+
+Se auditó qué `fvSolution` controla realmente cada nivel del algoritmo en los casos multi-región ejecutados con `foamMultiRun`.
+
+### Arquitectura real de OF14
+
+`foamMultiRun` crea:
+
+```
+pimpleMultiRegionControl pimple(runTime, solvers);
+```
+
+y ejecuta el loop exterior mediante:
+
+```
+while (pimple.loop())
+```
+
+El objeto `pimpleMultiRegionControl` hereda de `multiRegionSolutionControl`, cuyo `dict()` lee el subdiccionario `PIMPLE` del `system/fvSolution` raíz. Su `pimpleLoop::read()` toma de allí `nOuterCorrectors`.
+
+Por lo tanto:
+
+- `system/fvSolution/PIMPLE/nOuterCorrectors` = número efectivo de **outer correctors multi-región**.
+- `system/fvSolution/PIMPLE/nEnergyCorrectors` = número efectivo de **energy correctors globales**.
+
+Cada solver regional dispone además de un `pimpleNoLoopControl` construido sobre el `fvSolution` de su propia malla/región. En el metal:
+
+- `system/metal/fvSolution/PIMPLE/nCorrectors` = número efectivo de correctores PISO de presión por cada outer global.
+- `system/metal/fvSolution/PIMPLE/nNonOrthogonalCorrectors` = correctores no ortogonales efectivos.
+- `momentumPredictor`, `pRefPoint/pRefCell`, `pRefValue` y controles regionales similares también se leen del diccionario regional.
+- Los bloques `solvers` y sus tolerancias son regionales.
+
+El `nOuterCorrectors 1` presente en `system/metal/fvSolution` **no controla el outer loop de foamMultiRun**. `pimpleNoLoopControl` no posee un loop exterior propio; cuando está conectado al `pimpleMultiRegionControl`, la lectura del outer loop se delega al objeto multi-región.
+
+Asimismo, las entradas duplicadas `nCorrectors` y `nNonOrthogonalCorrectors` del `system/fvSolution` raíz no son las que gobiernan los correctores internos del metal. Para el metal mandan los valores del archivo regional.
+
+### Verificación con logs reales
+
+Los logs confirman exactamente la estructura:
+
+- B3: root outer=2, metal nCorrectors=2 -> **4** series `p_rgh_0...p_rgh_3`.
+- B5: root outer=3, metal nCorrectors=2 -> **6** series `p_rgh_0...p_rgh_5`.
+- B7: root outer=4, metal nCorrectors=2 -> **8** series `p_rgh_0...p_rgh_7`.
+- B8: root outer=4, metal nCorrectors=2 -> **8** series.
+
+La energía también confirma el control global:
+
+- B3: outer=2 × energyCorrectors=1 -> **2** series de h/e.
+- B4: outer=2 × energyCorrectors=2 -> **4** series de h/e.
+- B5: outer=3 × energyCorrectors=1 -> **3** series de h/e.
+
+### Corrección metodológica
+
+La nomenclatura V3/V5/V7 usada hasta ahora para 2/3/4 outer correctors sigue siendo **correcta**, porque esos valores estaban modificándose en el archivo raíz, que es precisamente el que controla el loop multi-región.
+
+Sin embargo, para describir la configuración completa debe distinguirse:
+
+- **outer correctors multi-región**: root `system/fvSolution`;
+- **pressure/PISO correctors del metal**: `system/metal/fvSolution`;
+- **non-orthogonal correctors del metal**: regional;
+- **energy correctors**: root.
+
+En los casos actuales el metal usa efectivamente:
+- `nCorrectors = 2`;
+- `nNonOrthogonalCorrectors = 0`;
+- `momentumPredictor = no`.
+
+Por ello, la entrada root `nNonOrthogonalCorrectors = 1` NO debe reportarse como valor efectivo del metal.
+
+### Recomendación de mantenimiento
+
+No se modificaron casos históricos. En futuros casos conviene eliminar o comentar del `system/fvSolution` raíz las entradas `nCorrectors` y `nNonOrthogonalCorrectors` duplicadas para evitar ambigüedad, dejando en root solo los controles multi-región pertinentes y en `system/metal/fvSolution` los controles internos del solver regional.
