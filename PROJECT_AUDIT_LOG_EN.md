@@ -3728,3 +3728,68 @@ Recommended controlled test:
 - compare top mass/advective-energy flux, Uy, vorticity, phase fraction, continuity and energy.
 
 Historical cases were not modified by this audit.
+
+
+## V8 adaptive + 4 outer correctors — final result
+
+A complete physical-time-aligned comparison was performed for B8/C8 against V6 adaptive and V5 fixed, covering Uy, T, alphaL, vorticity, flowType, Darcy acceleration, p_rgh acceleration, coupling, continuity, Courant and cost.
+
+Permanent summary:
+- `analysis_results/v8_comprehensive/summary.md`
+
+### B family
+
+B8 is practically indistinguishable from B6:
+- median Uy NRMSE: 0.04% (y20), 0.13% (y30), 0.17% (vertical);
+- final T RMSE ~0.004–0.005 K;
+- alphaL essentially identical;
+- horizontal vorticity differences <0.2%;
+- no flowType class disagreement;
+- Darcy and p_rgh acceleration differences ~0.1% or less;
+- phase-front locations indistinguishable.
+
+B8 remains strongly different from B5:
+- final Uy NRMSE: 50.2% (y20), 80.5% (y30), 99.2% (vertical);
+- flowType disagreement: 40% at y20 and 85% at y30;
+- Darcy acceleration: 42–71%;
+- p_rgh acceleration: 20–50%;
+- vertical mushy width: B5 16.916 mm vs B8 18.493 mm (+9.3%).
+
+Coupling/cost:
+- B6 median Rp=0.3721, clock=119 s;
+- B8 median Rp=0.3882, clock=220 s;
+- continuity remains ~2.45e-4;
+- Co remains ~0.29.
+
+B conclusion: the fourth outer corrector does not recover the fixed-step solution and nearly doubles cost. The V6 discrepancy is not caused by insufficient root-level PIMPLE outer coupling.
+
+### C family
+
+C8 is likewise essentially identical to C6:
+- median Uy NRMSE ~0.01–0.03%;
+- T RMSE ~0.003–0.004 K;
+- alphaL essentially identical;
+- horizontal vorticity differences <=0.08%;
+- no flowType class disagreement;
+- Darcy <=0.06%;
+- p_rgh acceleration <=0.20%.
+
+C8 preserves the same adaptive-vs-fixed differences already observed in C6:
+- Uy remains close to C5 (~1.7–4.8%);
+- Darcy differs ~10–16%;
+- vertical p_rgh acceleration differs ~56%;
+- vertical mushy width: C5 17.679 mm vs C8 19.622 mm (+11.0%).
+
+Coupling/cost:
+- C6 median Rp=0.7900, clock=65 s;
+- C8 median Rp=0.7765, clock=121 s;
+- Rp>1 improves modestly from 6.25% to 5.10%;
+- continuity and Co are essentially unchanged.
+
+C conclusion: the fourth outer corrector modestly improves pressure-coupling statistics but does not change the physical solution and nearly doubles runtime.
+
+### Decision
+
+V8 is a diminishing-return case and is not recommended as a production configuration. The V5↔V6/V8 differences arise from the adaptive timestep trajectory/time discretization, not from insufficient outer-corrector count.
+
+V5 fixed remains the physical reference. V6 may be retained only as an explicit speed/accuracy trade-off study. V8 is retained as evidence of independence with respect to the number of outer correctors.
