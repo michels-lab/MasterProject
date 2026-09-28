@@ -3355,3 +3355,101 @@ Diagnosis: the function objects in `system/momentumPostProcessing` (`momentumMea
 Fix: added `region metal;` to all four function objects in B3–B7 and C3–C7.
 
 The failure occurred before statistics/profiles were evaluated and does not affect the CFD simulations or the already-written volumetric fields.
+
+
+## Vertical velocity Uy profile analysis — B3–B7 / C3–C7
+
+An explicit comparison of the vertical velocity component `Uy` was performed on all three available spatial profiles:
+- horizontal `y = 20 mm`;
+- horizontal `y = 30 mm`;
+- vertical centerline `x = 20 mm`.
+
+Fixed cases were compared at `t = 10 s`. Adaptive V6 cases were compared with V5 linearly interpolated to the same physical time.
+
+### Fixed-version sensitivity — B family
+
+Using B3 as reference at `t = 10 s`:
+
+- B4 vs B3:
+  - y=20 mm: NRMSE/RMS(Uy) = 4.44%, corr = 0.9990;
+  - y=30 mm: 9.45%, corr = 0.9955;
+  - vertical: 0.42%, corr = 0.999996.
+
+- B5 vs B3:
+  - y=20 mm: 4.00%;
+  - y=30 mm: 8.55%;
+  - vertical: 0.45%.
+
+- B7 vs B3:
+  - y=20 mm: 5.47%;
+  - y=30 mm: 11.64%;
+  - vertical: 0.45%.
+
+The B fixed cases retain the same qualitative Uy structure. Differences are modest and largest near the upper horizontal profile. Increasing outer correctors does not produce monotonic convergence toward a different velocity profile.
+
+### Fixed-version sensitivity — C family
+
+Using C3 as reference at `t = 10 s`, C4/C5/C7 are practically indistinguishable:
+
+- y=20 mm: NRMSE/RMS < 0.007%;
+- y=30 mm: < 0.010%;
+- vertical: < 0.004%;
+- correlations ≈ 1.
+
+### Adaptive effect — B6 vs B5
+
+At `t = 9.946515 s`:
+
+- y=20 mm:
+  - NRMSE/RMS(Uy) = 50.18%;
+  - corr = 0.865;
+  - 4/80 sampled points change sign.
+
+- y=30 mm:
+  - NRMSE/RMS = 80.60%;
+  - corr = 0.716;
+  - B5 Uy_min = -0.01933 m/s, Uy_max = +0.01354 m/s;
+  - B6 Uy_min = -0.01027 m/s, Uy_max = +0.00306 m/s.
+
+- vertical x=20 mm:
+  - NRMSE/RMS = 99.26%;
+  - corr = 0.121;
+  - 20/80 points change sign;
+  - B5 Uy_min = -0.01953 m/s, Uy_max = +0.00400 m/s;
+  - B6 Uy_min = -0.00150 m/s, Uy_max = +0.00237 m/s.
+
+B6 therefore does not preserve the vertical velocity field of B5. The strong descending centerline component is suppressed by roughly an order of magnitude.
+
+### Adaptive effect — C6 vs C5
+
+At `t = 9.182456 s`:
+
+- y=20 mm: NRMSE/RMS = 3.33%, corr = 0.999964;
+- y=30 mm: 1.69%, corr = 0.999867;
+- vertical: 3.42%, corr = 0.999787;
+- no sign changes in any profile.
+
+C6 preserves the Uy structure of C5 much more closely.
+
+### B vs C formulation difference
+
+B3 vs C3 at `t = 10 s`:
+
+- y=20 mm: corr = 0.284, 28/80 sign changes;
+- y=30 mm: corr = -0.715, 57/80 sign changes;
+- vertical: corr = -0.689, 46/80 sign changes.
+
+Vertical centerline:
+- B3: Uy_min = -0.01945 m/s, Uy_max = +0.00401 m/s;
+- C3: Uy_min = -0.000239 m/s, Uy_max = +0.01209 m/s.
+
+Thus B and C exhibit qualitatively different vertical circulation structures rather than merely different velocity magnitudes.
+
+### Uy conclusion
+
+1. Fixed V4/V5/V7 do not qualitatively change Uy relative to V3.
+2. C is essentially insensitive to the tested corrector changes.
+3. B shows moderate lateral sensitivity, strongest at y=30 mm.
+4. B6 adaptive strongly alters Uy and is not equivalent to B5 when convection matters.
+5. C6 adaptive preserves Uy much more closely.
+6. The B-vs-C formulation difference is substantially larger than the fixed-version differences within either family.
