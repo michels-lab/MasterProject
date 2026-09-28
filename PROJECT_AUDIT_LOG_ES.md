@@ -3970,3 +3970,26 @@ La conclusión correcta es ahora:
 5. el fallo original a 1782.04 K debe reinterpretarse como salida del rango tabulado durante un overshoot temprano, no como prueba suficiente de runaway térmico irreversible.
 
 Se requiere comparar el transitorio completo B9 vs B5 una vez subidos los resultados.
+
+
+## V9 metalTop fixedFlux — resultado comparativo final
+
+**[RUN-VERIFIED] [ANALYSIS-VERIFIED]**
+
+Se compararon B9 vs B5 y C9 vs C5 con perfiles completos 0–10 s, energía de frontera, phi en metalTop, coupling, continuidad, Uy, T, alphaL, vorticidad, flowType, Darcy y p_rgh acceleration.
+
+Resumen reproducible:
+- `analysis_results/v9_top_fixedflux/summary.md`
+- analizador: `analysis_tools/v9_top_fixedflux_analysis.py`
+
+Resultado principal:
+- `fixedFluxPressure + slip` hace `metalTop` impermeable: en B9 max |sum(phi)| = 2.54e-21 y la energía advectiva integrada de top ~0; en C9 ambos son exactamente 0 dentro de la precisión almacenada.
+- C9 permanece físicamente muy cercano a C5: Uy mediano ~1.1–2.9% en horizontales y 1.76% vertical; T final RMSE <=0.15 K; mushy width cambia +1.4%.
+- B9 cambia fuertemente respecto a B5: Uy mediano ~56% (y20), 95% (y30), 112% (vertical); mushy width +15%; center-T RMSE 14.6 K.
+- B5 tenía -970.358 J de energía advectiva integrada por top; B9 ~0. C5 tenía solo +6.841 J; C9 0.
+- B9 mejora enormemente la contracción residual de presión (median Rp~0.0021), pero la discrepancia transient rho-vs-thermo.rho acumulada crece a -0.046; esto no debe interpretarse como 4.6% de pérdida final de masa.
+- C9 mejora coupling y continuidad sin cambiar materialmente la solución física.
+
+Conclusión: el antiguo `totalPressure` tenía impacto físico despreciable en C pero fuerte en B. Las diferencias históricas B-vs-C no son una comparación limpia de formulaciones de buoyancy. Para el modelo Quick-Cup de volumen fijo actual, C9 es la referencia más limpia para continuar validación física.
+
+Caveat: B9 necesitó una extensión lineal diagnóstica de rho(T) por encima de 1773.15 K; por ello B9-vs-B5 dejó de ser una prueba estrictamente de una sola modificación.
