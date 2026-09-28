@@ -3593,3 +3593,99 @@ Conclusión general:
 3. B6 adaptive NO es equivalente a B5: altera la convección vertical desde etapas tempranas.
 4. C6 adaptive sí conserva razonablemente la estructura de Uy de C5 después del primer transitorio.
 5. La diferencia B-vs-C es física/estructural y mucho mayor que la sensibilidad entre versiones fixed.
+
+
+## Análisis exhaustivo OF14: vorticidad, topología de flujo, transporte de energía y acoplamiento
+
+Se ejecutaron analizadores reproducibles sobre las 10 corridas controladas:
+
+- `analysis_tools/physics_diagnostics_analysis.py`
+- `analysis_tools/coupling_analysis.py`
+
+Resúmenes permanentes:
+
+- `analysis_results/physics_diagnostics/physics_diagnostics_summary.md`
+- `analysis_results/coupling/coupling_summary.md`
+
+### Energía
+
+Los casos fixed B3/B4/B5/B7 son energéticamente casi indistinguibles entre sí. Lo mismo ocurre con C3/C4/C5/C7.
+
+En los casos fixed, aproximadamente 94.8% del transporte difusivo de energía por las fronteras evaluadas ocurre a través de `metal_to_mold`; ~5.2% corresponde a `metalTop`. Por tanto, la extracción energética difusiva está dominada por la interfaz metal-molde.
+
+Familia C fixed:
+- energía advectiva integrada de frontera ≈ +6.8 J;
+- energía difusiva ≈ 7057.8 J;
+- participación advectiva por magnitud ≈ 0.1%.
+
+Familia B fixed:
+- energía advectiva integrada ≈ -970 J;
+- energía difusiva ≈ 7100 J;
+- participación advectiva por magnitud ≈ 12%.
+
+La contribución advectiva B proviene de `metalTop`; `metal_to_mold` tiene advección prácticamente nula. Debido a que `metalTop` combina `U: slip` y `p_rgh: totalPressure`, este flujo advectivo B debe tratarse como un asunto de consistencia de flujo de masa en la frontera antes de interpretarlo como pérdida física de calor por convección.
+
+### Vorticidad y flowType
+
+En OpenFOAM Foundation v14:
+- +1 = flujo rotacional;
+- 0 = shear paralelo;
+- -1 = deformación/pure shear.
+
+Los porcentajes calculados son fracciones de puntos muestreados en líneas, no fracciones volumétricas.
+
+B fixed:
+- y=20 mm: RMS típico de omega_z ≈ 7.34 1/s, pero solo ~10% de puntos clasificados como rotacionales;
+- y=30 mm: RMS ≈ 5.82 1/s y ~45% de puntos rotacionales;
+- línea vertical central: vorticidad mucho menor.
+
+C fixed:
+- y=20 mm: RMS ≈ 3.52 1/s, ~40% rotacional y ~37% de la intensidad muestreada asociada a clasificación rotacional;
+- y=30 mm: ~12.5% rotacional;
+- línea vertical central: vorticidad casi nula.
+
+Esto confirma una topología de circulación distinta entre B y C.
+
+B6 adaptive reorganiza fuertemente la circulación:
+- y=30 mm: fracción rotacional ~45% -> ~20%;
+- participación rotacional por intensidad ~12.9% -> ~2.5%;
+- vorticidad en la línea vertical central prácticamente colapsa.
+
+C6 conserva mucho mejor Uy que B6, pero no conserva exactamente las derivadas/topología:
+- y=20 mm: fracción rotacional ~40% -> ~17.5%;
+- participación rotacional por intensidad ~37.4% -> ~10.5%;
+- RMS de vorticidad aumenta.
+
+### Acoplamiento
+
+Se definió:
+
+`R_p_outer = residual inicial del primer solve de p_rgh en el último outer / residual inicial correspondiente en el primer outer`.
+
+Menor valor implica mayor contracción típica a través del loop exterior; `R>1` no significa fallo del solver lineal.
+
+Resultados principales fixed:
+
+B:
+- B3 median Rp=0.6104;
+- B4=0.6084;
+- B5=0.5976;
+- B7=0.5989.
+
+C:
+- C3=0.8054;
+- C4=0.8054;
+- C5=0.7951;
+- C7=0.8019.
+
+B5/C5 solo mejoran modestamente la contracción mediana respecto a V3. V7 no aporta mejora adicional y en varios indicadores empeora.
+
+El segundo energy corrector B4/C4 reduce drásticamente el residual de entalpía h:
+- B3 Rh≈2.16e-3 -> B4≈1.92e-6;
+- C3 Rh≈1.05e-3 -> C4≈3.10e-7.
+
+Sin embargo, no mejora de forma relevante Re, los campos físicos, la vorticidad ni el balance energético. Por tanto, sobreconverge h sin beneficio físico observado en estas pruebas.
+
+B6 presenta Rp mucho menor (~0.372), pero no puede considerarse mejor acoplado globalmente porque empeora continuidad, eleva Co y cambia radicalmente Uy/vorticidad.
+
+Regla adoptada: un acoplamiento se considera preferible solo si reduce consistentemente residuales de coupling, mantiene residuales lineales y continuidad adecuados, respeta Co/timestep, preserva la solución física y evita costo innecesario.
