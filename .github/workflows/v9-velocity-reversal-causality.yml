@@ -1,0 +1,20 @@
+name: V9 velocity reversal causality
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'analysis_tools/v9_velocity_reversal_causality.py'
+      - 'analysis_tools/v9_velocity_reversal_trigger.txt'
+      - '.github/workflows/v9-velocity-reversal-causality.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Analyze velocity reversals
+        run: python3 analysis_tools/v9_velocity_reversal_causality.py
