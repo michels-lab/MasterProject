@@ -4014,3 +4014,32 @@ Limitación: los resultados versionados contienen perfiles lineales, no los camp
 
 Resumen reproducible: analysis_results/v9_flow_causality/summary.md
 Analizador: analysis_tools/v9_flow_causality_analysis.py
+
+
+---
+
+## 2026-09-28 — Regla permanente de auditoría de residuos de presión
+
+### AUD-PRES — Evolución de p_rgh y p_rghFinalRes obligatoria en todos los casos B/C
+**[GIT-VERIFIED]**
+
+Se establece como regla permanente del proyecto que todo caso B/C con resultados de `foamLog` debe revisarse mediante la evolución completa de los residuos de presión, no únicamente mediante un residual final o una métrica agregada.
+
+La auditoría obligatoria incluye:
+
+- residual inicial `p_rgh` de cada solve;
+- residual final `p_rghFinalRes` de cada solve;
+- evolución contra tiempo físico;
+- evolución contra índice de timestep;
+- cociente `p_rghFinal/p_rghInitial` para evaluar la contracción del solver lineal;
+- `R_p_outer` para evaluar la contracción del acoplamiento presión–velocidad entre outer correctors;
+- frecuencia de `R_p_outer > 1`;
+- continuidad, Courant, costo computacional y preservación de la solución física.
+
+Motivación: evaluar explícitamente si el uso de pasos de tiempo muy pequeños produce mejora real del acoplamiento o únicamente aumenta el número de pasos mientras los residuos permanecen en una meseta.
+
+Se añadió `analysis_tools/pressure_stagnation_analysis.py`, que descubre automáticamente todos los casos B/C que contienen `logs/` y genera tablas y, cuando matplotlib está disponible, gráficas semilogarítmicas de `p_rgh` y `p_rghFinalRes` contra tiempo físico e índice de timestep.
+
+El indicador automático de meseta es deliberadamente conservador y se usa solo como cribado: un cambio menor de 0.25 décadas log10 en la mediana del residual durante el 25 % final de las muestras se marca como `plateau_candidate`. Esta bandera no sustituye la inspección de magnitudes, continuidad ni campos físicos.
+
+**Estado:** ✅ regla incorporada al flujo de revisión.
