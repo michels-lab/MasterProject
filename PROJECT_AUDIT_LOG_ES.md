@@ -3786,3 +3786,68 @@ Prueba recomendada:
 - comparar top mass/energy advective flux, Uy, vorticity, phase fraction, continuity y energía.
 
 No se modificaron los casos históricos durante esta auditoría.
+
+
+## V8 adaptive + 4 outer correctors — resultado definitivo
+
+Se ejecutó una comparación completa de B8/C8 contra V6 adaptive y V5 fixed, alineando todos los perfiles por tiempo físico mediante interpolación temporal. Se analizaron Uy, T, alphaL, vorticidad, flowType, aceleración Darcy, aceleración asociada a p_rgh, coupling, continuidad, Courant y costo.
+
+Resumen permanente:
+- `analysis_results/v8_comprehensive/summary.md`
+
+### Familia B
+
+B8 es prácticamente indistinguible de B6:
+- Uy mediano NRMSE: 0.04% (y20), 0.13% (y30), 0.17% (vertical);
+- T RMSE final ~0.004–0.005 K;
+- alphaL prácticamente idéntico;
+- vorticidad horizontal <0.2% de diferencia;
+- flowType sin desacuerdo de clase;
+- Darcy y p_rgh acceleration <~0.1%;
+- posiciones del frente de fase indistinguibles.
+
+Sin embargo B8 sigue muy lejos de B5:
+- Uy final NRMSE: 50.2% (y20), 80.5% (y30), 99.2% (vertical);
+- flowType disagreement: 40% en y20 y 85% en y30;
+- Darcy acceleration: 42–71%;
+- p_rgh acceleration: 20–50%;
+- ancho mushy vertical: B5 16.916 mm vs B8 18.493 mm (+9.3%).
+
+Acoplamiento/costo:
+- B6 median Rp=0.3721, clock=119 s;
+- B8 median Rp=0.3882, clock=220 s;
+- continuidad prácticamente igual (~2.45e-4);
+- Co prácticamente igual (~0.29).
+
+Conclusión B: añadir el cuarto outer no recupera la solución fixed y casi duplica el costo. El problema de V6 no es falta de root-level outer PIMPLE coupling.
+
+### Familia C
+
+C8 también es prácticamente idéntico a C6:
+- Uy mediano NRMSE ~0.01–0.03%;
+- T RMSE ~0.003–0.004 K;
+- alphaL ~idéntico;
+- vorticidad horizontal <=0.08%;
+- flowType sin desacuerdo;
+- Darcy <=0.06%;
+- p_rgh acceleration <=0.20%.
+
+C8 sigue conservando las mismas diferencias adaptive-vs-fixed de C6:
+- Uy aún cercano a C5 (~1.7–4.8%);
+- Darcy ~10–16%;
+- p_rgh acceleration vertical ~56%;
+- ancho mushy vertical C5 17.679 mm vs C8 19.622 mm (+11.0%).
+
+Acoplamiento/costo:
+- C6 median Rp=0.7900, clock=65 s;
+- C8 median Rp=0.7765, clock=121 s;
+- Rp>1 mejora modestamente 6.25% -> 5.10%;
+- continuidad y Co prácticamente iguales.
+
+Conclusión C: el cuarto outer mejora modestamente la métrica de pressure coupling, pero no cambia la solución física y casi duplica el costo.
+
+### Decisión
+
+V8 es un caso de rendimientos decrecientes y no se recomienda como configuración de producción. La diferencia V5↔V6/V8 proviene de la trayectoria de timestep adaptativo/discretización temporal, no de un número insuficiente de outer correctors.
+
+Se mantiene V5 fixed como referencia física. V6 queda, en todo caso, como estudio explícito de trade-off velocidad/precisión. V8 se conserva solo como evidencia de independencia respecto al número de outer correctors.
