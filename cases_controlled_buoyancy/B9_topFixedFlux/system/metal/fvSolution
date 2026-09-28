@@ -76,6 +76,8 @@ PIMPLE
     nOuterCorrectors    1;
     nCorrectors         2;
     nNonOrthogonalCorrectors 0;
+    pRefPoint          (0.02025 0.03975 0.005);
+    pRefValue          1e5;
 }
 
 
