@@ -144,7 +144,7 @@ def coupling(case):
     cont=read_log_series(contfiles[-1]) if contfiles else {}
     co=read_log_series(logs/"CourantMax_0")
     clock=read_log_series(logs/"clockTime_0")
-    pfin=read_log_series(pfs[-1]) if pfs else {}
+    pfin=pfs[-1] if pfs else {}
     return {
         "median_Rp":statistics.median(ratios),
         "p95_Rp":sorted(ratios)[int(round(0.95*(len(ratios)-1)))],
