@@ -3486,3 +3486,110 @@ Interpretación: B y C no difieren solo en magnitud; muestran estructuras de cir
 4. B6 adaptive altera fuertemente Uy y no puede considerarse equivalente a B5 para estudios donde la convección sea relevante.
 5. C6 adaptive conserva mucho mejor Uy y sí parece numéricamente cercano a C5 en la estructura de flujo vertical.
 6. La diferencia B vs C es mayor que la diferencia entre versiones fixed dentro de una misma familia y corresponde a un cambio cualitativo del patrón de circulación.
+
+
+## Barrido temporal exhaustivo de Uy — todas las corridas controladas
+
+Se ejecutó `analysis_tools/uy_temporal_analysis.py` sobre todos los tiempos almacenados de los perfiles:
+- `y=20 mm`;
+- `y=30 mm`;
+- `x=20 mm` vertical.
+
+Los casos fixed se compararon en tiempos físicos exactamente comunes (101 muestras entre 0 y 10 s). Los casos adaptive se evaluaron en todos sus tiempos nativos y el caso fixed de referencia se interpoló linealmente al mismo tiempo físico.
+
+Resultados completos:
+- `analysis_results/uy_temporal/uy_temporal_metrics.csv`
+- `analysis_results/uy_temporal/uy_temporal_summary.md`
+
+### B fixed
+
+B4/B5/B7 mantienen el patrón de Uy de B3 durante toda la simulación.
+
+B4 vs B3:
+- y20: mediana NRMSE/RMS = 4.21%, pico 12.95% a 8.2 s;
+- y30: mediana 4.43%, pico 9.47% a 9.9 s;
+- vertical: mediana 0.80%, pico 3.08%.
+
+B5 vs B3:
+- y20: mediana 3.57%, pico 11.53% a 8.2 s;
+- y30: mediana 3.91%, pico 8.57% a 9.9 s;
+- vertical: mediana 0.82%, pico 4.00%.
+
+B7 vs B3:
+- y20: mediana 5.20%, pico 16.02% a 8.2 s;
+- y30: mediana 5.44%, pico 11.65% a 9.9 s;
+- vertical: mediana 0.79%, pico 3.96%.
+
+Conclusión: añadir correctores no genera una convergencia monotónica del perfil Uy; B7 puede diferir más de B3 que B5. Sin embargo, la correlación espacial permanece alta y no hay cambio cualitativo de circulación entre los casos fixed.
+
+### C fixed
+
+C4/C5/C7 permanecen prácticamente idénticos a C3 durante toda la corrida:
+- medianas y picos de NRMSE/RMS por debajo de ~0.03%;
+- correlación ≈ 1;
+- sin cambios significativos de signo.
+
+Conclusión: la solución Uy de la familia C es esencialmente insensible a los correctores adicionales probados.
+
+### B6 adaptive vs B5 fixed
+
+B6 diverge desde los primeros tiempos almacenados.
+
+y20:
+- primera diferencia >=5%: 0.223624 s;
+- >=10%: 1.76685 s;
+- >=25%: 2.31438 s;
+- >=50%: 2.60859 s;
+- mediana NRMSE/RMS = 33.10%;
+- pico = 80.09% a 7.500923 s;
+- correlación mínima = 0.6706 a 3.275592 s.
+
+y30:
+- >=10% ya a 0.223624 s;
+- >=25% y >=50% a 1.254542 s;
+- mediana = 59.12%;
+- pico = 84.81% a 1.76685 s;
+- correlación mínima = 0.5687.
+
+vertical:
+- >=25% desde 0.223624 s;
+- >=50% a 0.763943 s;
+- mediana = 75.23%;
+- pico = 99.26% a 9.946515 s;
+- correlación cae a 0.1211 al final;
+- máximo desacuerdo de signo = 53/80 puntos a 9.422639 s.
+
+La divergencia no aparece únicamente al final: comienza durante el transitorio inicial y después se acumula/reorganiza. En la línea vertical, B6 termina suprimiendo casi por completo la fuerte corriente descendente presente en B5.
+
+### C6 adaptive vs C5 fixed
+
+C6 presenta una discrepancia relativa inicial, pero posteriormente conserva bien el patrón Uy.
+
+A 0.953122 s:
+- y20: NRMSE/RMS = 13.81%, RMSE absoluto = 8.13e-4 m/s;
+- y30: 13.70%, RMSE = 6.80e-4 m/s;
+- vertical: 22.26%, RMSE = 5.08e-4 m/s.
+
+Después:
+- medianas: 3.03% (y20), 4.79% (y30), 3.42% (vertical);
+- al último tiempo 9.182456 s: 3.33%, 1.69% y 3.42%, respectivamente;
+- correlaciones finales > 0.9997;
+- no se alcanzan 25% ni 50% en ningún perfil.
+
+Conclusión: C6 tiene un transitorio temprano algo diferente, pero el campo Uy permanece estructuralmente muy cercano a C5 durante la mayor parte de la corrida.
+
+### B3 vs C3
+
+La diferencia de formulación aparece casi inmediatamente:
+- los tres perfiles superan 25% NRMSE/RMS desde 0.1 s;
+- y20 alcanza un pico de 189.3%;
+- y30 145.7%;
+- vertical 190.4%;
+- correlaciones mínimas: -0.352 (y20), -0.731 (y30), -0.794 (vertical).
+
+Conclusión general:
+1. Los correctores adicionales no cambian cualitativamente Uy en los casos fixed.
+2. La formulación C es extremadamente estable frente a los cambios numéricos probados.
+3. B6 adaptive NO es equivalente a B5: altera la convección vertical desde etapas tempranas.
+4. C6 adaptive sí conserva razonablemente la estructura de Uy de C5 después del primer transitorio.
+5. La diferencia B-vs-C es física/estructural y mucho mayor que la sensibilidad entre versiones fixed.
