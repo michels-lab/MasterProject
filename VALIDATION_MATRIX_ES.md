@@ -243,3 +243,39 @@ El script oficial para esta auditoría es:
 El script descubre automáticamente todos los directorios B/C que contengan `logs/`, por lo que la regla se extiende a casos futuros sin necesidad de añadirlos manualmente.
 
 La etiqueta `plateau_candidate` del script es únicamente un indicador de cribado: significa que la mediana del residual cambia menos de 0.25 décadas log10 durante el 25 % final de las muestras disponibles. **No constituye por sí sola un criterio de convergencia.** La magnitud del residual, las curvas completas, la continuidad y la solución física deben revisarse conjuntamente.
+
+
+---
+
+## Regla permanente de revisión de impermeabilidad y advección en metalTop
+
+Todo caso B/C que use `metalTop` como pared cinemáticamente impermeable debe verificarse con dos diagnósticos independientes:
+
+1. `metalTopPhiSum`: suma directa del flujo másico del solver `phi` sobre la tapa;
+2. `metalTopEnergyPower`: suma de `energyAdvectiveFlux`, `heatFlux` y `energyFlux` sobre la tapa.
+
+En OpenFOAM Foundation v14:
+
+`energyAdvectiveFlux = fvc::flux(alphaRhoPhi, hs)`
+
+por lo que, en la región metálica monofásica (`alpha=1`), el término advectivo representa transporte de entalpía sensible asociado al flujo másico del solver:
+
+`P_adv,f = phi_f * hs_f`
+
+con unidades de W por cara.
+
+Regla de aceptación:
+
+- `U=slip` por sí sola NO demuestra impermeabilidad;
+- `sum(phi)` debe ser compatible con cero a precisión numérica;
+- `energyAdvectiveFlux` en la tapa debe ser compatible con cero;
+- `heatFlux` puede ser distinto de cero porque impermeable no significa adiabático;
+- cualquier transporte advectivo significativo por `metalTop` debe investigarse antes de usar el caso como baseline físico.
+
+Esta alerta fue la evidencia que motivó V9, donde `metalTop/p_rgh` se cambió de `totalPressure` a `fixedFluxPressure`.
+
+El script oficial para aplicar esta regla de forma recurrente es:
+
+`analysis_tools/boundary_flux_audit.py`
+
+Los casos históricos sin `metalTopPhiSum` pueden revisarse con el `energyAdvectiveFlux` ya almacenado; los casos nuevos deben incluir ambos diagnósticos.
