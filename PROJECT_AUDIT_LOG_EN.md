@@ -3906,3 +3906,26 @@ Updated interpretation:
 5. the original 1782.04 K failure should be treated as a table-range failure during an early overshoot, not proof of irreversible thermal runaway.
 
 A full B9-vs-B5 transient comparison remains required after the run results are pushed.
+
+
+## V9 metalTop fixedFlux — final comparative result
+
+**[RUN-VERIFIED] [ANALYSIS-VERIFIED]**
+
+B9-vs-B5 and C9-vs-C5 were compared over the full 0–10 s profiles, including boundary energy, metalTop phi, coupling, continuity, Uy, T, alphaL, vorticity, flowType, Darcy and p_rgh acceleration.
+
+Reproducible summary:
+- `analysis_results/v9_top_fixedflux/summary.md`
+- analyzer: `analysis_tools/v9_top_fixedflux_analysis.py`
+
+Main result:
+- `fixedFluxPressure + slip` makes `metalTop` impermeable: B9 max |sum(phi)| = 2.54e-21 and integrated top advective energy ~0; C9 is exactly zero at stored precision.
+- C9 remains physically very close to C5: median Uy differences ~1.1–2.9% horizontally and 1.76% vertically; final T RMSE <=0.15 K; mushy width changes +1.4%.
+- B9 changes strongly relative to B5: median Uy differences ~56% (y20), 95% (y30), 112% (vertical); mushy width +15%; center-T RMSE 14.6 K.
+- B5 had -970.358 J integrated top advective energy; B9 ~0. C5 had only +6.841 J; C9 0.
+- B9 pressure residual contraction becomes extremely strong (median Rp~0.0021), but accumulated transient rho-vs-thermo.rho mismatch reaches -0.046; this is not a literal 4.6% final mass loss.
+- C9 improves coupling and continuity without materially changing the physical solution.
+
+Conclusion: historical `totalPressure` had negligible physical impact on C but major impact on B. Historical B-vs-C differences are therefore not a clean buoyancy-formulation comparison. For the current fixed-volume Quick-Cup model, C9 is the cleaner baseline for continued physical validation.
+
+Caveat: B9 required a diagnostic linear rho(T) extension above 1773.15 K, so B9-vs-B5 is no longer a strict single-change test.
