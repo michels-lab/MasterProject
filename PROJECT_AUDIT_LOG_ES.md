@@ -3689,3 +3689,100 @@ Sin embargo, no mejora de forma relevante Re, los campos físicos, la vorticidad
 B6 presenta Rp mucho menor (~0.372), pero no puede considerarse mejor acoplado globalmente porque empeora continuidad, eleva Co y cambia radicalmente Uy/vorticidad.
 
 Regla adoptada: un acoplamiento se considera preferible solo si reduce consistentemente residuales de coupling, mantiene residuales lineales y continuidad adecuados, respeta Co/timestep, preserva la solución física y evita costo innecesario.
+
+
+## Auditoría de `metalTop`: inconsistencia entre pared impermeable y presión abierta
+
+**[GIT-VERIFIED] [OPENFOAM-v14-SOURCE-VERIFIED] [INTERPRETATION]**
+
+Se revisó la frontera `metalTop` después de detectar un `energyAdvectiveFlux` integrado de aproximadamente -970 J en los casos fixed de la familia B, mientras la familia C presenta ~+6.8 J.
+
+### Geometría
+
+En `system/blockMeshDict`, `metalTop` está declarado como:
+
+```
+metalTop
+{
+    type wall;
+}
+```
+
+Por tanto, geométricamente es una pared.
+
+### Velocidad
+
+En todos los casos controlados revisados:
+
+```
+metalTop
+{
+    type slip;
+}
+```
+
+En OpenFOAM Foundation v14, `slip` hereda la condición de simetría y proyecta fuera la componente normal del vector velocidad. Para una malla estática esto impone `U·n = 0`: deslizamiento tangencial permitido, penetración normal nula.
+
+### Presión
+
+Sin embargo, `p_rgh` usa:
+
+```
+metalTop
+{
+    type totalPressure;
+    p0 uniform 1e5;
+}
+```
+
+OpenFOAM v14 documenta `totalPressure` como una condición de presión de entrada/salida/entrainment. Está diseñada para fronteras donde el flujo puede entrar o salir, no para imponer el flujo nulo de una pared impermeable.
+
+La condición `fixedFluxPressure`, en cambio, está diseñada precisamente para ajustar el gradiente de presión de modo que el flujo de la frontera coincida con el especificado por la condición de velocidad. Es la condición coherente con una pared/slip impermeable.
+
+### Evidencia de flujo advectivo
+
+OpenFOAM v14 calcula `energyAdvectiveFlux` mediante `calcPhihs`, usando:
+
+`alphaRhoPhi` × entalpía sensible `hs`.
+
+Por lo tanto, un `energyAdvectiveFlux` distinto de cero en `metalTop` implica que el flujo másico superficial utilizado por el solver (`alphaRhoPhi`) no es cero, aunque la condición `slip` sobre U imponga velocidad normal nula.
+
+Esto demuestra una inconsistencia entre la condición cinemática de U y el flujo superficial resultante del acoplamiento de presión.
+
+### Por qué B lo muestra mucho más que C
+
+B utiliza:
+- `heRhoThermo`
+- EOS `icoTabulated`
+- densidad dependiente de T
+- `beta=0` en solidificationMeltingSource.
+
+C utiliza:
+- `heRhoThermo`
+- EOS `rhoConst`
+- `rho=6820 kg/m3`
+- buoyancy explícita mediante `beta=1.13e-4`.
+
+Ambos usan la misma `metalTop` y el mismo h=10 W/(m2 K), pero la formulación de flujo/densidad de B amplifica la inconsistencia de `alphaRhoPhi` en la frontera. Esto explica por qué B presenta ~-970 J de transporte advectivo de frontera mientras C queda cerca de cero, aunque todavía debe verificarse con un caso controlado.
+
+### Implicación física
+
+Si el modelo actual pretende representar la superficie superior del metal como una superficie libre fija, sin pérdida de masa y sin deformación de la interfaz, la combinación físicamente coherente es:
+
+- U: `slip`
+- p_rgh: `fixedFluxPressure`
+- T: `externalWallHeatFluxTemperature`
+
+Si se pretendiera una frontera realmente abierta con entrada/salida de metal, entonces `totalPressure` podría ser apropiada, pero `U: slip` no lo sería; debería usarse una condición de velocidad compatible con frontera de presión, p.ej. `pressureNormalInletOutletVelocity`/familia equivalente. Ese no es el modelo físico actualmente planteado.
+
+### Consecuencia metodológica
+
+La diferencia B-vs-C en Uy, vorticidad y transporte advectivo no debe atribuirse exclusivamente a la formulación de buoyancy hasta repetir una comparación controlada corrigiendo únicamente la presión en `metalTop`.
+
+Prueba recomendada:
+- clonar B5 y C5;
+- cambiar solo `metalTop/p_rgh`: `totalPressure` -> `fixedFluxPressure`;
+- mantener U=slip, T, malla, propiedades, PIMPLE y timestep idénticos;
+- comparar top mass/energy advective flux, Uy, vorticity, phase fraction, continuity y energía.
+
+No se modificaron los casos históricos durante esta auditoría.
