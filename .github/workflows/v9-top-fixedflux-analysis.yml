@@ -1,0 +1,21 @@
+name: V9 top fixed-flux analysis
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'analysis_tools/v9_top_fixedflux_analysis.py'
+      - 'analysis_tools/v9_top_fixedflux_trigger.txt'
+      - '.github/workflows/v9-top-fixedflux-analysis.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run V9 analysis
+        run: python3 analysis_tools/v9_top_fixedflux_analysis.py
