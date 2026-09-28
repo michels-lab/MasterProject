@@ -3793,3 +3793,73 @@ C conclusion: the fourth outer corrector modestly improves pressure-coupling sta
 V8 is a diminishing-return case and is not recommended as a production configuration. The V5↔V6/V8 differences arise from the adaptive timestep trajectory/time discretization, not from insufficient outer-corrector count.
 
 V5 fixed remains the physical reference. V6 may be retained only as an explicit speed/accuracy trade-off study. V8 is retained as evidence of independence with respect to the number of outer correctors.
+
+
+## Audit of PIMPLE hierarchy in foamMultiRun (OpenFOAM Foundation v14)
+
+**[SOURCE-VERIFIED] [LOG-VERIFIED]**
+
+The effective source of each PIMPLE control in the multi-region `foamMultiRun` cases was audited.
+
+### Actual OF14 architecture
+
+`foamMultiRun` constructs:
+
+```
+pimpleMultiRegionControl pimple(runTime, solvers);
+```
+
+and executes the global outer loop with:
+
+```
+while (pimple.loop())
+```
+
+`pimpleMultiRegionControl` derives from `multiRegionSolutionControl`, whose `dict()` reads the root `system/fvSolution/PIMPLE` dictionary. Its `pimpleLoop::read()` obtains `nOuterCorrectors` from that root dictionary.
+
+Therefore:
+
+- root `system/fvSolution/PIMPLE/nOuterCorrectors` controls the effective **multi-region outer correctors**;
+- root `nEnergyCorrectors` controls the effective **global energy-corrector loop**.
+
+Each regional solver also owns a `pimpleNoLoopControl` based on that region's own `fvSolution`. For the metal region:
+
+- `system/metal/fvSolution/PIMPLE/nCorrectors` controls the effective PISO pressure correctors per global outer iteration;
+- regional `nNonOrthogonalCorrectors` controls non-orthogonal pressure corrections;
+- regional `momentumPredictor`, pressure-reference entries, and solver-specific controls are effective there;
+- linear-solver dictionaries/tolerances are regional.
+
+The `nOuterCorrectors 1` entry in `system/metal/fvSolution` does **not** create or control a second outer loop under `foamMultiRun`.
+
+Likewise, duplicated root `nCorrectors` and `nNonOrthogonalCorrectors` entries do not control the metal's internal pressure loop.
+
+### Verification from actual logs
+
+- B3: root outer=2 × metal nCorrectors=2 -> **4** p_rgh solve series.
+- B5: 3 × 2 -> **6** series.
+- B7: 4 × 2 -> **8** series.
+- B8: 4 × 2 -> **8** series.
+
+Energy:
+- B3: outer=2 × energyCorrectors=1 -> **2** h/e series.
+- B4: outer=2 × energyCorrectors=2 -> **4** h/e series.
+- B5: outer=3 × energyCorrectors=1 -> **3** h/e series.
+
+### Methodology correction
+
+The V3/V5/V7 interpretation as 2/3/4 outer-corrector tests remains correct because those values were changed in the root dictionary, which is the effective multi-region outer-loop control.
+
+The complete method should however distinguish:
+- multi-region outer correctors: root;
+- metal PISO/pressure correctors: regional;
+- metal non-orthogonal correctors: regional;
+- energy correctors: root.
+
+The effective metal settings in the current cases are:
+- nCorrectors = 2;
+- nNonOrthogonalCorrectors = 0;
+- momentumPredictor = no.
+
+Thus root `nNonOrthogonalCorrectors = 1` must not be reported as the effective metal setting.
+
+Historical cases were not modified. Future cases should avoid duplicated root entries that are not effective for the regional solver to reduce ambiguity.
