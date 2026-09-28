@@ -1,0 +1,59 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  14
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+
+FoamFile
+{
+    format      ascii;
+    class       dictionary;
+    location    "system";
+    object      functions;
+}
+
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+temperatureProbe
+{
+    type            probes;
+    libs            ("libfieldFunctionObjects.so");
+
+    // Región donde se encuentra el probe
+    region          metal;
+
+    // Campos registrados
+    fields
+    (
+        U
+        T
+        p_rgh
+        rho
+        phaseChangeSource:alpha1
+    );
+
+    // Posición del probe [m]
+    probeLocations
+    (
+        (0.02 0.02 0.005)
+    );
+
+    // Evaluar en cada paso de tiempo
+    executeControl  timeStep;
+    executeInterval 1;
+
+    // Escribir en cada paso de tiempo
+    writeControl    timeStep;
+    writeInterval   1;
+
+    // Guardar resultados en postProcessing
+    writeToFile     true;
+}
+
+
+#include "researchDiagnostics"
+#include "lineProfiles"
+
+// ************************************************************************* //
