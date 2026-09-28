@@ -3551,3 +3551,94 @@ Overall:
 3. B6 adaptive is not equivalent to B5 and changes vertical convection from early times.
 4. C6 adaptive preserves Uy reasonably well after the initial transient.
 5. The B-vs-C difference is structural and much larger than fixed-version sensitivity.
+
+
+## Exhaustive OF14 diagnostics: vorticity, flow topology, energy transport and coupling
+
+Reproducible analysis was executed across all 10 controlled cases with:
+
+- `analysis_tools/physics_diagnostics_analysis.py`
+- `analysis_tools/coupling_analysis.py`
+
+Permanent summaries:
+
+- `analysis_results/physics_diagnostics/physics_diagnostics_summary.md`
+- `analysis_results/coupling/coupling_summary.md`
+
+### Energy
+
+Fixed B3/B4/B5/B7 are energetically almost indistinguishable. The same is true for C3/C4/C5/C7.
+
+Approximately 94.8% of the evaluated diffusive boundary energy transport occurs through `metal_to_mold`, with only ~5.2% through `metalTop`. Diffusive heat extraction is therefore dominated by the metal-mold interface.
+
+Fixed C:
+- integrated boundary advective contribution ≈ +6.8 J;
+- diffusive ≈ 7057.8 J;
+- advective magnitude share ≈ 0.1%.
+
+Fixed B:
+- integrated boundary advective contribution ≈ -970 J;
+- diffusive ≈ 7100 J;
+- advective magnitude share ≈ 12%.
+
+The B advective contribution is associated with `metalTop`; metal-to-mold advection is essentially zero. Since `metalTop` combines `U: slip` and `p_rgh: totalPressure`, this B top mass/enthalpy flux must be investigated as a boundary-flux consistency issue before interpreting it as physical convective heat loss.
+
+### Vorticity and flowType
+
+Foundation v14 convention:
+- +1 rotational;
+- 0 parallel shear;
+- -1 pure-shear/deformation.
+
+Reported percentages are sampled-line fractions, not volume fractions.
+
+Fixed B:
+- y=20 mm: typical RMS omega_z ≈ 7.34 1/s, ~10% rotational samples;
+- y=30 mm: RMS ≈ 5.82 1/s, ~45% rotational samples;
+- vertical centerline: much smaller vorticity.
+
+Fixed C:
+- y=20 mm: RMS ≈ 3.52 1/s, ~40% rotational samples and ~37% sampled strength associated with rotational classification;
+- y=30 mm: ~12.5% rotational;
+- vertical centerline: near-zero vorticity.
+
+B and C therefore exhibit distinct sampled circulation topologies.
+
+B6 strongly reorganizes the B flow:
+- y=30 rotational fraction ~45% -> ~20%;
+- rotational-strength share ~12.9% -> ~2.5%;
+- vertical-centerline vorticity nearly collapses.
+
+C6 preserves Uy much better than B6 but still alters derivative/topology metrics at y=20.
+
+### Coupling
+
+`R_p_outer` is defined as the initial residual of the first p_rgh solve in the final outer corrector divided by the corresponding initial residual in the first outer corrector.
+
+Lower values indicate stronger typical contraction across the outer loop; R>1 is not a linear-solver failure.
+
+Fixed median Rp:
+
+B:
+- B3 0.6104;
+- B4 0.6084;
+- B5 0.5976;
+- B7 0.5989.
+
+C:
+- C3 0.8054;
+- C4 0.8054;
+- C5 0.7951;
+- C7 0.8019.
+
+V5 only modestly improves typical pressure coupling versus V3. V7 adds no further improvement.
+
+The second energy corrector dramatically reduces the h residual:
+- B3 Rh≈2.16e-3 -> B4≈1.92e-6;
+- C3 Rh≈1.05e-3 -> C4≈3.10e-7.
+
+However it does not materially improve Re, physical fields, vorticity or integrated energy transport, indicating over-convergence of h without observed physical benefit.
+
+B6 has a much lower Rp (~0.372) but worse continuity, higher Courant and a substantially changed Uy/vorticity solution; lower coupling residual alone is therefore insufficient to call it better.
+
+Adopted rule: coupling is numerically preferable only when contraction improves consistently while linear residuals and continuity remain acceptable, timestep/Courant constraints are respected, the physical solution is preserved, and extra cost is justified.
