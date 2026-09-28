@@ -3642,3 +3642,89 @@ However it does not materially improve Re, physical fields, vorticity or integra
 B6 has a much lower Rp (~0.372) but worse continuity, higher Courant and a substantially changed Uy/vorticity solution; lower coupling residual alone is therefore insufficient to call it better.
 
 Adopted rule: coupling is numerically preferable only when contraction improves consistently while linear residuals and continuity remain acceptable, timestep/Courant constraints are respected, the physical solution is preserved, and extra cost is justified.
+
+
+## Audit of `metalTop`: impermeable-wall / open-pressure inconsistency
+
+**[GIT-VERIFIED] [OPENFOAM-v14-SOURCE-VERIFIED] [INTERPRETATION]**
+
+The `metalTop` boundary was audited after observing an integrated `energyAdvectiveFlux` of about -970 J in the fixed B cases, compared with only ~+6.8 J in the fixed C cases.
+
+### Geometry
+
+In `system/blockMeshDict`, `metalTop` is declared as a `wall`.
+
+### Velocity
+
+All controlled cases use:
+
+```
+metalTop
+{
+    type slip;
+}
+```
+
+In OpenFOAM Foundation v14, `slip` inherits the symmetry projection and removes the velocity component normal to the patch. For a static mesh this imposes `U·n = 0`: tangential motion is allowed, normal penetration is not.
+
+### Pressure
+
+However, `p_rgh` currently uses:
+
+```
+metalTop
+{
+    type totalPressure;
+    p0 uniform 1e5;
+}
+```
+
+OpenFOAM v14 documents `totalPressure` as an inflow/outflow/entrainment pressure condition. It is intended for pressure-open boundaries where flux may enter or leave the domain.
+
+By contrast, `fixedFluxPressure` sets the pressure gradient such that the boundary flux matches that prescribed by the velocity boundary condition. It is therefore the consistent pressure condition for an impermeable slip wall.
+
+### Advective-flux evidence
+
+OpenFOAM v14 calculates `energyAdvectiveFlux` using `alphaRhoPhi` and sensible enthalpy `hs`.
+
+Therefore, a non-zero `energyAdvectiveFlux` across `metalTop` demonstrates that the solver surface mass flux used for advection (`alphaRhoPhi`) is non-zero even though the `slip` velocity condition imposes zero normal velocity.
+
+This is a pressure/flux-boundary inconsistency.
+
+### Why the effect is much larger in B
+
+B uses:
+- `heRhoThermo`;
+- `icoTabulated` EOS;
+- temperature-dependent density;
+- `beta=0` in `solidificationMeltingSource`.
+
+C uses:
+- `heRhoThermo`;
+- `rhoConst` EOS;
+- `rho=6820 kg/m3`;
+- explicit buoyancy via `beta=1.13e-4`.
+
+Both use the same `metalTop` settings and h=10 W/(m2 K), but the variable-density flux formulation in B makes the inconsistency much more visible in `alphaRhoPhi`. This is consistent with the large B boundary advective-energy term, but should be confirmed with a controlled rerun.
+
+### Physical implication
+
+If the current model intends the upper metal surface to be a fixed free surface with no mass loss and no interface deformation, the consistent approximation is:
+
+- U: `slip`
+- p_rgh: `fixedFluxPressure`
+- T: `externalWallHeatFluxTemperature`
+
+If the patch were intended to be a truly open boundary with metal inflow/outflow, then `totalPressure` could be appropriate, but `U: slip` would not; a pressure-compatible inlet/outlet velocity condition would be required.
+
+### Methodological consequence
+
+The B-vs-C differences in Uy, vorticity and advective energy transport should not be attributed solely to buoyancy formulation until a controlled test is repeated with only the `metalTop/p_rgh` condition changed from `totalPressure` to `fixedFluxPressure`.
+
+Recommended controlled test:
+- clone B5 and C5;
+- change only `metalTop/p_rgh`: `totalPressure` -> `fixedFluxPressure`;
+- keep U=slip, T, mesh, material properties, PIMPLE and timestep unchanged;
+- compare top mass/advective-energy flux, Uy, vorticity, phase fraction, continuity and energy.
+
+Historical cases were not modified by this audit.
