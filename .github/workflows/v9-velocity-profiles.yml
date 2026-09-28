@@ -1,0 +1,20 @@
+name: V9 velocity profile morphology
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'analysis_tools/v9_velocity_profiles.py'
+      - 'analysis_tools/v9_velocity_profiles_trigger.txt'
+      - '.github/workflows/v9-velocity-profiles.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Analyze V9 velocity profiles
+        run: python3 analysis_tools/v9_velocity_profiles.py
