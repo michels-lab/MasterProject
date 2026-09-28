@@ -47,7 +47,12 @@ mixture
                 (1423.15  6900)   // Solidus threshold (1150°C)
                 (1473.15  6820)   // Liquidus threshold (1200°C)
                 (1573.15  6740)
-                (1773.15  6580)   // Molten liquid max (1500°C)        
+                (1773.15  6580)   // Original table limit (1500°C)
+                (1873.15  6500)   // Diagnostic linear extrapolation
+                (1973.15  6420)   // Diagnostic linear extrapolation
+                (2073.15  6340)   // Diagnostic linear extrapolation
+                (2173.15  6260)   // Diagnostic linear extrapolation
+                (2273.15  6180)   // Diagnostic linear extrapolation
             );
         }
 
