@@ -1,0 +1,822 @@
+// QuickCup research diagnostics — OpenFOAM Foundation v14
+//
+// These function objects are post-processing only. They do not alter the
+// governing equations, material properties, boundary conditions or mesh.
+//
+// Execution is limited to case write times to reduce runtime overhead.
+
+vorticityField
+{
+    type            vorticity;
+    libs            ("libfieldFunctionObjects.so");
+    region          metal;
+
+    executeControl  writeTime;
+    executeInterval 1;
+    writeControl    writeTime;
+    writeInterval   1;
+}
+
+flowTopology
+{
+    type            flowType;
+    libs            ("libfieldFunctionObjects.so");
+    region          metal;
+
+    // Keep a stable canonical field name for sampling/PostPlotter.
+    result          flowType;
+
+    executeControl  writeTime;
+    executeInterval 1;
+    writeControl    writeTime;
+    writeInterval   1;
+}
+
+// OpenFOAM v14 native energy-flux decomposition.
+// All three result fields are surfaceScalarFields with power dimensions.
+energyAdvectiveFlux
+{
+    type            energyAdvectiveFlux;
+    libs            ("libfieldFunctionObjects.so");
+    region          metal;
+
+    executeControl  writeTime;
+    executeInterval 1;
+    writeControl    writeTime;
+    writeInterval   1;
+}
+
+heatFlux
+{
+    type            heatFlux;
+    libs            ("libfieldFunctionObjects.so");
+    region          metal;
+
+    executeControl  writeTime;
+    executeInterval 1;
+    writeControl    writeTime;
+    writeInterval   1;
+}
+
+energyFlux
+{
+    type            energyFlux;
+    libs            ("libfieldFunctionObjects.so");
+    region          metal;
+
+    executeControl  writeTime;
+    executeInterval 1;
+    writeControl    writeTime;
+    writeInterval   1;
+}
+
+// Net power [W] across the exposed metal surface.
+metalTopEnergyPower
+{
+    type            surfaceFieldValue;
+    libs            ("libfieldFunctionObjects.so");
+    region          metal;
+
+    log             true;
+    executeControl  writeTime;
+    executeInterval 1;
+    writeControl    writeTime;
+    writeInterval   1;
+
+    writeFields     false;
+    surfaceFormat   none;
+    patch           metalTop;
+    operation       sum;
+
+    fields
+    (
+        energyAdvectiveFlux
+        heatFlux
+        energyFlux
+    );
+}
+
+// Net power [W] exchanged through the metal-to-mold interface.
+metalMoldEnergyPower
+{
+    type            surfaceFieldValue;
+    libs            ("libfieldFunctionObjects.so");
+    region          metal;
+
+    log             true;
+    executeControl  writeTime;
+    executeInterval 1;
+    writeControl    writeTime;
+    writeInterval   1;
+
+    writeFields     false;
+    surfaceFormat   none;
+    patch           metal_to_mold;
+    operation       sum;
+
+    fields
+    (
+        energyAdvectiveFlux
+        heatFlux
+        energyFlux
+    );
+}
+
+// Net power [W] through all non-empty metal boundaries considered here.
+metalBoundaryEnergyPower
+{
+    type            surfaceFieldValue;
+    libs            ("libfieldFunctionObjects.so");
+    region          metal;
+
+    log             true;
+    executeControl  writeTime;
+    executeInterval 1;
+    writeControl    writeTime;
+    writeInterval   1;
+
+    writeFields     false;
+    surfaceFormat   none;
+    patches         (metalTop metal_to_mold);
+    operation       sum;
+
+    fields
+    (
+        energyAdvectiveFlux
+        heatFlux
+        energyFlux
+    );
+}
+
+// Sensible enthalpy inventory: integral(rho*h dV) [J].
+// This is deliberately NOT labelled "total energy" because latent heat is
+// handled by the phase-change model and must be analysed separately.
+metalSensibleEnthalpy
+{
+    type            volFieldValue;
+    libs            ("libfieldFunctionObjects.so");
+    region          metal;
+
+    log             true;
+    executeControl  writeTime;
+    executeInterval 1;
+    writeControl    writeTime;
+    writeInterval   1;
+
+    writeFields     false;
+    cellZone        all;
+    operation       volIntegrate;
+    weightField     rho;
+
+    fields
+    (
+        h
+    );
+}
+
+// Volume-average liquid fraction; useful alongside front tracking.
+metalMeanLiquidFraction
+{
+    type            volFieldValue;
+    libs            ("libfieldFunctionObjects.so");
+    region          metal;
+
+    log             true;
+    executeControl  writeTime;
+    executeInterval 1;
+    writeControl    writeTime;
+    writeInterval   1;
+
+    writeFields     false;
+    cellZone        all;
+    operation       volAverage;
+
+    fields
+    (
+        phaseChangeSource:alpha1
+    );
+}
+
+// ------------------------------------------------------------------------- //
+// Thermal gradients
+// ------------------------------------------------------------------------- //
+
+temperatureGradient
+{
+    type            grad;
+    libs            ("libfieldFunctionObjects.so");
+    region          metal;
+
+    field           T;
+    result          gradT;
+
+    executeControl  writeTime;
+    writeControl    writeTime;
+}
+
+temperatureGradientMagnitude
+{
+    type            mag;
+    libs            ("libfieldFunctionObjects.so");
+    region          metal;
+
+    field           gradT;
+    result          magGradT;
+
+    executeControl  writeTime;
+    writeControl    writeTime;
+}
+
+// ------------------------------------------------------------------------- //
+// Density gradients — physically important for the B-family buoyancy route.
+// In the C-family rho is constant, so gradRho should be approximately zero.
+// ------------------------------------------------------------------------- //
+
+densityGradient
+{
+    type            grad;
+    libs            ("libfieldFunctionObjects.so");
+    region          metal;
+
+    field           rho;
+    result          gradRho;
+
+    executeControl  writeTime;
+    writeControl    writeTime;
+}
+
+densityGradientMagnitude
+{
+    type            mag;
+    libs            ("libfieldFunctionObjects.so");
+    region          metal;
+
+    field           gradRho;
+    result          magGradRho;
+
+    executeControl  writeTime;
+    writeControl    writeTime;
+}
+
+// ------------------------------------------------------------------------- //
+// Local temporal rates.
+// NOTE: OpenFOAM v14's ddt function object is evaluated during solver runtime
+// and is NOT supported by foamPostProcess for retrospective reconstruction.
+// ------------------------------------------------------------------------- //
+
+temperatureTimeDerivative
+{
+    type            ddt;
+    libs            ("libfieldFunctionObjects.so");
+    region          metal;
+
+    field           T;
+    result          dTdt;
+
+    executeControl  writeTime;
+    writeControl    writeTime;
+}
+
+coolingRate
+{
+    type            scale;
+    libs            ("libfieldFunctionObjects.so");
+    region          metal;
+
+    field           dTdt;
+    scale           -1;
+    result          coolingRate;
+
+    executeControl  writeTime;
+    writeControl    writeTime;
+}
+
+liquidFractionTimeDerivative
+{
+    type            ddt;
+    libs            ("libfieldFunctionObjects.so");
+    region          metal;
+
+    field           phaseChangeSource:alpha1;
+    result          dAlphaLdt;
+
+    executeControl  writeTime;
+    writeControl    writeTime;
+}
+
+solidificationRate
+{
+    type            scale;
+    libs            ("libfieldFunctionObjects.so");
+    region          metal;
+
+    // Positive = liquid fraction decreasing = solidification.
+    // Negative = liquid fraction increasing = local remelting.
+    field           dAlphaLdt;
+    scale           -1;
+    result          solidificationRate;
+
+    executeControl  writeTime;
+    writeControl    writeTime;
+}
+
+// ------------------------------------------------------------------------- //
+// Local latent-heat release/absorption rate.
+//
+// latentHeatRateVol = rho * L * solidificationRate
+//
+// Units: W/m3
+// Sign convention:
+//   positive -> latent-heat release during solidification
+//   negative -> latent-heat absorption during remelting
+// ------------------------------------------------------------------------- //
+
+latentHeatField
+{
+    type            uniform;
+    libs            ("libfieldFunctionObjects.so");
+    region          metal;
+
+    fieldType       volScalarField;
+    field           latentHeat;
+    dimensions      [0 2 -2 0 0 0 0];
+    value           2.286e5;
+
+    executeControl  writeTime;
+    writeControl    writeTime;
+}
+
+latentHeatRateDensity
+{
+    type            multiply;
+    libs            ("libfieldFunctionObjects.so");
+    region          metal;
+
+    fields
+    (
+        rho
+        solidificationRate
+        latentHeat
+    );
+    result          latentHeatRateVol;
+
+    executeControl  writeTime;
+    writeControl    writeTime;
+}
+
+// ------------------------------------------------------------------------- //
+// Cell-wise Courant number.
+// For compressible/mass-flux phi, OpenFOAM v14 divides by rho internally.
+// ------------------------------------------------------------------------- //
+
+cellCourantNumber
+{
+    type            CourantNo;
+    libs            ("libfieldFunctionObjects.so");
+    region          metal;
+
+    phi             phi;
+    rho             rho;
+    result          CoCell;
+
+    executeControl  writeTime;
+    writeControl    writeTime;
+}
+
+// ------------------------------------------------------------------------- //
+// Integrated / summary solidification diagnostics
+// ------------------------------------------------------------------------- //
+
+metalLatentHeatPower
+{
+    type            volFieldValue;
+    libs            ("libfieldFunctionObjects.so");
+    region          metal;
+
+    log             true;
+    executeControl  writeTime;
+    writeControl    writeTime;
+
+    writeFields     false;
+    cellZone        all;
+    operation       volIntegrate;
+
+    fields
+    (
+        latentHeatRateVol
+    );
+}
+
+metalMeanCoolingRate
+{
+    type            volFieldValue;
+    libs            ("libfieldFunctionObjects.so");
+    region          metal;
+
+    log             true;
+    executeControl  writeTime;
+    writeControl    writeTime;
+
+    writeFields     false;
+    cellZone        all;
+    operation       volAverage;
+
+    fields
+    (
+        coolingRate
+    );
+}
+
+metalMeanSolidificationRate
+{
+    type            volFieldValue;
+    libs            ("libfieldFunctionObjects.so");
+    region          metal;
+
+    log             true;
+    executeControl  writeTime;
+    writeControl    writeTime;
+
+    writeFields     false;
+    cellZone        all;
+    operation       volAverage;
+
+    fields
+    (
+        solidificationRate
+    );
+}
+
+metalMaxCourant
+{
+    type            volFieldValue;
+    libs            ("libfieldFunctionObjects.so");
+    region          metal;
+
+    log             true;
+    executeControl  writeTime;
+    writeControl    writeTime;
+
+    writeFields     false;
+    writeLocation   true;
+    cellZone        all;
+    operation       max;
+
+    fields
+    (
+        CoCell
+    );
+}
+
+metalMaxThermalGradient
+{
+    type            volFieldValue;
+    libs            ("libfieldFunctionObjects.so");
+    region          metal;
+
+    log             true;
+    executeControl  writeTime;
+    writeControl    writeTime;
+
+    writeFields     false;
+    writeLocation   true;
+    cellZone        all;
+    operation       max;
+
+    fields
+    (
+        magGradT
+    );
+}
+
+metalMaxDensityGradient
+{
+    type            volFieldValue;
+    libs            ("libfieldFunctionObjects.so");
+    region          metal;
+
+    log             true;
+    executeControl  writeTime;
+    writeControl    writeTime;
+
+    writeFields     false;
+    writeLocation   true;
+    cellZone        all;
+    operation       max;
+
+    fields
+    (
+        magGradRho
+    );
+}
+
+
+
+// ------------------------------------------------------------------------- //
+// solidificationMeltingSource momentum diagnostics
+//
+// Reconstructs the exact Darcy coefficient used by OpenFOAM:
+//   S = -Cu*(1-alphaL)^2/(alphaL^3 + q)
+//
+// It also reconstructs the model's buoyancy temperature departure and writes
+// acceleration-scale fields for Darcy damping, Boussinesq buoyancy and p_rgh.
+// Values Cu, q, beta, rhoRef, Tsol, Tliq and alpha1e are read directly from
+// constant/metal/fvModels, so B- and C-family cases remain self-consistent.
+//
+// Diagnostics only: governing equations are NOT modified.
+// ------------------------------------------------------------------------- //
+
+solidificationMeltingMomentumDiagnostics
+{
+    type            coded;
+    libs            ("libutilityFunctionObjects.so");
+    region          metal;
+
+    executeControl  writeTime;
+    executeInterval 1;
+    writeControl    writeTime;
+    writeInterval   1;
+
+    codeInclude
+    #{
+        #include "fvMesh.H"
+        #include "volFields.H"
+        #include "uniformDimensionedFields.H"
+        #include "IOdictionary.H"
+        #include "zeroGradientFvPatchFields.H"
+        #include "fvcGrad.H"
+    #};
+
+    codeWrite
+    #{
+        const fvMesh& m = mesh();
+
+        const volScalarField& alphaL =
+            m.lookupObject<volScalarField>("phaseChangeSource:alpha1");
+        const volVectorField& U =
+            m.lookupObject<volVectorField>("U");
+        const volScalarField& T =
+            m.lookupObject<volScalarField>("T");
+        const volScalarField& rho =
+            m.lookupObject<volScalarField>("rho");
+        const volScalarField& pRgh =
+            m.lookupObject<volScalarField>("p_rgh");
+        const uniformDimensionedVectorField& g =
+            m.lookupObject<uniformDimensionedVectorField>("g");
+
+        IOdictionary fvModelsDict
+        (
+            IOobject
+            (
+                "fvModels",
+                m.time().constant(),
+                m,
+                IOobject::MUST_READ,
+                IOobject::NO_WRITE
+            )
+        );
+
+        const dictionary& pc = fvModelsDict.subDict("phaseChangeSource");
+
+        const scalar Cu = pc.lookupOrDefault<scalar>("Cu", 1e5);
+        const scalar q = pc.lookupOrDefault<scalar>("q", 1e-3);
+        const scalar beta = pc.lookup<scalar>("beta");
+        const scalar rhoRef = pc.lookup<scalar>("rhoRef");
+        const scalar Tsol = pc.lookup<scalar>("Tsol");
+        const scalar Tliq = pc.lookupOrDefault<scalar>("Tliq", Tsol);
+        const scalar alpha1e = pc.lookupOrDefault<scalar>("alpha1e", 0.0);
+
+        const dimensionedScalar CuD("Cu", dimless/dimTime, Cu);
+        const dimensionedScalar qD("q", dimless, q);
+        const dimensionedScalar betaD
+        (
+            "beta",
+            dimless/dimTemperature,
+            beta
+        );
+        const dimensionedScalar rhoRefD("rhoRef", dimDensity, rhoRef);
+        const dimensionedScalar accelFloor
+        (
+            "accelFloor",
+            dimLength/sqr(dimTime),
+            SMALL
+        );
+
+        volScalarField solidFraction
+        (
+            IOobject
+            (
+                "phaseChangeSolidFraction",
+                m.time().timeName(m.time().value()),
+                m,
+                IOobject::NO_READ,
+                IOobject::NO_WRITE
+            ),
+            scalar(1) - alphaL
+        );
+
+        // Positive damping coefficient D [1/s].
+        // OpenFOAM inserts S=-D into the momentum matrix diagonal.
+        volScalarField darcyCoeff
+        (
+            IOobject
+            (
+                "phaseChangeDarcyCoeff",
+                m.time().timeName(m.time().value()),
+                m,
+                IOobject::NO_READ,
+                IOobject::NO_WRITE
+            ),
+            CuD*sqr(scalar(1) - alphaL)/(pow3(alphaL) + qD)
+        );
+
+        volScalarField darcySp
+        (
+            IOobject
+            (
+                "phaseChangeDarcySp",
+                m.time().timeName(m.time().value()),
+                m,
+                IOobject::NO_READ,
+                IOobject::NO_WRITE
+            ),
+            -darcyCoeff
+        );
+
+        // Acceleration-scale representation of the implicit Darcy resistance.
+        volVectorField darcyAccel
+        (
+            IOobject
+            (
+                "phaseChangeDarcyAcceleration",
+                m.time().timeName(m.time().value()),
+                m,
+                IOobject::NO_READ,
+                IOobject::NO_WRITE
+            ),
+            -darcyCoeff*U
+        );
+
+        // Reconstruct deltaT exactly as solidificationMeltingSource does.
+        volScalarField modelDeltaT
+        (
+            IOobject
+            (
+                "phaseChangeModelDeltaT",
+                m.time().timeName(m.time().value()),
+                m,
+                IOobject::NO_READ,
+                IOobject::NO_WRITE
+            ),
+            m,
+            dimensionedScalar("zero", dimTemperature, 0),
+            zeroGradientFvPatchScalarField::typeName
+        );
+
+        forAll(modelDeltaT, celli)
+        {
+            const scalar a = alphaL[celli];
+
+            const scalar Tphase =
+                max
+                (
+                    Tsol,
+                    Tsol
+                  + (Tliq - Tsol)*(a - alpha1e)/(1.0 - alpha1e)
+                );
+
+            modelDeltaT[celli] = T[celli] - Tphase;
+        }
+        modelDeltaT.correctBoundaryConditions();
+
+        const dimensionedVector gD("g", g.dimensions(), g.value());
+
+        // Physical acceleration scale g*beta*deltaT [m/s2].
+        volVectorField buoyancyAccel
+        (
+            IOobject
+            (
+                "phaseChangeBuoyancyAcceleration",
+                m.time().timeName(m.time().value()),
+                m,
+                IOobject::NO_READ,
+                IOobject::NO_WRITE
+            ),
+            gD*betaD*modelDeltaT
+        );
+
+        // Exact explicit source vector Sb used by solidificationMeltingSource.
+        volVectorField buoyancySu
+        (
+            IOobject
+            (
+                "phaseChangeBuoyancySu",
+                m.time().timeName(m.time().value()),
+                m,
+                IOobject::NO_READ,
+                IOobject::NO_WRITE
+            ),
+            rhoRefD*buoyancyAccel
+        );
+
+        // Pressure-gradient acceleration from the solved p_rgh field.
+        volVectorField pressureAccel
+        (
+            IOobject
+            (
+                "pRghAcceleration",
+                m.time().timeName(m.time().value()),
+                m,
+                IOobject::NO_READ,
+                IOobject::NO_WRITE
+            ),
+            -fvc::grad(pRgh)/rho
+        );
+
+        volScalarField magDarcyAccel
+        (
+            IOobject
+            (
+                "magPhaseChangeDarcyAcceleration",
+                m.time().timeName(m.time().value()),
+                m,
+                IOobject::NO_READ,
+                IOobject::NO_WRITE
+            ),
+            mag(darcyAccel)
+        );
+
+        volScalarField magBuoyancyAccel
+        (
+            IOobject
+            (
+                "magPhaseChangeBuoyancyAcceleration",
+                m.time().timeName(m.time().value()),
+                m,
+                IOobject::NO_READ,
+                IOobject::NO_WRITE
+            ),
+            mag(buoyancyAccel)
+        );
+
+        volScalarField magPressureAccel
+        (
+            IOobject
+            (
+                "magPRghAcceleration",
+                m.time().timeName(m.time().value()),
+                m,
+                IOobject::NO_READ,
+                IOobject::NO_WRITE
+            ),
+            mag(pressureAccel)
+        );
+
+        volScalarField dragToBuoyancy
+        (
+            IOobject
+            (
+                "phaseChangeDragToBuoyancy",
+                m.time().timeName(m.time().value()),
+                m,
+                IOobject::NO_READ,
+                IOobject::NO_WRITE
+            ),
+            magDarcyAccel/(magBuoyancyAccel + accelFloor)
+        );
+
+        volScalarField dragToPressure
+        (
+            IOobject
+            (
+                "phaseChangeDragToPressure",
+                m.time().timeName(m.time().value()),
+                m,
+                IOobject::NO_READ,
+                IOobject::NO_WRITE
+            ),
+            magDarcyAccel/(magPressureAccel + accelFloor)
+        );
+
+        solidFraction.write();
+        darcyCoeff.write();
+        darcySp.write();
+        darcyAccel.write();
+        modelDeltaT.write();
+        buoyancyAccel.write();
+        buoyancySu.write();
+        pressureAccel.write();
+        magDarcyAccel.write();
+        magBuoyancyAccel.write();
+        magPressureAccel.write();
+        dragToBuoyancy.write();
+        dragToPressure.write();
+
+        Info<< "solidificationMelting diagnostics: "
+            << "max(DarcyCoeff)=" << gMax(darcyCoeff)
+            << "  max(|DarcyAccel|)=" << gMax(magDarcyAccel)
+            << "  max(|BuoyancyAccel|)=" << gMax(magBuoyancyAccel)
+            << "  max(|pRghAccel|)=" << gMax(magPressureAccel)
+            << nl;
+    #};
+}
