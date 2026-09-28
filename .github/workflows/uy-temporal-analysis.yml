@@ -7,6 +7,12 @@ on:
       - 'analysis_tools/uy_temporal_analysis.py'
       - '.github/workflows/uy-temporal-analysis.yml'
   workflow_dispatch:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'analysis_tools/uy_temporal_analysis.py'
+      - 'analysis_tools/uy_temporal_trigger.txt'
+      - '.github/workflows/uy-temporal-analysis.yml'
 
 permissions:
   contents: write
