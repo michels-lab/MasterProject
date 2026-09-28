@@ -3360,3 +3360,129 @@ La temperatura es comparativamente robusta (RMSE típicamente ~0.3–2.4 K en lo
 La familia B muestra la sensibilidad más fuerte del flujo al adaptive timestep. La familia C mantiene mejor el perfil lateral, pero también presenta ensanchamiento vertical de la mushy zone.
 
 Decisión provisional: mantener V5 fixed como referencia para validación física. V6 debe tratarse como una opción de aceleración que requiere un criterio de tolerancia explícito antes de adoptarse como configuración final.
+
+
+## Análisis específico de perfiles de velocidad vertical Uy — B3–B7 / C3–C7
+
+Se realizó una comparación explícita de la componente vertical `Uy` en los tres perfiles espaciales disponibles:
+- horizontal `y = 20 mm`;
+- horizontal `y = 30 mm`;
+- vertical central `x = 20 mm`.
+
+Los casos fixed se compararon a `t = 10 s`. Los casos adaptive V6 se compararon contra V5 interpolado al mismo tiempo físico disponible de V6.
+
+### Sensibilidad entre versiones fixed — familia B
+
+Referencia: B3.
+
+A `t = 10 s`:
+
+- B4 vs B3:
+  - y=20 mm: NRMSE/RMS(Uy) = 4.44%, corr = 0.9990;
+  - y=30 mm: NRMSE/RMS(Uy) = 9.45%, corr = 0.9955;
+  - vertical x=20 mm: NRMSE/RMS(Uy) = 0.42%, corr = 0.999996.
+
+- B5 vs B3:
+  - y=20 mm: 4.00%, corr = 0.9992;
+  - y=30 mm: 8.55%, corr = 0.9964;
+  - vertical: 0.45%, corr = 0.999998.
+
+- B7 vs B3:
+  - y=20 mm: 5.47%, corr = 0.9985;
+  - y=30 mm: 11.64%, corr = 0.9933;
+  - vertical: 0.45%, corr = 0.999998.
+
+Interpretación: en B, cambiar correctores produce diferencias modestas en Uy, especialmente cerca de la parte superior (`y=30 mm`), pero no cambia cualitativamente el patrón. El incremento a 4 outer correctors no produce convergencia monotónica hacia un perfil distinto; B7 presenta incluso la mayor diferencia lateral respecto a B3.
+
+### Sensibilidad entre versiones fixed — familia C
+
+Referencia: C3.
+
+A `t = 10 s`, C4/C5/C7 son prácticamente indistinguibles de C3:
+
+- y=20 mm: NRMSE/RMS < 0.007%;
+- y=30 mm: NRMSE/RMS < 0.010%;
+- vertical: NRMSE/RMS < 0.004%.
+
+Correlaciones ≈ 1 en todos los perfiles.
+
+Interpretación: la componente Uy de la familia C es esencialmente insensible a 2→3→4 outer correctors y al segundo energy corrector en esta serie.
+
+### Efecto adaptive — B6 vs B5
+
+Comparación a `t = 9.946515 s`, con B5 interpolado al mismo tiempo físico.
+
+- y=20 mm:
+  - NRMSE/RMS(Uy) = 50.18%;
+  - corr = 0.865;
+  - 4/80 puntos cambian de signo;
+  - B5: Uy_min = -0.01762 m/s, Uy_max = +0.00512 m/s;
+  - B6: Uy_min = -0.01531 m/s, Uy_max = +0.00645 m/s.
+
+- y=30 mm:
+  - NRMSE/RMS(Uy) = 80.60%;
+  - corr = 0.716;
+  - 2/80 puntos cambian de signo;
+  - B5: Uy_min = -0.01933 m/s, Uy_max = +0.01354 m/s;
+  - B6: Uy_min = -0.01027 m/s, Uy_max = +0.00306 m/s.
+
+- vertical x=20 mm:
+  - NRMSE/RMS(Uy) = 99.26%;
+  - corr = 0.121;
+  - 20/80 puntos cambian de signo;
+  - B5: Uy_min = -0.01953 m/s, Uy_max = +0.00400 m/s;
+  - B6: Uy_min = -0.00150 m/s, Uy_max = +0.00237 m/s.
+
+Interpretación: B6 no conserva el campo vertical de velocidad de B5. La componente descendente sobre la línea vertical central se reduce aproximadamente en un orden de magnitud y la estructura espacial pierde correlación. El adaptive timestep altera fuertemente la convección vertical en la formulación B.
+
+### Efecto adaptive — C6 vs C5
+
+Comparación a `t = 9.182456 s`, con C5 interpolado al mismo tiempo físico.
+
+- y=20 mm:
+  - NRMSE/RMS(Uy) = 3.33%;
+  - corr = 0.999964;
+  - sin cambios de signo.
+
+- y=30 mm:
+  - NRMSE/RMS(Uy) = 1.69%;
+  - corr = 0.999867;
+  - sin cambios de signo.
+
+- vertical x=20 mm:
+  - NRMSE/RMS(Uy) = 3.42%;
+  - corr = 0.999787;
+  - sin cambios de signo;
+  - C5 Uy_max ≈ 0.01282 m/s;
+  - C6 Uy_max ≈ 0.01313 m/s.
+
+Interpretación: C6 conserva razonablemente bien la estructura de Uy de C5 incluso con adaptive timestep.
+
+### Diferencia de formulación B vs C
+
+Comparación B3 vs C3 a `t = 10 s`:
+
+- y=20 mm:
+  - corr = 0.284;
+  - 28/80 puntos cambian de signo.
+
+- y=30 mm:
+  - corr = -0.715;
+  - 57/80 puntos cambian de signo.
+
+- vertical x=20 mm:
+  - corr = -0.689;
+  - 46/80 puntos cambian de signo;
+  - B3: Uy_min = -0.01945 m/s, Uy_max = +0.00401 m/s;
+  - C3: Uy_min = -0.000239 m/s, Uy_max = +0.01209 m/s.
+
+Interpretación: B y C no difieren solo en magnitud; muestran estructuras de circulación vertical cualitativamente distintas. En la línea vertical central, B está dominado por una componente descendente fuerte, mientras C está dominado por una componente ascendente.
+
+### Conclusión sobre Uy
+
+1. V4/V5/V7 fixed no cambian cualitativamente Uy respecto a V3.
+2. La familia C es extraordinariamente estable frente a cambios de correctores.
+3. La familia B muestra sensibilidad lateral moderada a correctores, especialmente cerca de y=30 mm.
+4. B6 adaptive altera fuertemente Uy y no puede considerarse equivalente a B5 para estudios donde la convección sea relevante.
+5. C6 adaptive conserva mucho mejor Uy y sí parece numéricamente cercano a C5 en la estructura de flujo vertical.
+6. La diferencia B vs C es mayor que la diferencia entre versiones fixed dentro de una misma familia y corresponde a un cambio cualitativo del patrón de circulación.
