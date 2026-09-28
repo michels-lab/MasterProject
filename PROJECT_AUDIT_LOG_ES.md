@@ -3258,3 +3258,105 @@ Valores a `t=10 s`:
 El valor de buoyancy igual a cero es consistente con la configuración B (`beta=0`). Los máximos globales no deben compararse entre sí como prueba directa de dominancia local.
 
 **Estado:** retrospective momentum post-processing validation PASSED for B3.
+
+
+## V5 fixed vs V6 adaptive — análisis espacial alineado por tiempo físico
+
+Se compararon V5 y V6 usando los perfiles reales de `postProcessing`, evaluando V5 mediante interpolación temporal lineal en los tiempos físicos nativos de V6. No se compararon índices de timestep ni números de directorio.
+
+Cortes principales:
+- vertical: `x = 20 mm`, dirección Y;
+- horizontal: `y = 20 mm`, dirección X.
+
+La mushy zone se identificó con `0.05 < alphaL < 0.95`. Las métricas de campo se calcularon sobre la unión de puntos clasificados como mushy en cualquiera de los dos casos comparados.
+
+### Familia B: B5 vs B6
+
+Vertical, t = 2.035181 s:
+- posición alphaL=0.5: B6 = 0.457 mm; B5 interpolado = 0.489 mm;
+- posición alphaL=0.95: B6 = 6.728 mm; B5 = 6.601 mm;
+- RMSE mushy: alphaL = 0.00874; T = 0.986 K; |U| = 7.45e-5 m/s;
+- RMSE normalizado respecto al valor medio absoluto de B5: |U| = 3.28%, |DarcyAccel| = 19.0%, |pRghAccel| = 2.61%.
+
+Vertical, t = 5.034212 s:
+- alphaL=0.5: B6 = 0.984 mm; B5 = 1.031 mm;
+- alphaL=0.95: B6 = 11.723 mm; B5 = 11.899 mm;
+- RMSE mushy: alphaL = 0.01277; T = 1.63 K;
+- |U| = 0.00201 m/s, equivalente a ~83.9% del valor medio absoluto de B5 en la zona evaluada;
+- |DarcyAccel| NRMSE = 45.3%;
+- |pRghAccel| NRMSE = 26.4%.
+
+Vertical, t = 9.946515 s:
+- alphaL=0.05: B6 = 0.940 mm; B5 = 1.007 mm;
+- alphaL=0.5: B6 = 1.828 mm; B5 = 1.922 mm;
+- alphaL=0.95: B6 = 19.433 mm; B5 = 17.923 mm;
+- ancho 0.05→0.95: B6 = 18.493 mm; B5 = 16.916 mm, incremento ≈ 1.577 mm (+9.3%);
+- RMSE mushy: alphaL = 0.01427; T = 1.77 K;
+- |U| NRMSE ≈ 94.5%;
+- |DarcyAccel| NRMSE ≈ 80.2%;
+- |pRghAccel| NRMSE ≈ 50.4%.
+
+Horizontal y=20 mm, t = 9.946515 s:
+- alphaL=0.95 crossings B6: x = 13.236 y 26.764 mm;
+- alphaL=0.95 crossings B5: x = 10.927 y 29.143 mm;
+- ancho del núcleo con alphaL>0.95: B6 ≈ 13.529 mm; B5 ≈ 18.217 mm;
+- el núcleo casi líquido es ≈4.69 mm más angosto en B6;
+- alphaL NRMSE = 0.78%, T RMSE = 1.79 K;
+- |U| NRMSE ≈ 58.4%, |DarcyAccel| ≈ 75.2%, |pRghAccel| ≈ 17.3%.
+
+Interpretación B:
+el adaptive timestep no desplaza simplemente un frente rígido. Produce una transición de fase espacialmente más ancha y altera fuertemente el campo de flujo/momentum en la mushy zone, aun cuando T y alphaL muestran diferencias globales pequeñas.
+
+### Familia C: C5 vs C6
+
+Vertical, t = 1.918353 s:
+- C6 todavía no presenta cruce alphaL=0.5 sobre el perfil, mientras C5 lo presenta a y≈0.349 mm;
+- alphaL=0.95: C6 = 3.895 mm; C5 = 3.630 mm;
+- RMSE mushy: alphaL = 0.0292; T = 2.44 K;
+- |U| NRMSE ≈ 8.14%;
+- |DarcyAccel| ≈ 86.3%;
+- |pRghAccel| ≈ 20.5%.
+
+Vertical, t = 5.092511 s:
+- alphaL=0.5: C6 = 0.921 mm; C5 = 0.989 mm;
+- alphaL=0.95: C6 = 24.282 mm; C5 = 24.350 mm;
+- RMSE mushy: alphaL = 0.0114; T = 1.42 K;
+- |U| NRMSE ≈ 4.13%;
+- |DarcyAccel| ≈ 14.9%;
+- |pRghAccel| ≈ 8.49%.
+
+Vertical, t = 9.182456 s:
+- alphaL=0.05: C6 = 0.465 mm; C5 = 0.619 mm;
+- alphaL=0.5: C6 = 1.370 mm; C5 = 1.489 mm;
+- alphaL=0.95: C6 = 20.088 mm; C5 = 18.299 mm;
+- ancho 0.05→0.95: C6 ≈ 19.623 mm; C5 ≈ 17.680 mm, incremento ≈ 1.943 mm (+11.0%);
+- RMSE mushy: alphaL = 0.0184; T = 1.07 K;
+- |U| NRMSE ≈ 8.26%;
+- |DarcyAccel| ≈ 23.1%;
+- |pRghAccel| ≈ 26.4%.
+
+Horizontal y=20 mm, t = 9.182456 s:
+- alphaL=0.95 crossings C6: x = 4.355 y 35.645 mm;
+- C5: x = 4.324 y 35.676 mm;
+- el ancho del núcleo alphaL>0.95 cambia solo ≈0.063 mm;
+- alphaL NRMSE ≈ 0.027%;
+- T RMSE ≈ 0.290 K;
+- |U| NRMSE ≈ 4.34%;
+- |DarcyAccel| ≈ 5.78%;
+- |pRghAccel| ≈ 9.41%.
+
+Interpretación C:
+la sensibilidad adaptive es anisotrópica. El corte horizontal central permanece casi idéntico, pero el perfil vertical muestra ensanchamiento de la mushy zone. El efecto sobre velocidad y momentum es menor que en B al final, aunque no despreciable.
+
+### Conclusión de V5 vs V6
+
+V6 no puede considerarse todavía físicamente equivalente a V5 solo por reproducir promedios globales cercanos. La comparación a tiempo físico igual muestra que el adaptive timestep modifica principalmente:
+1. el espesor/distribución espacial de la mushy zone;
+2. la velocidad local;
+3. las aceleraciones Darcy y asociadas a p_rgh.
+
+La temperatura es comparativamente robusta (RMSE típicamente ~0.3–2.4 K en los cortes estudiados), mientras que las variables de momentum son bastante más sensibles.
+
+La familia B muestra la sensibilidad más fuerte del flujo al adaptive timestep. La familia C mantiene mejor el perfil lateral, pero también presenta ensanchamiento vertical de la mushy zone.
+
+Decisión provisional: mantener V5 fixed como referencia para validación física. V6 debe tratarse como una opción de aceleración que requiere un criterio de tolerancia explícito antes de adoptarse como configuración final.
