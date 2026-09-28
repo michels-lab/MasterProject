@@ -1,0 +1,23 @@
+name: V8 comprehensive analysis
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'analysis_tools/v8_comprehensive_analysis.py'
+      - 'analysis_tools/v8_comprehensive_trigger.txt'
+      - '.github/workflows/v8-comprehensive-analysis.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run V8 analysis
+        run: python3 analysis_tools/v8_comprehensive_analysis.py
