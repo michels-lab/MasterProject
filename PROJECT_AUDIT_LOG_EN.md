@@ -3453,3 +3453,101 @@ Thus B and C exhibit qualitatively different vertical circulation structures rat
 4. B6 adaptive strongly alters Uy and is not equivalent to B5 when convection matters.
 5. C6 adaptive preserves Uy much more closely.
 6. The B-vs-C formulation difference is substantially larger than the fixed-version differences within either family.
+
+
+## Exhaustive temporal Uy sweep — all controlled runs
+
+The script `analysis_tools/uy_temporal_analysis.py` was executed over every stored sample of:
+- horizontal `y=20 mm`;
+- horizontal `y=30 mm`;
+- vertical `x=20 mm`.
+
+Fixed cases were compared at exact common physical times (101 samples from 0 to 10 s). Adaptive cases were evaluated at every native stored adaptive time, with the fixed reference linearly interpolated to the same physical time.
+
+Complete outputs:
+- `analysis_results/uy_temporal/uy_temporal_metrics.csv`
+- `analysis_results/uy_temporal/uy_temporal_summary.md`
+
+### Fixed B family
+
+B4/B5/B7 preserve the qualitative Uy structure of B3 throughout the run.
+
+Median / peak NRMSE relative to RMS(Uy):
+- B4 vs B3:
+  - y20: 4.21% / 12.95%;
+  - y30: 4.43% / 9.47%;
+  - vertical: 0.80% / 3.08%.
+- B5 vs B3:
+  - y20: 3.57% / 11.53%;
+  - y30: 3.91% / 8.57%;
+  - vertical: 0.82% / 4.00%.
+- B7 vs B3:
+  - y20: 5.20% / 16.02%;
+  - y30: 5.44% / 11.65%;
+  - vertical: 0.79% / 3.96%.
+
+Adding correctors does not produce monotonic convergence toward a distinct Uy profile; B7 can differ more from B3 than B5 does.
+
+### Fixed C family
+
+C4/C5/C7 are effectively indistinguishable from C3 over the full transient:
+- NRMSE/RMS medians and peaks below roughly 0.03%;
+- correlations ~1;
+- no meaningful sign changes.
+
+### B6 adaptive vs B5 fixed
+
+Divergence starts early and then accumulates/reorganizes.
+
+y20:
+- first >=5% at 0.223624 s;
+- >=10% at 1.76685 s;
+- >=25% at 2.31438 s;
+- >=50% at 2.60859 s;
+- median NRMSE/RMS = 33.10%;
+- peak = 80.09% at 7.500923 s.
+
+y30:
+- >=10% already at 0.223624 s;
+- >=25% and >=50% at 1.254542 s;
+- median = 59.12%;
+- peak = 84.81% at 1.76685 s.
+
+vertical:
+- >=25% from 0.223624 s;
+- >=50% at 0.763943 s;
+- median = 75.23%;
+- peak = 99.26% at 9.946515 s;
+- correlation falls to 0.1211 at the last stored time;
+- maximum sign disagreement = 53/80 points at 9.422639 s.
+
+B6 therefore does not preserve the B5 vertical convection structure.
+
+### C6 adaptive vs C5 fixed
+
+C6 shows an early relative discrepancy but then remains close to C5.
+
+At 0.953122 s:
+- y20: NRMSE/RMS = 13.81%, absolute RMSE = 8.13e-4 m/s;
+- y30: 13.70%, RMSE = 6.80e-4 m/s;
+- vertical: 22.26%, RMSE = 5.08e-4 m/s.
+
+Across the run:
+- medians = 3.03% (y20), 4.79% (y30), 3.42% (vertical);
+- at 9.182456 s: 3.33%, 1.69%, 3.42%;
+- final correlations >0.9997;
+- 25% and 50% thresholds are never reached.
+
+### B3 vs C3
+
+The formulation difference appears almost immediately:
+- all profiles exceed 25% NRMSE/RMS by 0.1 s;
+- peak NRMSE/RMS: 189.3% (y20), 145.7% (y30), 190.4% (vertical);
+- minimum correlations: -0.352, -0.731, -0.794.
+
+Overall:
+1. Additional correctors do not qualitatively change Uy in fixed cases.
+2. C is extremely stable to the tested numerical changes.
+3. B6 adaptive is not equivalent to B5 and changes vertical convection from early times.
+4. C6 adaptive preserves Uy reasonably well after the initial transient.
+5. The B-vs-C difference is structural and much larger than fixed-version sensitivity.
