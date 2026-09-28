@@ -3927,3 +3927,20 @@ Por ello, la entrada root `nNonOrthogonalCorrectors = 1` NO debe reportarse como
 ### Recomendación de mantenimiento
 
 No se modificaron casos históricos. En futuros casos conviene eliminar o comentar del `system/fvSolution` raíz las entradas `nCorrectors` y `nNonOrthogonalCorrectors` duplicadas para evitar ambigüedad, dejando en root solo los controles multi-región pertinentes y en `system/metal/fvSolution` los controles internos del solver regional.
+
+
+## B9 topFixedFlux — incompatibilidad de masa en dominio cerrado
+
+**[RUN-VERIFIED] [SOURCE-VERIFIED]**
+
+B9 arrancó correctamente con `fixedFluxPressure` y la referencia interna de presión, pero abortó cerca de t=0.016 s cuando T alcanzó 1782.04 K, por encima del límite de la tabla `rho(T)` de `icoTabulated` (1773.15 K). C9 sí completó.
+
+En OF14, `icoTabulated` usa `rho=rho(T)` y `psi=d(rho)/d(p)=0`. El solver `fluid` impone continuidad mediante `ddt(rho)+div(phi)=source(rho)`.
+
+En un dominio rígido, cerrado e impermeable, sin fuente de masa, la masa total debe permanecer constante. Sin embargo, al enfriarse el metal, la tabla de B exige un aumento de densidad. Como la presión no puede modificar rho (`psi=0`) y la tapa ya no permite flujo de masa, el modelo no dispone de un mecanismo para acomodar la contracción térmica.
+
+Esto explica el fuerte crecimiento temprano del error acumulado de continuidad y el posterior fallo por temperatura fuera de rango.
+
+Los casos B históricos con `metalTop: totalPressure` permitían intercambio de masa a través del top. El término advectivo de energía ~-970 J observado allí debe interpretarse como evidencia de ese intercambio, no como una superficie superior impermeable.
+
+Para la geometría actual de volumen fijo sin superficie libre móvil ni shrinkage, la formulación C (`rhoConst` + buoyancy mediante beta) es internamente consistente. La formulación B requeriría física adicional de cambio de volumen, superficie libre, alimentación o shrinkage. No se recomienda extender artificialmente la tabla de rho para forzar B9 a continuar.
