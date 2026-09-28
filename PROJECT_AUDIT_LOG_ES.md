@@ -3993,3 +3993,24 @@ Resultado principal:
 Conclusión: el antiguo `totalPressure` tenía impacto físico despreciable en C pero fuerte en B. Las diferencias históricas B-vs-C no son una comparación limpia de formulaciones de buoyancy. Para el modelo Quick-Cup de volumen fijo actual, C9 es la referencia más limpia para continuar validación física.
 
 Caveat: B9 necesitó una extensión lineal diagnóstica de rho(T) por encima de 1773.15 K; por ello B9-vs-B5 dejó de ser una prueba estrictamente de una sola modificación.
+
+
+## V9 — causalidad de inversiones de Uy
+
+**[ANALYSIS-VERIFIED]**
+
+Se correlacionaron todas las inversiones resueltas de Uy de B9 y C9 con alphaL, grad(rho), vorticidad, flowType, aceleración Darcy y aceleración de p_rgh.
+
+Corrección metodológica importante: B9 usa beta=0 en solidificationMeltingSource, por lo que su flotación no puede evaluarse con phaseChangeBuoyancyAcceleration. Para B9 se reconstruyó el término de densidad variable del solver como a_rho=-(gh/rho)grad(rho), con hRef=0 y gh=-9.81*y.
+
+Resultado:
+- B9 y30 conserva principalmente el par de inversiones simétricas clásico y predominantemente líquido. En 72% de todas sus inversiones resueltas, a_rho es la mayor de las tres escalas muestreadas (densidad, presión, Darcy); Darcy nunca es la mayor. Esto respalda un origen físico de convección por densidad variable.
+- B9 y20 desarrolla estructura secundaria transitoria. A 5 s aparecen cuatro inversiones resueltas aun en líquido; a 10 s las cuatro están en alphaL~0.94. Las inversiones externas a 10 s tienen fuerte vorticidad y gran Darcy; las internas muestran casi cancelación a_rho,y ~ -0.073 y a_p,y ~ +0.0735 m/s2, con magnitudes Darcy comparables. La estructura es simétrica y sistemática, no consistente con simple ruido aleatorio.
+- B9 vertical presenta inversiones de Uy, pero la vorticidad de la línea central es casi nula. No deben llamarse vórtices/celdas adicionales sin campos 2-D.
+- C9 mantiene una estructura más simple de dos celdas. Sus fronteras de celda tardías también están fuertemente condicionadas por Darcy conforme avanza la zona de cambio de fase.
+- Se corrigió la lectura previa de B9 y30: varias inversiones muy pequeñas detectadas sin umbral eran cruces cerca de Uy=0 y no deben contarse como celdas dinámicamente resueltas.
+
+Limitación: los resultados versionados contienen perfiles lineales, no los campos volumétricos completos finales; por ello no puede demostrarse geométricamente el cierre de cada celda mediante streamlines desde el repositorio actual.
+
+Resumen reproducible: analysis_results/v9_flow_causality/summary.md
+Analizador: analysis_tools/v9_flow_causality_analysis.py
