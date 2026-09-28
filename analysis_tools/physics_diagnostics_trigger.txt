@@ -1,2 +1,3 @@
 Trigger physics diagnostics analysis.
 Retry after workflow persistence fix.
+Retry with log-only summaries.
