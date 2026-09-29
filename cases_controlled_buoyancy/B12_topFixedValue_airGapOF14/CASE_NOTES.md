@@ -2,7 +2,7 @@
 
 > Este archivo documenta la intención y genealogía del caso. No modifica la simulación.
 
-**Estado:** CANÓNICO — V12 propuesta del doctor  
+**Estado:** CANÓNICO DIAGNÓSTICO — RUN-VERIFIED + ANALYSIS-VERIFIED; NO baseline impermeable
 **Familia:** B  
 **Caso padre / referencia:** `B11_topFixedFlux_airGapOF14`
 
@@ -56,3 +56,34 @@ Para cualquier rerun de este caso revisar como mínimo:
 ## Comparación correcta
 
 Comparar este caso contra su padre/referencia indicado arriba y contra el caso de la otra familia con el mismo número/objetivo. No atribuir diferencias B/C a la formulación de buoyancy si también cambió alguna condición numérica, térmica o de frontera.
+
+## Resultado de la corrida — 2026-09-29
+
+La simulación completó 10 s sin errores fatales.
+
+Resultados principales:
+- max `|sum(phi)|` en `metalTop`: **9.739e-5 kg/s**;
+- masa integrada por top: **-5.642e-4 kg**, magnitud equivalente a **0.519%** de la masa inicial B;
+- energía advectiva integrada por top: **-660.77 J**;
+- calor no advectivo integrado por top: **+369.28 J**;
+- energía total integrada por top: **-291.49 J**;
+- cruce central descendente de 1473 K: **9.230 s**;
+- T central final: **1471.29 K**;
+- alphaL central final: **0.993250**;
+- alphaL media final: **0.9626913**;
+- max Co: **0.1446901**;
+- mediana `R_p_outer`: **1.432e-3**;
+- timesteps con `R_p_outer>1`: **0%**;
+- continuidad acumulada final: **1.26875e-6**.
+
+### Interpretación
+
+`fixedValue p_rgh + slip` no produce una tapa impermeable en la familia B. El solver introduce masa y entalpía sensible a través de `metalTop`.
+
+El probe central presenta un rebound térmico de **+4.34 K** (1478.93 K @ 4.639 s → 1483.27 K @ 6.249 s), pero permanece por encima de Tliq y alphaL=1 durante el evento; por tanto no representa remelting.
+
+La fuerte contracción del pressure coupling demuestra que esta fuga no es una divergencia numérica: es una consecuencia de la condición de frontera resuelta.
+
+### Decisión
+
+Conservar B12 como prueba diagnóstica de la propuesta `fixedValue`. **No adoptarlo como baseline impermeable.** Para el modelo actual de tapa fija, V11 permanece como referencia física.
