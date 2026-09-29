@@ -2,7 +2,7 @@
 
 > Este archivo documenta la intención y genealogía del caso. No modifica la simulación.
 
-**Estado:** CANÓNICO — BASELINE físico actual para `metalTop` fijo e impermeable
+**Estado:** CANÓNICO — BASELINE físico actual para `metalTop` fijo e impermeable — RUN-VERIFIED + ANALYSIS-VERIFIED
 **Familia:** B  
 **Caso padre / referencia:** `B9_topFixedFlux / B9_airGapOF14`
 
@@ -61,16 +61,32 @@ Para cualquier rerun de este caso revisar como mínimo:
 
 Comparar este caso contra su padre/referencia indicado arriba y contra el caso de la otra familia con el mismo número/objetivo. No atribuir diferencias B/C a la formulación de buoyancy si también cambió alguna condición numérica, térmica o de frontera.
 
-## Estado después de V12/V13 — baseline reafirmada
+## Estado después del cierre V10–V13 — baseline verificada directamente
 
-Las pruebas canónicas V12/V13 completadas y auditadas el 2026-09-29 no sustituyen este caso como baseline físico del modelo actual.
+La corrida V11 con air gap OF14 ya está versionada y auditada directamente.
 
-Razón:
-- este caso conserva `U=slip` + `p_rgh=fixedFluxPressure`, la pareja coherente para una tapa geométricamente fija e impermeable bajo gravedad;
-- B12/B13, que fijan valor de presión en el top, permitieron entrada de masa y entalpía sensible significativa;
-- la evidencia histórica de V9, antecesor directo de esta condición de frontera, mostró `sum(phi)` y energía advectiva del top compatibles con cero.
+Resultados B11:
+- max `|sum(phi)|` en `metalTop` = **1.694066e-21 kg/s**;
+- `∫phi dt = -1.27055e-22 kg`;
+- energía advectiva integrada por el top = **-1.22e-16 J**;
+- T central final = **1470.07 K**;
+- alphaL central final = **0.988421**;
+- alphaL media final = **0.9606902**;
+- max Co = **0.0673434**;
+- mediana `R_p_outer = 0.001981`;
+- `R_p_outer>1` = **0%**;
+- cumulative continuity final = **-0.0310209**.
 
-**Importante:** la elección de V11 como baseline físico queda reafirmada por el contraste V12/V13, pero la corrida V11 con air gap debe conservar su propia auditoría RUN/ANALYSIS cuando sus resultados estén disponibles/versionados. No atribuir a V11 métricas numéricas que pertenecen a V9.
+B10, con la tapa previa, tuvo `Eadv,top=-629.63 J`. Al cerrar la tapa en B11 el transporte advectivo desaparece, mientras el heat transfer metal→molde permanece prácticamente igual (**3686.64 J vs 3687.23 J**). La diferencia de T central B10→B11 tiene RMSE **8.53 K** y los perfiles de `Uy` se reorganizan fuertemente.
+
+La cumulative continuity de B11 no representa pérdida de masa por el top: el flujo directo es ~0. Es la tensión conocida entre `rho(T)`, volumen geométrico fijo e inexistencia de shrinkage/free-surface/feeding.
 
 ### Decisión
-Mantener `fixedFluxPressure + slip` como referencia de tapa impermeable del modelo actual. V12/V13 se conservan como experimentos diagnósticos de condiciones de presión.
+
+Mantener B11 como baseline impermeable de diagnóstico para familia B. No reabrir el top para “mejorar” continuidad. Si se quiere conservar contracción térmica física, el siguiente modelo debe representar cambio de volumen/alimentación/superficie libre.
+
+Resumen reproducible:
+- `analysis_results/v10_v13_closure/summary.md`
+- `analysis_results/v10_v13_closure/case_metrics.csv`
+- `analysis_results/v10_v13_closure/pair_metrics.csv`
+- `analysis_results/v10_v13_closure/profile_metrics.csv`
