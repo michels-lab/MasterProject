@@ -2,7 +2,7 @@
 
 > Este archivo documenta la intención y genealogía del caso. No modifica la simulación.
 
-**Estado:** numerado — V9 + air gap OF14  
+**Estado:** CANÓNICO — BASELINE físico actual para `metalTop` fijo e impermeable
 **Familia:** B  
 **Caso padre / referencia:** `B9_topFixedFlux / B9_airGapOF14`
 
@@ -60,3 +60,17 @@ Para cualquier rerun de este caso revisar como mínimo:
 ## Comparación correcta
 
 Comparar este caso contra su padre/referencia indicado arriba y contra el caso de la otra familia con el mismo número/objetivo. No atribuir diferencias B/C a la formulación de buoyancy si también cambió alguna condición numérica, térmica o de frontera.
+
+## Estado después de V12/V13 — baseline reafirmada
+
+Las pruebas canónicas V12/V13 completadas y auditadas el 2026-09-29 no sustituyen este caso como baseline físico del modelo actual.
+
+Razón:
+- este caso conserva `U=slip` + `p_rgh=fixedFluxPressure`, la pareja coherente para una tapa geométricamente fija e impermeable bajo gravedad;
+- B12/B13, que fijan valor de presión en el top, permitieron entrada de masa y entalpía sensible significativa;
+- la evidencia histórica de V9, antecesor directo de esta condición de frontera, mostró `sum(phi)` y energía advectiva del top compatibles con cero.
+
+**Importante:** la elección de V11 como baseline físico queda reafirmada por el contraste V12/V13, pero la corrida V11 con air gap debe conservar su propia auditoría RUN/ANALYSIS cuando sus resultados estén disponibles/versionados. No atribuir a V11 métricas numéricas que pertenecen a V9.
+
+### Decisión
+Mantener `fixedFluxPressure + slip` como referencia de tapa impermeable del modelo actual. V12/V13 se conservan como experimentos diagnósticos de condiciones de presión.
