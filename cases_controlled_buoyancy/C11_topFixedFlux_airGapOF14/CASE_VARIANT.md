@@ -25,8 +25,12 @@ All timestep, PIMPLE, mesh, phase-change, velocity, pressure, top thermal bounda
 
 ## Current methodological status
 
-V11 remains the physical baseline for the current fixed-geometry, impermeable-top interpretation.
+**RUN-VERIFIED + ANALYSIS-VERIFIED.**
 
-C12/C13 confirmed that constant-density pressure-value variants can have nearly zero net mass flux while still carrying non-zero local advective energy. They therefore do not replace the `fixedFluxPressure + slip` wall treatment as the impermeable baseline.
+Direct C11 evidence confirms strict closure of the stored top diagnostics:
+- `sum(phi)=0`;
+- integrated top advective energy = 0 J.
 
-Historical V9 evidence supports this pairing. Direct V11 run metrics must still come from an audited V11 run.
+Relative to C10, the physical solution changes only slightly (center T RMSE 0.164 K; final Uy NRMSE below 1.71% on the three canonical profiles). C11 also yields essentially zero cumulative continuity error.
+
+C11 is therefore the preferred fixed-volume physical baseline for the next G1 experimental validation stage. V12/V13 remain pressure-boundary diagnostics.
