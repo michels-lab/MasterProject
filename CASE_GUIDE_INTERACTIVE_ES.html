@@ -343,11 +343,28 @@ emissivity 0.3;</code></pre>
 </div></section>
 
 
-<section id="mazapan"><div class="sectionHead"><div><h2>13 · MAZAPÁN — sincronizar casos con Git</h2><p>Convención del proyecto para subir carpetas completas de casos ya corridos y dejar que <code>.gitignore</code> filtre los outputs que no deben versionarse.</p></div><label class="doneBox"><input data-progress type="checkbox"> MAZAPÁN entendido</label></div>
-<div class="grid">
-<div class="card twoThirds searchable">
-<h3>Qué significa MAZAPÁN</h3>
-<p>Cuando digamos <strong>MAZAPÁN</strong>, no enumeramos manualmente <code>logs/</code>, <code>postProcessing/</code>, <code>log.foamMultiRun</code>, etc. Añadimos directamente las carpetas completas de los casos.</p>
+<section id="mazapan"><div class="sectionHead"><div><h2>13 · MAZAPÁN — cierre completo de una corrida</h2><p>MAZAPÁN no termina en el git push: sincroniza, audita, decide, documenta, limpia y verifica consistencia.</p></div><label class="doneBox"><input data-progress type="checkbox"> Protocolo entendido</label></div>
+<div class="card searchable">
+<h3>Qué significa “haz MAZAPÁN”</h3>
+<p>Es el protocolo completo posterior a una o varias corridas OpenFOAM. El objetivo es que ningún caso quede con resultados nuevos pero documentación vieja.</p>
+<ol>
+<li><b>Confirmar corrida:</b> latestTime, End, fatal errors y return code.</li>
+<li><b>Subir carpetas completas:</b> <code>git add cases_controlled_buoyancy/&lt;CASO&gt;</code>; dejar que <code>.gitignore</code> filtre outputs.</li>
+<li><b>Preservar local primero:</b> commit → pull --rebase → push; nunca force push para resolver un remoto adelantado.</li>
+<li><b>Verificar GitHub:</b> comprobar que logs/postProcessing sí entraron y que tiempos/mallas pesadas no quedaron trackeados accidentalmente.</li>
+<li><b>Limpiar tracking accidental:</b> si algo ignorado ya estaba trackeado, retirarlo del árbol de Git sin confundirlo con borrar el resultado local.</li>
+<li><b>Auditar científicamente:</b> masa, energía, p_rgh, outer coupling, continuidad, Courant, T, U, rho, αL, balances y diagnósticos específicos.</li>
+<li><b>Separar estados:</b> RUN-VERIFIED ≠ ANALYSIS-VERIFIED ≠ físicamente aceptado.</li>
+<li><b>Actualizar analysis_results/:</b> resumen reproducible y métricas derivadas cuando corresponda.</li>
+<li><b>Actualizar bitácora:</b> <code>PROJECT_AUDIT_LOG_ES.md</code>.</li>
+<li><b>Actualizar CADA caso:</b> <code>CASE_NOTES.md</code> y <code>CASE_VARIANT.md</code> deben pasar de “qué pretendemos probar” a “qué ocurrió, qué significa y qué decidimos”.</li>
+<li><b>Actualizar comparación:</b> README, <code>VALIDATION_MATRIX_ES.md</code> y documentación de casos canónicos cuando cambie su estado.</li>
+<li><b>Actualizar guías:</b> esta guía interactiva y <code>CASE_GUIDE_ES.md</code> cuando los resultados cambien cómo entendemos el modelo.</li>
+<li><b>Actualizar manual:</b> <code>OPENFOAM_COMMAND_MANUAL_ES.md</code> si apareció un procedimiento reutilizable.</li>
+<li><b>Reevaluar baseline:</b> declarar explícitamente si la evidencia la mantiene, la reemplaza o la limita; actualizar también las notas de la baseline.</li>
+<li><b>Cierre de consistencia:</b> ningún documento debe llamar pendiente a algo ya analizado ni baseline a una variante descartada.</li>
+</ol>
+<h4>Flujo Git</h4>
 <pre><code>cd ~/OpenFOAM/QuickCup_Solidification
 
 git add \
@@ -357,25 +374,13 @@ cases_controlled_buoyancy/&lt;CASO_2&gt;
 git commit -m "results: add simulation outputs"
 git pull --rebase origin main
 git push origin main</code></pre>
-<div class="callout"><strong>Idea central:</strong> el <code>.gitignore</code> del proyecto ya decide qué outputs son parte del registro científico y cuáles son generación pesada/temporal.</div>
-<h4>Se versiona normalmente</h4>
-<p><code>log.foamMultiRun</code>, <code>logs/</code>, <code>postProcessing/</code>, <code>analysis_results/</code>, inputs, notas y documentación.</p>
-<h4>Se ignora normalmente</h4>
-<p>Directorios de tiempo calculado, <code>polyMesh</code> generado, archivos ParaView, imágenes, videos, ZIPs y temporales.</p>
-</div>
-<div class="card third searchable">
-<h3>La trampa de .gitignore</h3>
-<p><code>.gitignore</code> no des-trackea archivos que ya estaban en Git.</p>
-<div class="callout warn">Si una ruta como <code>10/</code> había sido versionada antes, puede volver a aparecer aunque hoy exista una regla para ignorarla. Primero hay que retirarla del índice/árbol; después el ignore vuelve a funcionar.</div>
-<h4>MAZAPÁN vs NARANJA</h4>
-<p><strong>MAZAPÁN selecciona:</strong> carpetas completas + ignore.</p>
-<p><strong>NARANJA ordena:</strong> preservar resultados locales → commit → pull/rebase → push → documentar.</p>
-</div>
-<div class="card searchable">
-<h3>Regla que debes recordar</h3>
-<div class="eq">MAZAPÁN = git add &lt;casos completos&gt; → commit → pull --rebase → push</div>
-<p>No usar <code>git add -f</code> ni listar subcarpetas una por una salvo una excepción concreta y deliberada.</p>
-<div class="checks"><label class="check"><input data-progress type="checkbox"><span>Entiendo por qué añadir la carpeta completa es más seguro que enumerar cada output.</span></label><label class="check"><input data-progress type="checkbox"><span>Entiendo por qué un archivo ya trackeado puede ignorar la intención del .gitignore.</span></label></div>
+<div class="callout"><strong>Regla corta:</strong> MAZAPÁN = sincronizar + auditar + decidir + documentar + limpiar + verificar consistencia.</div>
+<div class="callout warn"><strong>.gitignore no des-trackea.</strong> Si un archivo ya estaba versionado, seguirá apareciendo aunque ahora coincida con una regla de ignore. Debe retirarse deliberadamente del índice/árbol.</div>
+<div class="checks">
+<label class="check"><input data-progress type="checkbox"><span>Entiendo que MAZAPÁN no termina con git push.</span></label>
+<label class="check"><input data-progress type="checkbox"><span>Después de analizar una corrida debo actualizar CASE_NOTES y CASE_VARIANT.</span></label>
+<label class="check"><input data-progress type="checkbox"><span>Después de comparar variantes debo reevaluar y documentar la baseline.</span></label>
+<label class="check"><input data-progress type="checkbox"><span>RUN-VERIFIED y ANALYSIS-VERIFIED son estados distintos.</span></label>
 </div>
 </div></section>
 
