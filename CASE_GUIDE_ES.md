@@ -1222,7 +1222,7 @@ U = slip
 
 es una combinación muy natural para una **tapa rígida impermeable bajo gravedad**.
 
-Nuestros diagnósticos históricos mostraron que esta combinación lleva `sum(phi)` y transporte advectivo por el top prácticamente a cero.
+V11 ya lo verifica directamente: B11 alcanza max `|sum(phi)| = 1.694066e-21 kg/s` y energía advectiva integrada ≈ 0 J; C11 registra `sum(phi)=0` y energía advectiva integrada = 0 J. Por tanto la impermeabilidad ya no depende solo de la evidencia histórica V9.
 
 ## V12
 
