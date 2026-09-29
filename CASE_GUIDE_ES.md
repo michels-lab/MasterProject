@@ -1879,15 +1879,98 @@ OpenFOAM Foundation v14:
 
 ---
 
-# 13. MAZAPÁN — cómo versionamos resultados del caso
+## 13. MAZAPÁN — cierre completo de una corrida OpenFOAM
 
-**MAZAPÁN** es la convención operativa del proyecto para sincronizar casos OpenFOAM ya corridos hacia GitHub sin enumerar manualmente cada subcarpeta de resultados.
+**MAZAPÁN** es el protocolo completo de cierre científico y documental de una o varias corridas del proyecto Quick-Cup. **No termina en el `git push`.**
 
-La filosofía es:
+Cuando Michel diga **“MAZAPÁN”** o **“haz MAZAPÁN”**, se debe ejecutar este flujo completo:
 
-> **Añadir la carpeta completa del caso y dejar que `.gitignore` decida qué outputs pertenecen al registro científico del repositorio.**
+1. **Confirmar la corrida local**
+   - comprobar `latestTime`;
+   - comprobar `End`;
+   - buscar `FOAM FATAL`, segmentation fault, floating point exception o procesos killed;
+   - registrar el código de retorno cuando exista un runner.
 
-## Flujo MAZAPÁN
+2. **Sincronizar las carpetas completas de los casos**
+   - añadir cada carpeta completa con `git add cases_controlled_buoyancy/<CASO>`;
+   - dejar que `.gitignore` filtre automáticamente tiempos calculados, mallas generadas, archivos ParaView, imágenes, ZIP y demás outputs no versionables;
+   - no enumerar manualmente `logs/`, `postProcessing/`, etc.;
+   - no usar `git add -f` salvo una excepción explícita.
+
+3. **Preservar primero los resultados locales**
+   - commit local de resultados;
+   - `git pull --rebase origin main`;
+   - `git push origin main`;
+   - nunca usar `force push` para resolver un remoto adelantado con resultados locales válidos.
+
+4. **Verificar lo que realmente quedó en GitHub**
+   - confirmar el commit;
+   - confirmar que `logs/`, `postProcessing/` y demás evidencia científica necesaria sí quedaron versionados;
+   - comprobar que outputs pesados/temporales no quedaron trackeados accidentalmente.
+
+5. **Limpiar tracking accidental**
+   - recordar que `.gitignore` no deja de rastrear archivos que ya estaban versionados;
+   - si un tiempo calculado u otro output ignorado sigue trackeado, retirarlo del árbol/índice de Git **sin confundirlo con borrar el resultado local**;
+   - verificar después que la ruta ya no esté trackeada.
+
+6. **Auditar científicamente los resultados**
+   Como mínimo, cuando existan:
+   - flujo de masa en fronteras relevantes, incluido `metalTopPhiSum`;
+   - energía advectiva y heat/energy flux;
+   - residuos iniciales/finales de `p_rgh`;
+   - contracción entre outer correctors;
+   - continuidad;
+   - Courant;
+   - T, U, rho y fracción líquida;
+   - balances y magnitudes integradas;
+   - comparación contra el caso padre/baseline y contra la familia equivalente;
+   - cualquier diagnóstico específico de la hipótesis probada.
+
+7. **Separar estados de evidencia**
+   - `RUN-VERIFIED`: terminó limpiamente;
+   - `ANALYSIS-VERIFIED`: los resultados fueron auditados;
+   - una corrida que da PASS **no** se declara físicamente válida solo por haber terminado.
+
+8. **Crear o actualizar el registro de análisis**
+   - guardar resumen reproducible en `analysis_results/` cuando el análisis lo amerite;
+   - guardar métricas/tablas derivadas que permitan reconstruir la conclusión.
+
+9. **Actualizar la bitácora global**
+   - `PROJECT_AUDIT_LOG_ES.md`;
+   - registrar qué se corrió, resultados, interpretación, decisión y nueva pregunta técnica.
+
+10. **Actualizar las notas de CADA caso afectado**
+    - `CASE_NOTES.md`: estado actual, resultados medidos, interpretación, advertencias y decisión;
+    - `CASE_VARIANT.md`: propósito de la variante y conclusión posterior a la corrida;
+    - no dejar una nota en modo “qué pretendemos probar” después de que el caso ya fue ejecutado y analizado.
+
+11. **Actualizar documentación de comparación**
+    Según lo que cambie:
+    - README de la familia/prueba;
+    - `VALIDATION_MATRIX_ES.md`;
+    - documentación de baseline/casos canónicos.
+
+12. **Actualizar las guías de aprendizaje**
+    Si el resultado cambia o fortalece cómo entendemos el modelo:
+    - `CASE_GUIDE_ES.md`;
+    - `CASE_GUIDE_INTERACTIVE_ES.html`;
+    - incorporar qué opción se probó, qué ocurrió realmente, qué opción queda como baseline y cómo defender la decisión oralmente.
+
+13. **Actualizar el manual de comandos cuando aparezca un procedimiento reutilizable**
+    - `OPENFOAM_COMMAND_MANUAL_ES.md`;
+    - documentar comandos nuevos o corregidos que deban repetirse en futuras corridas.
+
+14. **Reevaluar explícitamente la baseline**
+    - decidir si la evidencia mantiene, reemplaza o limita la baseline vigente;
+    - si la baseline cambia o queda reafirmada, reflejarlo en las notas de la baseline y de las variantes comparadas.
+
+15. **Cerrar con verificación de consistencia documental**
+    - ninguna guía debe llamar “pendiente” a una corrida ya analizada;
+    - ninguna nota debe llamar “baseline” a una variante descartada;
+    - los números de las notas deben coincidir con `analysis_results/`;
+    - Git debe quedar sin outputs generados accidentalmente trackeados.
+
+### Flujo Git de MAZAPÁN
 
 ```bash
 cd ~/OpenFOAM/QuickCup_Solidification
@@ -1897,68 +1980,13 @@ cases_controlled_buoyancy/<CASO_1> \
 cases_controlled_buoyancy/<CASO_2>
 
 git commit -m "results: add simulation outputs"
-
 git pull --rebase origin main
-
 git push origin main
 ```
 
-## Por qué lo hacemos así
+### Regla corta
 
-Nuestro `.gitignore` ya separa deliberadamente:
+> **MAZAPÁN = sincronizar + auditar + decidir + documentar + limpiar + verificar consistencia.**
 
-**Se conserva en Git:**
-- configuración del caso;
-- `log.foamMultiRun`;
-- `logs/`;
-- `postProcessing/`;
-- `analysis_results/`;
-- notas y documentación científica.
-
-**Se excluye normalmente:**
-- directorios de tiempo calculado (`1/`, `2/`, `10/`, etc.);
-- mallas generadas `constant/*/polyMesh/`;
-- archivos ParaView;
-- imágenes/videos;
-- ZIP/RAR/7z;
-- archivos temporales y de compilación.
-
-Por tanto, escribir manualmente:
-
-```bash
-git add caso/log.foamMultiRun caso/logs caso/postProcessing ...
-```
-
-es redundante y más propenso a omitir algo que añadir directamente:
-
-```bash
-git add caso
-```
-
-## Advertencia fundamental de Git
-
-`.gitignore` evita que Git empiece a rastrear archivos nuevos que coinciden con sus reglas, pero **no deja de rastrear automáticamente un archivo que ya estaba versionado**.
-
-Por eso una ruta ignorada puede seguir apareciendo en un commit si fue añadida al historial previamente.
-
-La solución correcta en ese caso es retirar la ruta del índice/árbol de Git de forma deliberada y conservarla localmente si todavía se necesita. Una vez des-trackeada, `.gitignore` vuelve a impedir que entre mediante un `git add` normal.
-
-## Relación con NARANJA
-
-- **NARANJA** describe el orden seguro cuando existen resultados locales más recientes que la documentación remota: preservar local → commit → pull/rebase → push → documentar.
-- **MAZAPÁN** describe **cómo seleccionar los archivos del caso para ese commit**: añadir las carpetas completas y confiar en `.gitignore`.
-
-Por tanto pueden usarse juntos:
-
-> **MAZAPÁN selecciona; NARANJA ordena la sincronización.**
-
-## Regla de conversación
-
-Cuando Michel diga simplemente:
-
-> **“MAZAPÁN”**
-
-debe interpretarse como:
-
-> “Dame el flujo Git para subir las carpetas completas de estos casos, usando el `.gitignore` existente; no enumeres manualmente logs/postProcessing ni uses `git add -f` salvo que exista una excepción explícita.”
+El `git push` es solo la mitad del flujo.
 
