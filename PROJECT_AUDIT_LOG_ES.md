@@ -4339,14 +4339,100 @@ Para el modelo actual de Quick-Cup con geometría fija y `metalTop` cinemáticam
 
 ---
 
-## 2026-09-29 — Convención operativa MAZAPÁN
+## 2026-09-29 — Protocolo operativo MAZAPÁN
 
-### MAZAPÁN — sincronización de carpetas completas de casos
-**[WORKFLOW] [GIT] [PROJECT CONVENTION]**
+## MAZAPÁN — cierre completo de una corrida OpenFOAM
 
-A partir de esta fecha, **MAZAPÁN** es el nombre corto oficial del proyecto para el flujo de subir a GitHub resultados versionables de uno o varios casos OpenFOAM **añadiendo la carpeta completa del caso**, y dejando que `.gitignore` decida qué archivos generados no deben entrar al repositorio.
+**MAZAPÁN** es el protocolo completo de cierre científico y documental de una o varias corridas del proyecto Quick-Cup. **No termina en el `git push`.**
 
-Cuando en la conversación se indique **“haz/pásame MAZAPÁN”**, la intención es este patrón:
+Cuando Michel diga **“MAZAPÁN”** o **“haz MAZAPÁN”**, se debe ejecutar este flujo completo:
+
+1. **Confirmar la corrida local**
+   - comprobar `latestTime`;
+   - comprobar `End`;
+   - buscar `FOAM FATAL`, segmentation fault, floating point exception o procesos killed;
+   - registrar el código de retorno cuando exista un runner.
+
+2. **Sincronizar las carpetas completas de los casos**
+   - añadir cada carpeta completa con `git add cases_controlled_buoyancy/<CASO>`;
+   - dejar que `.gitignore` filtre automáticamente tiempos calculados, mallas generadas, archivos ParaView, imágenes, ZIP y demás outputs no versionables;
+   - no enumerar manualmente `logs/`, `postProcessing/`, etc.;
+   - no usar `git add -f` salvo una excepción explícita.
+
+3. **Preservar primero los resultados locales**
+   - commit local de resultados;
+   - `git pull --rebase origin main`;
+   - `git push origin main`;
+   - nunca usar `force push` para resolver un remoto adelantado con resultados locales válidos.
+
+4. **Verificar lo que realmente quedó en GitHub**
+   - confirmar el commit;
+   - confirmar que `logs/`, `postProcessing/` y demás evidencia científica necesaria sí quedaron versionados;
+   - comprobar que outputs pesados/temporales no quedaron trackeados accidentalmente.
+
+5. **Limpiar tracking accidental**
+   - recordar que `.gitignore` no deja de rastrear archivos que ya estaban versionados;
+   - si un tiempo calculado u otro output ignorado sigue trackeado, retirarlo del árbol/índice de Git **sin confundirlo con borrar el resultado local**;
+   - verificar después que la ruta ya no esté trackeada.
+
+6. **Auditar científicamente los resultados**
+   Como mínimo, cuando existan:
+   - flujo de masa en fronteras relevantes, incluido `metalTopPhiSum`;
+   - energía advectiva y heat/energy flux;
+   - residuos iniciales/finales de `p_rgh`;
+   - contracción entre outer correctors;
+   - continuidad;
+   - Courant;
+   - T, U, rho y fracción líquida;
+   - balances y magnitudes integradas;
+   - comparación contra el caso padre/baseline y contra la familia equivalente;
+   - cualquier diagnóstico específico de la hipótesis probada.
+
+7. **Separar estados de evidencia**
+   - `RUN-VERIFIED`: terminó limpiamente;
+   - `ANALYSIS-VERIFIED`: los resultados fueron auditados;
+   - una corrida que da PASS **no** se declara físicamente válida solo por haber terminado.
+
+8. **Crear o actualizar el registro de análisis**
+   - guardar resumen reproducible en `analysis_results/` cuando el análisis lo amerite;
+   - guardar métricas/tablas derivadas que permitan reconstruir la conclusión.
+
+9. **Actualizar la bitácora global**
+   - `PROJECT_AUDIT_LOG_ES.md`;
+   - registrar qué se corrió, resultados, interpretación, decisión y nueva pregunta técnica.
+
+10. **Actualizar las notas de CADA caso afectado**
+    - `CASE_NOTES.md`: estado actual, resultados medidos, interpretación, advertencias y decisión;
+    - `CASE_VARIANT.md`: propósito de la variante y conclusión posterior a la corrida;
+    - no dejar una nota en modo “qué pretendemos probar” después de que el caso ya fue ejecutado y analizado.
+
+11. **Actualizar documentación de comparación**
+    Según lo que cambie:
+    - README de la familia/prueba;
+    - `VALIDATION_MATRIX_ES.md`;
+    - documentación de baseline/casos canónicos.
+
+12. **Actualizar las guías de aprendizaje**
+    Si el resultado cambia o fortalece cómo entendemos el modelo:
+    - `CASE_GUIDE_ES.md`;
+    - `CASE_GUIDE_INTERACTIVE_ES.html`;
+    - incorporar qué opción se probó, qué ocurrió realmente, qué opción queda como baseline y cómo defender la decisión oralmente.
+
+13. **Actualizar el manual de comandos cuando aparezca un procedimiento reutilizable**
+    - `OPENFOAM_COMMAND_MANUAL_ES.md`;
+    - documentar comandos nuevos o corregidos que deban repetirse en futuras corridas.
+
+14. **Reevaluar explícitamente la baseline**
+    - decidir si la evidencia mantiene, reemplaza o limita la baseline vigente;
+    - si la baseline cambia o queda reafirmada, reflejarlo en las notas de la baseline y de las variantes comparadas.
+
+15. **Cerrar con verificación de consistencia documental**
+    - ninguna guía debe llamar “pendiente” a una corrida ya analizada;
+    - ninguna nota debe llamar “baseline” a una variante descartada;
+    - los números de las notas deben coincidir con `analysis_results/`;
+    - Git debe quedar sin outputs generados accidentalmente trackeados.
+
+### Flujo Git de MAZAPÁN
 
 ```bash
 cd ~/OpenFOAM/QuickCup_Solidification
@@ -4360,20 +4446,9 @@ git pull --rebase origin main
 git push origin main
 ```
 
-Principios de MAZAPÁN:
+### Regla corta
 
-1. **Agregar el caso completo**, no enumerar a mano `log.foamMultiRun`, `logs/`, `postProcessing/`, etc.
-2. **Confiar en el `.gitignore` del proyecto** para excluir tiempos calculados, mallas generadas, archivos ParaView, imágenes, ZIP y otros outputs que no deben versionarse.
-3. Los resultados científicos deliberadamente permitidos por `.gitignore` —por ejemplo `logs/`, `postProcessing/` y `analysis_results/`— entran automáticamente.
-4. Hacer primero el commit de los resultados locales y después `git pull --rebase origin main`, para no perder una corrida local válida cuando GitHub contiene documentación más reciente.
-5. **No usar `git add -f`** salvo una decisión explícita y justificada.
-6. **Advertencia Git importante:** `.gitignore` solo evita añadir archivos no rastreados. Si un archivo o directorio ya estaba trackeado, seguirá apareciendo en commits aunque después se añada una regla para ignorarlo. En ese caso debe retirarse del índice/árbol de Git de forma deliberada sin confundirlo con borrar el resultado local.
-7. MAZAPÁN no modifica la física ni los inputs del caso; es exclusivamente un flujo de sincronización/versionado.
+> **MAZAPÁN = sincronizar + auditar + decidir + documentar + limpiar + verificar consistencia.**
 
-La convención se añadió también a:
-- `OPENFOAM_COMMAND_MANUAL_ES.md`;
-- `CASE_GUIDE_ES.md`;
-- `CASE_GUIDE_INTERACTIVE_ES.html`.
-
-**Origen de la convención:** durante la sincronización de V12/V13 se comprobó que enumerar manualmente cada subcarpeta era innecesario y propenso a errores, porque el repositorio ya dispone de reglas `.gitignore` diseñadas para separar configuración/resultados científicos de outputs pesados.
+El `git push` es solo la mitad del flujo.
 
