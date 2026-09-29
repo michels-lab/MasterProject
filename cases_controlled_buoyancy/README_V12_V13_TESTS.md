@@ -116,6 +116,19 @@ Neither V12 nor V13 should be declared impermeable merely because `U=slip`. Both
 
 Therefore V12/V13 are deliberate controlled diagnostics. Their physical acceptability must be checked from the run, not assumed from the dictionary.
 
+## Run status
+
+Canonical local execution completed successfully on 2026-09-29 with OpenFOAM Foundation v14:
+
+| Case | Result | latestTime | End | fatal | AllrunRC |
+|---|---|---:|---|---:|---:|
+| B12_topFixedValue_airGapOF14 | PASS | 10 | YES | 0 | 0 |
+| C12_topFixedValue_airGapOF14 | PASS | 10 | YES | 0 | 0 |
+| B13_prghPressure_airGapOF14 | PASS | 10 | YES | 0 | 0 |
+| C13_prghPressure_airGapOF14 | PASS | 10 | YES | 0 | 0 |
+
+This establishes RUN-VERIFIED status only. Physical/numerical acceptance remains pending the diagnostics below.
+
 ## Required diagnostics
 
 For all four cases:
