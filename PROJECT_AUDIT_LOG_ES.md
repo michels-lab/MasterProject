@@ -4256,13 +4256,29 @@ La guía OF14 usa `fixedFluxPressure` en paredes y combina condiciones de presi�
 
 ---
 
-### AUD-V12-V13-STATUS — Estado antes de la corrida
-**[GIT-VERIFIED]**
+### AUD-V12-V13-STATUS — Corrida canónica completada
+**[GIT-VERIFIED] [RUN-VERIFIED]**
 
-- Configuración canónica V12/V13: ✅ verificada por contenido y SHA relativo contra V11.
-- Cálculo de presión inicial: ✅ verificado.
-- Sintaxis `prghPressure`: ✅ verificada contra fuente OF14.
-- Documentación por caso: ✅ presente.
-- Runner canónico: `cases_controlled_buoyancy/run_v12_v13_tests.sh`.
-- Resultados V12/V13: ⏳ todavía no deben considerarse `RUN-VERIFIED` ni `ANALYSIS-VERIFIED` hasta ejecutar y auditar los cuatro casos.
+El 29 de septiembre de 2026 se ejecutó localmente el runner canónico `cases_controlled_buoyancy/run_v12_v13_tests.sh` en OpenFOAM Foundation v14.
+
+Resultado reportado por el runner:
+
+- `B12_topFixedValue_airGapOF14`: PASS — `latest=10`, `End=YES`, `fatal=0`, `AllrunRC=0`.
+- `C12_topFixedValue_airGapOF14`: PASS — `latest=10`, `End=YES`, `fatal=0`, `AllrunRC=0`.
+- `B13_prghPressure_airGapOF14`: PASS — `latest=10`, `End=YES`, `fatal=0`, `AllrunRC=0`.
+- `C13_prghPressure_airGapOF14`: PASS — `latest=10`, `End=YES`, `fatal=0`, `AllrunRC=0`.
+
+Esto verifica que las cuatro configuraciones canónicas completan 10 s sin errores fatales de ejecución.
+
+**Importante:** `RUN-VERIFIED` no equivale a `ANALYSIS-VERIFIED`. Antes de aceptar físicamente V12 o V13 deben auditarse, como mínimo:
+
+- `metalTopPhiSum`;
+- energía advectiva integrada en `metalTop`;
+- residuos iniciales/finales de `p_rgh`;
+- contracción del acoplamiento exterior;
+- continuidad;
+- Courant;
+- U, T y fracción líquida.
+
+El estado `ANALYSIS-VERIFIED` permanece pendiente.
 
