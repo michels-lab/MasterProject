@@ -35,7 +35,7 @@ details{border:1px solid var(--line);border-radius:11px;background:var(--panel);
 <div class="navSub"><a href="#controlDict">controlDict</a><a href="#blockMesh">blockMeshDict</a><a href="#fvsolution">fvSolution</a><a href="#fvschemes">fvSchemes</a><a href="#functions">functions y diagnósticos</a></div>
 <a href="#constant">3 · constant/</a><div class="navSub"><a href="#material">castIron</a><a href="#bcfamilies">Familias B y C</a><a href="#solidification">solidificationMelting</a><a href="#mold">Molde y air gap</a></div>
 <a href="#zero">4 · 0/</a><div class="navSub"><a href="#velocity">U</a><a href="#pressure">p_rgh · V11/V12/V13</a><a href="#temperature">T</a><a href="#alpha">alpha líquida</a></div>
-<a href="#equations">5 · Ecuaciones</a><a href="#boundaries">6 · Mapa de fronteras</a><a href="#choices">7 · Opciones y efectos</a><a href="#verification">8 · Verificación y validación</a><a href="#justify">9 · Pendientes por justificar</a><a href="#defense">10 · Defensa oral</a><a href="#workflow">11 · Flujo de trabajo</a><a href="#mastercheck">12 · Checklist maestro</a>
+<a href="#equations">5 · Ecuaciones</a><a href="#boundaries">6 · Mapa de fronteras</a><a href="#choices">7 · Opciones y efectos</a><a href="#verification">8 · Verificación y validación</a><a href="#justify">9 · Pendientes por justificar</a><a href="#defense">10 · Defensa oral</a><a href="#workflow">11 · Flujo de trabajo</a><a href="#mastercheck">12 · Checklist maestro</a><a href="#mazapan">13 · MAZAPÁN</a>
 </nav></aside>
 <main>
 <section id="inicio"><div class="hero searchable">
@@ -340,6 +340,43 @@ emissivity 0.3;</code></pre>
 <div class="card half searchable"><h3>Numérica</h3><div class="checks"><label class="check"><input data-progress type="checkbox"><span>Sé PIMPLE global vs regional.</span></label><label class="check"><input data-progress type="checkbox"><span>Sé qué esquemas usamos.</span></label><label class="check"><input data-progress type="checkbox"><span>Sé qué controla Δt hoy.</span></label></div></div>
 <div class="card half searchable"><h3>Calidad</h3><div class="checks"><label class="check"><input data-progress type="checkbox"><span>Distingo verificación de validación.</span></label><label class="check"><input data-progress type="checkbox"><span>Sé diagnósticos de masa/energía/coupling.</span></label><label class="check"><input data-progress type="checkbox"><span>No uso “corrió” como prueba de validez.</span></label></div></div>
 <div class="card half searchable"><h3>Defensa</h3><div class="checks"><label class="check"><input data-progress type="checkbox"><span>Sé qué parámetros aún no están justificados.</span></label><label class="check"><input data-progress type="checkbox"><span>Sé las limitaciones físicas del modelo.</span></label><label class="check"><input data-progress type="checkbox"><span>Puedo proponer un observable para decidir entre opciones.</span></label></div></div>
+</div></section>
+
+
+<section id="mazapan"><div class="sectionHead"><div><h2>13 · MAZAPÁN — sincronizar casos con Git</h2><p>Convención del proyecto para subir carpetas completas de casos ya corridos y dejar que <code>.gitignore</code> filtre los outputs que no deben versionarse.</p></div><label class="doneBox"><input data-progress type="checkbox"> MAZAPÁN entendido</label></div>
+<div class="grid">
+<div class="card twoThirds searchable">
+<h3>Qué significa MAZAPÁN</h3>
+<p>Cuando digamos <strong>MAZAPÁN</strong>, no enumeramos manualmente <code>logs/</code>, <code>postProcessing/</code>, <code>log.foamMultiRun</code>, etc. Añadimos directamente las carpetas completas de los casos.</p>
+<pre><code>cd ~/OpenFOAM/QuickCup_Solidification
+
+git add \
+cases_controlled_buoyancy/&lt;CASO_1&gt; \
+cases_controlled_buoyancy/&lt;CASO_2&gt;
+
+git commit -m "results: add simulation outputs"
+git pull --rebase origin main
+git push origin main</code></pre>
+<div class="callout"><strong>Idea central:</strong> el <code>.gitignore</code> del proyecto ya decide qué outputs son parte del registro científico y cuáles son generación pesada/temporal.</div>
+<h4>Se versiona normalmente</h4>
+<p><code>log.foamMultiRun</code>, <code>logs/</code>, <code>postProcessing/</code>, <code>analysis_results/</code>, inputs, notas y documentación.</p>
+<h4>Se ignora normalmente</h4>
+<p>Directorios de tiempo calculado, <code>polyMesh</code> generado, archivos ParaView, imágenes, videos, ZIPs y temporales.</p>
+</div>
+<div class="card third searchable">
+<h3>La trampa de .gitignore</h3>
+<p><code>.gitignore</code> no des-trackea archivos que ya estaban en Git.</p>
+<div class="callout warn">Si una ruta como <code>10/</code> había sido versionada antes, puede volver a aparecer aunque hoy exista una regla para ignorarla. Primero hay que retirarla del índice/árbol; después el ignore vuelve a funcionar.</div>
+<h4>MAZAPÁN vs NARANJA</h4>
+<p><strong>MAZAPÁN selecciona:</strong> carpetas completas + ignore.</p>
+<p><strong>NARANJA ordena:</strong> preservar resultados locales → commit → pull/rebase → push → documentar.</p>
+</div>
+<div class="card searchable">
+<h3>Regla que debes recordar</h3>
+<div class="eq">MAZAPÁN = git add &lt;casos completos&gt; → commit → pull --rebase → push</div>
+<p>No usar <code>git add -f</code> ni listar subcarpetas una por una salvo una excepción concreta y deliberada.</p>
+<div class="checks"><label class="check"><input data-progress type="checkbox"><span>Entiendo por qué añadir la carpeta completa es más seguro que enumerar cada output.</span></label><label class="check"><input data-progress type="checkbox"><span>Entiendo por qué un archivo ya trackeado puede ignorar la intención del .gitignore.</span></label></div>
+</div>
 </div></section>
 
 <footer><p><strong>Base técnica:</strong> configuración real de QuickCup-Solidification (V11 baseline; V12/V13 pruebas controladas) + código de OpenFOAM Foundation v14 para foamMultiRun, solidificationMelting, buoyancy/p_rgh, fixedFluxPressure, prghPressure, coupledTemperature, wallLayersHeatTransferCoefficient y constTransport.</p><p>La guía distingue entre <b>lo escrito</b>, <b>lo que OF14 hace con ello</b> y <b>lo que todavía necesita evidencia</b>.</p></footer>
