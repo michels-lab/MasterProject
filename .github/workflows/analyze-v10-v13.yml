@@ -1,0 +1,44 @@
+name: Analyze V10-V13 closure
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - ".github/workflows/analyze-v10-v13.yml"
+      - "analysis_tools/v10_v13_closure_analysis.py"
+      - "cases_controlled_buoyancy/B10_airGapOF14/**"
+      - "cases_controlled_buoyancy/C10_airGapOF14/**"
+      - "cases_controlled_buoyancy/B11_topFixedFlux_airGapOF14/**"
+      - "cases_controlled_buoyancy/C11_topFixedFlux_airGapOF14/**"
+      - "cases_controlled_buoyancy/B12_topFixedValue_airGapOF14/**"
+      - "cases_controlled_buoyancy/C12_topFixedValue_airGapOF14/**"
+      - "cases_controlled_buoyancy/B13_prghPressure_airGapOF14/**"
+      - "cases_controlled_buoyancy/C13_prghPressure_airGapOF14/**"
+
+permissions:
+  contents: write
+
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Run closure analysis
+        run: python3 analysis_tools/v10_v13_closure_analysis.py
+
+      - name: Commit reproducible analysis
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add analysis_results/v10_v13_closure
+          if git diff --cached --quiet; then
+            echo "No analysis changes to commit."
+            exit 0
+          fi
+          git commit -m "analysis: add V10 V13 closure results"
+          git push origin HEAD:main
