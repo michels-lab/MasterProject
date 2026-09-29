@@ -33,3 +33,16 @@ Initial density:
 - C: rho=6820 kg/m3 -> p_rgh(atm)=2676.168 Pa.
 
 For the prghPressure variant, `p uniform 0` is intentional because `pRef=1e5 Pa`; using `p=1e5` there would double-count the atmospheric reference in this solver setup.
+
+## Run result and interpretation
+
+Status: **RUN-VERIFIED + ANALYSIS-VERIFIED; diagnostic only**.
+
+B12 completed 10 s, but the fixed reduced-pressure boundary allowed significant exchange through `metalTop`:
+- max |sum(phi)| = 9.739e-5 kg/s;
+- integrated mass = -5.642e-4 kg;
+- integrated top advective energy = -660.77 J.
+
+The central probe shows a +4.34 K thermal rebound while remaining above Tliq, with no local remelting.
+
+Conclusion: this case is retained as the controlled `fixedValue p_rgh` experiment, not as the impermeable baseline. V11 remains the baseline for the current fixed-top model.
