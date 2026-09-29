@@ -154,3 +154,17 @@ Acceptance for an impermeable interpretation requires `sum(phi)` and top advecti
 
 Also see the OF14 User Guide discussion of `fixedFluxPressure` on walls:
 https://doc.cfd.direct/openfoam/user-guide-v14/dambreak
+
+
+## Analysis status
+
+V12/V13 are now **ANALYSIS-VERIFIED**.
+
+Reproducible results:
+- `analysis_results/v12_v13_pressure_bc/summary.md`
+- `analysis_results/v12_v13_pressure_bc/metrics.csv`
+
+Main conclusion:
+- C12 and C13 are numerically/physically indistinguishable within stored precision.
+- B12 and B13 both develop significant top mass/enthalpy flux and therefore fail the impermeable-top interpretation.
+- `fixedFluxPressure + slip` remains the coherent impermeable-top baseline for the present fixed-geometry model.
