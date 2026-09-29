@@ -103,6 +103,27 @@ Esto es exactamente la clase de física que el `solidificationMelting` estándar
 
 ---
 
+
+## Cierre previo a G1 — campaña V10–V13
+
+**Estado: CERRADA / ANALYSIS-VERIFIED (2026-09-29).**
+
+La campaña de air gap y condición de presión superior quedó cerrada con resultados directos versionados.
+
+Hallazgos que pasan a ser restricciones de G1:
+- V11 verifica directamente `fixedFluxPressure + slip` como tapa impermeable: B11 max `|sum(phi)|=1.69e-21 kg/s`; C11 `sum(phi)=0`; advección superior integrada ≈0 J en ambos.
+- C10→C11 cambia muy poco la solución (T central RMSE 0.164 K; Uy final NRMSE ≤1.70% en los perfiles canónicos).
+- B10→B11 cambia fuertemente la solución (T central RMSE 8.53 K; Uy final NRMSE hasta 258%), demostrando contaminación histórica por transporte superior.
+- B12/B13 reducen la discrepancia de continuidad permitiendo entrada de masa por la tapa; por ello no son alternativas físicas para el Quick-Cup fijo impermeable.
+- C12/C13 son cercanos a C11 pero conservan advección local no nula y siguen siendo diagnósticos.
+
+**Baseline de entrada a G1: C11_topFixedFlux_airGapOF14.**
+
+No se abre otra variante de presión/PIMPLE antes de G1 salvo que nueva evidencia experimental o de conservación revele una necesidad concreta.
+
+
+---
+
 ## 4. Puertas de decisión
 
 ### G0 — Paridad de benchmark
@@ -209,7 +230,7 @@ Cuando exista la curva digitalizada/raw, las métricas mínimas serán:
 
 1. **V3–V7 permanecen congelados como estudio numérico/buoyancy.**
 2. **No se modifica todavía `solidificationMelting` para forzar recalescencia.**
-3. El siguiente caso científico debe ser un **benchmark de equilibrio alineado con el experimento**.
+3. El siguiente caso científico debe ser un **benchmark de equilibrio alineado con el experimento**, usando **C11_topFixedFlux_airGapOF14** como baseline física de partida.
 4. Si ese benchmark demuestra una limitación estructural del modelo de equilibrio, se implementará el `fvModel` cinético de dos transformaciones.
 
 
