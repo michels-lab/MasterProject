@@ -1,1 +1,363 @@
-The requested file reference is not currently visible. Use files.search or files.list to rediscover the file, then retry with a returned ref_id or file_id.
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Quick-Cup · Guía maestra interactiva · OpenFOAM 14</title>
+<style>
+:root{--bg:#f5f7f9;--panel:#fff;--ink:#172026;--muted:#607078;--line:#dce4e8;--accent:#0d6b66;--accent2:#0b4f6c;--soft:#e8f3f1;--warn:#fff4d8;--danger:#fdeceb;--code:#10181d;--codeInk:#e7f3f2;--shadow:0 10px 30px rgba(25,40,46,.08);--radius:14px;--sidebar:330px}
+[data-theme="dark"]{--bg:#101619;--panel:#162126;--ink:#edf4f5;--muted:#9db0b7;--line:#2a3a40;--accent:#63c8bd;--accent2:#7bc4e8;--soft:#173331;--warn:#40351b;--danger:#402526;--code:#081013;--codeInk:#d9f0ee;--shadow:0 10px 30px rgba(0,0,0,.25)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font:15.5px/1.62 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}a{color:var(--accent2)}button,input{font:inherit}
+.sidebar{position:fixed;inset:0 auto 0 0;width:var(--sidebar);overflow:auto;background:var(--panel);border-right:1px solid var(--line);padding:20px 18px 32px;z-index:20}
+.brand{display:flex;gap:12px;align-items:center;margin-bottom:16px}.logo{width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:grid;place-items:center;color:white;font-weight:800}.brand h1{font-size:16px;line-height:1.2;margin:0}.brand small{display:block;color:var(--muted);margin-top:4px}
+.search{width:100%;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:10px;padding:10px 12px;outline:none}.progressBox{margin:14px 0 16px;padding:12px;border:1px solid var(--line);border-radius:12px;background:var(--bg)}.progressRow{display:flex;justify-content:space-between;gap:10px;font-size:13px;margin-bottom:8px}.track{height:9px;background:var(--line);border-radius:999px;overflow:hidden}.bar{height:100%;width:0;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:.2s}.sideActions{display:flex;gap:8px;margin-top:10px}.btn{border:1px solid var(--line);background:var(--panel);color:var(--ink);padding:8px 10px;border-radius:9px;cursor:pointer}.btn:hover{border-color:var(--accent)}
+.navTitle{font-size:11px;text-transform:uppercase;letter-spacing:.13em;color:var(--muted);margin:18px 8px 8px}nav a{display:block;text-decoration:none;color:var(--ink);padding:7px 9px;border-radius:8px;font-size:13.5px}nav a:hover,nav a.active{background:var(--soft);color:var(--accent)}.navSub{padding-left:12px}.navSub a{font-size:12.5px;color:var(--muted)}
+main{margin-left:var(--sidebar);padding:42px clamp(24px,5vw,72px) 90px;max-width:1500px}.hero{background:linear-gradient(135deg,var(--panel),var(--soft));border:1px solid var(--line);border-radius:22px;padding:32px;box-shadow:var(--shadow)}.hero h1{font-size:clamp(30px,4vw,52px);line-height:1.05;margin:0 0 12px}.hero p{font-size:18px;color:var(--muted);max-width:950px}
+.badges{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}.badge{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:5px 9px;font-size:12px;font-weight:700;border:1px solid var(--line);background:var(--panel)}
+section{scroll-margin-top:18px;margin-top:38px}.sectionHead{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;border-bottom:1px solid var(--line);padding-bottom:12px;margin-bottom:18px}.sectionHead h2{margin:0;font-size:28px;line-height:1.2}.sectionHead p{margin:7px 0 0;color:var(--muted);max-width:900px}.doneBox{white-space:nowrap;border:1px solid var(--line);border-radius:10px;padding:7px 10px;background:var(--panel);font-size:13px}
+.grid{display:grid;grid-template-columns:repeat(12,1fr);gap:16px}.card{grid-column:span 12;background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:20px;box-shadow:0 4px 18px rgba(30,45,50,.03)}.card.half{grid-column:span 6}.card.third{grid-column:span 4}.card.twoThirds{grid-column:span 8}.card h3{margin:0 0 9px;font-size:19px}.card h4{margin:18px 0 7px;font-size:15px}.muted{color:var(--muted)}.small{font-size:13px}
+.callout{border-left:4px solid var(--accent);background:var(--soft);padding:13px 15px;border-radius:0 10px 10px 0;margin:14px 0}.warn{border-left-color:#d19b22;background:var(--warn)}.danger{border-left-color:#cc5c50;background:var(--danger)}
+code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;background:var(--soft);padding:.1em .35em;border-radius:5px}pre{background:var(--code);color:var(--codeInk);padding:16px;border-radius:12px;overflow:auto;font:13px/1.5 ui-monospace,SFMono-Regular,Consolas,monospace}pre code{background:transparent;padding:0}
+.eq{font-family:Cambria Math,STIX Two Math,Times New Roman,serif;font-size:18px;text-align:center;padding:12px 10px;margin:12px 0;background:var(--bg);border:1px solid var(--line);border-radius:10px}.vars{font-size:13px;color:var(--muted);padding-left:18px}table{width:100%;border-collapse:collapse;margin:12px 0;font-size:13.5px}th,td{border-bottom:1px solid var(--line);padding:9px 10px;text-align:left;vertical-align:top}th{background:var(--soft);font-size:12px;text-transform:uppercase;letter-spacing:.04em}
+details{border:1px solid var(--line);border-radius:11px;background:var(--panel);margin:10px 0}summary{cursor:pointer;font-weight:700;padding:12px 14px}details>div{padding:0 14px 14px}.checks{display:grid;gap:8px;margin-top:12px}.check{display:flex;gap:9px;align-items:flex-start;padding:8px 10px;border:1px solid var(--line);border-radius:9px;background:var(--bg)}.check input{margin-top:4px;accent-color:var(--accent)}.check:has(input:checked){background:var(--soft);border-color:var(--accent)}
+.fileTree{font:13px/1.55 ui-monospace,SFMono-Regular,Consolas,monospace;background:var(--code);color:var(--codeInk);border-radius:14px;padding:18px;overflow:auto}.kpi{display:flex;gap:12px;flex-wrap:wrap}.kpi>div{flex:1;min-width:155px;background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:13px}.kpi strong{display:block;font-size:22px;color:var(--accent)}.filterHidden{display:none!important}
+.quizQ{padding:14px;border:1px solid var(--line);border-radius:12px;margin:10px 0;background:var(--panel)}.answer{display:none;margin-top:10px;padding:10px;background:var(--soft);border-radius:9px}.quizQ.open .answer{display:block}.topTools{position:fixed;right:18px;top:16px;display:flex;gap:8px;z-index:30}.mobileMenu{display:none}footer{margin-top:50px;color:var(--muted);font-size:12px;border-top:1px solid var(--line);padding-top:18px}
+@media(max-width:980px){.sidebar{transform:translateX(-100%);transition:.2s;box-shadow:var(--shadow)}.sidebar.open{transform:translateX(0)}main{margin-left:0;padding:78px 18px 60px}.mobileMenu{display:inline-block}.card.half,.card.third,.card.twoThirds{grid-column:span 12}.topTools{left:16px;right:auto}}
+@media print{.sidebar,.topTools,.doneBox,.sideActions,.search{display:none!important}main{margin:0;padding:0;max-width:none}.card{break-inside:avoid;box-shadow:none}details>div{display:block!important}}
+</style></head><body>
+<div class="topTools"><button class="btn mobileMenu" id="menuBtn">☰ Índice</button><button class="btn" id="themeBtn">◐ Tema</button></div>
+<aside class="sidebar" id="sidebar">
+<div class="brand"><div class="logo">OF</div><div><h1>Quick‑Cup · OpenFOAM 14</h1><small>Guía maestra interactiva</small></div></div>
+<input class="search" id="search" placeholder="Buscar: Cu, p_rgh, Euler, air gap…">
+<div class="progressBox"><div class="progressRow"><strong>Progreso de estudio</strong><span id="progressText">0%</span></div><div class="track"><div class="bar" id="progressBar"></div></div><div class="small muted" id="progressCount">0 / 0 puntos revisados</div><div class="sideActions"><button class="btn" id="resetBtn">Reiniciar</button><button class="btn" onclick="window.print()">Imprimir</button></div></div>
+<div class="navTitle">Mapa</div>
+<nav id="nav">
+<a href="#inicio">0 · Cómo usarla</a><a href="#mapa">1 · Anatomía del caso</a><a href="#system">2 · system/</a>
+<div class="navSub"><a href="#controlDict">controlDict</a><a href="#blockMesh">blockMeshDict</a><a href="#fvsolution">fvSolution</a><a href="#fvschemes">fvSchemes</a><a href="#functions">functions y diagnósticos</a></div>
+<a href="#constant">3 · constant/</a><div class="navSub"><a href="#material">castIron</a><a href="#bcfamilies">Familias B y C</a><a href="#solidification">solidificationMelting</a><a href="#mold">Molde y air gap</a></div>
+<a href="#zero">4 · 0/</a><div class="navSub"><a href="#velocity">U</a><a href="#pressure">p_rgh · V11/V12/V13</a><a href="#temperature">T</a><a href="#alpha">alpha líquida</a></div>
+<a href="#equations">5 · Ecuaciones</a><a href="#boundaries">6 · Mapa de fronteras</a><a href="#choices">7 · Opciones y efectos</a><a href="#verification">8 · Verificación y validación</a><a href="#justify">9 · Pendientes por justificar</a><a href="#defense">10 · Defensa oral</a><a href="#workflow">11 · Flujo de trabajo</a><a href="#mastercheck">12 · Checklist maestro</a>
+</nav></aside>
+<main>
+<section id="inicio"><div class="hero searchable">
+<div class="badges"><span class="badge">Física</span><span class="badge">Numérica</span><span class="badge">BC</span><span class="badge">Diagnóstico</span><span class="badge">Defensa</span></div>
+<h1>Entender el caso, no memorizar diccionarios.</h1>
+<p>Construida sobre el caso real Quick‑Cup y la implementación de OpenFOAM Foundation v14. La meta es que puedas señalar cualquier entrada y explicar <strong>dónde vive, qué ecuación afecta, qué impone, qué alternativas existen, qué cambiaría y cómo lo comprobarías</strong>.</p>
+<div class="kpi"><div><strong>2</strong>regiones: metal + molde</div><div><strong>10 s</strong>tiempo físico</div><div><strong>0.001 s</strong>Δt fijo</div><div><strong>80×80×1</strong>malla metal</div><div><strong>V11–V13</strong>presión superior</div></div>
+<div class="callout"><strong>Regla de defensa:</strong> “Esta opción impone matemáticamente X. La elegimos porque el dominio representa físicamente Y. Frente a Z esperamos que cambie W. Lo comprobamos con Q.”</div>
+<div class="checks"><label class="check"><input data-progress type="checkbox"><span>Puedo explicar en una frase qué pregunta física responde el modelo.</span></label><label class="check"><input data-progress type="checkbox"><span>Entiendo que “existe un archivo” no significa automáticamente que el solver lo use.</span></label></div>
+</div></section>
+
+<section id="mapa"><div class="sectionHead"><div><h2>1 · Anatomía del caso</h2><p>Cuatro preguntas: cómo resolver, qué física existe, cómo inicia y cómo se ejecuta/analiza.</p></div><label class="doneBox"><input data-progress type="checkbox"> Sección entendida</label></div>
+<div class="grid"><div class="card half searchable"><h3>Mapa mental</h3><div class="fileTree">QuickCup case
+├── system/          ← CÓMO se resuelve
+│   ├── controlDict
+│   ├── blockMeshDict
+│   ├── fvSolution
+│   ├── metal/{fvSolution,fvSchemes}
+│   ├── mold/{fvSolution,fvSchemes}
+│   ├── functions
+│   ├── researchDiagnostics
+│   └── lineProfiles
+├── constant/        ← QUÉ física/materiales existen
+│   ├── metal/{physicalProperties,fvModels,g,pRef,…}
+│   └── mold/physicalProperties
+├── 0/               ← CÓMO empieza + FRONTERAS
+│   ├── metal/{U,p_rgh,p,T,alpha1…}
+│   └── mold/T
+├── Allrun / Allclean
+├── postProcessing/  ← resultados procesados
+└── logs/            ← residuos / Courant / continuidad</div></div>
+<div class="card half searchable"><h3>Dos regiones, dos problemas acoplados</h3><p><strong>metal</strong> se declara <code>fluid</code>: velocidad, presión, energía y solidificación. <strong>mold</strong> se declara <code>solid</code>: conducción térmica.</p><p><strong>foamMultiRun</strong> coordina ambos módulos mediante PIMPLE multi‑región.</p><div class="callout warn"><strong>Ojo:</strong> la fase sólida no se vuelve una nueva región geométrica. Se representa con α líquida + resistencia Darcy.</div><div class="checks"><label class="check"><input data-progress type="checkbox"><span>Puedo explicar por qué necesitamos foamMultiRun.</span></label><label class="check"><input data-progress type="checkbox"><span>Distingo región física de fase sólido/líquido.</span></label></div></div></div></section>
+
+<section id="system"><div class="sectionHead"><div><h2>2 · <code>system/</code> — cómo se resuelve</h2><p>Tiempo, malla, discretización, solvers lineales, acoplamiento y diagnóstico.</p></div><label class="doneBox"><input data-progress type="checkbox"> Sección entendida</label></div>
+<div class="grid">
+<div class="card twoThirds searchable" id="controlDict"><h3><code>system/controlDict</code></h3><p><strong>Función:</strong> gobierna la ejecución general.</p>
+<pre><code>application     foamMultiRun;
+regionSolvers
+{
+    metal       fluid;
+    mold        solid;
+}
+startTime       0;
+endTime         10;
+deltaT          0.001;
+writeControl    timeStep;
+writeInterval   100;
+adjustTimeStep  no;
+maxCo           0.25;
+maxDeltaT       0.1;</code></pre>
+<div class="eq">N = t<sub>end</sub>/Δt = 10/0.001 = 10 000 pasos</div>
+<ul class="vars"><li><b>N</b>: pasos nominales [-]</li><li><b>tend</b>: tiempo final [s]</li><li><b>Δt</b>: paso temporal [s]</li></ul>
+<p><code>writeInterval=100</code> → escritura cada 0.1 s.</p>
+<div class="callout warn"><strong>Pregunta trampa:</strong> <code>maxCo=0.25</code> NO controla Δt porque <code>adjustTimeStep no</code>. El timestep es fijo.</div>
+<details><summary>Opciones y efecto esperado</summary><div><table><tr><th>Opción</th><th>Qué cambia</th><th>Riesgo/beneficio</th></tr><tr><td>adjustTimeStep no</td><td>Δt fijo</td><td>Comparación limpia; Co puede crecer.</td></tr><tr><td>adjustTimeStep yes</td><td>Δt adaptativo</td><td>Robustez; secuencia temporal cambia entre casos.</td></tr><tr><td>Δt mayor</td><td>menos pasos</td><td>menor costo; más error temporal.</td></tr><tr><td>Δt menor</td><td>más pasos</td><td>mejor resolución temporal; mayor costo.</td></tr></table></div></details>
+<div class="checks"><label class="check"><input data-progress type="checkbox"><span>Sé explicar regionSolvers.</span></label><label class="check"><input data-progress type="checkbox"><span>Puedo calcular pasos y frecuencia de escritura.</span></label><label class="check"><input data-progress type="checkbox"><span>No diría que maxCo adapta Δt actualmente.</span></label></div></div>
+<div class="card third searchable"><h3>¿Qué tipo de archivo es?</h3><p><code>controlDict</code> es un diccionario de ejecución. No contiene propiedades del hierro ni BC de presión.</p><p>Esas viven en <code>constant/</code> y <code>0/</code>.</p></div>
+
+<div class="card searchable" id="blockMesh"><h3><code>system/blockMeshDict</code></h3><p>Define geometría, bloques, cellZones, resolución y nombres de patches.</p>
+<div class="grid"><div class="card third"><h4>Geometría</h4><p><code>convertToMeters 0.001</code>. Metal: 40×40×10 mm.</p></div><div class="card third"><h4>Malla</h4><p>Metal: <code>(80 80 1)</code>.</p><div class="eq">Δx≈Δy≈0.5 mm</div></div><div class="card third"><h4>2-D</h4><p><code>frontAndBack empty</code> + una celda Z → no se resuelve variación en Z.</p></div></div>
+<details><summary>¿Qué pasa si cambio la malla?</summary><div><p>Más fina: menor error espacial y mejor resolución de gradientes/frente, con mayor costo. Más gruesa: más difusión numérica. Necesitamos independencia de malla, no solo “más celdas”.</p></div></details>
+<div class="checks"><label class="check"><input data-progress type="checkbox"><span>Puedo explicar por qué es 2-D.</span></label><label class="check"><input data-progress type="checkbox"><span>Sé por qué refinar X e Y aumenta mucho el costo.</span></label></div></div>
+
+<div class="card searchable" id="fvsolution"><h3><code>fvSolution</code>: coupling + solvers lineales</h3>
+<table><tr><th>Archivo</th><th>Rol</th><th>Actual</th></tr><tr><td>system/fvSolution</td><td>PIMPLE multi‑región</td><td>3 outer, 2 correctors, 1 non-orthogonal</td></tr><tr><td>system/metal/fvSolution</td><td>p/U/h regional</td><td>GAMG para p_rgh; PBiCGStab/DILU para U,h</td></tr><tr><td>system/mold/fvSolution</td><td>energía sólido</td><td>PCG/DIC</td></tr></table>
+<pre><code>p_rgh { solver GAMG; tolerance 1e-7; relTol 0.01; }
+p_rghFinal { $p_rgh; relTol 0; }
+
+PIMPLE
+{
+    momentumPredictor no;
+    nOuterCorrectors 1;
+    nCorrectors 2;
+    nNonOrthogonalCorrectors 0;
+    pRefPoint (0.02025 0.03975 0.005);
+    pRefValue 1e5;
+}</code></pre>
+<div class="callout"><strong>No confundir:</strong> <code>pRefPoint/pRefValue</code> son referencia numérica si el campo la necesita. <code>constant/metal/pRef</code> participa en la transformación física de presión buoyant.</div>
+<div class="checks"><label class="check"><input data-progress type="checkbox"><span>Distingo PIMPLE global y regional.</span></label><label class="check"><input data-progress type="checkbox"><span>Distingo tolerance de relTol.</span></label><label class="check"><input data-progress type="checkbox"><span>Distingo pRefValue de constant/metal/pRef.</span></label></div></div>
+
+<div class="card searchable" id="fvschemes"><h3><code>fvSchemes</code>: discretización</h3>
+<table><tr><th>Término</th><th>Esquema</th><th>Lectura</th></tr><tr><td>Tiempo</td><td>Euler</td><td>1er orden, robusto</td></tr><tr><td>∇</td><td>Gauss linear</td><td>interpolación lineal</td></tr><tr><td>Convección U</td><td>linearUpwind grad(U)</td><td>menos difusivo que upwind puro</td></tr><tr><td>Convección h</td><td>upwind</td><td>robusto pero difusivo</td></tr><tr><td>Laplacianos</td><td>linear corrected</td><td>corrige no-ortogonalidad</td></tr></table>
+<div class="callout warn"><strong>Para recalescencia:</strong> <code>div(phi,h) Gauss upwind</code> puede suavizar gradientes térmicos. Si la forma fina de T(t) es crítica, hay que hacer sensibilidad del esquema.</div>
+<div class="checks"><label class="check"><input data-progress type="checkbox"><span>Sé qué término usa upwind.</span></label><label class="check"><input data-progress type="checkbox"><span>Entiendo que cambiar esquema puede cambiar el resultado sin cambiar la física material.</span></label></div></div>
+
+<div class="card searchable" id="functions"><h3><code>system/functions</code> + diagnósticos</h3><p>Registra un probe central (0.02,0.02,0.005) m e incluye <code>researchDiagnostics</code> y <code>lineProfiles</code>.</p>
+<table><tr><th>Diagnóstico</th><th>Uso</th></tr><tr><td>metalTopPhiSum</td><td>impermeabilidad real</td></tr><tr><td>energyAdvectiveFlux</td><td>energía transportada por masa</td></tr><tr><td>heatFlux / energyFlux</td><td>balance térmico</td></tr><tr><td>vorticity / flowType</td><td>estructura convectiva</td></tr><tr><td>gradT / gradRho</td><td>gradientes y buoyancy</td></tr><tr><td>dTdt / solidificationRate</td><td>enfriamiento y fase</td></tr><tr><td>Darcy / pRgh acceleration</td><td>escalas de momentum</td></tr></table>
+<div class="callout"><strong>Campo diagnóstico ≠ variable gobernante.</strong> Que un archivo aparezca en <code>0/metal</code> no significa que sea una condición inicial elegida.</div><p><code>createZonesDict</code> existe, pero <code>createZones</code> está comentado en Allrun. Las zonas activas vienen de blockMesh + splitMeshRegions.</p>
+<div class="checks"><label class="check"><input data-progress type="checkbox"><span>Distingo diagnóstico de variable que modifica física.</span></label><label class="check"><input data-progress type="checkbox"><span>Sé que createZones no está activo.</span></label></div></div>
+</div></section>
+
+<section id="constant"><div class="sectionHead"><div><h2>3 · <code>constant/</code> — qué física existe</h2><p>Propiedades termofísicas, gravedad, referencia buoyant, solidificación y transporte de momentum.</p></div><label class="doneBox"><input data-progress type="checkbox"> Sección entendida</label></div>
+<div class="grid">
+<div class="card searchable" id="material"><h3><code>constant/metal/physicalProperties</code> → <code>materials/castIron</code></h3>
+<p>El archivo activo incluye <code>materials/castIron</code>. Ahí viven las propiedades termofísicas del metal.</p>
+<table><tr><th>Entrada</th><th>Actual</th><th>Qué controla</th></tr><tr><td>heRhoThermo</td><td>sí</td><td>paquete termodinámico basado en densidad</td></tr><tr><td>hConst</td><td>Cp constante</td><td>relación h–T</td></tr><tr><td>constTransport</td><td>μ + Pr constantes</td><td>viscosidad y k derivada</td></tr><tr><td>sensibleEnthalpy</td><td>h</td><td>variable energética sensible</td></tr></table>
+<div class="eq">k = C<sub>p</sub> μ / Pr ≈ 827·(5.5×10<sup>−3</sup>)/0.14 ≈ 32.49 W/(m·K)</div>
+<ul class="vars"><li><b>k</b>: conductividad térmica [W/(m·K)]</li><li><b>Cp</b>: calor específico [J/(kg·K)] = 827</li><li><b>μ</b>: viscosidad dinámica [Pa·s] = 5.5×10⁻³</li><li><b>Pr</b>: Prandtl [-] = 0.14</li></ul>
+<div class="callout warn"><strong>No aparece “kappa 32.49” escrito:</strong> OF14 la calcula porque usamos <code>constTransport</code> con Pr.</div>
+<details><summary>Opciones que podríamos usar</summary><div><p>Propiedades constantes, tabuladas o T-dependientes. Hacer k(T), Cp(T) o μ(T) cambia difusión térmica, convección y solidificación; exige datos de material defendibles.</p></div></details>
+<div class="checks"><label class="check"><input data-progress type="checkbox"><span>Puedo responder cuál es k del metal y de dónde sale.</span></label><label class="check"><input data-progress type="checkbox"><span>Sé cuáles propiedades son constantes y cuál cambia en B.</span></label></div></div>
+
+<div class="card searchable" id="bcfamilies"><h3>Familias B y C: dos rutas de buoyancy</h3>
+<table><tr><th></th><th>Familia B</th><th>Familia C</th></tr><tr><td>Ecuación de estado</td><td>icoTabulated</td><td>rhoConst</td></tr><tr><td>ρ</td><td>ρ(T) tabulada</td><td>6820 kg/m³</td></tr><tr><td>β en fvModels</td><td>0</td><td>1.13×10⁻⁴ K⁻¹</td></tr><tr><td>Ruta de flotación</td><td>densidad variable + gravedad/presión buoyant</td><td>fuente térmica explícita del modelo</td></tr></table>
+<p>En B: 1473.15 K → 6820 kg/m³ y 1573.15 K → 6740 kg/m³. A 1500 K:</p><div class="eq">ρ<sub>B</sub>(1500 K) = 6798.52 kg/m³</div>
+<p>En C, la aceleración térmica del modelo es:</p><div class="eq">a<sub>b</sub> = g β ΔT</div>
+<ul class="vars"><li><b>a<sub>b</sub></b>: aceleración térmica [m/s²]</li><li><b>g</b>: gravedad [m/s²]</li><li><b>β</b>: expansión térmica [1/K]</li><li><b>ΔT</b>: desviación térmica del modelo [K]</li></ul>
+<div class="callout danger"><strong>No duplicar física:</strong> ρ(T) fuerte + una fuente β equivalente sin derivación puede contar dos veces la misma flotación térmica.</div>
+<div class="checks"><label class="check"><input data-progress type="checkbox"><span>Puedo explicar B y C sin decir solo “una tiene beta”.</span></label><label class="check"><input data-progress type="checkbox"><span>Entiendo por qué beta=0 en B es deliberado.</span></label></div></div>
+
+<div class="card searchable" id="solidification"><h3><code>constant/metal/fvModels</code> — solidificationMeltingSource</h3>
+<p>Método de malla fija tipo <strong>entalpía–porosidad</strong>: añade calor latente y resistencia de momentum al solidificar.</p>
+<table><tr><th>Parámetro</th><th>Actual</th><th>Naturaleza</th><th>Afecta</th></tr><tr><td>Tsol</td><td>1423 K</td><td>física/material</td><td>límite inferior de fase</td></tr><tr><td>Tliq</td><td>1473 K</td><td>física/material</td><td>límite superior</td></tr><tr><td>L</td><td>2.286×10⁵ J/kg</td><td>física/material</td><td>energía latente</td></tr><tr><td>alpha1e</td><td>0.8</td><td>modelo físico</td><td>relación T–αL/eutéctica</td></tr><tr><td>relax</td><td>0.1</td><td>numérico/modelo</td><td>actualización αL</td></tr><tr><td>Cu</td><td>1×10⁵ s⁻¹</td><td>modelo mushy</td><td>resistencia Darcy</td></tr><tr><td>q</td><td>1×10⁻³</td><td>regularización</td><td>evita singularidad αL→0</td></tr></table>
+<div class="eq">ΔT<sub>mushy</sub> = T<sub>liq</sub> − T<sub>sol</sub> = 50 K</div>
+<h4>Actualización de αL en OF14</h4><div class="eq">α<sub>L,new</sub> = clamp[ α<sub>L,old</sub> + r C<sub>p</sub>(T − T<sub>phase</sub>)/L , 0, 1 ]</div>
+<ul class="vars"><li><b>αL</b>: fracción líquida [-]</li><li><b>r</b>: relax [-]</li><li><b>Cp</b>: calor específico [J/(kg·K)]</li><li><b>T</b>, <b>Tphase</b>: temperaturas [K]</li><li><b>L</b>: calor latente [J/kg]</li></ul>
+<p>En la implementación OF14, <code>alpha1e</code> modifica Tphase: para αL≤alpha1e la referencia queda limitada por Tsol; por encima se interpola hacia Tliq.</p>
+<h4>Resistencia Darcy</h4><div class="eq">D = C<sub>u</sub>(1−α<sub>L</sub>)² / (α<sub>L</sub>³ + q)</div>
+<ul class="vars"><li><b>D</b>: amortiguamiento positivo [1/s]</li><li><b>Cu</b>: constante mushy [1/s]</li><li><b>αL</b>: fracción líquida [-]</li><li><b>q</b>: regularización [-]</li></ul>
+<details open><summary>Si cambia un parámetro, ¿qué espero?</summary><div><table><tr><th>Cambio</th><th>Esperaría</th><th>Revisar</th></tr><tr><td>L ↑</td><td>más energía por extraer; solidificación térmica más lenta</td><td>T(t), αL(t), potencia latente</td></tr><tr><td>Cu ↑</td><td>más frenado en mushy</td><td>U, Darcy acceleration</td></tr><tr><td>q ↓</td><td>penalización más extrema cerca del sólido</td><td>estabilidad + U en αL bajo</td></tr><tr><td>relax ↓</td><td>αL cambia más lentamente por actualización</td><td>sensibilidad a Δt</td></tr><tr><td>alpha1e cambia</td><td>cambia T–αL</td><td>curva T y liberación latente</td></tr><tr><td>Tsol/Tliq</td><td>desplaza mushy</td><td>frente y tiempos de fase</td></tr></table></div></details>
+<div class="callout warn"><strong>Puntos a defender:</strong> relax=0.1 (default OF14 0.9) y alpha1e=0.8 requieren justificación explícita.</div>
+<div class="checks"><label class="check"><input data-progress type="checkbox"><span>Puedo explicar la ecuación Darcy.</span></label><label class="check"><input data-progress type="checkbox"><span>Distingo L, Cu, q, relax y alpha1e.</span></label><label class="check"><input data-progress type="checkbox"><span>Sé cuáles parámetros aún necesitan evidencia.</span></label></div></div>
+
+<div class="card half searchable"><h3><code>momentumTransport</code>: laminar</h3><pre><code>simulationType laminar;
+RAS
+{
+    model      kOmegaSST;
+    turbulence off;
+}</code></pre><p>El caso es <strong>laminar</strong>. La existencia de k, epsilon, omega, nut y alphat no activa RANS.</p><div class="callout warn">Debemos justificar laminaridad con escalas (Re/Ra) y/o sensibilidad.</div><div class="checks"><label class="check"><input data-progress type="checkbox"><span>No confundo archivos de turbulencia con turbulencia activa.</span></label></div></div>
+
+<div class="card half searchable"><h3>Gravedad y pRef</h3><p><code>g=(0 −9.81 0) m/s²</code>; Y es vertical.</p><p><code>constant/metal/pRef=1e5 Pa</code>.</p><div class="eq">p<sub>rgh</sub> = p − ρgh − p<sub>Ref</sub></div><ul class="vars"><li><b>p_rgh</b>: presión reducida [Pa]</li><li><b>p</b>: presión estática [Pa]</li><li><b>ρ</b>: densidad [kg/m³]</li><li><b>gh</b>: potencial gravitatorio específico [m²/s²]</li><li><b>pRef</b>: offset [Pa]</li></ul><p>No existe <code>hRef</code>; OF14 usa 0.</p></div>
+
+<div class="card searchable" id="mold"><h3>Molde activo + air gap</h3><p><code>constant/mold/physicalProperties</code> incluye <code>materials/silica</code>. <code>steel4140*</code> existe pero no está activo.</p>
+<div class="kpi"><div><strong>1500</strong>ρ [kg/m³]</div><div><strong>2</strong>k [W/(m·K)]</div><div><strong>700</strong>Cv [J/(kg·K)]</div></div>
+<div class="eq">R″ = δ/k = 2×10<sup>−4</sup>/0.1 = 0.002 m²·K/W</div><div class="eq">h<sub>gap</sub> = 1/R″ = 500 W/(m²·K)</div>
+<ul class="vars"><li><b>R″</b>: resistencia areal [m²K/W]</li><li><b>δ</b>: espesor [m]</li><li><b>k</b>: conductividad de capa [W/(mK)]</li><li><b>hgap</b>: conductancia equivalente [W/(m²K)]</li></ul>
+<p>δ↑ o k↓ → resistencia↑ → menor extracción metal→molde → enfriamiento/solidificación más lentos.</p>
+<div class="checks"><label class="check"><input data-progress type="checkbox"><span>Puedo derivar 500 W/(m²K).</span></label><label class="check"><input data-progress type="checkbox"><span>Sé cuál material del molde está activo.</span></label></div></div>
+</div></section>
+
+<section id="zero"><div class="sectionHead"><div><h2>4 · <code>0/</code> — estado inicial + fronteras</h2><p>Campos iniciales y relaciones matemáticas en cada patch.</p></div><label class="doneBox"><input data-progress type="checkbox"> Sección entendida</label></div>
+<div class="grid">
+<div class="card searchable" id="velocity"><h3><code>0/metal/U</code></h3><div class="eq">U(t=0) = (0,0,0) m/s</div>
+<table><tr><th>Patch</th><th>BC</th><th>Significado</th><th>Tipo conceptual</th></tr><tr><td>metalTop</td><td>slip</td><td>Un=0; deslizamiento tangencial</td><td>restricción vectorial mixta</td></tr><tr><td>metal_to_mold</td><td>noSlip</td><td>U=0</td><td>Dirichlet</td></tr><tr><td>frontAndBack</td><td>empty</td><td>reducción 2-D</td><td>especial</td></tr></table>
+<details><summary>Opciones para metalTop</summary><div><p><b>slip:</b> impermeable sin fricción tangencial. <b>noSlip:</b> pared rígida con adherencia. <b>open velocity:</b> necesaria si se permite flujo normal real.</p></div></details>
+<div class="checks"><label class="check"><input data-progress type="checkbox"><span>Entiendo por qué slip no equivale a superficie libre completa.</span></label><label class="check"><input data-progress type="checkbox"><span>Distingo slip de noSlip físicamente.</span></label></div></div>
+
+<div class="card searchable" id="pressure"><h3><code>0/metal/p_rgh</code> — V11 vs V12 vs V13</h3>
+<table><tr><th>Versión</th><th>BC top</th><th>Qué fija</th><th>Interpretación</th></tr><tr><td>V11</td><td>fixedFluxPressure</td><td>gradiente compatible con flujo/U</td><td>tapa rígida impermeable coherente con slip</td></tr><tr><td>V12</td><td>fixedValue</td><td>p_rgh</td><td>presión reducida fija</td></tr><tr><td>V13</td><td>prghPressure</td><td>presión estática</td><td>atmósfera; p_rgh se adapta a ρ/altura</td></tr></table>
+<h4>V11 · fixedFluxPressure</h4><p>Condición especializada de gradiente/flujo: ajusta ∂p_rgh/∂n para ser compatible con la BC de velocidad y fuerzas de cuerpo. No fija “1 atm”.</p><div class="callout"><strong>Por qué la propusimos:</strong> para una tapa fija impermeable con U=slip. V9 verificó top phi y advección ≈0.</div>
+<h4>V12 · fixedValue</h4><p>Dirichlet: fija directamente p_rgh. A y=0.04 m y atmósfera inicial:</p><div class="eq">p<sub>rgh</sub> = ρ·9.81·0.04</div><p>B: <strong>2667.739248 Pa</strong>. C: <strong>2676.168 Pa</strong>.</p><div class="callout warn">En B, si ρ(T) cambia y p_rgh queda fijo, la presión estática reconstruida no tiene por qué seguir en 1 atm.</div>
+<h4>V13 · prghPressure</h4><p>Fija presión estática. Con <code>pRef=1e5 Pa</code>, <code>p uniform 0</code> es offset gauge cero; no significa vacío.</p><div class="eq">p = p<sub>rgh</sub> + ρgh + p<sub>Ref</sub></div>
+<div class="callout danger"><strong>Limitación:</strong> V12/V13 conservan U=slip. Son pruebas controladas de presión, no una superficie libre VOF ni una frontera abierta completa.</div>
+<details><summary>¿Y p_rgh internalField uniform 1e5?</summary><div><p>Es inicialización numérica, no un perfil hidrostático físicamente consistente completo. El pressure corrector lo reajusta.</p></div></details>
+<div class="checks"><label class="check"><input data-progress type="checkbox"><span>Puedo defender V11/V12/V13 sin decir “la que corre”.</span></label><label class="check"><input data-progress type="checkbox"><span>Puedo derivar los dos valores V12.</span></label><label class="check"><input data-progress type="checkbox"><span>Entiendo p=0 en V13.</span></label></div></div>
+
+<div class="card half searchable"><h3><code>0/metal/p</code></h3><p>Usa <code>calculated</code>. p se reconstruye; no es la variable independiente de presión que resolvemos.</p><div class="eq">p = p<sub>rgh</sub> + ρgh + p<sub>Ref</sub></div><div class="checks"><label class="check"><input data-progress type="checkbox"><span>No confundo p con p_rgh.</span></label></div></div>
+
+<div class="card half searchable" id="alpha"><h3><code>phaseChangeSource:alpha1</code></h3><p><code>internalField uniform 1.0</code> → 100% líquido inicialmente. Es consistente con T₀=1500 K &gt; Tliq=1473 K.</p><div class="callout"><strong>Chequeo profesional:</strong> T inicial y estado de fase deben ser compatibles.</div><div class="checks"><label class="check"><input data-progress type="checkbox"><span>Puedo justificar αL=1 inicialmente.</span></label></div></div>
+
+<div class="card searchable" id="temperature"><h3><code>0/metal/T</code> + <code>0/mold/T</code></h3><p>Metal inicia a <strong>1500 K</strong>; molde a <strong>300 K</strong>.</p>
+<h4>metalTop</h4><pre><code>type       externalWallHeatFluxTemperature;
+h          uniform 10;
+Ta         constant 300;
+emissivity 0.3;</code></pre>
+<p>Es una condición <strong>mixed / Robin / Cauchy</strong>, con convección y radiación.</p>
+<div class="eq">q″<sub>conv</sub> = h(T<sub>s</sub>−T<sub>a</sub>)</div><ul class="vars"><li><b>q″conv</b>: flujo [W/m²]</li><li><b>h</b>: coeficiente [W/(m²K)]</li><li><b>Ts, Ta</b>: temperaturas [K]</li></ul><p>A 1500 K: ≈12 kW/m².</p>
+<div class="eq">q″<sub>rad</sub> = εσ(T<sub>s</sub>⁴−T<sub>a</sub>⁴)</div><p>A 1500 K y ε=.3: ≈<strong>86 kW/m²</strong>.</p>
+<h4>Interfaz metal–molde</h4><p><code>coupledTemperature</code> + resistencia air gap: condición mixed acoplada.</p>
+<h4>Exterior del molde</h4><p>h=10 W/(m²K), Ta=300 K, ε=.5.</p>
+<details><summary>Dirichlet, Neumann o Cauchy</summary><div><table><tr><th>BC</th><th>Tipo conceptual</th><th>Física</th></tr><tr><td>fixedValue T</td><td>Dirichlet</td><td>T conocida</td></tr><tr><td>zeroGradient</td><td>Neumann homogénea</td><td>gradiente normal cero</td></tr><tr><td>flujo conocido</td><td>Neumann</td><td>q″ prescrito</td></tr><tr><td>externalWallHeatFluxTemperature</td><td>Robin/Cauchy/mixed</td><td>convección + radiación</td></tr><tr><td>coupledTemperature</td><td>mixed acoplada</td><td>interfaz entre regiones</td></tr></table></div></details>
+<div class="checks"><label class="check"><input data-progress type="checkbox"><span>Puedo explicar por qué la BC térmica superior es Cauchy/Robin.</span></label><label class="check"><input data-progress type="checkbox"><span>Sé que al inicio radiación domina sobre convección en orden de magnitud.</span></label></div></div>
+
+<div class="card searchable"><h3>Campos presentes ≠ física activa</h3><p>vorticity, gradT, CoCell, pRghAcceleration, etc. son diagnósticos. k, epsilon, omega, nut y alphat existen, pero <code>simulationType laminar</code> mantiene RANS apagado.</p><div class="callout">Pregunta universal: <strong>¿quién lee este archivo?</strong></div></div>
+</div></section>
+
+<section id="equations"><div class="sectionHead"><div><h2>5 · Ecuaciones gobernantes + mapa código → ecuación</h2><p>Representación física/esquemática del problema. OF14 reorganiza especialmente gravedad/presión mediante p_rgh.</p></div><label class="doneBox"><input data-progress type="checkbox"> Sección entendida</label></div>
+<div class="grid">
+<div class="card half searchable"><h3>Continuidad · metal</h3><div class="eq">∂ρ/∂t + ∇·(ρU) = 0</div><ul class="vars"><li><b>ρ</b>: densidad [kg/m³]</li><li><b>U</b>: velocidad [m/s]</li><li><b>t</b>: tiempo [s]</li></ul><p><strong>B:</strong> ρ cambia con T. <strong>C:</strong> ρ termodinámica es constante.</p><p><b>Archivos:</b> castIron, U y pressure corrector.</p></div>
+
+<div class="card half searchable"><h3>Momentum · metal</h3><div class="eq">∂(ρU)/∂t + ∇·(ρU⊗U) = −∇p + ∇·τ + ρg + S<sub>phase</sub></div><ul class="vars"><li><b>τ</b>: esfuerzo viscoso [Pa]</li><li><b>Sphase</b>: fuente/sumidero del cambio de fase [N/m³]</li></ul><p>OF14 usa p_rgh para separar la parte hidrostática. En mushy aparece Darcy; en C además la fuente térmica β.</p><p><b>Archivos:</b> U, p_rgh, g, castIron, fvModels, fvSchemes.</p></div>
+
+<div class="card half searchable"><h3>Energía · metal con calor latente</h3><p>Forma conceptual del método entalpía:</p><div class="eq">H = h + α<sub>L</sub>L</div><div class="eq">∂(ρH)/∂t + ∇·(ρUh) ≈ ∇·(k∇T) + fuentes</div><ul class="vars"><li><b>H</b>: entalpía con contribución latente [J/kg]</li><li><b>h</b>: entalpía sensible [J/kg]</li><li><b>αL</b>: fracción líquida [-]</li><li><b>L</b>: calor latente [J/kg]</li><li><b>k</b>: conductividad [W/(mK)]</li></ul><p>En OF14, solidificationMelting añade la contribución latente según evolución de αL.</p></div>
+
+<div class="card half searchable"><h3>Conducción · molde</h3><div class="eq">∂(ρe)/∂t = ∇·(k∇T)</div><ul class="vars"><li><b>e</b>: energía interna [J/kg]</li><li><b>ρ</b>: densidad [kg/m³]</li><li><b>k</b>: conductividad [W/(mK)]</li></ul><p>No existe ecuación de U ni presión en el molde sólido.</p></div>
+
+<div class="card searchable"><h3>Mapa directo</h3><table><tr><th>Parámetro/archivo</th><th>Ecuación</th><th>Observable sensible</th></tr><tr><td>ρ(T) / rhoConst</td><td>continuidad + momentum/p_rgh</td><td>U, continuidad, gradRho, p_rgh</td></tr><tr><td>μ</td><td>momentum viscoso</td><td>U, vorticidad, Re</td></tr><tr><td>Cp, Pr → k</td><td>energía</td><td>T(t), gradT, solidificación</td></tr><tr><td>L</td><td>energía/fase</td><td>T(t), αL, potencia latente</td></tr><tr><td>Cu, q</td><td>momentum mushy</td><td>U, Darcy acceleration</td></tr><tr><td>β (C)</td><td>fuente momentum</td><td>U, celdas convectivas</td></tr><tr><td>air gap</td><td>interfaz térmica</td><td>heatFlux metal→mold</td></tr><tr><td>h/ε</td><td>BC energía</td><td>pérdida top/molde</td></tr><tr><td>Δt / Euler</td><td>discretización temporal</td><td>convergencia, fase, costo</td></tr><tr><td>BC p_rgh</td><td>pressure corrector/frontera</td><td>phi top, p_rgh, U, continuidad</td></tr></table>
+<div class="checks"><label class="check"><input data-progress type="checkbox"><span>Puedo señalar una ecuación afectada por cada parámetro importante.</span></label><label class="check"><input data-progress type="checkbox"><span>Entiendo que p_rgh es reformulación de presión, no una física nueva.</span></label></div></div>
+</div></section>
+
+<section id="boundaries"><div class="sectionHead"><div><h2>6 · Mapa completo de fronteras</h2><p>Una frontera se lee como conjunto U + p_rgh + T.</p></div><label class="doneBox"><input data-progress type="checkbox"> Sección entendida</label></div>
+<div class="card searchable"><table><tr><th>Patch</th><th>Campo</th><th>BC</th><th>Tipo conceptual</th><th>Interpretación</th></tr>
+<tr><td rowspan="3"><b>metalTop</b></td><td>U</td><td>slip</td><td>mixta vectorial</td><td>sin penetración; slip tangencial</td></tr>
+<tr><td>p_rgh</td><td>V11 fixedFluxPressure / V12 fixedValue / V13 prghPressure</td><td>gradiente especializado / Dirichlet / valor transformado</td><td>hipótesis de presión comparada</td></tr>
+<tr><td>T</td><td>externalWallHeatFluxTemperature</td><td>Robin/Cauchy no lineal</td><td>convección + radiación</td></tr>
+<tr><td rowspan="3"><b>metal_to_mold</b></td><td>U</td><td>noSlip</td><td>Dirichlet</td><td>U=0 en pared</td></tr>
+<tr><td>p_rgh</td><td>fixedFluxPressure</td><td>gradiente/flujo</td><td>compatibilidad con pared</td></tr>
+<tr><td>T</td><td>coupledTemperature + gap</td><td>mixed acoplada</td><td>CHT + resistencia</td></tr>
+<tr><td><b>frontAndBack</b></td><td>relevantes</td><td>empty</td><td>reducción dimensional</td><td>2-D</td></tr>
+<tr><td><b>mold exteriores</b></td><td>T</td><td>externalWallHeatFluxTemperature</td><td>Robin/Cauchy</td><td>intercambio con ambiente</td></tr>
+<tr><td><b>mold_to_metal</b></td><td>T</td><td>coupledTemperature</td><td>mixed acoplada</td><td>pareja térmica</td></tr></table>
+<div class="callout"><strong>Dirichlet</strong> fija valor; <strong>Neumann</strong> fija derivada/flujo; <strong>Robin/Cauchy</strong> relaciona valor y flujo. Varias BC de OF14 son mixed especializadas y no caben de forma perfecta en una etiqueta elemental.</div>
+<div class="checks"><label class="check"><input data-progress type="checkbox"><span>Puedo clasificar fixedValue, zeroGradient y externalWallHeatFluxTemperature.</span></label><label class="check"><input data-progress type="checkbox"><span>Puedo explicar metalTop como conjunto.</span></label></div></div></section>
+
+<section id="choices"><div class="sectionHead"><div><h2>7 · Opciones reales y efecto esperado</h2><p>No memorices opciones: entiende qué hipótesis sustituiría cada una.</p></div><label class="doneBox"><input data-progress type="checkbox"> Sección entendida</label></div>
+<div class="card searchable"><table><tr><th>Decisión</th><th>Nuestra opción</th><th>Alternativa</th><th>Qué vigilar</th></tr>
+<tr><td>Top U</td><td>slip</td><td>noSlip / open velocity</td><td>phi, U top, vorticidad</td></tr>
+<tr><td>Top p_rgh</td><td>V11/V12/V13</td><td>otra BC compatible</td><td>phi, advección, p_rgh, continuidad</td></tr>
+<tr><td>Top térmico</td><td>h=10, Ta=300, ε=.3</td><td>adiabático / T fija / otro h,ε</td><td>T(t), heatFlux</td></tr>
+<tr><td>Interfaz</td><td>gap .2 mm, k=.1</td><td>contacto perfecto / otro HTC</td><td>flujo metal→molde</td></tr>
+<tr><td>Densidad</td><td>B rho(T) / C rhoConst</td><td>otra EOS</td><td>U, continuidad</td></tr>
+<tr><td>Transporte</td><td>Cp, μ, Pr constantes</td><td>T-dependientes</td><td>k, Re, T, U</td></tr>
+<tr><td>Flujo</td><td>laminar</td><td>RANS/LES</td><td>mezcla, U, heat transfer</td></tr>
+<tr><td>Tiempo</td><td>Euler + .001</td><td>otro esquema/adaptativo</td><td>sensibilidad, costo</td></tr>
+<tr><td>Convección h</td><td>upwind</td><td>limited/higher order</td><td>difusión térmica numérica</td></tr>
+<tr><td>Malla</td><td>80×80×1</td><td>más fina/3-D</td><td>independencia</td></tr>
+<tr><td>Mushy</td><td>Cu=1e5, q=1e-3</td><td>sensibilidad</td><td>U mushy</td></tr>
+<tr><td>Phase relax</td><td>.1</td><td>.9 default / sensibilidad</td><td>αL, T, Δt</td></tr></table>
+<div class="checks"><label class="check"><input data-progress type="checkbox"><span>Para cada decisión puedo nombrar alternativa + observable.</span></label></div></div>
+
+<div class="card searchable"><h3>Números adimensionales para defender escalas</h3>
+<table><tr><th>Número</th><th>Fórmula</th><th>Uso</th><th>Estado</th></tr><tr><td>Pr</td><td>Pr=μCp/k</td><td>momentum vs difusión térmica</td><td>0.14</td></tr><tr><td>Re</td><td>Re=ρUL/μ</td><td>laminaridad</td><td>calcular con U de resultados</td></tr><tr><td>Pe</td><td>Pe=Re·Pr=UL/α</td><td>advección vs difusión térmica</td><td>calcular</td></tr><tr><td>Ra</td><td>Ra=gβΔTL³/(να)</td><td>convección natural, especialmente C</td><td>elegir ΔT/estado</td></tr><tr><td>Ste</td><td>Ste=CpΔT/L</td><td>sensible vs latente</td><td>calcular</td></tr><tr><td>Fo</td><td>Fo=αt/L²</td><td>escala difusión térmica</td><td>calcular</td></tr></table>
+<ul class="vars"><li><b>U</b>: velocidad característica [m/s]; <b>L</b>: longitud [m]</li><li><b>ν=μ/ρ</b> [m²/s]; <b>α=k/(ρCp)</b> [m²/s]</li><li><b>β</b> [1/K]; <b>ΔT</b> [K]</li></ul>
+<div class="callout warn">No inventar un Re/Ra único sin declarar qué U, L y ΔT representan el régimen evaluado.</div></div>
+</section>
+
+<section id="verification"><div class="sectionHead"><div><h2>8 · Verificación ≠ validación</h2><p>Primero probar que resolvemos bien el modelo; después que el modelo representa el experimento.</p></div><label class="doneBox"><input data-progress type="checkbox"> Sección entendida</label></div>
+<div class="grid"><div class="card half searchable"><h3>Verificación numérica</h3><div class="checks">
+<label class="check"><input data-progress type="checkbox"><span>Independencia/sensibilidad de malla.</span></label><label class="check"><input data-progress type="checkbox"><span>Sensibilidad a Δt.</span></label><label class="check"><input data-progress type="checkbox"><span>Courant razonable.</span></label><label class="check"><input data-progress type="checkbox"><span>Residuos p_rgh completos.</span></label><label class="check"><input data-progress type="checkbox"><span>Continuidad/balance de masa.</span></label><label class="check"><input data-progress type="checkbox"><span>Balance energético.</span></label><label class="check"><input data-progress type="checkbox"><span>sum(phi)+advección top.</span></label><label class="check"><input data-progress type="checkbox"><span>Propiedades dentro de rango.</span></label>
+</div></div>
+<div class="card half searchable"><h3>Validación física</h3><div class="checks">
+<label class="check"><input data-progress type="checkbox"><span>T(t) contra curva experimental.</span></label><label class="check"><input data-progress type="checkbox"><span>Tiempos/temperaturas liquidus-solidus.</span></label><label class="check"><input data-progress type="checkbox"><span>Arresto/recalescencia experimental.</span></label><label class="check"><input data-progress type="checkbox"><span>Sensibilidad a h, ε y gap antes de calibrar.</span></label><label class="check"><input data-progress type="checkbox"><span>Distinguir ajuste de validación independiente.</span></label>
+</div><div class="callout"><strong>“End” no es validación.</strong> Una simulación puede converger y estar físicamente equivocada.</div></div></div></section>
+
+<section id="justify"><div class="sectionHead"><div><h2>9 · Pendientes por justificar</h2><p>Que estén funcionando no significa que ya estén defendidos.</p></div><label class="doneBox"><input data-progress type="checkbox"> Sección revisada</label></div>
+<div class="card searchable"><div class="checks">
+<label class="check"><input data-progress type="checkbox"><span><b>alpha1e=.8:</b> fuente metalúrgica/modelo para nuestro hierro.</span></label>
+<label class="check"><input data-progress type="checkbox"><span><b>relax=.1:</b> sensibilidad y razón frente al default .9.</span></label>
+<label class="check"><input data-progress type="checkbox"><span><b>Cu=1e5, q=1e-3:</b> sensibilidad mushy.</span></label>
+<label class="check"><input data-progress type="checkbox"><span><b>Cp=827, μ=5.5e-3, Pr=.14:</b> procedencia/rango.</span></label>
+<label class="check"><input data-progress type="checkbox"><span><b>rho(T) B:</b> procedencia y extensión diagnóstica.</span></label>
+<label class="check"><input data-progress type="checkbox"><span><b>Tsol/Tliq/L:</b> correspondencia con composición/experimento.</span></label>
+<label class="check"><input data-progress type="checkbox"><span><b>h=10:</b> justificación de convección externa.</span></label>
+<label class="check"><input data-progress type="checkbox"><span><b>ε=.3/.5:</b> fuente/estado superficial.</span></label>
+<label class="check"><input data-progress type="checkbox"><span><b>Gap .2 mm, k=.1:</b> fuente/calibración independiente.</span></label>
+<label class="check"><input data-progress type="checkbox"><span><b>2-D:</b> suficiencia o limitación declarada.</span></label>
+<label class="check"><input data-progress type="checkbox"><span><b>Laminar:</b> Re/Ra/sensibilidad.</span></label>
+<label class="check"><input data-progress type="checkbox"><span><b>Euler + upwind h:</b> sensibilidad para recalescencia.</span></label>
+<label class="check"><input data-progress type="checkbox"><span><b>p_rgh inicial 1e5:</b> valorar inicialización hidrostática final.</span></label>
+<label class="check"><input data-progress type="checkbox"><span><b>metalTop:</b> decidir interpretación final.</span></label>
+<label class="check"><input data-progress type="checkbox"><span><b>Física ausente:</b> shrinkage, alimentación, free surface móvil, segregación, 3-D.</span></label>
+</div></div></section>
+
+<section id="defense"><div class="sectionHead"><div><h2>10 · Banco de preguntas de defensa</h2><p>Intenta contestar antes de abrir la respuesta.</p></div><label class="doneBox"><input data-progress type="checkbox"> Sección practicada</label></div>
+<div id="quiz">
+<div class="quizQ searchable"><b>1. ¿Qué solver estás usando realmente?</b> <button class="btn" onclick="toggleAnswer(this)">Ver respuesta</button><div class="answer">OpenFOAM Foundation v14 con <code>foamMultiRun</code>. Metal usa módulo <code>fluid</code>; molde, <code>solid</code>.</div></div>
+<div class="quizQ searchable"><b>2. ¿Por qué es 2-D?</b> <button class="btn" onclick="toggleAnswer(this)">Ver respuesta</button><div class="answer">Una celda en Z + <code>frontAndBack=empty</code>; no se resuelve variación física en Z.</div></div>
+<div class="quizQ searchable"><b>3. ¿fixedValue vs fixedFluxPressure?</b> <button class="btn" onclick="toggleAnswer(this)">Ver respuesta</button><div class="answer"><code>fixedValue</code> impone p_rgh. <code>fixedFluxPressure</code> ajusta gradiente para hacer el flujo compatible con U y fuerzas de cuerpo.</div></div>
+<div class="quizQ searchable"><b>4. ¿Por qué prghPressure si quieres atmósfera?</b> <button class="btn" onclick="toggleAnswer(this)">Ver respuesta</button><div class="answer">Fija presión estática y recalcula p_rgh con ρ y altura. En B evita congelar p_rgh cuando ρ(T) cambia.</div></div>
+<div class="quizQ searchable"><b>5. ¿Por qué p=0 en V13 no es vacío?</b> <button class="btn" onclick="toggleAnswer(this)">Ver respuesta</button><div class="answer"><code>constant/metal/pRef=1e5 Pa</code> aporta el offset. El cero de la BC es gauge relativo a esa referencia.</div></div>
+<div class="quizQ searchable"><b>6. ¿Qué método de solidificación usas?</b> <button class="btn" onclick="toggleAnswer(this)">Ver respuesta</button><div class="answer"><code>solidificationMeltingSource</code>, malla fija tipo entalpía–porosidad; calor latente en energía + Darcy en momentum.</div></div>
+<div class="quizQ searchable"><b>7. ¿Qué pasa si Cu aumenta mucho?</b> <button class="btn" onclick="toggleAnswer(this)">Ver respuesta</button><div class="answer">Aumenta el frenado en zonas parcialmente sólidas; puede suprimir convección mushy y endurecer el sistema numérico.</div></div>
+<div class="quizQ searchable"><b>8. ¿De dónde sale k del metal?</b> <button class="btn" onclick="toggleAnswer(this)">Ver respuesta</button><div class="answer">Con constTransport: k=Cp·μ/Pr≈32.49 W/(mK).</div></div>
+<div class="quizQ searchable"><b>9. ¿Por qué la BC térmica superior es Cauchy/Robin?</b> <button class="btn" onclick="toggleAnswer(this)">Ver respuesta</button><div class="answer">Relaciona flujo y temperatura de superficie mediante convección y radiación; no fija solo valor ni solo gradiente.</div></div>
+<div class="quizQ searchable"><b>10. ¿maxCo=.25 mantiene Co automáticamente?</b> <button class="btn" onclick="toggleAnswer(this)">Ver respuesta</button><div class="answer">No. <code>adjustTimeStep=no</code>; Δt sigue en .001 s.</div></div>
+<div class="quizQ searchable"><b>11. ¿Por qué B tiene beta=0?</b> <button class="btn" onclick="toggleAnswer(this)">Ver respuesta</button><div class="answer">B ya representa flotación mediante densidad variable ρ(T) en el solver buoyant; añadir una fuente β equivalente puede duplicar la física.</div></div>
+<div class="quizQ searchable"><b>12. ¿Es una superficie libre real?</b> <button class="btn" onclick="toggleAnswer(this)">Ver respuesta</button><div class="answer">No completa: geometría fija, U=slip, sin VOF, movimiento de interfaz, shrinkage ni feeding.</div></div>
+<div class="quizQ searchable"><b>13. ¿Cómo pruebas impermeabilidad?</b> <button class="btn" onclick="toggleAnswer(this)">Ver respuesta</button><div class="answer">Con sum(phi) en metalTop + energía advectiva integrada + continuidad; U=slip por sí sola no basta.</div></div>
+<div class="quizQ searchable"><b>14. ¿Verificación vs validación?</b> <button class="btn" onclick="toggleAnswer(this)">Ver respuesta</button><div class="answer">Verificación: resolver consistentemente el modelo numérico. Validación: demostrar que reproduce el experimento/fenómeno.</div></div>
+<div class="quizQ searchable"><b>15. ¿Cómo respondes “por qué elegiste esto”?</b> <button class="btn" onclick="toggleAnswer(this)">Ver respuesta</button><div class="answer">Impone X; representa Y; Z sería otra hipótesis; espero W; lo compruebo con Q.</div></div>
+<div class="quizQ searchable"><b>16. ¿Qué significa alpha1e=.8?</b> <button class="btn" onclick="toggleAnswer(this)">Ver respuesta</button><div class="answer">Es el máximo de fracción líquida eutéctica del modelo; modifica la relación entre T y αL. No es simplemente “80% sólido”.</div></div>
+<div class="quizQ searchable"><b>17. ¿Por qué relax=.1 es discutible?</b> <button class="btn" onclick="toggleAnswer(this)">Ver respuesta</button><div class="answer">Es mucho menor que el default .9 de OF14. Puede estabilizar la actualización de fase, pero también retardarla y hacerla dependiente del timestep; requiere sensibilidad.</div></div>
+<div class="quizQ searchable"><b>18. ¿Qué está activo: silica o steel4140?</b> <button class="btn" onclick="toggleAnswer(this)">Ver respuesta</button><div class="answer">Sílica, porque <code>constant/mold/physicalProperties</code> la incluye. Los archivos steel4140 no están activos.</div></div>
+<div class="quizQ searchable"><b>19. ¿createZones participa hoy?</b> <button class="btn" onclick="toggleAnswer(this)">Ver respuesta</button><div class="answer">No. La llamada está comentada en Allrun. Las cellZones vienen de blockMesh y luego splitMeshRegions.</div></div>
+<div class="quizQ searchable"><b>20. ¿Qué variable mirarías si cambias Cu?</b> <button class="btn" onclick="toggleAnswer(this)">Ver respuesta</button><div class="answer">U en la zona mushy, <code>phaseChangeDarcyAcceleration</code>, αL y estructura convectiva; además T si la convección cambia transferencia térmica.</div></div>
+</div>
+<div class="checks"><label class="check"><input data-progress type="checkbox"><span>Puedo responder 16/20 sin abrir respuestas.</span></label></div>
+</section>
+
+<section id="workflow"><div class="sectionHead"><div><h2>11 · Flujo exacto de ejecución</h2><p>Qué sucede y en qué orden.</p></div><label class="doneBox"><input data-progress type="checkbox"> Sección entendida</label></div>
+<div class="card searchable"><ol>
+<li><b>Allclean</b> elimina resultados previos.</li>
+<li><b>blockMesh</b> crea malla y cellZones.</li>
+<li><b>splitMeshRegions -cellZones all</b> separa metal y mold.</li>
+<li><b>foamMultiRun</b> lee controlDict, crea regiones y carga solver fluid/solid.</li>
+<li>Cada región lee <b>physicalProperties</b>, transporte y campos de <code>0/</code>.</li>
+<li>Se crea <b>fvModels</b>; solidificationMelting se conecta a momentum/energía.</li>
+<li>Comienza el <b>time loop</b>; PIMPLE multi‑región coordina predictores/correctores.</li>
+<li>Se escriben campos y <b>function objects</b> según los controles.</li>
+<li>Si terminó bien, <b>foamPostProcess</b> reduce diagnósticos de momentum.</li>
+<li><b>foamLog</b> extrae residuos, Courant, continuidad, iteraciones y costo.</li>
+</ol>
+<div class="callout"><strong>Allrun actual no ejecuta createZones.</strong> La línea está comentada.</div>
+<div class="checks"><label class="check"><input data-progress type="checkbox"><span>Puedo recitar el flujo y explicar qué produce cada etapa.</span></label></div></div>
+</section>
+
+<section id="mastercheck"><div class="sectionHead"><div><h2>12 · Checklist maestro antes del doctor</h2><p>Cuando esto esté marcado, la meta es reconstruir el razonamiento sin abrir GitHub.</p></div><label class="doneBox"><input data-progress type="checkbox"> Listo para defensa</label></div>
+<div class="grid">
+<div class="card half searchable"><h3>Estructura</h3><div class="checks"><label class="check"><input data-progress type="checkbox"><span>Sé para qué sirven system, constant y 0.</span></label><label class="check"><input data-progress type="checkbox"><span>Sé qué archivos están activos y cuáles solo existen.</span></label><label class="check"><input data-progress type="checkbox"><span>Sé por qué hay metal y mold.</span></label></div></div>
+<div class="card half searchable"><h3>Física</h3><div class="checks"><label class="check"><input data-progress type="checkbox"><span>Explico continuidad, momentum, energía y conducción.</span></label><label class="check"><input data-progress type="checkbox"><span>Explico entalpía–porosidad y Darcy.</span></label><label class="check"><input data-progress type="checkbox"><span>Explico B vs C.</span></label></div></div>
+<div class="card half searchable"><h3>Fronteras</h3><div class="checks"><label class="check"><input data-progress type="checkbox"><span>Clasifico BC principales.</span></label><label class="check"><input data-progress type="checkbox"><span>Defiendo V11/V12/V13 y limitaciones.</span></label><label class="check"><input data-progress type="checkbox"><span>Explico metalTop con U+p_rgh+T.</span></label></div></div>
+<div class="card half searchable"><h3>Numérica</h3><div class="checks"><label class="check"><input data-progress type="checkbox"><span>Sé PIMPLE global vs regional.</span></label><label class="check"><input data-progress type="checkbox"><span>Sé qué esquemas usamos.</span></label><label class="check"><input data-progress type="checkbox"><span>Sé qué controla Δt hoy.</span></label></div></div>
+<div class="card half searchable"><h3>Calidad</h3><div class="checks"><label class="check"><input data-progress type="checkbox"><span>Distingo verificación de validación.</span></label><label class="check"><input data-progress type="checkbox"><span>Sé diagnósticos de masa/energía/coupling.</span></label><label class="check"><input data-progress type="checkbox"><span>No uso “corrió” como prueba de validez.</span></label></div></div>
+<div class="card half searchable"><h3>Defensa</h3><div class="checks"><label class="check"><input data-progress type="checkbox"><span>Sé qué parámetros aún no están justificados.</span></label><label class="check"><input data-progress type="checkbox"><span>Sé las limitaciones físicas del modelo.</span></label><label class="check"><input data-progress type="checkbox"><span>Puedo proponer un observable para decidir entre opciones.</span></label></div></div>
+</div></section>
+
+<footer><p><strong>Base técnica:</strong> configuración real de QuickCup-Solidification (V11 baseline; V12/V13 pruebas controladas) + código de OpenFOAM Foundation v14 para foamMultiRun, solidificationMelting, buoyancy/p_rgh, fixedFluxPressure, prghPressure, coupledTemperature, wallLayersHeatTransferCoefficient y constTransport.</p><p>La guía distingue entre <b>lo escrito</b>, <b>lo que OF14 hace con ello</b> y <b>lo que todavía necesita evidencia</b>.</p></footer>
+</main>
+
+<script>
+const STORE='quickcup-study-guide-v1';
+const boxes=[...document.querySelectorAll('[data-progress]')];
+function updateProgress(){const done=boxes.filter(b=>b.checked).length,total=boxes.length,pct=total?Math.round(done*100/total):0;document.getElementById('progressBar').style.width=pct+'%';document.getElementById('progressText').textContent=pct+'%';document.getElementById('progressCount').textContent=`${done} / ${total} puntos revisados`;}
+function save(){const s={};boxes.forEach((b,i)=>s[i]=b.checked);localStorage.setItem(STORE,JSON.stringify(s));updateProgress();}
+function load(){let s={};try{s=JSON.parse(localStorage.getItem(STORE)||'{}')}catch(e){}boxes.forEach((b,i)=>b.checked=!!s[i]);updateProgress();}
+boxes.forEach(b=>b.addEventListener('change',save));
+document.getElementById('resetBtn').onclick=()=>{if(confirm('¿Reiniciar todo el progreso?')){boxes.forEach(b=>b.checked=false);save();}};
+document.getElementById('themeBtn').onclick=()=>{const r=document.documentElement,n=r.dataset.theme==='dark'?'light':'dark';r.dataset.theme=n;localStorage.setItem(STORE+'-theme',n);};document.documentElement.dataset.theme=localStorage.getItem(STORE+'-theme')||'light';
+const sidebar=document.getElementById('sidebar');document.getElementById('menuBtn').onclick=()=>sidebar.classList.toggle('open');document.querySelectorAll('nav a').forEach(a=>a.onclick=()=>sidebar.classList.remove('open'));
+const search=document.getElementById('search');search.addEventListener('input',()=>{const q=search.value.trim().toLowerCase();document.querySelectorAll('.searchable').forEach(el=>el.classList.toggle('filterHidden',q&&!el.innerText.toLowerCase().includes(q)));});
+function toggleAnswer(btn){btn.closest('.quizQ').classList.toggle('open')}window.toggleAnswer=toggleAnswer;
+const navLinks=[...document.querySelectorAll('#nav a')],targets=[...document.querySelectorAll('section[id],.card[id]')];
+const obs=new IntersectionObserver(es=>{const v=es.filter(e=>e.isIntersecting).sort((a,b)=>b.intersectionRatio-a.intersectionRatio)[0];if(!v)return;navLinks.forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+v.target.id));},{rootMargin:'-15% 0px -70% 0px',threshold:[0,.05,.2,.5]});targets.forEach(t=>obs.observe(t));
+load();
+</script></body></html>
