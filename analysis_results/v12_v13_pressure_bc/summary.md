@@ -32,7 +32,9 @@ C12 y C13 son indistinguibles dentro de la precisión almacenada.
 - mediana `R_p_outer`: 7.58e-4;
 - fracción de timesteps con `R_p_outer>1`: 0.
 
-Esto confirma la predicción metodológica: con `rhoConst` y una tapa horizontal fija, `fixedValue p_rgh` y `prghPressure` producen esencialmente la misma condición de presión.
+Esto confirma la predicción metodológica: con `rhoConst` y una tapa horizontal fija, `fixedValue p_rgh` y `prghPressure` producen esencialmente la misma solución.
+
+**Precisión importante sobre impermeabilidad en C:** `sum(phi)` es el flujo NETO integrado sobre todo el patch. Que su suma sea ~0 no demuestra que cada cara tenga `phi=0`. El `energyAdvectiveFlux` integrado de +6.29 J demuestra que existe intercambio advectivo local no nulo que no se cancela energéticamente. Por tanto C12/C13 tampoco deben declararse estrictamente impermeables; solo presentan flujo másico neto casi nulo. Para cuantificar intercambio local de masa en una futura auditoría conviene almacenar también `sum(abs(phi))` o un equivalente face-wise.
 
 ### Familia B
 
@@ -240,7 +242,7 @@ En B:
 
 Para el modelo ACTUAL de Quick-Cup con geometría fija y top cinemáticamente impermeable:
 
-- V12 y V13 son pruebas diagnósticas útiles, pero no deben adoptarse como baseline impermeable;
+- V12 y V13 son pruebas diagnósticas útiles, pero no deben adoptarse como baseline impermeable; en C el flujo neto es casi cero, pero la advección energética demuestra intercambio local no nulo;
 - la evidencia favorece mantener `fixedFluxPressure + slip` como formulación coherente de pared/tapa impermeable;
 - la familia C es internamente más compatible con esa geometría fija porque no exige cambio de masa/volumen por `rho(T)`;
 - si se desea conservar una formulación B con contracción térmica real, el siguiente problema físico no es otra BC de presión: es representar shrinkage, cambio de volumen, alimentación o una superficie libre móvil de forma coherente.
