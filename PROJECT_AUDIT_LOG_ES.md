@@ -4071,3 +4071,204 @@ Se establece que `U=slip` no basta para declarar una frontera impermeable. Todo 
 Se añadió `analysis_tools/boundary_flux_audit.py` y se incorporó `metalTopPhiSum` a B10/C10 para futuras ejecuciones. La corrida local que ya estaba en marcha antes de esta modificación no adquiere retrospectivamente ese function object; en ella la alerta advectiva sigue disponible mediante `metalTopEnergyPower`.
 
 **Estado:** ✅ alerta V9 convertida en regla permanente.
+
+
+---
+
+## 2026-09-29 — Trazabilidad V10–V13 y auditoría de la condición de presión en `metalTop`
+
+### AUD-V10-V11 — Linaje controlado con air gap OF14
+**[GIT-VERIFIED] [CONFIG-VERIFIED]**
+
+La bitácora global no había incorporado todavía los casos V10 y V11 aunque ya estaban versionados. Se corrige aquí ese hueco documental.
+
+Casos canónicos:
+
+- `B10_airGapOF14`: descendiente de B5/V5 con el air gap corregido para OpenFOAM Foundation v14 y tabla B de `rho(T)` extendida.
+- `C10_airGapOF14`: descendiente de C5/V5 con el mismo air gap OF14.
+- `B11_topFixedFlux_airGapOF14`: descendiente de B9/V9; combina `metalTop/p_rgh=fixedFluxPressure` con el air gap OF14 y la misma tabla B extendida.
+- `C11_topFixedFlux_airGapOF14`: descendiente de C9/V9; combina `fixedFluxPressure` con el air gap OF14.
+
+Air gap común:
+- espesor: `2e-4 m`;
+- conductividad: `1e-1 W/(m K)`;
+- conductancia equivalente: `k/delta = 500 W/(m2 K)`.
+
+Comparaciones primarias:
+1. B10 vs B11: efecto de la BC superior con air gap y tabla `rho(T)` igualados;
+2. C10 vs C11: mismo efecto en familia C;
+3. B10 vs C10 y B11 vs C11: contraste B/C solo después de confirmar que las demás condiciones permanezcan emparejadas.
+
+**Estado de evidencia:** la configuración está verificada en Git. No etiquetar V10/V11 como `RUN-VERIFIED` o `ANALYSIS-VERIFIED` hasta que los resultados correspondientes estén incorporados y auditados.
+
+---
+
+### AUD-V12-V13 — Canonicalización de las pruebas de presión
+**[GIT-VERIFIED] [SOURCE-VERIFIED] [DECISION]**
+
+V12 y V13 descienden directamente de V11. La regla de cambio controlado quedó verificada por SHA: frente a V11, los casos canónicos solo cambian físicamente `0/metal/p_rgh`; las diferencias adicionales son únicamente `CASE_NOTES.md` y `CASE_VARIANT.md`.
+
+Casos canónicos:
+
+- `B12_topFixedValue_airGapOF14`
+- `C12_topFixedValue_airGapOF14`
+- `B13_prghPressure_airGapOF14`
+- `C13_prghPressure_airGapOF14`
+
+Los primeros prototipos:
+- `B12_fixedValueP_rgh`
+- `C12_fixedValueP_rgh`
+- `B13_prghPressureAtmosphere`
+- `C13_prghPressureAtmosphere`
+
+quedan como **PROVISIONALES / NO CANÓNICOS** porque usaban `value uniform 0` como valor inicial de `p_rgh`. Se conservan solo como rastro histórico; el runner canónico es `run_v12_v13_tests.sh`.
+
+---
+
+### AUD-PREF — Dos referencias de presión distintas que no deben confundirse
+**[SOURCE-VERIFIED] [GIT-VERIFIED]**
+
+OpenFOAM Foundation v14 define en la clase de buoyancy:
+
+`p_rgh = p - rho*gh - pRef`
+
+donde:
+- `constant/metal/pRef` es un `uniformDimensionedScalarField` que forma parte de la definición de presión reducida;
+- `hRef` es opcional y, si no existe el archivo, su valor por defecto es 0;
+- `gh = (g·x) - ghRef`.
+
+Esto es distinto de:
+- `system/metal/fvSolution/PIMPLE/pRefPoint`
+- `system/metal/fvSolution/PIMPLE/pRefValue`
+
+que pertenecen al mecanismo `pressureReference` para fijar un nivel de presión en dominios que lo necesitan.
+
+El código de `GeometricField::needReference()` establece que si alguna BC de presión `fixesValue()`, el campo no necesita una referencia interna adicional. Por tanto:
+
+- V11, con `fixedFluxPressure` en `metalTop` y en la interfaz, necesita referencia interna y usa `pRefPoint/pRefValue`;
+- V12 y V13 tienen en `metalTop` una BC derivada de `fixedValue`, por lo que `p_rgh.needReference()` pasa a falso y el anclaje `pRefPoint/pRefValue` deja de ser el mecanismo que fija el nivel del sistema;
+- `constant/metal/pRef=1e5 Pa` sigue siendo físicamente activo en la reconstrucción `p = p_rgh + rho*gh + pRef`.
+
+Esta distinción es obligatoria al explicar por qué `prghPressure` usa `p uniform 0` en V13.
+
+Fuentes oficiales OF14:
+- `src/finiteVolume/cfdTools/general/buoyancy/buoyancy.H`
+- `src/finiteVolume/cfdTools/general/buoyancy/buoyancy.C`
+- `src/finiteVolume/cfdTools/general/pressureReference/pressureReference.C`
+- `src/finiteVolume/fields/GeometricFields/GeometricField/GeometricField.C`
+- `applications/modules/isothermalFluid/correctBuoyantPressure.C`
+
+---
+
+### AUD-V12-CALC — Derivación exacta de los valores fixedValue de V12
+**[SOURCE-VERIFIED] [GIT-VERIFIED] [CALC-VERIFIED]**
+
+Datos del caso:
+- `g=(0,-9.81,0) m/s2`;
+- `hRef=0`;
+- la superficie `metalTop` está en `y=0.040 m`;
+- `constant/metal/pRef=1e5 Pa`;
+- presión estática atmosférica objetivo: `p=1e5 Pa`.
+
+Entonces:
+
+`gh = -9.81*0.040 = -0.3924 m2/s2`
+
+y, como `p-pRef=0` en la tapa:
+
+`p_rgh = -rho*gh = rho*9.81*0.040`.
+
+Familia B:
+- `T0=1500 K`;
+- interpolación lineal de la tabla `icoTabulated` entre 1473.15 K / 6820 kg/m3 y 1573.15 K / 6740 kg/m3:
+- `rho_B(1500 K)=6798.52 kg/m3`;
+- `p_rgh=6798.52*9.81*0.040=2667.739248 Pa`.
+
+Familia C:
+- `rho_C=6820 kg/m3`;
+- `p_rgh=6820*9.81*0.040=2676.168 Pa`.
+
+Por tanto los valores canónicos de V12 están respaldados directamente por la geometría, gravedad, EOS y definición de `p_rgh`; no son parámetros ajustados.
+
+---
+
+### AUD-V13-BC — Significado de `prghPressure p uniform 0`
+**[SOURCE-VERIFIED] [DECISION]**
+
+La implementación OF14 de `PrghPressureFvPatchScalarField` aplica:
+
+`p_rgh = p_spec - rho*gh`
+
+sobre el valor de presión estática suministrado por la BC. El solver reconstruye después:
+
+`p = p_rgh + rho*gh + pRef`.
+
+En este caso, con `constant/metal/pRef=1e5 Pa`, especificar:
+
+`p uniform 0;`
+
+produce una presión estática reconstruida de:
+
+`p = 0 + pRef = 1e5 Pa`.
+
+Por tanto, usar `p=1e5` dentro de `prghPressure` **duplicaría** el offset de referencia y conduciría a aproximadamente 2 bar reconstruidos en esta configuración.
+
+El `value` de V13 (`2667.739248` Pa en B y `2676.168` Pa en C) es el valor inicial consistente; la BC lo recalcula durante la solución.
+
+Fuente oficial OF14:
+- `src/finiteVolume/fields/fvPatchFields/derived/PrghPressure/PrghPressureFvPatchScalarField.H/.C`
+- `src/finiteVolume/fields/fvPatchFields/derived/pressure/pressureFvPatchScalarField.H/.C`.
+
+---
+
+### AUD-V12-V13-PHYS — Qué hipótesis física prueba realmente cada caso
+**[SOURCE-VERIFIED] [METHODOLOGICAL DECISION]**
+
+V11:
+- `U=slip`;
+- `p_rgh=fixedFluxPressure`.
+
+La documentación oficial OF14 describe `fixedFluxPressure` como la BC que ajusta el gradiente de presión para que el flujo de frontera sea consistente con la BC de velocidad en presencia de fuerzas de cuerpo. Para una tapa rígida, fija e impermeable con `U=slip`, V11 es la combinación de referencia físicamente coherente. Esto ya fue confirmado empíricamente en V9 mediante `sum(phi)≈0` y advección de energía ≈0.
+
+V12:
+- mantiene `U=slip`;
+- fija directamente `p_rgh` al valor atmosféricamente consistente del instante inicial.
+
+En C, como `rho` es constante y la tapa es horizontal, ese valor permanece consistente con atmósfera. En B, al cambiar `rho(T)`, mantener `p_rgh` congelado implica que la presión estática reconstruida:
+
+`p = pRef + p_rgh + rho*gh`
+
+puede cambiar en el tiempo y espacialmente con `rho`. V12 es por tanto una prueba explícita de la propuesta de `fixedValue`, no una imposición de atmósfera estática constante durante todo el transitorio B.
+
+V13:
+- mantiene `U=slip`;
+- prescribe presión estática atmosférica mediante `prghPressure`;
+- permite que `p_rgh` se adapte a `rho` y a la altura.
+
+En C12 vs C13, con `rhoConst` y una tapa horizontal fija, ambas BC deberían generar esencialmente el mismo valor de `p_rgh` en `metalTop` (salvo redondeo/implementación). Ese par funciona como control.
+
+En B12 vs B13, la diferencia controlada es precisamente:
+- V12: `p_rgh` permanece congelado;
+- V13: la presión estática permanece atmosférica y `p_rgh` sigue a `rho(T)`.
+
+**Advertencia metodológica:** ni `fixedValue` ni `prghPressure` deben declararse automáticamente equivalentes a una pared impermeable. Ambas fijan el valor de presión; la combinación con `U=slip` es una prueba deliberada y debe validarse con:
+- `metalTopPhiSum`;
+- `energyAdvectiveFlux`;
+- continuidad;
+- residuos de `p_rgh`;
+- campos de U/T/alphaL.
+
+La guía OF14 usa `fixedFluxPressure` en paredes y combina condiciones de presión atmosférica con condiciones de velocidad que permiten entrada/salida cuando se modela una frontera abierta. Por ello V12/V13 son diagnósticos controlados de BC y no sustituyen V11 como baseline impermeable sin evidencia de los resultados.
+
+---
+
+### AUD-V12-V13-STATUS — Estado antes de la corrida
+**[GIT-VERIFIED]**
+
+- Configuración canónica V12/V13: ✅ verificada por contenido y SHA relativo contra V11.
+- Cálculo de presión inicial: ✅ verificado.
+- Sintaxis `prghPressure`: ✅ verificada contra fuente OF14.
+- Documentación por caso: ✅ presente.
+- Runner canónico: `cases_controlled_buoyancy/run_v12_v13_tests.sh`.
+- Resultados V12/V13: ⏳ todavía no deben considerarse `RUN-VERIFIED` ni `ANALYSIS-VERIFIED` hasta ejecutar y auditar los cuatro casos.
+
