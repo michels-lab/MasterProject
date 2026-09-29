@@ -25,8 +25,12 @@ All timestep, PIMPLE, mesh, phase-change, velocity, pressure, top thermal bounda
 
 ## Current methodological status
 
-V11 remains the physical baseline for the current fixed-geometry, impermeable-top interpretation.
+**RUN-VERIFIED + ANALYSIS-VERIFIED.**
 
-The completed V12/V13 pressure tests showed that pressure-value boundary conditions can create advective exchange through `metalTop`, especially in variable-density family B. Therefore V12/V13 remain diagnostic variants rather than replacements for this fixed-flux baseline.
+Direct V11 evidence confirms that `fixedFluxPressure + slip` closes `metalTop` to numerical precision:
+- max `|sum(phi)| = 1.694066e-21 kg/s`;
+- integrated top advective energy ≈ 0 J.
 
-Historical V9 evidence supports the impermeability of the `fixedFluxPressure + slip` pairing. Direct V11 run metrics must still be attributed only when V11 results themselves are audited.
+Relative to B10, closing the top removes ~629.6 J of advective transport and strongly reorganizes the B velocity field. The variable-density cumulative continuity mismatch remains and is interpreted as a fixed-volume/model-physics limitation, not as top leakage.
+
+V11 therefore remains the impermeable baseline for family B; V12/V13 remain diagnostic pressure-value variants.
