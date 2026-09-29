@@ -4115,13 +4115,7 @@ Casos canónicos:
 - `B13_prghPressure_airGapOF14`
 - `C13_prghPressure_airGapOF14`
 
-Los primeros prototipos:
-- `B12_fixedValueP_rgh`
-- `C12_fixedValueP_rgh`
-- `B13_prghPressureAtmosphere`
-- `C13_prghPressureAtmosphere`
-
-quedan como **PROVISIONALES / NO CANÓNICOS** porque usaban `value uniform 0` como valor inicial de `p_rgh`. Se conservan solo como rastro histórico; el runner canónico es `run_v12_v13_tests.sh`.
+Los primeros directorios duplicados/provisionales de V12/V13 fueron eliminados del árbol actual del repositorio para mantener una estructura inequívoca: una sola configuración de caso por versión y familia. La trazabilidad del intento inicial permanece en el historial Git, pero no como casos activos. El único runner V12/V13 vigente es `run_v12_v13_tests.sh`.
 
 ---
 
