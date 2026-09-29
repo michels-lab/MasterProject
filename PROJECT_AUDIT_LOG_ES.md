@@ -4282,3 +4282,56 @@ Esto verifica que las cuatro configuraciones canónicas completan 10 s sin error
 
 El estado `ANALYSIS-VERIFIED` permanece pendiente.
 
+
+
+---
+
+## 2026-09-29 — Análisis V12/V13 de presión en `metalTop`
+
+### AUD-V12-V13-RESULTS — Fixed reduced pressure vs atmospheric static pressure
+**[RUN-VERIFIED] [ANALYSIS-VERIFIED]**
+
+Resumen reproducible:
+- `analysis_results/v12_v13_pressure_bc/summary.md`
+- `analysis_results/v12_v13_pressure_bc/metrics.csv`
+
+Hallazgos principales:
+
+1. **C12 y C13 son indistinguibles dentro de la precisión almacenada.**
+   Con `rhoConst` y tapa horizontal fija, `fixedValue p_rgh` y `prghPressure` producen esencialmente la misma solución.
+
+2. **B12 y B13 no son impermeables.**
+   - B12: max `|sum(phi)|=9.739e-5 kg/s`; `∫phi dt=-5.642e-4 kg`.
+   - B13: max `|sum(phi)|=9.771e-5 kg/s`; `∫phi dt=-5.799e-4 kg`.
+   Eso equivale a aproximadamente 0.519% y 0.533% de la masa inicial B, respectivamente, en 10 s.
+
+3. **La fuga lleva entalpía sensible por `metalTop`.**
+   - B12: `∫P_adv,top dt=-660.77 J`; calor no advectivo top `+369.28 J`.
+   - B13: `∫P_adv,top dt=-559.53 J`; calor no advectivo top `+374.77 J`.
+   Durante el rebound, el flujo advectivo negativo supera al heatFlux positivo, por lo que el balance neto del top introduce energía al dominio.
+
+4. **B13 presenta remelting local inducido por el transporte de frontera.**
+   - T: 1471.28 K @ 5.167 s → 1475.28 K @ 7.237 s (`+4.00 K`).
+   - alphaL: 0.993108 @ 5.231 s → 1.0 @ 6.222 s.
+   El evento coincide con flujo/entalpía entrante por el top. No debe etiquetarse como recalescencia metalúrgica por nucleación.
+
+5. **B12 también presenta rebound térmico**, 1478.93 K → 1483.27 K (`+4.34 K`), pero permanece por encima de Tliq y alphaL=1; no hay remelting.
+
+6. **La extracción térmica no advectiva permanece casi igual** entre los casos (~4.06 kJ sobre todas las fronteras). La diferencia B12/B13 no proviene de h, emissivity o air gap; proviene del acoplamiento presión-flujo en `metalTop`.
+
+7. **Los cuatro casos convergen numéricamente en presión.**
+   `R_p_outer>1` ocurre en 0% de los 10 000 timesteps. Por tanto la fuga no es evidencia de divergencia; es una consecuencia de la condición de frontera resuelta.
+
+8. **Interpretación de continuidad en B.**
+   B12/B13 muestran cumulative continuity ~1e-6, mucho menor que el ~-0.046 histórico de B9 impermeable. La razón física es que B12/B13 permiten entrada de masa para acomodar el aumento de `rho(T)` en volumen geométrico fijo. Esa mejor continuidad no significa mayor fidelidad para una tapa impermeable.
+
+### Decisión metodológica
+
+Para el modelo actual de Quick-Cup con geometría fija y `metalTop` cinemáticamente impermeable:
+
+- V12/V13 se conservan como pruebas diagnósticas;
+- no se adoptan como baseline impermeable;
+- `fixedFluxPressure + slip` sigue siendo la formulación coherente de tapa/pared impermeable;
+- la familia C es internamente más compatible con el volumen fijo;
+- conservar B con contracción térmica real requeriría modelar de forma coherente shrinkage, cambio de volumen, alimentación o superficie libre móvil.
+
