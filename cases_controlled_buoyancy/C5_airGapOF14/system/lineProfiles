@@ -1,0 +1,136 @@
+horizontalProfiles
+{
+    type            sets;
+    libs            ("libsampling.so");
+
+    // Sample only the fluid metal region
+    region          metal;
+
+    // Write profiles at the case write times
+    writeControl    writeTime;
+
+    interpolationScheme cellPoint;
+    setFormat       raw;
+
+    // U is written as a vector, so the raw profile contains Ux, Uy and Uz.
+    // |U| is derived exactly during analysis from the sampled components.
+    fields
+    (
+        U
+        T
+        p_rgh
+        rho
+        phaseChangeSource:alpha1
+
+        // Flow topology
+        vorticity
+        flowType
+        magSqrDevGradU
+
+        // Thermal-gradient and cooling diagnostics
+        gradT
+        magGradT
+        dTdt
+        coolingRate
+
+        // Density-gradient / buoyancy diagnostics
+        gradRho
+        magGradRho
+
+        // Phase-change-rate diagnostics
+        dAlphaLdt
+        solidificationRate
+        latentHeatRateVol
+
+        // Numerical field
+        CoCell
+    );
+
+    sets
+    {
+        // Horizontal profile at mid-height: y = 20 mm
+        line_y20mm
+        {
+            type        lineUniform;
+            axis        x;
+            start       (0.00025 0.020 0.005);
+            end         (0.03975 0.020 0.005);
+            nPoints     80;
+        }
+
+        // Horizontal profile closer to the free surface: y = 30 mm
+        // The metal top is y = 40 mm, so this line is 10 mm below it.
+        line_y30mm
+        {
+            type        lineUniform;
+            axis        x;
+            start       (0.00025 0.030 0.005);
+            end         (0.03975 0.030 0.005);
+            nPoints     80;
+        }
+    }
+}
+
+verticalProfiles
+{
+    type            sets;
+    libs            ("libsampling.so");
+
+    // Sample the fluid metal region along the gravity direction (Y).
+    region          metal;
+
+    // Write profiles at the case write times.
+    writeControl    writeTime;
+
+    interpolationScheme cellPoint;
+    setFormat       raw;
+
+    // Keep the same fields as the horizontal profiles so both orientations
+    // can be compared directly in PostPlotter.
+    fields
+    (
+        U
+        T
+        p_rgh
+        rho
+        phaseChangeSource:alpha1
+
+        // Flow topology
+        vorticity
+        flowType
+        magSqrDevGradU
+
+        // Thermal-gradient and cooling diagnostics
+        gradT
+        magGradT
+        dTdt
+        coolingRate
+
+        // Density-gradient / buoyancy diagnostics
+        gradRho
+        magGradRho
+
+        // Phase-change-rate diagnostics
+        dAlphaLdt
+        solidificationRate
+        latentHeatRateVol
+
+        // Numerical field
+        CoCell
+    );
+
+    sets
+    {
+        // Vertical centerline through the central probe:
+        // x = 20 mm, z = 5 mm, from the first to last metal-cell-centre height.
+        line_x20mm
+        {
+            type        lineUniform;
+            axis        y;
+            start       (0.020 0.00025 0.005);
+            end         (0.020 0.03975 0.005);
+            nPoints     80;
+        }
+    }
+}
+
