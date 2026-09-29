@@ -4335,3 +4335,45 @@ Para el modelo actual de Quick-Cup con geometría fija y `metalTop` cinemáticam
 - la familia C es internamente más compatible con el volumen fijo;
 - conservar B con contracción térmica real requeriría modelar de forma coherente shrinkage, cambio de volumen, alimentación o superficie libre móvil.
 
+
+
+---
+
+## 2026-09-29 — Convención operativa MAZAPÁN
+
+### MAZAPÁN — sincronización de carpetas completas de casos
+**[WORKFLOW] [GIT] [PROJECT CONVENTION]**
+
+A partir de esta fecha, **MAZAPÁN** es el nombre corto oficial del proyecto para el flujo de subir a GitHub resultados versionables de uno o varios casos OpenFOAM **añadiendo la carpeta completa del caso**, y dejando que `.gitignore` decida qué archivos generados no deben entrar al repositorio.
+
+Cuando en la conversación se indique **“haz/pásame MAZAPÁN”**, la intención es este patrón:
+
+```bash
+cd ~/OpenFOAM/QuickCup_Solidification
+
+git add \
+cases_controlled_buoyancy/<CASO_1> \
+cases_controlled_buoyancy/<CASO_2>
+
+git commit -m "results: add simulation outputs"
+git pull --rebase origin main
+git push origin main
+```
+
+Principios de MAZAPÁN:
+
+1. **Agregar el caso completo**, no enumerar a mano `log.foamMultiRun`, `logs/`, `postProcessing/`, etc.
+2. **Confiar en el `.gitignore` del proyecto** para excluir tiempos calculados, mallas generadas, archivos ParaView, imágenes, ZIP y otros outputs que no deben versionarse.
+3. Los resultados científicos deliberadamente permitidos por `.gitignore` —por ejemplo `logs/`, `postProcessing/` y `analysis_results/`— entran automáticamente.
+4. Hacer primero el commit de los resultados locales y después `git pull --rebase origin main`, para no perder una corrida local válida cuando GitHub contiene documentación más reciente.
+5. **No usar `git add -f`** salvo una decisión explícita y justificada.
+6. **Advertencia Git importante:** `.gitignore` solo evita añadir archivos no rastreados. Si un archivo o directorio ya estaba trackeado, seguirá apareciendo en commits aunque después se añada una regla para ignorarlo. En ese caso debe retirarse del índice/árbol de Git de forma deliberada sin confundirlo con borrar el resultado local.
+7. MAZAPÁN no modifica la física ni los inputs del caso; es exclusivamente un flujo de sincronización/versionado.
+
+La convención se añadió también a:
+- `OPENFOAM_COMMAND_MANUAL_ES.md`;
+- `CASE_GUIDE_ES.md`;
+- `CASE_GUIDE_INTERACTIVE_ES.html`.
+
+**Origen de la convención:** durante la sincronización de V12/V13 se comprobó que enumerar manualmente cada subcarpeta era innecesario y propenso a errores, porque el repositorio ya dispone de reglas `.gitignore` diseñadas para separar configuración/resultados científicos de outputs pesados.
+
