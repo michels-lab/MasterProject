@@ -4452,3 +4452,102 @@ git push origin main
 
 El `git push` es solo la mitad del flujo.
 
+
+
+---
+
+## 2026-09-29 — Cierre científico V10–V13
+
+### AUD-V10-V13-CLOSURE — V11 verificada directamente y campaña de BC de presión cerrada
+**[RUN-VERIFIED] [ANALYSIS-VERIFIED] [DECISION]**
+
+Los resultados locales de V10/V11 fueron incorporados al repositorio en el commit de resultados y se auditaron directamente junto con V12/V13.
+
+Resumen reproducible:
+- `analysis_results/v10_v13_closure/summary.md`
+- `analysis_results/v10_v13_closure/case_metrics.csv`
+- `analysis_results/v10_v13_closure/pair_metrics.csv`
+- `analysis_results/v10_v13_closure/profile_metrics.csv`
+
+#### Verificación directa de V11
+
+B11:
+- max `|sum(phi_top)| = 1.694066e-21 kg/s`;
+- `∫phi_top dt = -1.27055e-22 kg`;
+- `∫P_adv,top dt ≈ -1.22e-16 J`;
+- T central final = 1470.07 K;
+- alphaL central final = 0.988421;
+- alphaL media final = 0.9606902;
+- max Co = 0.0673434;
+- mediana `R_p_outer = 0.001981`;
+- `R_p_outer>1 = 0%`;
+- cumulative continuity final = -0.0310209.
+
+C11:
+- `sum(phi_top)=0`;
+- `∫P_adv,top dt=0 J`;
+- T central final = 1464.19 K;
+- alphaL central final = 0.964815;
+- alphaL media final = 0.9620593;
+- max Co = 0.0650864;
+- mediana `R_p_outer = 0.0005954`;
+- `R_p_outer>1 = 0%`;
+- cumulative continuity final = 4.45e-13.
+
+Con esto, la impermeabilidad de `fixedFluxPressure + slip` queda demostrada en los casos V11 mismos y ya no depende únicamente de la evidencia histórica V9.
+
+#### B10 → B11
+
+Cerrar la tapa elimina una contribución advectiva integrada de aproximadamente -629.63 J sin cambiar materialmente la extracción térmica metal→molde (3686.64 J vs 3687.23 J).
+
+Efecto sobre la solución:
+- T central RMSE = 8.53 K;
+- max |ΔT| = 16.16 K;
+- final ΔT = -2.46 K;
+- Uy NRMSE final = 44.7% en y=20 mm, 217.5% en y=30 mm y 257.9% en x=20 mm;
+- flowType class disagreement = 62.5%, 27.5% y 10%.
+
+**Interpretación:** la antigua condición de presión superior participaba materialmente en la solución B. B10 no es una referencia limpia de buoyancy de densidad variable.
+
+#### C10 → C11
+
+Cerrar la tapa elimina solo +2.976 J de advección integrada.
+
+Efecto sobre la solución:
+- T central RMSE = 0.164 K;
+- max |ΔT| = 0.43 K;
+- final ΔT = -0.08 K;
+- Uy NRMSE final = 0.52%, 1.70% y 0.44% en los tres perfiles canónicos.
+
+**Interpretación:** C es robusta a la corrección porque el transporte superior previo ya era pequeño.
+
+#### V11 frente a V12/V13
+
+B12 se separa fuertemente de B11:
+- max `|sum(phi)| = 9.739e-5 kg/s`;
+- `Eadv,top=-660.77 J`;
+- T RMSE vs B11 = 5.39 K;
+- Uy NRMSE y=30 mm = 182%;
+- flowType disagreement y=30 mm = 98.75%.
+
+B13 puede parecer térmicamente cercano a B11:
+- T RMSE = 0.234 K;
+- Uy NRMSE = 8–12% según perfil;
+
+pero mantiene:
+- max `|sum(phi)| = 9.771e-5 kg/s`;
+- `Eadv,top=-559.53 J`.
+
+**Lección metodológica:** similitud de T(t) no demuestra equivalencia física si el balance de masa/frontera es incorrecto.
+
+C12/C13 quedan cerca de C11 en T/U, pero conservan ~+6.29 J de advección integrada con flujo neto casi nulo, por lo que no sustituyen la condición estrictamente impermeable.
+
+#### Decisión final de la campaña
+
+1. V11 queda `RUN-VERIFIED + ANALYSIS-VERIFIED`.
+2. `fixedFluxPressure + slip` queda confirmado como tratamiento de `metalTop` impermeable en el modelo actual.
+3. **C11 queda como baseline físico preferido para la etapa G1 de validación experimental.**
+4. B11 se conserva como diagnóstico de densidad variable; su cumulative continuity distinta de cero expone la incompatibilidad `rho(T)` + volumen fijo sin shrinkage/free-surface/feeding y no representa fuga por el top.
+5. V12/V13 quedan como pruebas diagnósticas y no reemplazan V11.
+6. No se justifica abrir nuevas variantes V14 de presión/PIMPLE por esta línea de investigación.
+7. El siguiente paso científico es G1: alinear C11 a las condiciones experimentales Quick-Cup y comparar contra una serie numérica/digitalizada de termopar.
