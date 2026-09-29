@@ -33,3 +33,11 @@ Initial density:
 - C: rho=6820 kg/m3 -> p_rgh(atm)=2676.168 Pa.
 
 For the prghPressure variant, `p uniform 0` is intentional because `pRef=1e5 Pa`; using `p=1e5` there would double-count the atmospheric reference in this solver setup.
+
+## Run result and interpretation
+
+Status: **RUN-VERIFIED + ANALYSIS-VERIFIED; diagnostic/control case**.
+
+C12 is numerically indistinguishable from C13 within stored precision. Net top mass flux is ~zero, but integrated advective energy is +6.293718 J, proving that net cancellation does not establish face-wise impermeability.
+
+Conclusion: C12 is retained as the constant-density control for the fixed-value test, not as the impermeable baseline. V11 remains the baseline.
