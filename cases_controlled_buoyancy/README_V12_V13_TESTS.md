@@ -15,7 +15,7 @@ Canonical runner:
 
 `run_v12_v13_tests.sh`
 
-The older `B/C12_fixedValueP_rgh` and `B/C13_prghPressureAtmosphere` directories are provisional historical prototypes. They are not the canonical V12/V13 cases.
+Only the canonical V12/V13 case directories are retained in the repository. Duplicate provisional case directories were removed to preserve a one-version/one-case-configuration structure.
 
 ## Controlled-change verification
 
