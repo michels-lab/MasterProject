@@ -4298,7 +4298,7 @@ Resumen reproducible:
 Hallazgos principales:
 
 1. **C12 y C13 son indistinguibles dentro de la precisión almacenada.**
-   Con `rhoConst` y tapa horizontal fija, `fixedValue p_rgh` y `prghPressure` producen esencialmente la misma solución.
+   Con `rhoConst` y tapa horizontal fija, `fixedValue p_rgh` y `prghPressure` producen esencialmente la misma solución. Su `sum(phi)` neto es ~0, pero la energía advectiva integrada (+6.29 J) no es cero: esto indica intercambio local de flujo que se cancela en masa neta pero no en entalpía. Por tanto tampoco deben llamarse estrictamente impermeables.
 
 2. **B12 y B13 no son impermeables.**
    - B12: max `|sum(phi)|=9.739e-5 kg/s`; `∫phi dt=-5.642e-4 kg`.
