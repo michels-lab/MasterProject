@@ -2,7 +2,7 @@
 
 > Este archivo documenta la intención y genealogía del caso. No modifica la simulación.
 
-**Estado:** CANÓNICO — V13 presión estática atmosférica  
+**Estado:** CANÓNICO DIAGNÓSTICO — RUN-VERIFIED + ANALYSIS-VERIFIED; NO baseline impermeable  
 **Familia:** B  
 **Caso padre / referencia:** `B11_topFixedFlux_airGapOF14`
 
@@ -56,3 +56,40 @@ Para cualquier rerun de este caso revisar como mínimo:
 ## Comparación correcta
 
 Comparar este caso contra su padre/referencia indicado arriba y contra el caso de la otra familia con el mismo número/objetivo. No atribuir diferencias B/C a la formulación de buoyancy si también cambió alguna condición numérica, térmica o de frontera.
+
+## Resultado de la corrida — 2026-09-29
+
+La simulación completó 10 s sin errores fatales.
+
+Resultados principales:
+- max `|sum(phi)|` en `metalTop`: **9.771e-5 kg/s**;
+- masa integrada por top: **-5.799e-4 kg**, magnitud equivalente a **0.533%** de la masa inicial B;
+- energía advectiva integrada por top: **-559.53 J**;
+- calor no advectivo integrado por top: **+374.77 J**;
+- energía total integrada por top: **-184.75 J**;
+- cruce central descendente de 1473 K: **4.291 s**;
+- T central final: **1469.23 K**;
+- alphaL central final: **0.985082**;
+- alphaL media final: **0.9591660**;
+- max Co: **0.06910705**;
+- mediana `R_p_outer`: **7.346e-4**;
+- `R_p_outer>1`: **0%**;
+- continuidad acumulada final: **9.88004e-7**.
+
+### Interpretación
+
+`prghPressure + slip` mantiene la presión estática atmosférica objetivo, pero no produce una tapa impermeable en B. Existe entrada de masa y entalpía sensible por `metalTop`.
+
+El probe central presenta un rebound de **+4.00 K**:
+- Tmin local: **1471.28 K @ 5.167 s**;
+- máximo posterior: **1475.28 K @ 7.237 s**.
+
+La fracción líquida presenta:
+- mínimo alphaL: **0.993108 @ 5.231 s**;
+- recuperación a **alphaL=1.0 @ 6.222 s**.
+
+Esto es **remelting local dentro del modelo**, coincidente con la entrada advectiva de frontera. No debe describirse como recalescencia metalúrgica por nucleación.
+
+### Decisión
+
+Conservar B13 como prueba diagnóstica de presión estática atmosférica. **No adoptarlo como baseline impermeable.** V11 permanece como referencia física del modelo actual.
