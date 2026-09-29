@@ -40,6 +40,7 @@
 24. [Actualizar y subir cambios del repositorio](#24-actualizar-y-subir-cambios-del-repositorio)
 25. [Agregar deliberadamente un archivo ignorado por Git](#25-agregar-deliberadamente-un-archivo-ignorado-por-git)
 26. [Flujo histórico B2/C2](#26-flujo-histórico-b2c2)
+27. [MAZAPÁN — subir carpetas completas de casos](#27-mazapán--subir-carpetas-completas-de-casos)
 
 ---
 
@@ -890,3 +891,94 @@ Cada caso escribe su salida de consola en `log.momentumPostProcess`.
 
 
 Nota para casos multirregión: los function objects usados con `foamPostProcess` deben declarar explícitamente `region metal;`; no basta con pasar `-region metal` en la línea de comandos si el objeto intenta resolver la región por defecto `region0`.
+
+
+---
+
+## 27. MAZAPÁN — subir carpetas completas de casos
+
+### Qué significa
+
+**MAZAPÁN** es el nombre corto del proyecto para el flujo estándar de sincronización de resultados de casos OpenFOAM hacia GitHub.
+
+La idea es deliberadamente simple:
+
+> **Añadir la carpeta completa del caso y dejar que `.gitignore` filtre lo que no debe versionarse.**
+
+No enumerar manualmente `logs/`, `postProcessing/`, `log.foamMultiRun`, etc., cuando todos pertenecen al mismo caso.
+
+### Plantilla MAZAPÁN
+
+Desde la raíz del repositorio:
+
+```bash
+cd ~/OpenFOAM/QuickCup_Solidification
+
+git add \
+cases_controlled_buoyancy/<CASO_1> \
+cases_controlled_buoyancy/<CASO_2>
+
+git commit -m "results: add simulation outputs"
+
+git pull --rebase origin main
+
+git push origin main
+```
+
+### Ejemplo real: V12/V13
+
+```bash
+cd ~/OpenFOAM/QuickCup_Solidification
+
+git add \
+cases_controlled_buoyancy/B12_topFixedValue_airGapOF14 \
+cases_controlled_buoyancy/C12_topFixedValue_airGapOF14 \
+cases_controlled_buoyancy/B13_prghPressure_airGapOF14 \
+cases_controlled_buoyancy/C13_prghPressure_airGapOF14
+
+git commit -m "results: add canonical V12 V13 run outputs"
+
+git pull --rebase origin main
+
+git push origin main
+```
+
+### Qué hace `.gitignore` durante MAZAPÁN
+
+En la configuración actual del proyecto:
+
+- `logs/` → se versiona;
+- `postProcessing/` → se versiona;
+- `analysis_results/` → se versiona;
+- directorios de tiempo calculado como `1/`, `2/`, `10/` → se ignoran si nunca estuvieron trackeados;
+- `constant/*/polyMesh/` → se ignora;
+- archivos `.foam`, imágenes, videos y archivos comprimidos → se ignoran;
+- temporales/editor/build → se ignoran.
+
+### Advertencia: ignorado no significa des-trackeado
+
+Si una ruta ya había sido añadida a Git en un commit anterior, añadirla después a `.gitignore` **no hace que Git deje de rastrearla**.
+
+Por eso durante V12/V13 aparecieron archivos del directorio `10/` aunque el patrón numérico estaba ignorado: esos paths ya estaban trackeados históricamente.
+
+La corrección consiste en retirarlos del árbol/índice Git sin interpretar eso como una pérdida del resultado local. Después de estar des-trackeados, la regla `.gitignore` vuelve a impedir que entren con un `git add` normal.
+
+### Cuándo usar MAZAPÁN
+
+Usarlo cuando:
+- uno o varios casos ya terminaron;
+- queremos que sus resultados científicos versionables queden disponibles en GitHub;
+- el `.gitignore` vigente ya representa correctamente qué outputs conservar.
+
+No usarlo a ciegas si:
+- se cambió recientemente `.gitignore`;
+- existen archivos grandes previamente trackeados;
+- la carpeta contiene datos experimentales o archivos que no pertenecen al caso.
+
+### Regla corta
+
+Cuando Michel diga **“MAZAPÁN”**, el procedimiento esperado es:
+
+`git add <carpetas completas de casos>` → `commit` → `pull --rebase` → `push`.
+
+No usar `git add -f` ni enumerar manualmente subdirectorios salvo que exista una razón concreta.
