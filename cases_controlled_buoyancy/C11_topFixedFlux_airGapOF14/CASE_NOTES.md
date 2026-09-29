@@ -2,7 +2,7 @@
 
 > Este archivo documenta la intención y genealogía del caso. No modifica la simulación.
 
-**Estado:** CANÓNICO — BASELINE físico actual para `metalTop` fijo e impermeable
+**Estado:** CANÓNICO — BASELINE físico actual para `metalTop` fijo e impermeable — RUN-VERIFIED + ANALYSIS-VERIFIED
 **Familia:** C  
 **Caso padre / referencia:** `C9_topFixedFlux / C9_airGapOF14`
 
@@ -60,16 +60,32 @@ Para cualquier rerun de este caso revisar como mínimo:
 
 Comparar este caso contra su padre/referencia indicado arriba y contra el caso de la otra familia con el mismo número/objetivo. No atribuir diferencias B/C a la formulación de buoyancy si también cambió alguna condición numérica, térmica o de frontera.
 
-## Estado después de V12/V13 — baseline reafirmada
+## Estado después del cierre V10–V13 — baseline verificada directamente
 
-Las pruebas canónicas V12/V13 completadas y auditadas el 2026-09-29 no sustituyen este caso como baseline físico del modelo actual.
+La corrida C11 con air gap OF14 ya está versionada y auditada directamente.
 
-Razón:
-- este caso conserva `U=slip` + `p_rgh=fixedFluxPressure`, la pareja coherente para una tapa geométricamente fija e impermeable bajo gravedad;
-- C12/C13 tuvieron flujo másico NETO casi nulo, pero conservaron intercambio advectivo local de energía (`~6.29 J` integrados), por lo que tampoco prueban impermeabilidad estricta;
-- la evidencia histórica de V9, antecesor directo de esta condición de frontera, mostró `sum(phi)` y energía advectiva del top compatibles con cero.
+Resultados C11:
+- `sum(phi)` en `metalTop` = **0** en el diagnóstico almacenado;
+- energía advectiva integrada por el top = **0 J**;
+- T central final = **1464.19 K**;
+- alphaL central final = **0.964815**;
+- alphaL media final = **0.9620593**;
+- max Co = **0.0650864**;
+- mediana `R_p_outer = 0.0005954`;
+- `R_p_outer>1` = **0%**;
+- cumulative continuity final = **4.45e-13**.
 
-**Importante:** la elección de V11 como baseline físico queda reafirmada por el contraste V12/V13, pero la corrida V11 con air gap debe conservar su propia auditoría RUN/ANALYSIS cuando sus resultados estén disponibles/versionados. No atribuir a V11 métricas numéricas que pertenecen a V9.
+C10 ya tenía poca advección por el top (**+2.976 J**), y cerrarlo en C11 apenas cambia la solución:
+- T central RMSE = **0.164 K**;
+- cambio final de T = **-0.08 K**;
+- `Uy` final NRMSE = **0.52%, 1.70% y 0.44%** en y=20 mm, y=30 mm y x=20 mm.
 
 ### Decisión
-Mantener `fixedFluxPressure + slip` como referencia de tapa impermeable del modelo actual. V12/V13 se conservan como experimentos diagnósticos.
+
+C11 queda confirmado como **baseline físico preferido para G1/validación experimental** del modelo Quick-Cup de volumen fijo. V12/V13 permanecen como diagnósticos de BC de presión y no sustituyen la tapa impermeable.
+
+Resumen reproducible:
+- `analysis_results/v10_v13_closure/summary.md`
+- `analysis_results/v10_v13_closure/case_metrics.csv`
+- `analysis_results/v10_v13_closure/pair_metrics.csv`
+- `analysis_results/v10_v13_closure/profile_metrics.csv`
