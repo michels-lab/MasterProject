@@ -2,7 +2,7 @@
 
 > Este archivo documenta la intención y genealogía del caso. No modifica la simulación.
 
-**Estado:** CANÓNICO — V13 presión estática atmosférica  
+**Estado:** CANÓNICO DIAGNÓSTICO — RUN-VERIFIED + ANALYSIS-VERIFIED; NO baseline impermeable  
 **Familia:** C  
 **Caso padre / referencia:** `C11_topFixedFlux_airGapOF14`
 
@@ -56,3 +56,31 @@ Para cualquier rerun de este caso revisar como mínimo:
 ## Comparación correcta
 
 Comparar este caso contra su padre/referencia indicado arriba y contra el caso de la otra familia con el mismo número/objetivo. No atribuir diferencias B/C a la formulación de buoyancy si también cambió alguna condición numérica, térmica o de frontera.
+
+## Resultado de la corrida — 2026-09-29
+
+La simulación completó 10 s sin errores fatales.
+
+Resultados principales:
+- max `|sum(phi)|` NETO en `metalTop`: **4.901e-10 kg/s**;
+- masa neta integrada: **-1.441e-10 kg**;
+- energía advectiva integrada por top: **+6.293718 J**;
+- calor no advectivo integrado por top: **+374.672263 J**;
+- T central final: **1464.30 K**;
+- cruce descendente de 1473 K: **4.642 s**;
+- alphaL central final: **0.965235**;
+- alphaL media final: **0.9620239**;
+- max Co: **0.06632859**;
+- mediana `R_p_outer`: **7.579e-4**;
+- `R_p_outer>1`: **0%**;
+- continuidad acumulada final: **1.47639e-6**.
+
+### Interpretación
+
+C13 es indistinguible de C12 dentro de la precisión almacenada. Esto confirma el control previsto: con `rhoConst`, `fixedValue p_rgh` y `prghPressure` producen esencialmente la misma solución en esta geometría.
+
+Aun así, masa neta casi cero no equivale a impermeabilidad local: la energía advectiva integrada de **+6.29 J** demuestra intercambio advectivo local.
+
+### Decisión
+
+Conservar C13 como control diagnóstico de `prghPressure`. No usarlo como baseline impermeable. V11 permanece como referencia física del top fijo.
