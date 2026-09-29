@@ -1875,3 +1875,90 @@ OpenFOAM Foundation v14:
 - `src/ThermophysicalTransportModels/coupledThermophysicalTransportModels/coupledTemperature/`
 - `src/ThermophysicalTransportModels/coupledThermophysicalTransportModels/wallLayersHeatTransferCoefficient/`
 - `src/thermophysicalModels/specie/transport/const/constTransportI.H`.
+
+
+---
+
+# 13. MAZAPÁN — cómo versionamos resultados del caso
+
+**MAZAPÁN** es la convención operativa del proyecto para sincronizar casos OpenFOAM ya corridos hacia GitHub sin enumerar manualmente cada subcarpeta de resultados.
+
+La filosofía es:
+
+> **Añadir la carpeta completa del caso y dejar que `.gitignore` decida qué outputs pertenecen al registro científico del repositorio.**
+
+## Flujo MAZAPÁN
+
+```bash
+cd ~/OpenFOAM/QuickCup_Solidification
+
+git add \
+cases_controlled_buoyancy/<CASO_1> \
+cases_controlled_buoyancy/<CASO_2>
+
+git commit -m "results: add simulation outputs"
+
+git pull --rebase origin main
+
+git push origin main
+```
+
+## Por qué lo hacemos así
+
+Nuestro `.gitignore` ya separa deliberadamente:
+
+**Se conserva en Git:**
+- configuración del caso;
+- `log.foamMultiRun`;
+- `logs/`;
+- `postProcessing/`;
+- `analysis_results/`;
+- notas y documentación científica.
+
+**Se excluye normalmente:**
+- directorios de tiempo calculado (`1/`, `2/`, `10/`, etc.);
+- mallas generadas `constant/*/polyMesh/`;
+- archivos ParaView;
+- imágenes/videos;
+- ZIP/RAR/7z;
+- archivos temporales y de compilación.
+
+Por tanto, escribir manualmente:
+
+```bash
+git add caso/log.foamMultiRun caso/logs caso/postProcessing ...
+```
+
+es redundante y más propenso a omitir algo que añadir directamente:
+
+```bash
+git add caso
+```
+
+## Advertencia fundamental de Git
+
+`.gitignore` evita que Git empiece a rastrear archivos nuevos que coinciden con sus reglas, pero **no deja de rastrear automáticamente un archivo que ya estaba versionado**.
+
+Por eso una ruta ignorada puede seguir apareciendo en un commit si fue añadida al historial previamente.
+
+La solución correcta en ese caso es retirar la ruta del índice/árbol de Git de forma deliberada y conservarla localmente si todavía se necesita. Una vez des-trackeada, `.gitignore` vuelve a impedir que entre mediante un `git add` normal.
+
+## Relación con NARANJA
+
+- **NARANJA** describe el orden seguro cuando existen resultados locales más recientes que la documentación remota: preservar local → commit → pull/rebase → push → documentar.
+- **MAZAPÁN** describe **cómo seleccionar los archivos del caso para ese commit**: añadir las carpetas completas y confiar en `.gitignore`.
+
+Por tanto pueden usarse juntos:
+
+> **MAZAPÁN selecciona; NARANJA ordena la sincronización.**
+
+## Regla de conversación
+
+Cuando Michel diga simplemente:
+
+> **“MAZAPÁN”**
+
+debe interpretarse como:
+
+> “Dame el flujo Git para subir las carpetas completas de estos casos, usando el `.gitignore` existente; no enumeres manualmente logs/postProcessing ni uses `git add -f` salvo que exista una excepción explícita.”
+
