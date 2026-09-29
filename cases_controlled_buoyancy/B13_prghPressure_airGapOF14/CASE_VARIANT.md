@@ -33,3 +33,16 @@ Initial density:
 - C: rho=6820 kg/m3 -> p_rgh(atm)=2676.168 Pa.
 
 For the prghPressure variant, `p uniform 0` is intentional because `pRef=1e5 Pa`; using `p=1e5` there would double-count the atmospheric reference in this solver setup.
+
+## Run result and interpretation
+
+Status: **RUN-VERIFIED + ANALYSIS-VERIFIED; diagnostic only**.
+
+B13 completed 10 s but allowed significant top exchange:
+- max |sum(phi)| = 9.771e-5 kg/s;
+- integrated mass = -5.799e-4 kg;
+- integrated top advective energy = -559.53 J.
+
+The central probe exhibits a +4.00 K rebound and local alphaL recovery to 1.0, i.e. model remelting coincident with advective energy entering through the top. This is not evidence of metallurgical recalescence.
+
+Conclusion: B13 is retained as the atmospheric-static-pressure diagnostic, not as the impermeable baseline. V11 remains the baseline.
