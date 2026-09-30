@@ -109,6 +109,18 @@ def latest_probe_time(case: Path):
     return max(s) if s else float("nan")
 
 
+def campaign_status():
+    path = ROOT / "analysis_results" / "full_campaign_run" / "status.tsv"
+    out = {}
+    if not path.is_file():
+        return out
+    for line in path.read_text(errors="replace").splitlines()[1:]:
+        parts = line.split("\t")
+        if len(parts) >= 2:
+            out[parts[0]] = parts[1]
+    return out
+
+
 def log_text(case: Path):
     p = case / "log.foamMultiRun"
     return p.read_text(errors="replace") if p.is_file() else ""
@@ -334,6 +346,7 @@ def profile_compare(a, b, idx):
 case_rows = []
 series = {}
 profile_inventory = []
+status_map = campaign_status()
 
 for name in CASES:
     case = BASE / name
@@ -347,7 +360,9 @@ for name in CASES:
         "latest_probe_time_s": latest,
         "log_has_End": log_end(case),
         "log_has_fatal": log_has_fatal(case),
-        "run_complete_10s": finite(latest) and latest >= 9.999 and log_end(case) and not log_has_fatal(case),
+        "campaign_status": status_map.get(name, "UNKNOWN"),
+        "run_complete_10s": finite(latest) and latest >= 9.999 and not log_has_fatal(case)
+                            and (status_map.get(name) == "COMPLETED" or log_end(case)),
         "T_center_final_K": T[max(T)] if T else float("nan"),
         "alphaL_center_final": A[max(A)] if A else float("nan"),
         "rho_center_final_kg_m3": R[max(R)] if R else float("nan"),
@@ -482,7 +497,7 @@ lines += [
     "",
     "## Interpretation guardrails",
     "",
-    "- Completion means the stored temperature probe reaches at least 9.999 s, log.foamMultiRun contains End, and no fatal marker is detected.",
+    "- Completion means the stored temperature probe reaches at least 9.999 s, no fatal marker is detected, and the campaign runner reports COMPLETED (or the solver log contains End as a fallback).",
     "- sum(phi) is a net top-patch mass flux; a near-zero net value does not by itself prove face-wise impermeability.",
     "- The y=10 mm profile is audited explicitly together with y=20 mm, y=30 mm and x=20 mm.",
     "- Numerical agreement is verification evidence, not experimental validation.",
