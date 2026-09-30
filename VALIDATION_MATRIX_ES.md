@@ -104,6 +104,48 @@ Esto es exactamente la clase de física que el `solidificationMelting` estándar
 ---
 
 
+## J0 — Puerta de trazabilidad termodinámica JMatPro
+
+**Estado: ABIERTA / obligatoria antes de crear G1.**
+
+La baseline numérica/física sigue siendo `C11_topFixedFlux_airGapOF14`, pero no debe clonarse todavía como caso G1 definitivo hasta cerrar la transferencia JMatPro → OpenFOAM.
+
+La propuesta de tesis exige que JMatPro preceda a OpenFOAM y aporte:
+- estabilidad de fases y definición del Mn controlado;
+- interacción Mn-S / posibles sulfuros;
+- `TL`, `TS`, `L`;
+- `Cp(T)`, `k(T)`, `rho(T)`;
+- `fL(T)` / `fS(T)`.
+
+La auditoría del caso actual muestra:
+- C11 usa `rhoConst=6820 kg/m3`;
+- `Cp=827 J/(kg K)` constante;
+- `mu=5.5e-3 Pa s` y `Pr=0.14`, que implican `k≈32.49 W/(m K)`;
+- `beta=1.13e-4 1/K`;
+- `Tsol=1423 K`, `Tliq=1473 K`, `L=2.286e5 J/kg`;
+- `solidificationMeltingSource` con `alpha1e=0.8`, por lo que la relación fase-temperatura real no es simplemente una interpolación lineal 0→1 entre TS y TL.
+
+La tabla rho(T) de familia B produce, en 1473.15–1773.15 K:
+- `d(rho)/dT≈-0.8 kg/(m3 K)`;
+- `beta≈1.173e-4 1/K` con `rhoRef=6820 kg/m3`,
+solo ~3.81% mayor que el beta actual de C11.
+
+Esto respalda la estrategia de usar JMatPro `rho(T)` para derivar `rhoRef + beta` en C, **sin reintroducir una EOS de densidad variable en un volumen fijo**.
+
+### Criterios para cerrar J0
+
+1. Archivar exports numéricos JMatPro de las cuatro condiciones CE/S y el Mn seleccionado.
+2. Trazar el origen de TL, TS, L, Cp(T), k(T), rho(T), fL(T) y viscosidad si está disponible.
+3. Derivar `beta` sobre un rango líquido explícito y guardar ajuste/error.
+4. Comparar `fL_JMatPro(T)` contra la relación `alphaL(T)` de OpenFOAM con `alpha1e=0.8`.
+5. Decidir qué dependencias con T se implementan en G1 y cuáles permanecen como aproximaciones.
+6. No declarar valores actuales como “JMatPro-derived” sin el export que demuestre su procedencia.
+
+Documento maestro:
+`JMATPRO_OPENFOAM_TRACEABILITY_ES.md`.
+
+---
+
 ## Cierre previo a G1 — campaña V10–V13
 
 **Estado: CERRADA / ANALYSIS-VERIFIED (2026-09-29).**
@@ -117,7 +159,7 @@ Hallazgos que pasan a ser restricciones de G1:
 - B12/B13 reducen la discrepancia de continuidad permitiendo entrada de masa por la tapa; por ello no son alternativas físicas para el Quick-Cup fijo impermeable.
 - C12/C13 son cercanos a C11 pero conservan advección local no nula y siguen siendo diagnósticos.
 
-**Baseline de entrada a G1: C11_topFixedFlux_airGapOF14.**
+**Baseline de entrada a G1: C11_topFixedFlux_airGapOF14, después de cerrar J0.**
 
 No se abre otra variante de presión/PIMPLE antes de G1 salvo que nueva evidencia experimental o de conservación revele una necesidad concreta.
 
