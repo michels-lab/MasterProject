@@ -1,13 +1,23 @@
 #!/usr/bin/env bash
-set -euo pipefail
+set -u -o pipefail
 
-# Post-process face-wise metalTop flux and the internal velocity line directly
-# below metalTop.  This script never runs foamMultiRun and never changes the
-# physical solution.
+# Batch retrospective post-processing of face-wise metalTop flow.
+#
+# Default behavior:
+#   - auto-detect every current B*/C* case in cases_controlled_buoyancy/
+#   - process cases that already contain solved time directories + phi
+#   - skip cases that cannot be reconstructed exactly
+#   - NEVER run foamMultiRun
+#
+# Optional behavior:
+#   pass one or more case directories explicitly to process only those cases.
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+CASES_ROOT="$REPO_ROOT/cases_controlled_buoyancy"
 DICT="$SCRIPT_DIR/topSurfaceFlowPostProcessing"
+STATUS_DIR="$REPO_ROOT/analysis_results/top_surface_flow_batch"
+STATUS_FILE="$STATUS_DIR/status.tsv"
 
 if ! command -v foamPostProcess >/dev/null 2>&1; then
     echo "ERROR: foamPostProcess is not available in this shell."
@@ -15,35 +25,71 @@ if ! command -v foamPostProcess >/dev/null 2>&1; then
     exit 2
 fi
 
-if [ "$#" -eq 0 ]; then
-    set -- \
-      "$REPO_ROOT/cases_controlled_buoyancy/B11_topFixedFlux_airGapOF14" \
-      "$REPO_ROOT/cases_controlled_buoyancy/B13_prghPressure_airGapOF14"
+mkdir -p "$STATUS_DIR"
+printf "case\tstatus\tlatest_phi_time\tnote\n" > "$STATUS_FILE"
+
+if [ "$#" -gt 0 ]; then
+    CASES=("$@")
+else
+    mapfile -t CASES < <(
+        find "$CASES_ROOT" -mindepth 1 -maxdepth 1 -type d \
+            \( -name 'B[0-9]*' -o -name 'C[0-9]*' \) \
+            -print | sort -V
+    )
 fi
 
-for CASE in "$@"; do
-    CASE="$(cd "$CASE" && pwd)"
+if [ "${#CASES[@]}" -eq 0 ]; then
+    echo "ERROR: no B*/C* cases found."
+    exit 3
+fi
+
+processed=0
+skipped=0
+failed=0
+
+for CASE_INPUT in "${CASES[@]}"; do
+    if [ ! -d "$CASE_INPUT" ]; then
+        echo "SKIP: case directory not found: $CASE_INPUT"
+        printf "%s\tSKIPPED\t\tnot_found\n" "$CASE_INPUT" >> "$STATUS_FILE"
+        skipped=$((skipped+1))
+        continue
+    fi
+
+    CASE="$(cd "$CASE_INPUT" && pwd)"
+    NAME="$(basename "$CASE")"
 
     echo
     echo "================================================================="
-    echo "Top-flow post-processing: $CASE"
+    echo "Top-flow post-processing: $NAME"
     echo "================================================================="
 
     if [ ! -d "$CASE/constant/metal/polyMesh" ]; then
-        echo "ERROR: metal mesh not found in $CASE/constant/metal/polyMesh"
-        echo "This case must already have been meshed/run locally."
-        exit 3
+        echo "SKIP: metal mesh not found."
+        printf "%s\tSKIPPED\t\tmetal_mesh_missing\n" "$NAME" >> "$STATUS_FILE"
+        skipped=$((skipped+1))
+        continue
     fi
 
-    # Exact spatial flux visualization requires the solved surface field phi.
-    # Check the latest canonical 10 s output first.
-    if [ ! -f "$CASE/10/metal/phi" ] && [ ! -f "$CASE/10/metal/phi.gz" ]; then
-        echo "ERROR: $CASE/10/metal/phi is missing."
-        echo "The existing integrated postProcessing sum(phi) is not enough"
-        echo "to reconstruct the exact face-wise top flux retrospectively."
-        echo "Do NOT rerun yet. Send this message back for the fallback route."
-        exit 4
+    # Find all solved time directories that contain the exact solver surface
+    # field phi.  The latest one is reported for traceability.
+    mapfile -t PHI_TIMES < <(
+        find "$CASE" -mindepth 2 -maxdepth 3 -type f \
+            \( -path '*/metal/phi' -o -path '*/metal/phi.gz' \) -print |
+        sed -E 's#^.*/([^/]+)/metal/phi(\.gz)?$#\1#' |
+        awk '/^[0-9]+([.][0-9]+)?([eE][-+]?[0-9]+)?$/' |
+        sort -g -u
+    )
+
+    if [ "${#PHI_TIMES[@]}" -eq 0 ]; then
+        echo "SKIP: no solved time contains metal/phi."
+        echo "      Existing integrated sums cannot reconstruct exact face-wise flux."
+        printf "%s\tSKIPPED\t\tphi_not_saved_in_time_directories\n" "$NAME" >> "$STATUS_FILE"
+        skipped=$((skipped+1))
+        continue
     fi
+
+    LATEST_PHI_TIME="${PHI_TIMES[${#PHI_TIMES[@]}-1]}"
+    echo "Latest time with exact metal/phi: $LATEST_PHI_TIME s"
 
     rm -rf \
       "$CASE/postProcessing/topPatchFaceFields" \
@@ -53,24 +99,37 @@ for CASE in "$@"; do
       "$CASE/postProcessing/topPhiMaximum" \
       "$CASE/postProcessing/nearTopInternalLine"
 
-    foamPostProcess \
+    if foamPostProcess \
         -case "$CASE" \
         -region metal \
         -dict "$DICT" \
-        -time '0.1:10' \
+        -time '0:' \
         -fields '(U T p_rgh rho phi phaseChangeSource:alpha1)' \
         2>&1 | tee "$CASE/log.topSurfaceFlowPostProcess"
-
-    echo
-    echo "Created:"
-    echo "  postProcessing/topPatchFaceFields/   <- face-by-face metalTop data"
-    echo "  postProcessing/topPhiNet/            <- net sum(phi)"
-    echo "  postProcessing/topPhiAbsolute/       <- sum(abs(phi_i))"
-    echo "  postProcessing/topPhiMinimum/        <- strongest negative face flux"
-    echo "  postProcessing/topPhiMaximum/        <- strongest positive face flux"
-    echo "  postProcessing/nearTopInternalLine/  <- U,T,p_rgh,rho,alphaL below top"
-    echo "  log.topSurfaceFlowPostProcess"
+    then
+        echo "OK: $NAME"
+        printf "%s\tPROCESSED\t%s\tok\n" "$NAME" "$LATEST_PHI_TIME" >> "$STATUS_FILE"
+        processed=$((processed+1))
+    else
+        echo "FAILED: foamPostProcess returned an error for $NAME"
+        printf "%s\tFAILED\t%s\tsee_log.topSurfaceFlowPostProcess\n" "$NAME" "$LATEST_PHI_TIME" >> "$STATUS_FILE"
+        failed=$((failed+1))
+    fi
 done
 
 echo
-echo "DONE. No solver rerun was performed."
+echo "================================================================="
+echo "BATCH SUMMARY"
+echo "================================================================="
+echo "Processed: $processed"
+echo "Skipped:   $skipped"
+echo "Failed:    $failed"
+echo "Status:    $STATUS_FILE"
+echo
+echo "No foamMultiRun execution was performed."
+
+# Do not hide partial failures from the user, but allow skipped cases because
+# missing historical phi cannot be reconstructed without rerunning them.
+if [ "$failed" -gt 0 ]; then
+    exit 5
+fi
