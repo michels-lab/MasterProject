@@ -70,7 +70,6 @@ energyFlux
     writeInterval   1;
 }
 
-
 // Net solver flux through metalTop.
 // For these static-mesh compressible cases phi is used as the direct
 // impermeability diagnostic. A physically impermeable slip top should
@@ -97,6 +96,7 @@ metalTopPhiSum
         phi
     );
 }
+
 
 // Net power [W] across the exposed metal surface.
 metalTopEnergyPower
