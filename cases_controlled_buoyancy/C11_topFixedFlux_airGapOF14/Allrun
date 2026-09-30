@@ -36,4 +36,31 @@ runApplication foamLog log.foamMultiRun
 
 touch buoyant.foam
 
+
+# Spatial metalTop post-processing for FoamLens / boundary-flow audit.
+# Diagnostic only: does not alter the solved physics. Runs only after a
+# successful foamMultiRun and writes face-wise/top-near fields under
+# postProcessing/ plus log.topSurfaceFlowPostProcess.
+if [ "$foamMultiRunStatus" -eq 0 ]
+then
+    repoRoot="$(cd ../.. && pwd)"
+
+    foamPostProcess \
+        -region metal \
+        -dict "$repoRoot/analysis_tools/topSurfaceFlowPostProcessing" \
+        -time '0:' \
+        -fields '(U T p_rgh rho phi phaseChangeSource:alpha1)' \
+        > log.topSurfaceFlowPostProcess 2>&1
+    topSurfaceFlowStatus=$?
+
+    if [ "$topSurfaceFlowStatus" -ne 0 ]
+    then
+        echo "ERROR: top-surface post-processing failed with status $topSurfaceFlowStatus."
+        echo "See: $(pwd)/log.topSurfaceFlowPostProcess"
+        exit "$topSurfaceFlowStatus"
+    fi
+else
+    echo "Skipping top-surface post-processing: foamMultiRun returned status $foamMultiRunStatus."
+fi
+
 #------------------------------------------------------------------------------
