@@ -34,6 +34,7 @@ PAIR_SPECS = [
 ]
 
 PROFILE_SPECS = {
+    "y10mm": ("horizontalProfiles", "line_y10mm.xy"),
     "y20mm": ("horizontalProfiles", "line_y20mm.xy"),
     "y30mm": ("horizontalProfiles", "line_y30mm.xy"),
     "x20mm": ("verticalProfiles", "line_x20mm.xy"),
