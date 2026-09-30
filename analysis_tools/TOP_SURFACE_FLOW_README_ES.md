@@ -27,4 +27,15 @@ Default run:
 bash analysis_tools/run_top_surface_flow_postprocessing.sh
 ```
 
-The default processes B11 and B13.
+Por defecto el runner procesa **todas las carpetas B*/C*** existentes en
+`cases_controlled_buoyancy/`, incluidas las variantes históricas y actuales
+(B3–B13/C3–C13 y variantes `airGapOF14` que existan en el repositorio).
+
+No vuelve a simular. Para cada caso:
+- si encuentra malla + directorios temporales con `metal/phi`, ejecuta el postprocesamiento;
+- si no existe `phi` guardado en los tiempos locales, lo marca como `SKIPPED`;
+- si `foamPostProcess` falla, lo marca como `FAILED`;
+- genera `analysis_results/top_surface_flow_batch/status.tsv` con el estado de toda la campaña.
+
+Esto permite saber exactamente qué versiones históricas pueden compararse
+espacialmente sin rerun y cuáles requerirían una decisión posterior.
