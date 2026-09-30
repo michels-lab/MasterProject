@@ -4630,3 +4630,16 @@ Documentación:
 **Hallazgo físico preliminar.** La campaña confirma una separación fuerte entre configuraciones de tapa: B12/B13 conservan flujo neto por `metalTop` del orden de 9.7e-5 kg/s y energía advectiva integrada de cientos de joules, mientras B11 y C11 presentan flujo superior prácticamente nulo. C12/C13 mantienen flujo superior cercano a 4.9e-10 kg/s. B9/B11 y C9/C11 comparten además `fixedFluxPressure` en `p_rgh` y `slip` en `U`, consistente con sus resultados prácticamente coincidentes.
 
 **Estado.** AUDITOR-CORRECTED / RESULTS-PENDING-RECHECK. No se modificaron casos ni resultados; únicamente la lógica de auditoría.
+
+
+## 2026-09-30 — AUD-RUN-002 — Campaña completa 26/26 confirmada; falso `fatal=True` resuelto
+
+**Evidencia.** La auditoría detallada mostró para los 26 casos `status.tsv = COMPLETED`. Los probes de temperatura alcanzaron 10 s en los casos de paso fijo y entre 9.99966 s y 10.004 s en los casos con paso temporal adaptativo, consistente con el objetivo `endTime 10`.
+
+**Causa del falso fallo.** `full_campaign_audit.py` interpretaba la ausencia de `log.foamMultiRun` como un error fatal mediante `if not txt: return True`. Como consecuencia, todos los casos aparecían con `fatal=True` y `complete=False` aunque el runner los hubiera marcado `COMPLETED` y los productos de postprocesamiento estuvieran completos.
+
+**Acción.** Se separó explícitamente `log_available` de `log_has_fatal`. Un log ausente ya no se interpreta como fallo. Para campañas gestionadas por el runner, el criterio principal de finalización es: `status.tsv = COMPLETED`, probe >= 9.999 s y ausencia de marcador fatal cuando el log existe. `End` queda como respaldo únicamente si no hay estado del runner.
+
+**Resultado.** La campaña controlada B/C queda confirmada como **26/26 corridas completadas hasta el objetivo temporal**, con los perfiles canónicos y=10, 20, 30 mm y x=20 mm disponibles en todos los casos.
+
+**Estado.** RUN-COMPLETE / AUDITOR-FIXED. Pendiente: auditoría física de continuidad, transporte cara-a-cara en `metalTop` y selección de la configuración de referencia para tesis.
