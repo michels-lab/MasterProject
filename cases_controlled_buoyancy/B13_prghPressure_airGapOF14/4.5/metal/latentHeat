@@ -1,0 +1,40 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  14
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    format      ascii;
+    class       volScalarField;
+    location    "4.5/metal";
+    object      latentHeat;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+dimensions      [0 2 -2 0 0 0 0];
+
+internalField   uniform 228600;
+
+boundaryField
+{
+    metalTop
+    {
+        type            calculated;
+        value           uniform 228600;
+    }
+    frontAndBack
+    {
+        type            empty;
+    }
+    metal_to_mold
+    {
+        type            calculated;
+        value           uniform 228600;
+    }
+}
+
+
+// ************************************************************************* //
