@@ -1,0 +1,5 @@
+composition_id,CE_target,S_wt_pct,Mn_wt_pct,T_K,rho_kg_m3,Cp_J_kgK,k_W_mK,fL
+CE3p9_S0p05,3.9,0.05,,,
+CE3p9_S0p13,3.9,0.13,,,
+CE4p2_S0p05,4.2,0.05,,,
+CE4p2_S0p13,4.2,0.13,,,
