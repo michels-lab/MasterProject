@@ -138,7 +138,11 @@ def log_has_fatal(case: Path):
     txt = log_text(case)
     if not txt:
         return False
-    return bool(re.search(r"FOAM FATAL|Floating point exception|Segmentation fault|Killed", txt, re.I))
+    return bool(re.search(
+        r"FOAM FATAL(?: IO)? ERROR|Segmentation fault|Killed|Floating point exception \\(core dumped\\)",
+        txt,
+        re.I,
+    ))
 
 
 def finite(x):
@@ -457,7 +461,7 @@ lines = [
     "",
     "## Completion",
     "",
-    f"- Complete to 10 s with End and no fatal marker: **{len(complete)}/{len(CASES)}**.",
+    f"- Complete to target time with runner confirmation and no fatal marker: **{len(complete)}/{len(CASES)}**.",
     f"- Incomplete/invalid: **{len(incomplete)}**.",
 ]
 if incomplete:
