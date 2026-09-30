@@ -1,0 +1,8 @@
+check,value,unit,interpretation
+C11_implied_k,32.4892857143,W/(m K),Cp*mu/Pr with Cp=827 mu=5.5e-3 Pr=0.14
+B_table_liquid_drho_dT,-0.8,kg/(m3 K),1473.15-1773.15 K
+beta_from_B_liquid_rho,1.17302052786e-4,1/K,-(1/rhoRef)drho/dT with rhoRef=6820
+C11_beta,1.13e-4,1/K,current Boussinesq coefficient
+beta_relative_difference,3.80712636,percent,C11 beta vs beta derived from B liquid-range rho table
+B_table_mushy_beta_approx,2.332361516e-4,1/K,1423.15-1473.15 K using mean rho
+C11_implied_thermal_diffusivity,5.760368664e-6,m2/s,k/(rho Cp)
