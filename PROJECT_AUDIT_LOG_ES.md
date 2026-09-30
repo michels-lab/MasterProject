@@ -4599,3 +4599,21 @@ Documentación:
 - `analysis_results/jmatpro_openfoam_audit/current_model_matrix.csv`;
 - `analysis_results/jmatpro_openfoam_audit/derived_checks.csv`;
 - `thermodynamics/jmatpro/README_ES.md`.
+
+## 2026-09-30 — AUD-POST-001 — Normalización canónica de postprocesamiento B/C + perfil y=10 mm
+
+**Hallazgo.** La campaña `cases_controlled_buoyancy` mantenía la misma estructura general de ejecución, pero `system/researchDiagnostics` conservaba tres variantes históricas. Además, los perfiles horizontales disponibles estaban en y=20 mm y y=30 mm.
+
+**Acción.**
+- Se sincronizó `system/researchDiagnostics` en las 26 variantes B/C actuales usando la versión más completa, que incluye también `metalTopPhiSum`.
+- Se mantuvieron idénticos en las 26 variantes: `Allrun`, `system/functions`, `system/researchDiagnostics`, `system/lineProfiles`, `system/lineProfilesDict` y `system/momentumPostProcessing`.
+- Se añadió `line_y10mm` a `lineProfiles` con 80 puntos desde x=0.25 mm hasta x=39.75 mm, y=10 mm, z=5 mm.
+- Se añadió el mismo `line_y10mm` al muestreo de `momentumPostProcessing`.
+- El `Allrun` canónico ejecuta también el análisis espacial de `metalTop` después de una corrida exitosa.
+
+**Verificación.** Auditoría por blob SHA en `main`: cada uno de los seis archivos canónicos anteriores presenta exactamente un único hash compartido por los 26 casos.
+
+**Impacto.** A partir de esta normalización, las comparaciones entre generaciones B/C usan exactamente la misma instrumentación y muestreo de postprocesamiento. Los perfiles horizontales canónicos quedan en y=10, 20 y 30 mm, reduciendo sesgo por diferencias históricas de diagnóstico.
+
+**Estado.** CONFIG-VERIFIED. Requiere nueva campaña limpia para que todos los resultados locales se regeneren bajo la instrumentación canónica.
+
