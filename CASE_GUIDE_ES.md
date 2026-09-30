@@ -677,6 +677,27 @@ constant/metal/materials/castIron
 
 ---
 
+## Puente con JMatPro — estado metodológico
+
+La baseline C11 usa actualmente propiedades constantes para `rho`, `Cp` y transporte. Esto **no elimina JMatPro**: antes de G1 debe cerrarse la puerta J0 definida en `JMATPRO_OPENFOAM_TRACEABILITY_ES.md`.
+
+Reglas:
+- no llamar “JMatPro-derived” a un valor sin conservar su exportación/fuente;
+- usar `rho(T)` de JMatPro para justificar `rhoRef` y derivar `beta` en la formulación Boussinesq de volumen fijo;
+- comparar `fL_JMatPro(T)` contra la relación de fase real de `solidificationMeltingSource`, especialmente porque `alpha1e=0.8`;
+- evaluar `Cp(T)` y `k(T)` reales antes de crear el caso G1 definitivo;
+- mantener C11 congelado como baseline y hacer los cambios físicos en un descendiente G1.
+
+La herramienta reproducible para esta etapa es:
+
+`analysis_tools/jmatpro_property_bridge.py`
+
+y el esquema de datos está en:
+
+`thermodynamics/jmatpro/JMATPRO_EXPORT_TEMPLATE.csv`.
+
+---
+
 # 3.2 Hierro — propiedades térmicas y de transporte
 
 En B11 tenemos:
