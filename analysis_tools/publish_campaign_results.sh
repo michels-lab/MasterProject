@@ -77,7 +77,7 @@ fi
 
 echo
 echo "Files selected for publication:"
-git diff --cached --stat
+git --no-pager diff --cached --stat
 
 # Guard against GitHub's per-file limit before committing.
 too_large=0
