@@ -1,0 +1,164 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  QuickCup spatial top-flow post-processing — OpenFOAM Foundation v14
+\*---------------------------------------------------------------------------*/
+
+FoamFile
+{
+    format      ascii;
+    class       dictionary;
+    location    "analysis_tools";
+    object      topSurfaceFlowPostProcessing;
+}
+
+// Writes face-by-face values on metalTop.  The raw surface writer preserves
+// the patch geometry plus the selected field values for later visualization.
+topPatchFaceFields
+{
+    type            surfaceFieldValue;
+    libs            ("libfieldFunctionObjects.so");
+    region          metal;
+
+    log             true;
+    writeControl    timeStep;
+    writeInterval   1;
+
+    patch           metalTop;
+    operation       none;
+
+    writeFields     true;
+    surfaceFormat   raw;
+
+    fields
+    (
+        phi
+        U
+        T
+        p_rgh
+        rho
+    );
+}
+
+// Existing net-flux metric, reconstructed retrospectively from the stored phi.
+topPhiNet
+{
+    type            surfaceFieldValue;
+    libs            ("libfieldFunctionObjects.so");
+    region          metal;
+
+    log             true;
+    writeControl    timeStep;
+    writeInterval   1;
+
+    patch           metalTop;
+    operation       sum;
+    writeFields     false;
+    surfaceFormat   none;
+
+    fields
+    (
+        phi
+    );
+}
+
+// Sum of absolute face contributions.  This detects simultaneous local inflow
+// and outflow that may cancel in the net patch sum.
+topPhiAbsolute
+{
+    type            surfaceFieldValue;
+    libs            ("libfieldFunctionObjects.so");
+    region          metal;
+
+    log             true;
+    writeControl    timeStep;
+    writeInterval   1;
+
+    patch           metalTop;
+    operation       sumMag;
+    writeFields     false;
+    surfaceFormat   none;
+
+    fields
+    (
+        phi
+    );
+}
+
+topPhiMinimum
+{
+    type            surfaceFieldValue;
+    libs            ("libfieldFunctionObjects.so");
+    region          metal;
+
+    log             true;
+    writeControl    timeStep;
+    writeInterval   1;
+
+    patch           metalTop;
+    operation       min;
+    writeFields     false;
+    surfaceFormat   none;
+
+    fields
+    (
+        phi
+    );
+}
+
+topPhiMaximum
+{
+    type            surfaceFieldValue;
+    libs            ("libfieldFunctionObjects.so");
+    region          metal;
+
+    log             true;
+    writeControl    timeStep;
+    writeInterval   1;
+
+    patch           metalTop;
+    operation       max;
+    writeFields     false;
+    surfaceFormat   none;
+
+    fields
+    (
+        phi
+    );
+}
+
+// Internal flow immediately below the top boundary.  The metal mesh uses
+// dy = 0.5 mm, so y=39.75 mm passes through the top row of cell centres.
+nearTopInternalLine
+{
+    type            sets;
+    libs            ("libsampling.so");
+    region          metal;
+
+    writeControl    timeStep;
+    writeInterval   1;
+
+    interpolationScheme cellPoint;
+    setFormat       raw;
+
+    fields
+    (
+        U
+        T
+        p_rgh
+        rho
+        phaseChangeSource:alpha1
+    );
+
+    sets
+    {
+        line_y39p75mm
+        {
+            type        lineUniform;
+            axis        x;
+            start       (0.00025 0.03975 0.005);
+            end         (0.03975 0.03975 0.005);
+            nPoints     80;
+        }
+    }
+}
+
+// ************************************************************************* //
