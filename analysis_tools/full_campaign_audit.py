@@ -469,15 +469,16 @@ lines += [
     "",
     "## Case-level diagnostics",
     "",
-    "| case | complete | T final K | mean alphaL final | max Co | cumulative continuity | max abs phi_top kg/s | Eadv top J |",
-    "|---|---:|---:|---:|---:|---:|---:|---:|",
+    "| case | status.tsv | probe last s | log End | fatal | complete | T final K | mean alphaL final | max Co | cumulative continuity | max abs phi_top kg/s | Eadv top J |",
+    "|---|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|",
 ]
 for name in CASES:
     r = by_case[name]
     lines.append(
-        f"| {name} | {r['run_complete_10s']} | {fmt(r['T_center_final_K'])} | {fmt(r['alphaL_mean_final'])} | "
-        f"{fmt(r['max_Co'])} | {fmt(r['cont_cumulative_final'])} | {fmt(r['top_phi_max_abs_kg_s'])} | "
-        f"{fmt(r.get('E_top_adv_J'))} |"
+        f"| {name} | {r['campaign_status']} | {fmt(r['latest_probe_time_s'])} | {r['log_has_End']} | "
+        f"{r['log_has_fatal']} | {r['run_complete_10s']} | {fmt(r['T_center_final_K'])} | "
+        f"{fmt(r['alphaL_mean_final'])} | {fmt(r['max_Co'])} | {fmt(r['cont_cumulative_final'])} | "
+        f"{fmt(r['top_phi_max_abs_kg_s'])} | {fmt(r.get('E_top_adv_J'))} |"
     )
 
 lines += [
