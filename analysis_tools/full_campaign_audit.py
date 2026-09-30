@@ -130,10 +130,14 @@ def log_end(case: Path):
     return bool(re.search(r"(?m)^End\s*$", log_text(case)))
 
 
+def log_available(case: Path):
+    return (case / "log.foamMultiRun").is_file()
+
+
 def log_has_fatal(case: Path):
     txt = log_text(case)
     if not txt:
-        return True
+        return False
     return bool(re.search(r"FOAM FATAL|Floating point exception|Segmentation fault|Killed", txt, re.I))
 
 
@@ -358,11 +362,16 @@ for name in CASES:
         "case": name,
         "family": name[0],
         "latest_probe_time_s": latest,
+        "log_available": log_available(case),
         "log_has_End": log_end(case),
         "log_has_fatal": log_has_fatal(case),
         "campaign_status": status_map.get(name, "UNKNOWN"),
-        "run_complete_10s": finite(latest) and latest >= 9.999 and not log_has_fatal(case)
-                            and (status_map.get(name) == "COMPLETED" or log_end(case)),
+        "run_complete_10s": finite(latest) and latest >= 9.999
+                            and not log_has_fatal(case)
+                            and (
+                                status_map.get(name) == "COMPLETED"
+                                or (status_map.get(name, "UNKNOWN") == "UNKNOWN" and log_end(case))
+                            ),
         "T_center_final_K": T[max(T)] if T else float("nan"),
         "alphaL_center_final": A[max(A)] if A else float("nan"),
         "rho_center_final_kg_m3": R[max(R)] if R else float("nan"),
@@ -469,14 +478,14 @@ lines += [
     "",
     "## Case-level diagnostics",
     "",
-    "| case | status.tsv | probe last s | log End | fatal | complete | T final K | mean alphaL final | max Co | cumulative continuity | max abs phi_top kg/s | Eadv top J |",
-    "|---|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|",
+    "| case | status.tsv | probe last s | log file | log End | fatal | complete | T final K | mean alphaL final | max Co | cumulative continuity | max abs phi_top kg/s | Eadv top J |",
+    "|---|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|",
 ]
 for name in CASES:
     r = by_case[name]
     lines.append(
-        f"| {name} | {r['campaign_status']} | {fmt(r['latest_probe_time_s'])} | {r['log_has_End']} | "
-        f"{r['log_has_fatal']} | {r['run_complete_10s']} | {fmt(r['T_center_final_K'])} | "
+        f"| {name} | {r['campaign_status']} | {fmt(r['latest_probe_time_s'])} | {r['log_available']} | "
+        f"{r['log_has_End']} | {r['log_has_fatal']} | {r['run_complete_10s']} | {fmt(r['T_center_final_K'])} | "
         f"{fmt(r['alphaL_mean_final'])} | {fmt(r['max_Co'])} | {fmt(r['cont_cumulative_final'])} | "
         f"{fmt(r['top_phi_max_abs_kg_s'])} | {fmt(r.get('E_top_adv_J'))} |"
     )
@@ -498,7 +507,8 @@ lines += [
     "",
     "## Interpretation guardrails",
     "",
-    "- Completion means the stored temperature probe reaches at least 9.999 s, no fatal marker is detected, and the campaign runner reports COMPLETED (or the solver log contains End as a fallback).",
+    "- For runner-managed campaigns, completion means the stored temperature probe reaches at least 9.999 s, status.tsv reports COMPLETED, and no fatal marker is detected in log.foamMultiRun when that log exists.",
+    "- A missing log.foamMultiRun is reported separately and is not treated as a fatal solver error. If status.tsv is unavailable, log End is used only as a fallback completion signal.",
     "- sum(phi) is a net top-patch mass flux; a near-zero net value does not by itself prove face-wise impermeability.",
     "- The y=10 mm profile is audited explicitly together with y=20 mm, y=30 mm and x=20 mm.",
     "- Numerical agreement is verification evidence, not experimental validation.",
