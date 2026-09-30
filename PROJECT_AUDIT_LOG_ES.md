@@ -4617,3 +4617,16 @@ Documentación:
 
 **Estado.** CONFIG-VERIFIED. Requiere nueva campaña limpia para que todos los resultados locales se regeneren bajo la instrumentación canónica.
 
+
+
+## 2026-09-30 — AUD-RUN-001 — Falso negativo en auditoría de finalización de campaña completa
+
+**Hallazgo.** La primera ejecución de `analysis_tools/full_campaign_audit.py` reportó 0/26 casos completos pese a que los 26 casos presentaron productos canónicos de postprocesamiento, sin faltantes en los perfiles y=10, 20, 30 mm y x=20 mm, y métricas finales coherentes.
+
+**Causa identificada.** El criterio original exigía simultáneamente que el probe alcanzara 10 s, que `log.foamMultiRun` contuviera una línea exacta `End` y que no hubiera marcadores fatales. El runner de campaña ya registra explícitamente cada corrida exitosa en `analysis_results/full_campaign_run/status.tsv`, por lo que depender de la presencia textual exacta de `End` produce falsos negativos cuando la estructura del log difiere.
+
+**Acción.** Se actualizó `full_campaign_audit.py` para considerar un caso completo cuando: (1) el probe alcanza al menos 9.999 s, (2) no se detecta error fatal y (3) `status.tsv` reporta `COMPLETED`; la línea `End` queda únicamente como respaldo cuando el status no está disponible.
+
+**Hallazgo físico preliminar.** La campaña confirma una separación fuerte entre configuraciones de tapa: B12/B13 conservan flujo neto por `metalTop` del orden de 9.7e-5 kg/s y energía advectiva integrada de cientos de joules, mientras B11 y C11 presentan flujo superior prácticamente nulo. C12/C13 mantienen flujo superior cercano a 4.9e-10 kg/s. B9/B11 y C9/C11 comparten además `fixedFluxPressure` en `p_rgh` y `slip` en `U`, consistente con sus resultados prácticamente coincidentes.
+
+**Estado.** AUDITOR-CORRECTED / RESULTS-PENDING-RECHECK. No se modificaron casos ni resultados; únicamente la lógica de auditoría.
