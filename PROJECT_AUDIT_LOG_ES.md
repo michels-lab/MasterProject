@@ -4643,3 +4643,16 @@ Documentación:
 **Resultado.** La campaña controlada B/C queda confirmada como **26/26 corridas completadas hasta el objetivo temporal**, con los perfiles canónicos y=10, 20, 30 mm y x=20 mm disponibles en todos los casos.
 
 **Estado.** RUN-COMPLETE / AUDITOR-FIXED. Pendiente: auditoría física de continuidad, transporte cara-a-cara en `metalTop` y selección de la configuración de referencia para tesis.
+
+
+## 2026-09-30 — AUD-RUN-003 — Falso `fatal=True` causado por mensaje normal de OpenFOAM
+
+**Hallazgo.** La auditoría detallada mostró `log file = True`, `status.tsv = COMPLETED` y probes en el objetivo temporal para los 26 casos, pero `fatal=True` en todos.
+
+**Causa raíz.** El patrón de detección de fallos buscaba la cadena genérica `Floating point exception`. Los logs normales de OpenFOAM incluyen durante el arranque una línea que indica que el *floating point exception trapping* está habilitado. Esa línea es informativa y no representa una excepción ocurrida durante la solución.
+
+**Acción.** Se eliminó la coincidencia genérica y el auditor ahora busca únicamente marcadores compatibles con fallo real: `FOAM FATAL ERROR`, `FOAM FATAL IO ERROR`, `Segmentation fault`, `Killed` o `Floating point exception (core dumped)`. También se corrigió el encabezado del reporte para no exigir una línea literal `End` cuando el runner ya registra `COMPLETED`.
+
+**Impacto.** La clasificación anterior `fatal=True` para 26/26 casos era un falso positivo del analizador y no evidencia de inestabilidad del solver.
+
+**Estado.** AUDITOR-FIXED / READY-FOR-FINAL-RUN-STATUS.
