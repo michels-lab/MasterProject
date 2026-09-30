@@ -1,0 +1,3 @@
+SOURCE += fluidThermoTemplate.C
+
+LIB = $(PWD)/../platforms/$(WM_OPTIONS)/lib/libheRhoThermo_pureMixture_const_hConst_icoTabulated_specie___sensibleEnthalpy____c92121a83e9f397179ef59322f976a6a75104c3e

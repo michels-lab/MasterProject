@@ -1,0 +1,3 @@
+SOURCE += codedFunctionObjectTemplate.C
+
+LIB = $(PWD)/../platforms/$(WM_OPTIONS)/lib/libsolidificationMeltingMomentumDiagnostics_a28c3d6b0dfa5996ff73f1bf0014ffed29f9c4ff
