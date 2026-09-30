@@ -4551,3 +4551,51 @@ C12/C13 quedan cerca de C11 en T/U, pero conservan ~+6.29 J de advección integr
 5. V12/V13 quedan como pruebas diagnósticas y no reemplazan V11.
 6. No se justifica abrir nuevas variantes V14 de presión/PIMPLE por esta línea de investigación.
 7. El siguiente paso científico es G1: alinear C11 a las condiciones experimentales Quick-Cup y comparar contra una serie numérica/digitalizada de termopar.
+
+
+---
+
+## 2026-09-29 — Auditoría JMatPro → OpenFOAM
+
+### AUD-JMATPRO-001 — La simulación termodinámica queda como puerta J0 antes de G1
+**[GIT-VERIFIED] [DOCUMENT-VERIFIED] [DECISION]**
+
+Se auditó la relación entre la función metodológica de JMatPro en la propuesta de tesis y las propiedades realmente implementadas en la baseline C11.
+
+La propuesta define JMatPro antes de OpenFOAM para:
+- definir Mn controlado mediante estabilidad de fases e interacción Mn-S;
+- estimar TL, TS, L, Cp(T), k(T), rho(T) y fL(T);
+- alimentar el modelo numérico con propiedades calculadas por composición.
+
+Estado real de C11:
+- `rhoConst=6820 kg/m3`;
+- `Cp=827 J/(kg K)` constante;
+- `mu=5.5e-3 Pa s`;
+- `Pr=0.14`;
+- conductividad implícita `k≈32.4893 W/(m K)`;
+- `beta=1.13e-4 1/K`;
+- `Tsol=1423 K`;
+- `Tliq=1473 K`;
+- `L=2.286e5 J/kg`;
+- `alpha1e=0.8`.
+
+**Hallazgo:** C11 no usa actualmente curvas tabuladas Cp(T), k(T), rho(T) o fL(T). Los valores actuales del modelo no deben etiquetarse como derivados de JMatPro hasta conservar su exportación/fuente específica.
+
+**Chequeo de consistencia de densidad:** la tabla rho(T) de B en el líquido 1473.15–1773.15 K tiene pendiente ~-0.8 kg/(m3 K), equivalente a `beta≈1.173e-4 1/K` con rhoRef=6820. Esto difiere solo ~3.81% del beta C11 y respalda conceptualmente la transformación `rho(T) → rhoRef + beta` para el modelo Boussinesq de volumen fijo. No demuestra por sí sola procedencia JMatPro.
+
+**Hallazgo crítico de fase:** la propuesta muestra una fL(T) lineal entre TS y TL, pero el caso real usa `alpha1e=0.8`. La implementación de `solidificationMeltingSource` modifica la relación temperatura-fracción líquida; por ello la curva fL(T) de JMatPro debe compararse explícitamente contra la relación de OpenFOAM antes de G1.
+
+### Decisión
+
+1. C11 permanece congelado como baseline física.
+2. Se crea la puerta **J0 — trazabilidad termodinámica** antes de G1.
+3. JMatPro conserva dos papeles: metalurgia/estabilidad de fases y suministro/transformación de propiedades para CFD.
+4. `rho(T)` no tiene que entrar directamente como EOS: puede transformarse en `rhoRef + beta`.
+5. Antes de modificar C11 o crear G1 se deben archivar los exports JMatPro de las cuatro condiciones CE/S y cerrar la matriz de procedencia.
+6. No se añade cinética de recalescencia antes de comparar primero fL_JMatPro(T), propiedades termofísicas reales y el modelo de equilibrio.
+
+Documentación:
+- `JMATPRO_OPENFOAM_TRACEABILITY_ES.md`;
+- `analysis_results/jmatpro_openfoam_audit/current_model_matrix.csv`;
+- `analysis_results/jmatpro_openfoam_audit/derived_checks.csv`;
+- `thermodynamics/jmatpro/README_ES.md`.
