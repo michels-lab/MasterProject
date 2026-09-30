@@ -1,0 +1,13 @@
+quantity,jmatpro_role,current_C11,current_transfer,status,next_action
+Mn_phase_stability_MnS,metallurgical design,not a CFD field,design/interpretation,JMatPro central,run and archive phase-stability calculation
+Tliq_K,composition-dependent solidification temperature,1473,direct fvModels,active provenance unverified,replace/confirm from raw JMatPro for each composition
+Tsol_K,composition-dependent solidification temperature,1423,direct fvModels,active provenance unverified,replace/confirm from raw JMatPro for each composition
+latent_heat_J_kg,composition-dependent latent heat,228600,direct fvModels,active provenance unverified,replace/confirm from raw JMatPro
+Cp_J_kgK,Cp(T),827 constant,hConst simplification,temperature dependence not implemented,export Cp(T) and select OF14 implementation
+k_W_mK,k(T),32.4893 implied,constTransport Cp*mu/Pr,temperature dependence not implemented,export k(T) and select OF14 implementation
+rho_kg_m3,rho(T),6820 constant,rhoConst,curve not direct in C11,use rho(T) to define rhoRef and beta
+beta_1_K,derived from rho(T),1.13e-4,Boussinesq source,consistent with B liquid slope,derive from actual JMatPro rho(T) per composition
+fL_vs_T,solidification curve,internal alpha1 with alpha1e=0.8,solidificationMeltingSource,JMatPro table not read,compare JMatPro fL(T) vs OpenFOAM relation
+mu_Pa_s,liquid viscosity if available,5.5e-3 constant,constTransport,provenance unverified,confirm/export from JMatPro or justified source
+primary_austenite_fraction,metallurgical target,no independent CFD field,external comparison,not represented independently,compare JMatPro vs Newton/Fourier/microstructure
+graphite_and_sulfide_phases,metallurgical interpretation,no independent CFD fields,external comparison,not represented independently,archive JMatPro phase fractions
