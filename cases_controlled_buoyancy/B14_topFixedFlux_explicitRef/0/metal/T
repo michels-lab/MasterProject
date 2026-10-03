@@ -1,0 +1,65 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  13
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    format      ascii;
+    class       volScalarField;
+    location    "0";
+    object      T;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+dimensions      [0 0 0 1 0 0 0];
+
+internalField   uniform 1500;
+
+boundaryField
+{
+    frontAndBack
+    {
+        type            empty;
+    }
+
+    metalTop
+    {
+        type            externalWallHeatFluxTemperature;
+        h               uniform 10;
+        Ta              constant 300;
+        value           $internalField;
+        emissivity      0.3;
+    }
+
+    metal_to_mold
+    {
+        type            coupledTemperature;
+        h
+        {
+            type              wallLayersHeatTransferCoefficient;
+            thicknessLayers   (2e-4);
+            kappaLayers       (1e-1);
+        }
+
+        value           uniform     1500;
+    }
+}
+
+
+// ************************************************************************* //
+
+// ============================================================================
+// QUICKCUP DOCUMENTATION APPENDIX
+// ============================================================================
+// Archivo documentado: 0/metal/T.
+// El contenido ejecutable anterior permanece intacto; este apéndice solo explica su función e interacción con el modelo.
+// FUNCIÓN: campo de temperatura y condiciones de frontera térmicas.
+// internalField = uniform 1500: valor inicial asignado al interior del dominio antes de comenzar la integración temporal.
+// Tipos de condición de frontera presentes: empty, externalWallHeatFluxTemperature, coupledTemperature, wallLayersHeatTransferCoefficient.
+// INTERACCIÓN: fixedValue impone T; condiciones de gradiente/flujo controlan transferencia; coupledTemperature intercambia calor entre regiones; resistencias de pared/air-gap modifican la ruta térmica metal-molde.
+// T controla propiedades y fracción de fase, por lo que una BC térmica puede cambiar indirectamente densidad, flotación, U, calor latente y tiempo de solidificación.
+// NOTA DE SEGURIDAD: todas las líneas de este apéndice son comentarios y no cambian la ejecución del caso.
+// ============================================================================

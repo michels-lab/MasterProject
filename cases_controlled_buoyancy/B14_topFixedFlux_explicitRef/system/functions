@@ -1,0 +1,100 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  14
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+
+FoamFile
+{
+    format      ascii;
+    class       dictionary;
+    location    "system";
+    object      functions;
+}
+
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+temperatureProbe
+{
+    type            probes;
+    libs            ("libfieldFunctionObjects.so");
+
+    // Región donde se encuentra el probe
+    region          metal;
+
+    // Campos registrados
+    fields
+    (
+        U
+        T
+        p_rgh
+        rho
+        phaseChangeSource:alpha1
+    );
+
+    // Posición del probe [m]
+    probeLocations
+    (
+        (0.02 0.02 0.005)
+    );
+
+    // Evaluar en cada paso de tiempo
+    executeControl  timeStep;
+    executeInterval 1;
+
+    // Escribir en cada paso de tiempo
+    writeControl    timeStep;
+    writeInterval   1;
+
+    // Guardar resultados en postProcessing
+    writeToFile     true;
+}
+
+
+// Registro directo solicitado para V14: valores cara por cara en metalTop
+// escritos cuando el solver guarda un estado (writeTime).
+topFlow
+{
+    type            surfaceFieldValue;
+    libs            ("libfieldFunctionObjects.so");
+    region          metal;
+
+    patch           metalTop;
+    surfaceFormat   raw;
+
+    writeControl    writeTime;
+    writeToFile     true;
+    log             true;
+
+    operation       none;
+    writeFields     true;
+
+    fields
+    (
+        U
+        phi
+    );
+}
+
+#include "researchDiagnostics"
+#include "lineProfiles"
+
+// ************************************************************************* //
+
+// ============================================================================
+// QUICKCUP DOCUMENTATION APPENDIX
+// ============================================================================
+// Archivo documentado: system/functions.
+// El contenido ejecutable anterior permanece intacto; este apéndice solo explica su función e interacción con el modelo.
+// FUNCIÓN: configuración de diagnóstico/postprocesamiento; solicita campos, probes, perfiles o reducciones estadísticas.
+// Los objetos diagnósticos aquí usados leen la solución y escriben resultados; no cambian las ecuaciones gobernantes.
+// executeControl = timeStep: parámetro del bloque; debe interpretarse con el modelo o BC que lo contiene.
+// writeControl = timeStep: criterio que decide cuándo se escriben resultados o diagnósticos.
+// writeInterval = 1: separación entre escrituras según writeControl; determina qué tiempos quedan disponibles para análisis posterior.
+// region selecciona la región de malla; fields los campos analizados; operation decide si se conservan valores espaciales o se reducen mediante suma/promedio/mínimo/máximo.
+// INTERACCIÓN: las coordenadas de muestreo están en metros y deben corresponder con blockMesh. Para comparar casos deben coincidir ubicación y tiempos de escritura.
+// V14 añade topFlow con writeControl = writeTime para almacenar U y phi directamente, cara por cara, en metalTop durante la corrida; es diagnóstico y no modifica las ecuaciones.
+// NOTA DE SEGURIDAD: todas las líneas de este apéndice son comentarios y no cambian la ejecución del caso.
+// ============================================================================

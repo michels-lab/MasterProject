@@ -1,0 +1,22 @@
+#!/bin/sh
+cd ${0%/*} || exit 1    # Run from this directory
+
+# Source tutorial clean functions
+. $WM_PROJECT_DIR/bin/tools/CleanFunctions
+
+cleanCase
+
+# Derived foamLog output is part of the standard post-processing workflow.
+rm -rf logs
+
+#------------------------------------------------------------------------------
+
+# ============================================================================
+# QUICKCUP DOCUMENTATION APPENDIX
+# ============================================================================
+# Archivo documentado: Allclean.
+# El contenido ejecutable anterior permanece intacto; este apéndice solo explica su función e interacción con el modelo.
+# FUNCIÓN: elimina archivos generados para permitir reconstruir el caso desde las entradas originales.
+# INTERACCIÓN: no cambia el modelo físico; 0/, constant/ y system/ siguen siendo la definición reproducible del siguiente cálculo.
+# NOTA DE SEGURIDAD: todas las líneas de este apéndice son comentarios y no cambian la ejecución del caso.
+# ============================================================================
