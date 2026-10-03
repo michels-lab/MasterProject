@@ -4017,3 +4017,32 @@ V11 and V14 produce the same energy-series structure in `foamLog`: `h_0..2` and 
 V14 does not introduce new physics relative to V11. It is validated as the **supervisor-reference case**: it preserves V11's physically consistent impermeable top and demonstrates that the requested explicit pressure reference does not materially change T, alphaL or the flow pattern.
 
 **Status:** ✅ RUN-VERIFIED / ANALYSIS-VERIFIED.
+
+
+---
+
+## 2026-10-03 — V14-BC-003 — B14/C14 comparison with common impermeable top
+
+**[RUN-VERIFIED] [GIT-VERIFIED] [ANALYSIS-VERIFIED]**
+
+B14 and C14 were compared after removing the historical `metalTop` flux inconsistency. Both cases reached 10 s and have a face-wise impermeable top.
+
+Key results:
+
+- maximum `sum(abs(phi))` on `metalTop`: B14 = 8.47033e-22; C14 = 0;
+- maximum Courant: B14 = 0.0673434; C14 = 0.0650864;
+- final cumulative continuity: B14 = **-3.10190e-02**; C14 = **4.44346e-13**;
+- central T at 10 s: B14 = 1470.07 K; C14 = 1464.19 K;
+- volume-mean liquid fraction: B14 = 0.9606902; C14 = 0.9620593;
+- total boundary heat power: B14 = 316.1799 W; C14 = 313.9750 W;
+- boundary advective power: approximately zero in both.
+
+At 10 s the profiles still show substantial velocity differences and moderate thermal differences. At y=20 mm, for example, B14/C14 RMSE is 3.7677e-3 m/s for Uy and 3.2461 K for T; at y=10 mm it is 5.2355e-3 m/s and 7.8166 K.
+
+**Interpretation:** because boundary heat extraction is similar and the top no longer permits mass flux, the B/C separation is mainly associated with the density/buoyancy formulation. In the current rigid, fixed-volume, impermeable domain, B's rho(T) formulation accumulates a major continuity mismatch, whereas C's constant-density + explicit-buoyancy formulation preserves continuity near machine precision.
+
+**Current decision:** C14 is recommended as the physical/production baseline for the thesis's rigid Quick-Cup model. B14 is retained as a controlled sensitivity/alternative-formulation case and may become physically relevant again if shrinkage, feeding, a moving free surface, or other volume-change physics is introduced.
+
+Reproducible summary: `analysis_results/v14_bc_comparison/summary.md`.
+
+**Status:** ✅ ANALYSIS-VERIFIED. No V15 was created.

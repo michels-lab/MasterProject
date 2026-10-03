@@ -4723,3 +4723,32 @@ V11 y V14 producen la misma estructura de series de energía en `foamLog`: `h_0.
 V14 no representa una nueva física respecto a V11. Su función queda validada como **caso de referencia del director**: conserva la condición impermeable físicamente consistente de V11 y demuestra que la referencia explícita de presión solicitada no altera materialmente T, alphaL o el patrón de flujo.
 
 **Estado:** ✅ RUN-VERIFIED / ANALYSIS-VERIFIED.
+
+
+---
+
+## 2026-10-03 — V14-BC-003 — Comparación B14/C14 con tapa impermeable común
+
+**[RUN-VERIFIED] [GIT-VERIFIED] [ANALYSIS-VERIFIED]**
+
+Se compararon B14 y C14 una vez eliminada la inconsistencia histórica de flujo en `metalTop`. Ambos casos alcanzaron 10 s y presentan tapa impermeable cara por cara.
+
+Resultados principales:
+
+- máximo `sum(abs(phi))` en `metalTop`: B14 = 8.47033e-22; C14 = 0;
+- máximo Courant: B14 = 0.0673434; C14 = 0.0650864;
+- continuidad acumulada final: B14 = **-3.10190e-02**; C14 = **4.44346e-13**;
+- T central a 10 s: B14 = 1470.07 K; C14 = 1464.19 K;
+- fracción líquida media: B14 = 0.9606902; C14 = 0.9620593;
+- potencia térmica total de frontera: B14 = 316.1799 W; C14 = 313.9750 W;
+- potencia advectiva de frontera: aproximadamente cero en ambos.
+
+A 10 s los perfiles continúan mostrando diferencias sustanciales de velocidad y diferencias térmicas moderadas. Por ejemplo, en y=20 mm el RMSE B14/C14 es 3.7677e-3 m/s para Uy y 3.2461 K para T; en y=10 mm es 5.2355e-3 m/s y 7.8166 K.
+
+**Interpretación:** como la extracción térmica de frontera es similar y la tapa ya no permite flujo de masa, la separación B/C se atribuye principalmente a la formulación densidad/flotación. En el dominio rígido, de volumen fijo e impermeable actual, la formulación B con rho(T) acumula una incompatibilidad de continuidad importante, mientras C con rho constante + flotación explícita conserva continuidad prácticamente a precisión de máquina.
+
+**Decisión actual:** C14 queda recomendado como baseline físico/de producción para el modelo Quick-Cup rígido de la tesis. B14 se conserva como caso controlado de sensibilidad/formulación alternativa y podría recuperar relevancia física si posteriormente se incorporan contracción, alimentación, superficie libre móvil u otra física de cambio de volumen.
+
+Resumen reproducible: `analysis_results/v14_bc_comparison/summary.md`.
+
+**Estado:** ✅ ANALYSIS-VERIFIED. No se creó V15.
