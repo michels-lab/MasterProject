@@ -47,11 +47,21 @@ jobs:
           ./Allrun
           echo "Latest time:"
           foamListTimes -latestTime
-          test "$(foamListTimes -latestTime)" = "10"
-          grep -q "^End$" log.foamMultiRun
           tar -czf "$GITHUB_WORKSPACE/${CASE_NAME}-results.tar.gz" \
             log.foamMultiRun log.blockMesh log.splitMeshRegions log.foamPostProcess log.foamLog \
             logs postProcessing 2>/dev/null || true
+          test "$(foamListTimes -latestTime)" = "10"
+          grep -qE '^[[:space:]]*End[[:space:]]*
+
+      - name: Upload results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.case }}-results
+          if-no-files-found: warn
+          retention-days: 14
+          path: ${{ matrix.case }}-results.tar.gz
+ log.foamMultiRun
 
       - name: Upload results
         if: always()
