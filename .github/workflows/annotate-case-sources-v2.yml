@@ -1,0 +1,40 @@
+name: Annotate case source files v2
+
+on:
+  push:
+    branches:
+      - docs/case-code-comments-20261002
+    paths:
+      - analysis_tools/validate_case_annotations.py
+      - .github/workflows/annotate-case-sources-v2.yml
+
+permissions:
+  contents: write
+
+jobs:
+  annotate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out documentation branch
+        uses: actions/checkout@v4
+        with:
+          ref: docs/case-code-comments-20261002
+          fetch-depth: 0
+
+      - name: Append explanatory comments
+        run: python3 analysis_tools/annotate_case_sources.py
+
+      - name: Validate annotations
+        run: python3 analysis_tools/validate_case_annotations.py
+
+      - name: Commit annotated case files
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add cases_controlled_buoyancy cases_buoyancy cleanproy
+          if git diff --cached --quiet; then
+            echo "No case source files required annotation."
+            exit 0
+          fi
+          git commit -m "docs: append explanatory comments to all case source files"
+          git push origin HEAD:docs/case-code-comments-20261002
