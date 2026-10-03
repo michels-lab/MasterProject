@@ -40,8 +40,8 @@ jobs:
         env:
           CASE_NAME: ${{ matrix.case }}
         run: |
-          set -euo pipefail
           source /opt/openfoam14/etc/bashrc
+          set -euo pipefail
           cd "cases_controlled_buoyancy/$CASE_NAME"
           ./Allclean || true
           ./Allrun
@@ -49,6 +49,9 @@ jobs:
           foamListTimes -latestTime
           test "$(foamListTimes -latestTime)" = "10"
           grep -q "^End$" log.foamMultiRun
+          tar -czf "$GITHUB_WORKSPACE/${CASE_NAME}-results.tar.gz" \
+            log.foamMultiRun log.blockMesh log.splitMeshRegions log.foamPostProcess log.foamLog \
+            logs postProcessing 2>/dev/null || true
 
       - name: Upload results
         if: always()
@@ -57,11 +60,4 @@ jobs:
           name: ${{ matrix.case }}-results
           if-no-files-found: warn
           retention-days: 14
-          path: |
-            cases_controlled_buoyancy/${{ matrix.case }}/log.foamMultiRun
-            cases_controlled_buoyancy/${{ matrix.case }}/log.blockMesh
-            cases_controlled_buoyancy/${{ matrix.case }}/log.splitMeshRegions
-            cases_controlled_buoyancy/${{ matrix.case }}/log.foamPostProcess
-            cases_controlled_buoyancy/${{ matrix.case }}/log.foamLog
-            cases_controlled_buoyancy/${{ matrix.case }}/logs/**
-            cases_controlled_buoyancy/${{ matrix.case }}/postProcessing/**
+          path: ${{ matrix.case }}-results.tar.gz
