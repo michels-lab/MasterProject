@@ -3950,3 +3950,28 @@ Limitation: versioned results contain line profiles but not the complete final v
 
 Reproducible summary: analysis_results/v9_flow_causality/summary.md
 Analyzer: analysis_tools/v9_flow_causality_analysis.py
+
+
+## 2026-10-03 — V14-CONFIG-001 — Explicit pressure reference + direct topFlow requested by supervisor
+
+**Objective.** Create V14 as a controlled test derived from V11, retaining the `fixedFluxPressure + slip` top boundary while applying the requested pressure-reference and direct `metalTop` flow-recording configuration.
+
+**New cases.**
+- `B14_topFixedFlux_explicitRef`
+- `C14_topFixedFlux_explicitRef`
+
+**Controlled changes relative to V11.**
+- `system/metal/fvSolution`: `pRefPoint (0.02 0.04 0.005)`;
+- `system/metal/fvSolution`: `pRefValue 1e5`;
+- `system/metal/fvSolution`: add `nEnergyCorrectors 2`;
+- `system/functions`: add `topFlow`, a `surfaceFieldValue` on `metalTop`, with `operation none`, `writeFields true`, fields `(U phi)`, and `writeControl writeTime`.
+
+**Pressure boundary.** `0/metal/p_rgh` remains unchanged: `metalTop = fixedFluxPressure` with `value $internalField`.
+
+**OF14 compatibility finding.** The metal region uses the modular `fluid` solver. In OpenFOAM Foundation v14, `fluid::thermophysicalPredictor()` assembles and solves one energy equation per call and does not read `nEnergyCorrectors`. That keyword is implemented by `multiphaseEuler`. The requested setting is retained exactly for traceability, but V14 must audit the run log to determine its actual operational effect rather than assuming that it changes the number of energy solves.
+
+**Startup risk to verify.** The requested point `(0.02 0.04 0.005)` lies on the geometric top plane. The pressure-reference routine must associate the reference point uniquely with a cell, so the first V14 check is whether OF14 accepts this point without a reference-cell error.
+
+**Preparation verification.** The two new cases contain input/documentation files only: 138 blobs total and zero inherited `postProcessing/`, `logs/`, `log.*`, or solved-time directories.
+
+**Status.** CONFIG-VERIFIED / NOT-RUN. Pending: run B14/C14 to 10 s and compare directly with B11/C11 for face-wise `phi`, `sum(abs(phi))`, T, alphaL, Courant number, continuity, and the effective number of energy solves.

@@ -1,0 +1,60 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  13
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    format      ascii;
+    class       dictionary;
+    location    "system";
+    object      createZonesDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+
+// List of zone generators to execute sequentially
+zoneGenerators
+(
+    // Define the rigid metal cellZone using a geometric box
+    metalZone
+    {
+        type        box;
+        zoneType    cell;
+        // Bounding box slightly buffered around your 40x40x10 mm metal core
+        // Coordinates must be converted to METERS (0 to 0.04m)
+        min         (-0.001 -0.001 -0.001);
+        max         (0.041  0.041  0.011);
+        
+        // Output zone name required by splitMeshRegions
+        name        metal; 
+    }
+
+    // Define the mold cellZone by capturing the entire mesh bounding box
+    moldZone
+    {
+        type        box;
+        zoneType    cell;
+        // Bounding box encapsulating the entire mold area (-7mm to 47mm)
+        min         (-0.008 -0.016 -0.001);
+        max         (0.048  0.041  0.011);
+        
+        name        mold;
+    }
+
+    // Optional: Filter out overlapping zones if needed, though splitMeshRegions 
+    // prioritizes unique cell mapping assignments automatically.
+);
+
+
+
+// ============================================================================
+// QUICKCUP DOCUMENTATION APPENDIX
+// ============================================================================
+// Archivo documentado: system/createZonesDict.
+// El contenido ejecutable anterior permanece intacto; este apéndice solo explica su función e interacción con el modelo.
+// FUNCIÓN: identifica zonas de celdas/caras usadas para separar regiones o aplicar modelos.
+// INTERACCIÓN: cambiar una selección puede mover celdas entre metal y molde aunque las propiedades termofísicas no cambien.
+// NOTA DE SEGURIDAD: todas las líneas de este apéndice son comentarios y no cambian la ejecución del caso.
+// ============================================================================
