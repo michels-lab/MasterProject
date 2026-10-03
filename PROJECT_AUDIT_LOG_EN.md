@@ -4046,3 +4046,36 @@ At 10 s the profiles still show substantial velocity differences and moderate th
 Reproducible summary: `analysis_results/v14_bc_comparison/summary.md`.
 
 **Status:** ✅ ANALYSIS-VERIFIED. No V15 was created.
+
+
+---
+
+## 2026-10-03 — ENERGY-004 — C11 with 2 effective energy correctors
+
+**[RUN-VERIFIED] [GIT-VERIFIED] [ANALYSIS-VERIFIED]**
+
+`C11_energy2_test` was run from `C11_topFixedFlux_airGapOF14`, changing only root `system/fvSolution/PIMPLE/nEnergyCorrectors = 2`.
+
+The case reached 10 s and generated `h_0..5` and `e_0..5`, confirming 6 energy solves per timestep (3 outer correctors × 2 energy correctors). Normal C11 generates `h_0..2` and `e_0..2`.
+
+Comparison:
+- central T(t): RMSE 0 K; byte-identical 10,001-point file;
+- central alphaL: RMSE 4.80e-8; max |Δ| 1e-6;
+- central U: RMSE 7.70e-9 m/s; max |Δ| 1e-7 m/s;
+- mean liquid fraction: RMSE 2.22e-8; max |Δ| 1e-7;
+- y=20 mm profile at 10 s: T and alphaL identical; Uy RMSE 4.04e-9 m/s;
+- max Courant 0.0650864 in both;
+- final continuity: 4.44517e-13 (C11) vs 4.58617e-13 (energy2);
+- executionTime: 289.433 s vs 387.542 s;
+- clockTime: 302 s vs 398 s.
+
+The second corrector reduces the enthalpy residual further but does not change the physical solution within stored resolution. It is classified as extra numerical convergence with additional cost.
+
+**C14 correction:** C14's `nEnergyCorrectors 2` is located in `system/metal/fvSolution` and does not control the global energy loop. C14 generated only `h_0..2/e_0..2`; therefore it had 1 effective energy corrector.
+
+**Decision:** retain 1 energy corrector in the current baseline.
+
+Results: `cases_controlled_buoyancy/C11_energy2_test/`.  
+Summary: `analysis_results/c11_energy2_test/summary.md`.
+
+**Status:** ✅ RUN-VERIFIED / ANALYSIS-VERIFIED.
