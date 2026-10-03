@@ -1,4 +1,4 @@
-name: TEMP Run C11 energy2 OpenFOAM 14
+name: Run V10 V11 OpenFOAM 14 cases
 
 on:
   push:
@@ -8,12 +8,20 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
   run-case:
-    name: C11_energy2_test
+    name: ${{ matrix.case }}
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        case:
+          - B10_airGapOF14
+          - C10_airGapOF14
+          - B11_topFixedFlux_airGapOF14
+          - C11_topFixedFlux_airGapOF14
 
     steps:
       - name: Checkout
@@ -33,43 +41,30 @@ jobs:
       - name: Run case
         shell: bash
         env:
-          CASE_NAME: C11_energy2_test
+          CASE_NAME: ${{ matrix.case }}
         run: |
-          source /opt/openfoam14/etc/bashrc
           set -euo pipefail
+          source /opt/openfoam14/etc/bashrc
           cd "cases_controlled_buoyancy/$CASE_NAME"
           ./Allclean || true
           ./Allrun
           echo "Latest time:"
           foamListTimes -latestTime
-          tar -czf "$GITHUB_WORKSPACE/${CASE_NAME}-results.tar.gz" \
-            log.foamMultiRun log.blockMesh log.splitMeshRegions log.foamPostProcess log.foamLog \
-            logs postProcessing 2>/dev/null || true
           test "$(foamListTimes -latestTime)" = "10"
-          tail -n 10 log.foamMultiRun | grep -q "End"
-
-      - name: Commit real energy2 results to main
-        if: success()
-        shell: bash
-        env:
-          CASE_NAME: C11_energy2_test
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -A "cases_controlled_buoyancy/$CASE_NAME"
-          if git diff --cached --quiet
-          then
-            echo "No result changes to commit."
-          else
-            git commit -m "results: store C11 energy2 test"
-            git push origin HEAD:main
-          fi
+          grep -q "^End$" log.foamMultiRun
 
       - name: Upload results
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: C11_energy2_test-results
+          name: ${{ matrix.case }}-results
           if-no-files-found: warn
           retention-days: 14
-          path: C11_energy2_test-results.tar.gz
+          path: |
+            cases_controlled_buoyancy/${{ matrix.case }}/log.foamMultiRun
+            cases_controlled_buoyancy/${{ matrix.case }}/log.blockMesh
+            cases_controlled_buoyancy/${{ matrix.case }}/log.splitMeshRegions
+            cases_controlled_buoyancy/${{ matrix.case }}/log.foamPostProcess
+            cases_controlled_buoyancy/${{ matrix.case }}/log.foamLog
+            cases_controlled_buoyancy/${{ matrix.case }}/logs/**
+            cases_controlled_buoyancy/${{ matrix.case }}/postProcessing/**
