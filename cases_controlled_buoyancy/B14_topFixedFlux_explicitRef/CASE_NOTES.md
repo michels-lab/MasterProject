@@ -2,7 +2,7 @@
 
 > Este archivo documenta la intención y genealogía del caso. No modifica la simulación.
 
-**Estado:** CONFIG-VERIFIED — PENDIENTE DE CORRIDA  
+**Estado:** RUN-VERIFIED — ANALYSIS-VERIFIED  
 **Familia:** B  
 **Caso padre / referencia:** `B11_topFixedFlux_airGapOF14`
 
@@ -54,3 +54,16 @@ El `pRefPoint` solicitado está en `y=0.04 m`, sobre el plano superior geométri
 ## Hipótesis previa
 
 Se espera que `fixedFluxPressure + slip` conserve la impermeabilidad observada en B11. El cambio de punto de referencia debería afectar principalmente el nivel absoluto/datum de presión, no el campo de flujo. Esta hipótesis debe verificarse con la corrida, no asumirse.
+
+
+## Resultado verificado — 2026-10-03
+
+- Corrida completada a **10 s** sin fatal error.
+- El punto de referencia `pRefPoint (0.02 0.04 0.005)` fue aceptado por OpenFOAM 14.
+- `topFlow` registró **80 caras** de `metalTop` por writeTime.
+- En 0.1, 5 y 10 s, las 80 caras verificadas tienen `U_y = 0` y `phi = 0` a precisión almacenada, salvo un residuo de redondeo máximo de `8.47033e-22` en `phi` a 0.1 s.
+- Sobre los **100 writeTimes de 0.1 a 10 s**, el máximo `sum(abs(phi))` fue **8.47033e-22**. Por tanto no existe cancelación oculta de entradas/salidas: la tapa es impermeable cara por cara.
+- La velocidad tangencial permanece activa, consistente con `slip` (max |Ux| = 7.7934e-3 m/s a 10 s).
+- Comparación con B11: máxima diferencia del probe central T = 0.01 K; alphaL = 7e-6; a 10 s T=1470.07 K en ambos y alphaL=0.988421 vs 0.988414.
+- La estructura de `foamLog` para energía es idéntica a V11: `h_0..2` y `e_0..2`. El `nEnergyCorrectors 2` añadido en el **fvSolution regional del metal** no introdujo solves de energía adicionales.
+- Conclusión: V14 **preserva la física impermeable de V11** y valida la referencia explícita de presión solicitada; no introduce un cambio físico material respecto a V11.

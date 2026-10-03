@@ -3975,3 +3975,45 @@ Analyzer: analysis_tools/v9_flow_causality_analysis.py
 **Preparation verification.** The two new cases contain input/documentation files only: 138 blobs total and zero inherited `postProcessing/`, `logs/`, `log.*`, or solved-time directories.
 
 **Status.** CONFIG-VERIFIED / NOT-RUN. Pending: run B14/C14 to 10 s and compare directly with B11/C11 for face-wise `phi`, `sum(abs(phi))`, T, alphaL, Courant number, continuity, and the effective number of energy solves.
+
+
+---
+
+## 2026-10-03 — V14-RUN-002 — Impermeability and explicit pressure-reference validation
+
+**[RUN-VERIFIED] [GIT-VERIFIED] [ANALYSIS-VERIFIED]**
+
+`B14_topFixedFlux_explicitRef` and `C14_topFixedFlux_explicitRef` were run to **10 s** and both completed successfully. OpenFOAM 14 accepted `pRefPoint (0.02 0.04 0.005)` without a reference-cell error.
+
+### Face-wise metalTop audit
+
+`topFlow` recorded all **80 faces** of `metalTop`. At representative times 0.1, 5 and 10 s:
+
+- B14: `max |Uy| = 0`; `max |phi| = 8.47033e-22` at 0.1 s and 0 at 5/10 s.
+- C14: `max |Uy| = 0`; `max |phi| = 0` at all three times.
+- Non-zero tangential `Ux` remains, as expected for a `slip` boundary.
+
+Across all **100 writeTimes from 0.1 to 10 s**:
+
+- B14: maximum `sum(abs(phi)) = 8.47033e-22`;
+- C14: `sum(abs(phi)) = 0` at every stored writeTime.
+
+This rules out hidden cancellation between local inflow and outflow. The `fixedFluxPressure + slip` top remains impermeable face by face.
+
+### V11 -> V14 comparison
+
+Central probe, 10,001 steps:
+
+- B: `max |ΔT| = 0.01 K`; `max |ΔalphaL| = 7e-6`; T(10 s)=1470.07 K in both; alphaL(10 s)=0.988421 (B11) and 0.988414 (B14).
+- C: T is identical at stored precision for the full series; `max |ΔalphaL| = 1e-6`; T(10 s)=1464.19 K and alphaL(10 s)=0.964815 in both.
+- Velocity differences are small and do not indicate a change of physical regime.
+
+### Regional nEnergyCorrectors
+
+V11 and V14 produce the same energy-series structure in `foamLog`: `h_0..2` and `e_0..2`, with the same number of pressure series. Therefore the `nEnergyCorrectors 2` entry added to `system/metal/fvSolution` **did not add energy corrections** under the current `foamMultiRun` architecture. The effective multi-region energy loop remains controlled by the global/root setting rather than the regional duplicate.
+
+### Conclusion
+
+V14 does not introduce new physics relative to V11. It is validated as the **supervisor-reference case**: it preserves V11's physically consistent impermeable top and demonstrates that the requested explicit pressure reference does not materially change T, alphaL or the flow pattern.
+
+**Status:** ✅ RUN-VERIFIED / ANALYSIS-VERIFIED.

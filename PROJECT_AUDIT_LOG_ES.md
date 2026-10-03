@@ -4681,3 +4681,45 @@ Documentación:
 **Verificación de preparación.** Los dos casos contienen únicamente archivos de entrada/documentación: 138 blobs en total y cero `postProcessing/`, `logs/`, `log.*` o tiempos de solución heredados.
 
 **Estado.** CONFIG-VERIFIED / NOT-RUN. Pendiente: corrida B14/C14 hasta 10 s y comparación directa contra B11/C11 de `phi` cara por cara, `sum(abs(phi))`, T, alphaL, Courant, continuidad y número efectivo de solves de energía.
+
+
+---
+
+## 2026-10-03 — V14-RUN-002 — Validación de impermeabilidad y referencia explícita de presión
+
+**[RUN-VERIFIED] [GIT-VERIFIED] [ANALYSIS-VERIFIED]**
+
+Se ejecutaron `B14_topFixedFlux_explicitRef` y `C14_topFixedFlux_explicitRef` hasta **10 s**. Ambos casos terminaron correctamente. El `pRefPoint (0.02 0.04 0.005)` fue aceptado por OpenFOAM 14 sin error de referencia.
+
+### Auditoría cara por cara de metalTop
+
+`topFlow` registró las **80 caras** de `metalTop`. En tiempos representativos 0.1, 5 y 10 s:
+
+- B14: `max |Uy| = 0`; `max |phi| = 8.47033e-22` a 0.1 s y 0 a 5/10 s.
+- C14: `max |Uy| = 0`; `max |phi| = 0` en los tres tiempos.
+- Existe `Ux` tangencial no nulo, consistente con una condición `slip`.
+
+La serie agregada de los **100 writeTimes entre 0.1 y 10 s** confirma:
+
+- B14: máximo `sum(abs(phi)) = 8.47033e-22`;
+- C14: `sum(abs(phi)) = 0` en todos los writeTimes.
+
+Esto descarta la cancelación de flujos locales que podía ocultarse al observar solo `sum(phi)`. La combinación `fixedFluxPressure + slip` mantiene la tapa impermeable.
+
+### Comparación V11 -> V14
+
+Probe central, 10,001 pasos:
+
+- B: `max |ΔT| = 0.01 K`; `max |ΔalphaL| = 7e-6`; T(10 s)=1470.07 K en ambos; alphaL(10 s)=0.988421 (B11) y 0.988414 (B14).
+- C: T es idéntica a precisión almacenada durante toda la serie; `max |ΔalphaL| = 1e-6`; T(10 s)=1464.19 K y alphaL(10 s)=0.964815 en ambos.
+- Las diferencias de velocidad son pequeñas y no cambian el régimen físico observado.
+
+### nEnergyCorrectors regional
+
+V11 y V14 producen la misma estructura de series de energía en `foamLog`: `h_0..2` y `e_0..2`, además de la misma cantidad de series de presión. Por tanto, el `nEnergyCorrectors 2` añadido en `system/metal/fvSolution` **no introdujo correcciones de energía adicionales** bajo la arquitectura actual de `foamMultiRun`. La clave efectiva de energía para el bucle multi-región sigue siendo la del control global/root, no la copia regional.
+
+### Conclusión
+
+V14 no representa una nueva física respecto a V11. Su función queda validada como **caso de referencia del director**: conserva la condición impermeable físicamente consistente de V11 y demuestra que la referencia explícita de presión solicitada no altera materialmente T, alphaL o el patrón de flujo.
+
+**Estado:** ✅ RUN-VERIFIED / ANALYSIS-VERIFIED.
