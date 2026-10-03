@@ -1,0 +1,88 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  13
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    format      ascii;
+    class       dictionary;
+    location    "constant";
+    object      physicalProperties;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+thermoType
+{
+    type            heRhoThermo;
+    mixture         pureMixture;
+    transport       const;
+    thermo          hConst;
+    equationOfState icoTabulated; //Boussinesq; //icoTabulated;
+    specie          specie;
+    energy          sensibleEnthalpy;
+}
+
+mixture
+{
+    specie
+    {
+        molWeight       56;
+    }
+    equationOfState
+    {
+        T0              1473;
+        rho0            6820;
+        beta            1.13e-04;
+
+        rho
+        {
+            values
+            (
+                (293.15   7200)   // Room Temp (20°C)
+                (873.15   7050)
+                (1273.15  6930)   // Solid state (1000°C)
+                (1423.15  6900)   // Solidus threshold (1150°C)
+                (1473.15  6820)   // Liquidus threshold (1200°C)
+                (1573.15  6740)
+                (1773.15  6580)   // Original table limit (1500°C)
+                (1873.15  6500)   // Diagnostic linear extrapolation
+                (1973.15  6420)   // Diagnostic linear extrapolation
+                (2073.15  6340)   // Diagnostic linear extrapolation
+                (2173.15  6260)   // Diagnostic linear extrapolation
+                (2273.15  6180)   // Diagnostic linear extrapolation
+            );
+        }
+
+    }
+    thermodynamics
+    {
+        Cp              827;
+        hf              0;
+    }
+    transport
+    {
+        mu              5.5e-03; // Pa.s
+        Pr              0.14;
+    }
+}
+
+
+// ************************************************************************* //
+
+// ============================================================================
+// QUICKCUP DOCUMENTATION APPENDIX
+// ============================================================================
+// Archivo documentado: constant/metal/materials/castIron.
+// El contenido ejecutable anterior permanece intacto; este apéndice solo explica su función e interacción con el modelo.
+// FUNCIÓN: propiedades termofísicas del material castIron.
+// rho0 = 6820: densidad de referencia de la formulación termofísica seleccionada.
+// beta = 1.13e-04: coeficiente de expansión térmica usado por la ruta de flotación que corresponda al modelo.
+// Cp = 827: capacidad calorífica; gobierna cuánta energía sensible se necesita para cambiar la temperatura.
+// mu = 5.5e-03: viscosidad dinámica; controla difusión viscosa y resistencia al movimiento.
+// Las tablas dependientes de temperatura se interpolan entre pares temperatura-propiedad; el conjunto de filas representa una ley continua, no constantes aisladas.
+// INTERACCIÓN: rho se acopla con gravedad/p_rgh; Cp y kappa controlan respuesta térmica; mu controla resistencia al flujo. En metal, todo ello retroalimenta el cambio de fase mediante T y alphaL.
+// NOTA DE SEGURIDAD: todas las líneas de este apéndice son comentarios y no cambian la ejecución del caso.
+// ============================================================================

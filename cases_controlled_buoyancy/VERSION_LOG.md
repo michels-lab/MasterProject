@@ -17,6 +17,7 @@ Este índice resume la genealogía de `cases_controlled_buoyancy`. El detalle ex
 | V11 | `B11_topFixedFlux_airGapOF14 / C11_topFixedFlux_airGapOF14` | V9 + air gap OF14 | fixedFluxPressure + gap correcto |
 | V12 | `B12_topFixedValue_airGapOF14 / C12_topFixedValue_airGapOF14` | Propuesta doctor | fixedValue de p_rgh inicialmente consistente |
 | V13 | `B13_prghPressure_airGapOF14 / C13_prghPressure_airGapOF14` | Presión estática atmosférica | prghPressure con p=0 gauge relativo a pRef |
+| V14 | `B14_topFixedFlux_explicitRef / C14_topFixedFlux_explicitRef` | Referencia explícita de presión sobre baseline V11 | fixedFluxPressure + slip; pRefPoint (0.02 0.04 0.005); pRefValue 1e5; diagnóstico face-wise U/phi |
 
 ## Casos transicionales no numerados
 
@@ -36,7 +37,7 @@ Las versiones canónicas son:
 
 ## Dos advertencias históricas que deben acompañar cualquier interpretación
 
-1. **Air gap:** V3–V9 históricos conservan la sintaxis heredada OF13 (`thicknessLayers/kappaLayers` directamente en `coupledTemperature`). En OF14 esa forma no representa la resistencia pretendida. V10/V11/V12/V13 usan `h { type wallLayersHeatTransferCoefficient; ... }` una sola vez en la interfaz.
+1. **Air gap:** V3–V9 históricos conservan la sintaxis heredada OF13 (`thicknessLayers/kappaLayers` directamente en `coupledTemperature`). En OF14 esa forma no representa la resistencia pretendida. V10/V11/V12/V13/V14 usan `h { type wallLayersHeatTransferCoefficient; ... }` una sola vez en la interfaz.
 2. **B9:** además del cambio de `metalTop`, B9 necesitó extensión diagnóstica de la tabla `rho(T)` hasta 2273.15 K y se añadió referencia regional de presión. Por ello B9-vs-B5 no es estrictamente una comparación de un solo cambio.
 
 ## Regla de mantenimiento
