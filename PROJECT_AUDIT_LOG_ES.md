@@ -4656,3 +4656,28 @@ Documentación:
 **Impacto.** La clasificación anterior `fatal=True` para 26/26 casos era un falso positivo del analizador y no evidencia de inestabilidad del solver.
 
 **Estado.** AUDITOR-FIXED / READY-FOR-FINAL-RUN-STATUS.
+
+
+## 2026-10-03 — V14-CONFIG-001 — Referencia explícita de presión + topFlow directo solicitados por el director
+
+**Objetivo.** Crear V14 como prueba controlada derivada de V11, conservando la tapa `fixedFluxPressure + slip` y aplicando la configuración solicitada para referencia de presión y registro directo de flujo en `metalTop`.
+
+**Casos nuevos.**
+- `B14_topFixedFlux_explicitRef`
+- `C14_topFixedFlux_explicitRef`
+
+**Cambios controlados respecto a V11.**
+- `system/metal/fvSolution`: `pRefPoint (0.02 0.04 0.005)`;
+- `system/metal/fvSolution`: `pRefValue 1e5`;
+- `system/metal/fvSolution`: se añade `nEnergyCorrectors 2`;
+- `system/functions`: se añade `topFlow`, `surfaceFieldValue` sobre `metalTop`, con `operation none`, `writeFields true`, campos `(U phi)` y `writeControl writeTime`.
+
+**Condición de presión.** `0/metal/p_rgh` permanece sin cambio: `metalTop = fixedFluxPressure` con `value $internalField`.
+
+**Hallazgo de compatibilidad OF14.** La región metálica usa el solver modular `fluid`. En OpenFOAM Foundation v14, `fluid::thermophysicalPredictor()` ensambla y resuelve una ecuación de energía por llamada y no consulta `nEnergyCorrectors`. Esa clave sí existe en `multiphaseEuler`. Por trazabilidad se conserva exactamente la configuración solicitada, pero V14 debe auditar el log para verificar su efecto operativo real y no asumir que cambia el número de solves de energía.
+
+**Riesgo de arranque a verificar.** El punto `(0.02 0.04 0.005)` se encuentra sobre el plano superior geométrico. La rutina de referencia de presión requiere asociar el punto de forma unívoca con una celda; por ello la primera prueba V14 debe confirmar que OF14 acepta el punto sin error.
+
+**Verificación de preparación.** Los dos casos contienen únicamente archivos de entrada/documentación: 138 blobs en total y cero `postProcessing/`, `logs/`, `log.*` o tiempos de solución heredados.
+
+**Estado.** CONFIG-VERIFIED / NOT-RUN. Pendiente: corrida B14/C14 hasta 10 s y comparación directa contra B11/C11 de `phi` cara por cara, `sum(abs(phi))`, T, alphaL, Courant, continuidad y número efectivo de solves de energía.
