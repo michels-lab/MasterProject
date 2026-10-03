@@ -12,13 +12,8 @@ permissions:
 
 jobs:
   run-case:
-    name: ${{ matrix.case }}
+    name: C11_energy2_test
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        case:
-          - C11_energy2_test
 
     steps:
       - name: Checkout
@@ -38,7 +33,7 @@ jobs:
       - name: Run case
         shell: bash
         env:
-          CASE_NAME: ${{ matrix.case }}
+          CASE_NAME: C11_energy2_test
         run: |
           source /opt/openfoam14/etc/bashrc
           set -euo pipefail
@@ -51,23 +46,13 @@ jobs:
             log.foamMultiRun log.blockMesh log.splitMeshRegions log.foamPostProcess log.foamLog \
             logs postProcessing 2>/dev/null || true
           test "$(foamListTimes -latestTime)" = "10"
-          grep -qE '^[[:space:]]*End[[:space:]]*
+          tail -n 10 log.foamMultiRun | grep -q "End"
 
       - name: Upload results
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ matrix.case }}-results
+          name: C11_energy2_test-results
           if-no-files-found: warn
           retention-days: 14
-          path: ${{ matrix.case }}-results.tar.gz
- log.foamMultiRun
-
-      - name: Upload results
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: ${{ matrix.case }}-results
-          if-no-files-found: warn
-          retention-days: 14
-          path: ${{ matrix.case }}-results.tar.gz
+          path: C11_energy2_test-results.tar.gz
