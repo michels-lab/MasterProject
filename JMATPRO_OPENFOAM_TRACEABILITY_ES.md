@@ -1,5 +1,8 @@
 # Auditoría JMatPro → OpenFOAM — QuickCup Solidification
 
+> **Actualización 2026-10-03 — baseline vigente:** `C11_topFixedFlux_airGapOF14` se conserva como baseline histórico congelado. `C14_topFixedFlux_explicitRef` fue verificado a 10 s y es su sucesor actual para trabajo/validación: mantiene `fixedFluxPressure + slip`, la misma física/materiales de C11 y añade la referencia explícita de presión solicitada por el director. Las observaciones de trazabilidad de propiedades hechas sobre C11 siguen aplicando a C14 mientras no se cambien sus propiedades termofísicas.
+
+
 **Fecha:** 2026-09-29  
 **Estado:** AUDITORÍA DE TRAZABILIDAD TERMODINÁMICA  
 **Baseline OpenFOAM inspeccionada:** `C11_topFixedFlux_airGapOF14`  

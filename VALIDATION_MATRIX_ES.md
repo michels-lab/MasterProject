@@ -1,5 +1,8 @@
 # Matriz de validación — QuickCup Solidification
 
+> **Actualización 2026-10-03 — baseline vigente:** la campaña V14 validó `C14_topFixedFlux_explicitRef` como sucesor de trabajo de C11 para el modelo rígido, de volumen fijo e impermeable. C11 permanece congelado como referencia histórica; C14 conserva su física y añade la referencia explícita de presión del director. J0 continúa abierta y debe cerrarse antes de crear G1.
+
+
 ## Objetivo
 
 Determinar la **mínima física adicional necesaria** para explicar la evidencia experimental sin confundir:

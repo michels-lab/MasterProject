@@ -1,5 +1,8 @@
 # JMatPro data area
 
+> **Actualización 2026-10-03:** `C11_topFixedFlux_airGapOF14` permanece como referencia histórica congelada; `C14_topFixedFlux_explicitRef` es el baseline actual de trabajo/validación después de verificar impermeabilidad, continuidad y equivalencia física con C11. La incorporación de datos JMatPro no debe modificar C11 ni C14; cualquier nueva física se introducirá después de cerrar J0.
+
+
 Este directorio está reservado para la trazabilidad de la simulación termodinámica previa a OpenFOAM.
 
 ## Regla
