@@ -1,0 +1,27 @@
+case	status	latest_phi_time	note
+B3_reference	PROCESSED	10	ok
+B4_energy2	PROCESSED	10	ok
+B5_airGapOF14	SKIPPED		metal_mesh_missing
+B5_outer3	PROCESSED	10	ok
+B6_adaptiveDt	PROCESSED	9.946515	ok
+B7_outer4	PROCESSED	10	ok
+B8_adaptiveOuter4	PROCESSED	9.946556	ok
+B9_airGapOF14	SKIPPED		metal_mesh_missing
+B9_topFixedFlux	PROCESSED	10	ok
+B10_airGapOF14	PROCESSED	10	ok
+B11_topFixedFlux_airGapOF14	PROCESSED	10	ok
+B12_topFixedValue_airGapOF14	PROCESSED	9.9	ok
+B13_prghPressure_airGapOF14	PROCESSED	9.9	ok
+C3_reference	PROCESSED	10	ok
+C4_energy2	PROCESSED	10	ok
+C5_airGapOF14	SKIPPED		metal_mesh_missing
+C5_outer3	PROCESSED	10	ok
+C6_adaptiveDt	PROCESSED	9.182456	ok
+C7_outer4	PROCESSED	10	ok
+C8_adaptiveOuter4	PROCESSED	9.182888	ok
+C9_airGapOF14	SKIPPED		metal_mesh_missing
+C9_topFixedFlux	PROCESSED	10	ok
+C10_airGapOF14	PROCESSED	10	ok
+C11_topFixedFlux_airGapOF14	PROCESSED	10	ok
+C12_topFixedValue_airGapOF14	PROCESSED	9.9	ok
+C13_prghPressure_airGapOF14	PROCESSED	9.9	ok
