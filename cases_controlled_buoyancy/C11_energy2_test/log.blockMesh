@@ -7,12 +7,12 @@
 \*---------------------------------------------------------------------------*/
 Build  : 14-7b05503f98a8
 Exec   : blockMesh
-Date   : Sep 28 2026
-Time   : 15:16:44
-Host   : "Michel-DuarteHP"
-PID    : 333828
+Date   : Oct 03 2026
+Time   : 23:26:07
+Host   : "runnervm8df0l"
+PID    : 6793
 I/O    : uncollated
-Case   : /home/michel/OpenFOAM/QuickCup_Solidification/cases_controlled_buoyancy/C11_topFixedFlux_airGapOF14
+Case   : /home/runner/work/QuickCup-Solidification/QuickCup-Solidification/cases_controlled_buoyancy/C11_energy2_test
 nProcs : 1
 sigFpe : Enabling floating point exception trapping (FOAM_SIGFPE).
 fileModificationChecking : Monitoring run-time modified files using timeStampMaster (fileModificationSkew 10)

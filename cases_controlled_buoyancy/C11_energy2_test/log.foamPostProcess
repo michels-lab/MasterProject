@@ -7,12 +7,12 @@
 \*---------------------------------------------------------------------------*/
 Build  : 14-7b05503f98a8
 Exec   : foamPostProcess -region metal -dict system/momentumPostProcessing -time 0: -fields (phaseChangeSolidFraction phaseChangeDarcyCoeff phaseChangeModelDeltaT phaseChangeDarcyAcceleration phaseChangeBuoyancyAcceleration pRghAcceleration magPhaseChangeDarcyAcceleration magPhaseChangeBuoyancyAcceleration magPRghAcceleration phaseChangeDragToBuoyancy phaseChangeDragToPressure)
-Date   : Sep 28 2026
-Time   : 15:21:30
-Host   : "Michel-DuarteHP"
-PID    : 334148
+Date   : Oct 03 2026
+Time   : 23:32:46
+Host   : "runnervm8df0l"
+PID    : 7079
 I/O    : uncollated
-Case   : /home/michel/OpenFOAM/QuickCup_Solidification/cases_controlled_buoyancy/C11_topFixedFlux_airGapOF14
+Case   : /home/runner/work/QuickCup-Solidification/QuickCup-Solidification/cases_controlled_buoyancy/C11_energy2_test
 nProcs : 1
 sigFpe : Enabling floating point exception trapping (FOAM_SIGFPE).
 fileModificationChecking : Monitoring run-time modified files using timeStampMaster (fileModificationSkew 10)
@@ -35,6 +35,7 @@ Constructing functionObjects from system/functions
         operation = max
     Selecting sets with name momentumHorizontalProfiles
         Reading set description:
+            line_y10mm
             line_y20mm
             line_y30mm
     Selecting sets with name momentumVerticalProfiles
@@ -237,7 +238,7 @@ volFieldValue momentumMean write:
     volAverage(all) of phaseChangeModelDeltaT = 22.9435
     volAverage(all) of magPhaseChangeDarcyAcceleration = 0.000576879
     volAverage(all) of magPhaseChangeBuoyancyAcceleration = 0.0254425
-    volAverage(all) of magPRghAcceleration = 0.0261092
+    volAverage(all) of magPRghAcceleration = 0.0261093
 
 volFieldValue momentumMax write:
     number of cells = 6400
@@ -246,7 +247,7 @@ volFieldValue momentumMax write:
     max(all) of phaseChangeDarcyCoeff = 789.014 at location (0.00025 0.00025 0.005) in cell 0
     max(all) of phaseChangeModelDeltaT = 26.9827 at location (0.01475 0.01925 0.005) in cell 3069
     max(all) of magPhaseChangeDarcyAcceleration = 0.218143 at location (0.00075 0.00025 0.005) in cell 1
-    max(all) of magPhaseChangeBuoyancyAcceleration = 0.0299111 at location (0.01525 0.01525 0.005) in cell 2430
+    max(all) of magPhaseChangeBuoyancyAcceleration = 0.0299111 at location (0.01575 0.01525 0.005) in cell 2431
     max(all) of magPRghAcceleration = 0.0289474 at location (0.01975 0.03475 0.005) in cell 5559
 
 
@@ -276,7 +277,7 @@ volFieldValue momentumMax write:
     max(all) of phaseChangeDarcyCoeff = 1080.48 at location (0.00025 0.00025 0.005) in cell 0
     max(all) of phaseChangeModelDeltaT = 26.9827 at location (0.01575 0.01925 0.005) in cell 3071
     max(all) of magPhaseChangeDarcyAcceleration = 0.351836 at location (0.00125 0.00025 0.005) in cell 2
-    max(all) of magPhaseChangeBuoyancyAcceleration = 0.0299111 at location (0.01525 0.01575 0.005) in cell 2510
+    max(all) of magPhaseChangeBuoyancyAcceleration = 0.0299111 at location (0.01575 0.01575 0.005) in cell 2511
     max(all) of magPRghAcceleration = 0.0288092 at location (0.01975 0.03425 0.005) in cell 5479
 
 
@@ -293,7 +294,7 @@ volFieldValue momentumMean write:
     number of cells = 6400
     volume = 1.6e-05
     volAverage(all) of phaseChangeSolidFraction = 0.000659037
-    volAverage(all) of phaseChangeDarcyCoeff = 2.33067
+    volAverage(all) of phaseChangeDarcyCoeff = 2.33066
     volAverage(all) of phaseChangeModelDeltaT = 21.9616
     volAverage(all) of magPhaseChangeDarcyAcceleration = 0.00319186
     volAverage(all) of magPhaseChangeBuoyancyAcceleration = 0.0243609
@@ -305,8 +306,8 @@ volFieldValue momentumMax write:
     max(all) of phaseChangeSolidFraction = 0.100689 at location (0.00025 0.00025 0.005) in cell 0
     max(all) of phaseChangeDarcyCoeff = 1392 at location (0.00025 0.00025 0.005) in cell 0
     max(all) of phaseChangeModelDeltaT = 26.9827 at location (0.01775 0.01925 0.005) in cell 3075
-    max(all) of magPhaseChangeDarcyAcceleration = 0.501844 at location (0.00125 0.00025 0.005) in cell 2
-    max(all) of magPhaseChangeBuoyancyAcceleration = 0.0299111 at location (0.01625 0.01625 0.005) in cell 2592
+    max(all) of magPhaseChangeDarcyAcceleration = 0.501843 at location (0.00125 0.00025 0.005) in cell 2
+    max(all) of magPhaseChangeBuoyancyAcceleration = 0.0299111 at location (0.01675 0.01625 0.005) in cell 2593
     max(all) of magPRghAcceleration = 0.0286862 at location (0.01975 0.03425 0.005) in cell 5479
 
 
@@ -322,7 +323,7 @@ Executing functionObjects
 volFieldValue momentumMean write:
     number of cells = 6400
     volume = 1.6e-05
-    volAverage(all) of phaseChangeSolidFraction = 0.000921271
+    volAverage(all) of phaseChangeSolidFraction = 0.00092127
     volAverage(all) of phaseChangeDarcyCoeff = 3.61134
     volAverage(all) of phaseChangeModelDeltaT = 21.4979
     volAverage(all) of magPhaseChangeDarcyAcceleration = 0.00612257
@@ -335,7 +336,7 @@ volFieldValue momentumMax write:
     max(all) of phaseChangeSolidFraction = 0.110138 at location (0.00025 0.00025 0.005) in cell 0
     max(all) of phaseChangeDarcyCoeff = 1719.07 at location (0.00025 0.00025 0.005) in cell 0
     max(all) of phaseChangeModelDeltaT = 26.9827 at location (0.01725 0.01975 0.005) in cell 3154
-    max(all) of magPhaseChangeDarcyAcceleration = 0.69274 at location (0.00175 0.00025 0.005) in cell 3
+    max(all) of magPhaseChangeDarcyAcceleration = 0.692739 at location (0.00175 0.00025 0.005) in cell 3
     max(all) of magPhaseChangeBuoyancyAcceleration = 0.0299111 at location (0.01675 0.01725 0.005) in cell 2753
     max(all) of magPRghAcceleration = 0.0285878 at location (0.01975 0.03375 0.005) in cell 5399
 
@@ -365,7 +366,7 @@ volFieldValue momentumMax write:
     max(all) of phaseChangeSolidFraction = 0.118771 at location (0.00025 0.00025 0.005) in cell 0
     max(all) of phaseChangeDarcyCoeff = 2058.34 at location (0.00025 0.00025 0.005) in cell 0
     max(all) of phaseChangeModelDeltaT = 26.9827 at location (0.01875 0.01975 0.005) in cell 3157
-    max(all) of magPhaseChangeDarcyAcceleration = 0.912237 at location (0.00175 0.00025 0.005) in cell 3
+    max(all) of magPhaseChangeDarcyAcceleration = 0.912236 at location (0.00175 0.00025 0.005) in cell 3
     max(all) of magPhaseChangeBuoyancyAcceleration = 0.0299111 at location (0.01775 0.01775 0.005) in cell 2835
     max(all) of magPRghAcceleration = 0.0285106 at location (0.01975 0.03375 0.005) in cell 5399
 
@@ -386,7 +387,7 @@ volFieldValue momentumMean write:
     volAverage(all) of phaseChangeDarcyCoeff = 7.05291
     volAverage(all) of phaseChangeModelDeltaT = 20.6374
     volAverage(all) of magPhaseChangeDarcyAcceleration = 0.0157622
-    volAverage(all) of magPhaseChangeBuoyancyAcceleration = 0.0228978
+    volAverage(all) of magPhaseChangeBuoyancyAcceleration = 0.0228979
     volAverage(all) of magPRghAcceleration = 0.0241568
 
 volFieldValue momentumMax write:
@@ -417,7 +418,7 @@ volFieldValue momentumMean write:
     volAverage(all) of phaseChangeModelDeltaT = 20.2417
     volAverage(all) of magPhaseChangeDarcyAcceleration = 0.0227476
     volAverage(all) of magPhaseChangeBuoyancyAcceleration = 0.0224595
-    volAverage(all) of magPRghAcceleration = 0.0238883
+    volAverage(all) of magPRghAcceleration = 0.0238884
 
 volFieldValue momentumMax write:
     number of cells = 6400
@@ -445,7 +446,7 @@ volFieldValue momentumMean write:
     volAverage(all) of phaseChangeSolidFraction = 0.00220122
     volAverage(all) of phaseChangeDarcyCoeff = 11.5882
     volAverage(all) of phaseChangeModelDeltaT = 19.8553
-    volAverage(all) of magPhaseChangeDarcyAcceleration = 0.031506
+    volAverage(all) of magPhaseChangeDarcyAcceleration = 0.0315059
     volAverage(all) of magPhaseChangeBuoyancyAcceleration = 0.0220313
     volAverage(all) of magPRghAcceleration = 0.0236621
 
@@ -547,7 +548,7 @@ volFieldValue momentumMax write:
     max(all) of phaseChangeModelDeltaT = 26.9825 at location (0.01975 0.02275 0.005) in cell 3639
     max(all) of magPhaseChangeDarcyAcceleration = 3.09704 at location (0.00425 0.00025 0.005) in cell 8
     max(all) of magPhaseChangeBuoyancyAcceleration = 0.0299109 at location (0.01975 0.02275 0.005) in cell 3639
-    max(all) of magPRghAcceleration = 0.0344667 at location (0.03675 0.00275 0.005) in cell 473
+    max(all) of magPRghAcceleration = 0.0344666 at location (0.00325 0.00275 0.005) in cell 406
 
 
 Time = 1.7s
@@ -593,7 +594,7 @@ volFieldValue momentumMean write:
     number of cells = 6400
     volume = 1.6e-05
     volAverage(all) of phaseChangeSolidFraction = 0.00401822
-    volAverage(all) of phaseChangeDarcyCoeff = 27.3105
+    volAverage(all) of phaseChangeDarcyCoeff = 27.3104
     volAverage(all) of phaseChangeModelDeltaT = 18.0781
     volAverage(all) of magPhaseChangeDarcyAcceleration = 0.100822
     volAverage(all) of magPhaseChangeBuoyancyAcceleration = 0.0200632
@@ -776,14 +777,14 @@ volFieldValue momentumMean write:
     volAverage(all) of phaseChangeDarcyCoeff = 52.036
     volAverage(all) of phaseChangeModelDeltaT = 16.1228
     volAverage(all) of magPhaseChangeDarcyAcceleration = 0.221489
-    volAverage(all) of magPhaseChangeBuoyancyAcceleration = 0.0178954
+    volAverage(all) of magPhaseChangeBuoyancyAcceleration = 0.0178955
     volAverage(all) of magPRghAcceleration = 0.0252968
 
 volFieldValue momentumMax write:
     number of cells = 6400
     volume = 1.6e-05
     max(all) of phaseChangeSolidFraction = 0.194694 at location (0.00025 0.00025 0.005) in cell 0
-    max(all) of phaseChangeDarcyCoeff = 7244.26 at location (0.00025 0.00025 0.005) in cell 0
+    max(all) of phaseChangeDarcyCoeff = 7244.27 at location (0.00025 0.00025 0.005) in cell 0
     max(all) of phaseChangeModelDeltaT = 26.9701 at location (0.01975 0.02575 0.005) in cell 4119
     max(all) of magPhaseChangeDarcyAcceleration = 8.16281 at location (0.00875 0.00075 0.005) in cell 97
     max(all) of magPhaseChangeBuoyancyAcceleration = 0.0298972 at location (0.01975 0.02575 0.005) in cell 4119
@@ -843,7 +844,7 @@ volFieldValue momentumMax write:
     number of cells = 6400
     volume = 1.6e-05
     max(all) of phaseChangeSolidFraction = 0.203918 at location (0.00025 0.00025 0.005) in cell 0
-    max(all) of phaseChangeDarcyCoeff = 8225.74 at location (0.00025 0.00025 0.005) in cell 0
+    max(all) of phaseChangeDarcyCoeff = 8225.75 at location (0.00025 0.00025 0.005) in cell 0
     max(all) of phaseChangeModelDeltaT = 26.9567 at location (0.01975 0.02675 0.005) in cell 4279
     max(all) of magPhaseChangeDarcyAcceleration = 9.12386 at location (0.00925 0.00075 0.005) in cell 98
     max(all) of magPhaseChangeBuoyancyAcceleration = 0.0298823 at location (0.01975 0.02675 0.005) in cell 4279
@@ -873,7 +874,7 @@ volFieldValue momentumMax write:
     number of cells = 6400
     volume = 1.6e-05
     max(all) of phaseChangeSolidFraction = 0.217368 at location (0.00025 0.00025 0.005) in cell 0
-    max(all) of phaseChangeDarcyCoeff = 9835.89 at location (0.00025 0.00025 0.005) in cell 0
+    max(all) of phaseChangeDarcyCoeff = 9835.9 at location (0.00025 0.00025 0.005) in cell 0
     max(all) of phaseChangeModelDeltaT = 26.9462 at location (0.01975 0.02675 0.005) in cell 4279
     max(all) of magPhaseChangeDarcyAcceleration = 9.46916 at location (0.00975 0.00075 0.005) in cell 99
     max(all) of magPhaseChangeBuoyancyAcceleration = 0.0298707 at location (0.01975 0.02675 0.005) in cell 4279
@@ -933,7 +934,7 @@ volFieldValue momentumMax write:
     number of cells = 6400
     volume = 1.6e-05
     max(all) of phaseChangeSolidFraction = 0.26238 at location (0.00025 0.00025 0.005) in cell 0
-    max(all) of phaseChangeDarcyCoeff = 17111.3 at location (0.00025 0.00025 0.005) in cell 0
+    max(all) of phaseChangeDarcyCoeff = 17111.4 at location (0.00025 0.00025 0.005) in cell 0
     max(all) of phaseChangeModelDeltaT = 26.9151 at location (0.01975 0.02775 0.005) in cell 4439
     max(all) of magPhaseChangeDarcyAcceleration = 9.67512 at location (0.01025 0.00075 0.005) in cell 100
     max(all) of magPhaseChangeBuoyancyAcceleration = 0.0298362 at location (0.01975 0.02775 0.005) in cell 4439
@@ -952,8 +953,8 @@ Executing functionObjects
 volFieldValue momentumMean write:
     number of cells = 6400
     volume = 1.6e-05
-    volAverage(all) of phaseChangeSolidFraction = 0.00815801
-    volAverage(all) of phaseChangeDarcyCoeff = 84.0027
+    volAverage(all) of phaseChangeSolidFraction = 0.008158
+    volAverage(all) of phaseChangeDarcyCoeff = 84.0028
     volAverage(all) of phaseChangeModelDeltaT = 14.201
     volAverage(all) of magPhaseChangeDarcyAcceleration = 0.314605
     volAverage(all) of magPhaseChangeBuoyancyAcceleration = 0.0157647
@@ -963,7 +964,7 @@ volFieldValue momentumMax write:
     number of cells = 6400
     volume = 1.6e-05
     max(all) of phaseChangeSolidFraction = 0.292648 at location (0.00025 0.00025 0.005) in cell 0
-    max(all) of phaseChangeDarcyCoeff = 24130 at location (0.00025 0.00025 0.005) in cell 0
+    max(all) of phaseChangeDarcyCoeff = 24130.1 at location (0.00025 0.00025 0.005) in cell 0
     max(all) of phaseChangeModelDeltaT = 26.8918 at location (0.01975 0.02825 0.005) in cell 4519
     max(all) of magPhaseChangeDarcyAcceleration = 9.64837 at location (0.01075 0.00075 0.005) in cell 101
     max(all) of magPhaseChangeBuoyancyAcceleration = 0.0298104 at location (0.01975 0.02825 0.005) in cell 4519
@@ -983,7 +984,7 @@ volFieldValue momentumMean write:
     number of cells = 6400
     volume = 1.6e-05
     volAverage(all) of phaseChangeSolidFraction = 0.008467
-    volAverage(all) of phaseChangeDarcyCoeff = 91.8883
+    volAverage(all) of phaseChangeDarcyCoeff = 91.8884
     volAverage(all) of phaseChangeModelDeltaT = 13.8819
     volAverage(all) of magPhaseChangeDarcyAcceleration = 0.323838
     volAverage(all) of magPhaseChangeBuoyancyAcceleration = 0.0154107
@@ -992,8 +993,8 @@ volFieldValue momentumMean write:
 volFieldValue momentumMax write:
     number of cells = 6400
     volume = 1.6e-05
-    max(all) of phaseChangeSolidFraction = 0.327603 at location (0.00025 0.00025 0.005) in cell 0
-    max(all) of phaseChangeDarcyCoeff = 35188 at location (0.00025 0.00025 0.005) in cell 0
+    max(all) of phaseChangeSolidFraction = 0.327604 at location (0.00025 0.00025 0.005) in cell 0
+    max(all) of phaseChangeDarcyCoeff = 35188.1 at location (0.00025 0.00025 0.005) in cell 0
     max(all) of phaseChangeModelDeltaT = 26.8613 at location (0.01975 0.02875 0.005) in cell 4599
     max(all) of magPhaseChangeDarcyAcceleration = 9.48061 at location (0.01075 0.00075 0.005) in cell 101
     max(all) of magPhaseChangeBuoyancyAcceleration = 0.0297765 at location (0.01975 0.02875 0.005) in cell 4599
@@ -1023,7 +1024,7 @@ volFieldValue momentumMax write:
     number of cells = 6400
     volume = 1.6e-05
     max(all) of phaseChangeSolidFraction = 0.367006 at location (0.00025 0.00025 0.005) in cell 0
-    max(all) of phaseChangeDarcyCoeff = 52898 at location (0.00025 0.00025 0.005) in cell 0
+    max(all) of phaseChangeDarcyCoeff = 52898.1 at location (0.00025 0.00025 0.005) in cell 0
     max(all) of phaseChangeModelDeltaT = 26.8238 at location (0.01975 0.02875 0.005) in cell 4599
     max(all) of magPhaseChangeDarcyAcceleration = 9.28012 at location (0.01125 0.00075 0.005) in cell 102
     max(all) of magPhaseChangeBuoyancyAcceleration = 0.029735 at location (0.01975 0.02875 0.005) in cell 4599
@@ -1042,7 +1043,7 @@ Executing functionObjects
 volFieldValue momentumMean write:
     number of cells = 6400
     volume = 1.6e-05
-    volAverage(all) of phaseChangeSolidFraction = 0.00907572
+    volAverage(all) of phaseChangeSolidFraction = 0.00907571
     volAverage(all) of phaseChangeDarcyCoeff = 115.357
     volAverage(all) of phaseChangeModelDeltaT = 13.2475
     volAverage(all) of magPhaseChangeDarcyAcceleration = 0.337965
@@ -1053,7 +1054,7 @@ volFieldValue momentumMax write:
     number of cells = 6400
     volume = 1.6e-05
     max(all) of phaseChangeSolidFraction = 0.410664 at location (0.00025 0.00025 0.005) in cell 0
-    max(all) of phaseChangeDarcyCoeff = 81991.4 at location (0.00025 0.00025 0.005) in cell 0
+    max(all) of phaseChangeDarcyCoeff = 81991.7 at location (0.00025 0.00025 0.005) in cell 0
     max(all) of phaseChangeModelDeltaT = 26.7776 at location (0.01975 0.02925 0.005) in cell 4679
     max(all) of magPhaseChangeDarcyAcceleration = 9.03372 at location (0.01125 0.00075 0.005) in cell 102
     max(all) of magPhaseChangeBuoyancyAcceleration = 0.0296837 at location (0.01975 0.02925 0.005) in cell 4679
@@ -1072,7 +1073,7 @@ Executing functionObjects
 volFieldValue momentumMean write:
     number of cells = 6400
     volume = 1.6e-05
-    volAverage(all) of phaseChangeSolidFraction = 0.0093773
+    volAverage(all) of phaseChangeSolidFraction = 0.00937729
     volAverage(all) of phaseChangeDarcyCoeff = 135.234
     volAverage(all) of phaseChangeModelDeltaT = 12.933
     volAverage(all) of magPhaseChangeDarcyAcceleration = 0.343544
@@ -1083,7 +1084,7 @@ volFieldValue momentumMax write:
     number of cells = 6400
     volume = 1.6e-05
     max(all) of phaseChangeSolidFraction = 0.458413 at location (0.00025 0.00025 0.005) in cell 0
-    max(all) of phaseChangeDarcyCoeff = 131457 at location (0.00025 0.00025 0.005) in cell 0
+    max(all) of phaseChangeDarcyCoeff = 131458 at location (0.00025 0.00025 0.005) in cell 0
     max(all) of phaseChangeModelDeltaT = 26.719 at location (0.01975 0.02975 0.005) in cell 4759
     max(all) of magPhaseChangeDarcyAcceleration = 8.72466 at location (0.01125 0.00075 0.005) in cell 102
     max(all) of magPhaseChangeBuoyancyAcceleration = 0.0296188 at location (0.01975 0.02975 0.005) in cell 4759
@@ -1112,8 +1113,8 @@ volFieldValue momentumMean write:
 volFieldValue momentumMax write:
     number of cells = 6400
     volume = 1.6e-05
-    max(all) of phaseChangeSolidFraction = 0.510102 at location (0.00025 0.00025 0.005) in cell 0
-    max(all) of phaseChangeDarcyCoeff = 219442 at location (0.00025 0.00025 0.005) in cell 0
+    max(all) of phaseChangeSolidFraction = 0.510103 at location (0.00025 0.00025 0.005) in cell 0
+    max(all) of phaseChangeDarcyCoeff = 219443 at location (0.00025 0.00025 0.005) in cell 0
     max(all) of phaseChangeModelDeltaT = 26.6458 at location (0.01975 0.02975 0.005) in cell 4759
     max(all) of magPhaseChangeDarcyAcceleration = 8.43061 at location (0.01275 0.00125 0.005) in cell 185
     max(all) of magPhaseChangeBuoyancyAcceleration = 0.0295376 at location (0.01975 0.02975 0.005) in cell 4759
@@ -1143,11 +1144,11 @@ volFieldValue momentumMax write:
     number of cells = 6400
     volume = 1.6e-05
     max(all) of phaseChangeSolidFraction = 0.565584 at location (0.00025 0.00025 0.005) in cell 0
-    max(all) of phaseChangeDarcyCoeff = 385488 at location (0.00025 0.00025 0.005) in cell 0
+    max(all) of phaseChangeDarcyCoeff = 385490 at location (0.00025 0.00025 0.005) in cell 0
     max(all) of phaseChangeModelDeltaT = 26.5637 at location (0.01975 0.03025 0.005) in cell 4839
     max(all) of magPhaseChangeDarcyAcceleration = 8.22705 at location (0.01275 0.00125 0.005) in cell 185
     max(all) of magPhaseChangeBuoyancyAcceleration = 0.0294466 at location (0.01975 0.03025 0.005) in cell 4839
-    max(all) of magPRghAcceleration = 0.0637013 at location (0.00675 0.00325 0.005) in cell 493
+    max(all) of magPRghAcceleration = 0.0637012 at location (0.00675 0.00325 0.005) in cell 493
 
 
 Time = 3.7s
@@ -1163,7 +1164,7 @@ volFieldValue momentumMean write:
     number of cells = 6400
     volume = 1.6e-05
     volAverage(all) of phaseChangeSolidFraction = 0.0102782
-    volAverage(all) of phaseChangeDarcyCoeff = 333.874
+    volAverage(all) of phaseChangeDarcyCoeff = 333.875
     volAverage(all) of phaseChangeModelDeltaT = 12.0033
     volAverage(all) of magPhaseChangeDarcyAcceleration = 0.358414
     volAverage(all) of magPhaseChangeBuoyancyAcceleration = 0.013326
@@ -1172,12 +1173,12 @@ volFieldValue momentumMean write:
 volFieldValue momentumMax write:
     number of cells = 6400
     volume = 1.6e-05
-    max(all) of phaseChangeSolidFraction = 0.6247 at location (0.00025 0.00025 0.005) in cell 0
-    max(all) of phaseChangeDarcyCoeff = 724551 at location (0.00025 0.00025 0.005) in cell 0
+    max(all) of phaseChangeSolidFraction = 0.624701 at location (0.00025 0.00025 0.005) in cell 0
+    max(all) of phaseChangeDarcyCoeff = 724555 at location (0.00025 0.00025 0.005) in cell 0
     max(all) of phaseChangeModelDeltaT = 26.4625 at location (0.01975 0.03075 0.005) in cell 4919
-    max(all) of magPhaseChangeDarcyAcceleration = 9.31819 at location (0.00025 0.00025 0.005) in cell 0
+    max(all) of magPhaseChangeDarcyAcceleration = 9.3182 at location (0.00025 0.00025 0.005) in cell 0
     max(all) of magPhaseChangeBuoyancyAcceleration = 0.0293344 at location (0.01975 0.03075 0.005) in cell 4919
-    max(all) of magPRghAcceleration = 0.060131 at location (0.00675 0.00325 0.005) in cell 493
+    max(all) of magPRghAcceleration = 0.0601309 at location (0.00675 0.00325 0.005) in cell 493
 
 
 Time = 3.8s
@@ -1193,7 +1194,7 @@ volFieldValue momentumMean write:
     number of cells = 6400
     volume = 1.6e-05
     volAverage(all) of phaseChangeSolidFraction = 0.0105796
-    volAverage(all) of phaseChangeDarcyCoeff = 575.378
+    volAverage(all) of phaseChangeDarcyCoeff = 575.38
     volAverage(all) of phaseChangeModelDeltaT = 11.6988
     volAverage(all) of magPhaseChangeDarcyAcceleration = 0.363193
     volAverage(all) of magPhaseChangeBuoyancyAcceleration = 0.0129882
@@ -1202,7 +1203,7 @@ volFieldValue momentumMean write:
 volFieldValue momentumMax write:
     number of cells = 6400
     volume = 1.6e-05
-    max(all) of phaseChangeSolidFraction = 0.686573 at location (0.00025 0.00025 0.005) in cell 0
+    max(all) of phaseChangeSolidFraction = 0.686574 at location (0.00025 0.00025 0.005) in cell 0
     max(all) of phaseChangeDarcyCoeff = 1.48281e+06 at location (0.00025 0.00025 0.005) in cell 0
     max(all) of phaseChangeModelDeltaT = 26.3426 at location (0.01975 0.03075 0.005) in cell 4919
     max(all) of magPhaseChangeDarcyAcceleration = 10.7295 at location (0.00025 0.00025 0.005) in cell 0
@@ -1223,8 +1224,8 @@ volFieldValue momentumMean write:
     number of cells = 6400
     volume = 1.6e-05
     volAverage(all) of phaseChangeSolidFraction = 0.010883
-    volAverage(all) of phaseChangeDarcyCoeff = 1176.6
-    volAverage(all) of phaseChangeModelDeltaT = 11.3974
+    volAverage(all) of phaseChangeDarcyCoeff = 1176.61
+    volAverage(all) of phaseChangeModelDeltaT = 11.3975
     volAverage(all) of magPhaseChangeDarcyAcceleration = 0.368054
     volAverage(all) of magPhaseChangeBuoyancyAcceleration = 0.012654
     volAverage(all) of magPRghAcceleration = 0.021253
@@ -1232,8 +1233,8 @@ volFieldValue momentumMean write:
 volFieldValue momentumMax write:
     number of cells = 6400
     volume = 1.6e-05
-    max(all) of phaseChangeSolidFraction = 0.750173 at location (0.00025 0.00025 0.005) in cell 0
-    max(all) of phaseChangeDarcyCoeff = 3.39165e+06 at location (0.00025 0.00025 0.005) in cell 0
+    max(all) of phaseChangeSolidFraction = 0.750174 at location (0.00025 0.00025 0.005) in cell 0
+    max(all) of phaseChangeDarcyCoeff = 3.39167e+06 at location (0.00025 0.00025 0.005) in cell 0
     max(all) of phaseChangeModelDeltaT = 26.2115 at location (0.01975 0.03125 0.005) in cell 4999
     max(all) of magPhaseChangeDarcyAcceleration = 11.4656 at location (0.00025 0.00025 0.005) in cell 0
     max(all) of magPhaseChangeBuoyancyAcceleration = 0.0290562 at location (0.01925 0.03125 0.005) in cell 4998
@@ -1253,7 +1254,7 @@ volFieldValue momentumMean write:
     number of cells = 6400
     volume = 1.6e-05
     volAverage(all) of phaseChangeSolidFraction = 0.0111885
-    volAverage(all) of phaseChangeDarcyCoeff = 2930.62
+    volAverage(all) of phaseChangeDarcyCoeff = 2930.65
     volAverage(all) of phaseChangeModelDeltaT = 11.0993
     volAverage(all) of magPhaseChangeDarcyAcceleration = 0.373145
     volAverage(all) of magPhaseChangeBuoyancyAcceleration = 0.0123234
@@ -1262,8 +1263,8 @@ volFieldValue momentumMean write:
 volFieldValue momentumMax write:
     number of cells = 6400
     volume = 1.6e-05
-    max(all) of phaseChangeSolidFraction = 0.814522 at location (0.00025 0.00025 0.005) in cell 0
-    max(all) of phaseChangeDarcyCoeff = 8.98882e+06 at location (0.00025 0.00025 0.005) in cell 0
+    max(all) of phaseChangeSolidFraction = 0.814523 at location (0.00025 0.00025 0.005) in cell 0
+    max(all) of phaseChangeDarcyCoeff = 8.98889e+06 at location (0.00025 0.00025 0.005) in cell 0
     max(all) of phaseChangeModelDeltaT = 26.0564 at location (0.01625 0.03125 0.005) in cell 4992
     max(all) of magPhaseChangeDarcyAcceleration = 11.7277 at location (0.00025 0.00025 0.005) in cell 0
     max(all) of magPhaseChangeBuoyancyAcceleration = 0.0288843 at location (0.01625 0.03125 0.005) in cell 4992
@@ -1283,7 +1284,7 @@ volFieldValue momentumMean write:
     number of cells = 6400
     volume = 1.6e-05
     volAverage(all) of phaseChangeSolidFraction = 0.0114961
-    volAverage(all) of phaseChangeDarcyCoeff = 8904.59
+    volAverage(all) of phaseChangeDarcyCoeff = 8904.65
     volAverage(all) of phaseChangeModelDeltaT = 10.8044
     volAverage(all) of magPhaseChangeDarcyAcceleration = 0.378582
     volAverage(all) of magPhaseChangeBuoyancyAcceleration = 0.0119965
@@ -1292,8 +1293,8 @@ volFieldValue momentumMean write:
 volFieldValue momentumMax write:
     number of cells = 6400
     volume = 1.6e-05
-    max(all) of phaseChangeSolidFraction = 0.879418 at location (0.00025 0.00025 0.005) in cell 0
-    max(all) of phaseChangeDarcyCoeff = 2.80895e+07 at location (0.00025 0.00025 0.005) in cell 0
+    max(all) of phaseChangeSolidFraction = 0.879419 at location (0.00025 0.00025 0.005) in cell 0
+    max(all) of phaseChangeDarcyCoeff = 2.80897e+07 at location (0.00025 0.00025 0.005) in cell 0
     max(all) of phaseChangeModelDeltaT = 25.897 at location (0.01625 0.03175 0.005) in cell 5072
     max(all) of magPhaseChangeDarcyAcceleration = 11.7481 at location (0.00025 0.00025 0.005) in cell 0
     max(all) of magPhaseChangeBuoyancyAcceleration = 0.0287076 at location (0.01625 0.03175 0.005) in cell 5072
@@ -1313,8 +1314,8 @@ volFieldValue momentumMean write:
     number of cells = 6400
     volume = 1.6e-05
     volAverage(all) of phaseChangeSolidFraction = 0.0118066
-    volAverage(all) of phaseChangeDarcyCoeff = 24006.1
-    volAverage(all) of phaseChangeModelDeltaT = 10.5132
+    volAverage(all) of phaseChangeDarcyCoeff = 24006.2
+    volAverage(all) of phaseChangeModelDeltaT = 10.5133
     volAverage(all) of magPhaseChangeDarcyAcceleration = 0.384404
     volAverage(all) of magPhaseChangeBuoyancyAcceleration = 0.0116738
     volAverage(all) of magPRghAcceleration = 0.019357
@@ -1323,7 +1324,7 @@ volFieldValue momentumMax write:
     number of cells = 6400
     volume = 1.6e-05
     max(all) of phaseChangeSolidFraction = 0.94478 at location (0.00025 0.00025 0.005) in cell 0
-    max(all) of phaseChangeDarcyCoeff = 7.63969e+07 at location (0.00025 0.00025 0.005) in cell 0
+    max(all) of phaseChangeDarcyCoeff = 7.63972e+07 at location (0.00025 0.00025 0.005) in cell 0
     max(all) of phaseChangeModelDeltaT = 25.7202 at location (0.01475 0.03175 0.005) in cell 5069
     max(all) of magPhaseChangeDarcyAcceleration = 11.6729 at location (0.00025 0.00025 0.005) in cell 0
     max(all) of magPhaseChangeBuoyancyAcceleration = 0.0285116 at location (0.01475 0.03175 0.005) in cell 5069
@@ -1355,9 +1356,9 @@ volFieldValue momentumMax write:
     max(all) of phaseChangeSolidFraction = 1 at location (0.00025 0.00025 0.005) in cell 0
     max(all) of phaseChangeDarcyCoeff = 1e+08 at location (0.00025 0.00025 0.005) in cell 0
     max(all) of phaseChangeModelDeltaT = 25.5284 at location (0.01475 0.03225 0.005) in cell 5149
-    max(all) of magPhaseChangeDarcyAcceleration = 25.9007 at location (0.00025 0.00025 0.005) in cell 0
+    max(all) of magPhaseChangeDarcyAcceleration = 25.9012 at location (0.00025 0.00025 0.005) in cell 0
     max(all) of magPhaseChangeBuoyancyAcceleration = 0.028299 at location (0.01475 0.03225 0.005) in cell 5149
-    max(all) of magPRghAcceleration = 0.0441508 at location (0.00725 0.00325 0.005) in cell 494
+    max(all) of magPRghAcceleration = 0.0441507 at location (0.00725 0.00325 0.005) in cell 494
 
 
 Time = 4.4s
@@ -1374,7 +1375,7 @@ volFieldValue momentumMean write:
     volume = 1.6e-05
     volAverage(all) of phaseChangeSolidFraction = 0.0124291
     volAverage(all) of phaseChangeDarcyCoeff = 31398.6
-    volAverage(all) of phaseChangeModelDeltaT = 9.94081
+    volAverage(all) of phaseChangeModelDeltaT = 9.94082
     volAverage(all) of magPhaseChangeDarcyAcceleration = 0.407494
     volAverage(all) of magPhaseChangeBuoyancyAcceleration = 0.0110439
     volAverage(all) of magPRghAcceleration = 0.0181733
@@ -1385,8 +1386,8 @@ volFieldValue momentumMax write:
     max(all) of phaseChangeSolidFraction = 1 at location (0.00025 0.00025 0.005) in cell 0
     max(all) of phaseChangeDarcyCoeff = 1e+08 at location (0.00025 0.00025 0.005) in cell 0
     max(all) of phaseChangeModelDeltaT = 25.3323 at location (0.01375 0.03225 0.005) in cell 5147
-    max(all) of magPhaseChangeDarcyAcceleration = 44.2538 at location (0.00025 0.00025 0.005) in cell 0
-    max(all) of magPhaseChangeBuoyancyAcceleration = 0.0280816 at location (0.01375 0.03225 0.005) in cell 5147
+    max(all) of magPhaseChangeDarcyAcceleration = 44.2539 at location (0.00025 0.00025 0.005) in cell 0
+    max(all) of magPhaseChangeBuoyancyAcceleration = 0.0280817 at location (0.01375 0.03225 0.005) in cell 5147
     max(all) of magPRghAcceleration = 0.0422556 at location (0.00725 0.00325 0.005) in cell 494
 
 
@@ -1445,7 +1446,7 @@ volFieldValue momentumMax write:
     max(all) of phaseChangeSolidFraction = 1 at location (0.00025 0.00025 0.005) in cell 0
     max(all) of phaseChangeDarcyCoeff = 1e+08 at location (0.00025 0.00025 0.005) in cell 0
     max(all) of phaseChangeModelDeltaT = 24.8901 at location (0.01325 0.03275 0.005) in cell 5226
-    max(all) of magPhaseChangeDarcyAcceleration = 45.4379 at location (0.00025 0.00025 0.005) in cell 0
+    max(all) of magPhaseChangeDarcyAcceleration = 45.438 at location (0.00025 0.00025 0.005) in cell 0
     max(all) of magPhaseChangeBuoyancyAcceleration = 0.0275915 at location (0.01325 0.03275 0.005) in cell 5226
     max(all) of magPRghAcceleration = 0.0387983 at location (0.00725 0.00325 0.005) in cell 494
 
@@ -1524,7 +1525,7 @@ volFieldValue momentumMean write:
     volume = 1.6e-05
     volAverage(all) of phaseChangeSolidFraction = 0.0140739
     volAverage(all) of phaseChangeDarcyCoeff = 31598.3
-    volAverage(all) of phaseChangeModelDeltaT = 8.58899
+    volAverage(all) of phaseChangeModelDeltaT = 8.589
     volAverage(all) of magPhaseChangeDarcyAcceleration = 0.446142
     volAverage(all) of magPhaseChangeBuoyancyAcceleration = 0.0095469
     volAverage(all) of magPRghAcceleration = 0.0154742
@@ -1586,7 +1587,7 @@ volFieldValue momentumMean write:
     volAverage(all) of phaseChangeDarcyCoeff = 32027.5
     volAverage(all) of phaseChangeModelDeltaT = 8.08082
     volAverage(all) of magPhaseChangeDarcyAcceleration = 0.46272
-    volAverage(all) of magPhaseChangeBuoyancyAcceleration = 0.0089842
+    volAverage(all) of magPhaseChangeBuoyancyAcceleration = 0.00898421
     volAverage(all) of magPRghAcceleration = 0.0144903
 
 volFieldValue momentumMax write:
@@ -1597,7 +1598,7 @@ volFieldValue momentumMax write:
     max(all) of phaseChangeModelDeltaT = 23.5964 at location (0.01275 0.03325 0.005) in cell 5305
     max(all) of magPhaseChangeDarcyAcceleration = 45.8809 at location (0.00025 0.00025 0.005) in cell 0
     max(all) of magPhaseChangeBuoyancyAcceleration = 0.0261573 at location (0.01275 0.03325 0.005) in cell 5305
-    max(all) of magPRghAcceleration = 0.0313188 at location (0.00675 0.00375 0.005) in cell 573
+    max(all) of magPRghAcceleration = 0.0313188 at location (0.03325 0.00375 0.005) in cell 626
 
 
 Time = 5.2s
@@ -1644,7 +1645,7 @@ volFieldValue momentumMean write:
     volume = 1.6e-05
     volAverage(all) of phaseChangeSolidFraction = 0.0154878
     volAverage(all) of phaseChangeDarcyCoeff = 33917.5
-    volAverage(all) of phaseChangeModelDeltaT = 7.59217
+    volAverage(all) of phaseChangeModelDeltaT = 7.59218
     volAverage(all) of magPhaseChangeDarcyAcceleration = 0.47996
     volAverage(all) of magPhaseChangeBuoyancyAcceleration = 0.00844324
     volAverage(all) of magPRghAcceleration = 0.0135589
@@ -1673,8 +1674,8 @@ volFieldValue momentumMean write:
     number of cells = 6400
     volume = 1.6e-05
     volAverage(all) of phaseChangeSolidFraction = 0.0158566
-    volAverage(all) of phaseChangeDarcyCoeff = 37315.7
-    volAverage(all) of phaseChangeModelDeltaT = 7.35555
+    volAverage(all) of phaseChangeDarcyCoeff = 37315.8
+    volAverage(all) of phaseChangeModelDeltaT = 7.35556
     volAverage(all) of magPhaseChangeDarcyAcceleration = 0.488873
     volAverage(all) of magPhaseChangeBuoyancyAcceleration = 0.00818132
     volAverage(all) of magPRghAcceleration = 0.0131132
@@ -1703,11 +1704,11 @@ volFieldValue momentumMean write:
     number of cells = 6400
     volume = 1.6e-05
     volAverage(all) of phaseChangeSolidFraction = 0.0162313
-    volAverage(all) of phaseChangeDarcyCoeff = 46902.3
-    volAverage(all) of phaseChangeModelDeltaT = 7.12381
+    volAverage(all) of phaseChangeDarcyCoeff = 46902.4
+    volAverage(all) of phaseChangeModelDeltaT = 7.12382
     volAverage(all) of magPhaseChangeDarcyAcceleration = 0.497927
-    volAverage(all) of magPhaseChangeBuoyancyAcceleration = 0.00792478
-    volAverage(all) of magPRghAcceleration = 0.0126801
+    volAverage(all) of magPhaseChangeBuoyancyAcceleration = 0.00792479
+    volAverage(all) of magPRghAcceleration = 0.0126802
 
 volFieldValue momentumMax write:
     number of cells = 6400
@@ -1733,11 +1734,11 @@ volFieldValue momentumMean write:
     number of cells = 6400
     volume = 1.6e-05
     volAverage(all) of phaseChangeSolidFraction = 0.0166127
-    volAverage(all) of phaseChangeDarcyCoeff = 67682.2
-    volAverage(all) of phaseChangeModelDeltaT = 6.8974
+    volAverage(all) of phaseChangeDarcyCoeff = 67682.4
+    volAverage(all) of phaseChangeModelDeltaT = 6.89741
     volAverage(all) of magPhaseChangeDarcyAcceleration = 0.507199
     volAverage(all) of magPhaseChangeBuoyancyAcceleration = 0.0076742
-    volAverage(all) of magPRghAcceleration = 0.0122603
+    volAverage(all) of magPRghAcceleration = 0.0122604
 
 volFieldValue momentumMax write:
     number of cells = 6400
@@ -1745,7 +1746,7 @@ volFieldValue momentumMax write:
     max(all) of phaseChangeSolidFraction = 1 at location (0.00025 0.00025 0.005) in cell 0
     max(all) of phaseChangeDarcyCoeff = 1e+08 at location (0.00025 0.00025 0.005) in cell 0
     max(all) of phaseChangeModelDeltaT = 22.1393 at location (0.01475 0.03375 0.005) in cell 5389
-    max(all) of magPhaseChangeDarcyAcceleration = 45.267 at location (0.03975 0.00025 0.005) in cell 79
+    max(all) of magPhaseChangeDarcyAcceleration = 45.2669 at location (0.00025 0.00025 0.005) in cell 0
     max(all) of magPhaseChangeBuoyancyAcceleration = 0.0245421 at location (0.01475 0.03375 0.005) in cell 5389
     max(all) of magPRghAcceleration = 0.0250423 at location (0.00025 0.03475 0.005) in cell 5520
 
@@ -1776,7 +1777,7 @@ volFieldValue momentumMax write:
     max(all) of phaseChangeDarcyCoeff = 1e+08 at location (0.00025 0.00025 0.005) in cell 0
     max(all) of phaseChangeModelDeltaT = 21.8418 at location (0.01525 0.03375 0.005) in cell 5390
     max(all) of magPhaseChangeDarcyAcceleration = 44.1418 at location (0.00025 0.00025 0.005) in cell 0
-    max(all) of magPhaseChangeBuoyancyAcceleration = 0.0242122 at location (0.01525 0.03375 0.005) in cell 5390
+    max(all) of magPhaseChangeBuoyancyAcceleration = 0.0242123 at location (0.01525 0.03375 0.005) in cell 5390
     max(all) of magPRghAcceleration = 0.0248222 at location (0.00025 0.03475 0.005) in cell 5520
 
 
@@ -1794,9 +1795,9 @@ volFieldValue momentumMean write:
     volume = 1.6e-05
     volAverage(all) of phaseChangeSolidFraction = 0.0173823
     volAverage(all) of phaseChangeDarcyCoeff = 93963.2
-    volAverage(all) of phaseChangeModelDeltaT = 6.45704
+    volAverage(all) of phaseChangeModelDeltaT = 6.45705
     volAverage(all) of magPhaseChangeDarcyAcceleration = 0.538781
-    volAverage(all) of magPhaseChangeBuoyancyAcceleration = 0.00719303
+    volAverage(all) of magPhaseChangeBuoyancyAcceleration = 0.00719304
     volAverage(all) of magPRghAcceleration = 0.0114589
 
 volFieldValue momentumMax write:
@@ -1805,7 +1806,7 @@ volFieldValue momentumMax write:
     max(all) of phaseChangeSolidFraction = 1 at location (0.00025 0.00025 0.005) in cell 0
     max(all) of phaseChangeDarcyCoeff = 1e+08 at location (0.00025 0.00025 0.005) in cell 0
     max(all) of phaseChangeModelDeltaT = 21.5445 at location (0.01575 0.03375 0.005) in cell 5391
-    max(all) of magPhaseChangeDarcyAcceleration = 54.6617 at location (0.00025 0.00025 0.005) in cell 0
+    max(all) of magPhaseChangeDarcyAcceleration = 54.6619 at location (0.00025 0.00025 0.005) in cell 0
     max(all) of magPhaseChangeBuoyancyAcceleration = 0.0238827 at location (0.01575 0.03375 0.005) in cell 5391
     max(all) of magPRghAcceleration = 0.0245779 at location (0.00025 0.03475 0.005) in cell 5520
 
@@ -1826,7 +1827,7 @@ volFieldValue momentumMean write:
     volAverage(all) of phaseChangeDarcyCoeff = 93979.2
     volAverage(all) of phaseChangeModelDeltaT = 6.2439
     volAverage(all) of magPhaseChangeDarcyAcceleration = 0.55807
-    volAverage(all) of magPhaseChangeBuoyancyAcceleration = 0.00696126
+    volAverage(all) of magPhaseChangeBuoyancyAcceleration = 0.00696127
     volAverage(all) of magPRghAcceleration = 0.0110769
 
 volFieldValue momentumMax write:
@@ -1854,7 +1855,7 @@ volFieldValue momentumMean write:
     volume = 1.6e-05
     volAverage(all) of phaseChangeSolidFraction = 0.0181757
     volAverage(all) of phaseChangeDarcyCoeff = 94002.7
-    volAverage(all) of phaseChangeModelDeltaT = 6.0377
+    volAverage(all) of phaseChangeModelDeltaT = 6.03771
     volAverage(all) of magPhaseChangeDarcyAcceleration = 0.570106
     volAverage(all) of magPhaseChangeBuoyancyAcceleration = 0.00673378
     volAverage(all) of magPRghAcceleration = 0.0107068
@@ -1884,9 +1885,9 @@ volFieldValue momentumMean write:
     volume = 1.6e-05
     volAverage(all) of phaseChangeSolidFraction = 0.0185861
     volAverage(all) of phaseChangeDarcyCoeff = 94037.1
-    volAverage(all) of phaseChangeModelDeltaT = 5.83651
+    volAverage(all) of phaseChangeModelDeltaT = 5.83652
     volAverage(all) of magPhaseChangeDarcyAcceleration = 0.581019
-    volAverage(all) of magPhaseChangeBuoyancyAcceleration = 0.00651129
+    volAverage(all) of magPhaseChangeBuoyancyAcceleration = 0.0065113
     volAverage(all) of magPRghAcceleration = 0.0103486
 
 volFieldValue momentumMax write:
@@ -1896,7 +1897,7 @@ volFieldValue momentumMax write:
     max(all) of phaseChangeDarcyCoeff = 1e+08 at location (0.00025 0.00025 0.005) in cell 0
     max(all) of phaseChangeModelDeltaT = 20.6484 at location (0.01575 0.03425 0.005) in cell 5471
     max(all) of magPhaseChangeDarcyAcceleration = 69.2881 at location (0.00025 0.00025 0.005) in cell 0
-    max(all) of magPhaseChangeBuoyancyAcceleration = 0.0228893 at location (0.01575 0.03425 0.005) in cell 5471
+    max(all) of magPhaseChangeBuoyancyAcceleration = 0.0228894 at location (0.01575 0.03425 0.005) in cell 5471
     max(all) of magPRghAcceleration = 0.0237338 at location (0.00025 0.03525 0.005) in cell 5600
 
 
@@ -1914,7 +1915,7 @@ volFieldValue momentumMean write:
     volume = 1.6e-05
     volAverage(all) of phaseChangeSolidFraction = 0.0190037
     volAverage(all) of phaseChangeDarcyCoeff = 94088.7
-    volAverage(all) of phaseChangeModelDeltaT = 5.64055
+    volAverage(all) of phaseChangeModelDeltaT = 5.64056
     volAverage(all) of magPhaseChangeDarcyAcceleration = 0.591687
     volAverage(all) of magPhaseChangeBuoyancyAcceleration = 0.00629449
     volAverage(all) of magPRghAcceleration = 0.0100029
@@ -1944,10 +1945,10 @@ volFieldValue momentumMean write:
     volume = 1.6e-05
     volAverage(all) of phaseChangeSolidFraction = 0.0194274
     volAverage(all) of phaseChangeDarcyCoeff = 94169.5
-    volAverage(all) of phaseChangeModelDeltaT = 5.44936
+    volAverage(all) of phaseChangeModelDeltaT = 5.44937
     volAverage(all) of magPhaseChangeDarcyAcceleration = 0.602147
-    volAverage(all) of magPhaseChangeBuoyancyAcceleration = 0.00608293
-    volAverage(all) of magPRghAcceleration = 0.00966884
+    volAverage(all) of magPhaseChangeBuoyancyAcceleration = 0.00608294
+    volAverage(all) of magPRghAcceleration = 0.00966885
 
 volFieldValue momentumMax write:
     number of cells = 6400
@@ -2006,8 +2007,8 @@ volFieldValue momentumMean write:
     volAverage(all) of phaseChangeDarcyCoeff = 94528.3
     volAverage(all) of phaseChangeModelDeltaT = 5.08129
     volAverage(all) of magPhaseChangeDarcyAcceleration = 0.62208
-    volAverage(all) of magPhaseChangeBuoyancyAcceleration = 0.00567562
-    volAverage(all) of magPRghAcceleration = 0.00903728
+    volAverage(all) of magPhaseChangeBuoyancyAcceleration = 0.00567563
+    volAverage(all) of magPRghAcceleration = 0.00903729
 
 volFieldValue momentumMax write:
     number of cells = 6400
@@ -2036,8 +2037,8 @@ volFieldValue momentumMean write:
     volAverage(all) of phaseChangeDarcyCoeff = 94943.5
     volAverage(all) of phaseChangeModelDeltaT = 4.9043
     volAverage(all) of magPhaseChangeDarcyAcceleration = 0.631478
-    volAverage(all) of magPhaseChangeBuoyancyAcceleration = 0.00547976
-    volAverage(all) of magPRghAcceleration = 0.00873965
+    volAverage(all) of magPhaseChangeBuoyancyAcceleration = 0.00547977
+    volAverage(all) of magPRghAcceleration = 0.00873966
 
 volFieldValue momentumMax write:
     number of cells = 6400
@@ -2092,11 +2093,11 @@ Executing functionObjects
 volFieldValue momentumMean write:
     number of cells = 6400
     volume = 1.6e-05
-    volAverage(all) of phaseChangeSolidFraction = 0.0216366
+    volAverage(all) of phaseChangeSolidFraction = 0.0216365
     volAverage(all) of phaseChangeDarcyCoeff = 97557.1
-    volAverage(all) of phaseChangeModelDeltaT = 4.56323
+    volAverage(all) of phaseChangeModelDeltaT = 4.56324
     volAverage(all) of magPhaseChangeDarcyAcceleration = 0.649242
-    volAverage(all) of magPhaseChangeBuoyancyAcceleration = 0.00510232
+    volAverage(all) of magPhaseChangeBuoyancyAcceleration = 0.00510233
     volAverage(all) of magPRghAcceleration = 0.00817954
 
 volFieldValue momentumMax write:
@@ -2107,7 +2108,7 @@ volFieldValue momentumMax write:
     max(all) of phaseChangeModelDeltaT = 18.4625 at location (0.01725 0.03425 0.005) in cell 5474
     max(all) of magPhaseChangeDarcyAcceleration = 69.203 at location (0.00025 0.00025 0.005) in cell 0
     max(all) of magPhaseChangeBuoyancyAcceleration = 0.0204663 at location (0.01725 0.03425 0.005) in cell 5474
-    max(all) of magPRghAcceleration = 0.0210663 at location (0.00075 0.03575 0.005) in cell 5681
+    max(all) of magPRghAcceleration = 0.0210664 at location (0.00075 0.03575 0.005) in cell 5681
 
 
 Time = 6.9s
@@ -2124,9 +2125,9 @@ volFieldValue momentumMean write:
     volume = 1.6e-05
     volAverage(all) of phaseChangeSolidFraction = 0.022095
     volAverage(all) of phaseChangeDarcyCoeff = 101861
-    volAverage(all) of phaseChangeModelDeltaT = 4.39921
+    volAverage(all) of phaseChangeModelDeltaT = 4.39922
     volAverage(all) of magPhaseChangeDarcyAcceleration = 0.657612
-    volAverage(all) of magPhaseChangeBuoyancyAcceleration = 0.00492073
+    volAverage(all) of magPhaseChangeBuoyancyAcceleration = 0.00492074
     volAverage(all) of magPRghAcceleration = 0.00791697
 
 volFieldValue momentumMax write:
@@ -2156,7 +2157,7 @@ volFieldValue momentumMean write:
     volAverage(all) of phaseChangeDarcyCoeff = 112095
     volAverage(all) of phaseChangeModelDeltaT = 4.23921
     volAverage(all) of magPhaseChangeDarcyAcceleration = 0.665567
-    volAverage(all) of magPhaseChangeBuoyancyAcceleration = 0.00474367
+    volAverage(all) of magPhaseChangeBuoyancyAcceleration = 0.00474368
     volAverage(all) of magPRghAcceleration = 0.00766601
 
 volFieldValue momentumMax write:
@@ -2164,7 +2165,7 @@ volFieldValue momentumMax write:
     volume = 1.6e-05
     max(all) of phaseChangeSolidFraction = 1 at location (0.00025 0.00025 0.005) in cell 0
     max(all) of phaseChangeDarcyCoeff = 1e+08 at location (0.00025 0.00025 0.005) in cell 0
-    max(all) of phaseChangeModelDeltaT = 17.7943 at location (0.01625 0.03475 0.005) in cell 5552
+    max(all) of phaseChangeModelDeltaT = 17.7944 at location (0.01625 0.03475 0.005) in cell 5552
     max(all) of magPhaseChangeDarcyAcceleration = 68.2104 at location (0.00025 0.00025 0.005) in cell 0
     max(all) of magPhaseChangeBuoyancyAcceleration = 0.0197256 at location (0.01625 0.03475 0.005) in cell 5552
     max(all) of magPRghAcceleration = 0.0202027 at location (0.00075 0.03575 0.005) in cell 5681
@@ -2197,7 +2198,7 @@ volFieldValue momentumMax write:
     max(all) of phaseChangeModelDeltaT = 17.4554 at location (0.01625 0.03475 0.005) in cell 5552
     max(all) of magPhaseChangeDarcyAcceleration = 67.23 at location (0.00025 0.00025 0.005) in cell 0
     max(all) of magPhaseChangeBuoyancyAcceleration = 0.0193499 at location (0.01625 0.03475 0.005) in cell 5552
-    max(all) of magPRghAcceleration = 0.0197591 at location (0.00075 0.03575 0.005) in cell 5681
+    max(all) of magPRghAcceleration = 0.0197592 at location (0.00075 0.03575 0.005) in cell 5681
 
 
 Time = 7.2s
@@ -2216,7 +2217,7 @@ volFieldValue momentumMean write:
     volAverage(all) of phaseChangeDarcyCoeff = 141680
     volAverage(all) of phaseChangeModelDeltaT = 3.93061
     volAverage(all) of magPhaseChangeDarcyAcceleration = 0.682128
-    volAverage(all) of magPhaseChangeBuoyancyAcceleration = 0.00440336
+    volAverage(all) of magPhaseChangeBuoyancyAcceleration = 0.00440337
     volAverage(all) of magPRghAcceleration = 0.00719801
 
 volFieldValue momentumMax write:
@@ -2224,7 +2225,7 @@ volFieldValue momentumMax write:
     volume = 1.6e-05
     max(all) of phaseChangeSolidFraction = 1 at location (0.00025 0.00025 0.005) in cell 0
     max(all) of phaseChangeDarcyCoeff = 1e+08 at location (0.00025 0.00025 0.005) in cell 0
-    max(all) of phaseChangeModelDeltaT = 17.1079 at location (0.01625 0.03475 0.005) in cell 5552
+    max(all) of phaseChangeModelDeltaT = 17.108 at location (0.01625 0.03475 0.005) in cell 5552
     max(all) of magPhaseChangeDarcyAcceleration = 66.0005 at location (0.00025 0.00025 0.005) in cell 0
     max(all) of magPhaseChangeBuoyancyAcceleration = 0.0189647 at location (0.01625 0.03475 0.005) in cell 5552
     max(all) of magPRghAcceleration = 0.0193112 at location (0.00075 0.03575 0.005) in cell 5681
@@ -2244,10 +2245,10 @@ volFieldValue momentumMean write:
     volume = 1.6e-05
     volAverage(all) of phaseChangeSolidFraction = 0.0239674
     volAverage(all) of phaseChangeDarcyCoeff = 156242
-    volAverage(all) of phaseChangeModelDeltaT = 3.78112
+    volAverage(all) of phaseChangeModelDeltaT = 3.78113
     volAverage(all) of magPhaseChangeDarcyAcceleration = 0.69539
-    volAverage(all) of magPhaseChangeBuoyancyAcceleration = 0.00424065
-    volAverage(all) of magPRghAcceleration = 0.00697971
+    volAverage(all) of magPhaseChangeBuoyancyAcceleration = 0.00424066
+    volAverage(all) of magPRghAcceleration = 0.00697972
 
 volFieldValue momentumMax write:
     number of cells = 6400
@@ -2274,10 +2275,10 @@ volFieldValue momentumMean write:
     volume = 1.6e-05
     volAverage(all) of phaseChangeSolidFraction = 0.0244434
     volAverage(all) of phaseChangeDarcyCoeff = 168116
-    volAverage(all) of phaseChangeModelDeltaT = 3.63549
+    volAverage(all) of phaseChangeModelDeltaT = 3.6355
     volAverage(all) of magPhaseChangeDarcyAcceleration = 0.707339
-    volAverage(all) of magPhaseChangeBuoyancyAcceleration = 0.00408161
-    volAverage(all) of magPRghAcceleration = 0.00676915
+    volAverage(all) of magPhaseChangeBuoyancyAcceleration = 0.00408162
+    volAverage(all) of magPRghAcceleration = 0.00676916
 
 volFieldValue momentumMax write:
     number of cells = 6400
@@ -2307,7 +2308,7 @@ volFieldValue momentumMean write:
     volAverage(all) of phaseChangeModelDeltaT = 3.49319
     volAverage(all) of magPhaseChangeDarcyAcceleration = 0.720637
     volAverage(all) of magPhaseChangeBuoyancyAcceleration = 0.00392707
-    volAverage(all) of magPRghAcceleration = 0.00656534
+    volAverage(all) of magPRghAcceleration = 0.00656535
 
 volFieldValue momentumMax write:
     number of cells = 6400
@@ -2334,10 +2335,10 @@ volFieldValue momentumMean write:
     volume = 1.6e-05
     volAverage(all) of phaseChangeSolidFraction = 0.0254012
     volAverage(all) of phaseChangeDarcyCoeff = 187832
-    volAverage(all) of phaseChangeModelDeltaT = 3.35401
+    volAverage(all) of phaseChangeModelDeltaT = 3.35402
     volAverage(all) of magPhaseChangeDarcyAcceleration = 0.730671
-    volAverage(all) of magPhaseChangeBuoyancyAcceleration = 0.00377769
-    volAverage(all) of magPRghAcceleration = 0.00636821
+    volAverage(all) of magPhaseChangeBuoyancyAcceleration = 0.0037777
+    volAverage(all) of magPRghAcceleration = 0.00636822
 
 volFieldValue momentumMax write:
     number of cells = 6400
@@ -2364,10 +2365,10 @@ volFieldValue momentumMean write:
     volume = 1.6e-05
     volAverage(all) of phaseChangeSolidFraction = 0.025885
     volAverage(all) of phaseChangeDarcyCoeff = 187858
-    volAverage(all) of phaseChangeModelDeltaT = 3.21846
+    volAverage(all) of phaseChangeModelDeltaT = 3.21847
     volAverage(all) of magPhaseChangeDarcyAcceleration = 0.746921
     volAverage(all) of magPhaseChangeBuoyancyAcceleration = 0.00363173
-    volAverage(all) of magPRghAcceleration = 0.00617581
+    volAverage(all) of magPRghAcceleration = 0.00617582
 
 volFieldValue momentumMax write:
     number of cells = 6400
@@ -2394,10 +2395,10 @@ volFieldValue momentumMean write:
     volume = 1.6e-05
     volAverage(all) of phaseChangeSolidFraction = 0.0263772
     volAverage(all) of phaseChangeDarcyCoeff = 187896
-    volAverage(all) of phaseChangeModelDeltaT = 3.08738
+    volAverage(all) of phaseChangeModelDeltaT = 3.08739
     volAverage(all) of magPhaseChangeDarcyAcceleration = 0.757391
-    volAverage(all) of magPhaseChangeBuoyancyAcceleration = 0.003488
-    volAverage(all) of magPRghAcceleration = 0.00598718
+    volAverage(all) of magPhaseChangeBuoyancyAcceleration = 0.00348801
+    volAverage(all) of magPRghAcceleration = 0.00598719
 
 volFieldValue momentumMax write:
     number of cells = 6400
@@ -2406,8 +2407,8 @@ volFieldValue momentumMax write:
     max(all) of phaseChangeDarcyCoeff = 1e+08 at location (0.00025 0.00025 0.005) in cell 0
     max(all) of phaseChangeModelDeltaT = 14.9268 at location (0.01475 0.03525 0.005) in cell 5629
     max(all) of magPhaseChangeDarcyAcceleration = 79.6792 at location (0.00025 0.00025 0.005) in cell 0
-    max(all) of magPhaseChangeBuoyancyAcceleration = 0.0165468 at location (0.01475 0.03525 0.005) in cell 5629
-    max(all) of magPRghAcceleration = 0.0166615 at location (0.00075 0.03575 0.005) in cell 5681
+    max(all) of magPhaseChangeBuoyancyAcceleration = 0.0165469 at location (0.01475 0.03525 0.005) in cell 5629
+    max(all) of magPRghAcceleration = 0.0166616 at location (0.00075 0.03575 0.005) in cell 5681
 
 
 Time = 7.9s
@@ -2424,10 +2425,10 @@ volFieldValue momentumMean write:
     volume = 1.6e-05
     volAverage(all) of phaseChangeSolidFraction = 0.026875
     volAverage(all) of phaseChangeDarcyCoeff = 187951
-    volAverage(all) of phaseChangeModelDeltaT = 2.9599
+    volAverage(all) of phaseChangeModelDeltaT = 2.95991
     volAverage(all) of magPhaseChangeDarcyAcceleration = 0.765824
-    volAverage(all) of magPhaseChangeBuoyancyAcceleration = 0.00334731
-    volAverage(all) of magPRghAcceleration = 0.00580228
+    volAverage(all) of magPhaseChangeBuoyancyAcceleration = 0.00334732
+    volAverage(all) of magPRghAcceleration = 0.00580229
 
 volFieldValue momentumMax write:
     number of cells = 6400
@@ -2437,7 +2438,7 @@ volFieldValue momentumMax write:
     max(all) of phaseChangeModelDeltaT = 14.5529 at location (0.01475 0.03525 0.005) in cell 5629
     max(all) of magPhaseChangeDarcyAcceleration = 80.4433 at location (0.00025 0.00025 0.005) in cell 0
     max(all) of magPhaseChangeBuoyancyAcceleration = 0.0163017 at location (0.00025 0.00025 0.005) in cell 0
-    max(all) of magPRghAcceleration = 0.0162354 at location (0.00075 0.03575 0.005) in cell 5681
+    max(all) of magPRghAcceleration = 0.0162355 at location (0.00075 0.03575 0.005) in cell 5681
 
 
 Time = 8s
@@ -2454,10 +2455,10 @@ volFieldValue momentumMean write:
     volume = 1.6e-05
     volAverage(all) of phaseChangeSolidFraction = 0.0273768
     volAverage(all) of phaseChangeDarcyCoeff = 188032
-    volAverage(all) of phaseChangeModelDeltaT = 2.83544
+    volAverage(all) of phaseChangeModelDeltaT = 2.83545
     volAverage(all) of magPhaseChangeDarcyAcceleration = 0.773411
-    volAverage(all) of magPhaseChangeBuoyancyAcceleration = 0.00320974
-    volAverage(all) of magPRghAcceleration = 0.00562088
+    volAverage(all) of magPhaseChangeBuoyancyAcceleration = 0.00320975
+    volAverage(all) of magPRghAcceleration = 0.00562089
 
 volFieldValue momentumMax write:
     number of cells = 6400
@@ -2486,8 +2487,8 @@ volFieldValue momentumMean write:
     volAverage(all) of phaseChangeDarcyCoeff = 188158
     volAverage(all) of phaseChangeModelDeltaT = 2.71406
     volAverage(all) of magPhaseChangeDarcyAcceleration = 0.780503
-    volAverage(all) of magPhaseChangeBuoyancyAcceleration = 0.00307542
-    volAverage(all) of magPRghAcceleration = 0.00544315
+    volAverage(all) of magPhaseChangeBuoyancyAcceleration = 0.00307543
+    volAverage(all) of magPRghAcceleration = 0.00544316
 
 volFieldValue momentumMax write:
     number of cells = 6400
@@ -2514,9 +2515,9 @@ volFieldValue momentumMean write:
     volume = 1.6e-05
     volAverage(all) of phaseChangeSolidFraction = 0.0283908
     volAverage(all) of phaseChangeDarcyCoeff = 188362
-    volAverage(all) of phaseChangeModelDeltaT = 2.59544
+    volAverage(all) of phaseChangeModelDeltaT = 2.59545
     volAverage(all) of magPhaseChangeDarcyAcceleration = 0.787112
-    volAverage(all) of magPhaseChangeBuoyancyAcceleration = 0.00294407
+    volAverage(all) of magPhaseChangeBuoyancyAcceleration = 0.00294408
     volAverage(all) of magPRghAcceleration = 0.00526871
 
 volFieldValue momentumMax write:
@@ -2544,10 +2545,10 @@ volFieldValue momentumMean write:
     volume = 1.6e-05
     volAverage(all) of phaseChangeSolidFraction = 0.0289026
     volAverage(all) of phaseChangeDarcyCoeff = 188710
-    volAverage(all) of phaseChangeModelDeltaT = 2.47971
+    volAverage(all) of phaseChangeModelDeltaT = 2.47972
     volAverage(all) of magPhaseChangeDarcyAcceleration = 0.793227
     volAverage(all) of magPhaseChangeBuoyancyAcceleration = 0.00281598
-    volAverage(all) of magPRghAcceleration = 0.00509757
+    volAverage(all) of magPRghAcceleration = 0.00509758
 
 volFieldValue momentumMax write:
     number of cells = 6400
@@ -2574,9 +2575,9 @@ volFieldValue momentumMean write:
     volume = 1.6e-05
     volAverage(all) of phaseChangeSolidFraction = 0.0294178
     volAverage(all) of phaseChangeDarcyCoeff = 189340
-    volAverage(all) of phaseChangeModelDeltaT = 2.36692
+    volAverage(all) of phaseChangeModelDeltaT = 2.36693
     volAverage(all) of magPhaseChangeDarcyAcceleration = 0.798855
-    volAverage(all) of magPhaseChangeBuoyancyAcceleration = 0.00269112
+    volAverage(all) of magPhaseChangeBuoyancyAcceleration = 0.00269113
     volAverage(all) of magPRghAcceleration = 0.00492997
 
 volFieldValue momentumMax write:
@@ -2604,10 +2605,10 @@ volFieldValue momentumMean write:
     volume = 1.6e-05
     volAverage(all) of phaseChangeSolidFraction = 0.0299357
     volAverage(all) of phaseChangeDarcyCoeff = 190575
-    volAverage(all) of phaseChangeModelDeltaT = 2.25675
+    volAverage(all) of phaseChangeModelDeltaT = 2.25676
     volAverage(all) of magPhaseChangeDarcyAcceleration = 0.80404
-    volAverage(all) of magPhaseChangeBuoyancyAcceleration = 0.00256911
-    volAverage(all) of magPRghAcceleration = 0.00476548
+    volAverage(all) of magPhaseChangeBuoyancyAcceleration = 0.00256912
+    volAverage(all) of magPRghAcceleration = 0.00476549
 
 volFieldValue momentumMax write:
     number of cells = 6400
@@ -2617,7 +2618,7 @@ volFieldValue momentumMax write:
     max(all) of phaseChangeModelDeltaT = 12.2858 at location (0.01325 0.03575 0.005) in cell 5706
     max(all) of magPhaseChangeDarcyAcceleration = 80.2994 at location (0.00025 0.00025 0.005) in cell 0
     max(all) of magPhaseChangeBuoyancyAcceleration = 0.0162346 at location (0.00025 0.00025 0.005) in cell 0
-    max(all) of magPRghAcceleration = 0.0137446 at location (0.00125 0.03625 0.005) in cell 5762
+    max(all) of magPRghAcceleration = 0.0137447 at location (0.00125 0.03625 0.005) in cell 5762
 
 
 Time = 8.6s
@@ -2634,10 +2635,10 @@ volFieldValue momentumMean write:
     volume = 1.6e-05
     volAverage(all) of phaseChangeSolidFraction = 0.0304567
     volAverage(all) of phaseChangeDarcyCoeff = 193218
-    volAverage(all) of phaseChangeModelDeltaT = 2.14934
+    volAverage(all) of phaseChangeModelDeltaT = 2.14935
     volAverage(all) of magPhaseChangeDarcyAcceleration = 0.808819
     volAverage(all) of magPhaseChangeBuoyancyAcceleration = 0.00245022
-    volAverage(all) of magPRghAcceleration = 0.00460449
+    volAverage(all) of magPRghAcceleration = 0.0046045
 
 volFieldValue momentumMax write:
     number of cells = 6400
@@ -2664,7 +2665,7 @@ volFieldValue momentumMean write:
     volume = 1.6e-05
     volAverage(all) of phaseChangeSolidFraction = 0.0309811
     volAverage(all) of phaseChangeDarcyCoeff = 199275
-    volAverage(all) of phaseChangeModelDeltaT = 2.04492
+    volAverage(all) of phaseChangeModelDeltaT = 2.04493
     volAverage(all) of magPhaseChangeDarcyAcceleration = 0.813152
     volAverage(all) of magPhaseChangeBuoyancyAcceleration = 0.00233465
     volAverage(all) of magPRghAcceleration = 0.00444708
@@ -2694,9 +2695,9 @@ volFieldValue momentumMean write:
     volume = 1.6e-05
     volAverage(all) of phaseChangeSolidFraction = 0.0315082
     volAverage(all) of phaseChangeDarcyCoeff = 211991
-    volAverage(all) of phaseChangeModelDeltaT = 1.94304
+    volAverage(all) of phaseChangeModelDeltaT = 1.94305
     volAverage(all) of magPhaseChangeDarcyAcceleration = 0.816986
-    volAverage(all) of magPhaseChangeBuoyancyAcceleration = 0.00222175
+    volAverage(all) of magPhaseChangeBuoyancyAcceleration = 0.00222176
     volAverage(all) of magPRghAcceleration = 0.00429317
 
 volFieldValue momentumMax write:
@@ -2724,10 +2725,10 @@ volFieldValue momentumMean write:
     volume = 1.6e-05
     volAverage(all) of phaseChangeSolidFraction = 0.0320377
     volAverage(all) of phaseChangeDarcyCoeff = 228890
-    volAverage(all) of phaseChangeModelDeltaT = 1.8436
+    volAverage(all) of phaseChangeModelDeltaT = 1.84361
     volAverage(all) of magPhaseChangeDarcyAcceleration = 0.820354
-    volAverage(all) of magPhaseChangeBuoyancyAcceleration = 0.00211167
-    volAverage(all) of magPRghAcceleration = 0.0041425
+    volAverage(all) of magPhaseChangeBuoyancyAcceleration = 0.00211168
+    volAverage(all) of magPRghAcceleration = 0.00414251
 
 volFieldValue momentumMax write:
     number of cells = 6400
@@ -2737,7 +2738,7 @@ volFieldValue momentumMax write:
     max(all) of phaseChangeModelDeltaT = 10.7972 at location (0.01225 0.03575 0.005) in cell 5704
     max(all) of magPhaseChangeDarcyAcceleration = 79.1792 at location (0.00025 0.00025 0.005) in cell 0
     max(all) of magPhaseChangeBuoyancyAcceleration = 0.0161208 at location (0.00025 0.00025 0.005) in cell 0
-    max(all) of magPRghAcceleration = 0.0121794 at location (0.00125 0.03625 0.005) in cell 5762
+    max(all) of magPRghAcceleration = 0.0121795 at location (0.00125 0.03625 0.005) in cell 5762
 
 
 Time = 9s
@@ -2754,9 +2755,9 @@ volFieldValue momentumMean write:
     volume = 1.6e-05
     volAverage(all) of phaseChangeSolidFraction = 0.0325664
     volAverage(all) of phaseChangeDarcyCoeff = 243795
-    volAverage(all) of phaseChangeModelDeltaT = 1.74581
+    volAverage(all) of phaseChangeModelDeltaT = 1.74582
     volAverage(all) of magPhaseChangeDarcyAcceleration = 0.827709
-    volAverage(all) of magPhaseChangeBuoyancyAcceleration = 0.00200532
+    volAverage(all) of magPhaseChangeBuoyancyAcceleration = 0.00200533
     volAverage(all) of magPRghAcceleration = 0.0039955
 
 volFieldValue momentumMax write:
@@ -2784,10 +2785,10 @@ volFieldValue momentumMean write:
     volume = 1.6e-05
     volAverage(all) of phaseChangeSolidFraction = 0.0330949
     volAverage(all) of phaseChangeDarcyCoeff = 253367
-    volAverage(all) of phaseChangeModelDeltaT = 1.65004
+    volAverage(all) of phaseChangeModelDeltaT = 1.65005
     volAverage(all) of magPhaseChangeDarcyAcceleration = 0.835711
-    volAverage(all) of magPhaseChangeBuoyancyAcceleration = 0.00190122
-    volAverage(all) of magPRghAcceleration = 0.00385193
+    volAverage(all) of magPhaseChangeBuoyancyAcceleration = 0.00190123
+    volAverage(all) of magPRghAcceleration = 0.00385194
 
 volFieldValue momentumMax write:
     number of cells = 6400
@@ -2812,9 +2813,9 @@ Executing functionObjects
 volFieldValue momentumMean write:
     number of cells = 6400
     volume = 1.6e-05
-    volAverage(all) of phaseChangeSolidFraction = 0.0336223
+    volAverage(all) of phaseChangeSolidFraction = 0.0336222
     volAverage(all) of phaseChangeDarcyCoeff = 259316
-    volAverage(all) of phaseChangeModelDeltaT = 1.55585
+    volAverage(all) of phaseChangeModelDeltaT = 1.55586
     volAverage(all) of magPhaseChangeDarcyAcceleration = 0.847208
     volAverage(all) of magPhaseChangeBuoyancyAcceleration = 0.0018007
     volAverage(all) of magPRghAcceleration = 0.00371198
@@ -2824,7 +2825,7 @@ volFieldValue momentumMax write:
     volume = 1.6e-05
     max(all) of phaseChangeSolidFraction = 1 at location (0.00025 0.00025 0.005) in cell 0
     max(all) of phaseChangeDarcyCoeff = 1e+08 at location (0.00025 0.00025 0.005) in cell 0
-    max(all) of phaseChangeModelDeltaT = 9.70062 at location (0.01175 0.03575 0.005) in cell 5703
+    max(all) of phaseChangeModelDeltaT = 9.70064 at location (0.01175 0.03575 0.005) in cell 5703
     max(all) of magPhaseChangeDarcyAcceleration = 80.085 at location (0.00025 0.00025 0.005) in cell 0
     max(all) of magPhaseChangeBuoyancyAcceleration = 0.01662 at location (0.00025 0.00025 0.005) in cell 0
     max(all) of magPRghAcceleration = 0.0109853 at location (0.00175 0.03625 0.005) in cell 5763
@@ -2844,20 +2845,20 @@ volFieldValue momentumMean write:
     volume = 1.6e-05
     volAverage(all) of phaseChangeSolidFraction = 0.0341558
     volAverage(all) of phaseChangeDarcyCoeff = 273738
-    volAverage(all) of phaseChangeModelDeltaT = 1.46513
+    volAverage(all) of phaseChangeModelDeltaT = 1.46514
     volAverage(all) of magPhaseChangeDarcyAcceleration = 0.852907
-    volAverage(all) of magPhaseChangeBuoyancyAcceleration = 0.00170175
-    volAverage(all) of magPRghAcceleration = 0.00357589
+    volAverage(all) of magPhaseChangeBuoyancyAcceleration = 0.00170176
+    volAverage(all) of magPRghAcceleration = 0.0035759
 
 volFieldValue momentumMax write:
     number of cells = 6400
     volume = 1.6e-05
     max(all) of phaseChangeSolidFraction = 1 at location (0.00025 0.00025 0.005) in cell 0
     max(all) of phaseChangeDarcyCoeff = 1e+08 at location (0.00025 0.00025 0.005) in cell 0
-    max(all) of phaseChangeModelDeltaT = 9.3408 at location (0.01175 0.03575 0.005) in cell 5703
+    max(all) of phaseChangeModelDeltaT = 9.34083 at location (0.01175 0.03575 0.005) in cell 5703
     max(all) of magPhaseChangeDarcyAcceleration = 80.7063 at location (0.00025 0.00025 0.005) in cell 0
     max(all) of magPhaseChangeBuoyancyAcceleration = 0.0169292 at location (0.00025 0.00025 0.005) in cell 0
-    max(all) of magPRghAcceleration = 0.0105884 at location (0.00175 0.03625 0.005) in cell 5763
+    max(all) of magPRghAcceleration = 0.0105885 at location (0.00175 0.03625 0.005) in cell 5763
 
 
 Time = 9.4s
@@ -2874,20 +2875,20 @@ volFieldValue momentumMean write:
     volume = 1.6e-05
     volAverage(all) of phaseChangeSolidFraction = 0.0346942
     volAverage(all) of phaseChangeDarcyCoeff = 300260
-    volAverage(all) of phaseChangeModelDeltaT = 1.37719
+    volAverage(all) of phaseChangeModelDeltaT = 1.3772
     volAverage(all) of magPhaseChangeDarcyAcceleration = 0.857313
-    volAverage(all) of magPhaseChangeBuoyancyAcceleration = 0.0016049
-    volAverage(all) of magPRghAcceleration = 0.00344325
+    volAverage(all) of magPhaseChangeBuoyancyAcceleration = 0.00160491
+    volAverage(all) of magPRghAcceleration = 0.00344326
 
 volFieldValue momentumMax write:
     number of cells = 6400
     volume = 1.6e-05
     max(all) of phaseChangeSolidFraction = 1 at location (0.00025 0.00025 0.005) in cell 0
     max(all) of phaseChangeDarcyCoeff = 1e+08 at location (0.00025 0.00025 0.005) in cell 0
-    max(all) of phaseChangeModelDeltaT = 8.9823 at location (0.01175 0.03575 0.005) in cell 5703
+    max(all) of phaseChangeModelDeltaT = 8.98232 at location (0.01175 0.03575 0.005) in cell 5703
     max(all) of magPhaseChangeDarcyAcceleration = 80.6872 at location (0.00025 0.00025 0.005) in cell 0
     max(all) of magPhaseChangeBuoyancyAcceleration = 0.0170455 at location (0.00025 0.00025 0.005) in cell 0
-    max(all) of magPRghAcceleration = 0.0101849 at location (0.00175 0.03625 0.005) in cell 5763
+    max(all) of magPRghAcceleration = 0.010185 at location (0.00175 0.03625 0.005) in cell 5763
 
 
 Time = 9.5s
@@ -2903,8 +2904,8 @@ volFieldValue momentumMean write:
     number of cells = 6400
     volume = 1.6e-05
     volAverage(all) of phaseChangeSolidFraction = 0.0352319
-    volAverage(all) of phaseChangeDarcyCoeff = 312761
-    volAverage(all) of phaseChangeModelDeltaT = 1.29075
+    volAverage(all) of phaseChangeDarcyCoeff = 312762
+    volAverage(all) of phaseChangeModelDeltaT = 1.29076
     volAverage(all) of magPhaseChangeDarcyAcceleration = 0.864515
     volAverage(all) of magPhaseChangeBuoyancyAcceleration = 0.001512
     volAverage(all) of magPRghAcceleration = 0.00331452
@@ -2914,10 +2915,10 @@ volFieldValue momentumMax write:
     volume = 1.6e-05
     max(all) of phaseChangeSolidFraction = 1 at location (0.00025 0.00025 0.005) in cell 0
     max(all) of phaseChangeDarcyCoeff = 1e+08 at location (0.00025 0.00025 0.005) in cell 0
-    max(all) of phaseChangeModelDeltaT = 8.62929 at location (0.01125 0.03575 0.005) in cell 5702
+    max(all) of phaseChangeModelDeltaT = 8.62931 at location (0.01125 0.03575 0.005) in cell 5702
     max(all) of magPhaseChangeDarcyAcceleration = 80.8627 at location (0.00025 0.00025 0.005) in cell 0
     max(all) of magPhaseChangeBuoyancyAcceleration = 0.0171253 at location (0.00025 0.00025 0.005) in cell 0
-    max(all) of magPRghAcceleration = 0.00980964 at location (0.00175 0.03625 0.005) in cell 5763
+    max(all) of magPRghAcceleration = 0.00980967 at location (0.00175 0.03625 0.005) in cell 5763
 
 
 Time = 9.6s
@@ -2936,18 +2937,18 @@ volFieldValue momentumMean write:
     volAverage(all) of phaseChangeDarcyCoeff = 313032
     volAverage(all) of phaseChangeModelDeltaT = 1.20331
     volAverage(all) of magPhaseChangeDarcyAcceleration = 0.880221
-    volAverage(all) of magPhaseChangeBuoyancyAcceleration = 0.00142513
-    volAverage(all) of magPRghAcceleration = 0.00319095
+    volAverage(all) of magPhaseChangeBuoyancyAcceleration = 0.00142514
+    volAverage(all) of magPRghAcceleration = 0.00319096
 
 volFieldValue momentumMax write:
     number of cells = 6400
     volume = 1.6e-05
     max(all) of phaseChangeSolidFraction = 1 at location (0.00025 0.00025 0.005) in cell 0
     max(all) of phaseChangeDarcyCoeff = 1e+08 at location (0.00025 0.00025 0.005) in cell 0
-    max(all) of phaseChangeModelDeltaT = 8.27914 at location (0.01125 0.03575 0.005) in cell 5702
+    max(all) of phaseChangeModelDeltaT = 8.27916 at location (0.01125 0.03575 0.005) in cell 5702
     max(all) of magPhaseChangeDarcyAcceleration = 84.7932 at location (0.00025 0.00025 0.005) in cell 0
     max(all) of magPhaseChangeBuoyancyAcceleration = 0.0182987 at location (0.00025 0.00025 0.005) in cell 0
-    max(all) of magPRghAcceleration = 0.00943607 at location (0.00175 0.03625 0.005) in cell 5763
+    max(all) of magPRghAcceleration = 0.0094361 at location (0.00175 0.03625 0.005) in cell 5763
 
 
 Time = 9.7s
@@ -2964,9 +2965,9 @@ volFieldValue momentumMean write:
     volume = 1.6e-05
     volAverage(all) of phaseChangeSolidFraction = 0.0362968
     volAverage(all) of phaseChangeDarcyCoeff = 313087
-    volAverage(all) of phaseChangeModelDeltaT = 1.12058
+    volAverage(all) of phaseChangeModelDeltaT = 1.12059
     volAverage(all) of magPhaseChangeDarcyAcceleration = 0.892785
-    volAverage(all) of magPhaseChangeBuoyancyAcceleration = 0.00133774
+    volAverage(all) of magPhaseChangeBuoyancyAcceleration = 0.00133775
     volAverage(all) of magPRghAcceleration = 0.00306905
 
 volFieldValue momentumMax write:
@@ -2974,7 +2975,7 @@ volFieldValue momentumMax write:
     volume = 1.6e-05
     max(all) of phaseChangeSolidFraction = 1 at location (0.00025 0.00025 0.005) in cell 0
     max(all) of phaseChangeDarcyCoeff = 1e+08 at location (0.00025 0.00025 0.005) in cell 0
-    max(all) of phaseChangeModelDeltaT = 7.93084 at location (0.01125 0.03575 0.005) in cell 5702
+    max(all) of phaseChangeModelDeltaT = 7.93086 at location (0.01125 0.03575 0.005) in cell 5702
     max(all) of magPhaseChangeDarcyAcceleration = 89.1468 at location (0.00025 0.00025 0.005) in cell 0
     max(all) of magPhaseChangeBuoyancyAcceleration = 0.0192783 at location (0.00025 0.00025 0.005) in cell 0
     max(all) of magPRghAcceleration = 0.00926457 at location (0.00025 0.00075 0.005) in cell 80
@@ -2994,17 +2995,17 @@ volFieldValue momentumMean write:
     volume = 1.6e-05
     volAverage(all) of phaseChangeSolidFraction = 0.0368408
     volAverage(all) of phaseChangeDarcyCoeff = 313169
-    volAverage(all) of phaseChangeModelDeltaT = 1.0408
+    volAverage(all) of phaseChangeModelDeltaT = 1.04081
     volAverage(all) of magPhaseChangeDarcyAcceleration = 0.900571
     volAverage(all) of magPhaseChangeBuoyancyAcceleration = 0.00125134
-    volAverage(all) of magPRghAcceleration = 0.00294967
+    volAverage(all) of magPRghAcceleration = 0.00294968
 
 volFieldValue momentumMax write:
     number of cells = 6400
     volume = 1.6e-05
     max(all) of phaseChangeSolidFraction = 1 at location (0.00025 0.00025 0.005) in cell 0
     max(all) of phaseChangeDarcyCoeff = 1e+08 at location (0.00025 0.00025 0.005) in cell 0
-    max(all) of phaseChangeModelDeltaT = 7.58723 at location (0.01075 0.03575 0.005) in cell 5701
+    max(all) of phaseChangeModelDeltaT = 7.58726 at location (0.01075 0.03575 0.005) in cell 5701
     max(all) of magPhaseChangeDarcyAcceleration = 91.2185 at location (0.00025 0.00025 0.005) in cell 0
     max(all) of magPhaseChangeBuoyancyAcceleration = 0.0197378 at location (0.00025 0.00025 0.005) in cell 0
     max(all) of magPRghAcceleration = 0.009513 at location (0.00025 0.00075 0.005) in cell 80
@@ -3024,9 +3025,9 @@ volFieldValue momentumMean write:
     volume = 1.6e-05
     volAverage(all) of phaseChangeSolidFraction = 0.0373889
     volAverage(all) of phaseChangeDarcyCoeff = 313294
-    volAverage(all) of phaseChangeModelDeltaT = 0.963611
+    volAverage(all) of phaseChangeModelDeltaT = 0.963618
     volAverage(all) of magPhaseChangeDarcyAcceleration = 0.905856
-    volAverage(all) of magPhaseChangeBuoyancyAcceleration = 0.00116682
+    volAverage(all) of magPhaseChangeBuoyancyAcceleration = 0.00116683
     volAverage(all) of magPRghAcceleration = 0.00283317
 
 volFieldValue momentumMax write:
@@ -3034,7 +3035,7 @@ volFieldValue momentumMax write:
     volume = 1.6e-05
     max(all) of phaseChangeSolidFraction = 1 at location (0.00025 0.00025 0.005) in cell 0
     max(all) of phaseChangeDarcyCoeff = 1e+08 at location (0.00025 0.00025 0.005) in cell 0
-    max(all) of phaseChangeModelDeltaT = 7.24809 at location (0.01075 0.03575 0.005) in cell 5701
+    max(all) of phaseChangeModelDeltaT = 7.24812 at location (0.01075 0.03575 0.005) in cell 5701
     max(all) of magPhaseChangeDarcyAcceleration = 92.1312 at location (0.00025 0.00025 0.005) in cell 0
     max(all) of magPhaseChangeBuoyancyAcceleration = 0.0199398 at location (0.00025 0.00025 0.005) in cell 0
     max(all) of magPRghAcceleration = 0.00962316 at location (0.00025 0.00075 0.005) in cell 80
@@ -3054,17 +3055,17 @@ volFieldValue momentumMean write:
     volume = 1.6e-05
     volAverage(all) of phaseChangeSolidFraction = 0.0379407
     volAverage(all) of phaseChangeDarcyCoeff = 313491
-    volAverage(all) of phaseChangeModelDeltaT = 0.889058
+    volAverage(all) of phaseChangeModelDeltaT = 0.889065
     volAverage(all) of magPhaseChangeDarcyAcceleration = 0.909731
-    volAverage(all) of magPhaseChangeBuoyancyAcceleration = 0.00108476
-    volAverage(all) of magPRghAcceleration = 0.00272005
+    volAverage(all) of magPhaseChangeBuoyancyAcceleration = 0.00108477
+    volAverage(all) of magPRghAcceleration = 0.00272006
 
 volFieldValue momentumMax write:
     number of cells = 6400
     volume = 1.6e-05
     max(all) of phaseChangeSolidFraction = 1 at location (0.00025 0.00025 0.005) in cell 0
     max(all) of phaseChangeDarcyCoeff = 1e+08 at location (0.00025 0.00025 0.005) in cell 0
-    max(all) of phaseChangeModelDeltaT = 6.9111 at location (0.01075 0.03575 0.005) in cell 5701
+    max(all) of phaseChangeModelDeltaT = 6.91113 at location (0.01075 0.03575 0.005) in cell 5701
     max(all) of magPhaseChangeDarcyAcceleration = 92.49 at location (0.00025 0.00025 0.005) in cell 0
     max(all) of magPhaseChangeBuoyancyAcceleration = 0.0200202 at location (0.00025 0.00025 0.005) in cell 0
     max(all) of magPRghAcceleration = 0.00966982 at location (0.00025 0.00075 0.005) in cell 80
