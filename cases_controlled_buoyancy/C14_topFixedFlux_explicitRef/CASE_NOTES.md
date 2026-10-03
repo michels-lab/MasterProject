@@ -67,3 +67,14 @@ Se espera que `fixedFluxPressure + slip` conserve la impermeabilidad observada e
 - Comparación con C11: T del probe central es idéntica en los 10,001 pasos; máxima diferencia alphaL = 1e-6; a 10 s T=1464.19 K y alphaL=0.964815 en ambos.
 - La estructura de `foamLog` para energía es idéntica a V11: `h_0..2` y `e_0..2`. El `nEnergyCorrectors 2` añadido en el **fvSolution regional del metal** no introdujo solves de energía adicionales.
 - Conclusión: V14 **preserva la física impermeable de V11** y valida la referencia explícita de presión solicitada; no introduce un cambio físico material respecto a V11.
+
+
+## Aclaración posterior — energy correctors efectivos
+
+La entrada `nEnergyCorrectors 2` de C14 está en `system/metal/fvSolution`, no en el `system/fvSolution` raíz que controla el bucle global de energía de `foamMultiRun`.
+
+Por ello **C14 NO fue una corrida con 2 energy correctors efectivos**. Su log contiene `h_0..2` y `e_0..2`, exactamente como C11 normal.
+
+El test `C11_energy2_test` confirmó que, al colocar `nEnergyCorrectors 2` en el diccionario raíz, aparecen `h_0..5` y `e_0..5`. Ese test también mostró que duplicar los energy correctors no cambia materialmente T, alphaL o U y aumenta el costo computacional.
+
+Por tanto C14 debe interpretarse como **1 energy corrector efectivo**, con la referencia explícita de presión solicitada por el director.
