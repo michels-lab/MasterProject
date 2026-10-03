@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   run-case:
@@ -47,6 +47,23 @@ jobs:
             logs postProcessing 2>/dev/null || true
           test "$(foamListTimes -latestTime)" = "10"
           tail -n 10 log.foamMultiRun | grep -q "End"
+
+      - name: Commit real energy2 results to main
+        if: success()
+        shell: bash
+        env:
+          CASE_NAME: C11_energy2_test
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A "cases_controlled_buoyancy/$CASE_NAME"
+          if git diff --cached --quiet
+          then
+            echo "No result changes to commit."
+          else
+            git commit -m "results: store C11 energy2 test"
+            git push origin HEAD:main
+          fi
 
       - name: Upload results
         if: always()
