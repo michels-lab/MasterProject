@@ -1,0 +1,746 @@
+/*---------------------------------------------------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  14
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+Build  : 14-7b05503f98a8
+Exec   : foamPostProcess -region metal -dict /home/michel/OpenFOAM/QuickCup_Solidification/analysis_tools/topSurfaceFlowPostProcessing -time 0: -fields (U T p_rgh rho phi phaseChangeSource:alpha1)
+Date   : Sep 30 2026
+Time   : 14:06:22
+Host   : "Michel-DuarteHP"
+PID    : 822934
+I/O    : uncollated
+Case   : /home/michel/OpenFOAM/QuickCup_Solidification/cases_controlled_buoyancy/B8_adaptiveOuter4
+nProcs : 1
+sigFpe : Enabling floating point exception trapping (FOAM_SIGFPE).
+fileModificationChecking : Monitoring run-time modified files using timeStampMaster (fileModificationSkew 10)
+allowSystemOperations : Allowing user-supplied system call operations
+
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+Create time
+
+Create mesh metal for time = 0
+
+
+Constructing functionObjects from system/functions
+    Selecting surfaceFieldValue with name topPatchFaceFields
+        number of faces = 80
+        area = 0.0004
+        operation = none
+    Selecting surfaceFieldValue with name topPhiNet
+        number of faces = 80
+        area = 0.0004
+        operation = sum
+    Selecting surfaceFieldValue with name topPhiAbsolute
+        number of faces = 80
+        area = 0.0004
+        operation = sumMag
+    Selecting surfaceFieldValue with name topPhiMinimum
+        number of faces = 80
+        area = 0.0004
+        operation = min
+    Selecting surfaceFieldValue with name topPhiMaximum
+        number of faces = 80
+        area = 0.0004
+        operation = max
+    Selecting sets with name nearTopInternalLine
+        Reading set description:
+            line_y39p75mm
+Time = 0s
+
+Reading fields:
+    volScalarFields: phaseChangeSource:alpha1 T p_rgh
+    volVectorFields: U
+
+
+
+Executing functionObjects
+--> FOAM Warning:     functionObjects::surfaceFieldValue topPatchFaceFields cannot find required object phi
+--> FOAM Warning:     functionObjects::surfaceFieldValue topPatchFaceFields cannot find required object rho
+
+--> FOAM Warning:     functionObjects::surfaceFieldValue topPhiNet cannot find required object phi
+
+--> FOAM Warning:     functionObjects::surfaceFieldValue topPhiAbsolute cannot find required object phi
+
+--> FOAM Warning:     functionObjects::surfaceFieldValue topPhiMinimum cannot find required object phi
+
+--> FOAM Warning:     functionObjects::surfaceFieldValue topPhiMaximum cannot find required object phi
+
+--> FOAM Warning:     functionObjects::sets nearTopInternalLine cannot find required object rho
+
+Time = 0.223666s
+
+Reading fields:
+    volScalarFields: phaseChangeSource:alpha1 T rho p_rgh
+    volVectorFields: U
+    surfaceScalarFields: phi
+
+
+
+Executing functionObjects
+
+surfaceFieldValue topPhiNet write:
+    sum(metalTop) of phi = -0.000270055
+
+surfaceFieldValue topPhiAbsolute write:
+    sumMag(metalTop) of phi = 0.0114388
+
+surfaceFieldValue topPhiMinimum write:
+    min(metalTop) of phi = -0.00013103
+
+surfaceFieldValue topPhiMaximum write:
+    max(metalTop) of phi = 0.00143793
+
+
+Time = 0.395592s
+
+Reading fields:
+    volScalarFields: phaseChangeSource:alpha1 T rho p_rgh
+    volVectorFields: U
+    surfaceScalarFields: phi
+
+
+
+Executing functionObjects
+
+surfaceFieldValue topPhiNet write:
+    sum(metalTop) of phi = -0.000191994
+
+surfaceFieldValue topPhiAbsolute write:
+    sumMag(metalTop) of phi = 0.0141065
+
+surfaceFieldValue topPhiMinimum write:
+    min(metalTop) of phi = -0.000127924
+
+surfaceFieldValue topPhiMaximum write:
+    max(metalTop) of phi = 0.0013572
+
+
+Time = 0.570804s
+
+Reading fields:
+    volScalarFields: phaseChangeSource:alpha1 T rho p_rgh
+    volVectorFields: U
+    surfaceScalarFields: phi
+
+
+
+Executing functionObjects
+
+surfaceFieldValue topPhiNet write:
+    sum(metalTop) of phi = -0.000159817
+
+surfaceFieldValue topPhiAbsolute write:
+    sumMag(metalTop) of phi = 0.0140584
+
+surfaceFieldValue topPhiMinimum write:
+    min(metalTop) of phi = -0.00015456
+
+surfaceFieldValue topPhiMaximum write:
+    max(metalTop) of phi = 0.0012692
+
+
+Time = 0.763989s
+
+Reading fields:
+    volScalarFields: phaseChangeSource:alpha1 T rho p_rgh
+    volVectorFields: U
+    surfaceScalarFields: phi
+
+
+
+Executing functionObjects
+
+surfaceFieldValue topPhiNet write:
+    sum(metalTop) of phi = -0.000140719
+
+surfaceFieldValue topPhiAbsolute write:
+    sumMag(metalTop) of phi = 0.0119577
+
+surfaceFieldValue topPhiMinimum write:
+    min(metalTop) of phi = -0.000158877
+
+surfaceFieldValue topPhiMaximum write:
+    max(metalTop) of phi = 0.00113413
+
+
+Time = 0.994228s
+
+Reading fields:
+    volScalarFields: phaseChangeSource:alpha1 T rho p_rgh
+    volVectorFields: U
+    surfaceScalarFields: phi
+
+
+
+Executing functionObjects
+
+surfaceFieldValue topPhiNet write:
+    sum(metalTop) of phi = -0.000127149
+
+surfaceFieldValue topPhiAbsolute write:
+    sumMag(metalTop) of phi = 0.0094994
+
+surfaceFieldValue topPhiMinimum write:
+    min(metalTop) of phi = -0.000147704
+
+surfaceFieldValue topPhiMaximum write:
+    max(metalTop) of phi = 0.00102624
+
+
+Time = 1.25457s
+
+Reading fields:
+    volScalarFields: phaseChangeSource:alpha1 T rho p_rgh
+    volVectorFields: U
+    surfaceScalarFields: phi
+
+
+
+Executing functionObjects
+
+surfaceFieldValue topPhiNet write:
+    sum(metalTop) of phi = -0.000116458
+
+surfaceFieldValue topPhiAbsolute write:
+    sumMag(metalTop) of phi = 0.00768343
+
+surfaceFieldValue topPhiMinimum write:
+    min(metalTop) of phi = -9.59992e-05
+
+surfaceFieldValue topPhiMaximum write:
+    max(metalTop) of phi = 0.000875048
+
+
+Time = 1.50779s
+
+Reading fields:
+    volScalarFields: phaseChangeSource:alpha1 T rho p_rgh
+    volVectorFields: U
+    surfaceScalarFields: phi
+
+
+
+Executing functionObjects
+
+surfaceFieldValue topPhiNet write:
+    sum(metalTop) of phi = -0.000110337
+
+surfaceFieldValue topPhiAbsolute write:
+    sumMag(metalTop) of phi = 0.00723685
+
+surfaceFieldValue topPhiMinimum write:
+    min(metalTop) of phi = -8.14309e-05
+
+surfaceFieldValue topPhiMaximum write:
+    max(metalTop) of phi = 0.000786484
+
+
+Time = 1.76687s
+
+Reading fields:
+    volScalarFields: phaseChangeSource:alpha1 T rho p_rgh
+    volVectorFields: U
+    surfaceScalarFields: phi
+
+
+
+Executing functionObjects
+
+surfaceFieldValue topPhiNet write:
+    sum(metalTop) of phi = -0.000104479
+
+surfaceFieldValue topPhiAbsolute write:
+    sumMag(metalTop) of phi = 0.00659153
+
+surfaceFieldValue topPhiMinimum write:
+    min(metalTop) of phi = -7.97656e-05
+
+surfaceFieldValue topPhiMaximum write:
+    max(metalTop) of phi = 0.00075572
+
+
+Time = 2.0352s
+
+Reading fields:
+    volScalarFields: phaseChangeSource:alpha1 T rho p_rgh
+    volVectorFields: U
+    surfaceScalarFields: phi
+
+
+
+Executing functionObjects
+
+surfaceFieldValue topPhiNet write:
+    sum(metalTop) of phi = -9.97951e-05
+
+surfaceFieldValue topPhiAbsolute write:
+    sumMag(metalTop) of phi = 0.00666535
+
+surfaceFieldValue topPhiMinimum write:
+    min(metalTop) of phi = -7.82174e-05
+
+surfaceFieldValue topPhiMaximum write:
+    max(metalTop) of phi = 0.000729721
+
+
+Time = 2.3144s
+
+Reading fields:
+    volScalarFields: phaseChangeSource:alpha1 T rho p_rgh
+    volVectorFields: U
+    surfaceScalarFields: phi
+
+
+
+Executing functionObjects
+
+surfaceFieldValue topPhiNet write:
+    sum(metalTop) of phi = -9.75629e-05
+
+surfaceFieldValue topPhiAbsolute write:
+    sumMag(metalTop) of phi = 0.00647599
+
+surfaceFieldValue topPhiMinimum write:
+    min(metalTop) of phi = -7.71724e-05
+
+surfaceFieldValue topPhiMaximum write:
+    max(metalTop) of phi = 0.000711729
+
+
+Time = 2.60861s
+
+Reading fields:
+    volScalarFields: phaseChangeSource:alpha1 T rho p_rgh
+    volVectorFields: U
+    surfaceScalarFields: phi
+
+
+
+Executing functionObjects
+
+surfaceFieldValue topPhiNet write:
+    sum(metalTop) of phi = -9.35247e-05
+
+surfaceFieldValue topPhiAbsolute write:
+    sumMag(metalTop) of phi = 0.00658165
+
+surfaceFieldValue topPhiMinimum write:
+    min(metalTop) of phi = -7.64381e-05
+
+surfaceFieldValue topPhiMaximum write:
+    max(metalTop) of phi = 0.000703718
+
+
+Time = 2.92504s
+
+Reading fields:
+    volScalarFields: phaseChangeSource:alpha1 T rho p_rgh
+    volVectorFields: U
+    surfaceScalarFields: phi
+
+
+
+Executing functionObjects
+
+surfaceFieldValue topPhiNet write:
+    sum(metalTop) of phi = -8.74469e-05
+
+surfaceFieldValue topPhiAbsolute write:
+    sumMag(metalTop) of phi = 0.00661677
+
+surfaceFieldValue topPhiMinimum write:
+    min(metalTop) of phi = -7.79016e-05
+
+surfaceFieldValue topPhiMaximum write:
+    max(metalTop) of phi = 0.000702978
+
+
+Time = 3.27561s
+
+Reading fields:
+    volScalarFields: phaseChangeSource:alpha1 T rho p_rgh
+    volVectorFields: U
+    surfaceScalarFields: phi
+
+
+
+Executing functionObjects
+
+surfaceFieldValue topPhiNet write:
+    sum(metalTop) of phi = -8.14161e-05
+
+surfaceFieldValue topPhiAbsolute write:
+    sumMag(metalTop) of phi = 0.00681778
+
+surfaceFieldValue topPhiMinimum write:
+    min(metalTop) of phi = -8.14635e-05
+
+surfaceFieldValue topPhiMaximum write:
+    max(metalTop) of phi = 0.000708381
+
+
+Time = 3.67699s
+
+Reading fields:
+    volScalarFields: phaseChangeSource:alpha1 T rho p_rgh
+    volVectorFields: U
+    surfaceScalarFields: phi
+
+
+
+Executing functionObjects
+
+surfaceFieldValue topPhiNet write:
+    sum(metalTop) of phi = -7.53361e-05
+
+surfaceFieldValue topPhiAbsolute write:
+    sumMag(metalTop) of phi = 0.00702127
+
+surfaceFieldValue topPhiMinimum write:
+    min(metalTop) of phi = -8.65516e-05
+
+surfaceFieldValue topPhiMaximum write:
+    max(metalTop) of phi = 0.000714396
+
+
+Time = 4.12579s
+
+Reading fields:
+    volScalarFields: phaseChangeSource:alpha1 T rho p_rgh
+    volVectorFields: U
+    surfaceScalarFields: phi
+
+
+
+Executing functionObjects
+
+surfaceFieldValue topPhiNet write:
+    sum(metalTop) of phi = -6.83335e-05
+
+surfaceFieldValue topPhiAbsolute write:
+    sumMag(metalTop) of phi = 0.00686161
+
+surfaceFieldValue topPhiMinimum write:
+    min(metalTop) of phi = -8.52657e-05
+
+surfaceFieldValue topPhiMaximum write:
+    max(metalTop) of phi = 0.00069986
+
+
+Time = 4.58845s
+
+Reading fields:
+    volScalarFields: phaseChangeSource:alpha1 T rho p_rgh
+    volVectorFields: U
+    surfaceScalarFields: phi
+
+
+
+Executing functionObjects
+
+surfaceFieldValue topPhiNet write:
+    sum(metalTop) of phi = -6.23737e-05
+
+surfaceFieldValue topPhiAbsolute write:
+    sumMag(metalTop) of phi = 0.00607112
+
+surfaceFieldValue topPhiMinimum write:
+    min(metalTop) of phi = -7.56628e-05
+
+surfaceFieldValue topPhiMaximum write:
+    max(metalTop) of phi = 0.000708439
+
+
+Time = 5.03407s
+
+Reading fields:
+    volScalarFields: phaseChangeSource:alpha1 T rho p_rgh
+    volVectorFields: U
+    surfaceScalarFields: phi
+
+
+
+Executing functionObjects
+
+surfaceFieldValue topPhiNet write:
+    sum(metalTop) of phi = -5.83087e-05
+
+surfaceFieldValue topPhiAbsolute write:
+    sumMag(metalTop) of phi = 0.00572074
+
+surfaceFieldValue topPhiMinimum write:
+    min(metalTop) of phi = -6.9526e-05
+
+surfaceFieldValue topPhiMaximum write:
+    max(metalTop) of phi = 0.000731363
+
+
+Time = 5.451s
+
+Reading fields:
+    volScalarFields: phaseChangeSource:alpha1 T rho p_rgh
+    volVectorFields: U
+    surfaceScalarFields: phi
+
+
+
+Executing functionObjects
+
+surfaceFieldValue topPhiNet write:
+    sum(metalTop) of phi = -5.52121e-05
+
+surfaceFieldValue topPhiAbsolute write:
+    sumMag(metalTop) of phi = 0.00613723
+
+surfaceFieldValue topPhiMinimum write:
+    min(metalTop) of phi = -6.23788e-05
+
+surfaceFieldValue topPhiMaximum write:
+    max(metalTop) of phi = 0.000755011
+
+
+Time = 5.84941s
+
+Reading fields:
+    volScalarFields: phaseChangeSource:alpha1 T rho p_rgh
+    volVectorFields: U
+    surfaceScalarFields: phi
+
+
+
+Executing functionObjects
+
+surfaceFieldValue topPhiNet write:
+    sum(metalTop) of phi = -5.31639e-05
+
+surfaceFieldValue topPhiAbsolute write:
+    sumMag(metalTop) of phi = 0.0066813
+
+surfaceFieldValue topPhiMinimum write:
+    min(metalTop) of phi = -6.56032e-05
+
+surfaceFieldValue topPhiMaximum write:
+    max(metalTop) of phi = 0.000773452
+
+
+Time = 6.24686s
+
+Reading fields:
+    volScalarFields: phaseChangeSource:alpha1 T rho p_rgh
+    volVectorFields: U
+    surfaceScalarFields: phi
+
+
+
+Executing functionObjects
+
+surfaceFieldValue topPhiNet write:
+    sum(metalTop) of phi = -5.14163e-05
+
+surfaceFieldValue topPhiAbsolute write:
+    sumMag(metalTop) of phi = 0.00645922
+
+surfaceFieldValue topPhiMinimum write:
+    min(metalTop) of phi = -6.55234e-05
+
+surfaceFieldValue topPhiMaximum write:
+    max(metalTop) of phi = 0.000758443
+
+
+Time = 6.65635s
+
+Reading fields:
+    volScalarFields: phaseChangeSource:alpha1 T rho p_rgh
+    volVectorFields: U
+    surfaceScalarFields: phi
+
+
+
+Executing functionObjects
+
+surfaceFieldValue topPhiNet write:
+    sum(metalTop) of phi = -4.922e-05
+
+surfaceFieldValue topPhiAbsolute write:
+    sumMag(metalTop) of phi = 0.00636063
+
+surfaceFieldValue topPhiMinimum write:
+    min(metalTop) of phi = -6.34231e-05
+
+surfaceFieldValue topPhiMaximum write:
+    max(metalTop) of phi = 0.000748222
+
+
+Time = 7.07356s
+
+Reading fields:
+    volScalarFields: phaseChangeSource:alpha1 T rho p_rgh
+    volVectorFields: U
+    surfaceScalarFields: phi
+
+
+
+Executing functionObjects
+
+surfaceFieldValue topPhiNet write:
+    sum(metalTop) of phi = -4.76899e-05
+
+surfaceFieldValue topPhiAbsolute write:
+    sumMag(metalTop) of phi = 0.00633539
+
+surfaceFieldValue topPhiMinimum write:
+    min(metalTop) of phi = -6.53753e-05
+
+surfaceFieldValue topPhiMaximum write:
+    max(metalTop) of phi = 0.000737922
+
+
+Time = 7.50101s
+
+Reading fields:
+    volScalarFields: phaseChangeSource:alpha1 T rho p_rgh
+    volVectorFields: U
+    surfaceScalarFields: phi
+
+
+
+Executing functionObjects
+
+surfaceFieldValue topPhiNet write:
+    sum(metalTop) of phi = -4.5783e-05
+
+surfaceFieldValue topPhiAbsolute write:
+    sumMag(metalTop) of phi = 0.00601079
+
+surfaceFieldValue topPhiMinimum write:
+    min(metalTop) of phi = -6.26216e-05
+
+surfaceFieldValue topPhiMaximum write:
+    max(metalTop) of phi = 0.000714398
+
+
+Time = 7.9472s
+
+Reading fields:
+    volScalarFields: phaseChangeSource:alpha1 T rho p_rgh
+    volVectorFields: U
+    surfaceScalarFields: phi
+
+
+
+Executing functionObjects
+
+surfaceFieldValue topPhiNet write:
+    sum(metalTop) of phi = -4.43623e-05
+
+surfaceFieldValue topPhiAbsolute write:
+    sumMag(metalTop) of phi = 0.00551756
+
+surfaceFieldValue topPhiMinimum write:
+    min(metalTop) of phi = -5.6374e-05
+
+surfaceFieldValue topPhiMaximum write:
+    max(metalTop) of phi = 0.000682654
+
+
+Time = 8.41807s
+
+Reading fields:
+    volScalarFields: phaseChangeSource:alpha1 T rho p_rgh
+    volVectorFields: U
+    surfaceScalarFields: phi
+
+
+
+Executing functionObjects
+
+surfaceFieldValue topPhiNet write:
+    sum(metalTop) of phi = -4.26423e-05
+
+surfaceFieldValue topPhiAbsolute write:
+    sumMag(metalTop) of phi = 0.00510817
+
+surfaceFieldValue topPhiMinimum write:
+    min(metalTop) of phi = -5.67495e-05
+
+surfaceFieldValue topPhiMaximum write:
+    max(metalTop) of phi = 0.000652318
+
+
+Time = 8.91201s
+
+Reading fields:
+    volScalarFields: phaseChangeSource:alpha1 T rho p_rgh
+    volVectorFields: U
+    surfaceScalarFields: phi
+
+
+
+Executing functionObjects
+
+surfaceFieldValue topPhiNet write:
+    sum(metalTop) of phi = -4.09232e-05
+
+surfaceFieldValue topPhiAbsolute write:
+    sumMag(metalTop) of phi = 0.00485226
+
+surfaceFieldValue topPhiMinimum write:
+    min(metalTop) of phi = -5.8965e-05
+
+surfaceFieldValue topPhiMaximum write:
+    max(metalTop) of phi = 0.000633063
+
+
+Time = 9.42265s
+
+Reading fields:
+    volScalarFields: phaseChangeSource:alpha1 T rho p_rgh
+    volVectorFields: U
+    surfaceScalarFields: phi
+
+
+
+Executing functionObjects
+
+surfaceFieldValue topPhiNet write:
+    sum(metalTop) of phi = -3.83778e-05
+
+surfaceFieldValue topPhiAbsolute write:
+    sumMag(metalTop) of phi = 0.004742
+
+surfaceFieldValue topPhiMinimum write:
+    min(metalTop) of phi = -5.50679e-05
+
+surfaceFieldValue topPhiMaximum write:
+    max(metalTop) of phi = 0.000621435
+
+
+Time = 9.94656s
+
+Reading fields:
+    volScalarFields: phaseChangeSource:alpha1 T rho p_rgh
+    volVectorFields: U
+    surfaceScalarFields: phi
+
+
+
+Executing functionObjects
+
+surfaceFieldValue topPhiNet write:
+    sum(metalTop) of phi = -3.59871e-05
+
+surfaceFieldValue topPhiAbsolute write:
+    sumMag(metalTop) of phi = 0.00465872
+
+surfaceFieldValue topPhiMinimum write:
+    min(metalTop) of phi = -4.92687e-05
+
+surfaceFieldValue topPhiMaximum write:
+    max(metalTop) of phi = 0.000611338
+
+
+End
+
