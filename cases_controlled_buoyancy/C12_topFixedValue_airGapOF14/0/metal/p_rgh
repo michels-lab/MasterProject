@@ -38,3 +38,16 @@ boundaryField
 
 
 // ************************************************************************* //
+
+// ============================================================================
+// QUICKCUP DOCUMENTATION APPENDIX
+// ============================================================================
+// Archivo documentado: 0/metal/p_rgh.
+// El contenido ejecutable anterior permanece intacto; este apéndice solo explica su función e interacción con el modelo.
+// FUNCIÓN: presión modificada por flotación/hidrostática usada por el acoplamiento presión-momento.
+// internalField = uniform 1e5: valor inicial asignado al interior del dominio antes de comenzar la integración temporal.
+// Tipos de condición de frontera presentes: empty, fixedValue, fixedFluxPressure.
+// INTERACCIÓN: p_rgh debe leerse junto con rho, g/gh y la referencia de presión. fixedFluxPressure ajusta el gradiente de presión para ser coherente con el flujo/velocidad; fixedValue impone p_rgh; prghPressure transforma una presión especificada a la forma p_rgh.
+// La BC de presión puede cambiar phi y el transporte de masa/energía. sum(phi) cercano a cero puede ocultar entradas y salidas locales; para eso se revisa phi cara por cara o sumMag(phi).
+// NOTA DE SEGURIDAD: todas las líneas de este apéndice son comentarios y no cambian la ejecución del caso.
+// ============================================================================

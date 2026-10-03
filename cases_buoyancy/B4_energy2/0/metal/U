@@ -38,3 +38,16 @@ boundaryField
 
 
 // ************************************************************************* //
+
+// ============================================================================
+// QUICKCUP DOCUMENTATION APPENDIX
+// ============================================================================
+// Archivo documentado: 0/metal/U.
+// El contenido ejecutable anterior permanece intacto; este apéndice solo explica su función e interacción con el modelo.
+// FUNCIÓN: campo de velocidad y condiciones cinemáticas.
+// internalField = uniform (0 0 0): valor inicial asignado al interior del dominio antes de comenzar la integración temporal.
+// Tipos de condición de frontera presentes: empty, slip, noSlip.
+// INTERACCIÓN: noSlip fuerza velocidad nula; slip evita penetración normal y permite componente tangencial; empty representa la dirección inactiva de una geometría 2D/extruida.
+// U transporta energía por convección, por lo que cambios de flujo pueden modificar enfriamiento y solidificación aun con las mismas propiedades.
+// NOTA DE SEGURIDAD: todas las líneas de este apéndice son comentarios y no cambian la ejecución del caso.
+// ============================================================================
