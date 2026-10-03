@@ -48,3 +48,13 @@ zoneGenerators
 );
 
 
+
+// ============================================================================
+// QUICKCUP DOCUMENTATION APPENDIX
+// ============================================================================
+// Archivo documentado: system/createZonesDict.
+// El contenido ejecutable anterior permanece intacto; este apéndice solo explica su función e interacción con el modelo.
+// FUNCIÓN: identifica zonas de celdas/caras usadas para separar regiones o aplicar modelos.
+// INTERACCIÓN: cambiar una selección puede mover celdas entre metal y molde aunque las propiedades termofísicas no cambien.
+// NOTA DE SEGURIDAD: todas las líneas de este apéndice son comentarios y no cambian la ejecución del caso.
+// ============================================================================

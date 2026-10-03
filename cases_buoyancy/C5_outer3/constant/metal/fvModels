@@ -41,3 +41,22 @@ phaseChangeSource
 }
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+// ============================================================================
+// QUICKCUP DOCUMENTATION APPENDIX
+// ============================================================================
+// Archivo documentado: constant/metal/fvModels.
+// El contenido ejecutable anterior permanece intacto; este apéndice solo explica su función e interacción con el modelo.
+// FUNCIÓN: activa fuentes/modelos volumétricos; en metal incluye cambio de fase, calor latente, resistencia Darcy de zona pastosa y, cuando aplica, flotación.
+// Tsol = 1423: temperatura solidus; fija el extremo sólido del intervalo de cambio de fase.
+// Tliq = 1473: temperatura liquidus; junto con Tsol define el intervalo pastoso.
+// L = 2.286e5: calor latente por unidad de masa; convierte cambio de fracción de fase en fuente/sumidero de energía.
+// Cu = 1e5: escala del término Darcy en la zona pastosa; valores mayores amortiguan más la velocidad al solidificar.
+// q = 1e-3: regularización del término Darcy que evita una singularidad cuando la fracción líquida tiende a cero.
+// beta = 1.13e-04: coeficiente de expansión térmica usado por la ruta de flotación que corresponda al modelo.
+// rhoRef = 6930: densidad de referencia utilizada por el modelo de cambio de fase/flotación cuando aplica.
+// alpha1e = 0.8: parámetro de fracción líquida de referencia/eutéctica usado por la interpolación del cambio de fase.
+// relax = 0.1: relajación aplicada a la actualización del modelo; valores menores amortiguan cambios entre iteraciones.
+// INTERACCIÓN: T modifica alphaL; alphaL controla calor latente y amortiguamiento Darcy; U modifica transporte convectivo de energía; la convección retroalimenta T y la solidificación.
+// NOTA DE SEGURIDAD: todas las líneas de este apéndice son comentarios y no cambian la ejecución del caso.
+// ============================================================================

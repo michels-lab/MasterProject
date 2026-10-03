@@ -82,3 +82,18 @@ PIMPLE
 
 
 // ************************************************************************* //
+
+// ============================================================================
+// QUICKCUP DOCUMENTATION APPENDIX
+// ============================================================================
+// Archivo documentado: system/metal/fvSolution.
+// El contenido ejecutable anterior permanece intacto; este apéndice solo explica su función e interacción con el modelo.
+// FUNCIÓN: define solvers lineales, tolerancias, precondicionadores y acoplamiento PIMPLE.
+// Los bloques solvers{} actúan sobre campos concretos; tolerance fija el residuo absoluto objetivo y relTol permite detenerse respecto al residuo inicial.
+// momentumPredictor = no: activa o desactiva el predictor explícito de momento antes de las correcciones de presión.
+// nOuterCorrectors = 1: número de ciclos externos PIMPLE por paso de tiempo; más ciclos refuerzan el acoplamiento a mayor costo.
+// nCorrectors = 2: número de correcciones presión-velocidad dentro de cada ciclo PIMPLE.
+// nNonOrthogonalCorrectors = 0: correcciones adicionales de presión asociadas a no ortogonalidad de la malla.
+// INTERACCIÓN: PIMPLE controla cuánto se acoplan presión, velocidad y energía dentro de cada paso. pRefPoint/pRefValue fijan el datum de presión y deben interpretarse junto con p_rgh y pRef.
+// NOTA DE SEGURIDAD: todas las líneas de este apéndice son comentarios y no cambian la ejecución del caso.
+// ============================================================================

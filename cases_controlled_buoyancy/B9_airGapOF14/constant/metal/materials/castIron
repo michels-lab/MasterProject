@@ -71,3 +71,18 @@ mixture
 
 
 // ************************************************************************* //
+
+// ============================================================================
+// QUICKCUP DOCUMENTATION APPENDIX
+// ============================================================================
+// Archivo documentado: constant/metal/materials/castIron.
+// El contenido ejecutable anterior permanece intacto; este apéndice solo explica su función e interacción con el modelo.
+// FUNCIÓN: propiedades termofísicas del material castIron.
+// rho0 = 6820: densidad de referencia de la formulación termofísica seleccionada.
+// beta = 1.13e-04: coeficiente de expansión térmica usado por la ruta de flotación que corresponda al modelo.
+// Cp = 827: capacidad calorífica; gobierna cuánta energía sensible se necesita para cambiar la temperatura.
+// mu = 5.5e-03: viscosidad dinámica; controla difusión viscosa y resistencia al movimiento.
+// Las tablas dependientes de temperatura se interpolan entre pares temperatura-propiedad; el conjunto de filas representa una ley continua, no constantes aisladas.
+// INTERACCIÓN: rho se acopla con gravedad/p_rgh; Cp y kappa controlan respuesta térmica; mu controla resistencia al flujo. En metal, todo ello retroalimenta el cambio de fase mediante T y alphaL.
+// NOTA DE SEGURIDAD: todas las líneas de este apéndice son comentarios y no cambian la ejecución del caso.
+// ============================================================================

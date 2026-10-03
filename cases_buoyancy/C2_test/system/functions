@@ -50,3 +50,18 @@ temperatureProbe
 }
 
 // ************************************************************************* //
+
+// ============================================================================
+// QUICKCUP DOCUMENTATION APPENDIX
+// ============================================================================
+// Archivo documentado: system/functions.
+// El contenido ejecutable anterior permanece intacto; este apéndice solo explica su función e interacción con el modelo.
+// FUNCIÓN: configuración de diagnóstico/postprocesamiento; solicita campos, probes, perfiles o reducciones estadísticas.
+// Los objetos diagnósticos aquí usados leen la solución y escriben resultados; no cambian las ecuaciones gobernantes.
+// executeControl = timeStep: parámetro del bloque; debe interpretarse con el modelo o BC que lo contiene.
+// writeControl = timeStep: criterio que decide cuándo se escriben resultados o diagnósticos.
+// writeInterval = 1: separación entre escrituras según writeControl; determina qué tiempos quedan disponibles para análisis posterior.
+// region selecciona la región de malla; fields los campos analizados; operation decide si se conservan valores espaciales o se reducen mediante suma/promedio/mínimo/máximo.
+// INTERACCIÓN: las coordenadas de muestreo están en metros y deben corresponder con blockMesh. Para comparar casos deben coincidir ubicación y tiempos de escritura.
+// NOTA DE SEGURIDAD: todas las líneas de este apéndice son comentarios y no cambian la ejecución del caso.
+// ============================================================================

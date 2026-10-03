@@ -68,3 +68,14 @@ wallDist
 
 
 // ************************************************************************* //
+
+// ============================================================================
+// QUICKCUP DOCUMENTATION APPENDIX
+// ============================================================================
+// Archivo documentado: system/metal/fvSchemes.
+// El contenido ejecutable anterior permanece intacto; este apéndice solo explica su función e interacción con el modelo.
+// FUNCIÓN: selecciona esquemas de discretización por volumen finito.
+// ddtSchemes discretiza derivadas temporales; gradSchemes gradientes; divSchemes advección/divergencia; laplacianSchemes difusión; interpolationSchemes valores en caras; snGradSchemes gradientes normales.
+// INTERACCIÓN: estos esquemas interactúan con calidad de malla y deltaT; pueden cambiar difusión numérica, oscilaciones y convergencia aun con propiedades físicas idénticas.
+// NOTA DE SEGURIDAD: todas las líneas de este apéndice son comentarios y no cambian la ejecución del caso.
+// ============================================================================
