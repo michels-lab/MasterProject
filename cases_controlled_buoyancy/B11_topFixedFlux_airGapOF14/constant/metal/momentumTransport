@@ -26,3 +26,13 @@ RAS
 
 
 // ************************************************************************* //
+
+// ============================================================================
+// QUICKCUP DOCUMENTATION APPENDIX
+// ============================================================================
+// Archivo documentado: constant/metal/momentumTransport.
+// El contenido ejecutable anterior permanece intacto; este apéndice solo explica su función e interacción con el modelo.
+// FUNCIÓN: selecciona el modelo de transporte de momento/turbulencia.
+// INTERACCIÓN: si el caso es laminar, campos como nut, k, epsilon u omega pueden permanecer como soporte/plantilla sin aportar transporte turbulento. Si se activa turbulencia, esos campos pasan a ser dinámicamente relevantes.
+// NOTA DE SEGURIDAD: todas las líneas de este apéndice son comentarios y no cambian la ejecución del caso.
+// ============================================================================

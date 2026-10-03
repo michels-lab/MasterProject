@@ -33,3 +33,14 @@ boundaryField
         type            zeroGradient;
     }
 }
+
+// ============================================================================
+// QUICKCUP DOCUMENTATION APPENDIX
+// ============================================================================
+// Archivo documentado: 0/metal/phaseChangeSource:alpha1.
+// El contenido ejecutable anterior permanece intacto; este apéndice solo explica su función e interacción con el modelo.
+// FUNCIÓN: fracción líquida del modelo de solidificación; aproximadamente 1 = líquido y 0 = sólido.
+// internalField = uniform 1.0: valor inicial asignado al interior del dominio antes de comenzar la integración temporal.
+// INTERACCIÓN: alphaL controla calor latente y resistencia Darcy de la zona pastosa, enlazando energía y momento.
+// NOTA DE SEGURIDAD: todas las líneas de este apéndice son comentarios y no cambian la ejecución del caso.
+// ============================================================================

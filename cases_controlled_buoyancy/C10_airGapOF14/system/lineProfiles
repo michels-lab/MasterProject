@@ -144,3 +144,16 @@ verticalProfiles
     }
 }
 
+
+// ============================================================================
+// QUICKCUP DOCUMENTATION APPENDIX
+// ============================================================================
+// Archivo documentado: system/lineProfiles.
+// El contenido ejecutable anterior permanece intacto; este apéndice solo explica su función e interacción con el modelo.
+// FUNCIÓN: configuración de diagnóstico/postprocesamiento; solicita campos, probes, perfiles o reducciones estadísticas.
+// Los objetos diagnósticos aquí usados leen la solución y escriben resultados; no cambian las ecuaciones gobernantes.
+// writeControl = writeTime: criterio que decide cuándo se escriben resultados o diagnósticos.
+// region selecciona la región de malla; fields los campos analizados; operation decide si se conservan valores espaciales o se reducen mediante suma/promedio/mínimo/máximo.
+// INTERACCIÓN: las coordenadas de muestreo están en metros y deben corresponder con blockMesh. Para comparar casos deben coincidir ubicación y tiempos de escritura.
+// NOTA DE SEGURIDAD: todas las líneas de este apéndice son comentarios y no cambian la ejecución del caso.
+// ============================================================================

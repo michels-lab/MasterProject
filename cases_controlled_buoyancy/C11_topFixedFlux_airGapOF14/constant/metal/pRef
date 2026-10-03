@@ -18,3 +18,14 @@ dimensions      [1 -1 -2 0 0 0 0];
 value           1e5;
 
 // ************************************************************************* //
+
+// ============================================================================
+// QUICKCUP DOCUMENTATION APPENDIX
+// ============================================================================
+// Archivo documentado: constant/metal/pRef.
+// El contenido ejecutable anterior permanece intacto; este apéndice solo explica su función e interacción con el modelo.
+// FUNCIÓN: presión de referencia o datum de la formulación de presión.
+// value = 1e5: valor indicado por el diccionario; su efecto exacto depende del bloque o condición de frontera que lo contiene.
+// INTERACCIÓN: fija el nivel absoluto de referencia pero no crea por sí sola un gradiente; debe interpretarse con p, p_rgh, rho y g.
+// NOTA DE SEGURIDAD: todas las líneas de este apéndice son comentarios y no cambian la ejecución del caso.
+// ============================================================================

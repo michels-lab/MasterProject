@@ -131,3 +131,14 @@ boundary
 );
 
 // ************************************************************************* //
+
+// ============================================================================
+// QUICKCUP DOCUMENTATION APPENDIX
+// ============================================================================
+// Archivo documentado: system/blockMeshDict.
+// El contenido ejecutable anterior permanece intacto; este apéndice solo explica su función e interacción con el modelo.
+// FUNCIÓN: define escala geométrica, vértices, bloques, número de celdas y nombres de fronteras.
+// convertToMeters = 0.001: factor de escala aplicado a las coordenadas de blockMesh antes de construir la geometría.
+// INTERACCIÓN: el tamaño de celda afecta resolución y Courant. Los nombres de patch deben coincidir con U, T, p_rgh y demás campos; de lo contrario las BC no se aplican al lugar esperado.
+// NOTA DE SEGURIDAD: todas las líneas de este apéndice son comentarios y no cambian la ejecución del caso.
+// ============================================================================

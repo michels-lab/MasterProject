@@ -170,3 +170,11 @@
 # ============================================================
 
 **/.vscode/*.log
+
+
+# ============================================================
+# Local audit-transfer staging (never version these containers)
+# ============================================================
+
+**/analysis_results/audit_bundle_stage_*/
+**/analysis_results/quickcup_campaign_audit_*.tar.gz

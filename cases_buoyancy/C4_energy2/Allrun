@@ -14,3 +14,14 @@ runApplication foamMultiRun
 touch buoyant.foam
 
 #------------------------------------------------------------------------------
+
+# ============================================================================
+# QUICKCUP DOCUMENTATION APPENDIX
+# ============================================================================
+# Archivo documentado: Allrun.
+# El contenido ejecutable anterior permanece intacto; este apéndice solo explica su función e interacción con el modelo.
+# FUNCIÓN: script que encadena preparación de malla/regiones, ejecución del solver y postprocesos configurados.
+# INTERACCIÓN: el orden de comandos importa porque cada etapa consume archivos generados por la anterior. Los logs registran evidencia de ejecución sin modificar la física.
+# Los argumentos de cada comando seleccionan caso, región, diccionario o tiempos; solo se convierten en parámetros físicos cuando la utilidad invocada lee esos valores desde un diccionario del modelo.
+# NOTA DE SEGURIDAD: todas las líneas de este apéndice son comentarios y no cambian la ejecución del caso.
+# ============================================================================

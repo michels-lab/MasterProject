@@ -59,3 +59,23 @@ maxDeltaT       0.1;
 
 
 // ************************************************************************* //
+
+// ============================================================================
+// QUICKCUP DOCUMENTATION APPENDIX
+// ============================================================================
+// Archivo documentado: system/controlDict.
+// El contenido ejecutable anterior permanece intacto; este apéndice solo explica su función e interacción con el modelo.
+// FUNCIÓN: controla aplicación, intervalo temporal, paso de tiempo, escritura y ejecución de function objects.
+// application = foamMultiRun: solver o aplicación principal que ejecuta el caso.
+// startFrom = latestTime: define desde qué estado temporal comienza la simulación.
+// startTime = 0: tiempo inicial cuando startFrom utiliza un valor explícito.
+// endTime = 10: tiempo físico objetivo de la corrida; determina cuánto evoluciona la solución transitoria.
+// deltaT = 0.001: paso de tiempo base; al disminuirlo aumenta la resolución temporal y normalmente el costo computacional.
+// adjustTimeStep = no: permite que OpenFOAM ajuste deltaT durante la corrida para respetar criterios de estabilidad.
+// maxCo = 0.25: límite del número de Courant; acopla velocidad, tamaño de celda y paso de tiempo.
+// maxDeltaT = 0.1: límite superior permitido para un deltaT adaptativo.
+// writeControl = timeStep: criterio que decide cuándo se escriben resultados o diagnósticos.
+// writeInterval = 100: separación entre escrituras según writeControl; determina qué tiempos quedan disponibles para análisis posterior.
+// INTERACCIÓN: deltaT y maxCo afectan estabilidad temporal; writeControl/writeInterval determinan qué estados quedan disponibles para comparar perfiles y hacer postprocesamiento.
+// NOTA DE SEGURIDAD: todas las líneas de este apéndice son comentarios y no cambian la ejecución del caso.
+// ============================================================================

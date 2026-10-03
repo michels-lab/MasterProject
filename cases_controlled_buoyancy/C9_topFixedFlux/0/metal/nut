@@ -38,3 +38,14 @@ boundaryField
 
 
 // ************************************************************************* //
+
+// ============================================================================
+// QUICKCUP DOCUMENTATION APPENDIX
+// ============================================================================
+// Archivo documentado: 0/metal/nut.
+// El contenido ejecutable anterior permanece intacto; este apéndice solo explica su función e interacción con el modelo.
+// FUNCIÓN: campo auxiliar de transporte/turbulencia (nut).
+// internalField = uniform 0: valor inicial asignado al interior del dominio antes de comenzar la integración temporal.
+// INTERACCIÓN: su efecto depende del modelo seleccionado en momentumTransport; su mera presencia no implica que la turbulencia esté activa.
+// NOTA DE SEGURIDAD: todas las líneas de este apéndice son comentarios y no cambian la ejecución del caso.
+// ============================================================================

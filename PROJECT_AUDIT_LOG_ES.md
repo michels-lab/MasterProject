@@ -4617,3 +4617,42 @@ Documentación:
 
 **Estado.** CONFIG-VERIFIED. Requiere nueva campaña limpia para que todos los resultados locales se regeneren bajo la instrumentación canónica.
 
+
+
+## 2026-09-30 — AUD-RUN-001 — Falso negativo en auditoría de finalización de campaña completa
+
+**Hallazgo.** La primera ejecución de `analysis_tools/full_campaign_audit.py` reportó 0/26 casos completos pese a que los 26 casos presentaron productos canónicos de postprocesamiento, sin faltantes en los perfiles y=10, 20, 30 mm y x=20 mm, y métricas finales coherentes.
+
+**Causa identificada.** El criterio original exigía simultáneamente que el probe alcanzara 10 s, que `log.foamMultiRun` contuviera una línea exacta `End` y que no hubiera marcadores fatales. El runner de campaña ya registra explícitamente cada corrida exitosa en `analysis_results/full_campaign_run/status.tsv`, por lo que depender de la presencia textual exacta de `End` produce falsos negativos cuando la estructura del log difiere.
+
+**Acción.** Se actualizó `full_campaign_audit.py` para considerar un caso completo cuando: (1) el probe alcanza al menos 9.999 s, (2) no se detecta error fatal y (3) `status.tsv` reporta `COMPLETED`; la línea `End` queda únicamente como respaldo cuando el status no está disponible.
+
+**Hallazgo físico preliminar.** La campaña confirma una separación fuerte entre configuraciones de tapa: B12/B13 conservan flujo neto por `metalTop` del orden de 9.7e-5 kg/s y energía advectiva integrada de cientos de joules, mientras B11 y C11 presentan flujo superior prácticamente nulo. C12/C13 mantienen flujo superior cercano a 4.9e-10 kg/s. B9/B11 y C9/C11 comparten además `fixedFluxPressure` en `p_rgh` y `slip` en `U`, consistente con sus resultados prácticamente coincidentes.
+
+**Estado.** AUDITOR-CORRECTED / RESULTS-PENDING-RECHECK. No se modificaron casos ni resultados; únicamente la lógica de auditoría.
+
+
+## 2026-09-30 — AUD-RUN-002 — Campaña completa 26/26 confirmada; falso `fatal=True` resuelto
+
+**Evidencia.** La auditoría detallada mostró para los 26 casos `status.tsv = COMPLETED`. Los probes de temperatura alcanzaron 10 s en los casos de paso fijo y entre 9.99966 s y 10.004 s en los casos con paso temporal adaptativo, consistente con el objetivo `endTime 10`.
+
+**Causa del falso fallo.** `full_campaign_audit.py` interpretaba la ausencia de `log.foamMultiRun` como un error fatal mediante `if not txt: return True`. Como consecuencia, todos los casos aparecían con `fatal=True` y `complete=False` aunque el runner los hubiera marcado `COMPLETED` y los productos de postprocesamiento estuvieran completos.
+
+**Acción.** Se separó explícitamente `log_available` de `log_has_fatal`. Un log ausente ya no se interpreta como fallo. Para campañas gestionadas por el runner, el criterio principal de finalización es: `status.tsv = COMPLETED`, probe >= 9.999 s y ausencia de marcador fatal cuando el log existe. `End` queda como respaldo únicamente si no hay estado del runner.
+
+**Resultado.** La campaña controlada B/C queda confirmada como **26/26 corridas completadas hasta el objetivo temporal**, con los perfiles canónicos y=10, 20, 30 mm y x=20 mm disponibles en todos los casos.
+
+**Estado.** RUN-COMPLETE / AUDITOR-FIXED. Pendiente: auditoría física de continuidad, transporte cara-a-cara en `metalTop` y selección de la configuración de referencia para tesis.
+
+
+## 2026-09-30 — AUD-RUN-003 — Falso `fatal=True` causado por mensaje normal de OpenFOAM
+
+**Hallazgo.** La auditoría detallada mostró `log file = True`, `status.tsv = COMPLETED` y probes en el objetivo temporal para los 26 casos, pero `fatal=True` en todos.
+
+**Causa raíz.** El patrón de detección de fallos buscaba la cadena genérica `Floating point exception`. Los logs normales de OpenFOAM incluyen durante el arranque una línea que indica que el *floating point exception trapping* está habilitado. Esa línea es informativa y no representa una excepción ocurrida durante la solución.
+
+**Acción.** Se eliminó la coincidencia genérica y el auditor ahora busca únicamente marcadores compatibles con fallo real: `FOAM FATAL ERROR`, `FOAM FATAL IO ERROR`, `Segmentation fault`, `Killed` o `Floating point exception (core dumped)`. También se corrigió el encabezado del reporte para no exigir una línea literal `End` cuando el runner ya registra `COMPLETED`.
+
+**Impacto.** La clasificación anterior `fatal=True` para 26/26 casos era un falso positivo del analizador y no evidencia de inestabilidad del solver.
+
+**Estado.** AUDITOR-FIXED / READY-FOR-FINAL-RUN-STATUS.

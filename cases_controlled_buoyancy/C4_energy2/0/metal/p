@@ -39,3 +39,15 @@ boundaryField
 
 
 // ************************************************************************* //
+
+// ============================================================================
+// QUICKCUP DOCUMENTATION APPENDIX
+// ============================================================================
+// Archivo documentado: 0/metal/p.
+// El contenido ejecutable anterior permanece intacto; este apéndice solo explica su función e interacción con el modelo.
+// FUNCIÓN: presión estática/termodinámica cuando la formulación la requiere.
+// internalField = uniform 1e5: valor inicial asignado al interior del dominio antes de comenzar la integración temporal.
+// Tipos de condición de frontera presentes: empty, calculated.
+// INTERACCIÓN: en formulaciones con flotación, p y p_rgh están vinculadas por la corrección hidrostática y la referencia; tener las mismas dimensiones no significa que deban recibir el mismo valor numérico.
+// NOTA DE SEGURIDAD: todas las líneas de este apéndice son comentarios y no cambian la ejecución del caso.
+// ============================================================================
