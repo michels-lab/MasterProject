@@ -1,0 +1,51 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  14
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    format      ascii;
+    class       volVectorField;
+    location    "0/metal";
+    object      phaseChangeBuoyancySu;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+dimensions      [1 -2 -2 0 0 0 0];
+
+internalField   uniform (0 -0 0);
+
+boundaryField
+{
+    metalTop
+    {
+        type            calculated;
+        value           uniform (0 -0 0);
+    }
+    frontAndBack
+    {
+        type            empty;
+    }
+    metal_to_mold
+    {
+        type            calculated;
+        value           uniform (0 -0 0);
+    }
+}
+
+
+// ************************************************************************* //
+
+// ============================================================================
+// QUICKCUP DOCUMENTATION APPENDIX
+// ============================================================================
+// Archivo documentado: 0/metal/phaseChangeBuoyancySu.
+// El contenido ejecutable anterior permanece intacto; este apéndice solo explica su función e interacción con el modelo.
+// FUNCIÓN: Fuente explícita de flotación reconstruida a partir de rhoRef y la aceleración.
+// internalField = uniform (0 -0 0): valor inicial asignado al interior del dominio antes de comenzar la integración temporal.
+// INTERACCIÓN: es un campo de diagnóstico/interpretación y no modifica las ecuaciones salvo que otro modelo activo lo referencie explícitamente.
+// NOTA DE SEGURIDAD: todas las líneas de este apéndice son comentarios y no cambian la ejecución del caso.
+// ============================================================================

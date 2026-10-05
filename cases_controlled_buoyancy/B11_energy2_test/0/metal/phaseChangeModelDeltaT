@@ -1,0 +1,49 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  14
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    format      ascii;
+    class       volScalarField;
+    location    "0/metal";
+    object      phaseChangeModelDeltaT;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+dimensions      [0 0 0 1 0 0 0];
+
+internalField   uniform 27;
+
+boundaryField
+{
+    metalTop
+    {
+        type            zeroGradient;
+    }
+    frontAndBack
+    {
+        type            empty;
+    }
+    metal_to_mold
+    {
+        type            zeroGradient;
+    }
+}
+
+
+// ************************************************************************* //
+
+// ============================================================================
+// QUICKCUP DOCUMENTATION APPENDIX
+// ============================================================================
+// Archivo documentado: 0/metal/phaseChangeModelDeltaT.
+// El contenido ejecutable anterior permanece intacto; este apéndice solo explica su función e interacción con el modelo.
+// FUNCIÓN: Diferencia de temperatura usada por la reconstrucción de flotación del modelo de cambio de fase.
+// internalField = uniform 27: valor inicial asignado al interior del dominio antes de comenzar la integración temporal.
+// INTERACCIÓN: es un campo de diagnóstico/interpretación y no modifica las ecuaciones salvo que otro modelo activo lo referencie explícitamente.
+// NOTA DE SEGURIDAD: todas las líneas de este apéndice son comentarios y no cambian la ejecución del caso.
+// ============================================================================

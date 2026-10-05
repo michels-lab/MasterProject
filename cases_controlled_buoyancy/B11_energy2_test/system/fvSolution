@@ -1,0 +1,73 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  13
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    format      ascii;
+    class       dictionary;
+    object      fvSolution;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+PIMPLE
+{
+    nOuterCorrectors        3;
+    nCorrectors             2;
+    nNonOrthogonalCorrectors 1;
+
+    nEnergyCorrectors       2;
+
+/*
+    residualControl
+    {
+        "(h|e).*"           1e-6;
+        //"U.*"               1e-3; // coment when momentumPredictor no
+        "p_rgh.*"           1e-3;
+    }
+*/
+}
+
+relaxationFactors
+{
+    fields
+    {
+        rho             1.0;
+        rhoFinal        1.0;
+
+        p_rgh           1.0;
+        p_rghFinal      1.0;
+    }
+    equations
+    {
+        U               1.0;
+        UFinal          1.0;
+
+        h               1.0;
+        hFinal          1.0;
+
+        e               1.0;
+        eFinal          1.0;
+
+        "(k|epsilon|omega)"         1.0;
+        "(k|epsilon|omega)Final"    1.0;
+    }
+}
+// ************************************************************************* //
+
+// ============================================================================
+// QUICKCUP DOCUMENTATION APPENDIX
+// ============================================================================
+// Archivo documentado: system/fvSolution.
+// El contenido ejecutable anterior permanece intacto; este apéndice solo explica su función e interacción con el modelo.
+// FUNCIÓN: define solvers lineales, tolerancias, precondicionadores y acoplamiento PIMPLE.
+// Los bloques solvers{} actúan sobre campos concretos; tolerance fija el residuo absoluto objetivo y relTol permite detenerse respecto al residuo inicial.
+// nOuterCorrectors = 3: número de ciclos externos PIMPLE por paso de tiempo; más ciclos refuerzan el acoplamiento a mayor costo.
+// nCorrectors = 2: número de correcciones presión-velocidad dentro de cada ciclo PIMPLE.
+// nNonOrthogonalCorrectors = 1: correcciones adicionales de presión asociadas a no ortogonalidad de la malla.
+// INTERACCIÓN: PIMPLE controla cuánto se acoplan presión, velocidad y energía dentro de cada paso. pRefPoint/pRefValue fijan el datum de presión y deben interpretarse junto con p_rgh y pRef.
+// NOTA DE SEGURIDAD: todas las líneas de este apéndice son comentarios y no cambian la ejecución del caso.
+// ============================================================================
