@@ -4138,3 +4138,13 @@ The newly scheduled GitHub Actions workflow failed in two attempted runs with no
 Four C14 dictionaries declare 37 function objects. The initial field guide explicitly named 20; a comprehensive inventory has now been added for system/functions (2), researchDiagnostics (29), lineProfiles (2) and momentumPostProcessing (4), with role, type, meaning and limitations.
 
 The static auditor now requires every declared function-object name to appear in the scientific field guide. Name coverage alone does not prove correct scientific explanation, successful runtime execution or physical validation; those require independent source/result analysis.
+
+---
+
+## 2026-10-08 — AGENTS-010 — Architecture correction: user's laptop runs CFD; GitHub audits only after push
+
+**[GIT-VERIFIED] [WORKFLOW NOT YET RUN-VERIFIED]**
+
+Clarified explicit user ownership: all OpenFOAM simulations are carried out on the laptop, and completed outputs are pushed to GitHub. Removed mistakenly introduced local simulation launchers (`run_with_agents.py`, `live_run_watch.py`). Updated four agent-role specifications for post-push committed-evidence inspection and added `analysis_tools/audit_pushed_results.py`, which reads stored logs/postProcessing without starting CFD and generates review artifacts when Actions jobs successfully run.
+
+Aligned ES/EN manuals, postprocessing guide, protocol, agent index and README. No scientific cases or historical run outputs were modified. Agent instruction files are not autonomous LLM processes merely because they exist.

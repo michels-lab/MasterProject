@@ -4,17 +4,23 @@
 **Autoridad:** este archivo define qué revisar y actualizar antes/durante/después de **cada** corrida o auditoría de OpenFOAM Foundation 14.  
 **Regla:** ningún agente ni conversación debe dar por actualizado el proyecto basándose solo en un `git push`, en un `End`, en un termopar que llega a 10 s o en una nota aislada. Usar este protocolo + `RUN_CASE_REGISTRY.csv`.
 
-## Agentes especializados de auditoría (2026-10-08)
+## Arquitectura obligatoria — ejecución local, revisión después del push
 
-Cuatro agentes declarados en .github/agents/: observación local de corrida, interpretación/validación de postProcessing, verificación física/numérica y mantenimiento de documentación. El inventario de campos está en [POSTPROCESSING_FIELD_GUIDE_ES.md](POSTPROCESSING_FIELD_GUIDE_ES.md).
+**La simulación pertenece exclusivamente a la laptop del usuario.** El usuario crea/prepara y corre el caso localmente, genera postProcessing/ y logs/, verifica los resultados localmente y decide qué preservar mediante git commit + git push. GitHub **nunca ejecuta** `Allrun`, `Allclean`, `foamMultiRun`, `blockMesh` ni cualquier solver.
 
-Verificadores ejecutables:
-- analysis_tools/run_with_agents.py: lanzador seguro de un nuevo caso limpio junto con vigilancia local. Usar --dry-run antes de lanzar; no modifica Allrun ni la física por sí solo.
-- analysis_tools/live_run_watch.py: lee logs EN VIVO si el usuario lo ejecuta junto a su OpenFOAM local.
-- analysis_tools/audit_postprocessing_config.py: verificación estática de functionObjects V14, coherencia de calor latente y cobertura nominal de TODOS los objetos declarados en POSTPROCESSING_FIELD_GUIDE_ES.md.
-- .github/workflows/quickcup-research-audit.yml: ejecuta validación estática si GitHub Actions la programa y puede iniciar runners. Verificar su estado; no asegurar actividad continua si falla. No se controla el proceso local desde GitHub.
+Agentes científicos (declaraciones en `.github/agents/`):
+- Run Evidence Auditor: identifica resultados nuevos o incompletos que ya aparecen en Git.
+- Postprocessing Forensics: explica y comprueba función, variable, unidades y salida de cada postproceso.
+- Physics Verifier: audita interpretación física, convergencia y conservación con datos guardados.
+- Documentation Steward: coteja resultados nuevos contra bitácoras, inventario, manuales y matrices.
 
-Los agentes no deben identificar una declaración en diccionario como prueba de ejecución. Actualizar manuales ES/EN y guía de campos cuando una herramienta/interpretación cambie, manteniendo referencia a implementación y evidencia.
+Automatización real **de solo lectura** tras push, PR, manual o planificación:
+- `analysis_tools/audit_pushed_results.py`: inspecciona archivos conservados; entrega un informe con evidencia y alertas, sin datos fabricados.
+- `analysis_tools/check_run_registry.py`: verifica el inventario de casos y cobertura.
+- `analysis_tools/audit_postprocessing_config.py`: verifica definiciones V14 y catálogo de 37 `functionObjects`.
+- `.github/workflows/quickcup-research-audit.yml`: intenta ejecutar esos scripts; se considera **activo solo con una ejecución Actions exitosa**.
+
+Los archivos `.agent.md` no son procesos residentes ni agentes LLM que se ejecuten automáticamente con un push; requieren invocación o un sistema de agentes realmente conectado. Una ejecución GitHub Actions genera un artefacto; **no modifica automáticamente las conclusiones de tesis**. La actualización de manuales y bitácoras requiere una edición Git separada basada en resultados verificados.
 
 ## A. Fotografía inicial, 2026-10-08
 

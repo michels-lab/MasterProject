@@ -59,11 +59,11 @@ Estos campos se escriben a los tiempos de escritura del caso. No son mediciones 
 
 ## 4. Qué puede vigilarse en vivo y qué no
 
-**Vigilante local**: analysis_tools/live_run_watch.py lee log.foamMultiRun (tiempo, Courant, continuidad, residuos p_rgh y fallos). Solo vigila cuando se ejecuta un proceso de Python junto al solver; no hay conexión remota automática a tu PC.
+**Revisión posterior al push**: `analysis_tools/audit_pushed_results.py` inspecciona logs, perfiles y resultados ya almacenados en Git. No supervisa ni controla un proceso local.
 
-**Auditor de configuración GitHub**: analysis_tools/audit_postprocessing_config.py comprueba V14, definiciones y coherencia de L. GitHub Actions quickcup-research-audit.yml intenta ejecutarlo por push, bajo solicitud y diariamente. No instala OpenFOAM, no ejecuta foamMultiRun y no certifica campos físicos.
+**Auditor de configuración GitHub**: `analysis_tools/audit_postprocessing_config.py` revisa declaraciones y cobertura de V14. GitHub Actions ejecuta comprobaciones solamente cuando el workflow puede correr; no inicia OpenFOAM ni certifica automáticamente la física.
 
-**Postproceso de campos**: una simulación puede alcanzar End, pero pueden fallar foamLog o foamPostProcess. Revisar ambos logs, conteo de archivos/tiempos y los diagnósticos faltantes. No hacer afirmación global de estado sin revisar.
+**Postproceso de campos ya efectuado por el usuario**: una simulación puede alcanzar End, pero pueden fallar foamLog o foamPostProcess. Revisar ambos logs, conteo de archivos/tiempos y los diagnósticos faltantes. No hacer afirmación global de estado sin revisar.
 
 **V14 ya analizado:** analysis_results/v14_bc_comparison/summary.md concluye tapa impermeable comprobada cara por cara y continuidad acumulada casi nula en C14; B14 tiene inconsistencia de continuidad del modelo variable-density en volumen fijo. Esto no es una validación experimental.
 
@@ -90,10 +90,13 @@ Estos campos se escriben a los tiempos de escritura del caso. No son mediciones 
 El detalle de clases internas de Foundation v14 se debe comprobar contra el código fuente antes de aceptar cambios en sintaxis o comportamientos nuevos. No rellenar lagunas de implementación con suposiciones.
 
 
-## 7. Lanzador de monitorización integrado
+## 7. Flujo post-push de los agentes
 
-Para una variante nueva sin resultados: python3 analysis_tools/run_with_agents.py --case B11_energy2_test --dry-run. Cuando el investigador decida correrla y tenga OF14 activo: python3 analysis_tools/run_with_agents.py --case B11_energy2_test. El lanzador llama al Allrun existente y observa su log en paralelo; NO permite reutilizar accidentalmente resultados antiguos. Es una ayuda operacional local, no un veredicto científico.
-
+1. Michel ejecuta OpenFOAM Foundation 14 en su laptop, junto con los postprocesos de su caso y su validación local.
+2. Michel hace commit y push de la evidencia elegida: logs, sondas, perfiles, flujos y notas.
+3. GitHub Actions intenta ejecutar `audit_pushed_results.py` y `audit_postprocessing_config.py` sobre los archivos del commit. **No lanza simulaciones ni modifica casos**.
+4. Los perfiles especializados de agentes interpretan la evidencia al ser invocados; la automatización Python genera un informe reproducible, pero no ejecuta por sí sola agentes LLM.
+5. MAZAPÁN actualiza CASE_NOTES, CASE_VARIANT, el inventario, los informes, las guías/manuales relevantes y las bitácoras ES/EN; no se atribuyen propiedades físicas a datos ausentes.
 
 ## 8. Catálogo exhaustivo de functionObjects configurados en C14
 

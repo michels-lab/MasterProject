@@ -878,51 +878,26 @@ Multi-region note: function objects used with `foamPostProcess` must explicitly 
 
 ## 27. Active research audit agents and postprocessing (2026-10-08)
 
-**Scientific model: OpenFOAM Foundation v14.** Complete scientific definitions and limitations: [POSTPROCESSING_FIELD_GUIDE_ES.md](POSTPROCESSING_FIELD_GUIDE_ES.md).
+**Strict ownership:** the user performs every OpenFOAM Foundation 14 simulation on their laptop, then pushes output evidence to GitHub. No GitHub workflow, agent or auditing helper should install or run OpenFOAM, Allrun, foamMultiRun or blockMesh.
 
-### Watch a local run without changing the solver
+The `.github/workflows/quickcup-research-audit.yml` workflow attempts to inspect already-committed case logs, postProcessing outputs, functionObject definitions, and the inventory. It produces an audit report, not CFD results or automatic physical validation.
 
-Run this in a **separate terminal** from the repository root **while OpenFOAM is actually running**. The watcher only reads log.foamMultiRun.
+To inspect all previously pushed cases manually (read-only; run from repository root):
 
-    python3 analysis_tools/live_run_watch.py --case cases_controlled_buoyancy/C14_topFixedFlux_explicitRef --follow
+```bash
+python3 analysis_tools/audit_pushed_results.py --all
+```
 
-- python3: Python interpreter.
-- --case: path to the actual case being run.
-- --follow: polls the log repeatedly; Ctrl+C stops the watcher, not the solver.
-- --once: inspect an existing case log one time instead of following a running process.
+- `python3` runs the Python analysis helper.
+- `--all` includes all controlled cases rather than only those changed in the last git push.
+- Output reports go to `analysis_results/agent_checks/post_push/report.md` and `report.json`, or a GitHub Actions artifact.
 
-To inspect an already stored log:
+Check functionObject declarations and documentation coverage:
 
-    python3 analysis_tools/live_run_watch.py --case cases_controlled_buoyancy/C14_topFixedFlux_explicitRef --once
+```bash
+python3 analysis_tools/audit_postprocessing_config.py --strict
+```
 
-The watcher screens time progress, max Courant, cumulative continuity, p_rgh residuals and fatal messages. It does not prove conservation or physical validity. Face-wise phi and the full pressure coupling analysis must be evaluated separately.
+A missing Git-tracked result does not prove a local simulation never happened. A present result alone does not prove physical validity, numerical convergence or experimental agreement. Investigate completeness, per-face phi, residuals, conservation and units before claiming scientific conclusions.
 
-### Inspect V14 functionObject configuration (no OpenFOAM required)
-
-    python3 analysis_tools/audit_postprocessing_config.py --strict
-
-The --strict option makes structural mismatches an error code. A passing result is **configuration evidence only**.
-
-### Where the agents actually run
-
-Four specialized agent instruction files live under .github/agents/. They are not background daemons. The GitHub Actions workflow quickcup-research-audit.yml attempts read-only static checks on pushes, manually, and daily, when GitHub Actions runners are available. It reads the committed repository, never a local running solver. Do not claim automation succeeded until its workflow run is confirmed successful.
-
-Current historical case_metrics.csv contains only 26 cases; three further verified cases have independent summaries awaiting consolidation.
-
-
-### Launch a new case with monitoring attached automatically
-
-For a freshly prepared case only. The wrapper starts the existing ./Allrun plus a non-invasive log observer in parallel; it refuses to rerun cases with existing solutions by default.
-
-First perform a no-solver safety inspection:
-
-    python3 analysis_tools/run_with_agents.py --case B11_energy2_test --dry-run
-
-- --case supplies the single known case name.
-- --dry-run performs a safety check without starting CFD.
-
-To launch the actual case, after enabling the OpenFOAM Foundation v14 environment:
-
-    python3 analysis_tools/run_with_agents.py --case B11_energy2_test
-
-This really launches OpenFOAM through the existing Allrun script. It writes a runtime screening report under analysis_results/agent_checks/. This report is not full numerical, physical or experimental validation. Do not pass --allow-existing-output without explicit approval to run on an existing solved case.
+The four .github/agents definitions are agent instructions, not independent always-running AI. The deterministic post-push checks require a successful GitHub Actions job; inspect the actual workflow status. After a push, synchronize case notes, ES/EN logs, manuals, guide, scientific analysis and registry through MAZAPÁN without running a new simulation.

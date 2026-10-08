@@ -1011,58 +1011,28 @@ El `git push` es solo la mitad del flujo.
 
 ## 28. Agentes activos de investigación y diagnóstico del postprocesamiento (2026-10-08)
 
-**Versión del proyecto: OpenFOAM Foundation v14.** Referencia técnica detallada: [POSTPROCESSING_FIELD_GUIDE_ES.md](POSTPROCESSING_FIELD_GUIDE_ES.md).
+**Responsabilidades:** Michel ejecuta todas las simulaciones en su laptop con OpenFOAM Foundation 14. Después hace `git push` con los resultados. **GitHub no debe instalar ni ejecutar OpenFOAM, iniciar `Allrun`, `foamMultiRun`, `blockMesh` o repetir simulaciones.**
 
-### Vigilar un caso en vivo sin modificarlo
+Una vez que los resultados están versionados, el workflow `.github/workflows/quickcup-research-audit.yml` intenta auditar los archivos: `log.foamMultiRun`, `logs/`, `postProcessing/`, `system/functions` y estado del inventario. Esto es una revisión de evidencia documental y numérica ya generada; no sustituye la interpretación física ni MAZAPÁN.
 
-El comando Python siguiente lee el archivo local log.foamMultiRun de una corrida en curso y muestra avances numéricos sin arrancar, limpiar ni detener OpenFOAM. Debe dejarse en una terminal separada mientras el solver realmente ejecuta el caso.
+Para revisar manualmente desde la raíz del repositorio, el siguiente comando ejecuta **solo el auditor de resultados existentes**, sin ejecutar OpenFOAM:
 
-- python3: intérprete Python instalado.
-- analysis_tools/live_run_watch.py: lector local, solo consulta archivos.
-- --case: carpeta exacta del caso a vigilar.
-- --follow: vuelve a leer el log periódicamente; Ctrl+C interrumpe únicamente el monitor.
+```bash
+python3 analysis_tools/audit_pushed_results.py --all
+```
 
-Ejemplo desde la raíz del repositorio (sustituir por el caso que se esté ejecutando):
+- `python3`: ejecuta el script Python de auditoría.
+- `--all`: revisa todos los casos controlados presentes, no solamente los cambiados por el último push.
+- Salidas: `analysis_results/agent_checks/post_push/report.md` y `report.json` (archivos locales de análisis; los reportes de Actions se entregan como artefactos, no se suben solos al repositorio).
 
-    python3 analysis_tools/live_run_watch.py --case cases_controlled_buoyancy/C14_topFixedFlux_explicitRef --follow
+El auditor identifica presencia de perfiles, termopares, series de foamLog, resultados de flujo y energía en `metalTop`, el último tiempo de sonda disponible y discrepancias con el registro. Que aparezca una carpeta no demuestra que el postproceso haya funcionado; que falte un archivo en Git **no demuestra que la corrida no se hizo** en la laptop. La interpretación de residuos, flujos por cara, balances y cambio de fase se conserva como revisión científica posterior.
 
-Inspeccionar una corrida terminada o parcialmente archivada una sola vez:
+La verificación estática de definición y cobertura de los `functionObjects` es:
 
-    python3 analysis_tools/live_run_watch.py --case cases_controlled_buoyancy/C14_topFixedFlux_explicitRef --once
+```bash
+python3 analysis_tools/audit_postprocessing_config.py --strict
+```
 
-El watcher advierte cuando maxCo >= 1, continuidad acumulada grande o hay errores en el log. Son indicios para investigar, no pruebas automáticas de que la física esté mal. Para verificar impermeabilidad necesitas phi por cara: el log por sí solo no basta.
+Los cuatro perfiles especializados bajo `.github/agents/` son instrucciones para agentes, no procesos de IA autónomos por sí solos. La automatización real es el workflow y los scripts de verificación, que requieren una ejecución exitosa en GitHub Actions. Si falla, no declararlo activo.
 
-### Auditar los functionObjects configurados
-
-Este comando de configuración compara funciones declaradas de V14 con el inventario del proyecto, los includes, la salida por cara de topFlow y consistencia de L con constant/metal/fvModels:
-
-    python3 analysis_tools/audit_postprocessing_config.py --strict
-
-- --strict: devuelve error de salida si detecta incompatibilidades estructurales predefinidas; no simula nada.
-- Si el comando pasa, significa **solo CONFIG-VERIFIED**, no solución validada.
-
-### Qué está automatizado y qué no
-
-El workflow de GitHub .github/workflows/quickcup-research-audit.yml se solicita por cambios pertinentes, ejecución manual y programación diaria. Revisa archivos **del commit**, no el proceso OpenFOAM abierto en tu computadora. Su resultado debe consultarse en GitHub Actions; si falló o no arrancó, no afirmar que supervisa.
-
-Los cuatro agentes definidos en .github/agents/ son perfiles de revisión especializados y no procesos residentes. La vigilancia continua local requiere ejecutar --follow mientras ocurre la simulación. Posteriormente MAZAPÁN cierra la evidencia física y documental.
-
-Las tablas de 26 casos de full_campaign_audit no incluyen aún B14, C14 ni C11_energy2_test: avisar esta limitación en toda comparación global.
-
-
-### Lanzar una corrida nueva con el observador ya integrado
-
-Recomendado para un caso nuevo y **limpio**, sin outputs anteriores. El script ejecuta el Allrun **existente** y en paralelo observa el log; rechaza directorios con resultados antiguos por defecto. No lo uses sobre una referencia histórica sin haber autorizado explícitamente su regeneración.
-
-Primero comprobar sin ejecutar:
-
-    python3 analysis_tools/run_with_agents.py --case B11_energy2_test --dry-run
-
-- --case es el nombre de la carpeta controlada que deseas ejecutar.
-- --dry-run revisa seguridad y evita invocar el solver; no equivale a una simulación.
-
-Cuando estés listo para ejecutar realmente (requiere que OpenFOAM Foundation v14 esté cargado en esa terminal):
-
-    python3 analysis_tools/run_with_agents.py --case B11_energy2_test
-
-Este comando sí inicia la corrida real mediante ./Allrun. El monitor observa el proceso automáticamente. Cuando termine, conserva un informe de cribado bajo analysis_results/agent_checks/, pero la validación completa de residuos, flujo por cara y física sigue requiriendo MAZAPÁN. No usar --allow-existing-output salvo autorización explícita para correr sobre resultados preexistentes.
+**Después del push y su auditoría:** actualizar notas de caso, bitácoras ES/EN, manuales afectados, guía de postprocesamiento, matriz y consolidado histórico cuando corresponda. Nunca inventar datos no subidos.

@@ -4,11 +4,12 @@
 
 ## Scientific agents and postprocessing
 
+**Execution ownership:** all CFD runs occur on the user's laptop. The repository runs no CFD and only audits results after git push.
+
 - [Postprocessing field and function-object guide (Spanish)](POSTPROCESSING_FIELD_GUIDE_ES.md)
-- [Guarded local case launcher with simultaneous observer](analysis_tools/run_with_agents.py)
-- [Live local observer](analysis_tools/live_run_watch.py) — run as a separate process beside active OpenFOAM
+- [Post-push evidence auditor (read-only)](analysis_tools/audit_pushed_results.py) — checks files already pushed from the user's laptop
 - [Static OpenFOAM14 function-object auditor](analysis_tools/audit_postprocessing_config.py)
-- [GitHub scheduled/manual/static workflow](.github/workflows/quickcup-research-audit.yml) — verify its actual Actions status; it cannot see live local runs.
+- [GitHub post-push/manual/scheduled audit workflow](.github/workflows/quickcup-research-audit.yml) — checks committed evidence only, never launches CFD; verify actual Actions success.
 - [Specialized scientific agent roles](.github/agents/quickcup-postprocess-forensics.agent.md)
 
 ## Start here — all future runs and audits

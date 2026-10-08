@@ -4844,3 +4844,13 @@ Los intentos GitHub Actions del nuevo workflow registraron conclusion=failure si
 La revisión de las cuatro configuraciones principales de C14 identificó 37 nombres de functionObjects. La primera guía nombraba 20, por lo que se añadió un catálogo exhaustivo organizado por system/functions (2), researchDiagnostics (29), lineProfiles (2) y momentumPostProcessing (4), con tipo, significado y advertencias.
 
 El auditor analysis_tools/audit_postprocessing_config.py ahora comprueba además la presencia documental del **nombre de cada objeto configurado**, y marca error si falta. Este chequeo no prueba por sí solo que la explicación sea correcta, que un campo se escriba durante la corrida ni que el modelo sea válido; eso exige la revisión física del agente especializado.
+
+---
+
+## 2026-10-08 — AGENTS-010 — Corrección de arquitectura por instrucción del investigador: CFD local, agentes después del push
+
+**[GIT-VERIFIED] [WORKFLOW NOT YET RUN-VERIFIED]**
+
+Se corrige la interpretación anterior: Michel ejecuta todas las simulaciones en su laptop y sube los resultados a GitHub. Se RETIRAN los lanzadores y vigilantes locales introducidos erróneamente en el repositorio (`run_with_agents.py` y `live_run_watch.py`). Los cuatro roles de agentes pasan a análisis de evidencia posterior al push. La automatización `analysis_tools/audit_pushed_results.py` inspecciona únicamente outputs presentes en Git (sin arrancar OpenFOAM) y genera un reporte de alertas y cobertura en artefactos de Actions, sujeto a que el workflow corra exitosamente.
+
+Actualizados manuales ES/EN, guía de postprocesamiento, protocolo y README para eliminar instrucciones contradictorias. El flujo queda LAPTOP → simulación y postproceso local → git push → auditoría de evidencia + revisión científica/documental → actualización de bitácoras/manuales. No se modificó ningún caso ni resultado físico. Los archivos de agentes no se consideran procesos LLM autónomos.

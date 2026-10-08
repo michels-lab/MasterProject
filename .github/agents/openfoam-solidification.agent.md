@@ -58,17 +58,20 @@ This protocol is stored **inside the QuickCup repository**, independent of any M
 ---
 
 
-# SPECIALIZED AGENT COORDINATION — effective 2026-10-08
-Before a new run or postprocessing change, consult:
-- .github/agents/quickcup-live-observer.agent.md (local log/live execution)
-- .github/agents/quickcup-postprocess-forensics.agent.md (functionObjects, fields, units, formulas and saved evidence)
-- .github/agents/quickcup-physics-verifier.agent.md (mass/energy/buoyancy/phase/numerical interpretation)
-- .github/agents/quickcup-documentation-steward.agent.md (manual and log freshness)
-- POSTPROCESSING_FIELD_GUIDE_ES.md (reference descriptions for real C14 diagnostics)
+# SCIENTIFIC AGENT COORDINATION — post-push only (2026-10-08)
 
-These are specialized instructions, not daemon processes. The live_run_watch.py process must run locally to watch a solver. GitHub workflow quickcup-research-audit.yml performs only static checks and may fail if the runner is unavailable; check the actual Actions status. Every verified postprocessing behavior changes the relevant scientific guide and both command manuals. Do not modify a live case or historical results just to silence an audit warning.
+User owns all simulation execution on laptop. GitHub hosts already-run case outputs, and post-push agents audit committed evidence only. No agent shall run a simulation on GitHub or propose using this repository's audit workflow to launch one.
+
+Specialized roles:
+- .github/agents/quickcup-live-observer.agent.md is now the Run Evidence Auditor (the old filename is retained only for existing references).
+- .github/agents/quickcup-postprocess-forensics.agent.md audits persisted functionObject outputs.
+- .github/agents/quickcup-physics-verifier.agent.md audits persisted physics/numerical evidence.
+- .github/agents/quickcup-documentation-steward.agent.md maintains documentation through explicit edits.
+
+GitHub Actions only attempts deterministic read-only checks: analysis_tools/audit_pushed_results.py, check_run_registry.py, audit_postprocessing_config.py. Files declaring agent roles do not automatically become live-running LLM agents. Consult POSTPROCESSING_FIELD_GUIDE_ES.md and RUN_MASTER_PROTOCOL.md. Never claim a workflow is working before checking its actual successful run.
 
 ---
+
 # OPENFOAM VERSION — ABSOLUTE RULE
 
 The active environment is:
