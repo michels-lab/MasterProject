@@ -908,3 +908,21 @@ The --strict option makes structural mismatches an error code. A passing result 
 Four specialized agent instruction files live under .github/agents/. They are not background daemons. The GitHub Actions workflow quickcup-research-audit.yml attempts read-only static checks on pushes, manually, and daily, when GitHub Actions runners are available. It reads the committed repository, never a local running solver. Do not claim automation succeeded until its workflow run is confirmed successful.
 
 Current historical case_metrics.csv contains only 26 cases; three further verified cases have independent summaries awaiting consolidation.
+
+
+### Launch a new case with monitoring attached automatically
+
+For a freshly prepared case only. The wrapper starts the existing ./Allrun plus a non-invasive log observer in parallel; it refuses to rerun cases with existing solutions by default.
+
+First perform a no-solver safety inspection:
+
+    python3 analysis_tools/run_with_agents.py --case B11_energy2_test --dry-run
+
+- --case supplies the single known case name.
+- --dry-run performs a safety check without starting CFD.
+
+To launch the actual case, after enabling the OpenFOAM Foundation v14 environment:
+
+    python3 analysis_tools/run_with_agents.py --case B11_energy2_test
+
+This really launches OpenFOAM through the existing Allrun script. It writes a runtime screening report under analysis_results/agent_checks/. This report is not full numerical, physical or experimental validation. Do not pass --allow-existing-output without explicit approval to run on an existing solved case.

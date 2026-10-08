@@ -5,6 +5,7 @@
 ## Scientific agents and postprocessing
 
 - [Postprocessing field and function-object guide (Spanish)](POSTPROCESSING_FIELD_GUIDE_ES.md)
+- [Guarded local case launcher with simultaneous observer](analysis_tools/run_with_agents.py)
 - [Live local observer](analysis_tools/live_run_watch.py) — run as a separate process beside active OpenFOAM
 - [Static OpenFOAM14 function-object auditor](analysis_tools/audit_postprocessing_config.py)
 - [GitHub scheduled/manual/static workflow](.github/workflows/quickcup-research-audit.yml) — verify its actual Actions status; it cannot see live local runs.

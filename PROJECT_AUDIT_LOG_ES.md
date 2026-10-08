@@ -4826,3 +4826,12 @@ Se incorporaron cuatro perfiles especializados en .github/agents/ (observación 
 Se creó POSTPROCESSING_FIELD_GUIDE_ES.md con las funciones reales de C14/V14, unidades, condiciones de interpretación y referencias a diccionarios e implementación; se actualizaron ambos manuales de comandos y la guía general.
 
 **Advertencia:** el primer intento GitHub Actions puede fallar a nivel de runner; no considerar verificado hasta obtener run PASS. Los resultados originales quedan protegidos y los CSV históricos siguen incompletos para V14/C11-energy2.
+
+
+### 2026-10-08 — AGENTS-008 — Lanzador local integrado y estado real de GitHub Actions
+
+**[GIT-VERIFIED] [RUNNER NOT VERIFIED]**
+
+Se añadió analysis_tools/run_with_agents.py: ejecuta Allrun de un caso preparado, inicia un observador de log en paralelo, se niega a sobreescribir casos con directorios temporales/logs/postProcessing existentes salvo opción explícita y entrega un informe de cribado. Permite --dry-run; la herramienta no sustituye MAZAPÁN.
+
+Los intentos GitHub Actions del nuevo workflow registraron conclusion=failure sin pasos ejecutados en la respuesta de jobs. Por tanto la supervisión automática hospedada **NO** se declara funcional todavía; investigar disponibilidad/configuración de runner desde Actions UI. Esta limitación no impide vigilar una ejecución local usando el lanzador.

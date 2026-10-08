@@ -9,6 +9,7 @@
 Cuatro agentes declarados en .github/agents/: observación local de corrida, interpretación/validación de postProcessing, verificación física/numérica y mantenimiento de documentación. El inventario de campos está en [POSTPROCESSING_FIELD_GUIDE_ES.md](POSTPROCESSING_FIELD_GUIDE_ES.md).
 
 Verificadores ejecutables:
+- analysis_tools/run_with_agents.py: lanzador seguro de un nuevo caso limpio junto con vigilancia local. Usar --dry-run antes de lanzar; no modifica Allrun ni la física por sí solo.
 - analysis_tools/live_run_watch.py: lee logs EN VIVO si el usuario lo ejecuta junto a su OpenFOAM local.
 - analysis_tools/audit_postprocessing_config.py: verificación estática de functionObjects V14.
 - .github/workflows/quickcup-research-audit.yml: ejecuta validación estática si GitHub Actions la programa y puede iniciar runners. Verificar su estado; no asegurar actividad continua si falla. No se controla el proceso local desde GitHub.

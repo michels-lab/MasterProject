@@ -88,3 +88,8 @@ Estos campos se escriben a los tiempos de escritura del caso. No son mediciones 
 - analysis_results/c11_energy2_test/summary.md
 
 El detalle de clases internas de Foundation v14 se debe comprobar contra el código fuente antes de aceptar cambios en sintaxis o comportamientos nuevos. No rellenar lagunas de implementación con suposiciones.
+
+
+## 7. Lanzador de monitorización integrado
+
+Para una variante nueva sin resultados: python3 analysis_tools/run_with_agents.py --case B11_energy2_test --dry-run. Cuando el investigador decida correrla y tenga OF14 activo: python3 analysis_tools/run_with_agents.py --case B11_energy2_test. El lanzador llama al Allrun existente y observa su log en paralelo; NO permite reutilizar accidentalmente resultados antiguos. Es una ayuda operacional local, no un veredicto científico.

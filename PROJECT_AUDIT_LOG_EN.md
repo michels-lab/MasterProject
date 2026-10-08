@@ -4120,3 +4120,12 @@ Four specialized agent profiles were introduced under .github/agents/ for runtim
 Created POSTPROCESSING_FIELD_GUIDE_ES.md with actual V14 definitions, units, sources and interpretation limitations; updated both command manuals and case guide. No physical solver input or historical output was changed.
 
 **Caution:** the initial GitHub Actions invocation may fail before a runner starts. Do not claim verified automation until a successful job has been observed. Historical campaign CSVs still omit B14/C14 and C11-energy2.
+
+
+### 2026-10-08 — AGENTS-008 — Guarded local monitored run launcher and actual Actions status
+
+**[GIT-VERIFIED] [RUNNER NOT VERIFIED]**
+
+Added analysis_tools/run_with_agents.py: launches a prepared case through its existing Allrun and starts a read-only observer thread; refuses cases with pre-existing output unless explicitly overridden, offers --dry-run, and saves a screening report. Full MAZAPÁN remains required.
+
+The newly scheduled GitHub Actions workflow failed in two attempted runs with no executed steps in returned job data. Hosted automatic auditing is therefore NOT yet confirmed operational; investigate runner/Actions availability in GitHub UI. This does not prevent local live monitoring via the guarded launcher.

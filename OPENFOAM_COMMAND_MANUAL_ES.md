@@ -1048,3 +1048,21 @@ El workflow de GitHub .github/workflows/quickcup-research-audit.yml se solicita 
 Los cuatro agentes definidos en .github/agents/ son perfiles de revisión especializados y no procesos residentes. La vigilancia continua local requiere ejecutar --follow mientras ocurre la simulación. Posteriormente MAZAPÁN cierra la evidencia física y documental.
 
 Las tablas de 26 casos de full_campaign_audit no incluyen aún B14, C14 ni C11_energy2_test: avisar esta limitación en toda comparación global.
+
+
+### Lanzar una corrida nueva con el observador ya integrado
+
+Recomendado para un caso nuevo y **limpio**, sin outputs anteriores. El script ejecuta el Allrun **existente** y en paralelo observa el log; rechaza directorios con resultados antiguos por defecto. No lo uses sobre una referencia histórica sin haber autorizado explícitamente su regeneración.
+
+Primero comprobar sin ejecutar:
+
+    python3 analysis_tools/run_with_agents.py --case B11_energy2_test --dry-run
+
+- --case es el nombre de la carpeta controlada que deseas ejecutar.
+- --dry-run revisa seguridad y evita invocar el solver; no equivale a una simulación.
+
+Cuando estés listo para ejecutar realmente (requiere que OpenFOAM Foundation v14 esté cargado en esa terminal):
+
+    python3 analysis_tools/run_with_agents.py --case B11_energy2_test
+
+Este comando sí inicia la corrida real mediante ./Allrun. El monitor observa el proceso automáticamente. Cuando termine, conserva un informe de cribado bajo analysis_results/agent_checks/, pero la validación completa de residuos, flujo por cara y física sigue requiriendo MAZAPÁN. No usar --allow-existing-output salvo autorización explícita para correr sobre resultados preexistentes.
