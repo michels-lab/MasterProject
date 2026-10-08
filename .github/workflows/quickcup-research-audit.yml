@@ -1,0 +1,61 @@
+name: QuickCup Research Agents - Static Audit
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/agents/**'
+      - '.github/workflows/quickcup-research-audit.yml'
+      - 'analysis_tools/audit_postprocessing_config.py'
+      - 'analysis_tools/live_run_watch.py'
+      - 'RUN_CASE_REGISTRY.csv'
+      - 'OPENFOAM_COMMAND_MANUAL_*.md'
+      - 'POSTPROCESSING_FIELD_GUIDE_ES.md'
+      - 'cases_controlled_buoyancy/**/system/**'
+  pull_request:
+    paths:
+      - '.github/agents/**'
+      - '.github/workflows/quickcup-research-audit.yml'
+      - 'analysis_tools/audit_postprocessing_config.py'
+      - 'analysis_tools/live_run_watch.py'
+      - 'RUN_CASE_REGISTRY.csv'
+      - 'cases_controlled_buoyancy/**/system/**'
+  workflow_dispatch:
+  schedule:
+    - cron: '17 9 * * *'
+
+permissions:
+  contents: read
+
+jobs:
+  research-audit:
+    name: Verify config and registry - NO CFD run
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Check Python syntax
+        run: |
+          python3 - <<'PY'
+          import ast
+          from pathlib import Path
+          for name in ("audit_postprocessing_config","live_run_watch","check_run_registry"):
+              p=Path("analysis_tools")/(name+".py")
+              ast.parse(p.read_text(),filename=str(p))
+              print("PASS:",p)
+          PY
+      - name: Verify registry
+        run: python3 analysis_tools/check_run_registry.py
+      - name: Check V14 configured function objects
+        run: python3 analysis_tools/audit_postprocessing_config.py --strict --out analysis_results/agent_checks/static.json
+      - name: Inspect C14 existing log with live-watcher once mode
+        run: python3 analysis_tools/live_run_watch.py --case cases_controlled_buoyancy/C14_topFixedFlux_explicitRef --once
+      - name: Archive diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: quickcup-research-agent-audit
+          if-no-files-found: warn
+          retention-days: 30
+          path: analysis_results/agent_checks/static.json
