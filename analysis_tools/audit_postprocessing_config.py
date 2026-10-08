@@ -55,6 +55,19 @@ def audit(case_name):
                     item["errors"].append("Latent heat differs between fvModels and diagnostics")
                 elif not a or not b:
                     item["warnings"].append("Latent heat could not be cross-checked")
+    guide = ROOT / "POSTPROCESSING_FIELD_GUIDE_ES.md"
+    if not guide.is_file():
+        item["errors"].append("Postprocessing field guide missing")
+    else:
+        docs = guide.read_text(encoding="utf-8")
+        documented = set()
+        for declared in item["configured_objects"].values():
+            for name in declared:
+                if re.search(r"(?<![A-Za-z0-9_])" + re.escape(name) + r"(?![A-Za-z0-9_])", docs):
+                    documented.add(name)
+                else:
+                    item["errors"].append(f"Undocumented function object: {name}")
+        item["documented_function_objects"] = len(documented)
     control = case / "system/controlDict"
     if control.is_file():
         t = control.read_text()

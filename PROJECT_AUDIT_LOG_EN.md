@@ -4129,3 +4129,12 @@ Created POSTPROCESSING_FIELD_GUIDE_ES.md with actual V14 definitions, units, sou
 Added analysis_tools/run_with_agents.py: launches a prepared case through its existing Allrun and starts a read-only observer thread; refuses cases with pre-existing output unless explicitly overridden, offers --dry-run, and saves a screening report. Full MAZAPÁN remains required.
 
 The newly scheduled GitHub Actions workflow failed in two attempted runs with no executed steps in returned job data. Hosted automatic auditing is therefore NOT yet confirmed operational; investigate runner/Actions availability in GitHub UI. This does not prevent local live monitoring via the guarded launcher.
+
+
+### 2026-10-08 — AGENTS-009 — Complete V14 functionObject documentation coverage
+
+**[GIT-VERIFIED] [STATIC-CONFIG AUDIT]**
+
+Four C14 dictionaries declare 37 function objects. The initial field guide explicitly named 20; a comprehensive inventory has now been added for system/functions (2), researchDiagnostics (29), lineProfiles (2) and momentumPostProcessing (4), with role, type, meaning and limitations.
+
+The static auditor now requires every declared function-object name to appear in the scientific field guide. Name coverage alone does not prove correct scientific explanation, successful runtime execution or physical validation; those require independent source/result analysis.

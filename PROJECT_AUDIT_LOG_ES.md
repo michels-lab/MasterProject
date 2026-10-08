@@ -4835,3 +4835,12 @@ Se creó POSTPROCESSING_FIELD_GUIDE_ES.md con las funciones reales de C14/V14, u
 Se añadió analysis_tools/run_with_agents.py: ejecuta Allrun de un caso preparado, inicia un observador de log en paralelo, se niega a sobreescribir casos con directorios temporales/logs/postProcessing existentes salvo opción explícita y entrega un informe de cribado. Permite --dry-run; la herramienta no sustituye MAZAPÁN.
 
 Los intentos GitHub Actions del nuevo workflow registraron conclusion=failure sin pasos ejecutados en la respuesta de jobs. Por tanto la supervisión automática hospedada **NO** se declara funcional todavía; investigar disponibilidad/configuración de runner desde Actions UI. Esta limitación no impide vigilar una ejecución local usando el lanzador.
+
+
+### 2026-10-08 — AGENTS-009 — Cobertura documental completa de functionObjects de V14
+
+**[GIT-VERIFIED] [STATIC-CONFIG AUDIT]**
+
+La revisión de las cuatro configuraciones principales de C14 identificó 37 nombres de functionObjects. La primera guía nombraba 20, por lo que se añadió un catálogo exhaustivo organizado por system/functions (2), researchDiagnostics (29), lineProfiles (2) y momentumPostProcessing (4), con tipo, significado y advertencias.
+
+El auditor analysis_tools/audit_postprocessing_config.py ahora comprueba además la presencia documental del **nombre de cada objeto configurado**, y marca error si falta. Este chequeo no prueba por sí solo que la explicación sea correcta, que un campo se escriba durante la corrida ni que el modelo sea válido; eso exige la revisión física del agente especializado.

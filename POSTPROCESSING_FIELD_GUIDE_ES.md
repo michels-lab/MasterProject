@@ -93,3 +93,67 @@ El detalle de clases internas de Foundation v14 se debe comprobar contra el cód
 ## 7. Lanzador de monitorización integrado
 
 Para una variante nueva sin resultados: python3 analysis_tools/run_with_agents.py --case B11_energy2_test --dry-run. Cuando el investigador decida correrla y tenga OF14 activo: python3 analysis_tools/run_with_agents.py --case B11_energy2_test. El lanzador llama al Allrun existente y observa su log en paralelo; NO permite reutilizar accidentalmente resultados antiguos. Es una ayuda operacional local, no un veredicto científico.
+
+
+## 8. Catálogo exhaustivo de functionObjects configurados en C14
+
+Estos son **los 37 nombres declarados** en las cuatro fuentes principales del caso (no todos generan archivos separados; algunos producen campos intermedios). La tabla complementa la descripción de campos anterior. Para una variante distinta, leer sus propios diccionarios; no asumir que usa los mismos objetos.
+
+### system/functions — 2 objetos
+
+| Objeto | Tipo | Función exacta |
+|---|---|---|
+| temperatureProbe | probes | Muestrea U, T, p_rgh, rho y alphaL en posición central cada timestep; CSV/series bajo temperatureProbe. |
+| topFlow | surfaceFieldValue | En writeTime escribe U y phi por cara de metalTop para distinguir penetración local y cancelación neta; NO es suma acumulativa de tiempo. |
+
+### system/researchDiagnostics — 29 objetos
+
+| Objeto | Tipo | Resultado, interpretación y control |
+|---|---|---|
+| vorticityField | vorticity | Campo vorticity de U [s⁻¹], deriva espacial de velocidades; revisar signo/componente z en perfiles. |
+| flowTopology | flowType | Campo adimensional flowType; clasifica cinemática local, no la causa metalúrgica. |
+| energyAdvectiveFlux | energyAdvectiveFlux | W/cara de advección de entalpía sensible. |
+| heatFlux | heatFlux | W/cara de flujo térmico sin transporte de masa. |
+| energyFlux | energyFlux | W/cara, suma de energyAdvectiveFlux y heatFlux; evitar doble conteo. |
+| metalTopPhiSum | surfaceFieldValue | Flujo másico neto kg/s sobre metalTop; revisar por cara aparte. |
+| metalTopEnergyPower | surfaceFieldValue | Tabla de potencias por metalTop de tres campos relacionados (no se suman entre sí). |
+| metalMoldEnergyPower | surfaceFieldValue | Tablas de potencia por interfaz metal-molde; signo de normal según región metal. |
+| metalBoundaryEnergyPower | surfaceFieldValue | Suma de potencias por tapa e interfaz con patch set declarado; no equivale a todos los mecanismos del balance global. |
+| metalSensibleEnthalpy | volFieldValue | Integral ponderada por rho de h [J]; no incluye automáticamente calor latente. |
+| metalMeanLiquidFraction | volFieldValue | Media volumétrica de alphaL; no es punto central. |
+| temperatureGradient | grad | Calcula gradT [K/m] a partir de T en el metal. |
+| temperatureGradientMagnitude | mag | Calcula magGradT [K/m]; pierde información de dirección. |
+| densityGradient | grad | Calcula gradRho [kg/m⁴] a partir de rho. |
+| densityGradientMagnitude | mag | Calcula magGradRho [kg/m⁴]; esperar casi 0 si rhoConst. |
+| temperatureTimeDerivative | ddt | Calcula dTdt [K/s] en tiempo de solver; no inferir desde único estado. |
+| coolingRate | scale | Convierte dTdt en coolingRate=-dTdt [K/s]. |
+| liquidFractionTimeDerivative | ddt | Calcula dAlphaLdt [1/s] desde la historia temporal real. |
+| solidificationRate | scale | -dAlphaLdt [1/s], positivo solidificación / negativo remelting local. |
+| latentHeatField | uniform | Campo latentHeat uniforme con L en J/kg; verificar contra fvModels. |
+| latentHeatRateDensity | multiply | Campo latentHeatRateVol = rho*solidificationRate*L [W/m³]. |
+| cellCourantNumber | CourantNo | Campo CoCell adimensional, no sustituye residual de presión. |
+| metalLatentHeatPower | volFieldValue | Integral espacial latentHeatRateVol [W], potencia latente instantánea. |
+| metalMeanCoolingRate | volFieldValue | Promedio de coolingRate [K/s]; puede ocultar puntos que se calientan. |
+| metalMeanSolidificationRate | volFieldValue | Promedio de solidificationRate [1/s]; remelting y solidificación pueden compensarse. |
+| metalMaxCourant | volFieldValue | Máximo espacial CoCell en metal; es indicador numérico, no sentencia de convergencia. |
+| metalMaxThermalGradient | volFieldValue | Máximo espacial magGradT [K/m]; considerar ubicación y estabilidad espacial. |
+| metalMaxDensityGradient | volFieldValue | Máximo espacial magGradRho [kg/m⁴]; comparar formulación B/C. |
+| solidificationMeltingMomentumDiagnostics | coded | Código C++ que escribe 12 campos de fase, Darcy, aceleraciones y cocientes, explicados en §3. Su compilación/ejecución real debe confirmarse por log y campos. |
+
+### system/lineProfiles — 2 objetos
+
+| Objeto | Tipo | Resultado |
+|---|---|---|
+| horizontalProfiles | sets | Perfiles de 80 puntos en y=10,20,30 mm a z=5 mm, incluye U, T, p_rgh, rho, alphaL y diagnósticos derivados. |
+| verticalProfiles | sets | Perfil de 80 puntos en x=20 mm a z=5 mm; mismas variables para comparación ortogonal. |
+
+### system/momentumPostProcessing — 4 objetos
+
+| Objeto | Tipo | Resultado |
+|---|---|---|
+| momentumMean | volFieldValue | Medias de fracción sólida, resistencia Darcy, deltaT y magnitudes de aceleración, desde campos guardados. |
+| momentumMax | volFieldValue | Máximos y ubicación de los mismos campos; no supone que están activos en la ecuación como una fuente independiente. |
+| momentumHorizontalProfiles | sets | Cuatro familias de campos de momentum y fase en líneas y=10/20/30 mm; evalúa dependencias y tiempo disponible. |
+| momentumVerticalProfiles | sets | Mismos campos en x=20 mm para comparación vertical. |
+
+**Cuidado metodológico:** algunos nombres designan el objeto que produce otro campo (por ejemplo, temperatureTimeDerivative escribe dTdt). El verificador debe exigir cobertura de nombre y, por separado, comprobar fórmula, unidad, fuente y evidencia de ejecución.
