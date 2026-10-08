@@ -57,6 +57,18 @@ This protocol is stored **inside the QuickCup repository**, independent of any M
 
 ---
 
+
+# SPECIALIZED AGENT COORDINATION — effective 2026-10-08
+Before a new run or postprocessing change, consult:
+- .github/agents/quickcup-live-observer.agent.md (local log/live execution)
+- .github/agents/quickcup-postprocess-forensics.agent.md (functionObjects, fields, units, formulas and saved evidence)
+- .github/agents/quickcup-physics-verifier.agent.md (mass/energy/buoyancy/phase/numerical interpretation)
+- .github/agents/quickcup-documentation-steward.agent.md (manual and log freshness)
+- POSTPROCESSING_FIELD_GUIDE_ES.md (reference descriptions for real C14 diagnostics)
+
+These are specialized instructions, not daemon processes. The live_run_watch.py process must run locally to watch a solver. GitHub workflow quickcup-research-audit.yml performs only static checks and may fail if the runner is unavailable; check the actual Actions status. Every verified postprocessing behavior changes the relevant scientific guide and both command manuals. Do not modify a live case or historical results just to silence an audit warning.
+
+---
 # OPENFOAM VERSION — ABSOLUTE RULE
 
 The active environment is:

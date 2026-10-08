@@ -2,6 +2,14 @@
 
 **Master's thesis simulation project:** multi-region casting/Quick-Cup solidification, conjugate heat transfer, buoyancy and enthalpy–porosity using **OpenFOAM Foundation v14**.
 
+## Scientific agents and postprocessing
+
+- [Postprocessing field and function-object guide (Spanish)](POSTPROCESSING_FIELD_GUIDE_ES.md)
+- [Live local observer](analysis_tools/live_run_watch.py) — run as a separate process beside active OpenFOAM
+- [Static OpenFOAM14 function-object auditor](analysis_tools/audit_postprocessing_config.py)
+- [GitHub scheduled/manual/static workflow](.github/workflows/quickcup-research-audit.yml) — verify its actual Actions status; it cannot see live local runs.
+- [Specialized scientific agent roles](.github/agents/quickcup-postprocess-forensics.agent.md)
+
 ## Start here — all future runs and audits
 
 1. [**RUN_MASTER_PROTOCOL.md — required between-run update checklist**](RUN_MASTER_PROTOCOL.md)

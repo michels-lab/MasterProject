@@ -873,3 +873,38 @@ Each case stores the post-processing console output in `log.momentumPostProcess`
 
 
 Multi-region note: function objects used with `foamPostProcess` must explicitly declare `region metal;`; passing `-region metal` on the command line is not sufficient if the object otherwise resolves the default region `region0`.
+
+---
+
+## 27. Active research audit agents and postprocessing (2026-10-08)
+
+**Scientific model: OpenFOAM Foundation v14.** Complete scientific definitions and limitations: [POSTPROCESSING_FIELD_GUIDE_ES.md](POSTPROCESSING_FIELD_GUIDE_ES.md).
+
+### Watch a local run without changing the solver
+
+Run this in a **separate terminal** from the repository root **while OpenFOAM is actually running**. The watcher only reads log.foamMultiRun.
+
+    python3 analysis_tools/live_run_watch.py --case cases_controlled_buoyancy/C14_topFixedFlux_explicitRef --follow
+
+- python3: Python interpreter.
+- --case: path to the actual case being run.
+- --follow: polls the log repeatedly; Ctrl+C stops the watcher, not the solver.
+- --once: inspect an existing case log one time instead of following a running process.
+
+To inspect an already stored log:
+
+    python3 analysis_tools/live_run_watch.py --case cases_controlled_buoyancy/C14_topFixedFlux_explicitRef --once
+
+The watcher screens time progress, max Courant, cumulative continuity, p_rgh residuals and fatal messages. It does not prove conservation or physical validity. Face-wise phi and the full pressure coupling analysis must be evaluated separately.
+
+### Inspect V14 functionObject configuration (no OpenFOAM required)
+
+    python3 analysis_tools/audit_postprocessing_config.py --strict
+
+The --strict option makes structural mismatches an error code. A passing result is **configuration evidence only**.
+
+### Where the agents actually run
+
+Four specialized agent instruction files live under .github/agents/. They are not background daemons. The GitHub Actions workflow quickcup-research-audit.yml attempts read-only static checks on pushes, manually, and daily, when GitHub Actions runners are available. It reads the committed repository, never a local running solver. Do not claim automation succeeded until its workflow run is confirmed successful.
+
+Current historical case_metrics.csv contains only 26 cases; three further verified cases have independent summaries awaiting consolidation.

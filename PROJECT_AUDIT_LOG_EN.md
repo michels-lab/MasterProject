@@ -4107,3 +4107,16 @@ Added the independent `RUN_MASTER_PROTOCOL.md`, 30-case `RUN_CASE_REGISTRY.csv`,
 **Open:** extend/reverify the campaign metric generator before including the three later verified cases in all consolidated CSVs. No physical results were recomputed or changed in this documentation-only update. J0/G1 experimental validation remains open.
 
 **Decision:** every future simulation and MAZAPÁN flow must update the inventory and audit coverage without relying on an external master repository.
+
+
+---
+
+## 2026-10-08 — AGENTS-007 — Scientific agents, postprocessing interpretation and local live watcher
+
+**[GIT-VERIFIED] [CONFIG-VERIFIED / RUNNER PENDING]**
+
+Four specialized agent profiles were introduced under .github/agents/ for runtime observations, postprocessing forensics, independent physics/numerical checks and documentation synchronization. Added analysis_tools/live_run_watch.py, analysis_tools/audit_postprocessing_config.py and a scheduled/manual/push GitHub workflow. The local log watcher only becomes active when explicitly launched beside a live solver; GitHub checks repository contents, not local runtime.
+
+Created POSTPROCESSING_FIELD_GUIDE_ES.md with actual V14 definitions, units, sources and interpretation limitations; updated both command manuals and case guide. No physical solver input or historical output was changed.
+
+**Caution:** the initial GitHub Actions invocation may fail before a runner starts. Do not claim verified automation until a successful job has been observed. Historical campaign CSVs still omit B14/C14 and C11-energy2.

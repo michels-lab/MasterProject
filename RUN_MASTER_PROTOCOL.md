@@ -4,6 +4,17 @@
 **Autoridad:** este archivo define qué revisar y actualizar antes/durante/después de **cada** corrida o auditoría de OpenFOAM Foundation 14.  
 **Regla:** ningún agente ni conversación debe dar por actualizado el proyecto basándose solo en un `git push`, en un `End`, en un termopar que llega a 10 s o en una nota aislada. Usar este protocolo + `RUN_CASE_REGISTRY.csv`.
 
+## Agentes especializados de auditoría (2026-10-08)
+
+Cuatro agentes declarados en .github/agents/: observación local de corrida, interpretación/validación de postProcessing, verificación física/numérica y mantenimiento de documentación. El inventario de campos está en [POSTPROCESSING_FIELD_GUIDE_ES.md](POSTPROCESSING_FIELD_GUIDE_ES.md).
+
+Verificadores ejecutables:
+- analysis_tools/live_run_watch.py: lee logs EN VIVO si el usuario lo ejecuta junto a su OpenFOAM local.
+- analysis_tools/audit_postprocessing_config.py: verificación estática de functionObjects V14.
+- .github/workflows/quickcup-research-audit.yml: ejecuta validación estática si GitHub Actions la programa y puede iniciar runners. Verificar su estado; no asegurar actividad continua si falla. No se controla el proceso local desde GitHub.
+
+Los agentes no deben identificar una declaración en diccionario como prueba de ejecución. Actualizar manuales ES/EN y guía de campos cuando una herramienta/interpretación cambie, manteniendo referencia a implementación y evidencia.
+
 ## A. Fotografía inicial, 2026-10-08
 
 - **30 carpetas** en `cases_controlled_buoyancy/`: 26 casos del batch histórico V3–V13 (todos RUN/ANALYSIS-VERIFIED), B14/C14 (ambos RUN/ANALYSIS-VERIFIED), C11-energy2 (RUN/ANALYSIS-VERIFIED), B11-energy2 (solo PREPARED; sus salidas heredadas se retiraron).

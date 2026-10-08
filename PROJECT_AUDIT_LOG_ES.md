@@ -4813,3 +4813,16 @@ Se creó el protocolo autónomo `RUN_MASTER_PROTOCOL.md`, el registro de 30 caso
 **Pendiente real:** extender/revalidar el generador de métricas antes de integrar los 3 casos posteriores a la campaña en todos los CSV globales. No se han recalculado ni modificado métricas físicas durante esta actualización documental. El registro no sustituye a la validación experimental J0/G1.
 
 **Decisión:** toda corrida/MAZAPÁN futura consulta y actualiza el inventario y verifica cobertura sin depender de ningún repo maestro externo.
+
+
+---
+
+## 2026-10-08 — AGENTS-007 — Agentes científicos, auditoría de postProcessing y vigilancia local
+
+**[GIT-VERIFIED] [CONFIG-VERIFIED / RUNNER PENDING]**
+
+Se incorporaron cuatro perfiles especializados en .github/agents/ (observación durante corrida, forense de postprocesos, verificación numérico-física y actualización documental), el observador ejecutable analysis_tools/live_run_watch.py, el auditor analysis_tools/audit_postprocessing_config.py y el workflow programable quickcup-research-audit.yml. El observador local necesita ejecutarse junto al solver para ser realmente activo; el workflow de GitHub revisa solo archivos versionados. No se modificaron los casos físicos ni se ejecutó una nueva simulación.
+
+Se creó POSTPROCESSING_FIELD_GUIDE_ES.md con las funciones reales de C14/V14, unidades, condiciones de interpretación y referencias a diccionarios e implementación; se actualizaron ambos manuales de comandos y la guía general.
+
+**Advertencia:** el primer intento GitHub Actions puede fallar a nivel de runner; no considerar verificado hasta obtener run PASS. Los resultados originales quedan protegidos y los CSV históricos siguen incompletos para V14/C11-energy2.

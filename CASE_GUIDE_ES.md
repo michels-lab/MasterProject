@@ -2,6 +2,8 @@
 
 > **Protocolo de actualización entre corridas (2026-10-08):** consultar [RUN_MASTER_PROTOCOL.md](./RUN_MASTER_PROTOCOL.md) y [RUN_CASE_REGISTRY.csv](./RUN_CASE_REGISTRY.csv) antes de ejecutar, analizar o sincronizar una variante. La referencia numérica histórica de esta guía es V11; **la baseline actual para preparar G1 es C14** y la puerta J0 permanece abierta.
 
+> **Diagnósticos vigentes:** [Guía de postprocesamiento Foundation v14](POSTPROCESSING_FIELD_GUIDE_ES.md) explica el C14 actual (probes, perfiles, flujo por cara, balances, derivadas y fuerzas). Los ejemplos V11 de esta guía son referencias históricas; no representan automáticamente toda la instrumentación V14.
+
 ## Objetivo de esta guía
 
 Esta guía explica **cómo está organizado el caso real del proyecto Quick-Cup**, qué lee OpenFOAM en cada carpeta, qué está escrito actualmente, qué significa física y numéricamente, qué alternativas relevantes existen y cómo esas decisiones pueden modificar los resultados.

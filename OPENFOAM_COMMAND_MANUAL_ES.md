@@ -1006,3 +1006,45 @@ git push origin main
 
 El `git push` es solo la mitad del flujo.
 
+
+---
+
+## 28. Agentes activos de investigación y diagnóstico del postprocesamiento (2026-10-08)
+
+**Versión del proyecto: OpenFOAM Foundation v14.** Referencia técnica detallada: [POSTPROCESSING_FIELD_GUIDE_ES.md](POSTPROCESSING_FIELD_GUIDE_ES.md).
+
+### Vigilar un caso en vivo sin modificarlo
+
+El comando Python siguiente lee el archivo local log.foamMultiRun de una corrida en curso y muestra avances numéricos sin arrancar, limpiar ni detener OpenFOAM. Debe dejarse en una terminal separada mientras el solver realmente ejecuta el caso.
+
+- python3: intérprete Python instalado.
+- analysis_tools/live_run_watch.py: lector local, solo consulta archivos.
+- --case: carpeta exacta del caso a vigilar.
+- --follow: vuelve a leer el log periódicamente; Ctrl+C interrumpe únicamente el monitor.
+
+Ejemplo desde la raíz del repositorio (sustituir por el caso que se esté ejecutando):
+
+    python3 analysis_tools/live_run_watch.py --case cases_controlled_buoyancy/C14_topFixedFlux_explicitRef --follow
+
+Inspeccionar una corrida terminada o parcialmente archivada una sola vez:
+
+    python3 analysis_tools/live_run_watch.py --case cases_controlled_buoyancy/C14_topFixedFlux_explicitRef --once
+
+El watcher advierte cuando maxCo >= 1, continuidad acumulada grande o hay errores en el log. Son indicios para investigar, no pruebas automáticas de que la física esté mal. Para verificar impermeabilidad necesitas phi por cara: el log por sí solo no basta.
+
+### Auditar los functionObjects configurados
+
+Este comando de configuración compara funciones declaradas de V14 con el inventario del proyecto, los includes, la salida por cara de topFlow y consistencia de L con constant/metal/fvModels:
+
+    python3 analysis_tools/audit_postprocessing_config.py --strict
+
+- --strict: devuelve error de salida si detecta incompatibilidades estructurales predefinidas; no simula nada.
+- Si el comando pasa, significa **solo CONFIG-VERIFIED**, no solución validada.
+
+### Qué está automatizado y qué no
+
+El workflow de GitHub .github/workflows/quickcup-research-audit.yml se solicita por cambios pertinentes, ejecución manual y programación diaria. Revisa archivos **del commit**, no el proceso OpenFOAM abierto en tu computadora. Su resultado debe consultarse en GitHub Actions; si falló o no arrancó, no afirmar que supervisa.
+
+Los cuatro agentes definidos en .github/agents/ son perfiles de revisión especializados y no procesos residentes. La vigilancia continua local requiere ejecutar --follow mientras ocurre la simulación. Posteriormente MAZAPÁN cierra la evidencia física y documental.
+
+Las tablas de 26 casos de full_campaign_audit no incluyen aún B14, C14 ni C11_energy2_test: avisar esta limitación en toda comparación global.
