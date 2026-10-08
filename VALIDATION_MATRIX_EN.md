@@ -1,5 +1,7 @@
 # Validation Matrix — QuickCup Solidification
 
+> **Current baseline (2026-10-08):** `C14_topFixedFlux_explicitRef` supersedes C11 for new fixed-volume validation work. C11 remains the frozen historical reference. The J0 JMatPro provenance gate remains OPEN; do not create the G1 experimental-alignment case before closing it.
+
 ## Objective
 
 Determine the **minimum additional physics required** to explain experimental evidence while keeping numerical sensitivity, buoyancy implementation, thermal parameters, equilibrium-solidification limitations, and genuine kinetic effects separate.

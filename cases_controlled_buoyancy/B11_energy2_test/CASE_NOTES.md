@@ -1,22 +1,24 @@
 # CASE_NOTES — B11_energy2_test
 
-**Estado:** PREPARED — NOT YET LOCALLY RUN-VERIFIED  
+**Estado:** PREPARED / CLEAN INPUTS / NOT RUN-VERIFIED
 **Caso padre:** `B11_topFixedFlux_airGapOF14`
+**Fecha de auditoría:** 2026-10-08
 
-## Objetivo
-
-Medir el efecto real de pasar de 1 a 2 energy correctors en la familia B usando el mismo baseline físico B11.
-
-## Único cambio respecto a B11
-
+## Propósito y cambio controlado
+Comparar B11 con su variante de dos correctores de energía efectivos, modificando solamente:
 `system/fvSolution/PIMPLE/nEnergyCorrectors = 2`.
+Se mantienen sin cambio geometría, malla de entrada, materiales, condiciones de frontera, pasos de tiempo, presión, modelos y demás configuración.
 
-No se modifica `system/metal/fvSolution`, presión, malla, timestep, propiedades, condiciones de frontera, air gap ni modelo de solidificación.
+## Integridad de evidencia
+Al crear esta variante el 5 de octubre, también se copiaron y versionaron `logs/`, `postProcessing/` y `log.*` del caso padre B11. La serie `postProcessing/metal/temperatureProbe/0/T` tenía exactamente el mismo SHA de blob Git (8e5b4c39dade992897df864f8d4f3dce135dcf24) en ambos directorios.
 
-Este caso no constituye una nueva V; es una prueba numérica controlada B11→B11-energy2.
+Esas salidas **no son una ejecución de B11_energy2_test**. La auditoría del 2026-10-08 retiró del árbol versionado de esta variante las salidas heredadas, conservando intacta toda la evidencia original en el caso padre.
 
-## Criterio de verificación local
+## Estado y cierre pendiente
+- [x] Inputs comparados mediante hashes Git contra B11: solo difiere `system/fvSolution`.
+- [x] Eliminadas del tracking de esta variante las salidas heredadas.
+- [ ] Ejecutar la variante realmente con OpenFOAM Foundation 14 en la PC local.
+- [ ] Verificar `latestTime=10`, fin normal, ausencia de errores FATAL y seis series `h_0..h_5` y `e_0..e_5`.
+- [ ] Comparar T, U, alphaL, `metalTop` cara por cara, residuales, continuidad, Courant y tiempo contra B11; publicar métricas y decisión.
 
-La corrida válida para documentación de tesis debe ejecutarse localmente en la PC del usuario con OpenFOAM Foundation 14. Con `nOuterCorrectors = 3` y `nEnergyCorrectors = 2`, después de `foamLog` se espera observar seis series de energía por timestep: `h_0..h_5` y `e_0..e_5`.
-
-No marcar RUN-VERIFIED hasta completar y revisar esa corrida local.
+No afirmar RUN-VERIFIED ni ANALYSIS-VERIFIED hasta concluir esos pasos. El resultado ya verificado de C11_energy2 es independiente de esta prueba B11.

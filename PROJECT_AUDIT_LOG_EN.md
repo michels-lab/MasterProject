@@ -4079,3 +4079,17 @@ Results: `cases_controlled_buoyancy/C11_energy2_test/`.
 Summary: `analysis_results/c11_energy2_test/summary.md`.
 
 **Status:** ✅ RUN-VERIFIED / ANALYSIS-VERIFIED.
+
+---
+
+## 2026-10-08 — B11-E2-PREFLIGHT-005 — Remove inherited outputs from controlled test
+
+**[GIT-VERIFIED] [OPEN / NOT RUN-VERIFIED]**
+
+The October 5 addition of `B11_energy2_test` accidentally tracked B11's previously generated `logs/`, `postProcessing/` and `log.*`. The central temperature probe had exactly the same Git blob SHA in the parent and test: `8e5b4c39dade992897df864f8d4f3dce135dcf24`. These copied files do **not** establish an independent run.
+
+An input-blob comparison under `0/`, `constant/` and `system/` confirmed that **only root `system/fvSolution` differs**, setting `nEnergyCorrectors=2`. The test's tracked tree was rebuilt using only inputs, `Allrun`, `Allclean`, and test-specific notes. The original B11 results remain untouched.
+
+**Pending:** run B11-energy2 locally with OF14; verify six energy solves per timestep; compare T, U, alphaL, face-wise `metalTop` flux, continuity, residuals, Courant and computational cost against B11. Do not confuse this open B-family test with the already verified `C11_energy2_test`.
+
+The current experimental-validation baseline remains C14. The J0 provenance gate remains OPEN.

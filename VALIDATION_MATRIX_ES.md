@@ -111,7 +111,7 @@ Esto es exactamente la clase de física que el `solidificationMelting` estándar
 
 **Estado: ABIERTA / obligatoria antes de crear G1.**
 
-La baseline numérica/física sigue siendo `C11_topFixedFlux_airGapOF14`, pero no debe clonarse todavía como caso G1 definitivo hasta cerrar la transferencia JMatPro → OpenFOAM.
+La baseline vigente para preparar G1 es `C14_topFixedFlux_explicitRef`. `C11_topFixedFlux_airGapOF14` se conserva como referencia histórica congelada. No debe clonarse aún G1 definitivo hasta cerrar J0 y la transferencia JMatPro → OpenFOAM.
 
 La propuesta de tesis exige que JMatPro preceda a OpenFOAM y aporte:
 - estabilidad de fases y definición del Mn controlado;
@@ -162,7 +162,7 @@ Hallazgos que pasan a ser restricciones de G1:
 - B12/B13 reducen la discrepancia de continuidad permitiendo entrada de masa por la tapa; por ello no son alternativas físicas para el Quick-Cup fijo impermeable.
 - C12/C13 son cercanos a C11 pero conservan advección local no nula y siguen siendo diagnósticos.
 
-**Baseline de entrada a G1: C11_topFixedFlux_airGapOF14, después de cerrar J0.**
+**Baseline de entrada a G1: C14_topFixedFlux_explicitRef, después de cerrar J0.**
 
 No se abre otra variante de presión/PIMPLE antes de G1 salvo que nueva evidencia experimental o de conservación revele una necesidad concreta.
 
@@ -275,7 +275,7 @@ Cuando exista la curva digitalizada/raw, las métricas mínimas serán:
 
 1. **V3–V7 permanecen congelados como estudio numérico/buoyancy.**
 2. **No se modifica todavía `solidificationMelting` para forzar recalescencia.**
-3. El siguiente caso científico debe ser un **benchmark de equilibrio alineado con el experimento**, usando **C11_topFixedFlux_airGapOF14** como baseline física de partida.
+3. El siguiente caso científico debe ser un **benchmark de equilibrio alineado con el experimento**, usando **C14_topFixedFlux_explicitRef** como baseline física de partida.
 4. Si ese benchmark demuestra una limitación estructural del modelo de equilibrio, se implementará el `fvModel` cinético de dos transformaciones.
 
 

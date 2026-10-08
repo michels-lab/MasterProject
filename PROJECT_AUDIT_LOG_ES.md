@@ -4785,3 +4785,17 @@ Resultados: `cases_controlled_buoyancy/C11_energy2_test/`.
 Resumen: `analysis_results/c11_energy2_test/summary.md`.
 
 **Estado:** ✅ RUN-VERIFIED / ANALYSIS-VERIFIED.
+
+---
+
+## 2026-10-08 — B11-E2-PREFLIGHT-005 — Limpieza de evidencia heredada y preparación de comparación controlada
+
+**[GIT-VERIFIED] [OPEN / NOT RUN-VERIFIED]**
+
+Al agregar `B11_energy2_test` el 5 de octubre también se versionaron inadvertidamente `logs/`, `postProcessing/` y `log.*` copiados de `B11_topFixedFlux_airGapOF14`. El blob SHA de la temperatura central era idéntico en padre y variante: `8e5b4c39dade992897df864f8d4f3dce135dcf24`. Esos datos no constituyen evidencia de ejecución de la variante.
+
+Se compararon por SHA todos los archivos de entrada de `0/`, `constant/` y `system/`: **solo difiere `system/fvSolution`**, por el ajuste raíz `nEnergyCorrectors=2`. Se reconstruyó el árbol versionado de la variante sin los productos heredados, conservando `0/`, `constant/`, `system/`, `Allrun`, `Allclean` y sus notas. Los resultados del B11 original permanecen intactos.
+
+**Próximo paso obligatorio:** correr localmente B11-energy2 con OF14 y auditar seis solves de energía por timestep, comparativa B11 de T, U, alphaL, impermeabilidad `metalTop`, continuidad, residuales, Courant y costo. No confundir esta prueba todavía abierta con `C11_energy2_test`, que sí está verificada.
+
+La baseline de validación experimental permanece C14; J0 sigue ABIERTA.
