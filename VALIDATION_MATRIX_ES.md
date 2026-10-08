@@ -3,6 +3,8 @@
 > **Actualización 2026-10-03 — baseline vigente:** la campaña V14 validó `C14_topFixedFlux_explicitRef` como sucesor de trabajo de C11 para el modelo rígido, de volumen fijo e impermeable. C11 permanece congelado como referencia histórica; C14 conserva su física y añade la referencia explícita de presión del director. J0 continúa abierta y debe cerrarse antes de crear G1.
 
 
+> **Cobertura documental 2026-10-08:** `full_campaign_audit/` sigue siendo un consolidado histórico de 26 casos, no de los 29 verificados. Inventario y procedimiento de actualización: [RUN_CASE_REGISTRY.csv](RUN_CASE_REGISTRY.csv) y [RUN_MASTER_PROTOCOL.md](RUN_MASTER_PROTOCOL.md). Pendiente integrar B14/C14 y C11-energy2 en los CSV, sin introducir B11-energy2 no ejecutado.
+
 ## Objetivo
 
 Determinar la **mínima física adicional necesaria** para explicar la evidencia experimental sin confundir:

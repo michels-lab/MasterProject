@@ -43,6 +43,20 @@ The objective is to determine whether the simulation is:
 
 ---
 
+# OBLIGATORY PER-RUN PROJECT BASE — RUN_MASTER_PROTOCOL.md
+
+Before any new simulation, variant, audit or Git update, read:
+- `RUN_MASTER_PROTOCOL.md` (single authoritative cross-run checklist);
+- `RUN_CASE_REGISTRY.csv` (complete case inventory, including pending cases);
+- latest `PROJECT_AUDIT_LOG_ES.md` and `VALIDATION_MATRIX_ES.md` entries;
+- `CASE_NOTES.md` of the target case.
+
+After each run, follow PRE → RUN → ANALYSIS → MAZAPÁN, including case notes, the per-case evidence, **both ES/EN audit logs**, matrices/guides when affected, and global CSV coverage check. A new case absent from `full_campaign_audit/case_metrics.csv` MUST be flagged as not consolidated, regardless of whether the run passed. Never claim the five historical campaign CSV/summary products include a case unless checked. Run `python3 analysis_tools/check_run_registry.py`; strict coverage requires `--require-consolidated`.
+
+This protocol is stored **inside the QuickCup repository**, independent of any Michel's Lab main repository or chat memory. The normal requirement to explain exactly what will change *before* acting remains mandatory.
+
+---
+
 # OPENFOAM VERSION — ABSOLUTE RULE
 
 The active environment is:

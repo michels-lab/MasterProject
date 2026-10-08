@@ -2,6 +2,8 @@
 
 > **Current baseline (2026-10-08):** `C14_topFixedFlux_explicitRef` supersedes C11 for new fixed-volume validation work. C11 remains the frozen historical reference. The J0 JMatPro provenance gate remains OPEN; do not create the G1 experimental-alignment case before closing it.
 
+> **Coverage note (2026-10-08):** `analysis_results/full_campaign_audit/` represents the historic 26-case campaign, not all 29 independently verified runs. B14/C14 and C11-energy2 have separate analysis summaries; B11-energy2 has not been run. See [RUN_CASE_REGISTRY.csv](RUN_CASE_REGISTRY.csv) and [RUN_MASTER_PROTOCOL.md](RUN_MASTER_PROTOCOL.md).
+
 ## Objective
 
 Determine the **minimum additional physics required** to explain experimental evidence while keeping numerical sensitivity, buoyancy implementation, thermal parameters, equilibrium-solidification limitations, and genuine kinetic effects separate.

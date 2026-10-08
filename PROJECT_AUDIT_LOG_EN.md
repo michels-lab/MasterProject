@@ -4093,3 +4093,17 @@ An input-blob comparison under `0/`, `constant/` and `system/` confirmed that **
 **Pending:** run B11-energy2 locally with OF14; verify six energy solves per timestep; compare T, U, alphaL, face-wise `metalTop` flux, continuity, residuals, Courant and computational cost against B11. Do not confuse this open B-family test with the already verified `C11_energy2_test`.
 
 The current experimental-validation baseline remains C14. The J0 provenance gate remains OPEN.
+
+---
+
+## 2026-10-08 — RUN-PROTOCOL-006 — Complete case roster and independent cross-run update protocol
+
+**[GIT-VERIFIED] [OPEN / CONSOLIDATION PENDING]**
+
+The `cases_controlled_buoyancy/` directory has 30 case folders. `analysis_results/full_campaign_audit/` contains only the historical V3–V13 campaign: 26 `case_metrics.csv` case rows, 13 B/C pairs in `bc_pair_metrics.csv`, and 104 profile rows in `profile_inventory.csv`. It omits B14/C14 and C11-energy2, despite their separate RUN-VERIFIED/ANALYSIS-VERIFIED summaries. B11-energy2 remains PREPARED_NOT_RUN.
+
+Added the independent `RUN_MASTER_PROTOCOL.md`, 30-case `RUN_CASE_REGISTRY.csv`, read-only `analysis_tools/check_run_registry.py`, historical scope README, and entry-point references in agent, guide and validation matrix. Coverage checks do not treat copied outputs as a new run.
+
+**Open:** extend/reverify the campaign metric generator before including the three later verified cases in all consolidated CSVs. No physical results were recomputed or changed in this documentation-only update. J0/G1 experimental validation remains open.
+
+**Decision:** every future simulation and MAZAPÁN flow must update the inventory and audit coverage without relying on an external master repository.

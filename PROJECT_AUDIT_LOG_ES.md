@@ -4799,3 +4799,17 @@ Se compararon por SHA todos los archivos de entrada de `0/`, `constant/` y `syst
 **Próximo paso obligatorio:** correr localmente B11-energy2 con OF14 y auditar seis solves de energía por timestep, comparativa B11 de T, U, alphaL, impermeabilidad `metalTop`, continuidad, residuales, Courant y costo. No confundir esta prueba todavía abierta con `C11_energy2_test`, que sí está verificada.
 
 La baseline de validación experimental permanece C14; J0 sigue ABIERTA.
+
+---
+
+## 2026-10-08 — RUN-PROTOCOL-006 — Inventario íntegro y protocolo autónomo de actualización entre corridas
+
+**[GIT-VERIFIED] [OPEN / CONSOLIDATION PENDING]**
+
+Se verificaron 30 carpetas en `cases_controlled_buoyancy/`. La auditoría `analysis_results/full_campaign_audit/` cubre únicamente los 26 casos históricos V3–V13: 26 filas `case_metrics.csv`, 13 parejas `bc_pair_metrics.csv`, 104 perfiles en `profile_inventory.csv`. **No** incluye B14/C14 ni C11-energy2, aunque están RUN-VERIFIED/ANALYSIS-VERIFIED y cuentan con resúmenes separados. B11-energy2 conserva estado PREPARED_NOT_RUN.
+
+Se creó el protocolo autónomo `RUN_MASTER_PROTOCOL.md`, el registro de 30 casos `RUN_CASE_REGISTRY.csv`, el verificador de cobertura de solo lectura `analysis_tools/check_run_registry.py`, el README de alcance histórico y referencias en agente, guía y matrices. El verificador diferencia una campaña parcial de una global y no convierte outputs heredados en evidencia.
+
+**Pendiente real:** extender/revalidar el generador de métricas antes de integrar los 3 casos posteriores a la campaña en todos los CSV globales. No se han recalculado ni modificado métricas físicas durante esta actualización documental. El registro no sustituye a la validación experimental J0/G1.
+
+**Decisión:** toda corrida/MAZAPÁN futura consulta y actualiza el inventario y verifica cobertura sin depender de ningún repo maestro externo.
