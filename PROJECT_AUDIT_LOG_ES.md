@@ -4854,3 +4854,17 @@ El auditor analysis_tools/audit_postprocessing_config.py ahora comprueba además
 Se corrige la interpretación anterior: Michel ejecuta todas las simulaciones en su laptop y sube los resultados a GitHub. Se RETIRAN los lanzadores y vigilantes locales introducidos erróneamente en el repositorio (`run_with_agents.py` y `live_run_watch.py`). Los cuatro roles de agentes pasan a análisis de evidencia posterior al push. La automatización `analysis_tools/audit_pushed_results.py` inspecciona únicamente outputs presentes en Git (sin arrancar OpenFOAM) y genera un reporte de alertas y cobertura en artefactos de Actions, sujeto a que el workflow corra exitosamente.
 
 Actualizados manuales ES/EN, guía de postprocesamiento, protocolo y README para eliminar instrucciones contradictorias. El flujo queda LAPTOP → simulación y postproceso local → git push → auditoría de evidencia + revisión científica/documental → actualización de bitácoras/manuales. No se modificó ningún caso ni resultado físico. Los archivos de agentes no se consideran procesos LLM autónomos.
+
+---
+
+## 2026-10-08 — RESEARCH-011 — Reunión con director; C15/C16 preparados y línea 3D/B-shrinkage
+
+**[GIT-VERIFIED INPUTS] [PREPARED_NOT_RUN] [NO CFD EXECUTION]**
+
+Decisión conversada con director: comenzar la transición de C14 a 3D; previamente estudiar tiempo adaptativo y coeficiente de relajación. Auditoría directa de C14 encontró `maxCo=0.25`, `relaxationFactors=1.0` en `system/fvSolution` y, crucialmente, `solidificationMeltingSource/relax=0.1` en `constant/metal/fvModels`.
+
+Se prepararon nuevas variantes independientes de C14: **C15_adaptiveDt_fromC14** (solo `system/controlDict` cambia, adaptive y salida cada 0.1s físicos) y **C16_phaseRelax025_fromC14** (solo `constant/metal/fvModels` cambia, `relax:0.1→0.25`). Los archivos `0/`, `constant/`, `system/` más Allrun/Allclean se copiaron por SHA manteniendo input salvo el archivo correspondiente; se excluyeron tiempos solucionados, logs y postProcessing. Ambas permanecen PREPARED_NOT_RUN.
+
+Se registró la necesidad de una geometría 3D físicamente representativa: C14 usa 80×80×1 celdas con caras `empty`. Se definió línea B paralela para modelar interfaz aire-metal y contracción, incluyendo auditoría de compatibilidad con módulos multiphase de OF14, sin asumir que un simple parche de presión corrige el balance de masa del B14 cerrado. El plan `NEXT_RESEARCH_ROADMAP_ES.md` distingue etapas y evidencias esperadas.
+
+**Pendiente:** ejecutar C15/C16 en laptop, hacer push y validar numeria/físicamente contra C14; definir geometría 3D y arquitectura B-VOF/shrinkage. C14/B14 y resultados históricos intactos.

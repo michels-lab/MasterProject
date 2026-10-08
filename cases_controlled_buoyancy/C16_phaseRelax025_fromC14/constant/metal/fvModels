@@ -1,0 +1,62 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  13
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    format      ascii;
+    class       dictionary;
+    object      fvModels;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+phaseChangeSource
+{
+    type            solidificationMeltingSource;
+    libs            (fvModels);
+
+    // Explicitly target the whole mesh domain
+    selectionMode   cellZone;
+    cellZone        metal;
+
+    // Thermophysical linking
+    thermoMode      thermo;
+    beta            1.13e-04;   // Thermal expansion coefficient [1/K]
+    rhoRef          6820;       // reference solid density
+
+    // --- Energy and phase bounds
+    energy          h;
+    Tsol            1423;   // Solidus temperature [K]
+    Tliq            1473;   // Liquidus temperature [K] (mushy zone width = Tliq - Tsol)
+    L               2.286e5;   // Latent heat of fusion [J/kg]
+    alpha1e         0.8;    // Max eutectic melt fraction [0-1)
+
+    // --- Enthalpy-Porosity tuning parameters ---
+    relax           0.25;       // default value: 0.9 (water-ice example)
+    Cu              1e5;      // Mushy zone Darcy constant [1/s]
+    q               1e-3;     // Relaxation/division-by-zero protection parameter
+}
+
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+// ============================================================================
+// QUICKCUP DOCUMENTATION APPENDIX
+// ============================================================================
+// Archivo documentado: constant/metal/fvModels.
+// El contenido ejecutable anterior permanece intacto; este apéndice solo explica su función e interacción con el modelo.
+// FUNCIÓN: activa fuentes/modelos volumétricos; en metal incluye cambio de fase, calor latente, resistencia Darcy de zona pastosa y, cuando aplica, flotación.
+// Tsol = 1423: temperatura solidus; fija el extremo sólido del intervalo de cambio de fase.
+// Tliq = 1473: temperatura liquidus; junto con Tsol define el intervalo pastoso.
+// L = 2.286e5: calor latente por unidad de masa; convierte cambio de fracción de fase en fuente/sumidero de energía.
+// Cu = 1e5: escala del término Darcy en la zona pastosa; valores mayores amortiguan más la velocidad al solidificar.
+// q = 1e-3: regularización del término Darcy que evita una singularidad cuando la fracción líquida tiende a cero.
+// beta = 1.13e-04: coeficiente de expansión térmica usado por la ruta de flotación que corresponda al modelo.
+// rhoRef = 6820: densidad de referencia utilizada por el modelo de cambio de fase/flotación cuando aplica.
+// alpha1e = 0.8: parámetro de fracción líquida de referencia/eutéctica usado por la interpolación del cambio de fase.
+// relax = 0.1: relajación aplicada a la actualización del modelo; valores menores amortiguan cambios entre iteraciones.
+// INTERACCIÓN: T modifica alphaL; alphaL controla calor latente y amortiguamiento Darcy; U modifica transporte convectivo de energía; la convección retroalimenta T y la solidificación.
+// NOTA DE SEGURIDAD: todas las líneas de este apéndice son comentarios y no cambian la ejecución del caso.
+// ============================================================================

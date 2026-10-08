@@ -209,3 +209,13 @@ Cuando exista la curva digitalizada/raw, las métricas mínimas serán:
 2. **No se modifica todavía `solidificationMelting` para forzar recalescencia.**
 3. El siguiente caso científico debe ser un **benchmark de equilibrio alineado con el experimento**.
 4. Si ese benchmark demuestra una limitación estructural del modelo de equilibrio, se implementará el `fvModel` cinético de dos transformaciones.
+
+---
+
+## 2026-10-08 — Prepared C15/C16 and parallel research plans
+
+- `C15_adaptiveDt_fromC14`: PREPARED_NOT_RUN. Enable adaptive time-stepping, output at matching physical times (adjustableRunTime every 0.1 s), analyze vs fixed-dt C14.
+- `C16_phaseRelax025_fromC14`: PREPARED_NOT_RUN. Change only solidificationMeltingSource phase-fraction `relax=0.1 -> 0.25`, not root fvSolution relaxations or Courant limit.
+- C3D-01: PLAN. Move from 80x80x1 `empty` 2D slab to a physically appropriate 3D geometry from C14; dimensions and instrument position need confirmation.
+- B-FS/B-SH: PLAN. Investigate true free-surface metal/air coupling and mass-conserving shrinkage/feeding independently from the closed-volume B14 numerical experiment.
+- Runs only occur on the user's laptop; GitHub performs post-push evidence auditing. J0/G1 gates remain open. Full plan: `NEXT_RESEARCH_ROADMAP_ES.md`.

@@ -347,3 +347,14 @@ El script oficial para aplicar esta regla de forma recurrente es:
 `analysis_tools/boundary_flux_audit.py`
 
 Los casos históricos sin `metalTopPhiSum` pueden revisarse con el `energyAdvectiveFlux` ya almacenado; los casos nuevos deben incluir ambos diagnósticos.
+
+---
+
+## Plan 2026-10-08 — C15, C16 y transición a 3D
+
+- `C15_adaptiveDt_fromC14`: **PREPARED_NOT_RUN**. Frente a C14, activar adaptive time-step con `maxCo=0.25`, conservar `maxDeltaT=0.1 s` e instrumentar salidas `adjustableRunTime=0.1 s`. Debe compararse con C14 por tiempo físico, atendiendo a discrepancias históricas C6/C8.
+- `C16_phaseRelax025_fromC14`: **PREPARED_NOT_RUN**. Frente a C14, cambiar solo el `relax` de `solidificationMeltingSource` `0.1 → 0.25`; distinto del factor 1.0 en `fvSolution` y del `maxCo=0.25`.
+- `C3D-01`: **PLAN** basado en C14. Malla 3D real, interfaces/BC y sensores por definir; conservar la baseline 2D congelada y resolver geometría/dimensiones reales antes de preparar un caso. J0 y G1 siguen abiertas.
+- `B-FS/B-SH`: **PLAN paralelo** para superficie metal-aire y contracción/feeding, con auditoría de compatibilidad numérica Foundation v14 y conservación de masa. No implica que B14 sea físicamente validado.
+
+Detalles: `NEXT_RESEARCH_ROADMAP_ES.md`.

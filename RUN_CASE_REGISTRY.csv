@@ -29,3 +29,5 @@ B14_topFixedFlux_explicitRef,V14,RUN_VERIFIED,ANALYSIS_VERIFIED,NO,analysis_resu
 C14_topFixedFlux_explicitRef,V14,RUN_VERIFIED,ANALYSIS_VERIFIED,NO,analysis_results/v14_bc_comparison/summary.md,2026-10-08
 C11_energy2_test,ENERGY2_CONTROLLED,RUN_VERIFIED,ANALYSIS_VERIFIED,NO,analysis_results/c11_energy2_test/summary.md,2026-10-08
 B11_energy2_test,ENERGY2_CONTROLLED,PREPARED_NOT_RUN,NOT_ANALYZED,NO,cases_controlled_buoyancy/B11_energy2_test/CASE_NOTES.md,2026-10-08
+C15_adaptiveDt_fromC14,NUMERICAL_SENSITIVITY,PREPARED_NOT_RUN,NOT_ANALYZED,NO,cases_controlled_buoyancy/C15_adaptiveDt_fromC14/CASE_NOTES.md,2026-10-08
+C16_phaseRelax025_fromC14,PHASE_CHANGE_SENSITIVITY,PREPARED_NOT_RUN,NOT_ANALYZED,NO,cases_controlled_buoyancy/C16_phaseRelax025_fromC14/CASE_NOTES.md,2026-10-08

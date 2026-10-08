@@ -1,0 +1,196 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  14
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+
+FoamFile
+{
+    format      ascii;
+    class       dictionary;
+    location    "system";
+    object      momentumPostProcessing;
+}
+
+// Compact, Git-trackable summaries reconstructed from the volumetric
+// solidificationMelting momentum diagnostic fields after a run.
+//
+// The full time-directory fields remain local. foamPostProcess reads them
+// from disk and writes these reduced outputs under postProcessing/.
+
+momentumMean
+{
+    type            volFieldValue;
+    libs            ("libfieldFunctionObjects.so");
+    region          metal;
+
+    log             true;
+    writeControl    timeStep;
+    writeInterval   1;
+    writeFields     false;
+    writeNumberOfCells true;
+    writeVolume     true;
+
+    cellZone        all;
+    operation       volAverage;
+
+    fields
+    (
+        phaseChangeSolidFraction
+        phaseChangeDarcyCoeff
+        phaseChangeModelDeltaT
+        magPhaseChangeDarcyAcceleration
+        magPhaseChangeBuoyancyAcceleration
+        magPRghAcceleration
+    );
+}
+
+momentumMax
+{
+    type            volFieldValue;
+    libs            ("libfieldFunctionObjects.so");
+    region          metal;
+
+    log             true;
+    writeControl    timeStep;
+    writeInterval   1;
+    writeFields     false;
+    writeLocation   true;
+    writeNumberOfCells true;
+    writeVolume     true;
+
+    cellZone        all;
+    operation       max;
+
+    fields
+    (
+        phaseChangeSolidFraction
+        phaseChangeDarcyCoeff
+        phaseChangeModelDeltaT
+        magPhaseChangeDarcyAcceleration
+        magPhaseChangeBuoyancyAcceleration
+        magPRghAcceleration
+    );
+}
+
+momentumHorizontalProfiles
+{
+    type            sets;
+    libs            ("libsampling.so");
+    region          metal;
+
+    writeControl    timeStep;
+    writeInterval   1;
+
+    interpolationScheme cellPoint;
+    setFormat       raw;
+
+    fields
+    (
+        phaseChangeSolidFraction
+        phaseChangeDarcyCoeff
+        phaseChangeModelDeltaT
+
+        phaseChangeDarcyAcceleration
+        phaseChangeBuoyancyAcceleration
+        pRghAcceleration
+
+        magPhaseChangeDarcyAcceleration
+        magPhaseChangeBuoyancyAcceleration
+        magPRghAcceleration
+
+        phaseChangeDragToBuoyancy
+        phaseChangeDragToPressure
+    );
+
+    sets
+    {
+        line_y10mm
+        {
+            type        lineUniform;
+            axis        x;
+            start       (0.00025 0.010 0.005);
+            end         (0.03975 0.010 0.005);
+            nPoints     80;
+        }
+
+        line_y20mm
+        {
+            type        lineUniform;
+            axis        x;
+            start       (0.00025 0.020 0.005);
+            end         (0.03975 0.020 0.005);
+            nPoints     80;
+        }
+
+        line_y30mm
+        {
+            type        lineUniform;
+            axis        x;
+            start       (0.00025 0.030 0.005);
+            end         (0.03975 0.030 0.005);
+            nPoints     80;
+        }
+    }
+}
+
+momentumVerticalProfiles
+{
+    type            sets;
+    libs            ("libsampling.so");
+    region          metal;
+
+    writeControl    timeStep;
+    writeInterval   1;
+
+    interpolationScheme cellPoint;
+    setFormat       raw;
+
+    fields
+    (
+        phaseChangeSolidFraction
+        phaseChangeDarcyCoeff
+        phaseChangeModelDeltaT
+
+        phaseChangeDarcyAcceleration
+        phaseChangeBuoyancyAcceleration
+        pRghAcceleration
+
+        magPhaseChangeDarcyAcceleration
+        magPhaseChangeBuoyancyAcceleration
+        magPRghAcceleration
+
+        phaseChangeDragToBuoyancy
+        phaseChangeDragToPressure
+    );
+
+    sets
+    {
+        line_x20mm
+        {
+            type        lineUniform;
+            axis        y;
+            start       (0.020 0.00025 0.005);
+            end         (0.020 0.03975 0.005);
+            nPoints     80;
+        }
+    }
+}
+
+// ************************************************************************* //
+
+// ============================================================================
+// QUICKCUP DOCUMENTATION APPENDIX
+// ============================================================================
+// Archivo documentado: system/momentumPostProcessing.
+// El contenido ejecutable anterior permanece intacto; este apéndice solo explica su función e interacción con el modelo.
+// FUNCIÓN: configuración de diagnóstico/postprocesamiento; solicita campos, probes, perfiles o reducciones estadísticas.
+// Los objetos diagnósticos aquí usados leen la solución y escriben resultados; no cambian las ecuaciones gobernantes.
+// writeControl = timeStep: criterio que decide cuándo se escriben resultados o diagnósticos.
+// writeInterval = 1: separación entre escrituras según writeControl; determina qué tiempos quedan disponibles para análisis posterior.
+// region selecciona la región de malla; fields los campos analizados; operation decide si se conservan valores espaciales o se reducen mediante suma/promedio/mínimo/máximo.
+// INTERACCIÓN: las coordenadas de muestreo están en metros y deben corresponder con blockMesh. Para comparar casos deben coincidir ubicación y tiempos de escritura.
+// NOTA DE SEGURIDAD: todas las líneas de este apéndice son comentarios y no cambian la ejecución del caso.
+// ============================================================================

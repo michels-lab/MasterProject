@@ -60,6 +60,8 @@ This protocol is stored **inside the QuickCup repository**, independent of any M
 
 # SCIENTIFIC AGENT COORDINATION — post-push only (2026-10-08)
 
+**2026-10-08 research plan:** consult NEXT_RESEARCH_ROADMAP_ES.md for C15 adaptive, C16 phase relax 0.25, C3D from C14 and parallel B-family free-surface/shrinkage; cases C15/C16 are prepared input trees only. Never describe them as run-verified without new laptop-produced evidence.
+
 User owns all simulation execution on laptop. GitHub hosts already-run case outputs, and post-push agents audit committed evidence only. No agent shall run a simulation on GitHub or propose using this repository's audit workflow to launch one.
 
 Specialized roles:

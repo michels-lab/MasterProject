@@ -4148,3 +4148,15 @@ The static auditor now requires every declared function-object name to appear in
 Clarified explicit user ownership: all OpenFOAM simulations are carried out on the laptop, and completed outputs are pushed to GitHub. Removed mistakenly introduced local simulation launchers (`run_with_agents.py`, `live_run_watch.py`). Updated four agent-role specifications for post-push committed-evidence inspection and added `analysis_tools/audit_pushed_results.py`, which reads stored logs/postProcessing without starting CFD and generates review artifacts when Actions jobs successfully run.
 
 Aligned ES/EN manuals, postprocessing guide, protocol, agent index and README. No scientific cases or historical run outputs were modified. Agent instruction files are not autonomous LLM processes merely because they exist.
+
+---
+
+## 2026-10-08 — RESEARCH-011 — Supervisor meeting; clean C15/C16 cases and 3D/free-surface roadmap
+
+**[GIT-VERIFIED INPUTS] [PREPARED_NOT_RUN] [NO CFD EXECUTION]**
+
+Following the supervisor meeting, 3D development from C14 became a near-term goal. Initial studies will probe adaptive time-stepping and phase-fraction relaxation. In C14, `maxCo=0.25`, root `relaxationFactors=1.0` and the distinct solidificationMelting `relax=0.1` were verified. New independent variants of C14 were prepared with clean inputs only: **C15_adaptiveDt_fromC14** changes `system/controlDict` (adaptive and 0.1 s physical output schedule); **C16_phaseRelax025_fromC14** changes only `constant/metal/fvModels` (phase `relax:0.1→0.25`). Neither has been run.
+
+The parallel plans include a genuine 3D mesh (C14 remains an 80x80x1 planar `empty` model) and, separately, a metal-air free-surface and mass-conserving solidification-shrinkage/feeding B-family formulation. Investigate OF14 multiphase/solidification model compatibility before specifying new solver inputs; do not infer B14 mismatch is cured by an open pressure boundary. Both experimental J0/G1 gates remain open.
+
+All runs are performed exclusively on the researcher's laptop. GitHub performs post-push audits. See NEXT_RESEARCH_ROADMAP_ES.md.

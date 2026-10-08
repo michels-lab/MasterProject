@@ -2,6 +2,10 @@
 
 **Master's thesis simulation project:** multi-region casting/Quick-Cup solidification, conjugate heat transfer, buoyancy and enthalpy–porosity using **OpenFOAM Foundation v14**.
 
+## 2026-10-08 research roadmap
+
+[**Research plan: C15 adaptive, C16 phase relaxation, C3D and B free-surface/shrinkage**](NEXT_RESEARCH_ROADMAP_ES.md). C15 and C16 are prepared input-only cases, not simulated in GitHub or validated.
+
 ## Scientific agents and postprocessing
 
 **Execution ownership:** all CFD runs occur on the user's laptop. The repository runs no CFD and only audits results after git push.
@@ -23,7 +27,7 @@
 
 ## Coverage at 2026-10-08
 
-- 30 controlled-case directories: **29 verified** and **1 prepared/not run** (`B11_energy2_test`).
+- 32 controlled-case directories: **29 verified** and **3 prepared/not run** (`B11_energy2_test`).
 - [Historical full-campaign audit](analysis_results/full_campaign_audit/README.md) covers **26 cases only**, not all currently verified cases.
 - Additional independently verified results: [V14 B/C comparison](analysis_results/v14_bc_comparison/summary.md) and [C11 two-energy-corrector controlled test](analysis_results/c11_energy2_test/summary.md).
 - Current baseline for future fixed-volume experimental validation: `C14_topFixedFlux_explicitRef`; historical frozen reference: C11; JMatPro provenance gate **J0 open**.

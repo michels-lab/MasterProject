@@ -22,6 +22,12 @@ Automatización real **de solo lectura** tras push, PR, manual o planificación:
 
 Los archivos `.agent.md` no son procesos residentes ni agentes LLM que se ejecuten automáticamente con un push; requieren invocación o un sistema de agentes realmente conectado. Una ejecución GitHub Actions genera un artefacto; **no modifica automáticamente las conclusiones de tesis**. La actualización de manuales y bitácoras requiere una edición Git separada basada en resultados verificados.
 
+## Nuevas líneas de trabajo — 2026-10-08
+
+Se prepararon dos nuevos casos limpios derivados por separado de C14: `C15_adaptiveDt_fromC14` (adaptive `deltaT` con tiempos de salida físicos alineados) y `C16_phaseRelax025_fromC14` (únicamente `fvModels/relax=0.25` frente a 0.1 de C14). **Total actualizado: 32 carpetas; 29 verificadas y 3 PREPARED_NOT_RUN** (B11-energy2, C15, C16).
+
+Plan científico completo y fases separadas C3D y B-FS/B-SH: [NEXT_RESEARCH_ROADMAP_ES.md](NEXT_RESEARCH_ROADMAP_ES.md). Ningún workflow de GitHub puede iniciar CFD, y ningún caso nuevo puede declararse corrido solo por existir en el repo. Tras cada push, auditar resultados y añadir un registro científico ES/EN con evidencia.
+
 ## A. Fotografía inicial, 2026-10-08
 
 - **30 carpetas** en `cases_controlled_buoyancy/`: 26 casos del batch histórico V3–V13 (todos RUN/ANALYSIS-VERIFIED), B14/C14 (ambos RUN/ANALYSIS-VERIFIED), C11-energy2 (RUN/ANALYSIS-VERIFIED), B11-energy2 (solo PREPARED; sus salidas heredadas se retiraron).
