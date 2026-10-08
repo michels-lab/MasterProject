@@ -1,61 +1,80 @@
-name: QuickCup Research Agents - Static Audit
-
+name: QuickCup Post-Push Scientific Audit
 on:
   push:
     branches: [main]
     paths:
       - '.github/agents/**'
       - '.github/workflows/quickcup-research-audit.yml'
+      - 'analysis_tools/audit_pushed_results.py'
       - 'analysis_tools/audit_postprocessing_config.py'
-      - 'analysis_tools/live_run_watch.py'
+      - 'cases_controlled_buoyancy/**'
+      - 'analysis_results/**'
       - 'RUN_CASE_REGISTRY.csv'
-      - 'OPENFOAM_COMMAND_MANUAL_*.md'
+      - 'RUN_MASTER_PROTOCOL.md'
       - 'POSTPROCESSING_FIELD_GUIDE_ES.md'
-      - 'cases_controlled_buoyancy/**/system/**'
+      - 'OPENFOAM_COMMAND_MANUAL_*.md'
+      - 'PROJECT_AUDIT_LOG_*.md'
   pull_request:
     paths:
       - '.github/agents/**'
       - '.github/workflows/quickcup-research-audit.yml'
-      - 'analysis_tools/audit_postprocessing_config.py'
-      - 'analysis_tools/live_run_watch.py'
+      - 'analysis_tools/audit_pushed_results.py'
+      - 'cases_controlled_buoyancy/**'
       - 'RUN_CASE_REGISTRY.csv'
-      - 'cases_controlled_buoyancy/**/system/**'
   workflow_dispatch:
   schedule:
     - cron: '17 9 * * *'
-
 permissions:
   contents: read
-
 jobs:
-  research-audit:
-    name: Verify config and registry - NO CFD run
+  post-push-audit:
+    name: Inspect only previously pushed evidence
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 15
     steps:
-      - name: Checkout
+      - name: Checkout committed files
         uses: actions/checkout@v4
-      - name: Check Python syntax
+        with:
+          fetch-depth: 0
+      - name: Verify read-only Python scripts
         run: |
           python3 - <<'PY'
           import ast
           from pathlib import Path
-          for name in ("audit_postprocessing_config","live_run_watch","check_run_registry"):
+          for name in ("audit_pushed_results","audit_postprocessing_config","check_run_registry"):
               p=Path("analysis_tools")/(name+".py")
-              ast.parse(p.read_text(),filename=str(p))
-              print("PASS:",p)
+              ast.parse(p.read_text(encoding="utf-8"),filename=str(p))
+              print("Python syntax:",p)
           PY
-      - name: Verify registry
+      - name: Check scientific case registry
         run: python3 analysis_tools/check_run_registry.py
-      - name: Check V14 configured function objects
+      - name: Check V14 functionObject definitions and documentation
         run: python3 analysis_tools/audit_postprocessing_config.py --strict --out analysis_results/agent_checks/static.json
-      - name: Inspect C14 existing log with live-watcher once mode
-        run: python3 analysis_tools/live_run_watch.py --case cases_controlled_buoyancy/C14_topFixedFlux_explicitRef --once
-      - name: Archive diagnostics
+      - name: Audit pushed results, never simulate
+        shell: bash
+        env:
+          EVENT: ${{ github.event_name }}
+          PUSH_BASE: ${{ github.event.before }}
+          PR_BASE: ${{ github.event.pull_request.base.sha }}
+        run: |
+          set -euo pipefail
+          if [ "$EVENT" = "push" ]; then
+            python3 analysis_tools/audit_pushed_results.py --changed-base "${PUSH_BASE:-}"
+          elif [ "$EVENT" = "pull_request" ]; then
+            python3 analysis_tools/audit_pushed_results.py --changed-base "${PR_BASE:-}"
+          else
+            python3 analysis_tools/audit_pushed_results.py --all
+          fi
+          cat analysis_results/agent_checks/post_push/report.md >> "$GITHUB_STEP_SUMMARY"
+      - name: Preserve read-only post-push report
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: quickcup-research-agent-audit
-          if-no-files-found: warn
+          name: quickcup-post-push-audit
           retention-days: 30
-          path: analysis_results/agent_checks/static.json
+          if-no-files-found: warn
+          path: |
+            analysis_results/agent_checks/static.json
+            analysis_results/agent_checks/post_push/report.md
+            analysis_results/agent_checks/post_push/report.json
+# Forbidden here: OpenFOAM installation, Allrun, Allclean, foamMultiRun, blockMesh or any solver launch.
