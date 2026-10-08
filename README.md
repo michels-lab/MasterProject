@@ -4,7 +4,9 @@
 
 ## 2026-10-08 research roadmap
 
-[**Research plan: C15 adaptive, C16 phase relaxation, C3D and B free-surface/shrinkage**](NEXT_RESEARCH_ROADMAP_ES.md). C15 and C16 are prepared input-only cases, not simulated in GitHub or validated.
+[**Research plan: C15 adaptive, C16 phase relaxation, C3D and B free-surface/shrinkage**](NEXT_RESEARCH_ROADMAP_ES.md). B15/B16 and C15/C16 are prepared input-only cases, not simulated in GitHub or validated.
+
+**Stage gate:** complete paired B/C studies through V16 first; then fork into C → 3D and B → metal-air free surface plus shrinkage/feeding. No GitHub-based CFD execution.
 
 ## Scientific agents and postprocessing
 
@@ -27,7 +29,7 @@
 
 ## Coverage at 2026-10-08
 
-- 32 controlled-case directories: **29 verified** and **3 prepared/not run** (`B11_energy2_test`).
+- 34 controlled-case directories: **29 verified** and **5 prepared/not run** (`B11_energy2_test`).
 - [Historical full-campaign audit](analysis_results/full_campaign_audit/README.md) covers **26 cases only**, not all currently verified cases.
 - Additional independently verified results: [V14 B/C comparison](analysis_results/v14_bc_comparison/summary.md) and [C11 two-energy-corrector controlled test](analysis_results/c11_energy2_test/summary.md).
 - Current baseline for future fixed-volume experimental validation: `C14_topFixedFlux_explicitRef`; historical frozen reference: C11; JMatPro provenance gate **J0 open**.

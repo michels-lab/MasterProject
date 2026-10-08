@@ -358,3 +358,18 @@ Los casos históricos sin `metalTopPhiSum` pueden revisarse con el `energyAdvect
 - `B-FS/B-SH`: **PLAN paralelo** para superficie metal-aire y contracción/feeding, con auditoría de compatibilidad numérica Foundation v14 y conservación de masa. No implica que B14 sea físicamente validado.
 
 Detalles: `NEXT_RESEARCH_ROADMAP_ES.md`.
+
+---
+
+## 2026-10-08 — V15/V16 son parejas B/C; bifurcación de investigación después de V16
+
+**Estado de preparación (no corrida):** `B15_adaptiveDt_fromB14`, `C15_adaptiveDt_fromC14`, `B16_phaseRelax025_fromB14`, `C16_phaseRelax025_fromC14` = PREPARED_NOT_RUN.
+
+| Ensayo | Familia B | Familia C | Comparación obligatoria |
+|---|---|---|---|
+| V15 | B15 de B14 | C15 de C14 | Variar solo timestep adaptativo y cadencia de salida física; B15-B14 vs C15-C14 |
+| V16 | B16 de B14 | C16 de C14 | `phaseChangeSource/relax = 0.25` frente a 0.1, timestep fijo; B16-B14 vs C16-C14 |
+
+No arrastrar resultados de simulación ni confundir cambios numéricos con validación física. El caso B conserva la limitación de la formulación de densidad variable en volumen fijo cerrado.
+
+**Después de cerrar V16**, se abren dos rutas independientes: **familia C → geometría real 3D** y **familia B → superficie libre gas-metal, contracción/feeding**. El caso inicial 3D se basa en C14 hasta justificar por resultados un cambio de parámetros. La ruta B requerirá una formulación de interfaz con conservación de masa, y no está implementada en B15/B16. J0/G1 abiertas. Ver `NEXT_RESEARCH_ROADMAP_ES.md`.

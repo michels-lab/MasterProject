@@ -4160,3 +4160,15 @@ Following the supervisor meeting, 3D development from C14 became a near-term goa
 The parallel plans include a genuine 3D mesh (C14 remains an 80x80x1 planar `empty` model) and, separately, a metal-air free-surface and mass-conserving solidification-shrinkage/feeding B-family formulation. Investigate OF14 multiphase/solidification model compatibility before specifying new solver inputs; do not infer B14 mismatch is cured by an open pressure boundary. Both experimental J0/G1 gates remain open.
 
 All runs are performed exclusively on the researcher's laptop. GitHub performs post-push audits. See NEXT_RESEARCH_ROADMAP_ES.md.
+
+---
+
+## 2026-10-08 — RESEARCH-012 — Parallel B/C V15/V16 tests before the two-path split
+
+**[GIT-VERIFIED INPUTS] [PREPARED_NOT_RUN] [NO CFD EXECUTION]**
+
+User clarified the plan: V15 (adaptive timestep) and V16 (solidificationMelting phase-fraction relax 0.1 -> 0.25) are run separately in BOTH B and C families. Prepared clean B15_adaptiveDt_fromB14 and B16_phaseRelax025_fromB14 with only system/controlDict and constant/metal/fvModels changing, respectively. B14 physics, density table and boundaries are preserved and no legacy outputs were copied. Corrected non-executable appendix descriptions in the existing C15/C16 dictionaries, without changing active parameters.
+
+**Only after completing V16 in both families** does the research bifurcate: **C → physical 3D case from C14, subject to sensitivity findings** and **B → metal/air free surface with shrinkage/feeding and mass-conservative treatment**. Prepared V15/V16 remain closed, planar, pre-run sensitivity tests and are not purported to fix B14 continuity.
+
+Registry: 34 cases; 29 previously verified and 5 prepared/not run (B11-energy2, B15, B16, C15, C16). Updates include roadmap, registry, validation matrices and agent instructions. User executes CFD only on laptop and pushes results afterwards.

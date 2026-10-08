@@ -24,9 +24,9 @@ Los archivos `.agent.md` no son procesos residentes ni agentes LLM que se ejecut
 
 ## Nuevas líneas de trabajo — 2026-10-08
 
-Se prepararon dos nuevos casos limpios derivados por separado de C14: `C15_adaptiveDt_fromC14` (adaptive `deltaT` con tiempos de salida físicos alineados) y `C16_phaseRelax025_fromC14` (únicamente `fvModels/relax=0.25` frente a 0.1 de C14). **Total actualizado: 32 carpetas; 29 verificadas y 3 PREPARED_NOT_RUN** (B11-energy2, C15, C16).
+Se prepararon cuatro nuevos casos limpios, dos derivados de B14 y dos derivados de C14, como parejas V15/V16: **B15/C15** estudian adaptive timestep y **B16/C16** estudian relax de fase = 0.25 frente a 0.1. Los primeros casos C ya existían y se añadieron sus equivalentes B. Descripción de los C:  `C15_adaptiveDt_fromC14` (adaptive `deltaT` con tiempos de salida físicos alineados) y `C16_phaseRelax025_fromC14` (únicamente `fvModels/relax=0.25` frente a 0.1 de C14). **Total actualizado: 34 carpetas; 29 verificadas y 5 PREPARED_NOT_RUN** (B11-energy2, B15, B16, C15, C16).
 
-Plan científico completo y fases separadas C3D y B-FS/B-SH: [NEXT_RESEARCH_ROADMAP_ES.md](NEXT_RESEARCH_ROADMAP_ES.md). Ningún workflow de GitHub puede iniciar CFD, y ningún caso nuevo puede declararse corrido solo por existir en el repo. Tras cada push, auditar resultados y añadir un registro científico ES/EN con evidencia.
+Solo después de completar y auditar las cuatro variantes V15/V16 se bifurca el desarrollo: C3D desde C14 o baseline justificada; B-FS/B-SH con interfaz aire-metal y shrinkage/feeding. Plan científico completo: [NEXT_RESEARCH_ROADMAP_ES.md](NEXT_RESEARCH_ROADMAP_ES.md). Ningún workflow de GitHub puede iniciar CFD, y ningún caso nuevo puede declararse corrido solo por existir en el repo. Tras cada push, auditar resultados y añadir un registro científico ES/EN con evidencia.
 
 ## A. Fotografía inicial, 2026-10-08
 

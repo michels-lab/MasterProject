@@ -1,0 +1,105 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  14
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    format      ascii;
+    class       dictionary;
+    location    "system";
+    object      fvSolution;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+solvers
+{
+    "rho.*"
+    {
+        solver          diagonal;
+    }
+
+    p_rgh
+    {
+        solver           GAMG;
+        tolerance        1e-7;
+        relTol           0.01;
+        smoother         DICGaussSeidel;
+
+    }
+
+    p_rghFinal
+    {
+        $p_rgh;
+        relTol          0;
+    }
+
+    U
+    {
+        solver          PBiCGStab;
+        preconditioner  DILU;
+        tolerance       1e-8;
+        relTol          0.05;
+    }
+
+    UFinal
+    {
+        $U;
+        relTol          0;
+    }
+
+    _scalarSettings
+    {
+        solver          PBiCGStab;
+        preconditioner  DILU;
+        tolerance       1e-9;
+        relTol          0.05;
+    }
+    
+    "(h|k|epsilon|omega)"
+    {
+        $_scalarSettings;
+    }
+
+    "(h|k|epsilon|omega)Final"
+    {
+        $_scalarSettings;
+        relTol          0;
+    }
+}
+
+PIMPLE
+{
+    momentumPredictor   no;
+    nOuterCorrectors    1;
+    nCorrectors         2;
+    nNonOrthogonalCorrectors 0;
+    nEnergyCorrectors  2;
+    pRefPoint          (0.02 0.04 0.005);
+    pRefValue          1e5;
+}
+
+
+
+
+// ************************************************************************* //
+
+// ============================================================================
+// QUICKCUP DOCUMENTATION APPENDIX
+// ============================================================================
+// Archivo documentado: system/metal/fvSolution.
+// El contenido ejecutable anterior permanece intacto; este apéndice solo explica su función e interacción con el modelo.
+// FUNCIÓN: define solvers lineales, tolerancias, precondicionadores y acoplamiento PIMPLE.
+// Los bloques solvers{} actúan sobre campos concretos; tolerance fija el residuo absoluto objetivo y relTol permite detenerse respecto al residuo inicial.
+// momentumPredictor = no: activa o desactiva el predictor explícito de momento antes de las correcciones de presión.
+// nOuterCorrectors = 1: número de ciclos externos PIMPLE por paso de tiempo; más ciclos refuerzan el acoplamiento a mayor costo.
+// nCorrectors = 2: número de correcciones presión-velocidad dentro de cada ciclo PIMPLE.
+// nNonOrthogonalCorrectors = 0: correcciones adicionales de presión asociadas a no ortogonalidad de la malla.
+// nEnergyCorrectors = 2: se conserva exactamente la configuración solicitada por el director. En OpenFOAM Foundation v14 el solver regional usado aquí es `fluid`, cuyo módulo no consulta esta clave; por tanto se auditará el log para confirmar que no altera el número de solves de energía.
+// pRefPoint = (0.02 0.04 0.005): punto de referencia solicitado explícitamente por el director para V14; OpenFOAM debe poder asociarlo de forma unívoca con una celda de la región metal.
+// pRefValue = 1e5: valor de presión asignado al punto de referencia; debe ser coherente con p_rgh, pRef y las BC de presión.
+// INTERACCIÓN: PIMPLE controla cuánto se acoplan presión, velocidad y energía dentro de cada paso. pRefPoint/pRefValue fijan el datum de presión y deben interpretarse junto con p_rgh y pRef.
+// NOTA DE SEGURIDAD: todas las líneas de este apéndice son comentarios y no cambian la ejecución del caso.
+// ============================================================================

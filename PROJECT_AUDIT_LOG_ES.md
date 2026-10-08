@@ -4868,3 +4868,15 @@ Se prepararon nuevas variantes independientes de C14: **C15_adaptiveDt_fromC14**
 Se registró la necesidad de una geometría 3D físicamente representativa: C14 usa 80×80×1 celdas con caras `empty`. Se definió línea B paralela para modelar interfaz aire-metal y contracción, incluyendo auditoría de compatibilidad con módulos multiphase de OF14, sin asumir que un simple parche de presión corrige el balance de masa del B14 cerrado. El plan `NEXT_RESEARCH_ROADMAP_ES.md` distingue etapas y evidencias esperadas.
 
 **Pendiente:** ejecutar C15/C16 en laptop, hacer push y validar numeria/físicamente contra C14; definir geometría 3D y arquitectura B-VOF/shrinkage. C14/B14 y resultados históricos intactos.
+
+---
+
+## 2026-10-08 — RESEARCH-012 — V15/V16 ahora paralelas B/C y bifurcación posterior
+
+**[GIT-VERIFIED INPUTS] [PREPARED_NOT_RUN] [NO CFD EXECUTION]**
+
+Corrección de secuencia del investigador: **V15 y V16 se realizan para ambas familias**, no solo C. Se preparan `B15_adaptiveDt_fromB14` y `B16_phaseRelax025_fromB14` como contrapartes de `C15_adaptiveDt_fromC14` y `C16_phaseRelax025_fromC14`. B15 cambia únicamente `system/controlDict` respecto a B14, con `adjustTimeStep=yes`, escrituras a 0.1 s físicos mediante `adjustableRunTime`; B16 cambia únicamente `constant/metal/fvModels` mediante `phaseChangeSource/relax: 0.1 → 0.25`. En ambos casos toda la física/materiales/tablas de la familia B se preserva, sin heredar `logs/` ni `postProcessing/`.
+
+Se corrigieron comentarios no ejecutables de C15/C16 para reflejar valores actuales, sin cambiar sus parámetros activos. **Después de finalizar V16 para B y C** se abre una bifurcación: **C → 3D**, desde C14 como base física hasta evaluar los ensayos; **B → metal-aire con superficie libre, shrinkage y feeding**. Las variantes V15/V16 siguen siendo modelos cerrados 2D y no resuelven por sí mismas la continuidad del B14.
+
+Total: **34 carpetas** con **29 RUN/ANALYSIS_VERIFIED históricos** y **5 PREPARED_NOT_RUN** (B11-energy2, B15, B16, C15, C16). Siguientes actividades: ejecutar en laptop, hacer push, auditar resultados pareados y recién después escoger la arquitectura de cada ruta. Actualizados roadmap, registry, matrices y agents. GitHub no ejecutó OpenFOAM.

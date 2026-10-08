@@ -219,3 +219,13 @@ Cuando exista la curva digitalizada/raw, las métricas mínimas serán:
 - C3D-01: PLAN. Move from 80x80x1 `empty` 2D slab to a physically appropriate 3D geometry from C14; dimensions and instrument position need confirmation.
 - B-FS/B-SH: PLAN. Investigate true free-surface metal/air coupling and mass-conserving shrinkage/feeding independently from the closed-volume B14 numerical experiment.
 - Runs only occur on the user's laptop; GitHub performs post-push evidence auditing. J0/G1 gates remain open. Full plan: `NEXT_RESEARCH_ROADMAP_ES.md`.
+
+---
+
+## 2026-10-08 — Parallel B/C V15 and V16 sensitivity studies, followed by two research paths
+
+**Prepared, NOT RUN:** B15_adaptiveDt_fromB14 and C15_adaptiveDt_fromC14 (adaptative timestep, matched physical write intervals); B16_phaseRelax025_fromB14 and C16_phaseRelax025_fromC14 (solidificationMeltingSource relax 0.1 -> 0.25 with fixed timestep).
+
+Compare B15-B14 and C15-C14 for time-step effects, B16-B14 and C16-C14 for phase fraction relaxation, then compare the responses across B/C families. Do not interpret sensitivity experiments as resolution of B14 rigid-volume, rho(T) conservation issues.
+
+**Only after closing V16 for both families**, start independent paths: **C → physical 3D geometry based on C14 unless evidence favors alternative numeric settings**, and **B → metal/air free-surface and shrinkage/feeding modeling**. J0 and G1 remain open. All CFD is done on the researcher's laptop and pushed to Git afterwards. See NEXT_RESEARCH_ROADMAP_ES.md.

@@ -1,0 +1,46 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  14
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    format      ascii;
+    class       volScalarField;
+    location    "0/metal";
+    object      phaseChangeSource:alpha1;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+dimensions      [];
+
+internalField   uniform 1.0;
+
+boundaryField
+{
+    metalTop
+    {
+        type            zeroGradient;
+    }
+    frontAndBack
+    {
+        type            empty;
+    }
+    metal_to_mold
+    {
+        type            zeroGradient;
+    }
+}
+
+// ============================================================================
+// QUICKCUP DOCUMENTATION APPENDIX
+// ============================================================================
+// Archivo documentado: 0/metal/phaseChangeSource:alpha1.
+// El contenido ejecutable anterior permanece intacto; este apéndice solo explica su función e interacción con el modelo.
+// FUNCIÓN: fracción líquida del modelo de solidificación; aproximadamente 1 = líquido y 0 = sólido.
+// internalField = uniform 1.0: valor inicial asignado al interior del dominio antes de comenzar la integración temporal.
+// INTERACCIÓN: alphaL controla calor latente y resistencia Darcy de la zona pastosa, enlazando energía y momento.
+// NOTA DE SEGURIDAD: todas las líneas de este apéndice son comentarios y no cambian la ejecución del caso.
+// ============================================================================

@@ -4,14 +4,22 @@ Fecha: 2026-10-08 · Estado: hoja de ruta, no validación de resultados · OpenF
 ## Prioridades y genealogía
 
 ```text
-C14  [2D, dt fijo, relax=0.1] ──> C15 [2D, adaptive dt; salida cada 0.1 s]
-    ├────────────────────────> C16 [2D, dt fijo, relax de fase=0.25]
-    └────────────────────────> C3D-01 [3D base, sin superficie libre; caso futuro]
-B14  [rho(T), cerrado, mismatch continuidad] ──> B-FS-01 [interfaz aire-metal]
-                                      └────────> B-SH-01 [contracción/feeding con modelo conservativo]
+                           FASE COMÚN DE SENSIBILIDAD (2D)
+B14 ──┬──> B15  adaptive timestep ─────┐
+      └──> B16  relax fase = 0.25 ──────┤
+                                       ├──> CIERRE V15/V16 ──> RUTA B
+C14 ──┬──> C15  adaptive timestep ─────┤                       aire–metal,
+      └──> C16  relax fase = 0.25 ──────┘                       shrinkage/feeding
+                                                └─────────────> RUTA C
+                                                                  modelo 3D
 ```
 
-**Regla de investigación**: C15 y C16 descienden individualmente de C14; sus diferencias se evalúan contra C14 por separado. No se aplican simultáneamente `adaptive` y `relax=0.25` sin un experimento factorial nuevo. C14 y B14 quedan preservados. Ningún experimento se ejecuta en GitHub: Michel corre en laptop y hace push; GitHub audita lo almacenado.
+**Secuencia acordada:** V15 y V16 se ejecutan **en ambas familias B y C**, como pruebas de sensibilidad paralelas. **Después de cerrar V16** arrancan **dos rutas científicas diferentes**: C evoluciona a un modelo 3D desde la referencia C14 (o una configuración posterior justificada por evidencia), y B evoluciona a un modelo de superficie libre aire-metal y contracción/feeding. La transición de etapa es cronológica: **NO implica que C3D sea un clon de C16 ni que B-FS sea un clon de B16**. Se decide el padre físico según el análisis de V15/V16, manteniendo B14/C14 congelados. Ningún caso se ejecuta desde GitHub.
+
+**Comparaciones pareadas**:
+- V15: `B15 vs B14` y `C15 vs C14` (adaptativo), después diferencias de sensibilidad B/C.
+- V16: `B16 vs B14` y `C16 vs C14` (relajación), después diferencias de sensibilidad B/C.
+- El avance a 3D y superficie libre **solo se inicia tras disponer de los resultados V16 y revisar ambos grupos**; no se asume que las alteraciones numéricas resuelvan la discrepancia de continuidad B14.
 
 ### C15_adaptiveDt_fromC14 — PREPARED_NOT_RUN
 - Diferencia numérica: `system/controlDict/adjustTimeStep yes`.
@@ -26,7 +34,21 @@ B14  [rho(T), cerrado, mismatch continuidad] ──> B-FS-01 [interfaz aire-meta
 - Código real: `solidificationMelting.C` en https://cpp.openfoam.org/v14/solidificationMelting_8C_source.html utiliza `relax` en actualización de `alpha1` por timestep: este cambio puede afectar respuesta transitoria de fracción de fase y fuente latente, no solo residuales.
 - **Verificar después del push**: alphaL, dAlphaLdt, calor latente, T(t), fronts y velocidad, estabilidad/residuos, conservación y coste.
 
+### B15_adaptiveDt_fromB14 — PREPARED_NOT_RUN
+- Versión paralela directa de B14, con los **mismos tres ajustes** de `system/controlDict` que C15 frente a C14: `adjustTimeStep=yes`, `writeControl=adjustableRunTime`, `writeInterval=0.1` s.
+- Permanecen `maxCo=0.25`, `maxDeltaT=0.1` s, `deltaT` inicial 0.001 s, `relax=0.1`, EOS `rho(T)` de B14, mismas condiciones de frontera y top `slip+fixedFluxPressure`.
+- **Investigar** estabilidad, Courant, errores de continuidad, T/U/alphaL, energía, frente de fase y costo vs B14, con series alineadas por tiempo físico. Comprobar analogías/divergencias de sensibilidad con C15 vs C14.
+- La prueba adaptativa **no arregla** por sí misma la incompatibilidad de densidad variable en volumen rígido cerrado.
+
+### B16_phaseRelax025_fromB14 — PREPARED_NOT_RUN
+- Versión paralela directa de B14. Solo cambia `constant/metal/fvModels/phaseChangeSource/relax` `0.1 -> 0.25`, manteniendo `adjustTimeStep=no` y `deltaT=0.001` s fijo.
+- `maxCo=0.25` y `relaxationFactors=1.0` son diferentes al `relax` de solidificationMeltingSource; no tocarlos.
+- **Investigar** respuesta de fracción líquida, latente, T/U, residual, continuidad y costo vs B14; contrastar `B16-B14` vs `C16-C14`.
+- Separar resultado de relajación del diseño posterior de superficie libre/contracción. No declarar que `relax=0.25` valide la física de B.
+
 ## C3D-01 — expansión geométrica desde C14, fase siguiente
+
+**Esta ruta 3D empieza después de concluir V16 para las dos familias.**
 
 **C14 real NO es 3D**: `system/blockMeshDict` representa 40×40×10 mm en metal, con **80×80×1 celdas** y parches `frontAndBack` de tipo `empty`. Es un plano 2D extruido para mallado; hay que rediseñar geometría, mallado, parches y referencias.
 
@@ -40,6 +62,8 @@ Plan gradual:
 5. Afinar malla y validar después con curvas de enfriamiento y datos JMatPro (puerta J0 sigue abierta).
 
 ## B-FS y B-SH — programa paralelo de superficie libre y shrinkage
+
+**Esta ruta B empieza después de concluir V16 en las dos familias; B15 y B16 son ensayos numéricos previos y no contienen todavía aire, superficie libre ni shrinkage.**
 
 **No descartar B14**: es un experimento útil de densidad variable, pero el dominio metálico impermeable y de volumen fijo exhibió continuidad acumulada ≈ -0.031. El resultado motiva explorar física de cambio de volumen, **no demuestra todavía** que incorporar aire o superficie libre resolverá exactamente ese residuo.
 
@@ -56,7 +80,7 @@ En Foundation v14 existen módulos `twoPhaseVoFSolver` y `multiphaseEuler`, pero
 
 ## Gates de prueba e integridad
 
-- Las nuevas ramas C15/C16 son solo **PREPARED_NOT_RUN** hasta ejecución real en laptop y push de evidencia. Nunca prometer funcionamiento o estabilidad sin logs.
+- Los nuevos casos B15/B16/C15/C16 son solo **PREPARED_NOT_RUN** hasta ejecución real en laptop y push de evidencia. Nunca prometer funcionamiento o estabilidad sin logs.
 - Tras cada push, usar informes GitHub si Actions funciona; los agentes declarativos no son trabajadores autónomos. Actualizar inventario y bitácoras ES/EN, CASE_NOTES y análisis.
 - La puerta **J0 (JMatPro)** y experimental **G1** permanecen abiertas. Trabajar en 3D no sustituye verificar propiedades/condiciones experimentales.
 - No copiar postProcessing heredado como evidencia del nuevo caso, ni editar C14/B14.
