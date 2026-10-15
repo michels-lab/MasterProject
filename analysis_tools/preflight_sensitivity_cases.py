@@ -139,7 +139,8 @@ def audit_all(cases_root: Path = ROOT / CASES, mode: str = "prepared") -> dict[s
     for spec in VARIANTS:
         selected = mode
         if mode == "auto":
-            selected = "post-run" if copied_evidence(cases_root / spec[1]) else "prepared"
+            variant = cases_root / spec[1]
+            selected = "post-run" if variant.is_dir() and copied_evidence(variant) else "prepared"
         result[spec[1]] = audit_pair(cases_root, spec, selected)
     return result
 
