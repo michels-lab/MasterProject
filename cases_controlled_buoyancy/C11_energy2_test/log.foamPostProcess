@@ -7,12 +7,12 @@
 \*---------------------------------------------------------------------------*/
 Build  : 14-7b05503f98a8
 Exec   : foamPostProcess -region metal -dict system/momentumPostProcessing -time 0: -fields (phaseChangeSolidFraction phaseChangeDarcyCoeff phaseChangeModelDeltaT phaseChangeDarcyAcceleration phaseChangeBuoyancyAcceleration pRghAcceleration magPhaseChangeDarcyAcceleration magPhaseChangeBuoyancyAcceleration magPRghAcceleration phaseChangeDragToBuoyancy phaseChangeDragToPressure)
-Date   : Oct 03 2026
-Time   : 23:32:46
-Host   : "runnervm8df0l"
-PID    : 7079
+Date   : Oct 05 2026
+Time   : 02:56:30
+Host   : "Michel-DuarteHP"
+PID    : 1234677
 I/O    : uncollated
-Case   : /home/runner/work/QuickCup-Solidification/QuickCup-Solidification/cases_controlled_buoyancy/C11_energy2_test
+Case   : /home/michel/OpenFOAM/QuickCup_Solidification/cases_controlled_buoyancy/C11_energy2_test
 nProcs : 1
 sigFpe : Enabling floating point exception trapping (FOAM_SIGFPE).
 fileModificationChecking : Monitoring run-time modified files using timeStampMaster (fileModificationSkew 10)

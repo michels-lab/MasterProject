@@ -38,14 +38,3 @@ boundaryField
 
 
 // ************************************************************************* //
-
-// ============================================================================
-// QUICKCUP DOCUMENTATION APPENDIX
-// ============================================================================
-// Archivo documentado: 0/metal/magPhaseChangeBuoyancyAcceleration.
-// El contenido ejecutable anterior permanece intacto; este apéndice solo explica su función e interacción con el modelo.
-// FUNCIÓN: Magnitud de la aceleración de flotación reconstruida.
-// internalField = uniform 0: valor inicial asignado al interior del dominio antes de comenzar la integración temporal.
-// INTERACCIÓN: es un campo de diagnóstico/interpretación y no modifica las ecuaciones salvo que otro modelo activo lo referencie explícitamente.
-// NOTA DE SEGURIDAD: todas las líneas de este apéndice son comentarios y no cambian la ejecución del caso.
-// ============================================================================

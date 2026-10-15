@@ -1,0 +1,70 @@
+name: Run V10 V11 OpenFOAM 14 cases
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/run-v10-v11-openfoam14.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  run-case:
+    name: ${{ matrix.case }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        case:
+          - B10_airGapOF14
+          - C10_airGapOF14
+          - B11_topFixedFlux_airGapOF14
+          - C11_topFixedFlux_airGapOF14
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install OpenFOAM 14
+        shell: bash
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y wget software-properties-common
+          wget -qO- https://dl.openfoam.org/gpg.key | sudo tee /etc/apt/trusted.gpg.d/openfoam.asc >/dev/null
+          sudo rm -f /etc/apt/sources.list.d/*dl_openfoam_org*list
+          sudo add-apt-repository -y "http://dl.openfoam.org/ubuntu main dev"
+          sudo apt-get update
+          sudo apt-get install -y openfoam14
+
+      - name: Run case
+        shell: bash
+        env:
+          CASE_NAME: ${{ matrix.case }}
+        run: |
+          set -euo pipefail
+          source /opt/openfoam14/etc/bashrc
+          cd "cases_controlled_buoyancy/$CASE_NAME"
+          ./Allclean || true
+          ./Allrun
+          echo "Latest time:"
+          foamListTimes -latestTime
+          test "$(foamListTimes -latestTime)" = "10"
+          grep -q "^End$" log.foamMultiRun
+
+      - name: Upload results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.case }}-results
+          if-no-files-found: warn
+          retention-days: 14
+          path: |
+            cases_controlled_buoyancy/${{ matrix.case }}/log.foamMultiRun
+            cases_controlled_buoyancy/${{ matrix.case }}/log.blockMesh
+            cases_controlled_buoyancy/${{ matrix.case }}/log.splitMeshRegions
+            cases_controlled_buoyancy/${{ matrix.case }}/log.foamPostProcess
+            cases_controlled_buoyancy/${{ matrix.case }}/log.foamLog
+            cases_controlled_buoyancy/${{ matrix.case }}/logs/**
+            cases_controlled_buoyancy/${{ matrix.case }}/postProcessing/**

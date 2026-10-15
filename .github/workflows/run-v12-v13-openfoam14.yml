@@ -1,0 +1,87 @@
+name: Run V12 V13 OpenFOAM 14 cases
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/run-v12-v13-openfoam14.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  run-case:
+    name: ${{ matrix.case }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        case:
+          - B12_topFixedValue_airGapOF14
+          - C12_topFixedValue_airGapOF14
+          - B13_prghPressure_airGapOF14
+          - C13_prghPressure_airGapOF14
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install OpenFOAM 14
+        shell: bash
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y wget software-properties-common
+          wget -qO- https://dl.openfoam.org/gpg.key | sudo tee /etc/apt/trusted.gpg.d/openfoam.asc >/dev/null
+          sudo rm -f /etc/apt/sources.list.d/*dl_openfoam_org*list
+          sudo add-apt-repository -y "http://dl.openfoam.org/ubuntu main dev"
+          sudo apt-get update
+          sudo apt-get install -y openfoam14
+
+      - name: Run canonical V12/V13 case
+        shell: bash
+        env:
+          CASE_NAME: ${{ matrix.case }}
+        run: |
+          set -euo pipefail
+          source /opt/openfoam14/etc/bashrc
+          cd "cases_controlled_buoyancy/$CASE_NAME"
+          ./Allclean || true
+          ./Allrun
+          echo "Latest time:"
+          foamListTimes -latestTime
+          test "$(foamListTimes -latestTime)" = "10"
+          grep -q "^End$" log.foamMultiRun
+
+      - name: Audit essential diagnostics
+        if: always()
+        shell: bash
+        env:
+          CASE_NAME: ${{ matrix.case }}
+        run: |
+          set +e
+          cd "cases_controlled_buoyancy/$CASE_NAME"
+          echo "===== CASE ====="
+          echo "$CASE_NAME"
+          echo "===== FATAL / WARNINGS ====="
+          grep -n -E "FOAM FATAL|FOAM Warning|Floating point|Segmentation|ERROR" log.foamMultiRun 2>/dev/null | tail -50 || true
+          echo "===== FINAL LOG ====="
+          tail -80 log.foamMultiRun 2>/dev/null || true
+          echo "===== DIAGNOSTIC FILES ====="
+          find postProcessing -maxdepth 4 -type f 2>/dev/null | sort | tail -100 || true
+
+      - name: Upload results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.case }}-results
+          if-no-files-found: warn
+          retention-days: 14
+          path: |
+            cases_controlled_buoyancy/${{ matrix.case }}/log.foamMultiRun
+            cases_controlled_buoyancy/${{ matrix.case }}/log.blockMesh
+            cases_controlled_buoyancy/${{ matrix.case }}/log.splitMeshRegions
+            cases_controlled_buoyancy/${{ matrix.case }}/log.foamPostProcess
+            cases_controlled_buoyancy/${{ matrix.case }}/log.foamLog
+            cases_controlled_buoyancy/${{ matrix.case }}/logs/**
+            cases_controlled_buoyancy/${{ matrix.case }}/postProcessing/**

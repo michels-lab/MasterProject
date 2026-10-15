@@ -1,0 +1,100 @@
+/*---------------------------------------------------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  14
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+Build  : 14-7b05503f98a8
+Exec   : blockMesh
+Date   : Oct 09 2026
+Time   : 18:09:08
+Host   : "Michel-DuarteHP"
+PID    : 15404
+I/O    : uncollated
+Case   : /home/michel/OpenFOAM/QuickCup_Solidification_V15_V16/cases_controlled_buoyancy/B15_adaptiveDt_fromB14
+nProcs : 1
+sigFpe : Enabling floating point exception trapping (FOAM_SIGFPE).
+fileModificationChecking : Monitoring run-time modified files using timeStampMaster (fileModificationSkew 10)
+allowSystemOperations : Allowing user-supplied system call operations
+
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+Create time
+
+Reading "blockMeshDict"
+
+Creating block mesh from
+    "system/blockMeshDict"
+No non-linear block edges defined
+No non-planar block faces defined
+Creating topology blocks
+Creating topology patches
+
+Creating block mesh topology
+
+Basic statistics
+    Number of internal faces : 7
+    Number of boundary faces : 22
+    Number of defined boundary faces : 22
+    Number of undefined boundary faces : 0
+
+Checking topology
+Creating block offsets
+Creating merge list .
+
+Creating polyMesh from blockMesh
+Creating patches
+Creating cells
+Creating points with scale 0.001
+    Block 0 cell size :
+        i : 0.0005
+        j : 0.0005
+        k : 0.01
+    Block 1 cell size :
+        i : 0.0005 .. 0.0005
+        j : 0.0005
+        k : 0.01
+    Block 2 cell size :
+        i : 0.0005 .. 0.0005
+        j : 0.0005 .. 0.0005
+        k : 0.01
+    Block 3 cell size :
+        i : 0.0005
+        j : 0.0005 .. 0.0005
+        k : 0.01
+    Block 4 cell size :
+        i : 0.0005
+        j : 0.0005 .. 0.0005
+        k : 0.01
+    Block 5 cell size :
+        i : 0.0005
+        j : 0.0005
+        k : 0.01
+
+No patch pairs to merge
+
+Adding cell zones
+    0	metal
+    1	mold
+
+Writing polyMesh
+----------------
+Mesh Information
+----------------
+  boundingBox: (-0.007 -0.015 0) (0.047 0.04 0.01)
+  nPoints: 24198
+  nCells: 11880
+  nFaces: 47738
+  nInternalFaces: 23542
+----------------
+Patches
+----------------
+  patch 0 (start: 23542 size: 108) name: moldBottom
+  patch 1 (start: 23650 size: 28) name: moldTop
+  patch 2 (start: 23678 size: 110) name: moldLeft
+  patch 3 (start: 23788 size: 110) name: moldRight
+  patch 4 (start: 23898 size: 80) name: metalTop
+  patch 5 (start: 23978 size: 23760) name: frontAndBack
+
+End
+

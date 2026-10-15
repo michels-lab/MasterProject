@@ -1,17 +1,36 @@
-# CASE_VARIANT — B11_energy2_test
+# B11_topFixedFlux_airGapOF14
 
-**Parent:** `B11_topFixedFlux_airGapOF14`
-**Status (2026-10-08):** CLEAN INPUTS / PREPARED / NOT RUN-VERIFIED.
+Parent case: `B9_topFixedFlux`.
 
-## Controlled experiment
+Purpose: V9 top fixedFluxPressure lineage + corrected OF14 air gap.
 
-Only root `system/fvSolution/PIMPLE/nEnergyCorrectors` changes from 1 to 2.
-Global `nOuterCorrectors = 3`, so the run is expected to show six energy equation solves per timestep (`h_0..h_5` and `e_0..e_5`) if the change is effective.
+## Controlled configuration
 
-All input files under `0/`, `constant/` and `system/` were checked against B11 by Git blob SHA: the only input difference is root `system/fvSolution`.
+The metal-mold air gap is represented with OpenFOAM Foundation v14 syntax on the metal side only:
 
-## Evidence warning
+```
+h
+{
+    type              wallLayersHeatTransferCoefficient;
+    thicknessLayers   (2e-4);
+    kappaLayers       (1e-1);
+}
+```
 
-The original copied directory included B11's pre-existing outputs: both central temperature probe files had Git blob SHA `8e5b4c39dade992897df864f8d4f3dce135dcf24`. Such inherited files cannot validate B11-energy2. They were removed from the variant's tracked tree on 2026-10-08; source B11 results remain intact.
+The mold side remains a plain `coupledTemperature` boundary, avoiding a duplicated series resistance.
 
-A fresh local OpenFOAM Foundation 14 run and a documented B11-vs-energy2 analysis are still required. This variant does not create a new V generation, change material physics or supersede C14.
+Both B10 and B11 use the same extended `icoTabulated` density table through 2273.15 K; all original values through 1773.15 K remain unchanged.
+
+All timestep, PIMPLE, mesh, phase-change, velocity, pressure, top thermal boundary, material and diagnostic settings otherwise remain inherited from the parent lineage.
+
+## Current methodological status
+
+**RUN-VERIFIED + ANALYSIS-VERIFIED.**
+
+Direct V11 evidence confirms that `fixedFluxPressure + slip` closes `metalTop` to numerical precision:
+- max `|sum(phi)| = 1.694066e-21 kg/s`;
+- integrated top advective energy ≈ 0 J.
+
+Relative to B10, closing the top removes ~629.6 J of advective transport and strongly reorganizes the B velocity field. The variable-density cumulative continuity mismatch remains and is interpreted as a fixed-volume/model-physics limitation, not as top leakage.
+
+V11 therefore remains the impermeable baseline for family B; V12/V13 remain diagnostic pressure-value variants.

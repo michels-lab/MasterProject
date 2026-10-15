@@ -6,13 +6,13 @@
      \\/     M anipulation  |
 \*---------------------------------------------------------------------------*/
 Build  : 14-7b05503f98a8
-Exec   : foamPostProcess -region metal -dict /home/michel/OpenFOAM/QuickCup_Solidification/analysis_tools/topSurfaceFlowPostProcessing -time 0: -fields (U T p_rgh rho phi phaseChangeSource:alpha1)
-Date   : Oct 03 2026
-Time   : 01:38:25
+Exec   : foamPostProcess -region metal -dict /home/michel/OpenFOAM/QuickCup_Solidification_V15_V16/analysis_tools/topSurfaceFlowPostProcessing -time 0: -fields (U T p_rgh rho phi phaseChangeSource:alpha1)
+Date   : Oct 09 2026
+Time   : 18:22:06
 Host   : "Michel-DuarteHP"
-PID    : 1211132
+PID    : 19724
 I/O    : uncollated
-Case   : /home/michel/OpenFOAM/QuickCup_Solidification/cases_controlled_buoyancy/C14_topFixedFlux_explicitRef
+Case   : /home/michel/OpenFOAM/QuickCup_Solidification_V15_V16/cases_controlled_buoyancy/C14_topFixedFlux_explicitRef
 nProcs : 1
 sigFpe : Enabling floating point exception trapping (FOAM_SIGFPE).
 fileModificationChecking : Monitoring run-time modified files using timeStampMaster (fileModificationSkew 10)

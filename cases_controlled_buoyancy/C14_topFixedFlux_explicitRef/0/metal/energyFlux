@@ -12682,13 +12682,3 @@ boundaryField
 
 
 // ************************************************************************* //
-
-// ============================================================================
-// QUICKCUP DOCUMENTATION APPENDIX
-// ============================================================================
-// Archivo documentado: 0/metal/energyFlux.
-// El contenido ejecutable anterior permanece intacto; este apéndice solo explica su función e interacción con el modelo.
-// FUNCIÓN: Diagnóstico de flujo total de energía.
-// INTERACCIÓN: es un campo de diagnóstico/interpretación y no modifica las ecuaciones salvo que otro modelo activo lo referencie explícitamente.
-// NOTA DE SEGURIDAD: todas las líneas de este apéndice son comentarios y no cambian la ejecución del caso.
-// ============================================================================
