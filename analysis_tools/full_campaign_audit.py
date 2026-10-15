@@ -127,7 +127,7 @@ def log_text(case: Path):
 
 
 def log_end(case: Path):
-    return bool(re.search(r"(?m)^End\s*$", log_text(case)))
+    return bool(re.search(r"(?m)^\s*End\s*$", log_text(case)))
 
 
 def log_available(case: Path):
