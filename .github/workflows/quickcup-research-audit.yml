@@ -46,6 +46,8 @@ jobs:
               ast.parse(p.read_text(encoding="utf-8"),filename=str(p))
               print("Python syntax:",p)
           PY
+      - name: Test solver-log End marker parsing
+        run: python3 -m unittest discover -s analysis_tools -p 'test_audit_log_markers.py' -v
       - name: Check scientific case registry
         run: python3 analysis_tools/check_run_registry.py
       - name: Check V14 functionObject definitions and documentation
