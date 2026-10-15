@@ -79,7 +79,7 @@ def audit_case(case,reg):
     if log_size==0:
         notes.append("Full foamMultiRun log missing or empty in checkout")
     else:
-        if not re.search(r"(?m)^End\s*$",data):
+        if not re.search(r"(?m)^\s*End\s*$",data):
             notes.append("End marker not found near saved log tail")
         if re.search(r"FOAM FATAL|segmentation fault|floating point exception|failed wmake",data,re.I):
             check.append("Fatal/error marker in saved log tail")
