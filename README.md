@@ -13,6 +13,7 @@
 **Execution ownership:** all CFD runs occur on the user's laptop. The repository runs no CFD and only audits results after git push.
 
 - [Postprocessing field and function-object guide (Spanish)](POSTPROCESSING_FIELD_GUIDE_ES.md)
+- [V15/V16 controlled-input preflight (read-only)](analysis_tools/preflight_sensitivity_cases.py) — verifies B15/B16/C15/C16 provenance and single-variable changes before laptop runs; [evidence report](analysis_results/v15_v16_preflight/README.md).
 - [Post-push evidence auditor (read-only)](analysis_tools/audit_pushed_results.py) — checks files already pushed from the user's laptop
 - [Static OpenFOAM14 function-object auditor](analysis_tools/audit_postprocessing_config.py)
 - [GitHub post-push/manual/scheduled audit workflow](.github/workflows/quickcup-research-audit.yml) — checks committed evidence only, never launches CFD; verify actual Actions success.

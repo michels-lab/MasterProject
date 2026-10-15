@@ -84,3 +84,9 @@ En Foundation v14 existen módulos `twoPhaseVoFSolver` y `multiphaseEuler`, pero
 - Tras cada push, usar informes GitHub si Actions funciona; los agentes declarativos no son trabajadores autónomos. Actualizar inventario y bitácoras ES/EN, CASE_NOTES y análisis.
 - La puerta **J0 (JMatPro)** y experimental **G1** permanecen abiertas. Trabajar en 3D no sustituye verificar propiedades/condiciones experimentales.
 - No copiar postProcessing heredado como evidencia del nuevo caso, ni editar C14/B14.
+
+## 2026-10-15 — Preflight reproducible previo a ejecutar V15/V16
+
+El árbol Git de las cuatro variantes se comparó directamente con su padre (B14/C14): únicamente difieren `system/controlDict` para V15 y `constant/metal/fvModels` para V16; los demás archivos de entrada conservan el mismo blob. Se añadió `analysis_tools/preflight_sensitivity_cases.py` con pruebas sintéticas `analysis_tools/test_preflight_sensitivity.py` para detectar diferencias no controladas, valores activos fuera de hipótesis, entradas faltantes y evidencia heredada. Uso: `python3 analysis_tools/preflight_sensitivity_cases.py --strict`.
+
+**Esto verifica la preparación de entradas, NO el resultado numérico.** Los cuatro casos siguen `PREPARED_NOT_RUN`, a la espera de ejecución en laptop y auditoría MAZAPÁN. Evidencia: [analysis_results/v15_v16_preflight/README.md](analysis_results/v15_v16_preflight/README.md). La bifurcación C3D/B-FS continúa bloqueada hasta cerrar V16 de B y C.

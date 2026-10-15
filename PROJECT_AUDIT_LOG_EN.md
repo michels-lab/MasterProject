@@ -4172,3 +4172,15 @@ User clarified the plan: V15 (adaptive timestep) and V16 (solidificationMelting 
 **Only after completing V16 in both families** does the research bifurcate: **C → physical 3D case from C14, subject to sensitivity findings** and **B → metal/air free surface with shrinkage/feeding and mass-conservative treatment**. Prepared V15/V16 remain closed, planar, pre-run sensitivity tests and are not purported to fix B14 continuity.
 
 Registry: 34 cases; 29 previously verified and 5 prepared/not run (B11-energy2, B15, B16, C15, C16). Updates include roadmap, registry, validation matrices and agent instructions. User executes CFD only on laptop and pushes results afterwards.
+
+---
+
+## 2026-10-15 — V15/V16-PREFLIGHT-013 — Input provenance audit, no CFD execution
+
+**[GIT-VERIFIED INPUTS] [PREPARED_NOT_RUN] [NO CFD EXECUTION]**
+
+Git trees for the four prepared B15/B16/C15/C16 variants were compared with their frozen B14/C14 parents. Only `system/controlDict` differs for V15 and only `constant/metal/fvModels` differs for V16. Active assignments show V15 changes `adjustTimeStep`, `writeControl`, `writeInterval`; V16 changes phase-source `relax` from 0.1 to 0.25.
+
+Added read-only reproducible preflight (`analysis_tools/preflight_sensitivity_cases.py`), synthetic regression tests and a GitHub post-push CI check. The check rejects unintended input changes and inherited simulation evidence; it never launches a solver. Evidence: `analysis_results/v15_v16_preflight/README.md`.
+
+**Status:** input-only verification, with separate pending CI check. All four variants remain `PREPARED_NOT_RUN`, and J0/G1 remain open. Frozen B14/C14 and the scientific results were not changed.
