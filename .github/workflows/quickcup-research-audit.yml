@@ -7,6 +7,8 @@ on:
       - '.github/workflows/quickcup-research-audit.yml'
       - 'analysis_tools/audit_pushed_results.py'
       - 'analysis_tools/audit_postprocessing_config.py'
+      - 'analysis_tools/preflight_sensitivity_cases.py'
+      - 'analysis_tools/test_preflight_sensitivity.py'
       - 'cases_controlled_buoyancy/**'
       - 'analysis_results/**'
       - 'RUN_CASE_REGISTRY.csv'
@@ -19,6 +21,8 @@ on:
       - '.github/agents/**'
       - '.github/workflows/quickcup-research-audit.yml'
       - 'analysis_tools/audit_pushed_results.py'
+      - 'analysis_tools/preflight_sensitivity_cases.py'
+      - 'analysis_tools/test_preflight_sensitivity.py'
       - 'cases_controlled_buoyancy/**'
       - 'RUN_CASE_REGISTRY.csv'
   workflow_dispatch:
@@ -41,13 +45,17 @@ jobs:
           python3 - <<'PY'
           import ast
           from pathlib import Path
-          for name in ("audit_pushed_results","audit_postprocessing_config","check_run_registry"):
+          for name in ("audit_pushed_results","audit_postprocessing_config","check_run_registry","preflight_sensitivity_cases","test_preflight_sensitivity"):
               p=Path("analysis_tools")/(name+".py")
               ast.parse(p.read_text(encoding="utf-8"),filename=str(p))
               print("Python syntax:",p)
           PY
       - name: Test solver-log End marker parsing
         run: python3 -m unittest discover -s analysis_tools -p 'test_audit_log_markers.py' -v
+      - name: Check V15/V16 controlled input provenance (no CFD)
+        run: |
+          python3 -m unittest discover -s analysis_tools -p 'test_preflight_sensitivity.py' -v
+          python3 analysis_tools/preflight_sensitivity_cases.py --strict
       - name: Check scientific case registry
         run: python3 analysis_tools/check_run_registry.py
       - name: Check V14 functionObject definitions and documentation
