@@ -65,7 +65,7 @@ def parameter_value_and_mask(text: str, key: str) -> tuple[str, str]:
         raise ValueError(f"Expected one active assignment of {key}; found {len(matches)}")
     original = matches[0].group(2).strip()
     masked = pattern.sub(lambda m: m.group(1) + "<CONTROLLED>" + m.group(3), text)
-    return original, " ".join(masked.split())
+    return original, masked
 
 
 def copied_evidence(case: Path) -> list[str]:
@@ -123,7 +123,7 @@ def audit_pair(cases_root: Path, spec: tuple) -> list[str]:
                 issues.append(
                     f"{key}: expected {expected_parent!r} -> {expected_child!r}; "
                     f"observed {pval!r} -> {cval!r}")
-        if source != variant:
+        if " ".join(source.split()) != " ".join(variant.split()):
             issues.append("Unexpected additional active statement change in controlled file")
     return issues
 
