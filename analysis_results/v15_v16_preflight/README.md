@@ -1,11 +1,11 @@
 # V15/V16 — auditoría de paridad de entradas (15 de octubre de 2026)
 
 **Tipo de evidencia:** GIT-VERIFIED INPUTS. **Sin ejecución de CFD.**
-Los cuatro ensayos continúan \`PREPARED_NOT_RUN\`.
+Los cuatro ensayos continúan `PREPARED_NOT_RUN`.
 
 ## Auditoría del árbol de Git
 
-Se compararon los árboles \`0/\`, \`constant/\` y \`system/\` de cada
+Se compararon los árboles `0/`, `constant/` y `system/` de cada
 variante con su respectivo padre usando hashes de Git del repositorio.
 Los archivos no controlados se mantuvieron idénticos:
 
@@ -17,24 +17,24 @@ Los archivos no controlados se mantuvieron idénticos:
 | C14_topFixedFlux_explicitRef | C16_phaseRelax025_fromC14 | constant/metal/fvModels |
 
 De las entradas leídas:
-- V15: \`adjustTimeStep: no → yes\`;
-  \`writeControl: timeStep → adjustableRunTime\`;
-  \`writeInterval: 100 → 0.1\`. \`deltaT=0.001\`,
-  \`maxCo=0.25\`, \`maxDeltaT=0.1\` se conservan.
-- V16: \`phaseChangeSource/relax: 0.1 → 0.25\`;
-  sin cambiar \`maxCo\`, el esquema de paso fijo ni
-  \`relaxationFactors\` de PIMPLE.
-- Las variantes no contienen \`logs/\`, \`postProcessing/\`, \`log.*\`
+- V15: `adjustTimeStep: no → yes`;
+  `writeControl: timeStep → adjustableRunTime`;
+  `writeInterval: 100 → 0.1`. `deltaT=0.001`,
+  `maxCo=0.25`, `maxDeltaT=0.1` se conservan.
+- V16: `phaseChangeSource/relax: 0.1 → 0.25`;
+  sin cambiar `maxCo`, el esquema de paso fijo ni
+  `relaxationFactors` de PIMPLE.
+- Las variantes no contienen `logs/`, `postProcessing/`, `log.*`
   ni estados temporales copiados en el árbol rastreado al verificarse.
 
 ## Control reproducible previo a una corrida
 
 Desde la raíz del repositorio:
 
-\`\`\`bash
+```bash
 python3 -m unittest discover -s analysis_tools -p 'test_preflight_sensitivity.py' -v
 python3 analysis_tools/preflight_sensitivity_cases.py --strict
-\`\`\`
+```
 
 El preflight lee únicamente los archivos y detecta archivos faltantes,
 entradas adicionales, cambios ajenos a la hipótesis controlada, variaciones
