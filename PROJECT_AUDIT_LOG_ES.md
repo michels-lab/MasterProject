@@ -4892,3 +4892,15 @@ Se inspeccionaron los árboles Git `0/`, `constant/` y `system/` para B15/B16/C1
 Se añadió una comprobación reproducible **de solo lectura** `analysis_tools/preflight_sensitivity_cases.py`, pruebas sintéticas `test_preflight_sensitivity.py` y un paso en `quickcup-research-audit.yml` para detectar cambios no controlados o evidencia copiada sin ejecutar OpenFOAM. Informe: `analysis_results/v15_v16_preflight/README.md`.
 
 **Estado:** paridad de entradas verificada en la inspección; la ejecución de CI de la nueva rama y las cuatro corridas físicas se comprueban por separado. **J0 y G1 siguen ABIERTAS**. No se tocó B14/C14 ni se promovió ninguna variante a `RUN_VERIFIED`.
+
+---
+
+## 2026-10-15 — PUSH-014 — Evidencia nueva de cinco corridas y restitución accidental de workflows retirados
+
+**[GIT-VERIFIED OUTPUTS] [PRELIMINARY-ANALYSIS] [SCIENTIFIC-CLOSURE-OPEN]**
+
+Se comprobó que el commit `25e7cf8` subió `logs/`, `postProcessing/` y `log.foamMultiRun` para B11_energy2, B15, B16, C15 y C16. Las series `logs/Time_0` y los probes térmicos alcanzan 10 s. El registro de casos aún no está reconciliado con toda la evidencia y no deben declararse `ANALYSIS_VERIFIED` sin auditar log final, campos, masa, calor latente y fronteras. Comparaciones numéricas del punto central, Courant y continuidad: `analysis_results/v15_v16_postpush_20261015/README.md`.
+
+Hallazgo adicional: un push local volvió a añadir al árbol Git tres workflows retirados que instalan OpenFOAM y/o generan variantes en Actions. El cambio correctivo los elimina de nuevo **sin tocar resultados**, y adapta el preflight para verificar entradas `constant/`, `system/` y scripts en casos ya ejecutados. El chequeo de entradas preparadas se conserva en modo estricto; la paridad de campos iniciales `0/` tras una corrida necesita revisión específica.
+
+**Puertas científicas J0/G1 y bifurcación después de V16: sin cambios.** La documentación de esta sesión no convierte una evidencia temporal en validación física.

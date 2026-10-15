@@ -86,6 +86,16 @@ class ControlledVariantPreflightTests(unittest.TestCase):
         path.write_text(path.read_text() + "\n// Additional explanatory comment.\n")
         self.assertEqual(audit_all(self.root)["C16_phaseRelax025_fromC14"], [])
 
+    def test_postrun_auto_accepts_runtime_outputs_without_weakening_core_inputs(self):
+        variant = self.root / "B15_adaptiveDt_fromB14"
+        (variant / "logs").mkdir()
+        (variant / "log.foamMultiRun").write_text("End\n")
+        (variant / "0/metal/coolingRate").write_text("generated runtime diagnostic\n")
+        self.assertEqual(audit_all(self.root, mode="auto")["B15_adaptiveDt_fromB14"], [])
+        f = variant / "system/controlDict"
+        f.write_text(f.read_text().replace("maxCo 0.25;", "maxCo 0.99;"))
+        self.assertTrue(audit_all(self.root, mode="auto")["B15_adaptiveDt_fromB14"])
+
     def test_missing_input_is_a_failure(self):
         (self.root / "C15_adaptiveDt_fromC14/0/metal/T").unlink()
         self.assertIn("Missing inputs",

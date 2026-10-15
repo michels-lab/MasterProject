@@ -32,9 +32,9 @@ VARIANTS = (
 )
 
 
-def input_files(case: Path) -> dict[str, Path]:
+def input_files(case: Path, input_dirs: tuple[str, ...] = INPUT_DIRS) -> dict[str, Path]:
     result = {}
-    for dirname in INPUT_DIRS:
+    for dirname in input_dirs:
         directory = case / dirname
         if not directory.is_dir():
             raise ValueError(f"Required input directory missing: {directory}")
@@ -81,7 +81,7 @@ def copied_evidence(case: Path) -> list[str]:
     return sorted(bad)
 
 
-def audit_pair(cases_root: Path, spec: tuple) -> list[str]:
+def audit_pair(cases_root: Path, spec: tuple, mode: str = "prepared") -> list[str]:
     parent_name, child_name, target, allowed = spec
     parent = cases_root / parent_name
     child = cases_root / child_name
@@ -90,11 +90,17 @@ def audit_pair(cases_root: Path, spec: tuple) -> list[str]:
         return [f"Missing parent or variant: {parent_name} / {child_name}"]
 
     evidence = copied_evidence(child)
-    if evidence:
+    if mode == "prepared" and evidence:
         issues.append("Prepared case includes simulation output: " + ", ".join(evidence))
+    if mode == "post-run" and not evidence:
+        issues.append("Post-run mode requested but no runtime evidence was found")
+    # Runtime function objects can legitimately rewrite diagnostic fields in 0/.
+    # In post-run mode assert constant/system and Allrun/Allclean parity only.
+    # Initial 0/ fields and numerical validity require a separate audit.
+    check_dirs = ("system", "constant") if mode == "post-run" else INPUT_DIRS
     try:
-        old = input_files(parent)
-        new = input_files(child)
+        old = input_files(parent, check_dirs)
+        new = input_files(child, check_dirs)
     except ValueError as exc:
         return issues + [str(exc)]
 
@@ -128,25 +134,35 @@ def audit_pair(cases_root: Path, spec: tuple) -> list[str]:
     return issues
 
 
-def audit_all(cases_root: Path = ROOT / CASES) -> dict[str, list[str]]:
-    return {spec[1]: audit_pair(cases_root, spec) for spec in VARIANTS}
+def audit_all(cases_root: Path = ROOT / CASES, mode: str = "prepared") -> dict[str, list[str]]:
+    result = {}
+    for spec in VARIANTS:
+        selected = mode
+        if mode == "auto":
+            variant = cases_root / spec[1]
+            selected = "post-run" if variant.is_dir() and copied_evidence(variant) else "prepared"
+        result[spec[1]] = audit_pair(cases_root, spec, selected)
+    return result
 
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--root", type=Path, default=ROOT / CASES,
                         help="Directory containing controlled case folders")
+    parser.add_argument("--mode", choices=("prepared", "post-run", "auto"),
+                        default="prepared", help="Use auto after laptop runs are pushed")
     parser.add_argument("--strict", action="store_true",
                         help="Fail with exit code 1 if any case violates provenance")
     args = parser.parse_args()
-    report = audit_all(args.root)
+    report = audit_all(args.root, args.mode)
     for case, issues in report.items():
         print(f"{'PASS' if not issues else 'FAIL'} {case}")
         for issue in issues:
             print("  - " + issue)
     failed = sum(bool(value) for value in report.values())
     print(f"Preflight: {len(report) - failed}/{len(report)} cases meet input-only controls")
-    print("No simulation was run. These checks are not numerical/physical validation.")
+    print("No simulation was run. Post-run mode excludes 0/ from input parity;")
+    print("verify initial fields and scientific evidence separately. Not physical validation.")
     return 1 if failed and args.strict else 0
 
 

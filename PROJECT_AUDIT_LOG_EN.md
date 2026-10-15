@@ -4184,3 +4184,15 @@ Git trees for the four prepared B15/B16/C15/C16 variants were compared with thei
 Added read-only reproducible preflight (`analysis_tools/preflight_sensitivity_cases.py`), synthetic regression tests and a GitHub post-push CI check. The check rejects unintended input changes and inherited simulation evidence; it never launches a solver. Evidence: `analysis_results/v15_v16_preflight/README.md`.
 
 **Status:** input-only verification, with separate pending CI check. All four variants remain `PREPARED_NOT_RUN`, and J0/G1 remain open. Frozen B14/C14 and the scientific results were not changed.
+
+---
+
+## 2026-10-15 — PUSH-014 — Newly pushed evidence for five cases; old CFD workflows restored by accident
+
+**[GIT-VERIFIED OUTPUTS] [PRELIMINARY-ANALYSIS] [SCIENTIFIC-CLOSURE-OPEN]**
+
+Commit `25e7cf8` contains `logs/`, `postProcessing/` and `log.foamMultiRun` for B11-energy2, B15, B16, C15 and C16. Saved times and temperature probes reach 10 s in all five. This is evidence of computed outputs, not yet a final log, mass/energy, facewise-flux or experimental validation. Quantitative comparison: `analysis_results/v15_v16_postpush_20261015/README.md`.
+
+A local push also reintroduced three GitHub Actions workflows previously retired due to laptop-only CFD policy. This corrective change deletes them again and adds post-run-aware input parity to CI. Post-run comparison excludes runtime-mutated `0/` diagnostic fields and does not claim those initial fields are validated.
+
+**J0/G1 scientific gates and the V16-before-3D/free-surface sequencing remain unchanged.**
