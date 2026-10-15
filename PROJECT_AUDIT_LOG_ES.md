@@ -4880,3 +4880,15 @@ Corrección de secuencia del investigador: **V15 y V16 se realizan para ambas fa
 Se corrigieron comentarios no ejecutables de C15/C16 para reflejar valores actuales, sin cambiar sus parámetros activos. **Después de finalizar V16 para B y C** se abre una bifurcación: **C → 3D**, desde C14 como base física hasta evaluar los ensayos; **B → metal-aire con superficie libre, shrinkage y feeding**. Las variantes V15/V16 siguen siendo modelos cerrados 2D y no resuelven por sí mismas la continuidad del B14.
 
 Total: **34 carpetas** con **29 RUN/ANALYSIS_VERIFIED históricos** y **5 PREPARED_NOT_RUN** (B11-energy2, B15, B16, C15, C16). Siguientes actividades: ejecutar en laptop, hacer push, auditar resultados pareados y recién después escoger la arquitectura de cada ruta. Actualizados roadmap, registry, matrices y agents. GitHub no ejecutó OpenFOAM.
+
+---
+
+## 2026-10-15 — V15/V16-PREFLIGHT-013 — Verificación de trazabilidad de entradas sin ejecutar CFD
+
+**[GIT-VERIFIED INPUTS] [PREPARED_NOT_RUN] [NO CFD EXECUTION]**
+
+Se inspeccionaron los árboles Git `0/`, `constant/` y `system/` para B15/B16/C15/C16 contra los padres congelados B14/C14. Todas las diferencias de blobs se reducen a `system/controlDict` en V15 o `constant/metal/fvModels` en V16; las lecturas de claves activas confirman las tres modificaciones temporales (`adjustTimeStep`, `writeControl`, `writeInterval`) y el único cambio de relajación de fase (`0.1 → 0.25`).
+
+Se añadió una comprobación reproducible **de solo lectura** `analysis_tools/preflight_sensitivity_cases.py`, pruebas sintéticas `test_preflight_sensitivity.py` y un paso en `quickcup-research-audit.yml` para detectar cambios no controlados o evidencia copiada sin ejecutar OpenFOAM. Informe: `analysis_results/v15_v16_preflight/README.md`.
+
+**Estado:** paridad de entradas verificada en la inspección; la ejecución de CI de la nueva rama y las cuatro corridas físicas se comprueban por separado. **J0 y G1 siguen ABIERTAS**. No se tocó B14/C14 ni se promovió ninguna variante a `RUN_VERIFIED`.
