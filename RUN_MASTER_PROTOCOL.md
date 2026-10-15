@@ -62,7 +62,7 @@ Solo después de completar y auditar las cuatro variantes V15/V16 se bifurca el 
 - [ ] Decir al usuario **exactamente** qué se cambiará antes de tocar archivos, Git o ejecutar el solver.
 - [ ] Identificar hipótesis, objetivo, caso padre, baseline vigente, **única variable** a modificar, predicción y criterio de éxito/fallo.
 - [ ] Crear variante limpia: solo `0/`, `constant/`, `system/` y scripts de entrada; **no copiar** tiempos de solución, `logs/`, `postProcessing/` ni `log.*` y tomarlos como una corrida independiente.
-- [ ] Comparar entradas contra padre con hash/diff; archivar lista explícita de diferencias activas.
+- [ ] Comparar entradas contra padre con hash/diff; archivar lista explícita de diferencias activas. Para la campaña B15/C15/B16/C16 ejecutar también `python3 analysis_tools/preflight_sensitivity_cases.py --strict` (solo lectura, no sustituye el RUN/MAZAPÁN).
 - [ ] Registrar nombre, familia, estado `PREPARED_NOT_RUN`, fecha, pregunta y fuente en `RUN_CASE_REGISTRY.csv` y `CASE_NOTES.md`.
 - [ ] Verificar versión **OpenFOAM Foundation v14**; solvers realmente activos, `foamMultiRun`, control PIMPLE global/regional, malla/regiones, campos, unidades y BC.
 - [ ] Confirmar `deltaT`, `endTime`, write intervals, output de sonda, perfiles y `functionObjects`; comparar valores reales del directorio, no declaraciones.
