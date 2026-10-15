@@ -55,7 +55,7 @@ jobs:
       - name: Check V15/V16 controlled input provenance (no CFD)
         run: |
           python3 -m unittest discover -s analysis_tools -p 'test_preflight_sensitivity.py' -v
-          python3 analysis_tools/preflight_sensitivity_cases.py --strict
+          python3 analysis_tools/preflight_sensitivity_cases.py --mode auto --strict
       - name: Check scientific case registry
         run: python3 analysis_tools/check_run_registry.py
       - name: Check V14 functionObject definitions and documentation
