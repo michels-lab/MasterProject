@@ -22,15 +22,16 @@ El preflight reproducible está en `analysis_tools/preflight_c3d_stl.py`. Se ver
 El ZIP local `QuickCup_C3D_01_geometria_validada_preliminar.zip` contiene `QuickCup_C3D_geometry/` con `constant/triSurface/{metal,mold}.stl`, `system/{blockMeshDict,snappyHexMeshDict}`, el manifiesto y `scripts/mesh_only.sh`. Descomprimir en una carpeta nueva y sin archivos de malla anteriores.
 
 ```bash
-cd ~/OpenFOAM
-unzip -n ~/Descargas/QuickCup_C3D_01_geometria_validada_preliminar.zip
+mkdir -p ~/OpenFOAM/C3D_01_mesh_trial_01
+cd ~/OpenFOAM/C3D_01_mesh_trial_01
+unzip ~/Descargas/QuickCup_C3D_01_geometria_validada_preliminar.zip
 cd QuickCup_C3D_geometry
 source /opt/openfoam14/etc/bashrc
 python3 scripts/preflight_c3d_stl.py --stl-dir constant/triSurface --manifest geometry_audit.json
 bash scripts/mesh_only.sh
 ```
 
-La ruta ZIP es orientativa: ajustarla al directorio de descarga real. **No** ejecutar `Allclean`/`Allrun` de C14. El script es **solo malla**; aborta si existe una malla previa y no llama al solver CFD. El diccionario `snappyHexMeshDict` es un **borrador no probado en Foundation 14**: revisar especialmente la conservación de ambas zonas y la compatibilidad de `locationsInMesh` y `splitMeshRegions`.
+La ruta ZIP es orientativa: ajustarla al directorio de descarga real. Cada intento debe extraerse en un directorio nuevo y vacío, nunca encima de una malla anterior. **No** ejecutar `Allclean`/`Allrun` de C14. El script es **solo malla**; aborta si existe una malla previa y no llama al solver CFD. El diccionario `snappyHexMeshDict` es un **borrador no probado en Foundation 14**: revisar especialmente la conservación de ambas zonas y la compatibilidad de `locationsInMesh` y `splitMeshRegions`.
 
 Guardar y revisar:
 `log.preflight_c3d.json`, `log.surfaceCheck.mold`, `log.surfaceCheck.metal`, `log.blockMesh`, `log.snappyHexMesh`, `log.checkMesh.preSplit`, `log.splitMeshRegions`, `log.checkMesh.metal`, `log.checkMesh.mold`.
