@@ -4933,3 +4933,12 @@ Las fuentes SolidWorks corregidas son `QuickCup(1).STL` (3 084 triángulos) y `m
 El investigador confirmó que las exportaciones vigentes de SolidWorks se llaman `QuickCup.STL` y `metal.STL` (sin `(1)`) y residen en una carpeta de su equipo Windows. Se actualizó el instructivo de C3D-01 para utilizar esos nombres con rutas entre comillas desde WSL, y un procedimiento alternativo para Ubuntu no-WSL. Los identificadores SHA-256 **siguen vinculados a las exportaciones con coordenadas originales verificadas**: cambiar un nombre no cambia el hash, pero una exportación distinta se rechaza para impedir volver inadvertidamente a las coordenadas positivas que producían interferencia.
 
 Se aclaró que Python solo valida/prepara unidades de los STL; `blockMesh` genera la caja de fondo y el mallado 3D adaptado a la geometría metal/arena se hará con `snappyHexMesh` en un paso posterior con `snappyHexMeshDict` aún **no construido ni ejecutado**. Ninguna simulación CFD ni mallado fue ejecutado por GitHub.
+
+
+---
+
+## 2026-10-19 — [GIT-VERIFIED] Uso nativo de unidades `[mm]` en C3D-01 con OpenFOAM Foundation v14
+
+Se confirmó con la guía oficial https://doc.cfd.direct/openfoam/user-guide-v14/blockmesh que `blockMeshDict` soporta `units [mm];`, convirtiendo la malla generada a SI. También se verificó en el código fuente de OpenFOAM-14 (`searchableSurfaces::triSurface::scale`) que las geometrías trianguladas aceptan `units [mm];` y que `scale` y `units` no deben declararse simultáneamente para la misma entrada. Por ello se actualizó el caso 3D: vertices de fondo escritos como [-3,55],[-69,3],[-3,55] mm; geometrías binarias SolidWorks se copian sin alterar coordenadas a `constant/geometry`; Python hace solo validaciones en memoria mediante `--stl-units mm`. Se añadieron pruebas estáticas y sintéticas para evitar regresiones de unidades y pérdida de integridad.
+
+**Estado abierto:** No se ejecutó `blockMesh`, `snappyHexMesh`, `splitMeshRegions`, `checkMesh` en OpenFOAM. El fragmento `geometry` con unidades nativas está documentado, pero no existe aún un `snappyHexMeshDict` completo ni validado. La laptop será el único ejecutor CFD. No mezclar STL ya convertidos a m con la indicación `units [mm]` ni añadir `scale 0.001` duplicado.
