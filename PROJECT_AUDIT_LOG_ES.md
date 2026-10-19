@@ -4924,3 +4924,12 @@ A petición del investigador, el primer prototipo `blockMeshDict` fue llevado de
 Las fuentes SolidWorks corregidas son `QuickCup(1).STL` (3 084 triángulos) y `metal(1).STL` (3 896 triángulos), con coordenadas compartidas. La prueba local de transformación binaria y preflight de geometría comprobó superficies cerradas, volúmenes y seeds; **no** acredita calidad de malla OpenFOAM. Por seguridad de propiedad intelectual, los STL originales no se versionan en el repositorio público; se reconocen por SHA-256 en `geometry_reference.json`.
 
 **Estado:** `GEOMETRY_PREPARED; BACKGROUND_MESH_NOT_RUN; MULTIREGION_NOT_MESHED; CFD_NOT_RUN`. La tarea siguiente es `blockMesh`/`checkMesh` en Ubuntu, sin usar `Allclean` ni el `Allrun` de casos 2D. Ninguna prueba de GitHub instala OpenFOAM ni simula.
+
+
+---
+
+## 2026-10-19 — [GIT-VERIFIED] Corrección de rutas CAD y aclaración de snappyHexMesh
+
+El investigador confirmó que las exportaciones vigentes de SolidWorks se llaman `QuickCup.STL` y `metal.STL` (sin `(1)`) y residen en una carpeta de su equipo Windows. Se actualizó el instructivo de C3D-01 para utilizar esos nombres con rutas entre comillas desde WSL, y un procedimiento alternativo para Ubuntu no-WSL. Los identificadores SHA-256 **siguen vinculados a las exportaciones con coordenadas originales verificadas**: cambiar un nombre no cambia el hash, pero una exportación distinta se rechaza para impedir volver inadvertidamente a las coordenadas positivas que producían interferencia.
+
+Se aclaró que Python solo valida/prepara unidades de los STL; `blockMesh` genera la caja de fondo y el mallado 3D adaptado a la geometría metal/arena se hará con `snappyHexMesh` en un paso posterior con `snappyHexMeshDict` aún **no construido ni ejecutado**. Ninguna simulación CFD ni mallado fue ejecutado por GitHub.
