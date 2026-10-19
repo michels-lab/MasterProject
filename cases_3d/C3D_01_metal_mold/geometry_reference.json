@@ -4,9 +4,9 @@
   "coordinate_unit_after_conversion": "m",
   "stl_original_units": "mm",
   "stl_coordinate_conversion_factor": 0.001,
-  "stl_description": "Original exported SolidWorks STL keeps corrected shared CAD coordinates. The original files remain local. Shell script never modifies source STL.",
+  "stl_description": "Corrected SolidWorks STL files can be renamed QuickCup.STL and metal.STL; exact binary contents must match known-good coordinate-preserving SHA-256. Files remain local; conversion does not modify them.",
   "mold": {
-    "original_filename": "QuickCup(1).STL",
+    "original_filename": "QuickCup.STL",
     "original_sha256": "2e62e31875dc3c86dd7e6f2efe60d4c173ee4cee5e4f6ff63205c08efee3a638",
     "reference_converted_stl_sha256": "0b616630c060affab644a1858b13024d3dad272a11e89be7b02acbb1b2e7e8c9",
     "triangle_count": 3084,
@@ -30,7 +30,7 @@
     "stl_volume_m3": 0.00010284316521098784
   },
   "metal": {
-    "original_filename": "metal(1).STL",
+    "original_filename": "metal.STL",
     "original_sha256": "fc8e6b7f3c229369b856aca7dab936347732028d9cd695499bf0e249363fb810",
     "reference_converted_stl_sha256": "4e59d8545f1b6f8d1c3958cbe6b5a537e67f34ce1649e48a41a9f9d01a3f1ce9",
     "triangle_count": 3896,
