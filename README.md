@@ -45,3 +45,7 @@ See also the [3D case index](cases_3d/README.md). The existing C14 and B/C numer
 **Do not treat a successful run, old copied output, or `git push` alone as a completed scientific audit.** Follow the protocol and preserve the distinction between numerical verification and experimental validation.
 
 Repository guidance lives here, not in a separate Michel's Lab main repository.
+
+## GRANADA — Regla permanente de continuación del propietario
+
+Cuando el propietario diga **GRANADA**, se aparca con trazabilidad cualquier pendiente inacabado/bloqueado/en QA/propiedad de otra rama, y se aborda **el siguiente bloque grande independiente**. Consultar primero `.michelslab/GRANADA.md` y la norma maestra `standards/GRANADA_CONTINUOUS_BLOCK_PROTOCOL.md`; respetar claims, PRs y colisiones de archivos. Registrar SHA, tests y punto de retorno; no cerrar pendientes falsamente ni publicar releases sin autorización.
