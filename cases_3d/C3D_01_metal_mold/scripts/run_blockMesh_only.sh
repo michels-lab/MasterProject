@@ -11,14 +11,14 @@ if [[ -d constant/polyMesh || -d constant/metal/polyMesh || -d constant/mold/pol
   echo "ERROR: ya existe una malla; usa una copia nueva del caso en lugar de sobrescribirla." >&2
   exit 3
 fi
-for p in constant/triSurface/mold.stl constant/triSurface/metal.stl; do
+for p in constant/geometry/mold.stl constant/geometry/metal.stl; do
   if [[ ! -s "$p" ]]; then
     echo "ERROR: falta $p. Primero prepara los STL con prepare_geometry.py." >&2
     exit 4
   fi
 done
 python3 ../../analysis_tools/preflight_c3d_stl.py \
-  --stl-dir constant/triSurface \
+  --stl-dir constant/geometry --stl-units mm \
   --manifest geometry_reference.json \
   --json geometry_preflight_runtime.json
 
