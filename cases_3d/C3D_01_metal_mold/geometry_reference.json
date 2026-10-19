@@ -1,14 +1,13 @@
 {
-  "schema": "quickcup-c3d01-solidworks-aligned-stl-v1",
+  "schema": "quickcup-c3d01-solidworks-aligned-stl-v2-native-mm",
   "stage": "BACKGROUND_MESH_ONLY_NOT_RUN",
-  "coordinate_unit_after_conversion": "m",
+  "coordinate_unit_after_conversion": "m (SI, computed by OpenFOAM after reading units [mm]); no file conversion",
   "stl_original_units": "mm",
   "stl_coordinate_conversion_factor": 0.001,
-  "stl_description": "Corrected SolidWorks STL files can be renamed QuickCup.STL and metal.STL; exact binary contents must match known-good coordinate-preserving SHA-256. Files remain local; conversion does not modify them.",
+  "stl_description": "STL source bytes and stored vertices remain in native SolidWorks mm. OpenFOAM14 uses units [mm] in triSurface geometry; the read-only Python preflight interprets raw mm as SI in memory.",
   "mold": {
     "original_filename": "QuickCup.STL",
     "original_sha256": "2e62e31875dc3c86dd7e6f2efe60d4c173ee4cee5e4f6ff63205c08efee3a638",
-    "reference_converted_stl_sha256": "0b616630c060affab644a1858b13024d3dad272a11e89be7b02acbb1b2e7e8c9",
     "triangle_count": 3084,
     "size_in_mm": [
       51.8,
@@ -27,12 +26,12 @@
         0.0518
       ]
     ],
-    "stl_volume_m3": 0.00010284316521098784
+    "stl_volume_m3": 0.00010284316521098784,
+    "reference_converted_stl_sha256_deprecated": "0b616630c060affab644a1858b13024d3dad272a11e89be7b02acbb1b2e7e8c9"
   },
   "metal": {
     "original_filename": "metal.STL",
     "original_sha256": "fc8e6b7f3c229369b856aca7dab936347732028d9cd695499bf0e249363fb810",
-    "reference_converted_stl_sha256": "4e59d8545f1b6f8d1c3958cbe6b5a537e67f34ce1649e48a41a9f9d01a3f1ce9",
     "triangle_count": 3896,
     "size_in_mm": [
       36.5,
@@ -51,7 +50,8 @@
         0.04415
       ]
     ],
-    "stl_volume_m3": 0.00004798749039244212
+    "stl_volume_m3": 0.00004798749039244212,
+    "reference_converted_stl_sha256_deprecated": "4e59d8545f1b6f8d1c3958cbe6b5a537e67f34ce1649e48a41a9f9d01a3f1ce9"
   },
   "sampled_seed_points_m": {
     "metal": [
@@ -90,5 +90,7 @@
     "CHT contact patches",
     "energy balance",
     "independence of mesh"
-  ]
+  ],
+  "native_stl_file_units": "mm",
+  "units_conversion_owner": "OpenFOAM14 blockMeshDict.units [mm] and snappyHexMeshDict geometry entry units [mm] (not Python)"
 }
