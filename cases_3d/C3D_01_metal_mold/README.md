@@ -4,7 +4,7 @@
 
 ## Datos originales del investigador
 
-Los archivos exactos de SolidWorks corregidos son `QuickCup(1).STL` (arena) y `metal(1).STL` (metal), binarios, exportados en **milímetros** y conservando su origen compartido. Ambos son superficies cerradas verificadas preliminarmente.
+Los archivos locales actuales de SolidWorks son `QuickCup.STL` (arena) y `metal.STL` (metal). Las primeras exportaciones verificadas se cargaron originalmente con el sufijo `(1)`; el **nombre puede cambiar, pero el hash del contenido debe coincidir**, binarios, exportados en **milímetros** y conservando su origen compartido. Ambos son superficies cerradas verificadas preliminarmente.
 
 | Región | Tamaño exterior (X/Y/Z) | Triángulos | Volumen STL |
 |---|---|---:|---:|
@@ -28,16 +28,25 @@ Abre una terminal y accede a la carpeta del caso:
 cd cases_3d/C3D_01_metal_mold
 ```
 
-Copia los STL corregidos a tu carpeta local de descargas, por ejemplo `~/Downloads/QuickCup(1).STL` y `~/Downloads/metal(1).STL`. Ajusta esas rutas si usas `~/Descargas`.
+El investigador conserva actualmente **`QuickCup.STL` y `metal.STL`, sin sufijos**, en una carpeta de SolidWorks bajo `Documents/CINVESTAV/Tesis/Pieza dimensiones correctas` en Windows.
+
+**Si Ubuntu se ejecuta mediante WSL**, la unidad `C:` suele estar montada en `/mnt/c/`. Ajusta `USUARIO_WINDOWS` a tu nombre local:
 
 ```bash
+STL_DIR="/mnt/c/Users/USUARIO_WINDOWS/Documents/CINVESTAV/Tesis/Pieza dimensiones correctas"
 python3 scripts/prepare_geometry.py \
-  --mold "$HOME/Downloads/QuickCup(1).STL" \
-  --metal "$HOME/Downloads/metal(1).STL"
+  --mold "$STL_DIR/QuickCup.STL" \
+  --metal "$STL_DIR/metal.STL"
 
 source /opt/openfoam14/etc/bashrc
 bash scripts/run_blockMesh_only.sh
 ```
+
+**Si Ubuntu tiene arranque propio y no es WSL**, la ruta `C:` no está garantizada. Copia ambos STL desde Windows al sistema Ubuntu (USB, carpeta compartida o partición montada) y utiliza sus rutas de Linux, sin paréntesis. Nunca supongas que `/mnt/c` existe en ese entorno. Los comandos deben ejecutarse desde esta carpeta del caso.
+
+Si el preparador rechaza los hashes, **no anules la comprobación**: los nombres pueden ser iguales aunque los bytes sean de una exportación anterior con coordenadas positivas, o de una nueva triangulación. En tal caso, revisa/exporta los dos STL corregidos y actualiza la referencia solamente después de comprobar volúmenes, bounds y alineación espacial.
+
+`blockMesh` **no mallará todavía las piezas**: solo generará la caja auxiliar; después prepararemos juntos `snappyHexMeshDict` para ajustar las celdas a las superficies y separar metal/arena.
 
 El preparador compara **ambos hashes originales** y convierte las coordenadas de milímetros a metros **exactamente una vez**, sin desplazar ni reorientar las piezas ni sobrescribir tus STL originales. Valida las superficies y puntos interiores mediante `analysis_tools/preflight_c3d_stl.py`. Si los STL no coinciden con la referencia o ya existe una salida, se detiene.
 
