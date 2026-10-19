@@ -17,7 +17,7 @@ for p in constant/triSurface/mold.stl constant/triSurface/metal.stl; do
     exit 4
   fi
 done
-python3 ../../../analysis_tools/preflight_c3d_stl.py \
+python3 ../../analysis_tools/preflight_c3d_stl.py \
   --stl-dir constant/triSurface \
   --manifest geometry_reference.json \
   --json geometry_preflight_runtime.json
