@@ -101,3 +101,10 @@ Las cinco variantes tienen archivos versionados de solver y sonda hasta 10 s. No
 Se recibieron los STEP originales individuales del molde y metal; un chequeo CAD con OCC confirmó un sólido válido en cada archivo, intersección volumétrica nula y contacto entre ambos. Se prepararon STL separados, ambos cerrados y orientados, con referencia **condicionada** a un molde de 51.8×65.5×51.8 mm (el export STEP presenta inconsistencia de unidades). El metal ocupa ~47.99 cm³, la arena ~102.84 cm³.
 
 Se creó una barrera geométrica **solo lectura** en `analysis_tools/preflight_c3d_stl.py` con cuatro pruebas sintéticas y manifiesto versionado en [analysis_results/c3d_01_geometry](analysis_results/c3d_01_geometry/README.md). El paquete de malla se entrega localmente y no se publican los archivos CAD del investigador en GitHub. **No se ejecutó OpenFOAM**: `surfaceCheck`, `blockMesh`, `snappyHexMesh`, `splitMeshRegions`, `checkMesh` y balances físicos aún necesitan la laptop. Se conserva C14 intacto y J0/G1 abiertos; la ruta B de superficie libre es independiente.
+
+
+### 2026-10-19 — Primer caso 3D en carpeta separada (C3D-01)
+
+Se incorporó la **preparación geométrica y de malla de fondo** como experimento independiente en [`cases_3d/C3D_01_metal_mold`](cases_3d/C3D_01_metal_mold/README.md). Utiliza el molde y el metal corregidos/exportados desde SolidWorks (`QuickCup(1).STL`, `metal(1).STL`), no los STEP antiguos con la escala equivocada. Las nuevas piezas tienen dimensiones 51.8×65.5×51.8 mm y 36.5×40×36.5 mm. Para el fondo se propuso una caja de 58×72×58 mm con 29×36×29=30 276 celdas uniformes de 2 mm. Las caras del `blockMeshDict` se corrigieron a orientación exterior y se introdujeron pruebas geométricas estáticas. Los originales STL permanecen locales; el conversor controlado mm→m evita desplazamiento y doble escalado.
+
+**Separar preparación de simulación:** los comandos `blockMesh` y `checkMesh` aún no se han ejecutado en Ubuntu; `snappyHexMesh`, interfaz CHT, solver CFD, J0 y G1 siguen pendientes. Este avance no da por cerrada la auditoría V15/V16 ni valida físicamente la ruta 3D. GitHub Actions jamás ejecuta CFD ni meshing.

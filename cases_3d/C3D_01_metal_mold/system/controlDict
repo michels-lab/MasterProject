@@ -1,0 +1,16 @@
+/* C3D-01: minimal mesh-only case, not a solidification run. */
+FoamFile
+{
+    version 2.0;
+    format ascii;
+    class dictionary;
+    object controlDict;
+}
+application blockMesh;
+startFrom startTime;
+startTime 0;
+stopAt endTime;
+endTime 1;
+deltaT 1;
+writeControl timeStep;
+writeInterval 1;

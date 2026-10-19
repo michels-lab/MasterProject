@@ -4913,3 +4913,14 @@ Hallazgo adicional: un push local volvió a añadir al árbol Git tres workflows
 **Estado: PRELIMINARY-GEOMETRY-PASS / OPENFOAM-NOT-RUN / SCIENTIFIC-GATES-OPEN.** Los STEP individuales de QuickCup y metal son sólidos válidos con contacto (distancia cero), sin intersección volumétrica según OCC. La triangulación local cerrada tiene 2668 triángulos en arena y 2252 en metal. La escala 51.8×65.5×51.8 mm sigue **pendiente de confirmar** por contradicción entre metadatos STEP y coordenadas.
 
 Se añadió el preflight binario STL de solo lectura, verificación de región mediante 3 rayos por seed, comprobación de aristas/volumen y pruebas sintéticas sin OpenFOAM. La evidencia preliminar y los pasos locales quedan en [analysis_results/c3d_01_geometry/README.md](analysis_results/c3d_01_geometry/README.md). No se versionó CAD del investigador, no se ejecutó CFD en GitHub y no se tocaron B14/C14. El siguiente gate físico es multirregión+checkMesh+interfaces+BC en laptop.
+
+
+---
+
+## 2026-10-19 — [GIT-VERIFIED] Nuevo experimento C3D-01 en `cases_3d/`
+
+A petición del investigador, el primer prototipo `blockMeshDict` fue llevado desde el ZIP local a la carpeta independiente [`cases_3d/C3D_01_metal_mold`](cases_3d/C3D_01_metal_mold/README.md), dejando intactos los casos C14/B14 y la línea de variaciones 2D. El material incluido consiste en `system/blockMeshDict` (58×72×58 mm, 29×36×29 = 30 276 celdas de fondo, paso 2 mm), `system/controlDict`, manifiesto con referencias geométricas exactas, preparador STL mm→m, script de ejecución **solo en laptop** y pruebas de configuración. Se corrigió el sentido de las normales de las seis caras externas y se añadieron pruebas para las orientaciones.
+
+Las fuentes SolidWorks corregidas son `QuickCup(1).STL` (3 084 triángulos) y `metal(1).STL` (3 896 triángulos), con coordenadas compartidas. La prueba local de transformación binaria y preflight de geometría comprobó superficies cerradas, volúmenes y seeds; **no** acredita calidad de malla OpenFOAM. Por seguridad de propiedad intelectual, los STL originales no se versionan en el repositorio público; se reconocen por SHA-256 en `geometry_reference.json`.
+
+**Estado:** `GEOMETRY_PREPARED; BACKGROUND_MESH_NOT_RUN; MULTIREGION_NOT_MESHED; CFD_NOT_RUN`. La tarea siguiente es `blockMesh`/`checkMesh` en Ubuntu, sin usar `Allclean` ni el `Allrun` de casos 2D. Ninguna prueba de GitHub instala OpenFOAM ni simula.
