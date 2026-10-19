@@ -1,0 +1,45 @@
+/* QuickCup C3D-01, primera malla de fondo 3D; no es una malla física final.
+   STL convertidos una sola vez de mm a m; aquí las coordenadas ya son metros.
+   Caja: 58 x 72 x 58 mm; 29 x 36 x 29 celdas de 2 mm.
+*/
+FoamFile
+{
+    version 2.0;
+    format ascii;
+    class dictionary;
+    object blockMeshDict;
+}
+convertToMeters 1;
+vertices
+(
+    (-0.003 -0.069 -0.003) // 0
+    ( 0.055 -0.069 -0.003) // 1
+    ( 0.055  0.003 -0.003) // 2
+    (-0.003  0.003 -0.003) // 3
+    (-0.003 -0.069  0.055) // 4
+    ( 0.055 -0.069  0.055) // 5
+    ( 0.055  0.003  0.055) // 6
+    (-0.003  0.003  0.055) // 7
+);
+blocks
+(
+    hex (0 1 2 3 4 5 6 7) (29 36 29) simpleGrading (1 1 1)
+);
+edges ();
+boundary
+(
+    outerBox
+    {
+        type patch;
+        faces
+        (
+            (0 1 5 4) // yMin: normal -Y
+            (3 7 6 2) // yMax: normal +Y
+            (0 4 7 3) // xMin: normal -X
+            (1 2 6 5) // xMax: normal +X
+            (0 3 2 1) // zMin: normal -Z
+            (4 5 6 7) // zMax: normal +Z
+        );
+    }
+);
+mergePatchPairs ();
