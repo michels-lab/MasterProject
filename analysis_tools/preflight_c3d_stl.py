@@ -44,7 +44,7 @@ def edge_key(p):
     return tuple(round(x/EPS_VERTEX) for x in p)
 
 
-def inspect_binary_stl(path: Path) -> Surface:
+def inspect_binary_stl(path: Path, coordinate_scale_to_m: float = 1.0) -> Surface:
     data = path.read_bytes()
     if len(data) < 84:
         raise ValueError(f"{path}: STL header truncated")
@@ -59,7 +59,7 @@ def inspect_binary_stl(path: Path) -> Surface:
     upper = [float('-inf')]*3
     for i in range(n):
         values = struct.unpack_from('<12fH', data, 84 + 50*i)
-        verts = tuple(tuple(float(x) for x in values[j:j+3]) for j in (3, 6, 9))
+        verts = tuple(tuple(float(x)*coordinate_scale_to_m for x in values[j:j+3]) for j in (3, 6, 9))
         if any(not math.isfinite(x) for v in verts for x in v):
             raise ValueError(f"{path}: nonfinite coordinate in triangle {i}")
         a, b, c = verts
@@ -120,20 +120,23 @@ def is_inside(surface, pt):
     return votes[0]
 
 
-def audit(directory: Path, manifest: dict):
+def audit(directory: Path, manifest: dict, stl_units: str = 'm'):
+    # Only the in-memory analysis is converted to SI; source STL bytes never change.
+    scale_to_m = {'m': 1.0, 'mm': 0.001}[stl_units]
     names = ('metal', 'mold')
     problems = []
     result = {'status': 'FAIL', 'surfaces': {}, 'seed_checks': {},
-              'notes': ["STL has no intrinsic unit; metre interpretation is an explicit project assumption.",
+              'notes': ["STL has no intrinsic unit; --stl-units specifies input units for an in-memory SI audit only.",
                         "This is NOT an OpenFOAM checkMesh/CFD/CHT interface validation."]}
     surfaces = {}
+    result['input_stl_units'] = stl_units
     for name in names:
         stl = directory / (name+'.stl')
         if not stl.is_file():
             problems.append(f"Missing {stl}")
             continue
         try:
-            s = inspect_binary_stl(stl)
+            s = inspect_binary_stl(stl, coordinate_scale_to_m=scale_to_m)
         except (ValueError, OSError) as e:
             problems.append(str(e))
             continue
@@ -181,9 +184,11 @@ def main():
     parser.add_argument('--stl-dir', type=Path, required=True)
     parser.add_argument('--manifest', type=Path, required=True)
     parser.add_argument('--json', type=Path)
+    parser.add_argument('--stl-units', choices=('m', 'mm'), default='m',
+                        help='Declared units for stored STL coordinates; no STL file changes.')
     args=parser.parse_args()
     manifest=json.loads(args.manifest.read_text(encoding='utf-8'))
-    res=audit(args.stl_dir, manifest)
+    res=audit(args.stl_dir, manifest, stl_units=args.stl_units)
     if args.json:
         args.json.parent.mkdir(parents=True,exist_ok=True)
         args.json.write_text(json.dumps(res,indent=2)+'\n',encoding='utf-8')

@@ -4225,3 +4225,10 @@ Corrected shared-coordinate SolidWorks exports: `QuickCup(1).STL` (3,084 triangl
 The researcher clarified that the current local SolidWorks files are `QuickCup.STL` and `metal.STL` without `(1)`. C3D-01 instructions now use these names, give safe WSL Windows-drive path guidance plus an alternative for native Ubuntu, and preserve the exact verified corrected-export SHA-256 checks. A filename change is not proof of geometry identity; newly exported contents must be independently revalidated rather than bypassing the gate.
 
 Python only checks/scales STL coordinates; `blockMesh` builds the initial background box; `snappyHexMesh` will be responsible for conforming/refining a future physical metal/mold computational mesh. The `snappyHexMeshDict` and OpenFOAM runtime execution remain **pending**. No meshing or CFD ran in GitHub.
+
+
+---
+
+## 2026-10-19 — [GIT-VERIFIED] Native `[mm]` units for the C3D-01 Foundation v14 case
+
+The Foundation v14 `blockMesh` user guide explicitly documents `units [mm];`, and the `searchableSurfaces::triSurface::scale` source confirms that imported triangulated surfaces also accept `units [mm];`, mutually exclusive with `scale`. C3D-01 now writes background vertices directly in millimetres; exact source STL binary bytes are copied unchanged into `constant/geometry`; read-only Python geometry checks interpret input mm in SI memory only. Static tests now guard dimensions, binary integrity and lack of CFD execution. **No OpenFOAM mesh, multi-region interface or CFD run has occurred.** The future `snappyHexMeshDict` must explicitly mark each STL's units and avoid double scaling.

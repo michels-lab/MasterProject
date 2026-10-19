@@ -10,7 +10,7 @@
 
 ## New independent 3D research line — C3D-01
 
-The first three-dimensional QuickCup mesh experiment lives in [`cases_3d/C3D_01_metal_mold`](cases_3d/C3D_01_metal_mold/README.md). It includes a 2 mm Cartesian `blockMeshDict`, a checked local STL mm-to-m conversion workflow, mesh-only shell script, region seeds, and static regression tests. **Prepared, not run in OpenFOAM; no 3D CFD results yet.** User CAD/STL data remain local because this repository is public.
+The first three-dimensional QuickCup mesh experiment lives in [`cases_3d/C3D_01_metal_mold`](cases_3d/C3D_01_metal_mold/README.md). It includes a 2 mm Cartesian `blockMeshDict`, native OpenFOAM Foundation v14 `units [mm]` in the background mesh, byte-identical SolidWorks STL staging for future `snappyHexMesh`, mesh-only shell script, region seeds, and static regression tests. **Prepared, not run in OpenFOAM; no 3D CFD results yet.** User CAD/STL data remain local because this repository is public.
 
 See also the [3D case index](cases_3d/README.md). The existing C14 and B/C numerical research runs remain unchanged.
 

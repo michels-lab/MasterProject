@@ -1,90 +1,99 @@
-# C3D-01 — QuickCup tridimensional: metal + molde de arena
+# C3D-01 — QuickCup 3D: metal y molde de arena
 
-**Estado científico:** PREPARADO / NO EJECUTADO EN OPENFOAM. **Etapa 1: únicamente malla de fondo.** Este caso es independiente de `cases_controlled_buoyancy/` (familias B/C en 2D). La rama 3D pertenece a la ruta C y toma como **referencia física futura C14**, sin copiar las ecuaciones todavía.
+**Estado científico:** preparación CAD y malla de fondo; `blockMesh`/`checkMesh` no ejecutados aún en la laptop, **sin simulación CFD**. Experimento independiente de `cases_controlled_buoyancy/`. Referencia física futura: C14, sin alterar sus archivos.
 
-## Datos originales del investigador
+## Convención nativa de unidades (OpenFOAM Foundation v14)
 
-Los archivos locales actuales de SolidWorks son `QuickCup.STL` (arena) y `metal.STL` (metal). Las primeras exportaciones verificadas se cargaron originalmente con el sufijo `(1)`; el **nombre puede cambiar, pero el hash del contenido debe coincidir**, binarios, exportados en **milímetros** y conservando su origen compartido. Ambos son superficies cerradas verificadas preliminarmente.
+**Usamos milímetros de forma explícita en los diccionarios de OpenFOAM 14**, no conversores externos de geometría:
 
-| Región | Tamaño exterior (X/Y/Z) | Triángulos | Volumen STL |
+- `system/blockMeshDict`: `units [mm];` seguido de vértices con valores como `(-3 -69 -3)`, `(55 3 55)`. OpenFOAM genera la malla en su unidad base SI `[m]`.
+- **Geometrías SolidWorks**: `QuickCup.STL` y `metal.STL` mantienen sus coordenadas originales numéricas en **mm**, su orientación, origen y triangulación. `prepare_geometry.py` solo verifica el hash/triangulación y coloca **copias binarias idénticas** en `constant/geometry/mold.stl` y `metal.stl`. No escala ni mueve nada.
+- **Paso siguiente con `snappyHexMesh`**: cada entrada de superficie `triSurfaceMesh` declarará `units [mm];`. OpenFOAM convierte las superficies internamente a la escala física correcta.
+- **Prohibido doble escalado**: no usar también `scale 0.001;` en la misma geometría, ni convertir previamente los STL a metros; las dos opciones de escalado/units son alternativas.
+- Los scripts `analysis_tools/preflight_c3d_stl.py` inspeccionan la geometría **en memoria** en SI para verificar volumen/semillas; los archivos fuente no se cambian. `geometry_reference.json` conserva las huellas SHA-256 originales.
+- No se supone que poner `units [mm]` de forma global modifique todas las magnitudes del solver; cada parámetro y utilidad requiere la sintaxis admitida por OpenFOAM.
+
+Referencias oficiales:
+- https://doc.cfd.direct/openfoam/user-guide-v14/blockmesh
+- https://doc.cfd.direct/openfoam/user-guide-v14/snappyhexmesh
+- https://github.com/OpenFOAM/OpenFOAM-14/blob/master/src/meshTools/searchableSurfaces/triSurface/triSurface_searchableSurface.C
+
+## Geometrías recibidas
+
+| STL | Medidas X × Y × Z | Triángulos | Volumen aproximado |
 |---|---|---:|---:|
-| Molde | 51.8 × 65.5 × 51.8 mm | 3084 | 102.843 cm³ |
-| Metal | 36.5 × 40.0 × 36.5 mm | 3896 | 47.987 cm³ |
+| Molde `QuickCup.STL` | 51.8 × 65.5 × 51.8 mm | 3084 | 102.843 cm³ |
+| Metal `metal.STL` | 36.5 × 40 × 36.5 mm | 3896 | 47.987 cm³ |
 
-Por ser un repositorio **público**, los modelos STL originales no se publican aquí. El `geometry_reference.json` contiene los hashes SHA-256 y magnitudes esperadas, de manera que tu equipo pueda comprobar exactamente qué archivos utiliza. Los archivos STEP anteriores tenían un error de escala; **esta etapa se basa exclusivamente en la nueva exportación corregida**.
+Los archivos STL de SolidWorks **no están publicados** en este repositorio, que es público. Debes utilizar las exportaciones con origen compartido y SHA-256 especificados en `geometry_reference.json`; una exportación con el mismo nombre puede tener contenido distinto. Si los hashes no coinciden, inspeccionaremos la nueva exportación en lugar de desactivar la comprobación.
 
-## Preparar en tu Ubuntu (sin CFD)
+## Ubicación local y preparación
 
-Desde tu clon del repositorio:
+En Windows, la carpeta del investigador es:
+`C:\Users\HP\Documents\CINVESTAV\Tesis\Pieza dimensiones correctas`.
+
+Desde Ubuntu en **WSL**, si tienes este repositorio clonado bajo `~/OpenFOAM/QuickCup_Solidification`:
 
 ```bash
 cd ~/OpenFOAM/QuickCup_Solidification
 git pull --ff-only
-```
-
-Abre una terminal y accede a la carpeta del caso:
-
-```bash
 cd cases_3d/C3D_01_metal_mold
-```
 
-El investigador conserva actualmente **`QuickCup.STL` y `metal.STL`, sin sufijos**, en una carpeta de SolidWorks bajo `Documents/CINVESTAV/Tesis/Pieza dimensiones correctas` en Windows.
+STL_DIR="/mnt/c/Users/HP/Documents/CINVESTAV/Tesis/Pieza dimensiones correctas"
+ls -lh "$STL_DIR/QuickCup.STL" "$STL_DIR/metal.STL"
 
-**Si Ubuntu se ejecuta mediante WSL**, la unidad `C:` suele estar montada en `/mnt/c/`. Ajusta `USUARIO_WINDOWS` a tu nombre local:
-
-```bash
-STL_DIR="/mnt/c/Users/USUARIO_WINDOWS/Documents/CINVESTAV/Tesis/Pieza dimensiones correctas"
 python3 scripts/prepare_geometry.py \
-  --mold "$STL_DIR/QuickCup.STL" \
-  --metal "$STL_DIR/metal.STL"
+    --mold "$STL_DIR/QuickCup.STL" \
+    --metal "$STL_DIR/metal.STL"
 
 source /opt/openfoam14/etc/bashrc
 bash scripts/run_blockMesh_only.sh
 ```
 
-**Si Ubuntu tiene arranque propio y no es WSL**, la ruta `C:` no está garantizada. Copia ambos STL desde Windows al sistema Ubuntu (USB, carpeta compartida o partición montada) y utiliza sus rutas de Linux, sin paréntesis. Nunca supongas que `/mnt/c` existe en ese entorno. Los comandos deben ejecutarse desde esta carpeta del caso.
+Si Ubuntu es un sistema independiente y no WSL, transfiere los STL a Linux o monta la partición Windows antes de ejecutar `prepare_geometry.py`, con las rutas correctas. No presupongas que `/mnt/c` existe.
 
-Si el preparador rechaza los hashes, **no anules la comprobación**: los nombres pueden ser iguales aunque los bytes sean de una exportación anterior con coordenadas positivas, o de una nueva triangulación. En tal caso, revisa/exporta los dos STL corregidos y actualiza la referencia solamente después de comprobar volúmenes, bounds y alineación espacial.
+El script `run_blockMesh_only.sh` ejecuta exclusivamente `blockMesh` y `checkMesh -allTopology -allGeometry` y escribe logs locales. Se niega a sobrescribir `constant/polyMesh`; para repetir un mallado usa una copia nueva del caso, preservando la evidencia.
 
-`blockMesh` **no mallará todavía las piezas**: solo generará la caja auxiliar; después prepararemos juntos `snappyHexMeshDict` para ajustar las celdas a las superficies y separar metal/arena.
+## ¿Qué malla crea esta etapa?
 
-El preparador compara **ambos hashes originales** y convierte las coordenadas de milímetros a metros **exactamente una vez**, sin desplazar ni reorientar las piezas ni sobrescribir tus STL originales. Valida las superficies y puntos interiores mediante `analysis_tools/preflight_c3d_stl.py`. Si los STL no coinciden con la referencia o ya existe una salida, se detiene.
+**Dominio de fondo** (rectángulo cartesiano auxiliar):
 
-El script de malla sólo ejecuta `blockMesh` y `checkMesh -allTopology -allGeometry`, crea `log.blockMesh` y `log.checkMesh.background`, y **se niega a sobrescribir una malla existente**. No llama a `Allrun`, `Allclean` ni al solver. Para un intento nuevo, usa una copia nueva del caso; no borres resultados existentes.
-
-## Diseñamos juntos el diccionario
-
-`system/blockMeshDict` define una caja cartesiana auxiliar:
-
-| Eje | Mínimo [m] | Máximo [m] | Longitud [mm] | Celdas |
+| Eje | Mínimo [mm] | Máximo [mm] | Longitud [mm] | Celdas |
 |---|---:|---:|---:|---:|
-| X | -0.003 | 0.055 | 58 | 29 |
-| Y | -0.069 | 0.003 | 72 | 36 |
-| Z | -0.003 | 0.055 | 58 | 29 |
+| X | -3 | 55 | 58 | 29 |
+| Y | -69 | 3 | 72 | 36 |
+| Z | -3 | 55 | 58 | 29 |
 
-- **30,276 celdas hexaédricas de fondo**, nominalmente **2 mm** por lado, `simpleGrading (1 1 1)`.
-- `convertToMeters 1;` porque todos los vértices del diccionario YA están en metros.
-- `outerBox` es un parche temporal; **no** es una condición física de la pared de arena.
-- Las seis caras tienen normales exteriores consistentes, cubiertas por una prueba estática automática.
-- Los márgenes auxiliares de la caja no representan aire, arena adicional ni ningún otro material físico.
+En total hay **29 × 36 × 29 = 30,276** celdas hexaédricas uniformes de 2 mm. Las seis caras tienen normales hacia el exterior, cubiertas por la prueba sintética; el parche `outerBox` y los márgenes son **temporales** y no constituyen condiciones térmicas físicas.
 
-**Esta malla no resuelve el sólido ni distingue regiones.** No basta una comprobación favorable de `checkMesh` en la caja para afirmar que metal y arena estén mallados o térmicamente acoplados.
+`blockMesh` no crea por sí mismo las regiones metal/arena. **La malla física se realizará mediante `snappyHexMesh`, respetando los STL**, una vez que construyamos juntos el `system/snappyHexMeshDict`. Su `geometry` contendrá, conceptualmente:
 
-## Puertas de aceptación pendientes (no declararlas cerradas)
+```cpp
+geometry
+{
+    mold
+    {
+        type triSurfaceMesh;
+        file "mold.stl";
+        units [mm];
+    }
+    metal
+    {
+        type triSurfaceMesh;
+        file "metal.stl";
+        units [mm];
+    }
+}
+```
 
-1. Ejecutar `blockMesh` + `checkMesh` en Ubuntu con OpenFOAM Foundation v14, conservar los logs y revisar `Mesh OK` y dimensiones efectivas.
-2. Preparar juntos `snappyHexMeshDict`, captura de superficies y `cellZones`/regiones, **sin confiar en que dos STL bastan por sí solos para preservar la interfaz**.
-3. Separar metal/arena, inspeccionar `checkMesh` de ambas regiones, áreas de interfaz, conectividad y orientaciones.
-4. Configurar interfaces térmicas, BC 3D, gravedad, referencias de presión, propiedades y posición de termopares.
-5. Implementar un caso físico C3D desde C14 sólo cuando lo anterior esté documentado; ejecutar CFD exclusivamente en la laptop del investigador.
-6. Comparar conservación de masa/energía, malla, curvas de enfriamiento, fracción líquida, eventual recalescencia bajo interpretación física explícita.
+Esto es **un fragmento explicativo**, NO un `snappyHexMeshDict` listo para ejecutar. Faltan los controles de refinamiento, límites de celdas, snapping, selección de regiones y controles de calidad; no confundir una malla superficial correcta con interfaces de CHT validadas.
 
-Las pruebas GitHub son solamente estáticas/sintéticas, **nunca ejecutan OpenFOAM**. FoamLENS se desarrolla en paralelo y no es requisito para generar ni validar la malla en Ubuntu.
+## Próximas puertas de validación
 
-## Reproducibilidad
+1. Ejecutar `blockMesh` y `checkMesh` únicamente en Ubuntu del investigador; guardar y revisar logs y dimensiones del `bounding box` en metros.
+2. Diseñar `snappyHexMeshDict` entre investigador y asistente, con regiones metal/molde, control de contacto, refino de interfaces, seguimiento de calidad y de volumen físico, sin generar una sola región por accidente.
+3. Ejecutar `snappyHexMesh`, analizar interfaz y subdominios, preparar y validar `splitMeshRegions` y `checkMesh` por región.
+4. Adaptar con trazabilidad las BC/propiedades térmicas 3D desde la referencia C14, comprobar conservación de energía, pruebas de malla y curvas experimentales.
+5. Ejecutar el solver exclusivamente en la laptop. No instalar ni correr OpenFOAM en GitHub Actions; FoamLENS es independiente.
 
-- `geometry_reference.json`: tamaño, checksums originales, volúmenes, coordenadas y semillas de regiones.
-- `scripts/prepare_geometry.py`: transformación controlada de vértices STL mm → m y preflight.
-- `scripts/run_blockMesh_only.sh`: malla y verificación locales sin borrar archivos.
-- `scripts/test_c3d_background_case.py`: comprobaciones sintéticas de resolución, orientación y conversión.
-- [Historial y decisiones](../../PROJECT_AUDIT_LOG_ES.md).
+Las pruebas automáticas del repositorio son **solo sintéticas/estáticas**; no certifican una malla OpenFOAM ni validan resultados CFD.
