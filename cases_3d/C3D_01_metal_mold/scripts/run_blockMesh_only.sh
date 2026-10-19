@@ -1,27 +1,27 @@
 #!/usr/bin/env bash
-# C3D-01 stage 1: local background mesh only. Never delete prior CFD results.
+# C3D-01: OpenFOAM Foundation v14 background mesh ONLY.
+# The STL will be used later by snappyHexMesh, NOT by blockMesh.
+# No Python, no STL copying/transformation, no CFD, no cleanup.
 set -euo pipefail
+
 cd "$(dirname "$0")/.."
 
 if ! command -v blockMesh >/dev/null 2>&1 || ! command -v checkMesh >/dev/null 2>&1; then
-  echo "ERROR: carga OpenFOAM Foundation v14 con source /opt/openfoam14/etc/bashrc" >&2
+  echo "ERROR: primero carga OpenFOAM 14: source /opt/openfoam14/etc/bashrc" >&2
   exit 2
 fi
-if [[ -d constant/polyMesh || -d constant/metal/polyMesh || -d constant/mold/polyMesh ]]; then
-  echo "ERROR: ya existe una malla; usa una copia nueva del caso en lugar de sobrescribirla." >&2
-  exit 3
-fi
-for p in constant/geometry/mold.stl constant/geometry/metal.stl; do
-  if [[ ! -s "$p" ]]; then
-    echo "ERROR: falta $p. Primero prepara los STL con prepare_geometry.py." >&2
-    exit 4
+
+# Preserve previous results, including a failed attempt's diagnostic logs.
+for existing in constant/polyMesh constant/metal/polyMesh constant/mold/polyMesh log.blockMesh log.checkMesh.background; do
+  if [[ -e "$existing" ]]; then
+    echo "ERROR: $existing ya existe; no lo sobrescribire. Prepara una copia nueva del caso." >&2
+    exit 3
   fi
 done
-python3 ../../analysis_tools/preflight_c3d_stl.py \
-  --stl-dir constant/geometry --stl-units mm \
-  --manifest geometry_reference.json \
-  --json geometry_preflight_runtime.json
 
+echo "C3D-01: construyendo exclusivamente la caja inicial con blockMesh (units [mm])."
 blockMesh > log.blockMesh 2>&1
+echo "C3D-01: revisando la malla de fondo con checkMesh."
 checkMesh -allTopology -allGeometry > log.checkMesh.background 2>&1
-echo "Malla de fondo construida y auditada; revisar logs. NO se ejecuto CFD."
+echo "Listo: revisa log.blockMesh y log.checkMesh.background."
+echo "Aun NO se ejecuto snappyHexMesh, no hay regiones metal/arena ni simulacion CFD."
