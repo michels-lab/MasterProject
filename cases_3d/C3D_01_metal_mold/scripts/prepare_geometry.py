@@ -42,8 +42,8 @@ def sha(data: bytes) -> str:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--mold", type=Path, required=True, help="QuickCup(1).STL (mm)")
-    parser.add_argument("--metal", type=Path, required=True, help="metal(1).STL (mm)")
+    parser.add_argument("--mold", type=Path, required=True, help="QuickCup.STL (mm; aligned export)")
+    parser.add_argument("--metal", type=Path, required=True, help="metal.STL (mm; aligned export)")
     args = parser.parse_args()
     case = Path(__file__).resolve().parents[1]
     root = case.parents[1]
