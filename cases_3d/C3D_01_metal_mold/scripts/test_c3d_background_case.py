@@ -40,10 +40,11 @@ class C3DMeshInputTests(unittest.TestCase):
         v=vectors()
         self.assertEqual(len(v),8)
         extent=[max(p[i] for p in v)-min(p[i] for p in v) for i in range(3)]
-        for measured,expected in zip(extent,(0.058,0.072,0.058)):
+        for measured,expected in zip(extent,(58.0,72.0,58.0)):
             self.assertAlmostEqual(measured,expected)
         self.assertIn("hex (0 1 2 3 4 5 6 7) (29 36 29)",DICT)
-        self.assertIn("convertToMeters 1;",DICT)
+        self.assertIn("units [mm];",DICT)
+        self.assertNotIn("convertToMeters",DICT)
         self.assertEqual(29*36*29,30276)
         self.assertEqual(REF["background_mesh"]["cells_nxyz"],[29,36,29])
 
@@ -63,27 +64,33 @@ class C3DMeshInputTests(unittest.TestCase):
     def test_corrected_solidworks_fingerprints_are_stable(self):
         self.assertEqual(REF["mold"]["triangle_count"],3084)
         self.assertEqual(REF["metal"]["triangle_count"],3896)
-        self.assertEqual(REF["stl_coordinate_conversion_factor"],0.001)
+        self.assertEqual(REF["stl_coordinate_conversion_factor"],0.001)  # SI audit factor, not file conversion
         self.assertEqual(REF["sampled_seed_points_m"]["metal"],[0.0259,-0.02,0.0259])
 
-    def test_binary_stl_conversion_scales_vertices_only(self):
-        # Synthetic one-triangle STL, never reads private user CAD files in CI.
+    def test_original_binary_stl_is_kept_in_mm_unchanged(self):
+        # A synthetic STL is inspected by Python, never rescaled/rewritten.
         raw = bytearray(b"Synthetic STL test".ljust(80,b" "))
         raw += struct.pack("<I",1)
         raw += struct.pack("<12fH",0.0,0.0,1.0,
                            100.0,-40.0,0.0,200.0,-40.0,0.0,
                            100.0,0.0,50.0,0)
-        converted=mod.convert_binary_stl_mm_to_m(bytes(raw))
-        self.assertEqual(len(converted),len(raw))
-        self.assertEqual(converted[:96],raw[:96]) # header, count, normal unchanged
-        coords=struct.unpack_from("<9f",converted,96)
-        for actual,expected in zip(coords,(.1,-.04,0,.2,-.04,0,.1,0,.05)):
-            self.assertAlmostEqual(actual,expected,places=7)
-        self.assertEqual(converted[-2:],raw[-2:]) # attribute bits unchanged
+        baseline = bytes(raw)
+        self.assertEqual(mod.validate_binary_stl(baseline),1)
+        self.assertEqual(bytes(raw),baseline)
+        self.assertEqual(struct.unpack_from("<f",baseline,96)[0],100.0)
+        prepare=(CASE/"scripts"/"prepare_geometry.py").read_text()
+        self.assertIn('(temporary/(name+".stl")).write_bytes(raw)',prepare)
+        self.assertNotIn("scalePoints",prepare)
+        self.assertNotIn("convert_binary_stl_mm_to_m",prepare)
 
     def test_bad_binary_stl_is_rejected(self):
         with self.assertRaises(ValueError):
-            mod.convert_binary_stl_mm_to_m(b"short")
+            mod.validate_binary_stl(b"short")
+
+    def test_native_units_in_mesh_and_pending_snappy(self):
+        self.assertIn("units [mm];",DICT)
+        self.assertTrue((CASE/"constant"/"geometry"/"README.md").is_file())
+        self.assertEqual(REF["stl_original_units"],"mm")
 
     def test_scripts_never_run_cfd_or_cleanup(self):
         content=(CASE/"scripts"/"run_blockMesh_only.sh").read_text()
@@ -91,6 +98,8 @@ class C3DMeshInputTests(unittest.TestCase):
             self.assertNotIn(command,content)
         self.assertIn("checkMesh",content)
         self.assertIn("blockMesh",content)
+        self.assertIn("--stl-units mm",content)
+        self.assertIn("constant/geometry/",content)
 
 
 if __name__=="__main__":
