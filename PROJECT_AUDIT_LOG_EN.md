@@ -4196,3 +4196,12 @@ Commit `25e7cf8` contains `logs/`, `postProcessing/` and `log.foamMultiRun` for 
 A local push also reintroduced three GitHub Actions workflows previously retired due to laptop-only CFD policy. This corrective change deletes them again and adds post-run-aware input parity to CI. Post-run comparison excludes runtime-mutated `0/` diagnostic fields and does not claim those initial fields are validated.
 
 **J0/G1 scientific gates and the V16-before-3D/free-surface sequencing remain unchanged.**
+
+
+---
+
+## 2026-10-19 — C3D-01: CAD geometry and read-only STL preflight before meshing
+
+**Status: PRELIMINARY-GEOMETRY-PASS / OPENFOAM-NOT-RUN / SCIENTIFIC-GATES-OPEN.** User-provided individual mold/metal STEP models are valid OCC solids with zero volumetric overlap and zero CAD separation. The preliminary closed meshes contain 2668 mold and 2252 metal STL triangles. The 51.8×65.5×51.8 mm scale is an **unverified physical assumption** due to contradictory STEP unit metadata/coordinates.
+
+Added a binary STL manifold/volume/region-seed preflight and synthetic tests with no OpenFOAM solver. Reference and laptop-only meshing protocol: [analysis_results/c3d_01_geometry/README.md](analysis_results/c3d_01_geometry/README.md). No user CAD binaries were uploaded, no CFD ran in CI and B14/C14 baselines remain unchanged. J0/G1 and region-interface validation gates stay open.

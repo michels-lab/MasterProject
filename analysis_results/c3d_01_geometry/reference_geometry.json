@@ -1,0 +1,70 @@
+{
+  "note": "Derived on 2026-10-19 from the user-provided individual STEP CAD and their preliminary binary STL triangulations. Not OpenFOAM mesh/CFD evidence.",
+  "source_scale_to_m": 0.000001,
+  "scale_requires_real_measurement_confirmation": true,
+  "mold": {
+    "cad_valid": true,
+    "cad_solid_count": 1,
+    "bounds_in_m": [
+      [
+        0,
+        -0.0655,
+        0
+      ],
+      [
+        0.0518,
+        0,
+        0.0518
+      ]
+    ],
+    "size_in_mm": [
+      51.8,
+      65.5,
+      51.8
+    ],
+    "cad_volume_m3": 0.00010284333487618819,
+    "stl_volume_m3": 0.00010284349523791261,
+    "triangle_count": 2668,
+    "stl_sha256": "40ccead4d7c0db4422893408af1b353a87dc809522e195dce11ac94a6b90f764"
+  },
+  "metal": {
+    "cad_valid": true,
+    "cad_solid_count": 1,
+    "bounds_in_m": [
+      [
+        0.00765,
+        -0.04,
+        0.00765
+      ],
+      [
+        0.04415,
+        0,
+        0.04415
+      ]
+    ],
+    "size_in_mm": [
+      36.5,
+      40,
+      36.5
+    ],
+    "cad_volume_m3": 0.000047988510625677445,
+    "stl_volume_m3": 0.00004798742821641042,
+    "triangle_count": 2252,
+    "stl_sha256": "d0180439681e366252c468999a7d06454d04dffb8bd096fa82db76d2bbf2a462"
+  },
+  "cad_intersection_volume_m3": 0,
+  "cad_shape_distance_m": 0,
+  "sampled_seed_points_m": {
+    "metal": [
+      0.0259,
+      -0.02,
+      0.0259
+    ],
+    "mold": [
+      0.003,
+      -0.02,
+      0.0259
+    ]
+  },
+  "notice": "The native STEP unit metadata and coordinate values are inconsistent with the assumed laboratory dimensions. Confirm a measured 51.8 mm width and 65.5 mm height in CAD or physically before production use."
+}

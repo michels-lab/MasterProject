@@ -56,6 +56,8 @@ jobs:
         run: |
           python3 -m unittest discover -s analysis_tools -p 'test_preflight_sensitivity.py' -v
           python3 analysis_tools/preflight_sensitivity_cases.py --mode auto --strict
+      - name: Test read-only C3D preliminary STL geometry gate (synthetic only)
+        run: python3 -m unittest discover -s analysis_tools -p 'test_preflight_c3d_stl.py' -v
       - name: Check scientific case registry
         run: python3 analysis_tools/check_run_registry.py
       - name: Check V14 functionObject definitions and documentation

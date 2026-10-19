@@ -4904,3 +4904,12 @@ Se comprobó que el commit `25e7cf8` subió `logs/`, `postProcessing/` y `log.fo
 Hallazgo adicional: un push local volvió a añadir al árbol Git tres workflows retirados que instalan OpenFOAM y/o generan variantes en Actions. El cambio correctivo los elimina de nuevo **sin tocar resultados**, y adapta el preflight para verificar entradas `constant/`, `system/` y scripts en casos ya ejecutados. El chequeo de entradas preparadas se conserva en modo estricto; la paridad de campos iniciales `0/` tras una corrida necesita revisión específica.
 
 **Puertas científicas J0/G1 y bifurcación después de V16: sin cambios.** La documentación de esta sesión no convierte una evidencia temporal en validación física.
+
+
+---
+
+## 2026-10-19 — C3D-01: geometría CAD y barrera STL antes de mallar
+
+**Estado: PRELIMINARY-GEOMETRY-PASS / OPENFOAM-NOT-RUN / SCIENTIFIC-GATES-OPEN.** Los STEP individuales de QuickCup y metal son sólidos válidos con contacto (distancia cero), sin intersección volumétrica según OCC. La triangulación local cerrada tiene 2668 triángulos en arena y 2252 en metal. La escala 51.8×65.5×51.8 mm sigue **pendiente de confirmar** por contradicción entre metadatos STEP y coordenadas.
+
+Se añadió el preflight binario STL de solo lectura, verificación de región mediante 3 rayos por seed, comprobación de aristas/volumen y pruebas sintéticas sin OpenFOAM. La evidencia preliminar y los pasos locales quedan en [analysis_results/c3d_01_geometry/README.md](analysis_results/c3d_01_geometry/README.md). No se versionó CAD del investigador, no se ejecutó CFD en GitHub y no se tocaron B14/C14. El siguiente gate físico es multirregión+checkMesh+interfaces+BC en laptop.
