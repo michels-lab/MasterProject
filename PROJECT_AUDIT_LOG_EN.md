@@ -4205,3 +4205,14 @@ A local push also reintroduced three GitHub Actions workflows previously retired
 **Status: PRELIMINARY-GEOMETRY-PASS / OPENFOAM-NOT-RUN / SCIENTIFIC-GATES-OPEN.** User-provided individual mold/metal STEP models are valid OCC solids with zero volumetric overlap and zero CAD separation. The preliminary closed meshes contain 2668 mold and 2252 metal STL triangles. The 51.8×65.5×51.8 mm scale is an **unverified physical assumption** due to contradictory STEP unit metadata/coordinates.
 
 Added a binary STL manifold/volume/region-seed preflight and synthetic tests with no OpenFOAM solver. Reference and laptop-only meshing protocol: [analysis_results/c3d_01_geometry/README.md](analysis_results/c3d_01_geometry/README.md). No user CAD binaries were uploaded, no CFD ran in CI and B14/C14 baselines remain unchanged. J0/G1 and region-interface validation gates stay open.
+
+
+---
+
+## 2026-10-19 — [GIT-VERIFIED] Independent C3D-01 trial under `cases_3d/`
+
+At the researcher's request, the first background `blockMeshDict` was moved from an ad hoc local ZIP to [`cases_3d/C3D_01_metal_mold`](cases_3d/C3D_01_metal_mold/README.md), distinct from 2D C14/B14 and existing sensitivity cases. The staged inputs include a 58×72×58 mm background domain, 29×36×29=30,276 2 mm background cells, controlDict, geometry hash/seed manifest, strict mm-to-m local STL preparation, safe laptop-only mesh script, and synthetic tests. Boundary faces were corrected to outward orientation and a regression added.
+
+Corrected shared-coordinate SolidWorks exports: `QuickCup(1).STL` (3,084 triangles) and `metal(1).STL` (3,896 triangles). Local binary STL rescaling and geometry preflight pass; this is **not** OpenFOAM mesh verification, CHT coupling, or CFD validation. Original user STL/CAD remain off the public repository, with exact SHA-256 identifiers committed for reproducibility.
+
+**Status:** `GEOMETRY_PREPARED; BACKGROUND_MESH_NOT_RUN; MULTIREGION_NOT_MESHED; CFD_NOT_RUN`. Next gate: researcher runs `blockMesh` and `checkMesh` on laptop Ubuntu. GitHub workflows remain read-only; C14/B14 results unchanged.
