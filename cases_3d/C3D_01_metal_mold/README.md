@@ -7,7 +7,7 @@
 **Usamos milímetros de forma explícita en los diccionarios de OpenFOAM 14**, no conversores externos de geometría:
 
 - `system/blockMeshDict`: `units [mm];` seguido de vértices con valores como `(-3 -69 -3)`, `(55 3 55)`. OpenFOAM genera la malla en su unidad base SI `[m]`.
-- **Geometrías SolidWorks**: `QuickCup.STL` y `metal.STL` mantienen sus coordenadas originales numéricas en **mm**, su orientación, origen y triangulación. `prepare_geometry.py` solo verifica el hash/triangulación y coloca **copias binarias idénticas** en `constant/geometry/mold.stl` y `metal.stl`. No escala ni mueve nada.
+- **Geometrías SolidWorks**: `QuickCup.STL` y `metal.STL` mantienen sus coordenadas originales numéricas en **mm**, su orientación, origen y triangulación. La preparación **normal** consiste en copiar directamente estos archivos con `cp -n` a `constant/geometry/mold.stl` y `metal.stl`, sin Python ni escalado. `prepare_geometry.py` queda únicamente como auditoría opcional.
 - **Paso siguiente con `snappyHexMesh`**: cada entrada de superficie `triSurfaceMesh` declarará `units [mm];`. OpenFOAM convierte las superficies internamente a la escala física correcta.
 - **Prohibido doble escalado**: no usar también `scale 0.001;` en la misma geometría, ni convertir previamente los STL a metros; las dos opciones de escalado/units son alternativas.
 - Los scripts `analysis_tools/preflight_c3d_stl.py` inspeccionan la geometría **en memoria** en SI para verificar volumen/semillas; los archivos fuente no se cambian. `geometry_reference.json` conserva las huellas SHA-256 originales.
@@ -27,32 +27,48 @@ Referencias oficiales:
 
 Los archivos STL de SolidWorks **no están publicados** en este repositorio, que es público. Debes utilizar las exportaciones con origen compartido y SHA-256 especificados en `geometry_reference.json`; una exportación con el mismo nombre puede tener contenido distinto. Si los hashes no coinciden, inspeccionaremos la nueva exportación en lugar de desactivar la comprobación.
 
-## Ubicación local y preparación
+## Ubicación local y preparación sin Python
 
-En Windows, la carpeta del investigador es:
-`C:\Users\HP\Documents\CINVESTAV\Tesis\Pieza dimensiones correctas`.
+El investigador ha colocado sus dos STL de SolidWorks en **`/home/michel/OpenFOAM/Piezas_STL/`**. La ruta de Windows anterior en `C:\\Users\\HP\\...` no debe usarse, pues provocó errores de entrada/salida al acceder por `/mnt/c` en WSL.
 
-Desde Ubuntu en **WSL**, si tienes este repositorio clonado bajo `~/OpenFOAM/QuickCup_Solidification`:
+Desde el clon local:
 
 ```bash
 cd ~/OpenFOAM/QuickCup_Solidification
 git pull --ff-only
 cd cases_3d/C3D_01_metal_mold
 
-STL_DIR="/mnt/c/Users/HP/Documents/CINVESTAV/Tesis/Pieza dimensiones correctas"
-ls -lh "$STL_DIR/QuickCup.STL" "$STL_DIR/metal.STL"
+ls -lh "$HOME/OpenFOAM/Piezas_STL/QuickCup.STL" "$HOME/OpenFOAM/Piezas_STL/metal.STL"
 
-python3 scripts/prepare_geometry.py \
-    --mold "$STL_DIR/QuickCup.STL" \
-    --metal "$STL_DIR/metal.STL"
+cp -n "$HOME/OpenFOAM/Piezas_STL/QuickCup.STL" constant/geometry/mold.stl
+cp -n "$HOME/OpenFOAM/Piezas_STL/metal.STL" constant/geometry/metal.stl
+ls -lh constant/geometry/*.stl
+```
 
+`cp -n` no sobrescribe archivos ya existentes; si reutilizas este caso revisa las dos rutas antes de continuar. Los STL permanecen en **mm**, bit a bit idénticos a los de SolidWorks; no aplicamos Python, cambios de escala, traslaciones ni rotaciones. La interfaz futura será interpretada en SI por OpenFOAM mediante `units [mm]` en cada entrada `triSurfaceMesh` del diccionario `snappyHexMeshDict`, que aún no está construido.
+
+**Malla de fondo, usando OpenFOAM y sin Python:**
+
+```bash
 source /opt/openfoam14/etc/bashrc
 bash scripts/run_blockMesh_only.sh
 ```
 
-Si Ubuntu es un sistema independiente y no WSL, transfiere los STL a Linux o monta la partición Windows antes de ejecutar `prepare_geometry.py`, con las rutas correctas. No presupongas que `/mnt/c` existe.
+El script ejecuta exactamente `blockMesh` y `checkMesh -allTopology -allGeometry`, después de comprobar que OpenFOAM está disponible y que no existe una malla anterior o logs con esos nombres. Guarda `log.blockMesh` y `log.checkMesh.background`. **No lee STL, no llama a Python, no ejecuta snappyHexMesh, no resuelve CFD y no borra resultados**. Puedes estudiar y ejecutar los dos comandos por separado, desde la carpeta del caso, si prefieres analizar cada salida en terminal. Una caja válida no certifica todavía las superficies STL ni las futuras regiones físicas.
 
-El script `run_blockMesh_only.sh` ejecuta exclusivamente `blockMesh` y `checkMesh -allTopology -allGeometry` y escribe logs locales. Se niega a sobrescribir `constant/polyMesh`; para repetir un mallado usa una copia nueva del caso, preservando la evidencia.
+**Auditorías completamente opcionales** (independientes del mallado):
+
+```bash
+# Consulta visual de huellas sin cambiar STL:
+sha256sum constant/geometry/*.stl
+
+# Auditoria geometrica adicional si decides utilizarla:
+python3 ../../analysis_tools/preflight_c3d_stl.py \
+  --stl-dir constant/geometry --stl-units mm \
+  --manifest geometry_reference.json
+```
+
+La referencia SHA-256 de la exportación corregida está en `geometry_reference.json`; una comprobación opcional no implica validación física. Para rehacer una malla, prepara un caso nuevo y conserva las salidas anteriores; nunca ejecutes `Allclean` sobre resultados históricos.
 
 ## ¿Qué malla crea esta etapa?
 
