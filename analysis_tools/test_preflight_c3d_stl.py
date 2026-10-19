@@ -1,4 +1,7 @@
-"""Dependency-free synthetic tests of the preliminary geometry gate."""
+"""Dependency-free synthetic tests of the preliminary geometry gate.
+
+Tests create only tiny temporary STL fixtures; never execute OpenFOAM or CFD.
+"""
 from __future__ import annotations
 import struct
 import tempfile
