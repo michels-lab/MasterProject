@@ -1,7 +1,9 @@
-/* QuickCup C3D-01, primera malla de fondo 3D; no es una malla física final.
-   STL convertidos una sola vez de mm a m; aquí las coordenadas ya son metros.
-   Caja: 58 x 72 x 58 mm; 29 x 36 x 29 celdas de 2 mm.
-*/
+/* QuickCup C3D-01: primera malla de fondo, no malla física final.
+ * OpenFOAM Foundation v14: las coordenadas siguientes están en MILÍMETROS.
+ * units [mm] convierte automáticamente la malla generada a SI [m].
+ * Los STL originales permanecen en mm para geometry.units [mm] en snappy.
+ * Caja: 58 x 72 x 58 mm, 29 x 36 x 29 celdas de 2 mm.
+ */
 FoamFile
 {
     version 2.0;
@@ -9,17 +11,17 @@ FoamFile
     class dictionary;
     object blockMeshDict;
 }
-convertToMeters 1;
+units [mm];
 vertices
 (
-    (-0.003 -0.069 -0.003) // 0
-    ( 0.055 -0.069 -0.003) // 1
-    ( 0.055  0.003 -0.003) // 2
-    (-0.003  0.003 -0.003) // 3
-    (-0.003 -0.069  0.055) // 4
-    ( 0.055 -0.069  0.055) // 5
-    ( 0.055  0.003  0.055) // 6
-    (-0.003  0.003  0.055) // 7
+    (-3 -69 -3) // 0
+    (55 -69 -3) // 1
+    (55 3 -3) // 2
+    (-3 3 -3) // 3
+    (-3 -69 55) // 4
+    (55 -69 55) // 5
+    (55 3 55) // 6
+    (-3 3 55) // 7
 );
 blocks
 (
