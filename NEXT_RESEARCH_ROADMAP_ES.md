@@ -94,3 +94,10 @@ El árbol Git de las cuatro variantes se comparó directamente con su padre (B14
 ## 2026-10-15 — Estado tras subir resultados B11E2 / V15 / V16
 
 Las cinco variantes tienen archivos versionados de solver y sonda hasta 10 s. No repetir inmediatamente `Allclean`/`Allrun`: primero auditar evidencia y confrontarla con los padres. La comparación térmica preliminar y el diagnóstico de Courant/continuidad constan en `analysis_results/v15_v16_postpush_20261015/README.md`. La carpeta de B conserva un desbalance de continuidad ≈ -0.031. B15/C15 superaron marginalmente `maxCo=0.25`; estudiar la implementación del control adaptativo y sus consecuencias. **No se abre automáticamente C3D ni B-FS ni se cierran J0/G1** hasta completar la auditoría de V16.
+
+
+## 2026-10-19 — Avance de C3D-01 independiente de FoamLENS (malla PRELIMINAR)
+
+Se recibieron los STEP originales individuales del molde y metal; un chequeo CAD con OCC confirmó un sólido válido en cada archivo, intersección volumétrica nula y contacto entre ambos. Se prepararon STL separados, ambos cerrados y orientados, con referencia **condicionada** a un molde de 51.8×65.5×51.8 mm (el export STEP presenta inconsistencia de unidades). El metal ocupa ~47.99 cm³, la arena ~102.84 cm³.
+
+Se creó una barrera geométrica **solo lectura** en `analysis_tools/preflight_c3d_stl.py` con cuatro pruebas sintéticas y manifiesto versionado en [analysis_results/c3d_01_geometry](analysis_results/c3d_01_geometry/README.md). El paquete de malla se entrega localmente y no se publican los archivos CAD del investigador en GitHub. **No se ejecutó OpenFOAM**: `surfaceCheck`, `blockMesh`, `snappyHexMesh`, `splitMeshRegions`, `checkMesh` y balances físicos aún necesitan la laptop. Se conserva C14 intacto y J0/G1 abiertos; la ruta B de superficie libre es independiente.
