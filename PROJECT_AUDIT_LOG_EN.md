@@ -4216,3 +4216,12 @@ At the researcher's request, the first background `blockMeshDict` was moved from
 Corrected shared-coordinate SolidWorks exports: `QuickCup(1).STL` (3,084 triangles) and `metal(1).STL` (3,896 triangles). Local binary STL rescaling and geometry preflight pass; this is **not** OpenFOAM mesh verification, CHT coupling, or CFD validation. Original user STL/CAD remain off the public repository, with exact SHA-256 identifiers committed for reproducibility.
 
 **Status:** `GEOMETRY_PREPARED; BACKGROUND_MESH_NOT_RUN; MULTIREGION_NOT_MESHED; CFD_NOT_RUN`. Next gate: researcher runs `blockMesh` and `checkMesh` on laptop Ubuntu. GitHub workflows remain read-only; C14/B14 results unchanged.
+
+
+---
+
+## 2026-10-19 — [GIT-VERIFIED] Corrected local SolidWorks names and snappyHexMesh responsibilities
+
+The researcher clarified that the current local SolidWorks files are `QuickCup.STL` and `metal.STL` without `(1)`. C3D-01 instructions now use these names, give safe WSL Windows-drive path guidance plus an alternative for native Ubuntu, and preserve the exact verified corrected-export SHA-256 checks. A filename change is not proof of geometry identity; newly exported contents must be independently revalidated rather than bypassing the gate.
+
+Python only checks/scales STL coordinates; `blockMesh` builds the initial background box; `snappyHexMesh` will be responsible for conforming/refining a future physical metal/mold computational mesh. The `snappyHexMeshDict` and OpenFOAM runtime execution remain **pending**. No meshing or CFD ran in GitHub.
