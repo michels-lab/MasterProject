@@ -59,6 +59,19 @@ class GeometryPreflightTests(unittest.TestCase):
             with self.assertRaises(ValueError):
                 inspect_binary_stl(file)
 
+    def test_binary_stl_mm_preflight_is_read_only(self):
+        import hashlib
+        with tempfile.TemporaryDirectory() as d:
+            root=Path(d)
+            src=root/'cube.stl'
+            make_cube(src,side=10.0)
+            before=src.read_bytes()
+            surface=inspect_binary_stl(src,coordinate_scale_to_m=0.001)
+            self.assertAlmostEqual(surface.volume_m3,1e-6,delta=1e-11)
+            self.assertAlmostEqual(surface.bounds[1][0],0.01,delta=1e-8)
+            self.assertEqual(src.read_bytes(),before)
+            self.assertEqual(surface.digest,hashlib.sha256(before).hexdigest())
+
     def test_two_region_sanity_and_units(self):
         with tempfile.TemporaryDirectory() as d:
             p=Path(d)
