@@ -8,6 +8,12 @@
 
 **Stage gate:** complete paired B/C studies through V16 first; then fork into C → 3D and B → metal-air free surface plus shrinkage/feeding. No GitHub-based CFD execution.
 
+## New independent 3D research line — C3D-01
+
+The first three-dimensional QuickCup mesh experiment lives in [`cases_3d/C3D_01_metal_mold`](cases_3d/C3D_01_metal_mold/README.md). It includes a 2 mm Cartesian `blockMeshDict`, a checked local STL mm-to-m conversion workflow, mesh-only shell script, region seeds, and static regression tests. **Prepared, not run in OpenFOAM; no 3D CFD results yet.** User CAD/STL data remain local because this repository is public.
+
+See also the [3D case index](cases_3d/README.md). The existing C14 and B/C numerical research runs remain unchanged.
+
 ## Scientific agents and postprocessing
 
 **Execution ownership:** all CFD runs occur on the user's laptop. The repository runs no CFD and only audits results after git push.
