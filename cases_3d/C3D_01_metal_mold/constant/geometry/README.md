@@ -1,7 +1,15 @@
-# Superficies SolidWorks para snappyHexMesh en OpenFOAM Foundation v14
+# Superficies STL nativas para OpenFOAM Foundation v14
 
-`prepare_geometry.py` almacena aquí `mold.stl` y `metal.stl` como **copias binarias idénticas** a los STL corregidos, sin alterar sus coordenadas en milímetros. Conservar el origen compartido es indispensable para el contacto metal–arena.
+**Flujo recomendado sin Python:** copiar directamente los STL originales de SolidWorks, en milímetros, desde `~/OpenFOAM/Piezas_STL/`:
 
-El futuro `snappyHexMeshDict` declarará `units [mm];` individualmente en las entradas `triSurfaceMesh`. OpenFOAM convierte en memoria estas superficies a la base SI [m]. No utilizar ninguna conversión adicional de 0.001 en estas mismas superficies.
+```bash
+# Desde la carpeta C3D_01_metal_mold:
+cp -n "$HOME/OpenFOAM/Piezas_STL/QuickCup.STL" constant/geometry/mold.stl
+cp -n "$HOME/OpenFOAM/Piezas_STL/metal.STL" constant/geometry/metal.stl
+```
 
-Los STL son privados del investigador y se excluyen de GitHub; el manifiesto público sólo contiene hashes y dimensiones de referencia.
+Las copias siguen en mm; no se cambia ni un vértice. Los nombres internos se mantienen `mold.stl` y `metal.stl` para referenciarlos desde `snappyHexMeshDict`.
+
+**Conversión SI al leer las superficies:** en OpenFOAM Foundation v14 el futuro diccionario `snappyHexMeshDict` declarará `units [mm];` en cada superficie `triSurfaceMesh`. No preescalar los STL, no declarar además `scale 0.001;`. El comando `blockMesh` únicamente construye la caja inicial y no necesita leer estos STL.
+
+`scripts/prepare_geometry.py` y `analysis_tools/preflight_c3d_stl.py` siguen presentes **solo como opciones de auditoría**, no son pasos del mallado ni son llamados por el script de `blockMesh`. Se conservan los STL fuera del repositorio público; aquí están excluidos por `.gitignore`.

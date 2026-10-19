@@ -98,8 +98,13 @@ class C3DMeshInputTests(unittest.TestCase):
             self.assertNotIn(command,content)
         self.assertIn("checkMesh",content)
         self.assertIn("blockMesh",content)
-        self.assertIn("--stl-units mm",content)
-        self.assertIn("constant/geometry/",content)
+        self.assertNotIn("python3 ",content)
+        self.assertNotIn("preflight_c3d_stl.py",content)
+        self.assertNotIn("prepare_geometry.py",content)
+        self.assertNotIn("--stl-units",content)
+        self.assertIn("log.blockMesh",content)
+        self.assertIn("log.checkMesh.background",content)
+        self.assertIn("constant/polyMesh",content)
 
 
 if __name__=="__main__":

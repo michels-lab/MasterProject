@@ -4942,3 +4942,12 @@ Se aclaró que Python solo valida/prepara unidades de los STL; `blockMesh` gener
 Se confirmó con la guía oficial https://doc.cfd.direct/openfoam/user-guide-v14/blockmesh que `blockMeshDict` soporta `units [mm];`, convirtiendo la malla generada a SI. También se verificó en el código fuente de OpenFOAM-14 (`searchableSurfaces::triSurface::scale`) que las geometrías trianguladas aceptan `units [mm];` y que `scale` y `units` no deben declararse simultáneamente para la misma entrada. Por ello se actualizó el caso 3D: vertices de fondo escritos como [-3,55],[-69,3],[-3,55] mm; geometrías binarias SolidWorks se copian sin alterar coordenadas a `constant/geometry`; Python hace solo validaciones en memoria mediante `--stl-units mm`. Se añadieron pruebas estáticas y sintéticas para evitar regresiones de unidades y pérdida de integridad.
 
 **Estado abierto:** No se ejecutó `blockMesh`, `snappyHexMesh`, `splitMeshRegions`, `checkMesh` en OpenFOAM. El fragmento `geometry` con unidades nativas está documentado, pero no existe aún un `snappyHexMeshDict` completo ni validado. La laptop será el único ejecutor CFD. No mezclar STL ya convertidos a m con la indicación `units [mm]` ni añadir `scale 0.001` duplicado.
+
+
+---
+
+## 2026-10-19 — [GIT-VERIFIED] C3D-01: mallado de fondo 100 % OpenFOAM; Python opcional
+
+A petición expresa del investigador se retiró toda llamada obligatoria a Python del script `cases_3d/C3D_01_metal_mold/scripts/run_blockMesh_only.sh`. El script ahora solo verifica disponibilidad de OpenFOAM14 y la ausencia de `polyMesh`/logs existentes, luego ejecuta `blockMesh` y `checkMesh -allTopology -allGeometry`, preservando logs y sin sobrescribir pruebas. Ya **no requiere presencia de STL** porque `blockMesh` únicamente genera la caja auxiliar.
+
+El flujo normal copia sin modificación `QuickCup.STL` y `metal.STL` desde `~/OpenFOAM/Piezas_STL/` a `constant/geometry/` mediante `cp -n`; los STL permanecen en milímetros y serán interpretados con `units [mm];` dentro del futuro `snappyHexMeshDict`. Se corrigieron README, pruebas estáticas y la carpeta de geometría. `prepare_geometry.py` y `preflight_c3d_stl.py` continúan como **herramientas de auditoría opcionales** y no ejecutan mallado. **No hay evidencia de `blockMesh`, `checkMesh` o `snappyHexMesh` ejecutados en laptop**; GitHub no los ejecutó. Las salidas C14 y anteriores permanecen intactas.

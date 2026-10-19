@@ -4232,3 +4232,10 @@ Python only checks/scales STL coordinates; `blockMesh` builds the initial backgr
 ## 2026-10-19 — [GIT-VERIFIED] Native `[mm]` units for the C3D-01 Foundation v14 case
 
 The Foundation v14 `blockMesh` user guide explicitly documents `units [mm];`, and the `searchableSurfaces::triSurface::scale` source confirms that imported triangulated surfaces also accept `units [mm];`, mutually exclusive with `scale`. C3D-01 now writes background vertices directly in millimetres; exact source STL binary bytes are copied unchanged into `constant/geometry`; read-only Python geometry checks interpret input mm in SI memory only. Static tests now guard dimensions, binary integrity and lack of CFD execution. **No OpenFOAM mesh, multi-region interface or CFD run has occurred.** The future `snappyHexMeshDict` must explicitly mark each STL's units and avoid double scaling.
+
+
+---
+
+## 2026-10-19 — [GIT-VERIFIED] C3D-01 background mesh runs OpenFOAM only; Python strictly optional
+
+At the researcher's explicit request, `cases_3d/C3D_01_metal_mold/scripts/run_blockMesh_only.sh` no longer invokes any Python step. The launcher only checks for OpenFOAM availability and existing mesh/logs, then runs `blockMesh` and `checkMesh -allTopology -allGeometry` on the researcher's laptop, preserving outputs and preventing overwrites. It no longer requires STL files to build the auxiliary box. The default STL preparation is a byte-preserving `cp -n` from `~/OpenFOAM/Piezas_STL/` into `constant/geometry/`, preserving mm. Native `units [mm]` in the future `snappyHexMeshDict` will govern the physical mesh geometry. Python remains available only as optional read-only validation, never a mesher. The GitHub checks are synthetic/static; no real mesh or CFD run was executed.
