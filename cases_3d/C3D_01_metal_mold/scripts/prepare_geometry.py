@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""C3D-01: convert ORIGINAL aligned SolidWorks binary STL coordinates from mm to m.
+"""C3D-01: verify and stage original aligned SolidWorks STL in native mm.
 
-Converts triangle vertices only: normals, triangulation, winding, shared origin,
-and face attributes stay unchanged. Source files are never modified.
+OpenFOAM Foundation v14 reads these surfaces using geometry.units [mm].
+The exact STL binary content and original CAD coordinates remain unchanged.
 Requires the exact two validated STL exports recorded in geometry_reference.json.
 Does not execute OpenFOAM.
 """
@@ -18,22 +18,14 @@ import sys
 import tempfile
 
 
-def convert_binary_stl_mm_to_m(source: bytes) -> bytes:
+def validate_binary_stl(source: bytes) -> int:
+    """Validate the binary STL layout without modifying a single byte."""
     if len(source) < 84:
         raise ValueError("STL truncated: missing 84-byte binary header")
     count, = struct.unpack_from("<I", source, 80)
-    if count == 0 or len(source) != 84 + count * 50:
-        raise ValueError("Expected closed binary STL byte layout (84 + 50*N)")
-    output = bytearray(source)
-    for i in range(count):
-        record = 84 + 50*i
-        for axis in range(9):  # nine vertex floats, NOT three normal floats
-            address = record + 12 + axis*4
-            x, = struct.unpack_from("<f", source, address)
-            if not (-1e10 < x < 1e10):
-                raise ValueError(f"Non-finite/unreasonable coordinate: triangle {i}")
-            struct.pack_into("<f", output, address, x*0.001)
-    return bytes(output)
+    if count == 0 or len(source) != 84 + count*50:
+        raise ValueError("Expected binary STL 84 + 50*N bytes")
+    return count
 
 
 def sha(data: bytes) -> str:
@@ -48,7 +40,7 @@ def main() -> int:
     case = Path(__file__).resolve().parents[1]
     root = case.parents[1]
     meta = json.loads((case/"geometry_reference.json").read_text(encoding="utf-8"))
-    dst = case/"constant"/"triSurface"
+    dst = case/"constant"/"geometry"
     targets = {"mold":dst/"mold.stl", "metal":dst/"metal.stl"}
     if any(p.exists() for p in targets.values()):
         raise SystemExit("ERROR: target STL already exists; refusing to overwrite it.")
@@ -65,13 +57,13 @@ def main() -> int:
                     f"validated C3D-01 export. Found {actual}; expected {expected}. "
                     "Check that you chose the corrected coordinate-preserving export."
                 )
-            converted = convert_binary_stl_mm_to_m(raw)
-            (temporary/(name+".stl")).write_bytes(converted)
-            print(f"{name}: {len(converted)} bytes, SHA-256 after scaling {sha(converted)}")
+            triangles = validate_binary_stl(raw)
+            (temporary/(name+".stl")).write_bytes(raw)  # source bytes, never transformed
+            print(f"{name}: {triangles} triangles; native units [mm]; SHA-256 {actual}")
 
         # Validate BOTH converted surfaces and interior seeds before publishing either.
         cmd = [sys.executable, str(root/"analysis_tools"/"preflight_c3d_stl.py"),
-               "--stl-dir",str(temporary),
+               "--stl-dir",str(temporary), "--stl-units","mm",
                "--manifest",str(case/"geometry_reference.json"),
                "--json",str(temporary/"preflight.json")]
         result = subprocess.run(cmd,check=False)
@@ -84,7 +76,7 @@ def main() -> int:
             target.write_bytes(source.read_bytes())
         (case/"geometry_preflight_runtime.json").write_text(
             (temporary/"preflight.json").read_text(encoding="utf-8"),encoding="utf-8")
-    print("Geometry prepared in METRES. CAD originals unchanged. NO OpenFOAM solver run.")
+    print("Geometry copied UNCHANGED in millimetres. OpenFOAM14 uses geometry.units [mm]. No solver run.")
     return 0
 
 
