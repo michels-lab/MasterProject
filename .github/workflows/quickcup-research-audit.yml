@@ -10,6 +10,7 @@ on:
       - 'analysis_tools/preflight_sensitivity_cases.py'
       - 'analysis_tools/test_preflight_sensitivity.py'
       - 'cases_controlled_buoyancy/**'
+      - 'cases_3d/**'
       - 'analysis_results/**'
       - 'RUN_CASE_REGISTRY.csv'
       - 'RUN_MASTER_PROTOCOL.md'
@@ -24,6 +25,7 @@ on:
       - 'analysis_tools/preflight_sensitivity_cases.py'
       - 'analysis_tools/test_preflight_sensitivity.py'
       - 'cases_controlled_buoyancy/**'
+      - 'cases_3d/**'
       - 'RUN_CASE_REGISTRY.csv'
   workflow_dispatch:
   schedule:
@@ -58,6 +60,10 @@ jobs:
           python3 analysis_tools/preflight_sensitivity_cases.py --mode auto --strict
       - name: Test read-only C3D preliminary STL geometry gate (synthetic only)
         run: python3 -m unittest discover -s analysis_tools -p 'test_preflight_c3d_stl.py' -v
+      - name: Static 3D case input tests (no OpenFOAM, no solver)
+        run: |
+          python3 -m unittest discover -s cases_3d/C3D_01_metal_mold/scripts -p 'test_c3d_background_case.py' -v
+          bash -n cases_3d/C3D_01_metal_mold/scripts/run_blockMesh_only.sh
       - name: Check scientific case registry
         run: python3 analysis_tools/check_run_registry.py
       - name: Check V14 functionObject definitions and documentation
