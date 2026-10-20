@@ -30,11 +30,17 @@ def read_series(path: Path, *, probe=False):
     if not path.is_file():
         raise ValueError(f'missing file: {path}')
     rows = []
+    initial_marker_skipped = False
     for i, line in enumerate(path.read_text(encoding='utf-8', errors='replace').splitlines(), 1):
         line = line.strip()
         if not line or line.startswith('#'):
             continue
         cells = line.split()
+        if (len(cells) == 1 and not probe and path.name.startswith('CourantMax_')
+                and cells[0] == '0' and not rows and not initial_marker_skipped):
+            # foamLog CourantMax_* begins with a single startup 0 marker.
+            initial_marker_skipped = True
+            continue
         if len(cells) != 2:
             raise ValueError(f'{path}:{i}: expected exactly one time and one value')
         try:
