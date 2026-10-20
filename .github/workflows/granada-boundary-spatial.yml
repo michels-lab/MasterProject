@@ -24,7 +24,7 @@ jobs:
         run: python3 -m unittest discover -s analysis_tools -p test_granada_boundary_spatial_gate.py -v
       - name: Source-backed real QuickCup outputs
         run: |
-          python3 analysis_tools/granada_boundary_spatial_gate.py --root "$GITHUB_WORKSPACE" --out "/tmp/quickcup-boundary-spatial-evidence"
+          python3 analysis_tools/granada_boundary_spatial_gate.py --root "$GITHUB_WORKSPACE" --out "/tmp/quickcup-boundary-spatial-evidence" --strict
       - name: Upload evidence, even with diagnostic alerts
         if: always()
         uses: actions/upload-artifact@v4
