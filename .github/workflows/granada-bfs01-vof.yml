@@ -1,0 +1,62 @@
+name: GRANADA B-FS-01 official VOF hydrodynamic analogue (no CFD)
+
+on:
+  pull_request:
+    paths:
+      - 'analysis_tools/granada_bfs01_vof_benchmark.py'
+      - 'analysis_tools/test_granada_bfs01_vof_benchmark.py'
+      - 'docs/granada/B_FS_01_VOF_HYDRO_ANALOGUE_20261020.md'
+      - '.github/workflows/granada-bfs01-vof.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  surrogate-stage-and-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout QuickCup proposed changes
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Python compile
+        run: python3 -m py_compile analysis_tools/granada_bfs01_vof_benchmark.py analysis_tools/test_granada_bfs01_vof_benchmark.py
+      - name: Thirteen synthetic non-destructive regressions
+        run: python3 -m unittest discover -s analysis_tools -p test_granada_bfs01_vof_benchmark.py -v
+      - name: Checkout official OpenFOAM Foundation 14 tutorial inputs
+        uses: actions/checkout@v4
+        with:
+          repository: OpenFOAM/OpenFOAM-14
+          ref: master
+          path: upstream-foundation14
+          persist-credentials: false
+          filter: blob:none
+          sparse-checkout: |
+            tutorials/compressibleVoF/damBreak
+      - name: Stage B-FS-01 from genuine upstream source (no CFD)
+        run: |
+          python3 analysis_tools/granada_bfs01_vof_benchmark.py stage \
+            --tutorial upstream-foundation14/tutorials/compressibleVoF/damBreak \
+            --out /tmp/quickcup-bfs01-hydro
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          case=Path('/tmp/quickcup-bfs01-hydro')
+          m=json.loads((case/'BFS01_MANIFEST.json').read_text())
+          assert m['status']=='PREPARED_NOT_MESHED_OR_RUN'
+          assert m['physics']['metal'] is False
+          assert m['physics']['shrinkage'] is False
+          assert len(m['upstream_sha256'])>=13
+          assert (case/'system/blockMeshDict').is_file()
+          assert 'waterVolume' in (case/'system/controlDict').read_text()
+          print('Official Foundation14 source stage verified; NO blockMesh/checkMesh/foamRun executed')
+          PY
+      - name: Upload generated BENCH INPUTS ONLY (never CFD results)
+        uses: actions/upload-artifact@v4
+        with:
+          name: quickcup-bfs01-foundation14-water-air-inputs
+          path: /tmp/quickcup-bfs01-hydro/
+          if-no-files-found: error
+          retention-days: 14
