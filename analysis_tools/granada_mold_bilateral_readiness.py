@@ -26,7 +26,7 @@ def stripped(text):
 
 
 def block(text, name, opening="{", closing="}"):
-    pat = re.search(r"\b" + re.escape(name) + r"\s*\" + opening, text)
+    pat = re.search(r"\b" + re.escape(name) + r"\s*" + re.escape(opening), text)
     if pat is None:
         raise ValueError(f"missing block {name}")
     depth = 1
