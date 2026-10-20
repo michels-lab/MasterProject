@@ -50,6 +50,8 @@ class EvidenceTests(unittest.TestCase):
         self.assertEqual(len(a["cases"]),6)
         self.assertTrue(all(c["status"]=="NUMERIC_SCREEN_PASSED" for c in a["cases"]))
         self.assertTrue(all(c["source_file_count"]>=15 for c in a["cases"]))
+        self.assertTrue(all(len(c["source_manifest"])==c["source_file_count"] for c in a["cases"]))
+        self.assertTrue(all(len(s["sha256"])==64 and not s["path"].startswith("/") for c in a["cases"] for s in c["source_manifest"]))
         b=a["cases"][0]["sections"]
         self.assertEqual(b["top_boundary"]["face_count"],2)
         self.assertEqual(b["top_boundary"]["checked_patch_times"],2)
