@@ -12,7 +12,7 @@ Los PR activos #18/#19 poseen C3D-01, roadmap, malla y ciertas bitácoras. Este 
 
 **A — Auditoría numérica reproducible**: `analysis_tools/granada_v15v16_postrun.py`. Compara las cuatro parejas B14→B15, C14→C15, B14→B16 y C14→C16 usando sondas originales y una grilla común de 0.01 s **sin extrapolar**; calcula RMSE, máximo |ΔT| y diferencia final. Cada caso registra hash SHA-256, número de muestras y último tiempo para la sonda `T`, `CourantMax_0` y `contCumulative_0`. Revisa `maxCo` activo del diccionario, cuenta excedencias y registra continuidad final sin presentarla como conservación demostrada. Los campos ausentes/malformados se registran como **null y alerta**, nunca como cero medido.
 
-**B — QA regresivo**: `analysis_tools/test_granada_v15v16_postrun.py` contiene cinco tests sintéticos que inspeccionan cuatro parejas, exportación, exceso de Courant, fuentes faltantes, tiempos repetidos/invertidos, multisondeos ambiguos, rechazo de extrapolación y protección de las carpetas de simulación. Estos tests son numéricos/sintéticos, no validación contra casos reales.
+**B — QA regresivo**: `analysis_tools/test_granada_v15v16_postrun.py` contiene seis tests sintéticos que inspeccionan cuatro parejas, exportación, exceso de Courant, fuentes faltantes, tiempos repetidos/invertidos, marcador inicial aislado de Courant `0`, multisondeos ambiguos, rechazo de extrapolación y protección de las carpetas de simulación. Estos tests son numéricos/sintéticos, no validación contra casos reales.
 
 **C — Contrato exportable e integración CI**: el archivo `evidence.json` expone `format = quickcup-foamlens-openfoam-evidence-v1`, identidad de casos, métricas y rutas relativas + hashes de fuentes; `pair_metrics.csv` contiene las cuatro comparaciones por tiempo físico. Es un **contrato de intercambio propuesto** para que FoamLens analice y eventualmente consuma la evidencia, **no un importador ya implementado en FoamLens**. El workflow `.github/workflows/quickcup-v15v16-evidence.yml` ejecuta pruebas de Python y el análisis de salidas versionadas en un runner Ubuntu; solo crea un artefacto efímero, no simula CFD ni sobreescribe entradas.
 
@@ -40,4 +40,8 @@ Usar una carpeta de salida **vacía** y fuera de los casos. `--strict` devuelve 
 
 Revisar la ejecución exact-head del PR de este paquete, contrastar las métricas con los archivos originales, y continuar con el siguiente paquete independiente de **energía, flujos cara a cara y fracción de fase** que requerirá análisis físico/experimental separado. No tocar C3D-01 #18/#19 mientras sus ramas sigan abiertas.
 
-**Estado de QA al registrar:** cinco pruebas sintéticas ejecutadas localmente en el entorno de preparación; éxito. El workflow GitHub todavía debe ejecutarse en el head del PR. No hay validación CFD, energía, malla Ubuntu, ni experimento en esta ejecución.
+**Estado de QA al registrar:** seis pruebas sintéticas ejecutadas localmente en el entorno de preparación; éxito. El workflow GitHub todavía debe ejecutarse en el head del PR. No hay validación CFD, energía, malla Ubuntu, ni experimento en esta ejecución.
+
+## 2026-10-20 — hallazgo en la primera ejecución exact-head
+
+La primera versión de CI pasó 5 tests sintéticos pero informó 6 alertas de casos, porque los archivos originales `logs/CourantMax_0` contienen una línea inicial `0` (marcador del parser foamLog) antes de las series de dos columnas. Se agregó un reconocimiento **estrictamente limitado** al primer marcador cero de `CourantMax_*` y un sexto test que rechaza un segundo marcador malformado. Debe repetirse el job para comprobar métricas originales y alertas restantes en el nuevo SHA. No se eliminan anomalías físicas reales por esta corrección del formato.
