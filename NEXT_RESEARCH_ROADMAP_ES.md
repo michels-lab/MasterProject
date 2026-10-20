@@ -113,3 +113,8 @@ Se incorporó la **preparación geométrica y de malla de fondo** como experimen
 ### 2026-10-19 — Actualización metodológica: unidades explícitas en OpenFOAM14
 
 Tras revisar la guía oficial de `blockMesh` v14 y el código fuente `searchableSurfaces::triSurface::scale`, se aprobó sustituir el escalado numérico de STL mediante Python por la **declaración nativa `units [mm];`** en los diccionarios. `C3D_01_metal_mold/system/blockMeshDict` ahora expresa los 8 vértices directamente en milímetros; los STL binarios se copian byte a byte a `constant/geometry`, también en milímetros. La futura sección `geometry` de `snappyHexMeshDict` declarará `units [mm];` por superficie. El preflight Python audita volúmenes/coordenadas en SI en memoria, sin modificar archivos. No se realizó mallado OpenFOAM ni CFD. Prohibido doble escalado.
+
+
+### 2026-10-19 — Decisión recuperada de resolución 3D (metal + arena)
+
+El investigador fijó el **máximo nominal de 0.5 mm en ambos volúmenes completos**. Se conserva la malla de fondo de 2 mm de C3D-01 y se especifican **dos niveles de refinamiento octree** con `snappyHexMesh` (`refinementSurfaces` y `refinementRegions`, `mode inside; level 2;` en Fundación v14). La política ejecutable de comprobación y restricciones está en [cases_3d/C3D_01_metal_mold/MESH_REFINEMENT_POLICY_ES.md](cases_3d/C3D_01_metal_mold/MESH_REFINEMENT_POLICY_ES.md). Sin prueba real de refinamiento, conservación de metal/arena, interfaces de CHT ni independencia de malla. **No sustituye** el gate de V15/V16, J0 ni G1 y no autoriza ejecución en GitHub.
