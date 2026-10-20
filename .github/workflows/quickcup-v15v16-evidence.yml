@@ -28,6 +28,26 @@ jobs:
           python3 analysis_tools/granada_v15v16_postrun.py \
             --root "$GITHUB_WORKSPACE" \
             --out "/tmp/quickcup-granada/evidence"
+      - name: Require attributable source evidence and report measured warnings
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          d=json.loads(Path('/tmp/quickcup-granada/evidence/evidence.json').read_text())
+          assert len(d['cases'])==6 and len(d['comparisons'])==4
+          for case in d['cases']:
+              assert all(case['source_files'][name] for name in ('probe_T','courant','continuity')), case['case']
+              print(case['case'], 'Courant max=', case.get('courant_max_observed'),
+                    'exceedances=', case.get('courant_over_limit_count'),
+                    'cumulative continuity=', case.get('continuity_cumulative_last'),
+                    'alerts=', case['alerts'])
+          for pair in d['comparisons']:
+              assert pair['metrics'] and pair['metrics']['aligned_samples']>1, pair['variant']
+              print(pair['parent'],'->',pair['variant'], 'T-RMSE(K)=',
+                    pair['metrics']['rmse_K'], 'max abs delta(K)=',
+                    pair['metrics']['max_abs_delta_K'])
+          print('Source-backed data presence and 4 comparisons confirmed; physical validation NOT established.')
+          PY
       - name: Preserve candidate evidence (not CFD verification)
         if: always()
         uses: actions/upload-artifact@v4
