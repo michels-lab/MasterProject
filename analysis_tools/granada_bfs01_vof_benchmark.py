@@ -256,6 +256,19 @@ def audit(case, out, limit=.005):
             "wrong benchmark identity, not a B-FS-01 surrogate")
     require(math.isclose(m["analytical_initial_water_volume_m3"],REFERENCE_VOLUME),
             "benchmark geometry/provenance mismatch")
+    # Stage-derived input bytes must not have silently changed after staging.
+    expected = m.get("generated_sha256")
+    require(isinstance(expected, dict) and len(expected) >= len(SOURCE_FILES),
+            "missing complete generated-input SHA256 manifest")
+    for relative, recorded_sha in expected.items():
+        require(isinstance(relative, str) and not Path(relative).is_absolute()
+                and ".." not in Path(relative).parts,
+                "invalid or unsafe input path in manifest")
+        input_path = case / relative
+        require(input_path.is_file() and not input_path.is_symlink(),
+                f"original staged input missing or symlinked: {relative}")
+        require(sha(input_path) == recorded_sha,
+                f"staged input changed without provenance: {relative}")
     source = case / "postProcessing/waterVolume/0/volFieldValue.dat"
     rows = parse_volume(source)
     errors = []
