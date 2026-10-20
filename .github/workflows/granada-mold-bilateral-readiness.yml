@@ -1,0 +1,38 @@
+name: GRANADA QuickCup bilateral interface readiness (no CFD)
+
+on:
+  pull_request:
+    paths:
+      - 'analysis_tools/granada_mold_bilateral_readiness.py'
+      - 'analysis_tools/test_granada_mold_bilateral_readiness.py'
+      - 'docs/granada/BILATERAL_INTERFACE_READINESS_20261020.md'
+      - 'analysis_results/granada_mold_bilateral_readiness_20261020/**'
+      - '.github/workflows/granada-mold-bilateral-readiness.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  source-backed-interface-preflight:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Python syntax
+        run: python3 -m py_compile analysis_tools/granada_mold_bilateral_readiness.py analysis_tools/test_granada_mold_bilateral_readiness.py
+      - name: Synthetic interface and contract regressions
+        run: python3 -m unittest discover -s analysis_tools -p 'test_granada_mold_bilateral_readiness.py' -v
+      - name: Read-only actual QuickCup six-case readiness (source strict)
+        run: |
+          python3 analysis_tools/granada_mold_bilateral_readiness.py \
+            --root "$GITHUB_WORKSPACE" --out /tmp/quickcup-mold-bilateral-readiness \
+            --strict
+      - name: Save source-evidence contract
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: quickcup-granada-mold-bilateral-readiness
+          path: /tmp/quickcup-mold-bilateral-readiness/
+          if-no-files-found: warn
+          retention-days: 14
