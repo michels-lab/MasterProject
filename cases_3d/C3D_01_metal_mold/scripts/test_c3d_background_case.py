@@ -99,7 +99,7 @@ class C3DMeshInputTests(unittest.TestCase):
         self.assertIn("refinementRegions", note)
         self.assertIn("refinementSurfaces", note)
         self.assertIn("level 2;", note)
-        self.assertIn("AGREED_NOT_MESHED", note) if False else None
+        self.assertIn("0.5 mm", note)
 
     def test_native_units_in_mesh_and_pending_snappy(self):
         self.assertIn("units [mm];",DICT)
