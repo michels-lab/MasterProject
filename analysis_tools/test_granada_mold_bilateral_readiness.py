@@ -164,6 +164,18 @@ class BilateralTests(unittest.TestCase):
         self.assertEqual(main(["--root",str(self.root),"--out",str(out),
                                "--require-bilateral"]),1)
 
+    def test_required_bilateral_rejects_corrupted_data_even_if_six_present(self):
+        measurements=self.root/"optional"
+        for name in CASES:
+            prepare_mold(measurements,name)
+        raw=measurements/CASES[0]/"mold_interface_W.csv"
+        raw.write_text(raw.read_text()+"0.2,-9\n")
+        out=self.root/"requiredreport"
+        self.assertEqual(main(["--root",str(self.root),"--out",str(out),
+                               "--mold-evidence-root",str(measurements),
+                               "--require-bilateral"]),1)
+
+
 
 if __name__=="__main__":
     unittest.main()
