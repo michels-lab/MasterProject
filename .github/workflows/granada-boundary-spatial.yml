@@ -1,0 +1,35 @@
+name: GRANADA top faces interface and spatial phase (no CFD)
+
+on:
+  pull_request:
+    paths:
+      - 'analysis_tools/granada_boundary_spatial_gate.py'
+      - 'analysis_tools/test_granada_boundary_spatial_gate.py'
+      - 'docs/granada/GRANADA_INTERFACE_SPATIAL_20261020.md'
+      - '.github/workflows/granada-boundary-spatial.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  read-only-evidence:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Syntax inspection
+        run: python3 -m py_compile analysis_tools/granada_boundary_spatial_gate.py analysis_tools/test_granada_boundary_spatial_gate.py
+      - name: Synthetic original-format regression suite
+        run: python3 -m unittest discover -s analysis_tools -p test_granada_boundary_spatial_gate.py -v
+      - name: Source-backed real QuickCup outputs
+        run: |
+          python3 analysis_tools/granada_boundary_spatial_gate.py --root "$GITHUB_WORKSPACE" --out "/tmp/quickcup-boundary-spatial-evidence" --strict
+      - name: Upload evidence, even with diagnostic alerts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: quickcup-granada-boundary-spatial
+          path: /tmp/quickcup-boundary-spatial-evidence/
+          if-no-files-found: warn
+          retention-days: 14
