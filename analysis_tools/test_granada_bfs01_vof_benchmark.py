@@ -179,6 +179,25 @@ class BFS01Tests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError,"wrong benchmark identity"):
             audit(self.dest,self.root/"audit")
 
+    def test_modifying_stage_inputs_invalidates_audit_provenance(self):
+        self.staged()
+        self.write_volume()
+        p=self.dest/"system/blockMeshDict"
+        p.write_text(p.read_text().replace("(80 120 1)","(40 60 1)"))
+        with self.assertRaisesRegex(ValueError,"staged input changed"):
+            audit(self.dest,self.root/"audit")
+        self.assertFalse((self.root/"audit").exists())
+
+    def test_manifest_path_traversal_rejected(self):
+        self.staged()
+        self.write_volume()
+        p=self.dest/"BFS01_MANIFEST.json"
+        obj=json.loads(p.read_text())
+        obj["generated_sha256"]["../secret.txt"]="nope"
+        p.write_text(json.dumps(obj))
+        with self.assertRaisesRegex(ValueError,"unsafe input path"):
+            audit(self.dest,self.root/"audit")
+
 
 if __name__ == "__main__":
     unittest.main()
