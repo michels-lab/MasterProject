@@ -87,6 +87,20 @@ class C3DMeshInputTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             mod.validate_binary_stl(b"short")
 
+    def test_agreed_05mm_volumetric_refinement_target(self):
+        policy = REF["planned_volume_refinement"]
+        self.assertEqual(policy["status"], "AGREED_NOT_MESHED")
+        self.assertEqual(policy["scope"], ["metal", "mold"])
+        self.assertEqual(policy["openfoam_flavor"], "OpenFOAM Foundation v14")
+        self.assertEqual(policy["octree_refinement_level"], 2)
+        self.assertAlmostEqual(policy["base_cell_size_mm"] / (2 ** policy["octree_refinement_level"]),
+                               policy["nominal_max_cell_size_mm"])
+        note = (CASE / "MESH_REFINEMENT_POLICY_ES.md").read_text(encoding="utf-8")
+        self.assertIn("refinementRegions", note)
+        self.assertIn("refinementSurfaces", note)
+        self.assertIn("level 2;", note)
+        self.assertIn("AGREED_NOT_MESHED", note) if False else None
+
     def test_native_units_in_mesh_and_pending_snappy(self):
         self.assertIn("units [mm];",DICT)
         self.assertTrue((CASE/"constant"/"geometry"/"README.md").is_file())
