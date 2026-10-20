@@ -56,6 +56,14 @@ class EvidenceTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'exactly one'):
             read_series(p)
 
+    def test_foamlog_courant_initial_seed_marker_only(self):
+        p = self.cases/PAIRS[0][0]/'logs/CourantMax_0'
+        p.write_text('0\n0.01s 0.15\n0.02s 0.2\n')
+        self.assertEqual(len(read_series(p)), 2)
+        p.write_text('0\n0\n0.01s 0.15\n')
+        with self.assertRaisesRegex(ValueError, 'exactly one'):
+            read_series(p)
+
     def test_no_extrapolation_and_original_case_write_protection(self):
         with self.assertRaisesRegex(ValueError, 'insufficient'):
             temperature_metrics([(0, 1), (0.001, 1)], [(1, 2), (1.001, 2)])
