@@ -1,0 +1,38 @@
+name: GRANADA QuickCup energy phase evidence (no CFD)
+
+on:
+  pull_request:
+    paths:
+      - 'analysis_tools/granada_energy_phase_evidence.py'
+      - 'analysis_tools/test_granada_energy_phase_evidence.py'
+      - 'docs/granada/ENERGY_PHASE_V14_V16_20261020.md'
+      - '.github/workflows/granada-energy-phase-evidence.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  energy-phase-readonly:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate syntax
+        run: python3 -m py_compile analysis_tools/granada_energy_phase_evidence.py analysis_tools/test_granada_energy_phase_evidence.py
+      - name: Synthetic source and scientific-integrity regressions
+        run: python3 -m unittest discover -s analysis_tools -p 'test_granada_energy_phase_evidence.py' -v
+      - name: Audit real committed B/C V14-V16 output without CFD
+        run: |
+          mkdir -p /tmp/quickcup-granada-energy
+          python3 analysis_tools/granada_energy_phase_evidence.py \
+            --root "$GITHUB_WORKSPACE" \
+            --out /tmp/quickcup-granada-energy/report --strict
+      - name: Upload locally derived evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: quickcup-energy-phase-evidence
+          path: /tmp/quickcup-granada-energy/report/
+          if-no-files-found: warn
+          retention-days: 14
