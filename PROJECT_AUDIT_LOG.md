@@ -30,3 +30,5 @@ Both versions preserve the same technical history, evidence labels, dates, comma
 Registro independiente de la política de bloques ambiciosos y de la separación OpenFOAM ↔ FoamLens: [Bitácora de coordinación](docs/granada/GRANADA_GRANDE_GOVERNANCE_20261020.md).
 
 Avance científico no destructivo V15/V16: [Documento de evidencia y controles](docs/granada/V15_V16_SOURCE_EVIDENCE_20261020.md) propuesto en el [PR #20](https://github.com/michels-lab/QuickCup-Solidification/pull/20). El documento nuevo está en una rama candidata; no se considera integrado antes de su revisión y merge. Los informes de malla, energía y validación experimental permanecen abiertos.
+
+**Evidencia científica auditada en CI:** [V15/V16 — desviaciones de temperatura, Courant y continuidad (2026-10-20)](analysis_results/granada_v15v16_postrun_20261020/summary.md). El análisis es solo lectura y aún no cierra validación física/experimental.
