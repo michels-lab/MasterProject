@@ -5,7 +5,7 @@
 
 ## Hallazgo auditado en este repositorio
 
-El documento \`JMATPRO_OPENFOAM_TRACEABILITY_ES.md\` indica como **niveles de diseño experimental**:
+El documento `JMATPRO_OPENFOAM_TRACEABILITY_ES.md` indica como **niveles de diseño experimental**:
 
 - Carbono equivalente (CE) objetivo: **3.9 / 4.2**.
 - Azufre (S) objetivo: **0.05 / 0.13 wt%**.
@@ -13,18 +13,18 @@ El documento \`JMATPRO_OPENFOAM_TRACEABILITY_ES.md\` indica como **niveles de di
 
 **Esto NO equivale a una tabla completa de composición química medida de una colada.** Es incorrecto inventar los porcentajes de C, Si, P, Ni, Cr, Cu, Mg, etc. a partir de esos factores o atribuir automáticamente esos valores a una muestra.
 
-El archivo \`analysis_results/jmatpro_openfoam_audit/current_model_matrix.csv\` y los materiales 2D del repositorio contienen, a modo de **parámetros activos heredados** (con procedencia por confirmar):
+El archivo `analysis_results/jmatpro_openfoam_audit/current_model_matrix.csv` y los materiales 2D del repositorio contienen, a modo de **parámetros activos heredados** (con procedencia por confirmar):
 
 | Parámetro en el caso | Valor | No confundir con |
 |---|---:|---|
-| \`Tliq\` | 1473 K | Mediciones reales de liquidus de cada colada |
-| \`Tsol\` | 1423 K | Solidus experimental de cada colada |
-| \`L\` | 228600 J/kg | Latente calibrado y trazable para cada muestra |
-| \`rhoRef\` | 6820 kg/m³ | Densidad medida de todas las muestras |
-| \`Cp\` | 827 J/(kg K) | Curva específica \`Cp(T)\` de JMatPro |
-| \`alpha1e\` | 0.8 | Fracción de austenita primaria experimental |
+| `Tliq` | 1473 K | Mediciones reales de liquidus de cada colada |
+| `Tsol` | 1423 K | Solidus experimental de cada colada |
+| `L` | 228600 J/kg | Latente calibrado y trazable para cada muestra |
+| `rhoRef` | 6820 kg/m³ | Densidad medida de todas las muestras |
+| `Cp` | 827 J/(kg K) | Curva específica `Cp(T)` de JMatPro |
+| `alpha1e` | 0.8 | Fracción de austenita primaria experimental |
 
-La matriz **no** contiene la composición completa de la colada. \`alpha1e\` es un parámetro operativo del modelo de fase, no una medición explícita de dendritas ni del eutéctico. El que los números estén en \`fvModels\` o \`materials\` no prueba su origen en JMatPro.
+La matriz **no** contiene la composición completa de la colada. `alpha1e` es un parámetro operativo del modelo de fase, no una medición explícita de dendritas ni del eutéctico. El que los números estén en `fvModels` o `materials` no prueba su origen en JMatPro.
 
 ## Estado metalúrgico sustentado por el investigador
 
@@ -45,8 +45,8 @@ Para cada muestra o colada registrar, *solo después de recibir evidencia*:
 2. Documento de análisis químico primario, método analítico, fecha y unidad (wt%, ppm; detección/censura cuando aplique).
 3. Vector completo de elementos analizados, con incertidumbre si existe; no deducir ausentes por balance sin hacerlo explícito.
 4. Carbono equivalente: declarar ecuación y rango de validez antes de computarlo; un CE objetivo de DOE no equivale a CE medido.
-5. Archivos JMatPro/export por composición y condiciones de cálculo, \`f_L(T)\`, fases y termofísica con rangos y unidades.
+5. Archivos JMatPro/export por composición y condiciones de cálculo, `f_L(T)`, fases y termofísica con rangos y unidades.
 6. Datos de microestructura (grafito, eutéctico, SDAS) si están disponibles, sin exigir que necesariamente existan.
-7. Fecha y aprobación del investigador antes de modificar cualquier material, \`fvModels\`, dict, caso B/C o C3D.
+7. Fecha y aprobación del investigador antes de modificar cualquier material, `fvModels`, dict, caso B/C o C3D.
 
 **Estado de los datos químicos medidos: NO VERIFICADO.** Cierre de J0 sigue **ABIERTO**. Documentación preparada no equivale a validación física.
