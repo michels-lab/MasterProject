@@ -24,3 +24,9 @@ Both versions preserve the same technical history, evidence labels, dates, comma
 - Si cualquier parte está ocupada por otra rama, requiere equipo físico, una cuenta de proveedor, resultados científicos que solo existen en el portátil o autorización del propietario, **aparcar con evidencia y pasar a otra subparte independiente**. Conservar identidad visual, datos, credenciales y estándares de publicación.
 - Registro obligatorio: A/B/C con estados separados, ruta/PR/sha, QA **ejecutado** (no simplemente escrito), bloqueos, recuperación, reentrada. Esta actualización de política **no significa ninguna funcionalidad del producto implementada, probada ni publicada**.
 - Repositorio: `michels-lab/QuickCup-Solidification`. En los siguientes bloques aplicar este alcance sin modificar los PR activos o trabajos no relacionados.
+
+## GRANADA GRANDE — 2026-10-20
+
+Registro independiente de la política de bloques ambiciosos y de la separación OpenFOAM ↔ FoamLens: [Bitácora de coordinación](docs/granada/GRANADA_GRANDE_GOVERNANCE_20261020.md).
+
+Avance científico no destructivo V15/V16: [Documento de evidencia y controles](docs/granada/V15_V16_SOURCE_EVIDENCE_20261020.md) propuesto en el [PR #20](https://github.com/michels-lab/QuickCup-Solidification/pull/20). El documento nuevo está en una rama candidata; no se considera integrado antes de su revisión y merge. Los informes de malla, energía y validación experimental permanecen abiertos.
