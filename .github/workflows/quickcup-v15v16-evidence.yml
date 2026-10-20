@@ -24,10 +24,10 @@ jobs:
         run: python3 -m unittest discover -s analysis_tools -p test_granada_v15v16_postrun.py -v
       - name: Read-only analysis of committed QuickCup outputs
         run: |
-          mkdir -p "$RUNNER_TEMP/quickcup-granada"
+          mkdir -p "/tmp/quickcup-granada"
           python3 analysis_tools/granada_v15v16_postrun.py \
             --root "$GITHUB_WORKSPACE" \
-            --out "$RUNNER_TEMP/quickcup-granada/evidence"
+            --out "/tmp/quickcup-granada/evidence"
       - name: Preserve candidate evidence (not CFD verification)
         if: always()
         uses: actions/upload-artifact@v4
