@@ -1,0 +1,38 @@
+name: QuickCup V15-V16 evidence (no CFD)
+
+on:
+  pull_request:
+    paths:
+      - 'analysis_tools/granada_v15v16_postrun.py'
+      - 'analysis_tools/test_granada_v15v16_postrun.py'
+      - 'docs/granada/V15_V16_SOURCE_EVIDENCE_20261020.md'
+      - '.github/workflows/quickcup-v15v16-evidence.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  postrun-evidence:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Python availability
+        run: python3 --version
+      - name: Synthetic numerical/provenance regressions
+        run: python3 -m unittest discover -s analysis_tools -p test_granada_v15v16_postrun.py -v
+      - name: Read-only analysis of committed QuickCup outputs
+        run: |
+          mkdir -p "$RUNNER_TEMP/quickcup-granada"
+          python3 analysis_tools/granada_v15v16_postrun.py \
+            --root "$GITHUB_WORKSPACE" \
+            --out "$RUNNER_TEMP/quickcup-granada/evidence"
+      - name: Preserve candidate evidence (not CFD verification)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: quickcup-v15v16-evidence
+          path: /tmp/quickcup-granada/evidence/
+          if-no-files-found: warn
+          retention-days: 14
