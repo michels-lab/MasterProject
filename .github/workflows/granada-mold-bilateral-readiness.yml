@@ -6,6 +6,7 @@ on:
       - 'analysis_tools/granada_mold_bilateral_readiness.py'
       - 'analysis_tools/test_granada_mold_bilateral_readiness.py'
       - 'docs/granada/BILATERAL_INTERFACE_READINESS_20261020.md'
+      - 'analysis_results/granada_mold_bilateral_readiness_20261020/**'
       - '.github/workflows/granada-mold-bilateral-readiness.yml'
   workflow_dispatch:
 
