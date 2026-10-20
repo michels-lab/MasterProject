@@ -23,7 +23,7 @@ jobs:
           persist-credentials: false
       - name: Python compile
         run: python3 -m py_compile analysis_tools/granada_bfs01_vof_benchmark.py analysis_tools/test_granada_bfs01_vof_benchmark.py
-      - name: Thirteen synthetic non-destructive regressions
+      - name: Fifteen synthetic non-destructive regressions
         run: python3 -m unittest discover -s analysis_tools -p test_granada_bfs01_vof_benchmark.py -v
       - name: Checkout official OpenFOAM Foundation 14 tutorial inputs
         uses: actions/checkout@v4
