@@ -251,8 +251,11 @@ def inspect(root: Path):
         digest=hashlib.sha256()
         for s in sorted(sources,key=lambda x:x["path"]):
             digest.update((s["path"].removeprefix(str(original))+" "+s["sha256"]+"\n").encode())
+        manifest = [{"path":str(Path(s["path"]).relative_to(original)), "sha256":s["sha256"]}
+                    for s in sorted(sources,key=lambda v:v["path"])]
         cases.append({"case":name,"sections":sections,"source_file_count":len(sources),
                       "source_manifest_sha256":digest.hexdigest(),
+                      "source_manifest":manifest,
                       "status":"REVIEW" if issues else "NUMERIC_SCREEN_PASSED",
                       "alerts":issues})
     return {"schema":"quickcup-boundary-spatial-evidence-v1",
