@@ -327,9 +327,11 @@ def main(argv=None):
     (out/"CAPTURE_README.md").write_text("\n".join(notes),encoding="utf8")
     bad=sum(bool(c["alerts"]) for c in report["cases"])
     waiting=sum(c["sections"]["mold_side"]["status"]=="NOT_OBSERVED_NO_MOLD_OUTPUT" for c in report["cases"])
-    print(f"QuickCup bilateral readiness: {len(report['cases'])} cases; source_alert_cases={bad}; mold_missing={waiting}")
+    paired=sum(c["sections"]["mold_side"]["status"]=="PROVISIONAL_SOURCE_PAIR_NEEDS_MESH_NORMAL_VALIDATION" for c in report["cases"])
+    print(f"QuickCup bilateral readiness: {len(report['cases'])} cases; source_alert_cases={bad}; mold_missing={waiting}; provisional_pairs={paired}")
     print("No CFD executed; no true mold-side flux assumed; global physics NOT VALIDATED")
-    return int((args.strict and bad>0) or (args.require_bilateral and waiting>0))
+    # A corrupt or incomplete supplied mold dataset is never bilateral success.
+    return int((args.strict and bad>0) or (args.require_bilateral and (paired!=len(CASES) or bad>0)))
 
 
 if __name__=="__main__":
