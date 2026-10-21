@@ -92,5 +92,24 @@
     "independence of mesh"
   ],
   "native_stl_file_units": "mm",
-  "units_conversion_owner": "OpenFOAM14 blockMeshDict.units [mm] and snappyHexMeshDict geometry entry units [mm] (not Python)"
+  "units_conversion_owner": "OpenFOAM14 blockMeshDict.units [mm] and snappyHexMeshDict geometry entry units [mm] (not Python)",
+  "planned_volume_refinement": {
+    "decision_date": "2026-10-19",
+    "status": "AGREED_NOT_MESHED",
+    "scope": [
+      "metal",
+      "mold"
+    ],
+    "base_cell_size_mm": 2,
+    "nominal_max_cell_size_mm": 0.5,
+    "octree_refinement_level": 2,
+    "implementation": "snappyHexMesh refinementRegions with mode inside and level 2, plus refinementSurfaces (2 2) for both volumes",
+    "openfoam_flavor": "OpenFOAM Foundation v14",
+    "requires_validation": [
+      "both volume regions retained",
+      "mesh quality and per-region cell-size measurement",
+      "metal/mold CHT interface verified",
+      "no truncation at maxGlobalCells"
+    ]
+  }
 }

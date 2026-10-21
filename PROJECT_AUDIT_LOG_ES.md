@@ -4959,3 +4959,16 @@ Se confirmó con la guía oficial https://doc.cfd.direct/openfoam/user-guide-v14
 A petición expresa del investigador se retiró toda llamada obligatoria a Python del script `cases_3d/C3D_01_metal_mold/scripts/run_blockMesh_only.sh`. El script ahora solo verifica disponibilidad de OpenFOAM14 y la ausencia de `polyMesh`/logs existentes, luego ejecuta `blockMesh` y `checkMesh -allTopology -allGeometry`, preservando logs y sin sobrescribir pruebas. Ya **no requiere presencia de STL** porque `blockMesh` únicamente genera la caja auxiliar.
 
 El flujo normal copia sin modificación `QuickCup.STL` y `metal.STL` desde `~/OpenFOAM/Piezas_STL/` a `constant/geometry/` mediante `cp -n`; los STL permanecen en milímetros y serán interpretados con `units [mm];` dentro del futuro `snappyHexMeshDict`. Se corrigieron README, pruebas estáticas y la carpeta de geometría. `prepare_geometry.py` y `preflight_c3d_stl.py` continúan como **herramientas de auditoría opcionales** y no ejecutan mallado. **No hay evidencia de `blockMesh`, `checkMesh` o `snappyHexMesh` ejecutados en laptop**; GitHub no los ejecutó. Las salidas C14 y anteriores permanecen intactas.
+
+---
+
+## 2026-10-19 — [DECISIÓN DEL INVESTIGADOR / PREPARACIÓN NO EJECUTADA] C3D-01: resolución nominal máxima 0.5 mm en metal y arena
+
+El investigador aclaró el acuerdo previo: conservar la caja `blockMesh` de 2 mm y alcanzar **0.5 mm nominal máximo dentro del volumen completo de metal y arena**, aplicando dos niveles octree (`2/2^2=0.5 mm`) con `snappyHexMesh`. No imponer 0.5 mm global en `blockMesh`, ni refinar únicamente superficies STL. Fundación v14 requiere `refinementRegions: mode inside; level 2;` en ambos volúmenes, con `refinementSurfaces: level (2 2);`; la selección de ambos interiores y la asignación de zonas e interfaces CHT requieren comprobación real. Los STL permanecen byte idénticos en mm y usan unidades explícitas al importarse.
+
+**Evidencia de esta acción:** [MESH_REFINEMENT_POLICY_ES.md](cases_3d/C3D_01_metal_mold/MESH_REFINEMENT_POLICY_ES.md), `cases_3d/C3D_01_metal_mold/geometry_reference.json`, `cases_3d/C3D_01_metal_mold/scripts/test_c3d_background_case.py`, README C3D. Se registró la decisión y su test estático; los scripts de malla/CFD y los casos B14/C14 no cambiaron.
+
+**Límite:** segundo equipo no comprobado en esta conversación; sin nuevos `blockMesh`/`snappyHexMesh`/`checkMesh` ni datos de volúmenes/interfaz. El nivel 2 describe arista nominal previa a snap, **no prueba** que toda celda deformada tenga dimensión máxima medida menor o igual a 0.5 mm. `maxGlobalCells` no debe detener la refinación silenciosamente. J0/G1 siguen abiertos. **Estado:** POLICY_LOCKED / MESH_NOT_RUN / PHYSICS_NOT_VALIDATED.
+
+**Siguiente paso:** comprobar hardware/entorno OpenFOAM Foundation v14 en segundo equipo, `surfaceCheck`, completar y validar `snappyHexMeshDict` multirregión, medir tamaño real por región y comprobar interfaz CHT antes de CFD.
+

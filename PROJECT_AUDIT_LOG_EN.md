@@ -4239,3 +4239,16 @@ The Foundation v14 `blockMesh` user guide explicitly documents `units [mm];`, an
 ## 2026-10-19 — [GIT-VERIFIED] C3D-01 background mesh runs OpenFOAM only; Python strictly optional
 
 At the researcher's explicit request, `cases_3d/C3D_01_metal_mold/scripts/run_blockMesh_only.sh` no longer invokes any Python step. The launcher only checks for OpenFOAM availability and existing mesh/logs, then runs `blockMesh` and `checkMesh -allTopology -allGeometry` on the researcher's laptop, preserving outputs and preventing overwrites. It no longer requires STL files to build the auxiliary box. The default STL preparation is a byte-preserving `cp -n` from `~/OpenFOAM/Piezas_STL/` into `constant/geometry/`, preserving mm. Native `units [mm]` in the future `snappyHexMeshDict` will govern the physical mesh geometry. Python remains available only as optional read-only validation, never a mesher. The GitHub checks are synthetic/static; no real mesh or CFD run was executed.
+
+---
+
+## 2026-10-19 — [RESEARCHER DECISION / NOT RUN] C3D-01: nominal maximum 0.5 mm in metal and sand volumes
+
+The researcher clarified the previous agreement: retain the 2 mm `blockMesh` background box, and use `snappyHexMesh` **two octree levels** (`2/2^2=0.5 mm`) to target **nominal cell size no larger than 0.5 mm in the entire metal and sand mold volumes**. Do not uniformly change the background mesh to 0.5 mm or refine STL skins alone. Foundation v14 uses `refinementRegions: mode inside; level 2;` for both volumes together with `refinementSurfaces: level (2 2);`. Both retained regions, cell zones and actual CHT interfaces require runtime verification. Source STL bytes remain unmodified in mm with explicit imported units.
+
+**Evidence:** [MESH_REFINEMENT_POLICY_ES.md](cases_3d/C3D_01_metal_mold/MESH_REFINEMENT_POLICY_ES.md), the C3D geometry reference manifest, static regression test and C3D README. This change only locks configuration intent; it does not modify meshing/CFD runners or historical B14/C14 simulations.
+
+**Limit:** the secondary machine was not inspected in this session; no real `blockMesh`, `snappyHexMesh`, `checkMesh` or mesh/CHT analysis was executed. Level 2 is nominal pre-snap edge length and **does not establish** a strict measured maximum after snapping. Avoid silent truncation at `maxGlobalCells`. J0/G1 remain open. **Status:** POLICY_LOCKED / MESH_NOT_RUN / PHYSICS_NOT_VALIDATED.
+
+**Next:** verify the secondary computer and Foundation v14 environment, inspect STL with `surfaceCheck`, complete the multi-region `snappyHexMeshDict`, measure actual per-material dimensions and CHT interface before solver runs.
+
