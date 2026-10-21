@@ -44,8 +44,8 @@ class FreeSurfaceFS_C01(unittest.TestCase):
     def test_official_solver_and_analogue_phase_identity(self):
         cfg = (CASE / "system/controlDict").read_text()
         phases = (CASE / "constant/phaseProperties").read_text()
-        self.assertRegex(cfg, r"(?m)^solver\\s+compressibleVoF\\s*;")
-        self.assertRegex(phases, r"phases\\s*\\(water\\s+air\\)\\s*;")
+        self.assertRegex(cfg, r"(?m)^solver\s+compressibleVoF\s*;")
+        self.assertRegex(phases, r"phases\s*\(water\s+air\)\s*;")
         self.assertEqual(self.manifest["fluid_identity"], "WATER_AIR_ANALOGUE_NOT_MOLTEN_IRON")
         self.assertFalse(self.manifest["physics"]["shrinkage"])
         self.assertFalse(self.manifest["physics"]["solidification"])
