@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
   "audit_kind": "deterministic_full_tracked_tree",
-  "tracked_files_total": 38761,
-  "classified_files_total": 38757,
-  "docs_content_inspected": 126,
+  "tracked_files_total": 38764,
+  "classified_files_total": 38760,
+  "docs_content_inspected": 127,
   "large_docs_skipped": 0,
   "excluded_reports": 4,
   "roles": {
@@ -12,7 +12,7 @@
     "bitacora": 5,
     "config": 7,
     "data": 19,
-    "document": 99,
+    "document": 100,
     "index": 22,
     "license": 1,
     "simulation_case_file": 98,
@@ -20,17 +20,14 @@
     "simulation_log": 3151,
     "simulation_output": 32613,
     "source": 41,
-    "test": 10,
+    "test": 11,
     "web_ui": 1,
-    "workflow": 16
+    "workflow": 17
   },
-  "finding_counts": {
-    "DUPLICATE_DOC_CONTENT": 2,
-    "POTENTIAL_UNLOGGED_CHANGES": 2
-  },
-  "finding_total": 4,
-  "inventory_fingerprint": "38ebf6a0443860ebd73e469113c935d325cb557c0c9f375dd792761a17c3156f",
-  "evidence_fingerprint": "ddf87a44b078edc27770400c314d428ddbbf72643bb6d7d809c202698a53ac51",
+  "finding_counts": {},
+  "finding_total": 0,
+  "inventory_fingerprint": "102cfc4dffba866cc8cffd74c891768cecb31c1d97d811d53aee17328feca3c7",
+  "evidence_fingerprint": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
   "files": [
     {
       "path": ".github/agents/openfoam-solidification.agent.md",
@@ -72,7 +69,7 @@
       "role": "workflow",
       "purpose": "GitHub Actions automation",
       "certainty": "rule",
-      "blob": "f2105aac3cbce342056f06109f4e9e8b4948fa6a"
+      "blob": "5cbc83dbf4f8b8f277ffc47d9effebe25c4eb4eb"
     },
     {
       "path": ".github/workflows/file-steward-domain-pr-validation.yml",
@@ -87,6 +84,13 @@
       "purpose": "GitHub Actions automation",
       "certainty": "rule",
       "blob": "85196c9b3673e3cb0e4db53bcf32a243fa04c938"
+    },
+    {
+      "path": ".github/workflows/granada-b11-c11-document-provenance.yml",
+      "role": "workflow",
+      "purpose": "GitHub Actions automation",
+      "certainty": "rule",
+      "blob": "e03e5809b8ea67d33d429dd1e59d6ce4eb81cc20"
     },
     {
       "path": ".github/workflows/granada-bfs01-vof.yml",
@@ -282,14 +286,14 @@
       "role": "bitacora",
       "purpose": "technical/audit change history",
       "certainty": "rule",
-      "blob": "dca4695aa191268cbfe20ac74a875de473009ca3"
+      "blob": "12e089face7813d3e9b8c9b06e412b0ee88dfccf"
     },
     {
       "path": "PROJECT_AUDIT_LOG_ES.md",
       "role": "bitacora",
       "purpose": "technical/audit change history",
       "certainty": "rule",
-      "blob": "271919fcca77932b8e289cacd96be50c288afba9"
+      "blob": "dbc85c69255d8cce990671001608a4b76d1848ca"
     },
     {
       "path": "README.md",
@@ -12756,7 +12760,7 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "a958aac0f61ab2a559413663c8b4a9e7859f7930"
+      "blob": "3596ccdd293a956ce53c67c93e5317ce060ae129"
     },
     {
       "path": "cases_controlled_buoyancy/B11_energy2_test/constant/metal/fvModels",
@@ -146757,7 +146761,7 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "c27ba74aa9eeab20133bcf5efcbff95d181e8bc7"
+      "blob": "e4946ceafc99741c65bd3e1964ddd38f052286ae"
     },
     {
       "path": "cases_controlled_buoyancy/C11_energy2_test/constant/metal/fvModels",
@@ -270629,7 +270633,7 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "4289eb93aaa6f48bc2880cd9904743e74744acd7"
+      "blob": "19c7cddd54f0ad90d1f82d2ec710911b7ad9817f"
     },
     {
       "path": "docs/MASTERPROJECT_IDENTITY_ES.md",
@@ -270644,6 +270648,13 @@
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
       "blob": "74b1300153ff8e98293a63c649bbf927ce84a385"
+    },
+    {
+      "path": "docs/granada/B11_C11_ENERGY2_DOCUMENTATION_AUDIT_20261021.md",
+      "role": "document",
+      "purpose": "manual/decision/report/historical note",
+      "certainty": "inferred",
+      "blob": "96e79a9851ee29f7328ffbc4acefe0caae48415d"
     },
     {
       "path": "docs/granada/BILATERAL_INTERFACE_READINESS_20261020.md",
@@ -271325,6 +271336,13 @@
       "blob": "a2e2dd275c8b272cee6c762f6edfd5d5566d7a2d"
     },
     {
+      "path": "tools/test_energy2_case_provenance.py",
+      "role": "test",
+      "purpose": "code/test implementation",
+      "certainty": "rule",
+      "blob": "53f483e5dcb2a6019c940982155a1092257b6427"
+    },
+    {
       "path": "tools/test_repository_file_auditor.py",
       "role": "test",
       "purpose": "code/test implementation",
@@ -271332,44 +271350,7 @@
       "blob": "0b65cc6aa3d29917f57a31a96fd5c3afeffb4ed4"
     }
   ],
-  "findings": [
-    {
-      "id": "4790b4f6be1b7e0f",
-      "code": "DUPLICATE_DOC_CONTENT",
-      "severity": "review",
-      "path": "cases_controlled_buoyancy/B11_energy2_test/CASE_VARIANT.md",
-      "observation": "Identical tracked text: cases_controlled_buoyancy/B11_energy2_test/CASE_VARIANT.md, cases_controlled_buoyancy/B11_topFixedFlux_airGapOF14/CASE_VARIANT.md",
-      "recommendation": "Confirm aliases or translated/historical copies before consolidation",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "c4728d9d269368a5",
-      "code": "DUPLICATE_DOC_CONTENT",
-      "severity": "review",
-      "path": "cases_controlled_buoyancy/C11_energy2_test/CASE_VARIANT.md",
-      "observation": "Identical tracked text: cases_controlled_buoyancy/C11_energy2_test/CASE_VARIANT.md, cases_controlled_buoyancy/C11_topFixedFlux_airGapOF14/CASE_VARIANT.md",
-      "recommendation": "Confirm aliases or translated/historical copies before consolidation",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "2d0f730d0d7c1885",
-      "code": "POTENTIAL_UNLOGGED_CHANGES",
-      "severity": "review",
-      "path": "PROJECT_AUDIT_LOG_EN.md",
-      "observation": "20 implementation/config paths changed since this log's last commit; examples: .github/workflows/file-steward-domain-pr-validation.yml, .github/workflows/fs-c01-case-integrity.yml, .github/workflows/granada-bfs01-vof.yml, .github/workflows/granada-boundary-spatial.yml, .github/workflows/granada-energy-phase-evidence.yml, .github/workflows/granada-mold-bilateral-readiness.yml",
-      "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "40be4049dd89fea4",
-      "code": "POTENTIAL_UNLOGGED_CHANGES",
-      "severity": "review",
-      "path": "PROJECT_AUDIT_LOG_ES.md",
-      "observation": "20 implementation/config paths changed since this log's last commit; examples: .github/workflows/file-steward-domain-pr-validation.yml, .github/workflows/fs-c01-case-integrity.yml, .github/workflows/granada-bfs01-vof.yml, .github/workflows/granada-boundary-spatial.yml, .github/workflows/granada-energy-phase-evidence.yml, .github/workflows/granada-mold-bilateral-readiness.yml",
-      "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
-      "state": "REVIEW_REQUIRED"
-    }
-  ],
+  "findings": [],
   "untracked_audited": false,
   "ignored_audited": false,
   "binary_contents_audited": false,
