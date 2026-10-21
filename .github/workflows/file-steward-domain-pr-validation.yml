@@ -1,0 +1,25 @@
+name: File Steward - science repo fixture isolation
+on:
+  pull_request:
+    paths:
+      - 'tools/repository_file_auditor.py'
+      - 'tools/test_repository_file_auditor.py'
+      - '.github/workflows/file-steward-domain-pr-validation.yml'
+permissions:
+  contents: read
+jobs:
+  scoped-fixtures:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Keep OpenFOAM cases and reject copied life-app fixtures
+        run: python3 tools/test_repository_file_auditor.py
+      - name: Keep large research repository scan to existing scheduled workflow
+        run: echo "MasterProject has >29k tracked paths; only synthetic File Steward change is in this PR."

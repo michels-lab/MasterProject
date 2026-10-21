@@ -91,18 +91,18 @@ class FileStewardTests(unittest.TestCase):
                 self.assertEqual(audit.identify(path,{})[0], role)
     def test_android_backup_rules_not_disposable(self):
         self.assertEqual(audit.identify("android/app/src/main/res/xml/backup_rules.xml", {})[0], "config")
-    def test_real_app_artifact_purposes(self):
-        values={
-            "supabase/migrations/20261010_delete_instagram_profiles.sql":"database_migration",
-            "supabase/tests/rls_isolation.sql":"test",
-            ".michelslab/release-intents/unified-v3221-a029.txt":"release_intent",
-            "installer/TaskbarPinning.txt":"installer_metadata",
-            "src/MichelsLife/Program.cs.gz.b64":"encoded_source",
-            "src/MichelsLife/app.manifest":"config",
+    def test_scientific_repo_fixtures_not_copied_life_application(self):
+        cases={
+            "analysis_results/granada_case/README.md":"index",
+            "analysis_tools/compute_fields.py":"source",
+            "tools/repository_file_auditor.py":"source",
+            ".github/workflows/file-governance-audit.yml":"workflow",
+            "reports/file-governance/SUMMARY.json":"config",
         }
-        for path,expected in values.items():
+        for path,role in cases.items():
             with self.subTest(path=path):
-                self.assertEqual(audit.identify(path,{})[0],expected)
+                self.assertEqual(audit.identify(path,{})[0],role)
+        self.assertEqual(audit.identify("foreign/repo/CSharpProgram.cs.gz.b64",{})[0],"unknown")
 
     def test_backup_and_draft_labels_are_not_unused_evidence(self):
         for name in ("docs/BACKUP_PREFLIGHT.md","tools/test_granada_backup_preflight.py",
