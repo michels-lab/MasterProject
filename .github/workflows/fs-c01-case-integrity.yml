@@ -1,0 +1,26 @@
+name: FS-C01 frozen OpenFOAM input integrity (no CFD)
+
+on:
+  pull_request:
+    paths:
+      - 'freesurface/**'
+      - 'analysis_tools/test_freesurface_fs_c01.py'
+      - '.github/workflows/fs-c01-case-integrity.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  case-integrity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Python input integrity and nomenclature
+        run: python3 -m unittest discover -s analysis_tools -p test_freesurface_fs_c01.py -v
+      - name: Confirm no CFD was run in CI
+        run: |
+          test ! -d freesurface/FS-C01/postProcessing
+          test ! -d freesurface/FS-C01/constant/polyMesh
+          echo "FS-C01 source case present and integrity checked; runtime blockMesh/checkMesh/foamRun pending on Ubuntu"
