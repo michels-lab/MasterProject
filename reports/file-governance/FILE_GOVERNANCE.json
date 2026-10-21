@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "audit_kind": "deterministic_full_tracked_tree",
-  "tracked_files_total": 38760,
-  "classified_files_total": 38756,
+  "tracked_files_total": 38761,
+  "classified_files_total": 38757,
   "docs_content_inspected": 126,
   "large_docs_skipped": 0,
   "excluded_reports": 4,
@@ -22,15 +22,15 @@
     "source": 41,
     "test": 10,
     "web_ui": 1,
-    "workflow": 15
+    "workflow": 16
   },
   "finding_counts": {
     "DUPLICATE_DOC_CONTENT": 2,
     "POTENTIAL_UNLOGGED_CHANGES": 2
   },
   "finding_total": 4,
-  "inventory_fingerprint": "cb75540c2d67cc72d652d8949bf8315008ce13e6f7f5c565491b716fcb20e465",
-  "evidence_fingerprint": "8f4686988f98ae2b8c0e14c306e0c7a7004f1e547df0ff8254774730c1a11feb",
+  "inventory_fingerprint": "38ebf6a0443860ebd73e469113c935d325cb557c0c9f375dd792761a17c3156f",
+  "evidence_fingerprint": "ddf87a44b078edc27770400c314d428ddbbf72643bb6d7d809c202698a53ac51",
   "files": [
     {
       "path": ".github/agents/openfoam-solidification.agent.md",
@@ -73,6 +73,13 @@
       "purpose": "GitHub Actions automation",
       "certainty": "rule",
       "blob": "f2105aac3cbce342056f06109f4e9e8b4948fa6a"
+    },
+    {
+      "path": ".github/workflows/file-steward-domain-pr-validation.yml",
+      "role": "workflow",
+      "purpose": "GitHub Actions automation",
+      "certainty": "rule",
+      "blob": "96897d75fef73825a4b7ba038f80911fb1e528ad"
     },
     {
       "path": ".github/workflows/fs-c01-case-integrity.yml",
@@ -271315,14 +271322,14 @@
       "role": "source",
       "purpose": "code/test implementation",
       "certainty": "rule",
-      "blob": "0bf72f91e59ef91da61c95dd9586219583c02558"
+      "blob": "a2e2dd275c8b272cee6c762f6edfd5d5566d7a2d"
     },
     {
       "path": "tools/test_repository_file_auditor.py",
       "role": "test",
       "purpose": "code/test implementation",
       "certainty": "rule",
-      "blob": "b4831ec3831718ba9738f482654cf4dd6f524418"
+      "blob": "0b65cc6aa3d29917f57a31a96fd5c3afeffb4ed4"
     }
   ],
   "findings": [
@@ -271345,20 +271352,20 @@
       "state": "REVIEW_REQUIRED"
     },
     {
-      "id": "413dda0beecd92cd",
+      "id": "2d0f730d0d7c1885",
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_EN.md",
-      "observation": "19 implementation/config paths changed since this log's last commit; examples: .github/workflows/fs-c01-case-integrity.yml, .github/workflows/granada-bfs01-vof.yml, .github/workflows/granada-boundary-spatial.yml, .github/workflows/granada-energy-phase-evidence.yml, .github/workflows/granada-mold-bilateral-readiness.yml, .github/workflows/granada-plan-d-case3d01.yml",
+      "observation": "20 implementation/config paths changed since this log's last commit; examples: .github/workflows/file-steward-domain-pr-validation.yml, .github/workflows/fs-c01-case-integrity.yml, .github/workflows/granada-bfs01-vof.yml, .github/workflows/granada-boundary-spatial.yml, .github/workflows/granada-energy-phase-evidence.yml, .github/workflows/granada-mold-bilateral-readiness.yml",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     },
     {
-      "id": "c7f6d8304c095bc6",
+      "id": "40be4049dd89fea4",
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_ES.md",
-      "observation": "19 implementation/config paths changed since this log's last commit; examples: .github/workflows/fs-c01-case-integrity.yml, .github/workflows/granada-bfs01-vof.yml, .github/workflows/granada-boundary-spatial.yml, .github/workflows/granada-energy-phase-evidence.yml, .github/workflows/granada-mold-bilateral-readiness.yml, .github/workflows/granada-plan-d-case3d01.yml",
+      "observation": "20 implementation/config paths changed since this log's last commit; examples: .github/workflows/file-steward-domain-pr-validation.yml, .github/workflows/fs-c01-case-integrity.yml, .github/workflows/granada-bfs01-vof.yml, .github/workflows/granada-boundary-spatial.yml, .github/workflows/granada-energy-phase-evidence.yml, .github/workflows/granada-mold-bilateral-readiness.yml",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     }
