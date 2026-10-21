@@ -1,3 +1,9 @@
+## 2026-10-21 — GRANADA: B11/C11 `energy2_test` document provenance [GIT-VERIFIED; NO CFD RUN]
+
+- File Steward detected two byte-identical `CASE_VARIANT.md` pairs between `B11_energy2_test/B11_topFixedFlux_airGapOF14` and `C11_energy2_test/C11_topFixedFlux_airGapOF14`. Reviewing the matching `fvSolution` files confirmed both `energy2_test` folders explicitly configure `PIMPLE.nEnergyCorrectors 2`, absent in their canonical counterparts.
+- This documentation duplication obscured an input distinction. We preserved both case histories and added provenance caveats in the two `energy2_test` documents, separating canonical V11 validated metrics from **unverified** claims for the distinct `energy2_test` cases.
+- Evidence and guard: [source review](docs/granada/B11_C11_ENERGY2_DOCUMENTATION_AUDIT_20261021.md) and static `tools/test_energy2_case_provenance.py`. **No dictionary changes, CFD runs, or experimental validation**. Static checks do not establish physical effects; CI pass must be verified separately at the exact run/SHA.
+
 # QuickCup-Solidification — Project Audit Log
 
 **Language:** [🇪🇸 Español](./PROJECT_AUDIT_LOG_ES.md) | 🇬🇧 English | [↩ Language selector](./PROJECT_AUDIT_LOG.md)
