@@ -31,3 +31,4 @@ Este índice organiza la documentación **sin mover ni reemplazar** archivos exi
 - [Contrato público de límites](OPENFOAM_ECOSYSTEM.md). La coordinación externa nunca gobierna los cálculos ni sustituye este registro.
 
 **Norma:** cambios científicos aquí, manuales científicos aquí, resultados reales aquí. Un informe de GitHub/CI no equivale a validación experimental. Para reubicar un documento debe existir un inventario de referencias y una migración revisada por separado.
+- [Granada: constancia de acceso coordinador en modo lectura](granada/OPENFOAM_HUB_READ_ACCESS_20261021.md)
