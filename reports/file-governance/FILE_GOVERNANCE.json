@@ -25,12 +25,12 @@
     "workflow": 15
   },
   "finding_counts": {
-    "BROKEN_RELATIVE_LINK": 1,
-    "DUPLICATE_DOC_CONTENT": 2
+    "DUPLICATE_DOC_CONTENT": 2,
+    "POTENTIAL_UNLOGGED_CHANGES": 2
   },
-  "finding_total": 3,
-  "inventory_fingerprint": "87e1be67e4eedbdfeb5be182e87e6cbddfbced141a242cdf7542c6ae98228fb0",
-  "evidence_fingerprint": "af7821ffef62f5fd6a1d5d65a870e616a21f57a1834974d8ec8acd712d4b7709",
+  "finding_total": 4,
+  "inventory_fingerprint": "826478b4a28f3790ee0ee4277d61d2dca0a6202a4813726ba90db488f40c0031",
+  "evidence_fingerprint": "8f4686988f98ae2b8c0e14c306e0c7a7004f1e547df0ff8254774730c1a11feb",
   "files": [
     {
       "path": ".github/agents/openfoam-solidification.agent.md",
@@ -268,7 +268,7 @@
       "role": "bitacora",
       "purpose": "technical/audit change history",
       "certainty": "rule",
-      "blob": "681485321098a74d3250c1f61a8d4d333c05723b"
+      "blob": "7bbeb71a3b42d87dbe12ce0114f8f732909da97c"
     },
     {
       "path": "PROJECT_AUDIT_LOG_EN.md",
@@ -271315,26 +271315,17 @@
       "role": "source",
       "purpose": "code/test implementation",
       "certainty": "rule",
-      "blob": "5233e1e0466ce9bf333e24177d66e21b7d8fef84"
+      "blob": "50d28a76044b68d08461f77dca182750eaae8a92"
     },
     {
       "path": "tools/test_repository_file_auditor.py",
       "role": "test",
       "purpose": "code/test implementation",
       "certainty": "rule",
-      "blob": "de43a587db0cf63a8dbe1045e00a81704b4a0d75"
+      "blob": "bbec7d5a91fc96ac4915b703dc31ea7c075475f3"
     }
   ],
   "findings": [
-    {
-      "id": "7aa831f782018e41",
-      "code": "BROKEN_RELATIVE_LINK",
-      "severity": "confirmed",
-      "path": "PROJECT_AUDIT_LOG.md",
-      "observation": "Missing: docs/granada/V15_V16_SOURCE_EVIDENCE_20261020.md",
-      "recommendation": "Fix link or restore target",
-      "state": "REVIEW_REQUIRED"
-    },
     {
       "id": "4790b4f6be1b7e0f",
       "code": "DUPLICATE_DOC_CONTENT",
@@ -271351,6 +271342,24 @@
       "path": "cases_controlled_buoyancy/C11_energy2_test/CASE_VARIANT.md",
       "observation": "Identical tracked text: cases_controlled_buoyancy/C11_energy2_test/CASE_VARIANT.md, cases_controlled_buoyancy/C11_topFixedFlux_airGapOF14/CASE_VARIANT.md",
       "recommendation": "Confirm aliases or translated/historical copies before consolidation",
+      "state": "REVIEW_REQUIRED"
+    },
+    {
+      "id": "413dda0beecd92cd",
+      "code": "POTENTIAL_UNLOGGED_CHANGES",
+      "severity": "review",
+      "path": "PROJECT_AUDIT_LOG_EN.md",
+      "observation": "19 implementation/config paths changed since this log's last commit; examples: .github/workflows/fs-c01-case-integrity.yml, .github/workflows/granada-bfs01-vof.yml, .github/workflows/granada-boundary-spatial.yml, .github/workflows/granada-energy-phase-evidence.yml, .github/workflows/granada-mold-bilateral-readiness.yml, .github/workflows/granada-plan-d-case3d01.yml",
+      "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
+      "state": "REVIEW_REQUIRED"
+    },
+    {
+      "id": "c7f6d8304c095bc6",
+      "code": "POTENTIAL_UNLOGGED_CHANGES",
+      "severity": "review",
+      "path": "PROJECT_AUDIT_LOG_ES.md",
+      "observation": "19 implementation/config paths changed since this log's last commit; examples: .github/workflows/fs-c01-case-integrity.yml, .github/workflows/granada-bfs01-vof.yml, .github/workflows/granada-boundary-spatial.yml, .github/workflows/granada-energy-phase-evidence.yml, .github/workflows/granada-mold-bilateral-readiness.yml, .github/workflows/granada-plan-d-case3d01.yml",
+      "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     }
   ],
