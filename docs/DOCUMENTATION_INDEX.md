@@ -27,6 +27,7 @@ Este índice organiza la documentación **sin mover ni reemplazar** archivos exi
 - [Granada coordinación 2026-10-20](granada/GRANADA_GRANDE_GOVERNANCE_20261020.md)
 - [Resumen de campaña histórica](../analysis_results/full_campaign_audit/README.md)
 - [Evidencia V15/V16 2026-10-20](../analysis_results/granada_v15v16_postrun_20261020/summary.md)
+- [Granada: auditoría de procedencia B11/C11 energy2 y documentos duplicados](granada/B11_C11_ENERGY2_DOCUMENTATION_AUDIT_20261021.md) — hallazgo documental, no validación CFD
 
 ## Relación voluntaria con otros proyectos
 - [FoamLens](https://github.com/michels-lab/FoamLens) es un **visor genérico e independiente**. No es requisito para resolver, validar o publicar este trabajo.
