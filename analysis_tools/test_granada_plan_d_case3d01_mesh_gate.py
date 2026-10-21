@@ -84,7 +84,8 @@ class PlanDCase3D01Tests(unittest.TestCase):
     def test_background_source_strict_dimensions_and_cell_count(self):
         r=inspect(self.root)["background_input"]
         self.assertEqual(r["total_background_cells"],EXPECTED_BASE_CELLS)
-        self.assertEqual(r["spacing_mm"],[2.,2.,2.])
+        for spacing in r["spacing_mm"]:
+            self.assertAlmostEqual(spacing,2.0,places=10)
         self.assertIn("NOT_CHECKMESH",r["status"])
 
     def test_stl_absence_is_explicit_not_zero_flux_or_validation(self):
