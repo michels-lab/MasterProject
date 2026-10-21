@@ -46,6 +46,18 @@ See also the [3D case index](cases_3d/README.md). The existing C14 and B/C numer
 
 Repository guidance lives here, not in a separate Michel's Lab main repository.
 
+## 2026-10-19 — GRANADA: puertas metalúrgicas para C3D-01 (PR independiente)
+
+El mallado de 0.5 mm global permanece como **hipótesis no validada** y el [PR #18](https://github.com/michels-lab/QuickCup-Solidification/pull/18) continúa aislado. Se analizan por separado escala dendrítica/zona pastosa, procedencia de química medida y valores heredados del solver, viabilidad WSL/MPI y convergencia espacio-tiempo. **Ninguna simulación 3D ni prueba MPI fue ejecutada en CI.**
+
+- [Criterios físicos de malla y solidificación primaria/eutéctica](docs/granada/C3D_01_MALLA_Y_FISICA_ES.md)
+- [Composición medida vs diseño CE/S y propiedades heredadas](docs/granada/COMPOSICION_Y_PROCEDENCIA_ES.md)
+- [RAM/WSL de ambas computadoras, plan de MPI sin ejecutar](docs/granada/EQUIPOS_MPI_Y_EJECUCION_ES.md)
+- [Bitácora de bloque independiente y punto de reentrada](docs/granada/GRANADA_C3D_HANDOFF_ES.md)
+- [Puertas de evidencia en JSON](docs/granada/C3D_01_EVIDENCE_GATES.json)
+
+Este bloque documental **no cambia** `cases_3d/C3D_01_metal_mold/system/`, materiales, casos C14/B14 ni datos históricos. La investigación mantiene J0/CHT/recalescencia **abiertos** hasta evidencia experimental y numérica.
+
 ## GRANADA — Regla permanente de continuación del propietario
 
 Cuando el propietario diga **GRANADA**, se aparca con trazabilidad cualquier pendiente inacabado/bloqueado/en QA/propiedad de otra rama, y se aborda **el siguiente bloque grande independiente**. Consultar primero `.michelslab/GRANADA.md` y la norma maestra `standards/GRANADA_CONTINUOUS_BLOCK_PROTOCOL.md`; respetar claims, PRs y colisiones de archivos. Registrar SHA, tests y punto de retorno; no cerrar pendientes falsamente ni publicar releases sin autorización.
