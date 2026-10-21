@@ -1,9 +1,12 @@
-# Casos de investigación tridimensional
+# Plan D — Casos tridimensionales de QuickCup
 
-La carpeta `cases_3d/` reúne variantes geométricas 3D separadas de los casos 2D.
+**Identificador oficial de caso: [case3d-01](case3d-01/README.md).**
 
-- [C3D-01: primer caso QuickCup metal/molde de arena](C3D_01_metal_mold/README.md) — preparado para una prueba local de `blockMesh` y `checkMesh`. No hay simulaciones CFD ni resultados validados.
+La ruta científica Plan D investiga solidificación y transferencia térmica metal–arena en 3D, independiente de la ruta B de superficie libre [FS-C01](../freesurface/FS-C01/).
 
-Los STL originales de SolidWorks se mantienen en la laptop. La ejecución de OpenFOAM está prohibida en GitHub Actions.
+- **[case3d-01](case3d-01/README.md)**: documentación canónica, gate de geometría y huellas STL, auditoría de logs OpenFOAM y script que prepara **una copia externa y nueva** del caso de malla de fondo con los STL originales sin cambiarlos. No es todavía un caso CFD completo ni contiene públicamente los STL privados.
+- **[C3D_01_metal_mold](C3D_01_metal_mold/README.md)**: ubicación técnica heredada de los archivos CAD/inputs de malla mientras están abiertos los PR #18 y #19. Este nombre de carpeta no sustituye el identificador canónico `case3d-01`. No mover ni duplicar silenciosamente sus datos hasta reconciliar dichos PR.
 
-**Convención OpenFOAM14:** [C3D-01](C3D_01_metal_mold/README.md) utiliza `units [mm];` en `blockMeshDict` y mantendrá los STL de SolidWorks en milímetros para `snappyHexMesh`, sin conversión binaria en Python.
+Ambos directorios se refieren a la **misma línea de investigación Plan D**, no a dos simulaciones ni a resultados distintos. `blockMesh`, `checkMesh`, `snappyHexMesh` y los cálculos CFD requieren ejecución y validación en el Ubuntu del investigador; GitHub Actions únicamente verifica datos e integridad estática.
+
+**Escala:** `units [mm];` en OpenFOAM Foundation 14; conservar STL SolidWorks en mm sin convertirlos por Python. La meta propuesta de 0.5 mm nominal en volúmenes completos continúa **en revisión científica**, no es una resolución comprobada.

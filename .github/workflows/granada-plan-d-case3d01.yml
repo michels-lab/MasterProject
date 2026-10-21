@@ -1,0 +1,52 @@
+name: GRANADA Plan D case3d-01 mesh evidence (no OpenFOAM)
+
+on:
+  pull_request:
+    paths:
+      - 'analysis_tools/granada_plan_d_case3d01_mesh_gate.py'
+      - 'analysis_tools/test_granada_plan_d_case3d01_mesh_gate.py'
+      - 'docs/granada/PLAN_D_CASE3D_01_MESH_GATE_20261021.md'
+      - 'analysis_results/granada_plan_d_case3d01_20261021/**'
+      - 'cases_3d/case3d-01/**'
+      - 'cases_3d/README.md'
+      - '.github/workflows/granada-plan-d-case3d01.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  case3d01-source-evidence:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Python syntax preflight
+        run: python3 -m py_compile analysis_tools/granada_plan_d_case3d01_mesh_gate.py analysis_tools/test_granada_plan_d_case3d01_mesh_gate.py
+      - name: 20 synthetic regression tests
+        run: python3 -m unittest discover -s analysis_tools -p test_granada_plan_d_case3d01_mesh_gate.py -v
+      - name: Canonical Plan D local stage shell syntax
+        run: bash -n cases_3d/case3d-01/scripts/stage_mesh_only.sh
+      - name: Real repository source-only Plan D audit
+        run: |
+          python3 analysis_tools/granada_plan_d_case3d01_mesh_gate.py             --root "$GITHUB_WORKSPACE" --out /tmp/quickcup-plan-d-case3d01
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path("/tmp/quickcup-plan-d-case3d01/case3d-01-mesh-readiness.json")
+          report=json.loads(p.read_text())
+          assert report["case_id"] == "case3d-01"
+          assert report["background_input"]["total_background_cells"] == 30276
+          assert report["mesh_log_screen"]["status"] == "NOT_RUN_LOGS_NOT_SUPPLIED"
+          assert report["mesh_resolution_decision"] == "OPEN_0.5MM_NOT_AUTOMATICALLY_APPROVED"
+          assert report["global_CFD_validation"] == "NOT_VALIDATED"
+          print("case3d-01: original source checked, original mesh/STLs remain unverified")
+          PY
+      - name: Export audit only; no meshing or CFD
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: quickcup-plan-d-case3d01-source-gate
+          path: /tmp/quickcup-plan-d-case3d01/
+          if-no-files-found: warn
+          retention-days: 14
