@@ -1,0 +1,59 @@
+{
+  "schema": "quickcup-bfs01-hydro-analogue-v1",
+  "status": "PREPARED_NOT_MESHED_OR_RUN",
+  "template": "OpenFOAM Foundation 14 tutorials/compressibleVoF/damBreak",
+  "upstream_sha256": {
+    "system/controlDict": "1de533288f72457a02aad214751e345a2f574b1b1b3f23d87c14556d72b84fc6",
+    "system/fvSchemes": "3b3f1f3f2ff7e85ba8c32c2bc023838d7232054dc89860ac8f0a1c0b645f83ef",
+    "system/fvSolution": "d28d3bda7c98408ef23dea98910ab79f5da1cc6febee2d8597fa6284d8d3ebc8",
+    "constant/phaseProperties": "de2853ac17abc3021fbfaaefbda6bc58cf642f400b4db2a43f6d6e3189931e91",
+    "constant/physicalProperties.water": "9c6efa052efa627eec172709336097675837d55d8849313554b9b7f0ecef75db",
+    "constant/physicalProperties.air": "f83c414db2549472c1739429f75b97b22fcf67f9c5a558cb2e8d997a14d1a13a",
+    "constant/g": "ca3d19c1281fec63fdaf9cbab98a1704a593b3835d39205db4f5246237f65bb0",
+    "constant/momentumTransport": "b7a624e05a0ae64b19a59e40d0d61f917f63513f54a4fae6a78187ba9385d8b2",
+    "0/alpha.water": "ba6a70d30ea2ed5952ef6d88cca256e8ad93acd8792821a1447f9469ba088888",
+    "0/T": "ee373e1c65d53a9ed3d1ed4cdc9fdf890d50b9858d22ea0b07cf9dfbacde1077",
+    "0/U": "d93173c8a56c68f32d6228031091d01d24110fb1d7f2c60a7f596cfb52a54336",
+    "0/p": "91bf5a03478b292d365d324a1ad1bf9de5422a93d8f88e5d017976573edd309d",
+    "0/p_rgh": "813c5b7356abbf2625f2b23c8f4c7c90ac053dcbe85199c5adf9c70c827503e7"
+  },
+  "generated_sha256": {
+    "0/p_rgh": "813c5b7356abbf2625f2b23c8f4c7c90ac053dcbe85199c5adf9c70c827503e7",
+    "0/epsilon": "c3515fa41de60c5e5b168ad0fed57ad99749e3bdeb4a0f740b7c44df15294278",
+    "0/T": "ee373e1c65d53a9ed3d1ed4cdc9fdf890d50b9858d22ea0b07cf9dfbacde1077",
+    "0/U": "d93173c8a56c68f32d6228031091d01d24110fb1d7f2c60a7f596cfb52a54336",
+    "0/omega": "d6c296157d0c7b227070013ba6f2a51397a1d16d3269dad6b315a16b2c53d791",
+    "0/k": "1991bf0d2920e3559410a680e49cb8f9fc8d774decfb7584c6fb80bdd59ffb62",
+    "0/nuTilda": "1d9470f90fc81d9cbc7f89346001eba2ce43dce449873e01fbaacecf5d4e94d6",
+    "0/p": "91bf5a03478b292d365d324a1ad1bf9de5422a93d8f88e5d017976573edd309d",
+    "0/nut": "020c722434e9e35cbde76eb4666c1c74cc8d625bc84177f8a77674fb38ca18dd",
+    "0/alpha.water": "0b8a1c5ad42a4fe77b1bc8a638eb3342c9f1864851dc2c8aaa600a03885703a1",
+    "constant/phaseProperties": "de2853ac17abc3021fbfaaefbda6bc58cf642f400b4db2a43f6d6e3189931e91",
+    "constant/momentumTransport": "b7a624e05a0ae64b19a59e40d0d61f917f63513f54a4fae6a78187ba9385d8b2",
+    "constant/physicalProperties.water": "9c6efa052efa627eec172709336097675837d55d8849313554b9b7f0ecef75db",
+    "constant/fvModels": "59c4a31e95ae80a02b0174c47bcc5ce5ece97fb302a4d9ce2ec5d2bef658a168",
+    "constant/physicalProperties.air": "f83c414db2549472c1739429f75b97b22fcf67f9c5a558cb2e8d997a14d1a13a",
+    "constant/g": "ca3d19c1281fec63fdaf9cbab98a1704a593b3835d39205db4f5246237f65bb0",
+    "system/fvSolution": "d28d3bda7c98408ef23dea98910ab79f5da1cc6febee2d8597fa6284d8d3ebc8",
+    "system/controlDict": "2ef2cb88edc4c581e53dcef51e2e10481fbbbdad5b41624790d6f5fb8893e76d",
+    "system/blockMeshDict": "6ee502b16994977966f8f6223103d2c9bfd15adbd8d0dd5d679d7855328454af",
+    "system/fvSchemes": "3b3f1f3f2ff7e85ba8c32c2bc023838d7232054dc89860ac8f0a1c0b645f83ef"
+  },
+  "geometry_m": {
+    "width": 0.04,
+    "height": 0.06,
+    "depth": 0.01,
+    "water_fill_height": 0.04
+  },
+  "analytical_initial_water_volume_m3": 0.000016000000000000003,
+  "end_time_s": 0.1,
+  "fluid_identity": "WATER_AIR_ANALOGUE_NOT_MOLTEN_IRON",
+  "physics": {
+    "vof": "requested but not executed",
+    "metal": false,
+    "solidification": false,
+    "mold": false,
+    "shrinkage": false
+  },
+  "acceptance": "volume-only numerical check on actual postProcessing; mass not measured"
+}
