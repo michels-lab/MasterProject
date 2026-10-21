@@ -2,6 +2,7 @@
 from __future__ import annotations
 import hashlib
 import json
+import subprocess
 from pathlib import Path
 import tempfile
 import unittest
@@ -202,6 +203,24 @@ class PlanDCase3D01Tests(unittest.TestCase):
         for src in a["source_manifest"]:
             f=self.root/src["path"]
             self.assertEqual(hashlib.sha256(f.read_bytes()).hexdigest(),src["sha256"])
+
+    def test_canonical_case_staging_shell_is_parseable(self):
+        path=Path(__file__).resolve().parents[1]/"cases_3d/case3d-01/scripts/stage_mesh_only.sh"
+        r=subprocess.run(["bash","-n",str(path)],capture_output=True,text=True,check=False)
+        self.assertEqual(r.returncode,0,r.stderr)
+        script=path.read_text()
+        self.assertNotIn("rm -rf",script)
+        self.assertNotIn("foamMultiRun >",script)
+        self.assertIn("sha256sum --check --status",script)
+
+    def test_staging_missing_STLs_fails_without_output(self):
+        path=Path(__file__).resolve().parents[1]/"cases_3d/case3d-01/scripts/stage_mesh_only.sh"
+        out=Path(self.temp.name)/"safe-case3d-01"
+        missing=Path(self.temp.name)/"missing-stl-source"
+        r=subprocess.run(["bash",str(path),str(out),str(missing)],
+                         capture_output=True,text=True,check=False)
+        self.assertNotEqual(r.returncode,0)
+        self.assertFalse(out.exists())
 
 
 if __name__ == "__main__":
