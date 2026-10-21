@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "audit_kind": "deterministic_full_tracked_tree",
-  "tracked_files_total": 38764,
-  "classified_files_total": 38760,
+  "tracked_files_total": 38767,
+  "classified_files_total": 38763,
   "docs_content_inspected": 127,
   "large_docs_skipped": 0,
   "excluded_reports": 4,
@@ -19,15 +19,17 @@
     "simulation_input": 2667,
     "simulation_log": 3151,
     "simulation_output": 32613,
-    "source": 41,
-    "test": 11,
+    "source": 42,
+    "test": 12,
     "web_ui": 1,
-    "workflow": 17
+    "workflow": 18
   },
-  "finding_counts": {},
-  "finding_total": 0,
-  "inventory_fingerprint": "c8597fff27582f3dbd0a15442e5117d7058909802e08499bfd0fb763e6774006",
-  "evidence_fingerprint": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+  "finding_counts": {
+    "POTENTIAL_UNLOGGED_CHANGES": 2
+  },
+  "finding_total": 2,
+  "inventory_fingerprint": "4096f935fa3adb4d768989ac0fb1eef69dbf2d6f59e50d42288910e615864e09",
+  "evidence_fingerprint": "b25fadc64b339aecb85ff65cbd1d9da68510936c9e8ea63ba98e812058517028",
   "files": [
     {
       "path": ".github/agents/openfoam-solidification.agent.md",
@@ -69,7 +71,7 @@
       "role": "workflow",
       "purpose": "GitHub Actions automation",
       "certainty": "rule",
-      "blob": "d158595546cbe23c7e4459e91af9065ed26fad11"
+      "blob": "e72b07c481ee3de51cd7c1b8d3fb760dcc3e1a9e"
     },
     {
       "path": ".github/workflows/file-steward-domain-pr-validation.yml",
@@ -112,6 +114,13 @@
       "purpose": "GitHub Actions automation",
       "certainty": "rule",
       "blob": "872f71384c6ed36791acd0d8af294554ca5a6f59"
+    },
+    {
+      "path": ".github/workflows/granada-file-steward-head-proof-pr.yml",
+      "role": "workflow",
+      "purpose": "GitHub Actions automation",
+      "certainty": "rule",
+      "blob": "7354540e0c7528348ff73fd18692f69b8d34bafa"
     },
     {
       "path": ".github/workflows/granada-mold-bilateral-readiness.yml",
@@ -271329,6 +271338,13 @@
       "blob": "f03da5aaa222c30b173349a589a6bca9c8c0c2db"
     },
     {
+      "path": "tools/file_governance_audit_proof.py",
+      "role": "source",
+      "purpose": "code/test implementation",
+      "certainty": "rule",
+      "blob": "d339c6306fab8eaf413c7590cc39286a0261fdec"
+    },
+    {
       "path": "tools/repository_file_auditor.py",
       "role": "source",
       "purpose": "code/test implementation",
@@ -271343,6 +271359,13 @@
       "blob": "53f483e5dcb2a6019c940982155a1092257b6427"
     },
     {
+      "path": "tools/test_file_governance_audit_proof.py",
+      "role": "test",
+      "purpose": "code/test implementation",
+      "certainty": "rule",
+      "blob": "2689aa263170f58c0b0ec5ecfa8f4f0cdd7fdd28"
+    },
+    {
       "path": "tools/test_repository_file_auditor.py",
       "role": "test",
       "purpose": "code/test implementation",
@@ -271350,7 +271373,26 @@
       "blob": "0b65cc6aa3d29917f57a31a96fd5c3afeffb4ed4"
     }
   ],
-  "findings": [],
+  "findings": [
+    {
+      "id": "989bdfca4794879e",
+      "code": "POTENTIAL_UNLOGGED_CHANGES",
+      "severity": "review",
+      "path": "PROJECT_AUDIT_LOG_EN.md",
+      "observation": "3 implementation/config paths changed since this log's last commit; examples: .github/workflows/granada-file-steward-head-proof-pr.yml, tools/file_governance_audit_proof.py, tools/test_file_governance_audit_proof.py",
+      "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
+      "state": "REVIEW_REQUIRED"
+    },
+    {
+      "id": "a3b3803ea99dfd59",
+      "code": "POTENTIAL_UNLOGGED_CHANGES",
+      "severity": "review",
+      "path": "PROJECT_AUDIT_LOG_ES.md",
+      "observation": "3 implementation/config paths changed since this log's last commit; examples: .github/workflows/granada-file-steward-head-proof-pr.yml, tools/file_governance_audit_proof.py, tools/test_file_governance_audit_proof.py",
+      "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
+      "state": "REVIEW_REQUIRED"
+    }
+  ],
   "untracked_audited": false,
   "ignored_audited": false,
   "binary_contents_audited": false,
