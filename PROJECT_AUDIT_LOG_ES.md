@@ -1,3 +1,9 @@
+## 2026-10-21 — GRANADA: procedencia documental B11/C11 `energy2_test` [GIT-VERIFIED; NO CFD RUN]
+
+- File Steward detectó dos parejas de `CASE_VARIANT.md` idénticas entre `B11_energy2_test/B11_topFixedFlux_airGapOF14` y `C11_energy2_test/C11_topFixedFlux_airGapOF14`. El examen de los `fvSolution` correspondientes confirmó que ambas carpetas `energy2_test` contienen `PIMPLE.nEnergyCorrectors 2` y las variantes canónicas no.
+- La duplicación documental ocultaba una distinción de entrada. Se conservaron los documentos y se añadió una advertencia de procedencia a las dos copias `energy2_test`, separando las cifras verificadas del V11 canónico de afirmaciones no verificadas para `energy2_test`.
+- Evidencia y control: [revisión documental](docs/granada/B11_C11_ENERGY2_DOCUMENTATION_AUDIT_20261021.md) y prueba `tools/test_energy2_case_provenance.py`. **Sin cambios de diccionarios, sin CFD local/GitHub y sin validación experimental**. Un test de archivos no demuestra efectos físicos. La CI de procedencia se verifica por separado, por ejecución/SHA.
+
 ## 2026-10-20 — GRANADA ambiciosa: macro-bloques multi-entregable (regla adoptada)
 
 **Orden del propietario:** evitar correcciones mínimas encadenadas; elegir campañas de desarrollo con aproximadamente **3–6 paquetes sustanciales relacionados y no interferentes**, cuando el backlog lo permita. Cada paquete debe entregar código/experiencia tangible, recuperar estados y bordes, añadir pruebas de regresión y documentar las verificaciones reales. El tamaño no justifica pisar ramas/claims, mezclar cuentas, omitir QA ni dar por concluida una aceptación física pendiente. Si algún paquete está bloqueado por login, hardware, CI o release, aparcarlo con issue/PR/SHA y continuar con otro trabajo seguro. El objetivo es hacer más, **no aparentarlo**. [Estándar maestro](https://github.com/michels-lab/Michel-Software-Standards/blob/main/standards/OPERACION_GRANADA_STANDARD.md).
