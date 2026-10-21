@@ -15,24 +15,22 @@
     "document": 99,
     "index": 22,
     "license": 1,
-    "simulation_case_file": 92,
-    "simulation_input": 2570,
-    "simulation_log": 3142,
-    "simulation_output": 32610,
+    "simulation_case_file": 98,
+    "simulation_input": 2667,
+    "simulation_log": 3151,
+    "simulation_output": 32613,
     "source": 41,
     "test": 10,
-    "unknown": 115,
     "web_ui": 1,
     "workflow": 15
   },
   "finding_counts": {
     "BROKEN_RELATIVE_LINK": 1,
-    "DUPLICATE_DOC_CONTENT": 2,
-    "UNKNOWN_PURPOSE": 115
+    "DUPLICATE_DOC_CONTENT": 2
   },
-  "finding_total": 118,
-  "inventory_fingerprint": "ede18baf78ca6f2771d4c0d2c9d4c91e29585e42e1b817c97a3f69a9a7c33e98",
-  "evidence_fingerprint": "e61f3f8232d99e8f82aff558d6a24a4f95bb23191f754382edfaf2ffae31d874",
+  "finding_total": 3,
+  "inventory_fingerprint": "87e1be67e4eedbdfeb5be182e87e6cbddfbced141a242cdf7542c6ae98228fb0",
+  "evidence_fingerprint": "af7821ffef62f5fd6a1d5d65a870e616a21f57a1834974d8ec8acd712d4b7709",
   "files": [
     {
       "path": ".github/agents/openfoam-solidification.agent.md",
@@ -270376,247 +270374,247 @@
     },
     {
       "path": "cleanproy/0/metal/T",
-      "role": "unknown",
-      "purpose": "function unknown: owner classification required",
-      "certainty": "unknown",
+      "role": "simulation_input",
+      "purpose": "OpenFOAM case field/dictionary input (content unvalidated)",
+      "certainty": "inferred",
       "blob": "7283416a0932354cbf850e1ade41e6bc4d8e1d05"
     },
     {
       "path": "cleanproy/0/metal/U",
-      "role": "unknown",
-      "purpose": "function unknown: owner classification required",
-      "certainty": "unknown",
+      "role": "simulation_input",
+      "purpose": "OpenFOAM case field/dictionary input (content unvalidated)",
+      "certainty": "inferred",
       "blob": "4c4ee45bdf288749d59f0c2b901c6cb01ca222c6"
     },
     {
       "path": "cleanproy/0/metal/alphat",
-      "role": "unknown",
-      "purpose": "function unknown: owner classification required",
-      "certainty": "unknown",
+      "role": "simulation_input",
+      "purpose": "OpenFOAM case field/dictionary input (content unvalidated)",
+      "certainty": "inferred",
       "blob": "848c36401fbbc77c1e2736bd960123acb4945816"
     },
     {
       "path": "cleanproy/0/metal/epsilon",
-      "role": "unknown",
-      "purpose": "function unknown: owner classification required",
-      "certainty": "unknown",
+      "role": "simulation_input",
+      "purpose": "OpenFOAM case field/dictionary input (content unvalidated)",
+      "certainty": "inferred",
       "blob": "ea63688f99891f740b562143d2b7ee2925207d16"
     },
     {
       "path": "cleanproy/0/metal/k",
-      "role": "unknown",
-      "purpose": "function unknown: owner classification required",
-      "certainty": "unknown",
+      "role": "simulation_input",
+      "purpose": "OpenFOAM case field/dictionary input (content unvalidated)",
+      "certainty": "inferred",
       "blob": "e6f09880006ca7ee1ce267cea5259dd6a0c7e589"
     },
     {
       "path": "cleanproy/0/metal/nut",
-      "role": "unknown",
-      "purpose": "function unknown: owner classification required",
-      "certainty": "unknown",
+      "role": "simulation_input",
+      "purpose": "OpenFOAM case field/dictionary input (content unvalidated)",
+      "certainty": "inferred",
       "blob": "a90ea3f755f1848a1f51c56a27957e5f72f4d49b"
     },
     {
       "path": "cleanproy/0/metal/omega",
-      "role": "unknown",
-      "purpose": "function unknown: owner classification required",
-      "certainty": "unknown",
+      "role": "simulation_input",
+      "purpose": "OpenFOAM case field/dictionary input (content unvalidated)",
+      "certainty": "inferred",
       "blob": "eba99e94e2f8de74ab9b51714be46b8e70b1dfef"
     },
     {
       "path": "cleanproy/0/metal/p",
-      "role": "unknown",
-      "purpose": "function unknown: owner classification required",
-      "certainty": "unknown",
+      "role": "simulation_input",
+      "purpose": "OpenFOAM case field/dictionary input (content unvalidated)",
+      "certainty": "inferred",
       "blob": "1a750e049620cae25c4cc091df51650c3a3e7b7c"
     },
     {
       "path": "cleanproy/0/metal/p_rgh",
-      "role": "unknown",
-      "purpose": "function unknown: owner classification required",
-      "certainty": "unknown",
+      "role": "simulation_input",
+      "purpose": "OpenFOAM case field/dictionary input (content unvalidated)",
+      "certainty": "inferred",
       "blob": "a61449c49e6e2cde18451c249067abcaf961ad96"
     },
     {
       "path": "cleanproy/0/mold/T",
-      "role": "unknown",
-      "purpose": "function unknown: owner classification required",
-      "certainty": "unknown",
+      "role": "simulation_input",
+      "purpose": "OpenFOAM case field/dictionary input (content unvalidated)",
+      "certainty": "inferred",
       "blob": "51f24817989f74bf01941186b6e51851aa1e7640"
     },
     {
       "path": "cleanproy/Allclean",
-      "role": "unknown",
-      "purpose": "function unknown: owner classification required",
-      "certainty": "unknown",
+      "role": "simulation_case_file",
+      "purpose": "OpenFOAM case-specific support artifact",
+      "certainty": "inferred",
       "blob": "a7ad232fc8cc6a937ea087f4586b132f4f8a9862"
     },
     {
       "path": "cleanproy/Allrun",
-      "role": "unknown",
-      "purpose": "function unknown: owner classification required",
-      "certainty": "unknown",
+      "role": "simulation_case_file",
+      "purpose": "OpenFOAM case-specific support artifact",
+      "certainty": "inferred",
       "blob": "925c8860c5ecb4867645619b5ff1f2a80e98b67f"
     },
     {
       "path": "cleanproy/constant/metal/fvModels",
-      "role": "unknown",
-      "purpose": "function unknown: owner classification required",
-      "certainty": "unknown",
+      "role": "simulation_input",
+      "purpose": "OpenFOAM case field/dictionary input (content unvalidated)",
+      "certainty": "inferred",
       "blob": "efd02f895e4f0223ea30fdd7a7ec69863ab34b9b"
     },
     {
       "path": "cleanproy/constant/metal/g",
-      "role": "unknown",
-      "purpose": "function unknown: owner classification required",
-      "certainty": "unknown",
+      "role": "simulation_input",
+      "purpose": "OpenFOAM case field/dictionary input (content unvalidated)",
+      "certainty": "inferred",
       "blob": "627a74fa842f4ae7af40501765c87c4a7e26af8e"
     },
     {
       "path": "cleanproy/constant/metal/materials/castIron",
-      "role": "unknown",
-      "purpose": "function unknown: owner classification required",
-      "certainty": "unknown",
+      "role": "simulation_input",
+      "purpose": "OpenFOAM case field/dictionary input (content unvalidated)",
+      "certainty": "inferred",
       "blob": "41317fa77ed1dc15e19da4f395c303e3f4ad881c"
     },
     {
       "path": "cleanproy/constant/metal/momentumTransport",
-      "role": "unknown",
-      "purpose": "function unknown: owner classification required",
-      "certainty": "unknown",
+      "role": "simulation_input",
+      "purpose": "OpenFOAM case field/dictionary input (content unvalidated)",
+      "certainty": "inferred",
       "blob": "4f307e6dfc36d7e75e886b1e5501d5f114f481fa"
     },
     {
       "path": "cleanproy/constant/metal/pRef",
-      "role": "unknown",
-      "purpose": "function unknown: owner classification required",
-      "certainty": "unknown",
+      "role": "simulation_input",
+      "purpose": "OpenFOAM case field/dictionary input (content unvalidated)",
+      "certainty": "inferred",
       "blob": "6a1c70138dfd0ac65eb980eb966c5479efcdcd24"
     },
     {
       "path": "cleanproy/constant/metal/physicalProperties",
-      "role": "unknown",
-      "purpose": "function unknown: owner classification required",
-      "certainty": "unknown",
+      "role": "simulation_input",
+      "purpose": "OpenFOAM case field/dictionary input (content unvalidated)",
+      "certainty": "inferred",
       "blob": "24e3eb8a7acc46a0de12e4eda42cdd4e50cc8a3c"
     },
     {
       "path": "cleanproy/constant/mold/materials/silica",
-      "role": "unknown",
-      "purpose": "function unknown: owner classification required",
-      "certainty": "unknown",
+      "role": "simulation_input",
+      "purpose": "OpenFOAM case field/dictionary input (content unvalidated)",
+      "certainty": "inferred",
       "blob": "df4bdd5020ab70470b10746a4655c6b38bdd1d8c"
     },
     {
       "path": "cleanproy/constant/mold/materials/steel4140",
-      "role": "unknown",
-      "purpose": "function unknown: owner classification required",
-      "certainty": "unknown",
+      "role": "simulation_input",
+      "purpose": "OpenFOAM case field/dictionary input (content unvalidated)",
+      "certainty": "inferred",
       "blob": "0b93550e3991ae3b9f5a2393fc427fcabcda4123"
     },
     {
       "path": "cleanproy/constant/mold/materials/steel4140cons",
-      "role": "unknown",
-      "purpose": "function unknown: owner classification required",
-      "certainty": "unknown",
+      "role": "simulation_input",
+      "purpose": "OpenFOAM case field/dictionary input (content unvalidated)",
+      "certainty": "inferred",
       "blob": "a59cdbdfd6913993a9d8ea204385a6dd96b3debc"
     },
     {
       "path": "cleanproy/constant/mold/physicalProperties",
-      "role": "unknown",
-      "purpose": "function unknown: owner classification required",
-      "certainty": "unknown",
+      "role": "simulation_input",
+      "purpose": "OpenFOAM case field/dictionary input (content unvalidated)",
+      "certainty": "inferred",
       "blob": "ff2f209d29f4e789ab1e35d8e6918066e996eb94"
     },
     {
       "path": "cleanproy/log.blockMesh",
-      "role": "unknown",
-      "purpose": "function unknown: owner classification required",
-      "certainty": "unknown",
+      "role": "simulation_log",
+      "purpose": "OpenFOAM solver/run log (not proof of run quality)",
+      "certainty": "inferred",
       "blob": "508a3ddf4055a60cee735fb39cdd877a806c8147"
     },
     {
       "path": "cleanproy/log.foamMultiRun",
-      "role": "unknown",
-      "purpose": "function unknown: owner classification required",
-      "certainty": "unknown",
+      "role": "simulation_log",
+      "purpose": "OpenFOAM solver/run log (not proof of run quality)",
+      "certainty": "inferred",
       "blob": "df418748810192503f67f4f95c32c96cb01cc684"
     },
     {
       "path": "cleanproy/log.splitMeshRegions",
-      "role": "unknown",
-      "purpose": "function unknown: owner classification required",
-      "certainty": "unknown",
+      "role": "simulation_log",
+      "purpose": "OpenFOAM solver/run log (not proof of run quality)",
+      "certainty": "inferred",
       "blob": "2e6438b276c959db079bb35b5c88ca5d274f9693"
     },
     {
       "path": "cleanproy/postProcessing/metal/temperatureProbe/0/T",
-      "role": "unknown",
-      "purpose": "function unknown: owner classification required",
-      "certainty": "unknown",
+      "role": "simulation_output",
+      "purpose": "OpenFOAM solution time/postProcessing artifact (content unvalidated)",
+      "certainty": "inferred",
       "blob": "3332c13ffabab4e22c710a3fb5e66657d997c00a"
     },
     {
       "path": "cleanproy/system/blockMeshDict",
-      "role": "unknown",
-      "purpose": "function unknown: owner classification required",
-      "certainty": "unknown",
+      "role": "simulation_input",
+      "purpose": "OpenFOAM case field/dictionary input (content unvalidated)",
+      "certainty": "inferred",
       "blob": "ecf9234d65ba2b647e8847bb86b9146282d0b7a3"
     },
     {
       "path": "cleanproy/system/controlDict",
-      "role": "unknown",
-      "purpose": "function unknown: owner classification required",
-      "certainty": "unknown",
+      "role": "simulation_input",
+      "purpose": "OpenFOAM case field/dictionary input (content unvalidated)",
+      "certainty": "inferred",
       "blob": "c8bfc35c20947627fc9eefbbc0a53ef7f5343904"
     },
     {
       "path": "cleanproy/system/createZonesDict",
-      "role": "unknown",
-      "purpose": "function unknown: owner classification required",
-      "certainty": "unknown",
+      "role": "simulation_input",
+      "purpose": "OpenFOAM case field/dictionary input (content unvalidated)",
+      "certainty": "inferred",
       "blob": "bfac921cd69f9d2071a301ce384486b64bca82b8"
     },
     {
       "path": "cleanproy/system/functions",
-      "role": "unknown",
-      "purpose": "function unknown: owner classification required",
-      "certainty": "unknown",
+      "role": "simulation_input",
+      "purpose": "OpenFOAM case field/dictionary input (content unvalidated)",
+      "certainty": "inferred",
       "blob": "0c564d49cbbb9416771ffb8ab167bb7a74e356c5"
     },
     {
       "path": "cleanproy/system/fvSolution",
-      "role": "unknown",
-      "purpose": "function unknown: owner classification required",
-      "certainty": "unknown",
+      "role": "simulation_input",
+      "purpose": "OpenFOAM case field/dictionary input (content unvalidated)",
+      "certainty": "inferred",
       "blob": "6b65d57d2035012de86c76a2832cb80f1bbb8135"
     },
     {
       "path": "cleanproy/system/metal/fvSchemes",
-      "role": "unknown",
-      "purpose": "function unknown: owner classification required",
-      "certainty": "unknown",
+      "role": "simulation_input",
+      "purpose": "OpenFOAM case field/dictionary input (content unvalidated)",
+      "certainty": "inferred",
       "blob": "944f82f269b959d0707e1a7598a9d52a8ae43cb7"
     },
     {
       "path": "cleanproy/system/metal/fvSolution",
-      "role": "unknown",
-      "purpose": "function unknown: owner classification required",
-      "certainty": "unknown",
+      "role": "simulation_input",
+      "purpose": "OpenFOAM case field/dictionary input (content unvalidated)",
+      "certainty": "inferred",
       "blob": "adabb207018afe70b81e066fffe2aa286914b35c"
     },
     {
       "path": "cleanproy/system/mold/fvSchemes",
-      "role": "unknown",
-      "purpose": "function unknown: owner classification required",
-      "certainty": "unknown",
+      "role": "simulation_input",
+      "purpose": "OpenFOAM case field/dictionary input (content unvalidated)",
+      "certainty": "inferred",
       "blob": "669cdf00e139feb6a28308dfa333e1c056ea86a8"
     },
     {
       "path": "cleanproy/system/mold/fvSolution",
-      "role": "unknown",
-      "purpose": "function unknown: owner classification required",
-      "certainty": "unknown",
+      "role": "simulation_input",
+      "purpose": "OpenFOAM case field/dictionary input (content unvalidated)",
+      "certainty": "inferred",
       "blob": "227b64df30aee765d9ad67742d9258c8a88a596d"
     },
     {
@@ -270698,492 +270696,492 @@
     },
     {
       "path": "doctor_original/bcFourier/0/T",
-      "role": "unknown",
-      "purpose": "function unknown: owner classification required",
-      "certainty": "unknown",
+      "role": "simulation_input",
+      "purpose": "OpenFOAM case field/dictionary input (content unvalidated)",
+      "certainty": "inferred",
       "blob": "8e36aac2511726484426d875b44876f39ec2d75b"
     },
     {
       "path": "doctor_original/bcFourier/0/U",
-      "role": "unknown",
-      "purpose": "function unknown: owner classification required",
-      "certainty": "unknown",
+      "role": "simulation_input",
+      "purpose": "OpenFOAM case field/dictionary input (content unvalidated)",
+      "certainty": "inferred",
       "blob": "f7b60637f1fd01e32a32db748d651bb7696c380a"
     },
     {
       "path": "doctor_original/bcFourier/0/alphat",
-      "role": "unknown",
-      "purpose": "function unknown: owner classification required",
-      "certainty": "unknown",
+      "role": "simulation_input",
+      "purpose": "OpenFOAM case field/dictionary input (content unvalidated)",
+      "certainty": "inferred",
       "blob": "d066cde4cfd7e8348cff275020cef29000624281"
     },
     {
       "path": "doctor_original/bcFourier/0/epsilon",
-      "role": "unknown",
-      "purpose": "function unknown: owner classification required",
-      "certainty": "unknown",
+      "role": "simulation_input",
+      "purpose": "OpenFOAM case field/dictionary input (content unvalidated)",
+      "certainty": "inferred",
       "blob": "801d4f0b84f5def0a207d353e2e08ee55de1259e"
     },
     {
       "path": "doctor_original/bcFourier/0/k",
-      "role": "unknown",
-      "purpose": "function unknown: owner classification required",
-      "certainty": "unknown",
+      "role": "simulation_input",
+      "purpose": "OpenFOAM case field/dictionary input (content unvalidated)",
+      "certainty": "inferred",
       "blob": "08b774c25d29e155fa9cd77980438ea62d44624f"
     },
     {
       "path": "doctor_original/bcFourier/0/nut",
-      "role": "unknown",
-      "purpose": "function unknown: owner classification required",
-      "certainty": "unknown",
+      "role": "simulation_input",
+      "purpose": "OpenFOAM case field/dictionary input (content unvalidated)",
+      "certainty": "inferred",
       "blob": "0dd7283c08e35f90f7a5b60cf16e4dab88873895"
     },
     {
       "path": "doctor_original/bcFourier/0/omega",
-      "role": "unknown",
-      "purpose": "function unknown: owner classification required",
-      "certainty": "unknown",
+      "role": "simulation_input",
+      "purpose": "OpenFOAM case field/dictionary input (content unvalidated)",
+      "certainty": "inferred",
       "blob": "0391e584458352cefdf39d570dbbef758f6170e0"
     },
     {
       "path": "doctor_original/bcFourier/0/p",
-      "role": "unknown",
-      "purpose": "function unknown: owner classification required",
-      "certainty": "unknown",
+      "role": "simulation_input",
+      "purpose": "OpenFOAM case field/dictionary input (content unvalidated)",
+      "certainty": "inferred",
       "blob": "39c91f02b132d1c67e62d337e65099bcb81ce25f"
     },
     {
       "path": "doctor_original/bcFourier/0/p_rgh",
-      "role": "unknown",
-      "purpose": "function unknown: owner classification required",
-      "certainty": "unknown",
+      "role": "simulation_input",
+      "purpose": "OpenFOAM case field/dictionary input (content unvalidated)",
+      "certainty": "inferred",
       "blob": "46eb77a6084a356eafe73b150d8634e3b763188c"
     },
     {
       "path": "doctor_original/bcFourier/Allclean",
-      "role": "unknown",
-      "purpose": "function unknown: owner classification required",
-      "certainty": "unknown",
+      "role": "simulation_case_file",
+      "purpose": "OpenFOAM case-specific support artifact",
+      "certainty": "inferred",
       "blob": "6b45f82a41b0f9a0739a80a41a680be892e55243"
     },
     {
       "path": "doctor_original/bcFourier/Allrun",
-      "role": "unknown",
-      "purpose": "function unknown: owner classification required",
-      "certainty": "unknown",
+      "role": "simulation_case_file",
+      "purpose": "OpenFOAM case-specific support artifact",
+      "certainty": "inferred",
       "blob": "e42cba71995901fb3b8a833311d72d2531e04d76"
     },
     {
       "path": "doctor_original/bcFourier/constant/fvModels",
-      "role": "unknown",
-      "purpose": "function unknown: owner classification required",
-      "certainty": "unknown",
+      "role": "simulation_input",
+      "purpose": "OpenFOAM case field/dictionary input (content unvalidated)",
+      "certainty": "inferred",
       "blob": "c1dcf1e6632bb21e09920686618a2ca0cf27dee5"
     },
     {
       "path": "doctor_original/bcFourier/constant/g",
-      "role": "unknown",
-      "purpose": "function unknown: owner classification required",
-      "certainty": "unknown",
+      "role": "simulation_input",
+      "purpose": "OpenFOAM case field/dictionary input (content unvalidated)",
+      "certainty": "inferred",
       "blob": "e89d8a24f33e91f5cec8a2c13044deb578fbc3f0"
     },
     {
       "path": "doctor_original/bcFourier/constant/momentumTransport",
-      "role": "unknown",
-      "purpose": "function unknown: owner classification required",
-      "certainty": "unknown",
+      "role": "simulation_input",
+      "purpose": "OpenFOAM case field/dictionary input (content unvalidated)",
+      "certainty": "inferred",
       "blob": "c4ecce94efca9f2967378ade5a72aa17937c5b89"
     },
     {
       "path": "doctor_original/bcFourier/constant/pRef",
-      "role": "unknown",
-      "purpose": "function unknown: owner classification required",
-      "certainty": "unknown",
+      "role": "simulation_input",
+      "purpose": "OpenFOAM case field/dictionary input (content unvalidated)",
+      "certainty": "inferred",
       "blob": "c6679195c3928047a8b918a33f3891dc190ee441"
     },
     {
       "path": "doctor_original/bcFourier/constant/physicalProperties",
-      "role": "unknown",
-      "purpose": "function unknown: owner classification required",
-      "certainty": "unknown",
+      "role": "simulation_input",
+      "purpose": "OpenFOAM case field/dictionary input (content unvalidated)",
+      "certainty": "inferred",
       "blob": "92fe954f9164d3b98df1c2d7fa141fc93a437384"
     },
     {
       "path": "doctor_original/bcFourier/log.blockMesh",
-      "role": "unknown",
-      "purpose": "function unknown: owner classification required",
-      "certainty": "unknown",
+      "role": "simulation_log",
+      "purpose": "OpenFOAM solver/run log (not proof of run quality)",
+      "certainty": "inferred",
       "blob": "803ab57b02afa3756c2437f00b4ede5e7006dfa6"
     },
     {
       "path": "doctor_original/bcFourier/log.foamRun",
-      "role": "unknown",
-      "purpose": "function unknown: owner classification required",
-      "certainty": "unknown",
+      "role": "simulation_log",
+      "purpose": "OpenFOAM solver/run log (not proof of run quality)",
+      "certainty": "inferred",
       "blob": "413e4a8ef8805ce31a0963e3c4a45503c8d26344"
     },
     {
       "path": "doctor_original/bcFourier/postProcessing/temperatureProbe/0/T",
-      "role": "unknown",
-      "purpose": "function unknown: owner classification required",
-      "certainty": "unknown",
+      "role": "simulation_output",
+      "purpose": "OpenFOAM solution time/postProcessing artifact (content unvalidated)",
+      "certainty": "inferred",
       "blob": "d3a1cab1ffead409fe5bbda341f1b454d16d293f"
     },
     {
       "path": "doctor_original/bcFourier/system/blockMeshDict",
-      "role": "unknown",
-      "purpose": "function unknown: owner classification required",
-      "certainty": "unknown",
+      "role": "simulation_input",
+      "purpose": "OpenFOAM case field/dictionary input (content unvalidated)",
+      "certainty": "inferred",
       "blob": "744ea447efcaa1da04cf16979884538b51e7041a"
     },
     {
       "path": "doctor_original/bcFourier/system/controlDict",
-      "role": "unknown",
-      "purpose": "function unknown: owner classification required",
-      "certainty": "unknown",
+      "role": "simulation_input",
+      "purpose": "OpenFOAM case field/dictionary input (content unvalidated)",
+      "certainty": "inferred",
       "blob": "6737c41d1e3c2b4b9a14021551c8284197c849d3"
     },
     {
       "path": "doctor_original/bcFourier/system/functions",
-      "role": "unknown",
-      "purpose": "function unknown: owner classification required",
-      "certainty": "unknown",
+      "role": "simulation_input",
+      "purpose": "OpenFOAM case field/dictionary input (content unvalidated)",
+      "certainty": "inferred",
       "blob": "fadac263ed4e95bb663f48b95a908c236dd4d24f"
     },
     {
       "path": "doctor_original/bcFourier/system/fvSchemes",
-      "role": "unknown",
-      "purpose": "function unknown: owner classification required",
-      "certainty": "unknown",
+      "role": "simulation_input",
+      "purpose": "OpenFOAM case field/dictionary input (content unvalidated)",
+      "certainty": "inferred",
       "blob": "463efd7dd1ee41e9b43419b5ca8c44ee946d993e"
     },
     {
       "path": "doctor_original/bcFourier/system/fvSolution",
-      "role": "unknown",
-      "purpose": "function unknown: owner classification required",
-      "certainty": "unknown",
+      "role": "simulation_input",
+      "purpose": "OpenFOAM case field/dictionary input (content unvalidated)",
+      "certainty": "inferred",
       "blob": "3aeef30bbf040ca1275c42a5e8baf0cc57052117"
     },
     {
       "path": "doctor_original/cht/0/metal/T",
-      "role": "unknown",
-      "purpose": "function unknown: owner classification required",
-      "certainty": "unknown",
+      "role": "simulation_input",
+      "purpose": "OpenFOAM case field/dictionary input (content unvalidated)",
+      "certainty": "inferred",
       "blob": "e5f72e4840370aafa2b7d96adf48e5667b4ceed7"
     },
     {
       "path": "doctor_original/cht/0/metal/U",
-      "role": "unknown",
-      "purpose": "function unknown: owner classification required",
-      "certainty": "unknown",
+      "role": "simulation_input",
+      "purpose": "OpenFOAM case field/dictionary input (content unvalidated)",
+      "certainty": "inferred",
       "blob": "a182ca433616543015003c5f8daa1e1300ca9cd8"
     },
     {
       "path": "doctor_original/cht/0/metal/alphat",
-      "role": "unknown",
-      "purpose": "function unknown: owner classification required",
-      "certainty": "unknown",
+      "role": "simulation_input",
+      "purpose": "OpenFOAM case field/dictionary input (content unvalidated)",
+      "certainty": "inferred",
       "blob": "ec62907ae0727924669c6f4b80d319a1f518915a"
     },
     {
       "path": "doctor_original/cht/0/metal/epsilon",
-      "role": "unknown",
-      "purpose": "function unknown: owner classification required",
-      "certainty": "unknown",
+      "role": "simulation_input",
+      "purpose": "OpenFOAM case field/dictionary input (content unvalidated)",
+      "certainty": "inferred",
       "blob": "1866001d465378459d7cec67fa4349dcb7c3f8a0"
     },
     {
       "path": "doctor_original/cht/0/metal/k",
-      "role": "unknown",
-      "purpose": "function unknown: owner classification required",
-      "certainty": "unknown",
+      "role": "simulation_input",
+      "purpose": "OpenFOAM case field/dictionary input (content unvalidated)",
+      "certainty": "inferred",
       "blob": "35b6d4b3e851b97d50be0ff82f21d5e6517e99bf"
     },
     {
       "path": "doctor_original/cht/0/metal/nut",
-      "role": "unknown",
-      "purpose": "function unknown: owner classification required",
-      "certainty": "unknown",
+      "role": "simulation_input",
+      "purpose": "OpenFOAM case field/dictionary input (content unvalidated)",
+      "certainty": "inferred",
       "blob": "b30add1213b5f356a0487c0ec78da35a6a4ba51b"
     },
     {
       "path": "doctor_original/cht/0/metal/omega",
-      "role": "unknown",
-      "purpose": "function unknown: owner classification required",
-      "certainty": "unknown",
+      "role": "simulation_input",
+      "purpose": "OpenFOAM case field/dictionary input (content unvalidated)",
+      "certainty": "inferred",
       "blob": "6b170e99623bb97db09465a45dc077bdf3ec6976"
     },
     {
       "path": "doctor_original/cht/0/metal/p",
-      "role": "unknown",
-      "purpose": "function unknown: owner classification required",
-      "certainty": "unknown",
+      "role": "simulation_input",
+      "purpose": "OpenFOAM case field/dictionary input (content unvalidated)",
+      "certainty": "inferred",
       "blob": "99ece21ffc3541b58546e0cd896e440c1129d238"
     },
     {
       "path": "doctor_original/cht/0/metal/p_rgh",
-      "role": "unknown",
-      "purpose": "function unknown: owner classification required",
-      "certainty": "unknown",
+      "role": "simulation_input",
+      "purpose": "OpenFOAM case field/dictionary input (content unvalidated)",
+      "certainty": "inferred",
       "blob": "9a936ffe6a3fa5afcfef429903146f2233cd1d5f"
     },
     {
       "path": "doctor_original/cht/0/mold/T",
-      "role": "unknown",
-      "purpose": "function unknown: owner classification required",
-      "certainty": "unknown",
+      "role": "simulation_input",
+      "purpose": "OpenFOAM case field/dictionary input (content unvalidated)",
+      "certainty": "inferred",
       "blob": "abb25bb28b51bad6ba7b882cd1f206b61ab3e94a"
     },
     {
       "path": "doctor_original/cht/Allclean",
-      "role": "unknown",
-      "purpose": "function unknown: owner classification required",
-      "certainty": "unknown",
+      "role": "simulation_case_file",
+      "purpose": "OpenFOAM case-specific support artifact",
+      "certainty": "inferred",
       "blob": "6b45f82a41b0f9a0739a80a41a680be892e55243"
     },
     {
       "path": "doctor_original/cht/Allrun",
-      "role": "unknown",
-      "purpose": "function unknown: owner classification required",
-      "certainty": "unknown",
+      "role": "simulation_case_file",
+      "purpose": "OpenFOAM case-specific support artifact",
+      "certainty": "inferred",
       "blob": "8639dacb4ab44338d4bf3363d0830702988d1b72"
     },
     {
       "path": "doctor_original/cht/constant/metal/fvModels",
-      "role": "unknown",
-      "purpose": "function unknown: owner classification required",
-      "certainty": "unknown",
+      "role": "simulation_input",
+      "purpose": "OpenFOAM case field/dictionary input (content unvalidated)",
+      "certainty": "inferred",
       "blob": "2f5ffc4791ef6c40be2936e7cc400bcf7df6ee83"
     },
     {
       "path": "doctor_original/cht/constant/metal/g",
-      "role": "unknown",
-      "purpose": "function unknown: owner classification required",
-      "certainty": "unknown",
+      "role": "simulation_input",
+      "purpose": "OpenFOAM case field/dictionary input (content unvalidated)",
+      "certainty": "inferred",
       "blob": "e89d8a24f33e91f5cec8a2c13044deb578fbc3f0"
     },
     {
       "path": "doctor_original/cht/constant/metal/materials/castIron",
-      "role": "unknown",
-      "purpose": "function unknown: owner classification required",
-      "certainty": "unknown",
+      "role": "simulation_input",
+      "purpose": "OpenFOAM case field/dictionary input (content unvalidated)",
+      "certainty": "inferred",
       "blob": "92fe954f9164d3b98df1c2d7fa141fc93a437384"
     },
     {
       "path": "doctor_original/cht/constant/metal/momentumTransport",
-      "role": "unknown",
-      "purpose": "function unknown: owner classification required",
-      "certainty": "unknown",
+      "role": "simulation_input",
+      "purpose": "OpenFOAM case field/dictionary input (content unvalidated)",
+      "certainty": "inferred",
       "blob": "1709fb43f0843eb014262b8cb9609f8a44b71768"
     },
     {
       "path": "doctor_original/cht/constant/metal/pRef",
-      "role": "unknown",
-      "purpose": "function unknown: owner classification required",
-      "certainty": "unknown",
+      "role": "simulation_input",
+      "purpose": "OpenFOAM case field/dictionary input (content unvalidated)",
+      "certainty": "inferred",
       "blob": "c6679195c3928047a8b918a33f3891dc190ee441"
     },
     {
       "path": "doctor_original/cht/constant/metal/physicalProperties",
-      "role": "unknown",
-      "purpose": "function unknown: owner classification required",
-      "certainty": "unknown",
+      "role": "simulation_input",
+      "purpose": "OpenFOAM case field/dictionary input (content unvalidated)",
+      "certainty": "inferred",
       "blob": "66b9a315dcb7aec47e0e94ecb573a44fc35bde5d"
     },
     {
       "path": "doctor_original/cht/constant/mold/materials/silica",
-      "role": "unknown",
-      "purpose": "function unknown: owner classification required",
-      "certainty": "unknown",
+      "role": "simulation_input",
+      "purpose": "OpenFOAM case field/dictionary input (content unvalidated)",
+      "certainty": "inferred",
       "blob": "88bf5ed5e00818b5b6eb8a986f8390ad66cab19b"
     },
     {
       "path": "doctor_original/cht/constant/mold/materials/steel4140",
-      "role": "unknown",
-      "purpose": "function unknown: owner classification required",
-      "certainty": "unknown",
+      "role": "simulation_input",
+      "purpose": "OpenFOAM case field/dictionary input (content unvalidated)",
+      "certainty": "inferred",
       "blob": "4f3255f3fe93c969fda344e092011b14765396bd"
     },
     {
       "path": "doctor_original/cht/constant/mold/materials/steel4140cons",
-      "role": "unknown",
-      "purpose": "function unknown: owner classification required",
-      "certainty": "unknown",
+      "role": "simulation_input",
+      "purpose": "OpenFOAM case field/dictionary input (content unvalidated)",
+      "certainty": "inferred",
       "blob": "8c87c0b9a740b394e883145a8f25b675489d23d7"
     },
     {
       "path": "doctor_original/cht/constant/mold/physicalProperties",
-      "role": "unknown",
-      "purpose": "function unknown: owner classification required",
-      "certainty": "unknown",
+      "role": "simulation_input",
+      "purpose": "OpenFOAM case field/dictionary input (content unvalidated)",
+      "certainty": "inferred",
       "blob": "68099a774c8345e493b13118cbcedb34ecad903a"
     },
     {
       "path": "doctor_original/cht/log.blockMesh",
-      "role": "unknown",
-      "purpose": "function unknown: owner classification required",
-      "certainty": "unknown",
+      "role": "simulation_log",
+      "purpose": "OpenFOAM solver/run log (not proof of run quality)",
+      "certainty": "inferred",
       "blob": "76b86d48068c65f0382ac9b4f2b8c632569fd0d2"
     },
     {
       "path": "doctor_original/cht/log.createZones",
-      "role": "unknown",
-      "purpose": "function unknown: owner classification required",
-      "certainty": "unknown",
+      "role": "simulation_log",
+      "purpose": "OpenFOAM solver/run log (not proof of run quality)",
+      "certainty": "inferred",
       "blob": "acf926f6a23ebea192d3b6de7a96b0385ce099f2"
     },
     {
       "path": "doctor_original/cht/log.foamMultiRun",
-      "role": "unknown",
-      "purpose": "function unknown: owner classification required",
-      "certainty": "unknown",
+      "role": "simulation_log",
+      "purpose": "OpenFOAM solver/run log (not proof of run quality)",
+      "certainty": "inferred",
       "blob": "70c44aa4c39b676e081cf875cbd00e8d73f0e3ba"
     },
     {
       "path": "doctor_original/cht/log.splitMeshRegions",
-      "role": "unknown",
-      "purpose": "function unknown: owner classification required",
-      "certainty": "unknown",
+      "role": "simulation_log",
+      "purpose": "OpenFOAM solver/run log (not proof of run quality)",
+      "certainty": "inferred",
       "blob": "03c743a0676225691196dde951e6c7445f0dd482"
     },
     {
       "path": "doctor_original/cht/postProcessing/metal/temperatureProbe/0/T",
-      "role": "unknown",
-      "purpose": "function unknown: owner classification required",
-      "certainty": "unknown",
+      "role": "simulation_output",
+      "purpose": "OpenFOAM solution time/postProcessing artifact (content unvalidated)",
+      "certainty": "inferred",
       "blob": "c2714957551372926640cb670e188fcf8e6a3dca"
     },
     {
       "path": "doctor_original/cht/system/blockMeshDict",
-      "role": "unknown",
-      "purpose": "function unknown: owner classification required",
-      "certainty": "unknown",
+      "role": "simulation_input",
+      "purpose": "OpenFOAM case field/dictionary input (content unvalidated)",
+      "certainty": "inferred",
       "blob": "b858274caf67756b097f726b8ff956a5a9362287"
     },
     {
       "path": "doctor_original/cht/system/controlDict",
-      "role": "unknown",
-      "purpose": "function unknown: owner classification required",
-      "certainty": "unknown",
+      "role": "simulation_input",
+      "purpose": "OpenFOAM case field/dictionary input (content unvalidated)",
+      "certainty": "inferred",
       "blob": "3afafeb891d3afddda3586366434191a92a6afc7"
     },
     {
       "path": "doctor_original/cht/system/createZonesDict",
-      "role": "unknown",
-      "purpose": "function unknown: owner classification required",
-      "certainty": "unknown",
+      "role": "simulation_input",
+      "purpose": "OpenFOAM case field/dictionary input (content unvalidated)",
+      "certainty": "inferred",
       "blob": "5e12eafcd76cf7334f16e5b76959d4f31595287b"
     },
     {
       "path": "doctor_original/cht/system/functions",
-      "role": "unknown",
-      "purpose": "function unknown: owner classification required",
-      "certainty": "unknown",
+      "role": "simulation_input",
+      "purpose": "OpenFOAM case field/dictionary input (content unvalidated)",
+      "certainty": "inferred",
       "blob": "f231176f6a481bdad2933301f55d58a297c3d205"
     },
     {
       "path": "doctor_original/cht/system/fvSolution",
-      "role": "unknown",
-      "purpose": "function unknown: owner classification required",
-      "certainty": "unknown",
+      "role": "simulation_input",
+      "purpose": "OpenFOAM case field/dictionary input (content unvalidated)",
+      "certainty": "inferred",
       "blob": "fe34f8fe74e246c02d7616f7f3abfb7170ae02ca"
     },
     {
       "path": "doctor_original/cht/system/metal/fvSchemes",
-      "role": "unknown",
-      "purpose": "function unknown: owner classification required",
-      "certainty": "unknown",
+      "role": "simulation_input",
+      "purpose": "OpenFOAM case field/dictionary input (content unvalidated)",
+      "certainty": "inferred",
       "blob": "463efd7dd1ee41e9b43419b5ca8c44ee946d993e"
     },
     {
       "path": "doctor_original/cht/system/metal/fvSolution",
-      "role": "unknown",
-      "purpose": "function unknown: owner classification required",
-      "certainty": "unknown",
+      "role": "simulation_input",
+      "purpose": "OpenFOAM case field/dictionary input (content unvalidated)",
+      "certainty": "inferred",
       "blob": "3aeef30bbf040ca1275c42a5e8baf0cc57052117"
     },
     {
       "path": "doctor_original/cht/system/mold/fvSchemes",
-      "role": "unknown",
-      "purpose": "function unknown: owner classification required",
-      "certainty": "unknown",
+      "role": "simulation_input",
+      "purpose": "OpenFOAM case field/dictionary input (content unvalidated)",
+      "certainty": "inferred",
       "blob": "1ed69885aa4c8ebbee5acd3a5d825b030dd85c32"
     },
     {
       "path": "doctor_original/cht/system/mold/fvSolution",
-      "role": "unknown",
-      "purpose": "function unknown: owner classification required",
-      "certainty": "unknown",
+      "role": "simulation_input",
+      "purpose": "OpenFOAM case field/dictionary input (content unvalidated)",
+      "certainty": "inferred",
       "blob": "d0988a194b8e5222b9c3ba13cdb943d34c2dabb7"
     },
     {
       "path": "freesurface/FS-C01/0/T",
-      "role": "unknown",
-      "purpose": "function unknown: owner classification required",
-      "certainty": "unknown",
+      "role": "simulation_input",
+      "purpose": "OpenFOAM case field/dictionary input (content unvalidated)",
+      "certainty": "inferred",
       "blob": "afce5f4d767d492d7851fbb9445e54a5f6020db7"
     },
     {
       "path": "freesurface/FS-C01/0/U",
-      "role": "unknown",
-      "purpose": "function unknown: owner classification required",
-      "certainty": "unknown",
+      "role": "simulation_input",
+      "purpose": "OpenFOAM case field/dictionary input (content unvalidated)",
+      "certainty": "inferred",
       "blob": "73589d90ec3818cc6a9c3266bb0b5e0891ac523a"
     },
     {
       "path": "freesurface/FS-C01/0/alpha.water",
-      "role": "unknown",
-      "purpose": "function unknown: owner classification required",
-      "certainty": "unknown",
+      "role": "simulation_input",
+      "purpose": "OpenFOAM case field/dictionary input (content unvalidated)",
+      "certainty": "inferred",
       "blob": "4609cdb05860463e208fe5cb57b8dfe4fdbde66e"
     },
     {
       "path": "freesurface/FS-C01/0/epsilon",
-      "role": "unknown",
-      "purpose": "function unknown: owner classification required",
-      "certainty": "unknown",
+      "role": "simulation_input",
+      "purpose": "OpenFOAM case field/dictionary input (content unvalidated)",
+      "certainty": "inferred",
       "blob": "3ab07c7b77cebbba1f5b03570c86818fa64f422b"
     },
     {
       "path": "freesurface/FS-C01/0/k",
-      "role": "unknown",
-      "purpose": "function unknown: owner classification required",
-      "certainty": "unknown",
+      "role": "simulation_input",
+      "purpose": "OpenFOAM case field/dictionary input (content unvalidated)",
+      "certainty": "inferred",
       "blob": "2d1ab57c272cd55cd4f288f0cba7d032299e2e15"
     },
     {
       "path": "freesurface/FS-C01/0/nuTilda",
-      "role": "unknown",
-      "purpose": "function unknown: owner classification required",
-      "certainty": "unknown",
+      "role": "simulation_input",
+      "purpose": "OpenFOAM case field/dictionary input (content unvalidated)",
+      "certainty": "inferred",
       "blob": "2bca568aba34edba50678beb35fb73d474eff5ad"
     },
     {
       "path": "freesurface/FS-C01/0/nut",
-      "role": "unknown",
-      "purpose": "function unknown: owner classification required",
-      "certainty": "unknown",
+      "role": "simulation_input",
+      "purpose": "OpenFOAM case field/dictionary input (content unvalidated)",
+      "certainty": "inferred",
       "blob": "f0ace1bc31f3cd8ef30029f36a12c57b528911bd"
     },
     {
       "path": "freesurface/FS-C01/0/omega",
-      "role": "unknown",
-      "purpose": "function unknown: owner classification required",
-      "certainty": "unknown",
+      "role": "simulation_input",
+      "purpose": "OpenFOAM case field/dictionary input (content unvalidated)",
+      "certainty": "inferred",
       "blob": "e41b87115baa38613c9e43a4c29181f5eb7e1e70"
     },
     {
       "path": "freesurface/FS-C01/0/p",
-      "role": "unknown",
-      "purpose": "function unknown: owner classification required",
-      "certainty": "unknown",
+      "role": "simulation_input",
+      "purpose": "OpenFOAM case field/dictionary input (content unvalidated)",
+      "certainty": "inferred",
       "blob": "41ff5e6ff08add9bc177ea3c9401556cc2c4577f"
     },
     {
       "path": "freesurface/FS-C01/0/p_rgh",
-      "role": "unknown",
-      "purpose": "function unknown: owner classification required",
-      "certainty": "unknown",
+      "role": "simulation_input",
+      "purpose": "OpenFOAM case field/dictionary input (content unvalidated)",
+      "certainty": "inferred",
       "blob": "4cd28590bed601d5d82e44f9d272f1bde0e909bd"
     },
     {
@@ -271216,72 +271214,72 @@
     },
     {
       "path": "freesurface/FS-C01/constant/fvModels",
-      "role": "unknown",
-      "purpose": "function unknown: owner classification required",
-      "certainty": "unknown",
+      "role": "simulation_input",
+      "purpose": "OpenFOAM case field/dictionary input (content unvalidated)",
+      "certainty": "inferred",
       "blob": "ad38f13820bb94650b416fcf80a9ca826b169cdd"
     },
     {
       "path": "freesurface/FS-C01/constant/g",
-      "role": "unknown",
-      "purpose": "function unknown: owner classification required",
-      "certainty": "unknown",
+      "role": "simulation_input",
+      "purpose": "OpenFOAM case field/dictionary input (content unvalidated)",
+      "certainty": "inferred",
       "blob": "9761a18d72d363b03b2ff36ec94294ad71f7ec0a"
     },
     {
       "path": "freesurface/FS-C01/constant/momentumTransport",
-      "role": "unknown",
-      "purpose": "function unknown: owner classification required",
-      "certainty": "unknown",
+      "role": "simulation_input",
+      "purpose": "OpenFOAM case field/dictionary input (content unvalidated)",
+      "certainty": "inferred",
       "blob": "95c12a24714883e7a9024129b5922182f3119027"
     },
     {
       "path": "freesurface/FS-C01/constant/phaseProperties",
-      "role": "unknown",
-      "purpose": "function unknown: owner classification required",
-      "certainty": "unknown",
+      "role": "simulation_input",
+      "purpose": "OpenFOAM case field/dictionary input (content unvalidated)",
+      "certainty": "inferred",
       "blob": "bd9fd1ef999e8d95e795b479b6c3e4301b68d577"
     },
     {
       "path": "freesurface/FS-C01/constant/physicalProperties.air",
-      "role": "unknown",
-      "purpose": "function unknown: owner classification required",
-      "certainty": "unknown",
+      "role": "simulation_input",
+      "purpose": "OpenFOAM case field/dictionary input (content unvalidated)",
+      "certainty": "inferred",
       "blob": "fab25176dbb818d438b9b83d3c50bd121449dc63"
     },
     {
       "path": "freesurface/FS-C01/constant/physicalProperties.water",
-      "role": "unknown",
-      "purpose": "function unknown: owner classification required",
-      "certainty": "unknown",
+      "role": "simulation_input",
+      "purpose": "OpenFOAM case field/dictionary input (content unvalidated)",
+      "certainty": "inferred",
       "blob": "73c3f00d591888e317f432b7a8fbc68dcc4363d5"
     },
     {
       "path": "freesurface/FS-C01/system/blockMeshDict",
-      "role": "unknown",
-      "purpose": "function unknown: owner classification required",
-      "certainty": "unknown",
+      "role": "simulation_input",
+      "purpose": "OpenFOAM case field/dictionary input (content unvalidated)",
+      "certainty": "inferred",
       "blob": "6cdb4edd24e4b3bc4b6f5eb6d9fb22d3473d9fb4"
     },
     {
       "path": "freesurface/FS-C01/system/controlDict",
-      "role": "unknown",
-      "purpose": "function unknown: owner classification required",
-      "certainty": "unknown",
+      "role": "simulation_input",
+      "purpose": "OpenFOAM case field/dictionary input (content unvalidated)",
+      "certainty": "inferred",
       "blob": "b8667f688d36a60d3c125b64112cc1dea61bdb73"
     },
     {
       "path": "freesurface/FS-C01/system/fvSchemes",
-      "role": "unknown",
-      "purpose": "function unknown: owner classification required",
-      "certainty": "unknown",
+      "role": "simulation_input",
+      "purpose": "OpenFOAM case field/dictionary input (content unvalidated)",
+      "certainty": "inferred",
       "blob": "42af3f5640e9d54f600ad214b7a7209056f676ae"
     },
     {
       "path": "freesurface/FS-C01/system/fvSolution",
-      "role": "unknown",
-      "purpose": "function unknown: owner classification required",
-      "certainty": "unknown",
+      "role": "simulation_input",
+      "purpose": "OpenFOAM case field/dictionary input (content unvalidated)",
+      "certainty": "inferred",
       "blob": "6fbef510ed0c7ff1382921e39ac498bf69fbeff9"
     },
     {
@@ -271317,14 +271315,14 @@
       "role": "source",
       "purpose": "code/test implementation",
       "certainty": "rule",
-      "blob": "3f704fa24a27aa107914d85b772b32227ffd82fa"
+      "blob": "5233e1e0466ce9bf333e24177d66e21b7d8fef84"
     },
     {
       "path": "tools/test_repository_file_auditor.py",
       "role": "test",
       "purpose": "code/test implementation",
       "certainty": "rule",
-      "blob": "ebac5d9cfe86ff3c1e94b96468027a6578d1d708"
+      "blob": "de43a587db0cf63a8dbe1045e00a81704b4a0d75"
     }
   ],
   "findings": [
@@ -271353,1041 +271351,6 @@
       "path": "cases_controlled_buoyancy/C11_energy2_test/CASE_VARIANT.md",
       "observation": "Identical tracked text: cases_controlled_buoyancy/C11_energy2_test/CASE_VARIANT.md, cases_controlled_buoyancy/C11_topFixedFlux_airGapOF14/CASE_VARIANT.md",
       "recommendation": "Confirm aliases or translated/historical copies before consolidation",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "921b247eab730699",
-      "code": "UNKNOWN_PURPOSE",
-      "severity": "review",
-      "path": "cleanproy/0/metal/T",
-      "observation": "No reliable purpose category from path",
-      "recommendation": "Declare role after reviewing usage",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "f18afb9ccc23c764",
-      "code": "UNKNOWN_PURPOSE",
-      "severity": "review",
-      "path": "cleanproy/0/metal/U",
-      "observation": "No reliable purpose category from path",
-      "recommendation": "Declare role after reviewing usage",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "cf16c3f9efd56671",
-      "code": "UNKNOWN_PURPOSE",
-      "severity": "review",
-      "path": "cleanproy/0/metal/alphat",
-      "observation": "No reliable purpose category from path",
-      "recommendation": "Declare role after reviewing usage",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "b1952aebd02e69be",
-      "code": "UNKNOWN_PURPOSE",
-      "severity": "review",
-      "path": "cleanproy/0/metal/epsilon",
-      "observation": "No reliable purpose category from path",
-      "recommendation": "Declare role after reviewing usage",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "8ee17050c3045323",
-      "code": "UNKNOWN_PURPOSE",
-      "severity": "review",
-      "path": "cleanproy/0/metal/k",
-      "observation": "No reliable purpose category from path",
-      "recommendation": "Declare role after reviewing usage",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "4b507afe4eaf7257",
-      "code": "UNKNOWN_PURPOSE",
-      "severity": "review",
-      "path": "cleanproy/0/metal/nut",
-      "observation": "No reliable purpose category from path",
-      "recommendation": "Declare role after reviewing usage",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "c9729d76539bd278",
-      "code": "UNKNOWN_PURPOSE",
-      "severity": "review",
-      "path": "cleanproy/0/metal/omega",
-      "observation": "No reliable purpose category from path",
-      "recommendation": "Declare role after reviewing usage",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "849b1a5c94c07491",
-      "code": "UNKNOWN_PURPOSE",
-      "severity": "review",
-      "path": "cleanproy/0/metal/p",
-      "observation": "No reliable purpose category from path",
-      "recommendation": "Declare role after reviewing usage",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "523e7215813b455d",
-      "code": "UNKNOWN_PURPOSE",
-      "severity": "review",
-      "path": "cleanproy/0/metal/p_rgh",
-      "observation": "No reliable purpose category from path",
-      "recommendation": "Declare role after reviewing usage",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "d93274b8690f4a8e",
-      "code": "UNKNOWN_PURPOSE",
-      "severity": "review",
-      "path": "cleanproy/0/mold/T",
-      "observation": "No reliable purpose category from path",
-      "recommendation": "Declare role after reviewing usage",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "df43a560d552cc10",
-      "code": "UNKNOWN_PURPOSE",
-      "severity": "review",
-      "path": "cleanproy/Allclean",
-      "observation": "No reliable purpose category from path",
-      "recommendation": "Declare role after reviewing usage",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "5287113aa822695e",
-      "code": "UNKNOWN_PURPOSE",
-      "severity": "review",
-      "path": "cleanproy/Allrun",
-      "observation": "No reliable purpose category from path",
-      "recommendation": "Declare role after reviewing usage",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "52fc79735d0be78e",
-      "code": "UNKNOWN_PURPOSE",
-      "severity": "review",
-      "path": "cleanproy/constant/metal/fvModels",
-      "observation": "No reliable purpose category from path",
-      "recommendation": "Declare role after reviewing usage",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "6a1569123ea74e15",
-      "code": "UNKNOWN_PURPOSE",
-      "severity": "review",
-      "path": "cleanproy/constant/metal/g",
-      "observation": "No reliable purpose category from path",
-      "recommendation": "Declare role after reviewing usage",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "44bbbb66606fd2a3",
-      "code": "UNKNOWN_PURPOSE",
-      "severity": "review",
-      "path": "cleanproy/constant/metal/materials/castIron",
-      "observation": "No reliable purpose category from path",
-      "recommendation": "Declare role after reviewing usage",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "a3212cf3b9cb7f64",
-      "code": "UNKNOWN_PURPOSE",
-      "severity": "review",
-      "path": "cleanproy/constant/metal/momentumTransport",
-      "observation": "No reliable purpose category from path",
-      "recommendation": "Declare role after reviewing usage",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "fbaf39d61109140f",
-      "code": "UNKNOWN_PURPOSE",
-      "severity": "review",
-      "path": "cleanproy/constant/metal/pRef",
-      "observation": "No reliable purpose category from path",
-      "recommendation": "Declare role after reviewing usage",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "1f71e430d6556ff7",
-      "code": "UNKNOWN_PURPOSE",
-      "severity": "review",
-      "path": "cleanproy/constant/metal/physicalProperties",
-      "observation": "No reliable purpose category from path",
-      "recommendation": "Declare role after reviewing usage",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "467fa6716b15375d",
-      "code": "UNKNOWN_PURPOSE",
-      "severity": "review",
-      "path": "cleanproy/constant/mold/materials/silica",
-      "observation": "No reliable purpose category from path",
-      "recommendation": "Declare role after reviewing usage",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "35af006cd3957e7e",
-      "code": "UNKNOWN_PURPOSE",
-      "severity": "review",
-      "path": "cleanproy/constant/mold/materials/steel4140",
-      "observation": "No reliable purpose category from path",
-      "recommendation": "Declare role after reviewing usage",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "9678332df06fa8a4",
-      "code": "UNKNOWN_PURPOSE",
-      "severity": "review",
-      "path": "cleanproy/constant/mold/materials/steel4140cons",
-      "observation": "No reliable purpose category from path",
-      "recommendation": "Declare role after reviewing usage",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "670f21187797446d",
-      "code": "UNKNOWN_PURPOSE",
-      "severity": "review",
-      "path": "cleanproy/constant/mold/physicalProperties",
-      "observation": "No reliable purpose category from path",
-      "recommendation": "Declare role after reviewing usage",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "24d9a48fd2e1e4ed",
-      "code": "UNKNOWN_PURPOSE",
-      "severity": "review",
-      "path": "cleanproy/log.blockMesh",
-      "observation": "No reliable purpose category from path",
-      "recommendation": "Declare role after reviewing usage",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "31a64527bbeaf0ef",
-      "code": "UNKNOWN_PURPOSE",
-      "severity": "review",
-      "path": "cleanproy/log.foamMultiRun",
-      "observation": "No reliable purpose category from path",
-      "recommendation": "Declare role after reviewing usage",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "4681a233e9142909",
-      "code": "UNKNOWN_PURPOSE",
-      "severity": "review",
-      "path": "cleanproy/log.splitMeshRegions",
-      "observation": "No reliable purpose category from path",
-      "recommendation": "Declare role after reviewing usage",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "6cae9712e31c8aa6",
-      "code": "UNKNOWN_PURPOSE",
-      "severity": "review",
-      "path": "cleanproy/postProcessing/metal/temperatureProbe/0/T",
-      "observation": "No reliable purpose category from path",
-      "recommendation": "Declare role after reviewing usage",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "baad0d6508674a67",
-      "code": "UNKNOWN_PURPOSE",
-      "severity": "review",
-      "path": "cleanproy/system/blockMeshDict",
-      "observation": "No reliable purpose category from path",
-      "recommendation": "Declare role after reviewing usage",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "17819d17b8e6c9be",
-      "code": "UNKNOWN_PURPOSE",
-      "severity": "review",
-      "path": "cleanproy/system/controlDict",
-      "observation": "No reliable purpose category from path",
-      "recommendation": "Declare role after reviewing usage",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "2024fa94ded7a5fd",
-      "code": "UNKNOWN_PURPOSE",
-      "severity": "review",
-      "path": "cleanproy/system/createZonesDict",
-      "observation": "No reliable purpose category from path",
-      "recommendation": "Declare role after reviewing usage",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "cd8fca6c9155f36b",
-      "code": "UNKNOWN_PURPOSE",
-      "severity": "review",
-      "path": "cleanproy/system/functions",
-      "observation": "No reliable purpose category from path",
-      "recommendation": "Declare role after reviewing usage",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "d14c3d16afc557ca",
-      "code": "UNKNOWN_PURPOSE",
-      "severity": "review",
-      "path": "cleanproy/system/fvSolution",
-      "observation": "No reliable purpose category from path",
-      "recommendation": "Declare role after reviewing usage",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "71ace997964ed29c",
-      "code": "UNKNOWN_PURPOSE",
-      "severity": "review",
-      "path": "cleanproy/system/metal/fvSchemes",
-      "observation": "No reliable purpose category from path",
-      "recommendation": "Declare role after reviewing usage",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "aef34948c2cecc18",
-      "code": "UNKNOWN_PURPOSE",
-      "severity": "review",
-      "path": "cleanproy/system/metal/fvSolution",
-      "observation": "No reliable purpose category from path",
-      "recommendation": "Declare role after reviewing usage",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "955e83ad50bcda5e",
-      "code": "UNKNOWN_PURPOSE",
-      "severity": "review",
-      "path": "cleanproy/system/mold/fvSchemes",
-      "observation": "No reliable purpose category from path",
-      "recommendation": "Declare role after reviewing usage",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "37593339720d15ed",
-      "code": "UNKNOWN_PURPOSE",
-      "severity": "review",
-      "path": "cleanproy/system/mold/fvSolution",
-      "observation": "No reliable purpose category from path",
-      "recommendation": "Declare role after reviewing usage",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "06784237364bc4e5",
-      "code": "UNKNOWN_PURPOSE",
-      "severity": "review",
-      "path": "doctor_original/bcFourier/0/T",
-      "observation": "No reliable purpose category from path",
-      "recommendation": "Declare role after reviewing usage",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "fd1147a65908afa5",
-      "code": "UNKNOWN_PURPOSE",
-      "severity": "review",
-      "path": "doctor_original/bcFourier/0/U",
-      "observation": "No reliable purpose category from path",
-      "recommendation": "Declare role after reviewing usage",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "3fe7a286800ad6f1",
-      "code": "UNKNOWN_PURPOSE",
-      "severity": "review",
-      "path": "doctor_original/bcFourier/0/alphat",
-      "observation": "No reliable purpose category from path",
-      "recommendation": "Declare role after reviewing usage",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "311cf45c5f5da4ec",
-      "code": "UNKNOWN_PURPOSE",
-      "severity": "review",
-      "path": "doctor_original/bcFourier/0/epsilon",
-      "observation": "No reliable purpose category from path",
-      "recommendation": "Declare role after reviewing usage",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "2224c04bf351a7ef",
-      "code": "UNKNOWN_PURPOSE",
-      "severity": "review",
-      "path": "doctor_original/bcFourier/0/k",
-      "observation": "No reliable purpose category from path",
-      "recommendation": "Declare role after reviewing usage",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "8a7c60733fe222e9",
-      "code": "UNKNOWN_PURPOSE",
-      "severity": "review",
-      "path": "doctor_original/bcFourier/0/nut",
-      "observation": "No reliable purpose category from path",
-      "recommendation": "Declare role after reviewing usage",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "06c3489412bbc945",
-      "code": "UNKNOWN_PURPOSE",
-      "severity": "review",
-      "path": "doctor_original/bcFourier/0/omega",
-      "observation": "No reliable purpose category from path",
-      "recommendation": "Declare role after reviewing usage",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "ef306999c1253008",
-      "code": "UNKNOWN_PURPOSE",
-      "severity": "review",
-      "path": "doctor_original/bcFourier/0/p",
-      "observation": "No reliable purpose category from path",
-      "recommendation": "Declare role after reviewing usage",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "aee1c29877d63686",
-      "code": "UNKNOWN_PURPOSE",
-      "severity": "review",
-      "path": "doctor_original/bcFourier/0/p_rgh",
-      "observation": "No reliable purpose category from path",
-      "recommendation": "Declare role after reviewing usage",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "4333fabb9a271563",
-      "code": "UNKNOWN_PURPOSE",
-      "severity": "review",
-      "path": "doctor_original/bcFourier/Allclean",
-      "observation": "No reliable purpose category from path",
-      "recommendation": "Declare role after reviewing usage",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "4d4288ee18f5c448",
-      "code": "UNKNOWN_PURPOSE",
-      "severity": "review",
-      "path": "doctor_original/bcFourier/Allrun",
-      "observation": "No reliable purpose category from path",
-      "recommendation": "Declare role after reviewing usage",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "690c0ce3e2b60442",
-      "code": "UNKNOWN_PURPOSE",
-      "severity": "review",
-      "path": "doctor_original/bcFourier/constant/fvModels",
-      "observation": "No reliable purpose category from path",
-      "recommendation": "Declare role after reviewing usage",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "86d0a17f3a9209e7",
-      "code": "UNKNOWN_PURPOSE",
-      "severity": "review",
-      "path": "doctor_original/bcFourier/constant/g",
-      "observation": "No reliable purpose category from path",
-      "recommendation": "Declare role after reviewing usage",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "a262eae8b6d79b07",
-      "code": "UNKNOWN_PURPOSE",
-      "severity": "review",
-      "path": "doctor_original/bcFourier/constant/momentumTransport",
-      "observation": "No reliable purpose category from path",
-      "recommendation": "Declare role after reviewing usage",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "cd62acadb69bde0e",
-      "code": "UNKNOWN_PURPOSE",
-      "severity": "review",
-      "path": "doctor_original/bcFourier/constant/pRef",
-      "observation": "No reliable purpose category from path",
-      "recommendation": "Declare role after reviewing usage",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "575050cdb92c4b51",
-      "code": "UNKNOWN_PURPOSE",
-      "severity": "review",
-      "path": "doctor_original/bcFourier/constant/physicalProperties",
-      "observation": "No reliable purpose category from path",
-      "recommendation": "Declare role after reviewing usage",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "fb9b02f8dfd31bd4",
-      "code": "UNKNOWN_PURPOSE",
-      "severity": "review",
-      "path": "doctor_original/bcFourier/log.blockMesh",
-      "observation": "No reliable purpose category from path",
-      "recommendation": "Declare role after reviewing usage",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "4435d5da9789e313",
-      "code": "UNKNOWN_PURPOSE",
-      "severity": "review",
-      "path": "doctor_original/bcFourier/log.foamRun",
-      "observation": "No reliable purpose category from path",
-      "recommendation": "Declare role after reviewing usage",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "6aa8bc5302a524e0",
-      "code": "UNKNOWN_PURPOSE",
-      "severity": "review",
-      "path": "doctor_original/bcFourier/postProcessing/temperatureProbe/0/T",
-      "observation": "No reliable purpose category from path",
-      "recommendation": "Declare role after reviewing usage",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "7250c39d2572e65d",
-      "code": "UNKNOWN_PURPOSE",
-      "severity": "review",
-      "path": "doctor_original/bcFourier/system/blockMeshDict",
-      "observation": "No reliable purpose category from path",
-      "recommendation": "Declare role after reviewing usage",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "4638c535e179811e",
-      "code": "UNKNOWN_PURPOSE",
-      "severity": "review",
-      "path": "doctor_original/bcFourier/system/controlDict",
-      "observation": "No reliable purpose category from path",
-      "recommendation": "Declare role after reviewing usage",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "4e84e4d8f154feb7",
-      "code": "UNKNOWN_PURPOSE",
-      "severity": "review",
-      "path": "doctor_original/bcFourier/system/functions",
-      "observation": "No reliable purpose category from path",
-      "recommendation": "Declare role after reviewing usage",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "9e4b27e491bcb803",
-      "code": "UNKNOWN_PURPOSE",
-      "severity": "review",
-      "path": "doctor_original/bcFourier/system/fvSchemes",
-      "observation": "No reliable purpose category from path",
-      "recommendation": "Declare role after reviewing usage",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "4fca1001350c1ddf",
-      "code": "UNKNOWN_PURPOSE",
-      "severity": "review",
-      "path": "doctor_original/bcFourier/system/fvSolution",
-      "observation": "No reliable purpose category from path",
-      "recommendation": "Declare role after reviewing usage",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "db48d4aae69d7821",
-      "code": "UNKNOWN_PURPOSE",
-      "severity": "review",
-      "path": "doctor_original/cht/0/metal/T",
-      "observation": "No reliable purpose category from path",
-      "recommendation": "Declare role after reviewing usage",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "51361afa46da578a",
-      "code": "UNKNOWN_PURPOSE",
-      "severity": "review",
-      "path": "doctor_original/cht/0/metal/U",
-      "observation": "No reliable purpose category from path",
-      "recommendation": "Declare role after reviewing usage",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "b54d514d7226fe8c",
-      "code": "UNKNOWN_PURPOSE",
-      "severity": "review",
-      "path": "doctor_original/cht/0/metal/alphat",
-      "observation": "No reliable purpose category from path",
-      "recommendation": "Declare role after reviewing usage",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "2c516fe31cf845fe",
-      "code": "UNKNOWN_PURPOSE",
-      "severity": "review",
-      "path": "doctor_original/cht/0/metal/epsilon",
-      "observation": "No reliable purpose category from path",
-      "recommendation": "Declare role after reviewing usage",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "be55fe59be16cb15",
-      "code": "UNKNOWN_PURPOSE",
-      "severity": "review",
-      "path": "doctor_original/cht/0/metal/k",
-      "observation": "No reliable purpose category from path",
-      "recommendation": "Declare role after reviewing usage",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "a1e41f9b012edf6b",
-      "code": "UNKNOWN_PURPOSE",
-      "severity": "review",
-      "path": "doctor_original/cht/0/metal/nut",
-      "observation": "No reliable purpose category from path",
-      "recommendation": "Declare role after reviewing usage",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "dcf3c3b227d4cbd4",
-      "code": "UNKNOWN_PURPOSE",
-      "severity": "review",
-      "path": "doctor_original/cht/0/metal/omega",
-      "observation": "No reliable purpose category from path",
-      "recommendation": "Declare role after reviewing usage",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "d6696892e47554b2",
-      "code": "UNKNOWN_PURPOSE",
-      "severity": "review",
-      "path": "doctor_original/cht/0/metal/p",
-      "observation": "No reliable purpose category from path",
-      "recommendation": "Declare role after reviewing usage",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "8566e8d0be1a5224",
-      "code": "UNKNOWN_PURPOSE",
-      "severity": "review",
-      "path": "doctor_original/cht/0/metal/p_rgh",
-      "observation": "No reliable purpose category from path",
-      "recommendation": "Declare role after reviewing usage",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "10c635c3d4cb8cab",
-      "code": "UNKNOWN_PURPOSE",
-      "severity": "review",
-      "path": "doctor_original/cht/0/mold/T",
-      "observation": "No reliable purpose category from path",
-      "recommendation": "Declare role after reviewing usage",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "de6c3e87a11a76db",
-      "code": "UNKNOWN_PURPOSE",
-      "severity": "review",
-      "path": "doctor_original/cht/Allclean",
-      "observation": "No reliable purpose category from path",
-      "recommendation": "Declare role after reviewing usage",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "06bcad537776d187",
-      "code": "UNKNOWN_PURPOSE",
-      "severity": "review",
-      "path": "doctor_original/cht/Allrun",
-      "observation": "No reliable purpose category from path",
-      "recommendation": "Declare role after reviewing usage",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "86d39dd1fbd65bd5",
-      "code": "UNKNOWN_PURPOSE",
-      "severity": "review",
-      "path": "doctor_original/cht/constant/metal/fvModels",
-      "observation": "No reliable purpose category from path",
-      "recommendation": "Declare role after reviewing usage",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "bf33ec84f19ae6c7",
-      "code": "UNKNOWN_PURPOSE",
-      "severity": "review",
-      "path": "doctor_original/cht/constant/metal/g",
-      "observation": "No reliable purpose category from path",
-      "recommendation": "Declare role after reviewing usage",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "50b8e372f310caff",
-      "code": "UNKNOWN_PURPOSE",
-      "severity": "review",
-      "path": "doctor_original/cht/constant/metal/materials/castIron",
-      "observation": "No reliable purpose category from path",
-      "recommendation": "Declare role after reviewing usage",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "a6ae885aadfd4c04",
-      "code": "UNKNOWN_PURPOSE",
-      "severity": "review",
-      "path": "doctor_original/cht/constant/metal/momentumTransport",
-      "observation": "No reliable purpose category from path",
-      "recommendation": "Declare role after reviewing usage",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "5d5f4abff0a1ea3f",
-      "code": "UNKNOWN_PURPOSE",
-      "severity": "review",
-      "path": "doctor_original/cht/constant/metal/pRef",
-      "observation": "No reliable purpose category from path",
-      "recommendation": "Declare role after reviewing usage",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "8aecfc920c39d704",
-      "code": "UNKNOWN_PURPOSE",
-      "severity": "review",
-      "path": "doctor_original/cht/constant/metal/physicalProperties",
-      "observation": "No reliable purpose category from path",
-      "recommendation": "Declare role after reviewing usage",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "8cb02364a225a95f",
-      "code": "UNKNOWN_PURPOSE",
-      "severity": "review",
-      "path": "doctor_original/cht/constant/mold/materials/silica",
-      "observation": "No reliable purpose category from path",
-      "recommendation": "Declare role after reviewing usage",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "b6fb449e07c36608",
-      "code": "UNKNOWN_PURPOSE",
-      "severity": "review",
-      "path": "doctor_original/cht/constant/mold/materials/steel4140",
-      "observation": "No reliable purpose category from path",
-      "recommendation": "Declare role after reviewing usage",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "51b7d132d74ce71e",
-      "code": "UNKNOWN_PURPOSE",
-      "severity": "review",
-      "path": "doctor_original/cht/constant/mold/materials/steel4140cons",
-      "observation": "No reliable purpose category from path",
-      "recommendation": "Declare role after reviewing usage",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "2a6725427e23215a",
-      "code": "UNKNOWN_PURPOSE",
-      "severity": "review",
-      "path": "doctor_original/cht/constant/mold/physicalProperties",
-      "observation": "No reliable purpose category from path",
-      "recommendation": "Declare role after reviewing usage",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "b602866582b4bda3",
-      "code": "UNKNOWN_PURPOSE",
-      "severity": "review",
-      "path": "doctor_original/cht/log.blockMesh",
-      "observation": "No reliable purpose category from path",
-      "recommendation": "Declare role after reviewing usage",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "84c99525f48b4dd9",
-      "code": "UNKNOWN_PURPOSE",
-      "severity": "review",
-      "path": "doctor_original/cht/log.createZones",
-      "observation": "No reliable purpose category from path",
-      "recommendation": "Declare role after reviewing usage",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "1fda8f7fe4f85c92",
-      "code": "UNKNOWN_PURPOSE",
-      "severity": "review",
-      "path": "doctor_original/cht/log.foamMultiRun",
-      "observation": "No reliable purpose category from path",
-      "recommendation": "Declare role after reviewing usage",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "80e3e440a966a2ef",
-      "code": "UNKNOWN_PURPOSE",
-      "severity": "review",
-      "path": "doctor_original/cht/log.splitMeshRegions",
-      "observation": "No reliable purpose category from path",
-      "recommendation": "Declare role after reviewing usage",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "69490dfb5f44dc3a",
-      "code": "UNKNOWN_PURPOSE",
-      "severity": "review",
-      "path": "doctor_original/cht/postProcessing/metal/temperatureProbe/0/T",
-      "observation": "No reliable purpose category from path",
-      "recommendation": "Declare role after reviewing usage",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "7c102c43dd30e129",
-      "code": "UNKNOWN_PURPOSE",
-      "severity": "review",
-      "path": "doctor_original/cht/system/blockMeshDict",
-      "observation": "No reliable purpose category from path",
-      "recommendation": "Declare role after reviewing usage",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "dbeb3bd8fd4dc178",
-      "code": "UNKNOWN_PURPOSE",
-      "severity": "review",
-      "path": "doctor_original/cht/system/controlDict",
-      "observation": "No reliable purpose category from path",
-      "recommendation": "Declare role after reviewing usage",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "96e723f47532d09b",
-      "code": "UNKNOWN_PURPOSE",
-      "severity": "review",
-      "path": "doctor_original/cht/system/createZonesDict",
-      "observation": "No reliable purpose category from path",
-      "recommendation": "Declare role after reviewing usage",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "a90ce4c3f9941565",
-      "code": "UNKNOWN_PURPOSE",
-      "severity": "review",
-      "path": "doctor_original/cht/system/functions",
-      "observation": "No reliable purpose category from path",
-      "recommendation": "Declare role after reviewing usage",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "903d702f90cde4e6",
-      "code": "UNKNOWN_PURPOSE",
-      "severity": "review",
-      "path": "doctor_original/cht/system/fvSolution",
-      "observation": "No reliable purpose category from path",
-      "recommendation": "Declare role after reviewing usage",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "25dcb643d9f8c919",
-      "code": "UNKNOWN_PURPOSE",
-      "severity": "review",
-      "path": "doctor_original/cht/system/metal/fvSchemes",
-      "observation": "No reliable purpose category from path",
-      "recommendation": "Declare role after reviewing usage",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "71a1068e63a9971f",
-      "code": "UNKNOWN_PURPOSE",
-      "severity": "review",
-      "path": "doctor_original/cht/system/metal/fvSolution",
-      "observation": "No reliable purpose category from path",
-      "recommendation": "Declare role after reviewing usage",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "6e6d926a215dafe0",
-      "code": "UNKNOWN_PURPOSE",
-      "severity": "review",
-      "path": "doctor_original/cht/system/mold/fvSchemes",
-      "observation": "No reliable purpose category from path",
-      "recommendation": "Declare role after reviewing usage",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "ad107d0b6a66ad37",
-      "code": "UNKNOWN_PURPOSE",
-      "severity": "review",
-      "path": "doctor_original/cht/system/mold/fvSolution",
-      "observation": "No reliable purpose category from path",
-      "recommendation": "Declare role after reviewing usage",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "1606844240338591",
-      "code": "UNKNOWN_PURPOSE",
-      "severity": "review",
-      "path": "freesurface/FS-C01/0/T",
-      "observation": "No reliable purpose category from path",
-      "recommendation": "Declare role after reviewing usage",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "ca8f3ced7c5dc109",
-      "code": "UNKNOWN_PURPOSE",
-      "severity": "review",
-      "path": "freesurface/FS-C01/0/U",
-      "observation": "No reliable purpose category from path",
-      "recommendation": "Declare role after reviewing usage",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "6da9e7caad14f922",
-      "code": "UNKNOWN_PURPOSE",
-      "severity": "review",
-      "path": "freesurface/FS-C01/0/alpha.water",
-      "observation": "No reliable purpose category from path",
-      "recommendation": "Declare role after reviewing usage",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "6c0e8fefa0aafd92",
-      "code": "UNKNOWN_PURPOSE",
-      "severity": "review",
-      "path": "freesurface/FS-C01/0/epsilon",
-      "observation": "No reliable purpose category from path",
-      "recommendation": "Declare role after reviewing usage",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "d730b2c99f3b6a78",
-      "code": "UNKNOWN_PURPOSE",
-      "severity": "review",
-      "path": "freesurface/FS-C01/0/k",
-      "observation": "No reliable purpose category from path",
-      "recommendation": "Declare role after reviewing usage",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "3a260a548cbe834e",
-      "code": "UNKNOWN_PURPOSE",
-      "severity": "review",
-      "path": "freesurface/FS-C01/0/nuTilda",
-      "observation": "No reliable purpose category from path",
-      "recommendation": "Declare role after reviewing usage",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "3c1dd374dab9296e",
-      "code": "UNKNOWN_PURPOSE",
-      "severity": "review",
-      "path": "freesurface/FS-C01/0/nut",
-      "observation": "No reliable purpose category from path",
-      "recommendation": "Declare role after reviewing usage",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "c5a2b3ac0c5ef4f6",
-      "code": "UNKNOWN_PURPOSE",
-      "severity": "review",
-      "path": "freesurface/FS-C01/0/omega",
-      "observation": "No reliable purpose category from path",
-      "recommendation": "Declare role after reviewing usage",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "b4ba018a79bea5f9",
-      "code": "UNKNOWN_PURPOSE",
-      "severity": "review",
-      "path": "freesurface/FS-C01/0/p",
-      "observation": "No reliable purpose category from path",
-      "recommendation": "Declare role after reviewing usage",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "baf3d719d4a21cf6",
-      "code": "UNKNOWN_PURPOSE",
-      "severity": "review",
-      "path": "freesurface/FS-C01/0/p_rgh",
-      "observation": "No reliable purpose category from path",
-      "recommendation": "Declare role after reviewing usage",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "3fcb8b663577c36e",
-      "code": "UNKNOWN_PURPOSE",
-      "severity": "review",
-      "path": "freesurface/FS-C01/constant/fvModels",
-      "observation": "No reliable purpose category from path",
-      "recommendation": "Declare role after reviewing usage",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "22c2d34452e04f51",
-      "code": "UNKNOWN_PURPOSE",
-      "severity": "review",
-      "path": "freesurface/FS-C01/constant/g",
-      "observation": "No reliable purpose category from path",
-      "recommendation": "Declare role after reviewing usage",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "5c6b445c585ea1de",
-      "code": "UNKNOWN_PURPOSE",
-      "severity": "review",
-      "path": "freesurface/FS-C01/constant/momentumTransport",
-      "observation": "No reliable purpose category from path",
-      "recommendation": "Declare role after reviewing usage",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "c6ccb2b36d558c1e",
-      "code": "UNKNOWN_PURPOSE",
-      "severity": "review",
-      "path": "freesurface/FS-C01/constant/phaseProperties",
-      "observation": "No reliable purpose category from path",
-      "recommendation": "Declare role after reviewing usage",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "4b20d7c38eddd222",
-      "code": "UNKNOWN_PURPOSE",
-      "severity": "review",
-      "path": "freesurface/FS-C01/constant/physicalProperties.air",
-      "observation": "No reliable purpose category from path",
-      "recommendation": "Declare role after reviewing usage",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "029f7d6b23a40221",
-      "code": "UNKNOWN_PURPOSE",
-      "severity": "review",
-      "path": "freesurface/FS-C01/constant/physicalProperties.water",
-      "observation": "No reliable purpose category from path",
-      "recommendation": "Declare role after reviewing usage",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "468fff4ea29a84c2",
-      "code": "UNKNOWN_PURPOSE",
-      "severity": "review",
-      "path": "freesurface/FS-C01/system/blockMeshDict",
-      "observation": "No reliable purpose category from path",
-      "recommendation": "Declare role after reviewing usage",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "c0086dc2d013e178",
-      "code": "UNKNOWN_PURPOSE",
-      "severity": "review",
-      "path": "freesurface/FS-C01/system/controlDict",
-      "observation": "No reliable purpose category from path",
-      "recommendation": "Declare role after reviewing usage",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "f23359b3492691ef",
-      "code": "UNKNOWN_PURPOSE",
-      "severity": "review",
-      "path": "freesurface/FS-C01/system/fvSchemes",
-      "observation": "No reliable purpose category from path",
-      "recommendation": "Declare role after reviewing usage",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "6b368bdf0d07f7c2",
-      "code": "UNKNOWN_PURPOSE",
-      "severity": "review",
-      "path": "freesurface/FS-C01/system/fvSolution",
-      "observation": "No reliable purpose category from path",
-      "recommendation": "Declare role after reviewing usage",
       "state": "REVIEW_REQUIRED"
     }
   ],
