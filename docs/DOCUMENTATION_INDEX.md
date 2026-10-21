@@ -32,3 +32,5 @@ Este índice organiza la documentación **sin mover ni reemplazar** archivos exi
 
 **Norma:** cambios científicos aquí, manuales científicos aquí, resultados reales aquí. Un informe de GitHub/CI no equivale a validación experimental. Para reubicar un documento debe existir un inventario de referencias y una migración revisada por separado.
 - [Granada: constancia de acceso coordinador en modo lectura](granada/OPENFOAM_HUB_READ_ACCESS_20261021.md)
+
+- [Revisión científica crítica: hipótesis rivales, supuestos y pruebas de falsación](granada/CRITICAL_REVIEW_ES.md) — [agente escéptico](../.github/agents/scientific-skeptic.agent.md) y [contrafactual experimental](../.github/agents/experimental-counterfactual.agent.md).
