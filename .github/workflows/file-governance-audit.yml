@@ -26,14 +26,18 @@ jobs:
         with:
           python-version: '3.12'
       - name: Validate synthetic git audit and safety
-        run: python3 tools/test_repository_file_auditor.py
+        run: |
+          python3 tools/test_repository_file_auditor.py
+          python3 tools/test_file_governance_audit_proof.py
       - name: Enumerate all tracked paths, inspect documentation and record deltas
         run: python3 tools/repository_file_auditor.py --repo .
+      - name: Emit run-specific source HEAD proof (not a pass certificate)
+        run: python3 tools/file_governance_audit_proof.py --repo . --require-actions
       - name: Commit only generated local audit reports
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -- reports/file-governance/FILE_GOVERNANCE.json reports/file-governance/FILE_GOVERNANCE.md reports/file-governance/SUMMARY.json docs/audits/FILE_GOVERNANCE_LOG.md
+          git add -- reports/file-governance/FILE_GOVERNANCE.json reports/file-governance/FILE_GOVERNANCE.md reports/file-governance/SUMMARY.json reports/file-governance/AUDIT_PROOF.json docs/audits/FILE_GOVERNANCE_LOG.md
           if ! git diff --cached --quiet; then
             git commit -m "chore(file-steward): refresh local audit findings [skip ci]"
             for attempt in 1 2 3; do
