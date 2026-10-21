@@ -1,0 +1,26 @@
+name: Granada MasterProject File Steward proof contract
+on:
+  pull_request:
+    paths:
+      - 'tools/file_governance_audit_proof.py'
+      - 'tools/test_file_governance_audit_proof.py'
+      - '.github/workflows/file-governance-audit.yml'
+      - '.github/workflows/granada-file-steward-head-proof-pr.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  prove-no-forged-attestation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Validate SHA-bound source scan envelope
+        run: |
+          python3 tools/test_file_governance_audit_proof.py
+          python3 -m py_compile tools/file_governance_audit_proof.py
+      - name: Non-CFD scope
+        run: echo "No scientific CFD, case mutation or physical validation executed."
