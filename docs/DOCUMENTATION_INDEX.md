@@ -1,6 +1,8 @@
-# QuickCup — índice de documentación científica
+# MasterProject — índice de documentación científica
 
 Este índice organiza la documentación **sin mover ni reemplazar** archivos existentes. Este proyecto es completamente independiente de FoamLens y de cualquier repositorio coordinador.
+
+- [Identidad canónica de MasterProject y conservación de nombres de casos](MASTERPROJECT_IDENTITY_ES.md)
 
 ## Empezar / operación
 - [README](../README.md) — descripción y estado por confirmar en cada actualización
