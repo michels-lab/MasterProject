@@ -1,0 +1,35 @@
+name: Granada - B11 C11 energy2 documentary provenance
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'cases_controlled_buoyancy/B11_energy2_test/CASE_VARIANT.md'
+      - 'cases_controlled_buoyancy/C11_energy2_test/CASE_VARIANT.md'
+      - 'cases_controlled_buoyancy/B11_energy2_test/system/fvSolution'
+      - 'cases_controlled_buoyancy/C11_energy2_test/system/fvSolution'
+      - 'cases_controlled_buoyancy/B11_topFixedFlux_airGapOF14/system/fvSolution'
+      - 'cases_controlled_buoyancy/C11_topFixedFlux_airGapOF14/system/fvSolution'
+      - 'tools/test_energy2_case_provenance.py'
+  push:
+    branches: [main]
+    paths:
+      - 'cases_controlled_buoyancy/B11_energy2_test/CASE_VARIANT.md'
+      - 'cases_controlled_buoyancy/C11_energy2_test/CASE_VARIANT.md'
+      - 'docs/granada/B11_C11_ENERGY2_DOCUMENTATION_AUDIT_20261021.md'
+      - 'tools/test_energy2_case_provenance.py'
+      - '.github/workflows/granada-b11-c11-document-provenance.yml'
+permissions:
+  contents: read
+jobs:
+  verify-provenance:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verify documentary provenance against tracked OpenFOAM dictionaries
+        run: python3 tools/test_energy2_case_provenance.py
+      - name: Scope warning
+        run: echo "Static file checks only; CFD execution, numerical convergence and experimental validation NOT_CHECKED"
