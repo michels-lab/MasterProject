@@ -22,8 +22,10 @@ jobs:
       - uses: actions/checkout@v4
       - name: Python syntax preflight
         run: python3 -m py_compile analysis_tools/granada_plan_d_case3d01_mesh_gate.py analysis_tools/test_granada_plan_d_case3d01_mesh_gate.py
-      - name: 18 synthetic regression tests
+      - name: 20 synthetic regression tests
         run: python3 -m unittest discover -s analysis_tools -p test_granada_plan_d_case3d01_mesh_gate.py -v
+      - name: Canonical Plan D local stage shell syntax
+        run: bash -n cases_3d/case3d-01/scripts/stage_mesh_only.sh
       - name: Real repository source-only Plan D audit
         run: |
           python3 analysis_tools/granada_plan_d_case3d01_mesh_gate.py             --root "$GITHUB_WORKSPACE" --out /tmp/quickcup-plan-d-case3d01
