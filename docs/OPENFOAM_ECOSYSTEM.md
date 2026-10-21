@@ -1,6 +1,6 @@
-# QuickCup ↔ FoamLens — integración estrictamente opcional
+# masterproject ↔ FoamLens — integración estrictamente opcional
 
-**QuickCup-Solidification es un proyecto científico autosuficiente.** Sus casos OpenFOAM Foundation 14, simulaciones, reportes, scripts de análisis, protocolos y bitácoras no dependen de FoamLens ni de ningún hub de coordinación.
+**masterproject (antes QuickCup-Solidification) es un proyecto científico autosuficiente.** El slug de GitHub conserva temporalmente el nombre histórico hasta que el propietario lo cambie en Settings. Sus casos OpenFOAM Foundation 14, simulaciones, reportes, scripts de análisis, protocolos y bitácoras no dependen de FoamLens ni de ningún hub de coordinación.
 
 [FoamLens](https://github.com/michels-lab/FoamLens) es software genérico e independiente para visualizar y analizar datos OpenFOAM. Puede abrir datos de QuickCup **únicamente si el usuario así lo decide y si su importador soporta el formato**.
 
