@@ -1,6 +1,6 @@
-# QuickCup-Solidification
+# MasterProject
 
-**Master's thesis simulation project:** multi-region casting/Quick-Cup solidification, conjugate heat transfer, buoyancy and enthalpy–porosity using **OpenFOAM Foundation v14**.
+**MasterProject (formerly QuickCup-Solidification): Master's thesis simulation project.** multi-region casting/Quick-Cup solidification, conjugate heat transfer, buoyancy and enthalpy–porosity using **OpenFOAM Foundation v14**.
 
 ## 2026-10-08 research roadmap
 
@@ -53,6 +53,7 @@ Cuando el propietario diga **GRANADA**, se aparca con trazabilidad cualquier pen
 ## Documentation map and independent OpenFOAM ecosystem
 
 - [Manuals, scientific protocols, results and audit logs](docs/DOCUMENTATION_INDEX.md).
+- [Canonical MasterProject identity and preserved historical case names](docs/MASTERPROJECT_IDENTITY_ES.md).
 - [Optional FoamLens interoperability and independent-project boundaries](docs/OPENFOAM_ECOSYSTEM.md).
 
 All scientific evidence, original manuals and OpenFOAM runs remain owned by this repository. FoamLens and any coordination hub are **optional**, not runtime dependencies.
