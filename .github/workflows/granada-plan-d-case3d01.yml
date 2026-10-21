@@ -8,6 +8,7 @@ on:
       - 'docs/granada/PLAN_D_CASE3D_01_MESH_GATE_20261021.md'
       - 'analysis_results/granada_plan_d_case3d01_20261021/**'
       - 'cases_3d/case3d-01/**'
+      - 'cases_3d/README.md'
       - '.github/workflows/granada-plan-d-case3d01.yml'
   workflow_dispatch:
 
