@@ -49,3 +49,10 @@ Repository guidance lives here, not in a separate Michel's Lab main repository.
 ## GRANADA — Regla permanente de continuación del propietario
 
 Cuando el propietario diga **GRANADA**, se aparca con trazabilidad cualquier pendiente inacabado/bloqueado/en QA/propiedad de otra rama, y se aborda **el siguiente bloque grande independiente**. Consultar primero `.michelslab/GRANADA.md` y la norma maestra `standards/GRANADA_CONTINUOUS_BLOCK_PROTOCOL.md`; respetar claims, PRs y colisiones de archivos. Registrar SHA, tests y punto de retorno; no cerrar pendientes falsamente ni publicar releases sin autorización.
+
+## Documentation map and independent OpenFOAM ecosystem
+
+- [Manuals, scientific protocols, results and audit logs](docs/DOCUMENTATION_INDEX.md).
+- [Optional FoamLens interoperability and independent-project boundaries](docs/OPENFOAM_ECOSYSTEM.md).
+
+All scientific evidence, original manuals and OpenFOAM runs remain owned by this repository. FoamLens and any coordination hub are **optional**, not runtime dependencies.
