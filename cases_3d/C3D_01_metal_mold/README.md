@@ -113,3 +113,9 @@ Esto es **un fragmento explicativo**, NO un `snappyHexMeshDict` listo para ejecu
 5. Ejecutar el solver exclusivamente en la laptop. No instalar ni correr OpenFOAM en GitHub Actions; FoamLENS es independiente.
 
 Las pruebas automáticas del repositorio son **solo sintéticas/estáticas**; no certifican una malla OpenFOAM ni validan resultados CFD.
+
+## Acuerdo de refinamiento volumétrico 0.5 mm — 2026-10-19
+
+**[Leer el protocolo de tamaño de celda para metal y arena](MESH_REFINEMENT_POLICY_ES.md).** El investigador confirmó la meta: **0.5 mm nominal máximo para TODAS las celdas de metal y arena**, no solo en el contorno. El `blockMeshDict` actual conserva 2 mm para la caja de fondo; `snappyHexMesh` debe aplicar **nivel 2** mediante `refinementRegions` con `mode inside; level 2;` para **ambos volúmenes**, además de `refinementSurfaces` al nivel 2 para geometría/interfaz. En Foundation v14 no usar la sintaxis anterior para `inside`.
+
+**Estado: ACUERDO REGISTRADO, MALLA NO EJECUTADA.** El diccionario `system/snappyHexMeshDict` completo, la segmentación de metal/molde, los patches CHT, `splitMeshRegions` y la medición geométrica del máximo de celda siguen pendientes. No alterar los casos 2D ni presentar el nivel nominal como tamaño real certificado; `maxGlobalCells`/snap podrían impedir cumplirlo. La segunda computadora requiere verificación del entorno local.
