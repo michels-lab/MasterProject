@@ -17,6 +17,8 @@ on:
       - 'POSTPROCESSING_FIELD_GUIDE_ES.md'
       - 'OPENFOAM_COMMAND_MANUAL_*.md'
       - 'PROJECT_AUDIT_LOG_*.md'
+      - 'docs/granada/**'
+      - 'analysis_tools/test_granada_c3d_gates.py'
   pull_request:
     paths:
       - '.github/agents/**'
@@ -27,6 +29,8 @@ on:
       - 'cases_controlled_buoyancy/**'
       - 'cases_3d/**'
       - 'RUN_CASE_REGISTRY.csv'
+      - 'docs/granada/**'
+      - 'analysis_tools/test_granada_c3d_gates.py'
   workflow_dispatch:
   schedule:
     - cron: '17 9 * * *'
@@ -64,6 +68,8 @@ jobs:
         run: |
           python3 -m unittest discover -s cases_3d/C3D_01_metal_mold/scripts -p 'test_c3d_background_case.py' -v
           bash -n cases_3d/C3D_01_metal_mold/scripts/run_blockMesh_only.sh
+      - name: Check Granada scientific provenance without OpenFOAM
+        run: python3 -m unittest discover -s analysis_tools -p 'test_granada_c3d_gates.py' -v
       - name: Check scientific case registry
         run: python3 analysis_tools/check_run_registry.py
       - name: Check V14 functionObject definitions and documentation
