@@ -1,16 +1,19 @@
 # MasterProject
 
+**Actualización verificable 2026-11-10:** [estado C3D-01 (geometría y primera malla)](docs/C3D_01_ESTADO_REAL_20261110_ES.md). Los STL original y reparado están versionados en Git; en laptop se ejecutaron `blockMesh`, `surfaceCheck`, `surfacePointMerge`, `surfaceInertia` y una **prueba** de `snappyHexMesh` (1,505,847 celdas). La prueba **NO fue aceptada**: `checkMesh` informó 23 caras con *face tets* deficientes y 6,974 celdas cóncavas (2 comprobaciones fallidas), aún sin interfaz metal–arena ni regiones térmicas validadas. Los logs completos de esa prueba siguen locales. No se ha corrido CFD 3D ni cerrado J0/G1.
+
+
 **MasterProject (formerly QuickCup-Solidification): Master's thesis simulation project.** multi-region casting/Quick-Cup solidification, conjugate heat transfer, buoyancy and enthalpy–porosity using **OpenFOAM Foundation v14**.
 
 ## 2026-10-08 research roadmap
 
-[**Research plan: C15 adaptive, C16 phase relaxation, C3D and B free-surface/shrinkage**](NEXT_RESEARCH_ROADMAP_ES.md). B15/B16 and C15/C16 are prepared input-only cases, not simulated in GitHub or validated.
+[**Research plan: C15 adaptive, C16 phase relaxation, C3D and B free-surface/shrinkage**](NEXT_RESEARCH_ROADMAP_ES.md). The B15/B16 and C15/C16 inputs and preliminary laptop-run outputs are in GitHub (the registry is not yet reconciled); none is experimentally validated. No CFD runs on GitHub.
 
 **Stage gate:** complete paired B/C studies through V16 first; then fork into C → 3D and B → metal-air free surface plus shrinkage/feeding. No GitHub-based CFD execution.
 
 ## New independent 3D research line — C3D-01
 
-The first three-dimensional QuickCup mesh experiment lives in [`cases_3d/C3D_01_metal_mold`](cases_3d/C3D_01_metal_mold/README.md). It includes a 2 mm Cartesian `blockMeshDict`, native OpenFOAM Foundation v14 `units [mm]` in the background mesh, byte-identical SolidWorks STL staging for future `snappyHexMesh`, mesh-only shell script, region seeds, and static regression tests. **Prepared, not run in OpenFOAM; no 3D CFD results yet.** User CAD/STL data remain local because this repository is public.
+The first three-dimensional QuickCup mesh experiment lives in [`cases_3d/C3D_01_metal_mold`](cases_3d/C3D_01_metal_mold/README.md). It includes a 2 mm Cartesian `blockMeshDict`, native OpenFOAM Foundation v14 `units [mm]` in the background mesh, byte-identical SolidWorks STL staging for future `snappyHexMesh`, mesh-only shell script, region seeds, and static regression tests. **Background/experimental snappy meshing has since been run locally (Nov 10); the 1,505,847-cell trial fails two checkMesh quality checks. No 3D CFD or accepted multiregion mesh yet.** The original and repaired STL assets are now committed to this **public** repository (review IP permissions before adding more CAD).
 
 See also the [3D case index](cases_3d/README.md). The existing C14 and B/C numerical research runs remain unchanged.
 

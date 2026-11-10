@@ -1,6 +1,9 @@
 # C3D-01 — QuickCup 3D: metal y molde de arena
 
-**Estado científico:** preparación CAD y malla de fondo; `blockMesh`/`checkMesh` no ejecutados aún en la laptop, **sin simulación CFD**. Experimento independiente de `cases_controlled_buoyancy/`. Referencia física futura: C14, sin alterar sus archivos.
+> **Fuente de estado al 2026-11-10:** [registro con SHA, reparaciones, `surfaceCheck`, primera malla y fallos pendientes](../../docs/C3D_01_ESTADO_REAL_20261110_ES.md). La metodología histórica siguiente se conserva con avisos de actualización. `mold_repaired.stl` es un **derivado**, no sustituye a `mold.stl`.
+
+
+**Estado científico actualizado 2026-11-10:** `blockMesh`/`checkMesh` y una malla de prueba `snappyHexMesh` ejecutados en laptop; la prueba tiene **2 fallos de calidad**, sin separación metal–arena aceptada y **sin simulación CFD**. Experimento independiente de `cases_controlled_buoyancy/`. Referencia física futura: C14, sin alterar sus archivos.
 
 ## Convención nativa de unidades (OpenFOAM Foundation v14)
 
@@ -25,7 +28,7 @@ Referencias oficiales:
 | Molde `QuickCup.STL` | 51.8 × 65.5 × 51.8 mm | 3084 | 102.843 cm³ |
 | Metal `metal.STL` | 36.5 × 40 × 36.5 mm | 3896 | 47.987 cm³ |
 
-Los archivos STL de SolidWorks **no están publicados** en este repositorio, que es público. Debes utilizar las exportaciones con origen compartido y SHA-256 especificados en `geometry_reference.json`; una exportación con el mismo nombre puede tener contenido distinto. Si los hashes no coinciden, inspeccionaremos la nueva exportación en lugar de desactivar la comprobación.
+Los archivos STL originales y el molde reparado **ya están publicados** en este repositorio **público** (revisar permisos de propiedad intelectual). Debes utilizar las exportaciones con origen compartido y SHA-256 especificados en `geometry_reference.json`; una exportación con el mismo nombre puede tener contenido distinto. Si los hashes no coinciden, inspeccionaremos la nueva exportación en lugar de desactivar la comprobación.
 
 ## Ubicación local y preparación sin Python
 
@@ -34,7 +37,7 @@ El investigador ha colocado sus dos STL de SolidWorks en **`/home/michel/OpenFOA
 Desde el clon local:
 
 ```bash
-cd ~/OpenFOAM/QuickCup_Solidification
+cd ~/OpenFOAM/MasterProject
 git pull --ff-only
 cd cases_3d/C3D_01_metal_mold
 
@@ -45,7 +48,7 @@ cp -n "$HOME/OpenFOAM/Piezas_STL/metal.STL" constant/geometry/metal.stl
 ls -lh constant/geometry/*.stl
 ```
 
-`cp -n` no sobrescribe archivos ya existentes; si reutilizas este caso revisa las dos rutas antes de continuar. Los STL permanecen en **mm**, bit a bit idénticos a los de SolidWorks; no aplicamos Python, cambios de escala, traslaciones ni rotaciones. La interfaz futura será interpretada en SI por OpenFOAM mediante `units [mm]` en cada entrada `triSurfaceMesh` del diccionario `snappyHexMeshDict`, que aún no está construido.
+`cp -n` no sobrescribe archivos ya existentes; si reutilizas este caso revisa las dos rutas antes de continuar. Los STL permanecen en **mm**, bit a bit idénticos a los de SolidWorks; no aplicamos Python, cambios de escala, traslaciones ni rotaciones. La interfaz futura será interpretada en SI por OpenFOAM mediante `units [mm]` en cada entrada `triSurfaceMesh` del diccionario `snappyHexMeshDict` de producción, que aún no está construido y validado. Existe solo el diccionario generado en una prueba local externa al repo.
 
 **Malla de fondo, usando OpenFOAM y sin Python:**
 

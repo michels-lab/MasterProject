@@ -1,5 +1,11 @@
 # Plan de investigación QuickCup — acuerdos tras reunión con el director
-Fecha: 2026-10-08 · Estado: hoja de ruta, no validación de resultados · OpenFOAM Foundation v14
+Fecha de ruta original: 2026-10-08; actualización de avance 2026-11-10 · Estado: hoja de ruta, no validación de resultados · OpenFOAM Foundation v14
+
+## Progreso Plan D (2026-11-10; NO avance de validación CFD)
+
+Se subieron los STL `metal.stl`, `mold.stl` y `mold_repaired.stl`; la reparación `surfacePointMerge` cerró 74 aristas abiertas del molde y `surfaceCheck -checkSelfIntersection` confirmó superficies cerradas sin autointersecciones. En la laptop se ejecutó una primera malla de 1,505,847 celdas usando copias temporales escaladas, pero `checkMesh` falló **2 verificaciones** (23 face tets, 6,974 celdas cóncavas); conserva el exterior de la caja, sin malla metal–arena aceptada ni CFD 3D. Los STL fuente permanecen en mm; la siguiente prueba usará `units [mm]` directamente en el diccionario, **por comprobar en ejecución**. Véase [registro de evidencia](docs/C3D_01_ESTADO_REAL_20261110_ES.md).
+
+Los casos B11/B15/B16/C15/C16 tienen evidencia post-push local de octubre aunque el registro B/C histórico los mantiene `PREPARED_NOT_RUN`; conciliar esas dos fuentes antes de cerrar V15/V16. J0/JMatPro y G1 experimental continúan abiertos. El Plan D está en desarrollo geométrico anticipado, **no aprobado como resultado experimental**.
 
 ## Prioridades y genealogía
 

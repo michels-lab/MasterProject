@@ -1,5 +1,11 @@
 # MasterProject — índice de documentación científica
 
+## Estado de referencia más reciente (2026-11-10)
+- [Registro principal C3D-01: STL, reparaciones, pruebas de malla, límites y próximos pasos](C3D_01_ESTADO_REAL_20261110_ES.md) — evidencia local transcrita; malla de prueba NO aceptada y CFD 3D no ejecutado
+- [Inventario de sincronización documental 2026-11-10](DOCUMENT_SYNC_20261110_ES.md) — documentos activos revisados, históricos conservados, pendientes y colisiones con PRs
+- La campaña histórica de 26 casos y los cinco nuevos con evidencia subida conservan sus estados independientes; el registro B/C no es una lista de mallas 3D
+
+
 Este índice organiza la documentación **sin mover ni reemplazar** archivos existentes. Este proyecto es completamente independiente de FoamLens y de cualquier repositorio coordinador.
 
 - [Identidad canónica de MasterProject y conservación de nombres de casos](MASTERPROJECT_IDENTITY_ES.md)
