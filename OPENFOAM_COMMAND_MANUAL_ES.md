@@ -1092,3 +1092,64 @@ grep -Ei 'cells:|Number of regions:|non-orthogonality|skewness|face tets|concave
 ```
 
 Este recorte **solo es diagnóstico**, no garantiza interfaz CHT ni malla aprobada.
+
+## E. Historial ejecutado de comandos C3D-01 (10-11-2026)
+
+Esta sección complementa **todos los comandos históricos de casos B/C** (partes 1–28) con el trabajo 3D de metal y arena. Cada estado distingue **EJECUTADO** de **PROPUESTO**. La fuente de cantidades es la salida de terminal del investigador, registrada en [bitácora C3D-01](docs/C3D_01_ESTADO_REAL_20261110_ES.md). **Los logs y mallas de las carpetas de prueba siguen en laptop, no en GitHub.**
+
+| Utilidad | Uso que hemos realizado | Estado y precaución |
+|---|---|---|
+| `source /opt/openfoam14/etc/bashrc` | Cargar OpenFOAM Foundation 14 antes de ejecutar utilidades | **EJECUTADO**; si usas `set -u`, cargar OpenFOAM antes |
+| `surfaceCheck`, `surfacePointMerge`, `surfaceInertia` | Comprobar/cerrar molde y medir volúmenes STL | **EJECUTADO**; conservar CAD original inalterado |
+| `foamDictionary` | Leer `geometry`, `refinementSurfaces`, `refinementRegions`, `insidePoints`, `snapControls`; ajustar `snap` y `addLayers` de la copia | **EJECUTADO** |
+| `blockMesh` | Malla de fondo 2 mm nominal | **EJECUTADO** en ensayo local |
+| `snappyHexMesh` | Primera malla con snap; segunda castellated con `units [mm];`, `snap false` | **EJECUTADO**; ninguna fue aceptada |
+| `checkMesh` | Calidad general; `-writeSurfaces -surfaceFormat vtk -writeSets` para exportar defectos; `-region` por malla | **EJECUTADO** |
+| `topoSet` | `boxToCell` para AABB, `surfaceToCell` para interiores STL, `zoneToCell` para zone metal, `cellToCell` para combinar materiales | **EJECUTADO** |
+| `subsetMesh -cellSet materialVolume -noFields` | Recorte diagnóstico de metal+molde | **EJECUTADO**; la forma posicional `subsetMesh materialVolume` **NO funciona** en Foundation 14 |
+| `splitMeshRegions -disconnected -noFields` | Separación topológica del caso recortado | **EJECUTADO**; devuelve `No interfaces to add` |
+| `splitMeshRegions -cellZones 'metal'` | Inspeccionar caras compartidas de zona metal en la malla original conectada | **PROPUESTO, aún NO ejecutado** |
+
+### Comandos de consulta y exportación que sí utilizamos
+
+```bash
+source /opt/openfoam14/etc/bashrc
+TRIAL="$HOME/OpenFOAM/C3D01_snappy_NTC8Dj"
+DICT="$TRIAL/system/snappyHexMeshDict"
+foamDictionary "$DICT" -entry geometry
+foamDictionary "$DICT" -entry castellatedMeshControls/refinementSurfaces
+foamDictionary "$DICT" -entry castellatedMeshControls/refinementRegions
+foamDictionary "$DICT" -entry castellatedMeshControls/insidePoints
+foamDictionary "$DICT" -entry snapControls
+# La calidad de esta prueba ya fue exportada y guardada localmente:
+# checkMesh -case "$TRIAL" -allGeometry -allTopology -writeSurfaces -surfaceFormat vtk -writeSets
+find "$TRIAL/postProcessing/checkMesh" -name '*.vtk' -print
+```
+
+### Consultar el recorte **ya realizado** (sin repetir operaciones destructivas)
+
+```bash
+source /opt/openfoam14/etc/bashrc
+CASE="$HOME/OpenFOAM/C3D01_materials_H0qgJN"
+grep -Ei 'cells:|Number of regions:|Total volume|face tets|small determinant|concave cells|Failed' "$CASE/log.checkMesh"
+cat "$CASE/constant/polyMesh/boundary"
+```
+
+El recorte terminó con **1,209,777 celdas, 151.230 cm³, 15 celdas cóncavas, 8 caras con face-tets deficientes, 17 determinantes pequeños y 3 fallos de calidad**. El parche `oldInternalFaces` (8,384 caras) **no es interfaz térmica emparejada**. El `outerBox` quedó con 0 caras. **No repetir `subsetMesh` sobre el caso recortado**: crear una copia nueva si se desea otra variante.
+
+### Consultar las dos regiones **ya creadas**
+
+```bash
+source /opt/openfoam14/etc/bashrc
+CASE="$HOME/OpenFOAM/C3D01_regions_Xd1POM"
+# splitMeshRegions -case "$CASE" -disconnected -noFields  # YA EJECUTADO; NO REEJECUTAR
+for REGION in region1 region2; do
+    grep -Ei 'cells:|Total volume|face tets|small determinant|concave cells|Failed' "$CASE/log.checkMesh.$REGION"
+    cat "$CASE/constant/$REGION/polyMesh/boundary"
+done
+grep -Ei 'No interfaces to add|Region|nCells' "$CASE/log.splitMeshRegions"
+```
+
+**Resultados:** `region1` = probable arena, **825,994 celdas**, 103.256 cm³, 6 face-tets malos, 14 determinantes pequeños, 15 cóncavas, **3 comprobaciones fallidas**; `region2` = probable metal, **383,783 celdas**, 47.9735 cm³, 2 face-tets malos, 3 determinantes pequeños, **2 comprobaciones fallidas**. El programa comunicó **`No interfaces to add`**; no existe todavía interfaz CHT verificada. La futura alternativa de `-cellZones 'metal'` es una **hipótesis experimental**, no un logro.
+
+**Estado científico al cierre de este día:** no hay malla aceptada, no se ha ejecutado solver 3D, C14 sigue baseline 2D, J0/G1 abiertas. Los informes estáticos GitHub no prueban ejecución en Ubuntu.
