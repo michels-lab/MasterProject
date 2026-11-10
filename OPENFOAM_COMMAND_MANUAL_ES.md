@@ -1078,3 +1078,17 @@ La malla de prueba generada por `snappyHexMeshConfig` tenía `cellZone metal` co
 - No sobreescribir `constant/polyMesh`, `log.*` ni usar `Allclean` sobre la campaña histórica. Crear carpeta de prueba nueva.
 
 **Git:** El commit `e391f7591` incorporó los STL originales; el reparado y sus logs se incorporaron mediante `06426781f` tras rebase. Los logs completos de la prueba local `snappyHexMesh` no fueron subidos. Las comprobaciones estáticas de GitHub **no ejecutan** OpenFOAM.
+
+### D. Recorte de material mediante subsetMesh (Foundation 14)
+
+**Error real detectado 2026-11-10:** en Foundation 14, `subsetMesh materialVolume -case ...` produce `Wrong number of arguments, expected 0 found 1`. La opción **obligatoria** para seleccionar el conjunto es `-cellSet materialVolume`; `-overwrite` ya es el comportamiento predeterminado y el programa la marca como obsoleta.
+
+```bash
+source /opt/openfoam14/etc/bashrc
+CASE="$HOME/OpenFOAM/C3D01_materials_H0qgJN"
+subsetMesh -case "$CASE" -cellSet materialVolume -noFields > "$CASE/log.subsetMesh" 2>&1
+checkMesh -case "$CASE" -allGeometry -allTopology -writeSets > "$CASE/log.checkMesh" 2>&1 || true
+grep -Ei 'cells:|Number of regions:|non-orthogonality|skewness|face tets|concave cells|Failed|Mesh OK' "$CASE/log.checkMesh"
+```
+
+Este recorte **solo es diagnóstico**, no garantiza interfaz CHT ni malla aprobada.
