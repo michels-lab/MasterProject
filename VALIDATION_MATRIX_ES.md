@@ -1,5 +1,8 @@
 # Matriz de validación — QuickCup Solidification
 
+> **Estado C3D-01 actualizado al 10-11-2026:** la malla recortada metal+arena produjo **1,209,777 celdas y 151.230 cm³** (15 cóncavas, 8 face-tets deficientes, 17 determinantes pequeños; **3 fallos checkMesh**). `splitMeshRegions -disconnected` separó `region1` (**825,994 celdas, 103.256 cm³, 3 fallos**) y `region2` (**383,783 celdas, 47.9735 cm³, 2 fallos**) pero reportó **`No interfaces to add`**. No existe una interfaz CHT verificada, malla aceptada, solver CFD 3D ni validación experimental. `-cellZones 'metal'` **no se ha ejecutado**. [Registro técnico](docs/C3D_01_ESTADO_REAL_20261110_ES.md). C14/J0/G1 y el registro histórico B/C no cambian.
+
+
 > **Actualización 2026-10-03 — baseline vigente:** la campaña V14 validó `C14_topFixedFlux_explicitRef` como sucesor de trabajo de C11 para el modelo rígido, de volumen fijo e impermeable. C11 permanece congelado como referencia histórica; C14 conserva su física y añade la referencia explícita de presión del director. J0 continúa abierta y debe cerrarse antes de crear G1.
 
 
