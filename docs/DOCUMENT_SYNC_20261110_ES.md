@@ -1,5 +1,8 @@
 # MasterProject — control de sincronización documental (10-11-2026)
 
+> **Actualización integral 10-11-2026 (posterior a la primera tanda):** los manuales ES/EN, portadas e índices, registros cronológicos y guías operativas se están sincronizando con la última evidencia local: **1,209,777 celdas recortadas; dos regiones, pero sin interfaz CHT y con fallos de calidad**. La nota de **19 integrados / 6 en PR #33** que sigue abajo corresponde a la PRIMERA tanda documental, no al total de ediciones posteriores. [Registro técnico](C3D_01_ESTADO_REAL_20261110_ES.md).
+
+
 > **Integración Git al 2026-11-10:** 19 documentos de este bloque fueron incorporados a `main` mediante commit `641d3a2d97bc52aac0c4f8f5c8a77670ed4d7c59`. **Seis documentos adicionales están modificados pero pendientes de fusionar** en [PR #33](https://github.com/michels-lab/MasterProject/pull/33) por colisiones con PRs #18, #19 y #28: `README.md`, `docs/DOCUMENTATION_INDEX.md`, `NEXT_RESEARCH_ROADMAP_ES.md`, `PROJECT_AUDIT_LOG_ES.md`, `PROJECT_AUDIT_LOG_EN.md`, `cases_3d/C3D_01_metal_mold/README.md`. **No presentar esas seis ediciones como disponibles en `main` todavía.**
 
 
