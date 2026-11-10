@@ -77,3 +77,16 @@ El investigador ejecutó en **ambos** casos `checkMesh -allGeometry -allTopology
 
 ## Puente a documentos vivos
 [README](../README.md) · [Manual ES](../OPENFOAM_COMMAND_MANUAL_ES.md) · [Manual EN](../OPENFOAM_COMMAND_MANUAL_EN.md) · [Guía de casos](../CASE_GUIDE_ES.md) · [Índice documental](DOCUMENTATION_INDEX.md) · [Bitácora ES](../PROJECT_AUDIT_LOG_ES.md) · [Bitácora EN](../PROJECT_AUDIT_LOG_EN.md) · [Validación ES](../VALIDATION_MATRIX_ES.md) · [Plan D](../cases_3d/README.md).
+
+## Distribución de defectos respecto a la zona etiquetada metal (10-11-2026)
+
+**Fuente:** comparación local de identificadores de `constant/polyMesh/sets/concaveCells` con `constant/polyMesh/cellZones`, mediante `awk`, `sort` y `comm` sobre las dos mallas. Resultados reportados por el investigador; los sets y mallas **no** están archivados íntegramente en GitHub.
+
+| Ensayo | Celdas en `cellZone metal` | Cóncavas totales | Cóncavas dentro de zona metal | Cóncavas fuera de zona metal |
+|---|---:|---:|---:|---:|
+| `C3D01_snappy_NTC8Dj` | 383,788 | 6,974 | **1** | **6,973** |
+| `C3D01_castellated_7X7rLt` | 383,788 | 21,353 | **0** | **21,353** |
+
+En el primer ensayo, la proporción de defectos **que se encuentran dentro de la zona etiquetada metal** es aproximadamente **0.0143 %** (1/6,974); la incidencia de celdas cóncavas **entre celdas de metal** es aproximadamente **0.00026 %** (1/383,788). En el segundo ensayo ambas cantidades son cero. **No se debe equiparar «fuera de cellZone metal» con arena:** el mallado conserva aire/volumen exterior de la caja. Tampoco está medido el volumen físico real de `cellZone metal` ni comprobada una interfaz CHT conforme. La concavidad por sí sola no determina el error térmico hasta localizarla respecto a zonas e interfaz.
+
+**Próxima separación espacial:** clasificar defectos que están fuera del envolvente AABB del STL reparado (x = 0..51.8 mm, y = -65.5..0 mm, z = 0..51.8 mm); estos son exterior inequívoco. Los defectos dentro del envolvente todavía pueden estar en arena, cavidad o aire y requieren una prueba geométrica más precisa.
