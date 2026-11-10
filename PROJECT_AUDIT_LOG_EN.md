@@ -1,3 +1,11 @@
+## 2026-11-10 — C3D-01: physical-material subset and separate region meshes WITHOUT CHT interface [LOCAL EVIDENCE]
+
+- OpenFOAM Foundation 14 `topoSet surfaceToCell` found 6,959/6,974 concave cells outside both STL material interiors in the snapped trial, and 21,353/21,353 in the castellated trial; only 15 and 0, respectively, were selected inside the mold.
+- `subsetMesh -cellSet materialVolume -noFields` **ran on an independent copy**, producing 1,209,777 cells; 151.230 cm³; **15 concave cells; 8 poor face tets; 17 low-determinant cells; 3 failed `checkMesh` checks**. The positional `subsetMesh materialVolume` syntax failed in Foundation 14 and was corrected.
+- `splitMeshRegions -disconnected -noFields` on **another copy** produced `region1` (inferred sand mold: **825,994 cells; 103.256 cm³; 6 poor face tets; 14 low determinants; 15 concave cells; 3 failed checks**) and `region2` (inferred metal: **383,783 cells; 47.9735 cm³; 2 poor face tets; 3 low determinants; 2 failed checks**).
+- Utility output: **`No interfaces to add`**. The `oldInternalFaces` boundaries **are not a coupled metal–sand CHT interface**. `splitMeshRegions -cellZones 'metal'` on a fresh copy of the connected original mesh remains **PROPOSED AND NOT EXECUTED**. No accepted mesh, 3D solver run or experimental validation; J0/G1 OPEN.
+- Source: researcher's terminal transcript (10 Nov 2026), with full logs **still local to the laptop**. Full [technical record](docs/C3D_01_ESTADO_REAL_20261110_ES.md) and [English command manual](OPENFOAM_COMMAND_MANUAL_EN.md). October audit entries remain historical, not current trial status.
+
 ## 2026-10-21 — GRANADA: B11/C11 `energy2_test` document provenance [GIT-VERIFIED; NO CFD RUN]
 
 - File Steward detected two byte-identical `CASE_VARIANT.md` pairs between `B11_energy2_test/B11_topFixedFlux_airGapOF14` and `C11_energy2_test/C11_topFixedFlux_airGapOF14`. Reviewing the matching `fvSolution` files confirmed both `energy2_test` folders explicitly configure `PIMPLE.nEnergyCorrectors 2`, absent in their canonical counterparts.
