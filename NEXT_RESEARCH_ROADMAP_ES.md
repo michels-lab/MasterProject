@@ -1,4 +1,7 @@
 # Plan de investigación QuickCup — acuerdos tras reunión con el director
+
+> **Adenda actual (10-11-2026):** esta hoja de ruta de octubre conserva su función como plan, pero el trabajo 3D ha avanzado a dos ensayos de mallado, clasificación de STL, recorte metal+molde (**1,209,777 celdas**) y `splitMeshRegions -disconnected` en copia, con **dos regiones y sin interfaces conjugadas (`No interfaces to add`)**. `checkMesh` sigue fallando por región, **no hay CFD 3D ni validación**. Para cifras y próximos gates, ver [registro C3D](docs/C3D_01_ESTADO_REAL_20261110_ES.md) y [manual ES](OPENFOAM_COMMAND_MANUAL_ES.md).
+
 Fecha: 2026-10-08 · Estado: hoja de ruta, no validación de resultados · OpenFOAM Foundation v14
 
 ## Prioridades y genealogía
