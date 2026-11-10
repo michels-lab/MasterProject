@@ -117,3 +117,25 @@ Evidencia adicional transcrita del investigador: `topoSet` con `surfaceToCell`, 
 | Celdas de `cellZone metal` fuera de interior STL metal | 7 | 0 |
 
 **Interpretación:** la gran mayoría de defectos aparece fuera de los materiales seleccionados. Las **15 celdas cóncavas clasificadas como molde** de la primera malla merecen atención, como también las 23 caras de mala descomposición tetraédrica cuyo lugar aún no se ha discriminado. Las 7 coincidencias y 7 discrepancias de clasificación en torno al metal indican que la interfaz debe verificarse, pero **NO** prueban por sí solas interpenetración real de STL. Una malla de prueba recortada puede eliminar mucho exterior; no valida automáticamente la conectividad térmica metal–arena, calidad ni conservación geométrica: `surfaceToCell` con `includeCut false` no hace una construcción de interfaz conformante. Se requiere geometría+volumen+parches físicos antes de CFD.
+
+## Recorte real `subsetMesh` metal + molde — prueba local C3D01_materials_H0qgJN (10-11-2026)
+
+El investigador creó `~/OpenFOAM/C3D01_materials_H0qgJN` como copia de la primera malla con snapping y seleccionó la unión de `insideMoldSTL` + `insideMetalSTL` con `topoSet`. La primera sintaxis `subsetMesh materialVolume -case ...` falló por pasar un argumento posicional no permitido; la corrección nativa Foundation 14 `subsetMesh -case "$CASE" -cellSet materialVolume -noFields` **terminó**. No se ejecutó CFD.
+
+| Indicador | Antes de recortar | Después de recortar |
+|---|---:|---:|
+| Celdas | 1,505,847 | **1,209,777** |
+| Volumen total malla | 242.201 cm³ | **151.230 cm³** |
+| Componentes topológicas conectadas | 1 | **2** (`Number of regions: 2` en checkMesh) |
+| Concave cells | 6,974 | **15** |
+| Caras de baja calidad face-tets | 23 | **8** |
+| Celdas con determinante <0.001 | No reportadas | **17** |
+| No ortogonalidad máxima | 68.2102° | 68.2102° |
+| Skewness máximo | 2.60187 | 2.60187 |
+| `checkMesh` | 2 tests fallidos | **3 tests fallidos** |
+
+Los volúmenes geométricos de los STL, 47.9874896432 cm³ (metal) + 102.84309608 cm³ (molde reparado) = **150.8305857232 cm³**, frente a los **151.230 cm³** de la unión recortada; diferencia ~**0.3994 cm³** (~0.26 %). Es **comparación aproximada de volumen global**, no prueba de volumen ni interfaz por región.
+
+La malla recortada tiene estos patches: `outerBox` **0** caras, `mold_repaired` **114,807** caras (`wall`), `oldInternalFaces` **8,384** caras (`type internal` en la salida); esta frontera debe interpretarse con extrema precaución ya que `subsetMesh` expone caras sin preservar necesariamente tipos de frontera; **no constituye un par de interfaces térmicas metal–arena**. `Number of regions: 2` describe componentes desconectadas, no necesariamente dos regiones CFD físicamente acopladas. El nuevo `checkMesh` reportó 8 face-tets deficientes, 17 celdas de pequeño determinante y 15 cóncavas. **Malla NO aceptada para solver**. Logs `log.subsetMesh`, `log.checkMesh` aún están en carpeta local de prueba, no archivados en Git.
+
+**Reentrada técnica:** separar/nombrar componentes sobre otra copia con `splitMeshRegions` para inspección, verificar volúmenes y fronteras por región, corregir interfaz y 3 fallos geométricos antes de cualquier simulación térmica. Evitar confundir componentes topológicas con acoplamiento de calor.
