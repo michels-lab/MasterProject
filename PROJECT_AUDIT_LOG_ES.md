@@ -1,3 +1,11 @@
+## 2026-11-10 — C3D-01: recorte metal+molde y regiones separadas, SIN interfaz CHT [EVIDENCIA LOCAL]
+
+- En OpenFOAM Foundation 14, `topoSet surfaceToCell` mostró 6,959/6,974 celdas cóncavas fuera de ambos STL en la malla con snapping, y 21,353/21,353 en la malla castellated; 15 y 0 cóncavas, respectivamente, dentro del molde seleccionado.
+- `subsetMesh -cellSet materialVolume -noFields`, **ejecutado en una copia**, generó 1,209,777 celdas, 151.230 cm³, **15 cóncavas, 8 face-tets deficientes, 17 determinantes pequeños, 3 fallos de `checkMesh`**. La forma `subsetMesh materialVolume` falló por sintaxis en Foundation 14 y fue corregida.
+- `splitMeshRegions -disconnected -noFields` sobre **otra copia** produjo `region1` (molde inferido: **825,994 celdas; 103.256 cm³; 6 face-tets deficientes, 14 determinantes pequeños, 15 cóncavas; 3 fallos**) y `region2` (metal inferido: **383,783 celdas; 47.9735 cm³; 2 face-tets deficientes, 3 determinantes pequeños; 2 fallos**).
+- El programa informó **`No interfaces to add`**. Los parches `oldInternalFaces` **no prueban** acoplamiento térmico metal–arena; `splitMeshRegions -cellZones 'metal'` sobre una copia de la malla original conectada sigue **propuesto, NO ejecutado**. Sin malla aceptada, sin solver CFD 3D, sin validación experimental. J0/G1 abiertas.
+- Procedencia: salidas de terminal proporcionadas por el investigador hoy; logs completos conservados **solo en laptop**. Fuente canónica: [registro técnico C3D](docs/C3D_01_ESTADO_REAL_20261110_ES.md) y [manual de comandos ES](OPENFOAM_COMMAND_MANUAL_ES.md). Las entradas de octubre se conservan como historia, no como último estado.
+
 ## 2026-10-21 — GRANADA: procedencia documental B11/C11 `energy2_test` [GIT-VERIFIED; NO CFD RUN]
 
 - File Steward detectó dos parejas de `CASE_VARIANT.md` idénticas entre `B11_energy2_test/B11_topFixedFlux_airGapOF14` y `C11_energy2_test/C11_topFixedFlux_airGapOF14`. El examen de los `fvSolution` correspondientes confirmó que ambas carpetas `energy2_test` contienen `PIMPLE.nEnergyCorrectors 2` y las variantes canónicas no.
