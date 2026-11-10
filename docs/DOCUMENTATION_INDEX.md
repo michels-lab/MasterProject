@@ -7,6 +7,8 @@ Este índice organiza la documentación **sin mover ni reemplazar** archivos exi
 
 - [Identidad canónica de MasterProject y conservación de nombres de casos](MASTERPROJECT_IDENTITY_ES.md)
 
+- [Auditoría de documentación viva al 10-11-2026](DOCUMENTATION_AUDIT_20261110_ES.md) — cobertura real, comandos registrados, discrepancias y límites de evidencia
+
 ## Empezar / operación
 - [README](../README.md) — descripción y estado por confirmar en cada actualización
 - [RUN_MASTER_PROTOCOL](../RUN_MASTER_PROTOCOL.md) — reglas obligatorias antes/después de cada corrida **local**
