@@ -1,5 +1,8 @@
 # MasterProject — identidad del proyecto científico
 
+> **C3D-01 al 10-11-2026:** las mallas 3D y diagnósticos se ejecutaron **solo en la laptop**. `subsetMesh -cellSet materialVolume` conservó **1,209,777 celdas; 151.230 cm³; 15 concavidades, 8 face-tets deficientes, 17 determinantes pequeños y 3 fallos `checkMesh`**. `splitMeshRegions -disconnected` produjo `region1` (molde probable, **825,994 celdas; 3 fallos**) y `region2` (metal probable, **383,783 celdas; 2 fallos**), pero informó **`No interfaces to add`**: no hay interfaz térmica acoplada ni solver CFD 3D ejecutado. `-cellZones 'metal'` permanece **sin ejecutar**. [Registro experimental](C3D_01_ESTADO_REAL_20261110_ES.md). El repositorio y la carpeta local mantienen su identidad MasterProject.
+
+
 **Estado operativo 2026-11-10:** el usuario confirmó `~/OpenFOAM/MasterProject`, Git `main` y OpenFOAM Foundation 14. Los STL `metal.stl`, `mold.stl` y `mold_repaired.stl` están disponibles en GitHub. La línea Plan D ya cuenta con una primera malla **local y no aceptada** por fallos de calidad; [evidencia y límites](C3D_01_ESTADO_REAL_20261110_ES.md).
 
 
