@@ -90,3 +90,14 @@ El investigador ejecutó en **ambos** casos `checkMesh -allGeometry -allTopology
 En el primer ensayo, la proporción de defectos **que se encuentran dentro de la zona etiquetada metal** es aproximadamente **0.0143 %** (1/6,974); la incidencia de celdas cóncavas **entre celdas de metal** es aproximadamente **0.00026 %** (1/383,788). En el segundo ensayo ambas cantidades son cero. **No se debe equiparar «fuera de cellZone metal» con arena:** el mallado conserva aire/volumen exterior de la caja. Tampoco está medido el volumen físico real de `cellZone metal` ni comprobada una interfaz CHT conforme. La concavidad por sí sola no determina el error térmico hasta localizarla respecto a zonas e interfaz.
 
 **Próxima separación espacial:** clasificar defectos que están fuera del envolvente AABB del STL reparado (x = 0..51.8 mm, y = -65.5..0 mm, z = 0..51.8 mm); estos son exterior inequívoco. Los defectos dentro del envolvente todavía pueden estar en arena, cavidad o aire y requieren una prueba geométrica más precisa.
+
+## Concavidad fuera del envolvente del molde (10-11-2026)
+
+El investigador utilizó `topoSet` con `cellToCell` y `boxToCell` para intersectar `concaveCells` con el **AABB** del STL del molde reparado (x = 0..0.0518 m, y = -0.0655..0 m, z = 0..0.0518 m), sin remallar.
+
+| Ensayo local | Cóncavas totales | Centros dentro AABB | Centros fuera AABB | Fuera AABB (%) |
+|---|---:|---:|---:|---:|
+| `C3D01_snappy_NTC8Dj` | 6,974 | 2,194 | 4,780 | **68.54 %** |
+| `C3D01_castellated_7X7rLt` | 21,353 | 5,700 | 15,653 | **73.31 %** |
+
+Estos valores se suman a la observación previa de que solo **1** y **0** celdas cóncavas, respectivamente, pertenecen a la `cellZone metal`. **Lectura correcta:** al menos 4,780 / 15,653 centros defectuosos están inequívocamente fuera de la caja que contiene el molde y no tienen por qué formar parte de la futura malla física. Sin embargo, estar dentro del AABB **no demuestra** pertenencia al volumen material de la arena; hay que clasificar geométricamente la superficie cerrada del molde. Tampoco se garantiza que recortar la caja elimine exactamente ese número de defectos en una **malla regenerada**, pues la topología puede cambiar. La primera prueba sigue fallando 2 checks, la segunda 1; ambas rechazadas para CFD 3D.
