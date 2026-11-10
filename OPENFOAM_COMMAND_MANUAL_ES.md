@@ -1073,7 +1073,7 @@ La malla de prueba generada por `snappyHexMeshConfig` tenía `cellZone metal` co
 
 - `snappyHexMeshConfig -case ...` es **inválido** en la Foundation 14 instalada. Entrar antes al directorio del caso y llamar `snappyHexMeshConfig ...` allí.
 - No colocar `set -u` antes del `source /opt/openfoam14/etc/bashrc` (error observado `ZSH_NAME: unbound variable`).
-- `surfaceTransformPoints` se utilizó **solo en una prueba aislada**, sobre copias escaladas. **Para el siguiente caso se prefiere STL original en mm y `units [mm];` por geometría del `snappyHexMeshDict`**, sin convertir ni escalar dos veces. Esa variante todavía necesita una ejecución y verificación real.
+- `surfaceTransformPoints` se utilizó **solo en una prueba aislada**, sobre copias escaladas. **Para el siguiente caso se prefiere STL original en mm y `units [mm];` por geometría del `snappyHexMeshDict`**, sin convertir ni escalar dos veces. Esta variante **ya se ejecutó** en el segundo ensayo `C3D01_castellated_7X7rLt` (sin `snap` ni capas): 1,505,826 celdas, no ortogonalidad máxima 25.2394°, skewness 0.333333, `Face tets OK`, **21,353 celdas cóncavas** y **1 fallo `checkMesh`**. **No es una malla CFD aprobada.** Véase el registro C3D.
 - No ejecutar `splitMeshRegions` ni el solver mientras no se validen zonas física metal/arena, interfaz y los 23 face tets / 6,974 concave cells.
 - No sobreescribir `constant/polyMesh`, `log.*` ni usar `Allclean` sobre la campaña histórica. Crear carpeta de prueba nueva.
 
