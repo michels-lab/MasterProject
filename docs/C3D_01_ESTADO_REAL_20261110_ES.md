@@ -59,6 +59,15 @@ El `Mass` de `surfaceInertia` se interpreta como volumen geométrico a densidad 
 
 **Gates invariables:** ambas mallas **rechazadas** para CFD térmico 3D; las cantidades de células no son volúmenes validados de metal y arena. El exterior de la caja continúa sin excluirse con evidencia suficiente. Preferencia del investigador: comandos ejecutables **directamente en OpenFOAM sin Python**. No relajar criterios de `checkMesh` para declarar éxito; antes localizar concave cells, diagnosticar zona exterior, crear regiones físicas complementarias y volver a verificar.
 
+
+## Exportación de defectos a VTK (10-11-2026, evidencia local)
+
+El investigador ejecutó en **ambos** casos `checkMesh -allGeometry -allTopology -writeSurfaces -surfaceFormat vtk -writeSets`, siempre en su laptop. Los comandos terminaron y los defectos fueron exportados a `postProcessing/checkMesh/constant/` y `constant/polyMesh/sets/`; `checkMesh` **siguió informando fallos**. La finalización del comando no equivale a aprobación de calidad.
+
+- Caso con snapping `C3D01_snappy_NTC8Dj`: `nearPoints.vtk`, `lowQualityTetFaces.vtk`, `concaveFaces.vtk`, `concaveCells.vtk`. Sets: `concaveCells` **6,974**, `concaveFaces` **30**, `lowQualityTetFaces` **23**, además de `nearPoints` y `wrongFaces`.
+- Caso castellated sin snapping `C3D01_castellated_7X7rLt`: `nearPoints.vtk`, `concaveCells.vtk`; set `concaveCells` **21,353**; `Face tets OK`.
+- **Estado:** los VTK y sets **son archivos locales**, no están subidos a GitHub; no se ha estudiado su distribución espacial ni su intersección con la `cellZone metal`. El próximo paso debe cuantificar defectos dentro/fuera de metal y visualizar agrupaciones, evitando atribuirlos sin pruebas a mold/snap o a un supuesto CFD ya validado.
+
 ## Próximas puertas técnicas (abiertas)
 1. Archivar `log.blockMesh`, `log.snappyHexMesh`, `log.checkMesh.final` y `snappyHexMeshDict` de la prueba local en un paquete nuevo e identificado por SHA, sin sustituir evidencia previa; cotejar cantidad y volumen real de `cellZone metal`.
 2. Construir un segundo ensayo explícito con STL originales `units [mm]`, zonas metal y arena complementarias, interfaz/faceZones para transferencia de calor conjugada y eliminación correcta del aire exterior; demostrar que el sólido NO incluye el volumen del metal.
