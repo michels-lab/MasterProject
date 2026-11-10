@@ -139,3 +139,26 @@ Los volúmenes geométricos de los STL, 47.9874896432 cm³ (metal) + 102.8430960
 La malla recortada tiene estos patches: `outerBox` **0** caras, `mold_repaired` **114,807** caras (`wall`), `oldInternalFaces` **8,384** caras (`type internal` en la salida); esta frontera debe interpretarse con extrema precaución ya que `subsetMesh` expone caras sin preservar necesariamente tipos de frontera; **no constituye un par de interfaces térmicas metal–arena**. `Number of regions: 2` describe componentes desconectadas, no necesariamente dos regiones CFD físicamente acopladas. El nuevo `checkMesh` reportó 8 face-tets deficientes, 17 celdas de pequeño determinante y 15 cóncavas. **Malla NO aceptada para solver**. Logs `log.subsetMesh`, `log.checkMesh` aún están en carpeta local de prueba, no archivados en Git.
 
 **Reentrada técnica:** separar/nombrar componentes sobre otra copia con `splitMeshRegions` para inspección, verificar volúmenes y fronteras por región, corregir interfaz y 3 fallos geométricos antes de cualquier simulación térmica. Evitar confundir componentes topológicas con acoplamiento de calor.
+
+## Separación topológica de la unión recortada (10-11-2026)
+
+**Evidencia local del investigador:** `splitMeshRegions -case ~/OpenFOAM/C3D01_regions_Xd1POM -disconnected -noFields` sobre una **copia** de `C3D01_materials_H0qgJN` se completó, produciendo dos mallas. La utilidad informó **`No interfaces to add`**, de modo que esta variante **NO dispone de parches de contacto térmico conjugado generados automáticamente**. No se ejecutó ningún solver.
+
+| Resultado por región | `region1` (arena inferida) | `region2` (metal inferido) |
+|---|---:|---:|
+| Celdas | 825,994 | 383,783 |
+| Volumen malla | 103.256 cm³ | 47.9735 cm³ |
+| Volumen STL original | 102.843096 cm³ | 47.987490 cm³ |
+| Desviación relativa STL (aprox.) | +0.402 % | −0.029 % |
+| No ortogonalidad máx. | 64.9304° | 68.2102° |
+| Skewness máx. | 2.60187 | 1.42431 |
+| Caras deficientes face tets | 6 | 2 |
+| Celdas con determinante <0.001 | 14 | 3 |
+| Celdas cóncavas | 15 | 0 (no reportadas) |
+| `checkMesh` | **3 fallos** | **2 fallos** |
+| Patch `mold_repaired` | 90,093 caras (`wall`) | 24,714 caras (`wall`) |
+| Patch `oldInternalFaces` | 3,077 caras (`internal`) | 5,307 caras (`internal`) |
+
+Los volúmenes apoyan la identidad de los dos componentes pero NO demuestran que sus superficies de contacto coincidan. Los conteos de `oldInternalFaces` son diferentes y no constituyen un par de patches acoplados. **No es válido iniciar CFD conjugado con esta separación.**
+
+**Ruta técnica siguiente:** inspeccionar sobre **otra copia de la malla original conectada** `C3D01_snappy_NTC8Dj` la opción propia de OpenFOAM 14 `splitMeshRegions -cellZones 'metal' -noFields`, en lugar de `-disconnected`, para comprobar si la frontera interna de la `cellZone metal` produce patches emparejados. La región restante seguirá incluyendo exterior de la caja; la prueba NO constituye el dominio final ni acepta calidad `checkMesh`. Fuente de sintaxis: código oficial OpenFOAM-14 de `splitMeshRegions.C`, opción `-cellZones <names>`.
