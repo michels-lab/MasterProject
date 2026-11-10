@@ -1,5 +1,8 @@
 # Validation Matrix — QuickCup Solidification
 
+> **Estado C3D-01 actualizado al 10-11-2026:** la malla recortada metal+arena produjo **1,209,777 celdas y 151.230 cm³** (15 cóncavas, 8 face-tets deficientes, 17 determinantes pequeños; **3 fallos checkMesh**). `splitMeshRegions -disconnected` separó `region1` (**825,994 celdas, 103.256 cm³, 3 fallos**) y `region2` (**383,783 celdas, 47.9735 cm³, 2 fallos**) pero reportó **`No interfaces to add`**. No existe una interfaz CHT verificada, malla aceptada, solver CFD 3D ni validación experimental. `-cellZones 'metal'` **no se ha ejecutado**. [3D evidence](docs/C3D_01_ESTADO_REAL_20261110_ES.md). 2D baseline C14, gates J0/G1 and 2D registry stay unchanged.
+
+
 > **Current baseline (2026-10-08):** `C14_topFixedFlux_explicitRef` supersedes C11 for new fixed-volume validation work. C11 remains the frozen historical reference. The J0 JMatPro provenance gate remains OPEN; do not create the G1 experimental-alignment case before closing it.
 
 > **Coverage note (2026-10-08):** `analysis_results/full_campaign_audit/` represents the historic 26-case campaign, not all 29 independently verified runs. B14/C14 and C11-energy2 have separate analysis summaries; B11-energy2 has not been run. See [RUN_CASE_REGISTRY.csv](RUN_CASE_REGISTRY.csv) and [RUN_MASTER_PROTOCOL.md](RUN_MASTER_PROTOCOL.md).
