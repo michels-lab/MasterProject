@@ -1,4 +1,4 @@
-# OpenFOAM Practical Command Manual — QuickCup Solidification
+# OpenFOAM Practical Command Manual — MasterProject / QuickCup
 
 **Language:** [🇪🇸 Español](./OPENFOAM_COMMAND_MANUAL_ES.md) | 🇬🇧 English | [↩ Language selector](./OPENFOAM_COMMAND_MANUAL.md)
 
@@ -51,13 +51,13 @@
 ### Command
 
 ```bash
-cd ~/OpenFOAM/QuickCup_Solidification
+cd ~/OpenFOAM/MasterProject
 ```
 
 ### Go directly to the controlled buoyancy cases
 
 ```bash
-cd ~/OpenFOAM/QuickCup_Solidification/cases_controlled_buoyancy
+cd ~/OpenFOAM/MasterProject/cases_controlled_buoyancy
 ```
 
 ---
@@ -108,7 +108,7 @@ ls -lh
 First go to:
 
 ```bash
-cd ~/OpenFOAM/QuickCup_Solidification/cases_controlled_buoyancy
+cd ~/OpenFOAM/MasterProject/cases_controlled_buoyancy
 ```
 
 ### B6 — adaptive timestep
@@ -215,7 +215,7 @@ Therefore, if you start in `cases_controlled_buoyancy`, **do NOT use `../C6_adap
 ### First go to the correct folder
 
 ```bash
-cd ~/OpenFOAM/QuickCup_Solidification/cases_controlled_buoyancy
+cd ~/OpenFOAM/MasterProject/cases_controlled_buoyancy
 ```
 
 ### Run B6 → C6 → B7 → C7
@@ -250,7 +250,7 @@ It is especially useful from a **second terminal** while the solver continues ru
 ### Example: watch B6
 
 ```bash
-cd ~/OpenFOAM/QuickCup_Solidification/cases_controlled_buoyancy/B6_adaptiveDt
+cd ~/OpenFOAM/MasterProject/cases_controlled_buoyancy/B6_adaptiveDt
 tail -f log.foamMultiRun
 ```
 
@@ -424,35 +424,35 @@ Configurations currently studied:
 ### Run only B6
 
 ```bash
-cd ~/OpenFOAM/QuickCup_Solidification/cases_controlled_buoyancy/B6_adaptiveDt
+cd ~/OpenFOAM/MasterProject/cases_controlled_buoyancy/B6_adaptiveDt
 ./Allclean && ./Allrun
 ```
 
 ### Run only C6
 
 ```bash
-cd ~/OpenFOAM/QuickCup_Solidification/cases_controlled_buoyancy/C6_adaptiveDt
+cd ~/OpenFOAM/MasterProject/cases_controlled_buoyancy/C6_adaptiveDt
 ./Allclean && ./Allrun
 ```
 
 ### Run only B7
 
 ```bash
-cd ~/OpenFOAM/QuickCup_Solidification/cases_controlled_buoyancy/B7_outer4
+cd ~/OpenFOAM/MasterProject/cases_controlled_buoyancy/B7_outer4
 ./Allclean && ./Allrun
 ```
 
 ### Run only C7
 
 ```bash
-cd ~/OpenFOAM/QuickCup_Solidification/cases_controlled_buoyancy/C7_outer4
+cd ~/OpenFOAM/MasterProject/cases_controlled_buoyancy/C7_outer4
 ./Allclean && ./Allrun
 ```
 
 ### Run C6, B7, and C7 after B6 has already finished
 
 ```bash
-cd ~/OpenFOAM/QuickCup_Solidification/cases_controlled_buoyancy
+cd ~/OpenFOAM/MasterProject/cases_controlled_buoyancy
 (cd C6_adaptiveDt && ./Allclean && ./Allrun) && \
 (cd B7_outer4 && ./Allclean && ./Allrun) && \
 (cd C7_outer4 && ./Allclean && ./Allrun)
@@ -573,7 +573,7 @@ This is useful when a result exists on your computer but does not appear as a fi
 ### Pull remote changes first
 
 ```bash
-cd ~/OpenFOAM/QuickCup_Solidification
+cd ~/OpenFOAM/MasterProject
 git pull
 ```
 
@@ -604,7 +604,7 @@ git push origin main
 ### Complete workflow
 
 ```bash
-cd ~/OpenFOAM/QuickCup_Solidification
+cd ~/OpenFOAM/MasterProject
 git pull
 git status
 git add -A
@@ -641,7 +641,7 @@ These commands appeared in the early buoyancy-case tests and remain useful as a 
 ### C2 example
 
 ```bash
-cd ~/OpenFOAM/QuickCup_Solidification/cases_buoyancy/C2_test
+cd ~/OpenFOAM/MasterProject/cases_buoyancy/C2_test
 ./Allclean
 ./Allrun
 paraFoam -builtin &
@@ -650,7 +650,7 @@ paraFoam -builtin &
 ### B2 example
 
 ```bash
-cd ~/OpenFOAM/QuickCup_Solidification/cases_buoyancy/B2_test
+cd ~/OpenFOAM/MasterProject/cases_buoyancy/B2_test
 ./Allclean
 ./Allrun
 paraFoam -builtin &
@@ -753,7 +753,7 @@ The `solidificationMeltingMomentumDiagnostics` block is included in `system/rese
 After synchronizing:
 
 ```bash
-cd ~/OpenFOAM/QuickCup_Solidification
+cd ~/OpenFOAM/MasterProject
 git pull origin main
 ```
 
@@ -812,7 +812,7 @@ do not treat it as a solver failure. It is a dynamic-code compilation issue. In 
 After synchronizing the fix, clean and rerun B7:
 
 ```bash
-cd ~/OpenFOAM/QuickCup_Solidification
+cd ~/OpenFOAM/MasterProject
 git pull origin main
 cd cases_controlled_buoyancy/B7_outer4
 ./Allclean
@@ -865,7 +865,7 @@ For future runs, `Allrun` performs this stage automatically after `foamMultiRun`
 To regenerate this post-processing for all existing controlled cases without rerunning CFD:
 
 ```bash
-cd ~/OpenFOAM/QuickCup_Solidification/cases_controlled_buoyancy
+cd ~/OpenFOAM/MasterProject/cases_controlled_buoyancy
 sh postprocess_momentum_all.sh
 ```
 
@@ -901,3 +901,44 @@ python3 analysis_tools/audit_postprocessing_config.py --strict
 A missing Git-tracked result does not prove a local simulation never happened. A present result alone does not prove physical validity, numerical convergence or experimental agreement. Investigate completeness, per-face phi, residuals, conservation and units before claiming scientific conclusions.
 
 The four .github/agents definitions are agent instructions, not independent always-running AI. The deterministic post-push checks require a successful GitHub Actions job; inspect the actual workflow status. After a push, synchronize case notes, ES/EN logs, manuals, guide, scientific analysis and registry through MAZAPÁN without running a new simulation.
+
+
+---
+
+## Operational appendix — C3D-01 / Plan D (10 November 2026)
+
+**Provenance:** [complete geometry and local-mesh evidence register](docs/C3D_01_ESTADO_REAL_20261110_ES.md). The local `C3D01_snappy_NTC8Dj` trial produced **1,505,847 cells** but **failed two `checkMesh` checks**. It is NOT an accepted metal–sand multiregion mesh or a CFD simulation.
+
+### A. Inspect versioned STL geometry without changing it
+
+```bash
+source /opt/openfoam14/etc/bashrc
+cd ~/OpenFOAM/MasterProject/cases_3d/C3D_01_metal_mold
+sha256sum constant/geometry/{metal,mold,mold_repaired}.stl
+surfaceCheck -checkSelfIntersection constant/geometry/metal.stl
+surfaceCheck -checkSelfIntersection constant/geometry/mold_repaired.stl
+```
+
+The original metal/mold STL and the repaired mold are **already committed to GitHub**. Preserve original source files; for independent diagnostic `problemFaces`, run from separate output folders with absolute STL paths.
+
+### B. Examine the existing laptop trial (without re-meshing)
+
+```bash
+source /opt/openfoam14/etc/bashrc
+TRIAL="$HOME/OpenFOAM/C3D01_snappy_NTC8Dj"
+foamDictionary "$TRIAL/system/snappyHexMeshDict" -entry geometry
+foamDictionary "$TRIAL/system/snappyHexMeshDict" -entry castellatedMeshControls/refinementSurfaces
+foamDictionary "$TRIAL/system/snappyHexMeshDict" -entry castellatedMeshControls/refinementRegions
+grep -Ei 'cells:|face tets|concave cells|Failed|non-orthogonality|skewness' "$TRIAL/log.checkMesh.final"
+```
+
+The generated dictionary assigned `cellZone metal` (383,788 cell labels), but **neither its physical volume nor its CHT interface is proven**. The global mesh volume was 242.201 cm³, essentially the entire background box. `checkMesh` found 23 faulty face-tet decompositions and 6,974 concave cells.
+
+### C. Foundation 14 usage and safeguards
+
+- `snappyHexMeshConfig` does **not** support `-case`. Enter the trial directory before invoking it.
+- Do not enable `set -u` before sourcing `/opt/openfoam14/etc/bashrc`; an unset `ZSH_NAME` caused the reported failure.
+- The first local trial used **temporary meter-scaled COPIES** created by `surfaceTransformPoints`. For the next configuration, prefer original STL coordinates in millimetres with `units [mm];` in the **geometry entries** of a handcrafted Foundation 14 `snappyHexMeshDict`. This newer configuration is **not yet execution-tested**; never double scale.
+- Do not run `splitMeshRegions` or the solidification solver until metal/sand zones, interfaces, volumes and mesh quality have passed. Keep all original meshing and CFD results.
+
+**Git:** original STLs were introduced in `e391f7591`; the repaired mold and geometric verification logs in `06426781f`. Full `snappyHexMesh` trial logs remain only on the researcher's laptop; GitHub does not execute CFD.

@@ -4,6 +4,8 @@
 **Tipo de evidencia:** configuración inspeccionada en Git; conclusiones de ejecución física citadas en analysis_results/v14_bc_comparison/summary.md.  
 **IMPORTANTE:** la sola existencia de un functionObject no demuestra que se haya ejecutado. Los resultados numéricos deben contrastarse con los archivos generados y logs de cada corrida.
 
+> **2026-11-10 — límite de aplicación:** la prueba C3D-01 produjo únicamente una malla local no aceptada, **sin campos CFD 3D**. Los `functionObjects`, sondas, diagnósticos de fracción líquida y cierres energéticos descritos aquí corresponden a **C14/B14 2D**, no deben atribuirse a esa malla 3D. Véase [registro C3D](docs/C3D_01_ESTADO_REAL_20261110_ES.md).
+
 ## 1. Arquitectura: de las ecuaciones a los resultados
 
 - **system/controlDict**: foamMultiRun, regiones metal/fluid y mold/solid; C14 inicia 0 s y termina 10 s, dt = 0.001 s sin ajuste automático, estados volumétricos cada 100 pasos, equivalentes nominalmente a 0.1 s.

@@ -4,6 +4,8 @@
 
 > **Coverage note (2026-10-08):** `analysis_results/full_campaign_audit/` represents the historic 26-case campaign, not all 29 independently verified runs. B14/C14 and C11-energy2 have separate analysis summaries; B11-energy2 has not been run. See [RUN_CASE_REGISTRY.csv](RUN_CASE_REGISTRY.csv) and [RUN_MASTER_PROTOCOL.md](RUN_MASTER_PROTOCOL.md).
 
+> **2026-11-10 C3D-01 geometry/meshing evidence (NOT experimental validation):** [source-qualified local-run register](docs/C3D_01_ESTADO_REAL_20261110_ES.md). Original metal and mold STL and the repaired mold are in public GitHub. A 1,505,847-cell local `snappyHexMesh` trial finished but **failed 2 `checkMesh` checks** (23 face-tet failures and 6,974 concave cells); physical metal/sand regions, contact and CHT are NOT verified. Preserve C14 baseline, J0/G1 OPEN, V15/V16 registry not reconciled.
+
 ## Objective
 
 Determine the **minimum additional physics required** to explain experimental evidence while keeping numerical sensitivity, buoyancy implementation, thermal parameters, equilibrium-solidification limitations, and genuine kinetic effects separate.

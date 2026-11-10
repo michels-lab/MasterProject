@@ -1,5 +1,8 @@
 # MasterProject — identidad del proyecto científico
 
+**Estado operativo 2026-11-10:** el usuario confirmó `~/OpenFOAM/MasterProject`, Git `main` y OpenFOAM Foundation 14. Los STL `metal.stl`, `mold.stl` y `mold_repaired.stl` están disponibles en GitHub. La línea Plan D ya cuenta con una primera malla **local y no aceptada** por fallos de calidad; [evidencia y límites](C3D_01_ESTADO_REAL_20261110_ES.md).
+
+
 **Nombre actual y repositorio GitHub verificado (2026-10-21): `MasterProject`.** El nombre anterior era `QuickCup-Solidification`. GitHub confirmó el mismo ID `1381015792` en el URL nuevo y en el redireccionamiento anterior; no es un segundo repositorio.
 
 ## Qué es MasterProject

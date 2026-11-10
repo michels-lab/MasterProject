@@ -1,8 +1,15 @@
 # QUICKCUP — PROTOCOLO MAESTRO DE CORRIDAS Y SINCRONIZACIÓN
 
-**Versión:** 2026-10-08 · **Alcance:** repositorio `QuickCup-Solidification` (autónomo, no depende de Michel's Lab/main)  
+**Versión original:** 2026-10-08; **adenda de estado 2026-11-10** · **Alcance:** repositorio `MasterProject` (antes `QuickCup-Solidification`) (autónomo, no depende de Michel's Lab/main)  
 **Autoridad:** este archivo define qué revisar y actualizar antes/durante/después de **cada** corrida o auditoría de OpenFOAM Foundation 14.  
 **Regla:** ningún agente ni conversación debe dar por actualizado el proyecto basándose solo en un `git push`, en un `End`, en un termopar que llega a 10 s o en una nota aislada. Usar este protocolo + `RUN_CASE_REGISTRY.csv`.
+
+## Adenda de estado 3D — 2026-11-10
+
+- El estado de geometría y malla `C3D-01` se registra en [docs/C3D_01_ESTADO_REAL_20261110_ES.md](docs/C3D_01_ESTADO_REAL_20261110_ES.md). **No es un CFD ejecutado ni un resultado validado**. Los STL originales y molde reparado se versionaron, pero la prueba local `snappyHexMesh` aún no tiene logs completos en Git.
+- **No cambiar automáticamente estados del `RUN_CASE_REGISTRY.csv` de los 34 casos 2D.** Ese CSV sigue representando la campaña B/C y debe reconciliar por separado la evidencia V15/V16 de octubre. `case3d-01` requiere registro geométrico propio hasta que exista malla multirregión aceptada.
+- La primera prueba local C3D tiene 1,505,847 celdas, 23 fallos de *face tets*, 6,974 celdas cóncavas y **2 pruebas de malla fallidas**. El `End` de `snappyHexMesh` **no** autoriza `RUN_VERIFIED` ni `EXPERIMENTALLY_VALIDATED`.
+- La próxima malla debe preservar los originales en mm con `units [mm];` y demostrar metal/arena complementarios, interfaces térmicas y geometría; la prueba ejecutada en noviembre usó copias escaladas transitorias y no certifica todavía el diccionario nativo.
 
 ## Arquitectura obligatoria — ejecución local, revisión después del push
 

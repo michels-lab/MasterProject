@@ -1,4 +1,6 @@
-# QuickCup-Solidification — Project Audit Log
+# MasterProject — Project Audit Log (formerly QuickCup-Solidification)
+
+**Updated 2026-11-10:** [C3D-01 actual local geometries/meshing evidence](docs/C3D_01_ESTADO_REAL_20261110_ES.md); the meshing trial fails 2 checks and is not CFD-validated. Current entries appear in both language logs.
 
 ## Choose language / Selecciona idioma
 

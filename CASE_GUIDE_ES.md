@@ -1,8 +1,10 @@
-# Guía maestra del caso Quick-Cup en OpenFOAM 14
+# Guía maestra del caso Quick-Cup en OpenFOAM 14 — MasterProject
 
 > **Protocolo de actualización entre corridas (2026-10-08):** consultar [RUN_MASTER_PROTOCOL.md](./RUN_MASTER_PROTOCOL.md) y [RUN_CASE_REGISTRY.csv](./RUN_CASE_REGISTRY.csv) antes de ejecutar, analizar o sincronizar una variante. La referencia numérica histórica de esta guía es V11; **la baseline actual para preparar G1 es C14** y la puerta J0 permanece abierta.
 
 > **Diagnósticos vigentes:** [Guía de postprocesamiento Foundation v14](POSTPROCESSING_FIELD_GUIDE_ES.md) explica el C14 actual (probes, perfiles, flujo por cara, balances, derivadas y fuerzas). Los ejemplos V11 de esta guía son referencias históricas; no representan automáticamente toda la instrumentación V14.
+
+> **Actualización C3D-01 al 2026-11-10:** [registro de geometría y malla 3D local](docs/C3D_01_ESTADO_REAL_20261110_ES.md). El molde reparado y ambos STL originales están en Git; una malla experimental de 1,505,847 celdas **falló dos pruebas `checkMesh`** y no es apta para CFD. C14 continúa como referencia 2D; J0 y G1 abiertas. No confundir este experimento 3D con una variante B/C validada.
 
 ## Objetivo de esta guía
 
@@ -1998,7 +2000,7 @@ Cuando Michel diga **“MAZAPÁN”** o **“haz MAZAPÁN”**, se debe ejecutar
 ### Flujo Git de MAZAPÁN
 
 ```bash
-cd ~/OpenFOAM/QuickCup_Solidification
+cd ~/OpenFOAM/MasterProject
 
 git add \
 cases_controlled_buoyancy/<CASO_1> \

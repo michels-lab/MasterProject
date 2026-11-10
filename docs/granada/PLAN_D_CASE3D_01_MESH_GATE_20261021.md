@@ -1,5 +1,8 @@
 # Operación Granada Grande — Plan D / case3d-01: evidencia de geometría y malla
 
+> **Actualización posterior, 2026-11-10:** este documento conserva el alcance de **octubre**. El investigador ya publicó tres STL y ejecutó geometría y una primera prueba de mallado 3D **no aceptada** por 2 fallos `checkMesh`. Las nuevas fuentes, SHA y limitaciones están en [registro C3D-01](../C3D_01_ESTADO_REAL_20261110_ES.md). No reinterpretar los tests estáticos de este estudio como resultados CFD.
+
+
 **Fecha 21-oct-2026 — Estado: desarrollo de herramientas y pruebas, no ejecución OpenFOAM.**
 
 ## Identificación sin ambigüedad

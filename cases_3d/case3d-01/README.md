@@ -1,16 +1,19 @@
 # Plan D — caso científico `case3d-01`
 
+**Actualización 2026-11-10:** [registro íntegro de geometrías, primera malla y pendientes](../../docs/C3D_01_ESTADO_REAL_20261110_ES.md). Los STL ya se publicaron en GitHub; los logs de la prueba `snappyHexMesh` siguen en la laptop.
+
+
 **Nombre oficial de caso: `case3d-01`**. Este es el espacio canónico de la línea de investigación **Plan D**: fundición de hierro en molde de arena, modelo tridimensional QuickCup.
 
 ## Estado actual
 
 - Preparada y documentada la geometría STL de metal y arena.
 - Malla de fondo prevista: 58×72×58 mm, 29×36×29 celdas a 2 mm nominales.
-- **NO** se ha ejecutado todavía `blockMesh`, `checkMesh`, `snappyHexMesh` ni el solver de solidificación en un registro disponible.
+- **Novedad 2026-11-10:** `blockMesh`, `checkMesh` y una prueba `snappyHexMesh` sí se ejecutaron en laptop; esta última falló dos pruebas de calidad y no fue aceptada. **El solver de solidificación NO se ha ejecutado**.
 - Por lo tanto, no hay malla de metal–arena, intercambio conjugado validado, independencia de malla ni resultado experimental validado.
 - Los cambios de refinamiento de volumen a 0.5 mm y los límites científicos de ese refinamiento pertenecen a **PR #18 y PR #19**, ambos abiertos. No los fusionar conceptualmente ni imponer como resolución demostrada.
 
-La carpeta histórica `cases_3d/C3D_01_metal_mold/` conserva temporalmente **los archivos técnicos fuente** mientras dichos PR editan ese directorio. Este directorio `cases_3d/case3d-01/` conserva la nomenclatura canónica, una nueva herramienta segura para preparar **una copia local de ejecución** y la documentación de su trazabilidad. No es aún un caso OpenFOAM completo ejecutable directamente desde GitHub. **No borrar ni renombrar** el directorio antiguo mientras existan cambios simultáneos.
+La carpeta histórica `cases_3d/C3D_01_metal_mold/` conserva temporalmente **los archivos técnicos fuente** mientras dichos PR editan ese directorio. Este directorio `cases_3d/case3d-01/` conserva la nomenclatura canónica, una nueva herramienta segura para preparar **una copia local de ejecución** y la documentación de su trazabilidad. No es aún un caso CFD multirregión completo y validado directamente desde GitHub. **No borrar ni renombrar** el directorio antiguo mientras existan cambios simultáneos.
 
 ## Preparar una copia nueva con el nombre correcto
 

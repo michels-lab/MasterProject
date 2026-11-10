@@ -1,4 +1,4 @@
-# Auditoría JMatPro → OpenFOAM — QuickCup Solidification
+# Auditoría JMatPro → OpenFOAM — MasterProject / QuickCup
 
 > **Actualización 2026-10-03 — baseline vigente:** `C11_topFixedFlux_airGapOF14` se conserva como baseline histórico congelado. `C14_topFixedFlux_explicitRef` fue verificado a 10 s y es su sucesor actual para trabajo/validación: mantiene `fixedFluxPressure + slip`, la misma física/materiales de C11 y añade la referencia explícita de presión solicitada por el director. Las observaciones de trazabilidad de propiedades hechas sobre C11 siguen aplicando a C14 mientras no se cambien sus propiedades termofísicas.
 
@@ -7,6 +7,8 @@
 **Estado:** AUDITORÍA DE TRAZABILIDAD TERMODINÁMICA  
 **Baseline OpenFOAM inspeccionada:** `C11_topFixedFlux_airGapOF14`  
 **Caso de contraste:** `B11_topFixedFlux_airGapOF14`
+
+> **Nota de situación 2026-11-10:** la construcción geométrica C3D-01 avanzó a una prueba local de malla (no aceptada; [registro](docs/C3D_01_ESTADO_REAL_20261110_ES.md)). Esto **no cambia** el gate J0: aún no consta un CSV original completo de JMatPro verificable por composición/propiedad; el PR #32 agrega un auditor sintético, sin incorporación de exportación real ni cierre de procedencia. Tampoco hay G1 experimental.
 
 ## 1. Por qué existe esta auditoría
 

@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Quick-Cup · Guía maestra interactiva · OpenFOAM 14</title>
+<title>MasterProject / Quick-Cup · Guía maestra interactiva · OpenFOAM 14</title>
 <style>
 :root{--bg:#f5f7f9;--panel:#fff;--ink:#172026;--muted:#607078;--line:#dce4e8;--accent:#0d6b66;--accent2:#0b4f6c;--soft:#e8f3f1;--warn:#fff4d8;--danger:#fdeceb;--code:#10181d;--codeInk:#e7f3f2;--shadow:0 10px 30px rgba(25,40,46,.08);--radius:14px;--sidebar:330px}
 [data-theme="dark"]{--bg:#101619;--panel:#162126;--ink:#edf4f5;--muted:#9db0b7;--line:#2a3a40;--accent:#63c8bd;--accent2:#7bc4e8;--soft:#173331;--warn:#40351b;--danger:#402526;--code:#081013;--codeInk:#d9f0ee;--shadow:0 10px 30px rgba(0,0,0,.25)}
@@ -24,6 +24,8 @@ details{border:1px solid var(--line);border-radius:11px;background:var(--panel);
 @media(max-width:980px){.sidebar{transform:translateX(-100%);transition:.2s;box-shadow:var(--shadow)}.sidebar.open{transform:translateX(0)}main{margin-left:0;padding:78px 18px 60px}.mobileMenu{display:inline-block}.card.half,.card.third,.card.twoThirds{grid-column:span 12}.topTools{left:16px;right:auto}}
 @media print{.sidebar,.topTools,.doneBox,.sideActions,.search{display:none!important}main{margin:0;padding:0;max-width:none}.card{break-inside:avoid;box-shadow:none}details>div{display:block!important}}
 </style></head><body>
+<div role="status" style="margin:12px 16px;padding:12px;border:1px solid #8da6a4;border-radius:8px;background:#eef6f4;color:#173b35;font-size:14px"><strong>Actualización 10/11/2026 · MasterProject / QuickCup 3D:</strong> STL versionados y molde reparado. Malla local de 1,505,847 celdas con <strong>2 fallos checkMesh</strong> (23 face tets, 6,974 celdas cóncavas); sin región metal–arena validada ni CFD 3D. Consulte <a href="docs/C3D_01_ESTADO_REAL_20261110_ES.md">el registro científico actual</a>. Los ejemplos históricos de esta guía no se sustituyen por resultados de C3D.</div>
+
 <div class="topTools"><button class="btn mobileMenu" id="menuBtn">☰ Índice</button><button class="btn" id="themeBtn">◐ Tema</button></div>
 <aside class="sidebar" id="sidebar">
 <div class="brand"><div class="logo">OF</div><div><h1>Quick‑Cup · OpenFOAM 14</h1><small>Guía maestra interactiva</small></div></div>

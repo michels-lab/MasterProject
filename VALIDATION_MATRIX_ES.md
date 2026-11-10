@@ -5,6 +5,8 @@
 
 > **Cobertura documental 2026-10-08:** `full_campaign_audit/` sigue siendo un consolidado histórico de 26 casos, no de los 29 verificados. Inventario y procedimiento de actualización: [RUN_CASE_REGISTRY.csv](RUN_CASE_REGISTRY.csv) y [RUN_MASTER_PROTOCOL.md](RUN_MASTER_PROTOCOL.md). Pendiente integrar B14/C14 y C11-energy2 en los CSV, sin introducir B11-energy2 no ejecutado.
 
+> **2026-11-10 — C3D-01 (NO es validación científica):** [registro de geometría y primera malla local](docs/C3D_01_ESTADO_REAL_20261110_ES.md). STL originales y molde reparado versionados; prueba `snappyHexMesh` de 1,505,847 celdas con **2 fallos de calidad** (23 face tets y 6,974 celdas cóncavas). No están verificados los volúmenes metal/arena, la interfaz térmica ni las fronteras CHT. C14 sigue baseline 2D; J0/G1 abiertas. Sin cambiar etiquetas de los casos 2D V15/V16 hasta auditar registro y datos.
+
 ## Objetivo
 
 Determinar la **mínima física adicional necesaria** para explicar la evidencia experimental sin confundir:
