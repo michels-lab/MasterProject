@@ -101,3 +101,19 @@ El investigador utilizó `topoSet` con `cellToCell` y `boxToCell` para intersect
 | `C3D01_castellated_7X7rLt` | 21,353 | 5,700 | 15,653 | **73.31 %** |
 
 Estos valores se suman a la observación previa de que solo **1** y **0** celdas cóncavas, respectivamente, pertenecen a la `cellZone metal`. **Lectura correcta:** al menos 4,780 / 15,653 centros defectuosos están inequívocamente fuera de la caja que contiene el molde y no tienen por qué formar parte de la futura malla física. Sin embargo, estar dentro del AABB **no demuestra** pertenencia al volumen material de la arena; hay que clasificar geométricamente la superficie cerrada del molde. Tampoco se garantiza que recortar la caja elimine exactamente ese número de defectos en una **malla regenerada**, pues la topología puede cambiar. La primera prueba sigue fallando 2 checks, la segunda 1; ambas rechazadas para CFD 3D.
+
+## Clasificación material por superficies cerradas STL (10-11-2026)
+
+Evidencia adicional transcrita del investigador: `topoSet` con `surfaceToCell`, `useSurfaceOrientation true`, `includeCut false`, `includeInside true`, `includeOutside false`, para `mold_repaired.stl` y `metal.stl` en la geometría **temporal en metros** del primer ensayo. Ambas mallas se clasificaron mediante la misma geometría de referencia en metros. Los conteos son de selección geométrica **de centros de celdas**, no de volúmenes integrados o de patches CHT completos.
+
+| Conteo | `C3D01_snappy_NTC8Dj` | `C3D01_castellated_7X7rLt` |
+|---|---:|---:|
+| Celdas dentro del STL molde | 825,994 | 825,918 |
+| Celdas dentro del STL metal | 383,783 | 383,788 |
+| Celdas cóncavas dentro de molde | **15** | **0** |
+| Celdas cóncavas dentro de metal | **0** | **0** |
+| Celdas cóncavas fuera de ambos STL | **6,959** (99.78 % de 6,974) | **21,353** (100 % de 21,353) |
+| Celdas clasificadas dentro de ambos STL | 0 | 7 |
+| Celdas de `cellZone metal` fuera de interior STL metal | 7 | 0 |
+
+**Interpretación:** la gran mayoría de defectos aparece fuera de los materiales seleccionados. Las **15 celdas cóncavas clasificadas como molde** de la primera malla merecen atención, como también las 23 caras de mala descomposición tetraédrica cuyo lugar aún no se ha discriminado. Las 7 coincidencias y 7 discrepancias de clasificación en torno al metal indican que la interfaz debe verificarse, pero **NO** prueban por sí solas interpenetración real de STL. Una malla de prueba recortada puede eliminar mucho exterior; no valida automáticamente la conectividad térmica metal–arena, calidad ni conservación geométrica: `surfaceToCell` con `includeCut false` no hace una construcción de interfaz conformante. Se requiere geometría+volumen+parches físicos antes de CFD.
