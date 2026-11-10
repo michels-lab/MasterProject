@@ -1,5 +1,8 @@
 # QUICKCUP — PROTOCOLO MAESTRO DE CORRIDAS Y SINCRONIZACIÓN
 
+> **Estado C3D-01 actualizado al 10-11-2026:** la malla recortada metal+arena produjo **1,209,777 celdas y 151.230 cm³** (15 cóncavas, 8 face-tets deficientes, 17 determinantes pequeños; **3 fallos checkMesh**). `splitMeshRegions -disconnected` separó `region1` (**825,994 celdas, 103.256 cm³, 3 fallos**) y `region2` (**383,783 celdas, 47.9735 cm³, 2 fallos**) pero reportó **`No interfaces to add`**. No existe una interfaz CHT verificada, malla aceptada, solver CFD 3D ni validación experimental. `-cellZones 'metal'` **no se ha ejecutado**. [Bitácora](docs/C3D_01_ESTADO_REAL_20261110_ES.md). Los logs y mallas siguen locales y NO deben generar automáticamente nuevos estados en `RUN_CASE_REGISTRY.csv`.
+
+
 **Versión original:** 2026-10-08; **adenda de estado 2026-11-10** · **Alcance:** repositorio `MasterProject` (antes `QuickCup-Solidification`) (autónomo, no depende de Michel's Lab/main)  
 **Autoridad:** este archivo define qué revisar y actualizar antes/durante/después de **cada** corrida o auditoría de OpenFOAM Foundation 14.  
 **Regla:** ningún agente ni conversación debe dar por actualizado el proyecto basándose solo en un `git push`, en un `End`, en un termopar que llega a 10 s o en una nota aislada. Usar este protocolo + `RUN_CASE_REGISTRY.csv`.
