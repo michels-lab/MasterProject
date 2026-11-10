@@ -1,5 +1,8 @@
 # Guía de postprocesamiento y agentes científicos — QuickCup / Foundation v14
 
+> **Estado C3D-01 actualizado al 10-11-2026:** la malla recortada metal+arena produjo **1,209,777 celdas y 151.230 cm³** (15 cóncavas, 8 face-tets deficientes, 17 determinantes pequeños; **3 fallos checkMesh**). `splitMeshRegions -disconnected` separó `region1` (**825,994 celdas, 103.256 cm³, 3 fallos**) y `region2` (**383,783 celdas, 47.9735 cm³, 2 fallos**) pero reportó **`No interfaces to add`**. No existe una interfaz CHT verificada, malla aceptada, solver CFD 3D ni validación experimental. `-cellZones 'metal'` **no se ha ejecutado**. [Bitácora](docs/C3D_01_ESTADO_REAL_20261110_ES.md). Esta guía de campos/sondas sigue aplicándose a 2D C14/B14: todavía NO hay campos CFD 3D que postprocesar.
+
+
 **Actualización:** 2026-10-08 · **Caso inspeccionado:** C14 (y B14 para paridad de configuración)  
 **Tipo de evidencia:** configuración inspeccionada en Git; conclusiones de ejecución física citadas en analysis_results/v14_bc_comparison/summary.md.  
 **IMPORTANTE:** la sola existencia de un functionObject no demuestra que se haya ejecutado. Los resultados numéricos deben contrastarse con los archivos generados y logs de cada corrida.
