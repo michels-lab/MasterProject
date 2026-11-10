@@ -1,5 +1,8 @@
 # MasterProject — control de sincronización documental (10-11-2026)
 
+> **Integración Git al 2026-11-10:** 19 documentos de este bloque fueron incorporados a `main` mediante commit `641d3a2d97bc52aac0c4f8f5c8a77670ed4d7c59`. **Seis documentos adicionales están modificados pero pendientes de fusionar** en [PR #33](https://github.com/michels-lab/MasterProject/pull/33) por colisiones con PRs #18, #19 y #28: `README.md`, `docs/DOCUMENTATION_INDEX.md`, `NEXT_RESEARCH_ROADMAP_ES.md`, `PROJECT_AUDIT_LOG_ES.md`, `PROJECT_AUDIT_LOG_EN.md`, `cases_3d/C3D_01_metal_mold/README.md`. **No presentar esas seis ediciones como disponibles en `main` todavía.**
+
+
 ## Alcance del bloque
 
 Objetivo: mantener coherentes los **documentos vivos** de MasterProject con los STL originales publicados, reparación de molde y primera malla 3D ejecutada en laptop el 10-11-2026. Fuente primaria actual: terminal del investigador + logs geométricos versionados; los logs completos del primer snappy están pendientes de archivar. No sustituye datos de CFD ni pruebas experimentales.
