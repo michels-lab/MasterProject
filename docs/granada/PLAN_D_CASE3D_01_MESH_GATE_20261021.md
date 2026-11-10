@@ -1,5 +1,8 @@
 # Operación Granada Grande — Plan D / case3d-01: evidencia de geometría y malla
 
+> **C3D-01 al 10-11-2026:** las mallas 3D y diagnósticos se ejecutaron **solo en la laptop**. `subsetMesh -cellSet materialVolume` conservó **1,209,777 celdas; 151.230 cm³; 15 concavidades, 8 face-tets deficientes, 17 determinantes pequeños y 3 fallos `checkMesh`**. `splitMeshRegions -disconnected` produjo `region1` (molde probable, **825,994 celdas; 3 fallos**) y `region2` (metal probable, **383,783 celdas; 2 fallos**), pero informó **`No interfaces to add`**: no hay interfaz térmica acoplada ni solver CFD 3D ejecutado. `-cellZones 'metal'` permanece **sin ejecutar**. [Bitácora vigente](../C3D_01_ESTADO_REAL_20261110_ES.md). Este documento conserva los gates y el alcance histórico de octubre, no los resultados finales.
+
+
 > **Actualización posterior, 2026-11-10:** este documento conserva el alcance de **octubre**. El investigador ya publicó tres STL y ejecutó geometría y una primera prueba de mallado 3D **no aceptada** por 2 fallos `checkMesh`. Las nuevas fuentes, SHA y limitaciones están en [registro C3D-01](../C3D_01_ESTADO_REAL_20261110_ES.md). No reinterpretar los tests estáticos de este estudio como resultados CFD.
 
 
