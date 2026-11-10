@@ -1,6 +1,9 @@
 # MasterProject — Project Audit Log (formerly QuickCup-Solidification)
 
-**Updated 2026-11-10:** [C3D-01 actual local geometries/meshing evidence](docs/C3D_01_ESTADO_REAL_20261110_ES.md); the meshing trial fails 2 checks and is not CFD-validated. Current entries appear in both language logs.
+> **Estado científico actualizado, 10-11-2026 — C3D-01:** recorte local metal + arena: **1,209,777 celdas; 151.230 cm³; 15 celdas cóncavas, 8 face-tets deficientes, 17 celdas de determinante pequeño; 3 fallos `checkMesh`**. `splitMeshRegions -disconnected` separó `region1` (probable arena, **825,994 celdas; 103.256 cm³; 3 fallos**) y `region2` (probable metal, **383,783 celdas; 47.9735 cm³; 2 fallos**); **`No interfaces to add`**. **Sin interfaz CHT, sin CFD 3D ni malla aprobada.** El ensayo `-cellZones 'metal'` aún **NO** se ejecutó. [Evidencia](docs/C3D_01_ESTADO_REAL_20261110_ES.md) · [Manual](OPENFOAM_COMMAND_MANUAL_ES.md).
+
+
+**Updated 2026-11-10:** [full local 3D mesh evidence](docs/C3D_01_ESTADO_REAL_20261110_ES.md) covers material subset, separate regions and **missing thermal interface**. Both regions still fail quality checks. This page is a language selector; see dated entries in the underlying logs.
 
 ## Choose language / Selecciona idioma
 
