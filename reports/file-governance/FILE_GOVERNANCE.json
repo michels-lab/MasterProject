@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
   "audit_kind": "deterministic_full_tracked_tree",
-  "tracked_files_total": 38778,
-  "classified_files_total": 38773,
-  "docs_content_inspected": 129,
+  "tracked_files_total": 38779,
+  "classified_files_total": 38774,
+  "docs_content_inspected": 130,
   "large_docs_skipped": 0,
   "excluded_reports": 5,
   "roles": {
@@ -12,7 +12,7 @@
     "bitacora": 5,
     "config": 7,
     "data": 22,
-    "document": 102,
+    "document": 103,
     "index": 22,
     "license": 1,
     "simulation_case_file": 98,
@@ -24,10 +24,12 @@
     "web_ui": 1,
     "workflow": 18
   },
-  "finding_counts": {},
-  "finding_total": 0,
-  "inventory_fingerprint": "eab037e5c18b0f98dfd79945eb639f7729cbe4ee41eaac9c1aa28e81dfa172a6",
-  "evidence_fingerprint": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+  "finding_counts": {
+    "POTENTIAL_UNLOGGED_CHANGES": 2
+  },
+  "finding_total": 2,
+  "inventory_fingerprint": "df5fcb42a896c383057ed1fefe0c67d3dcc7360269cb4749dd8e6a0687de1699",
+  "evidence_fingerprint": "99f0166fdd590869d94075cf7ef42a57e51c4b3ed263cdd65c0c32869df3e5f2",
   "files": [
     {
       "path": ".github/agents/openfoam-solidification.agent.md",
@@ -237,7 +239,7 @@
       "role": "web_ui",
       "purpose": "local HTML documentation or web interface",
       "certainty": "inferred",
-      "blob": "d80ee86fec825aeac3a3fbc7cc718e3bd9226624"
+      "blob": "cf8cbd59119a17f31e9fdcfc800b84772882c491"
     },
     {
       "path": "GITHUB_EXECUTION_POLICY.md",
@@ -951,7 +953,7 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "a065e39f9f99101986504c258b89eae6d3bb03a9"
+      "blob": "9ee5c62c8e2fd571bea44e43ce3e360e2ce74f78"
     },
     {
       "path": "cases_3d/C3D_01_metal_mold/constant/geometry/metal.stl",
@@ -986,7 +988,7 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "c927497536663922642c82f9b2a9ebcc7131d84d"
+      "blob": "adf00c46d03de29c5f44bfcbdc5d5a6f9f92adee"
     },
     {
       "path": "cases_3d/C3D_01_metal_mold/geometry_reference.json",
@@ -270699,6 +270701,13 @@
       "blob": "182dfc44726647d8797033622eb1c61d1e2f7ad1"
     },
     {
+      "path": "docs/DOCUMENTATION_AUDIT_20261110_ES.md",
+      "role": "document",
+      "purpose": "manual/decision/report/historical note",
+      "certainty": "inferred",
+      "blob": "7c6884319b050ac6964e0ff45f57fb4f7a866f08"
+    },
+    {
       "path": "docs/DOCUMENTATION_INDEX.md",
       "role": "index",
       "purpose": "navigation/onboarding",
@@ -271441,7 +271450,26 @@
       "blob": "0b65cc6aa3d29917f57a31a96fd5c3afeffb4ed4"
     }
   ],
-  "findings": [],
+  "findings": [
+    {
+      "id": "38e9781209aab42a",
+      "code": "POTENTIAL_UNLOGGED_CHANGES",
+      "severity": "review",
+      "path": "PROJECT_AUDIT_LOG_EN.md",
+      "observation": "1 implementation/config paths changed since this log's last commit; examples: CASE_GUIDE_INTERACTIVE_ES.html",
+      "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
+      "state": "REVIEW_REQUIRED"
+    },
+    {
+      "id": "a81977bce1235f5b",
+      "code": "POTENTIAL_UNLOGGED_CHANGES",
+      "severity": "review",
+      "path": "PROJECT_AUDIT_LOG_ES.md",
+      "observation": "1 implementation/config paths changed since this log's last commit; examples: CASE_GUIDE_INTERACTIVE_ES.html",
+      "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
+      "state": "REVIEW_REQUIRED"
+    }
+  ],
   "untracked_audited": false,
   "ignored_audited": false,
   "binary_contents_audited": false,
