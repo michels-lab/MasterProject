@@ -956,3 +956,61 @@ grep -Ei 'cells:|Number of regions:|non-orthogonality|skewness|face tets|concave
 ```
 
 Diagnostic material recut only: does **not** by itself establish CHT patches or CFD-ready mesh quality.
+
+## E. Executed C3D-01 OpenFOAM command history (2026-11-10)
+
+The earlier sections document historical B/C simulation commands; this section captures the **actual 3D metal+mold experiments** and distinguishes **EXECUTED** from **PROPOSED**. Numeric evidence comes from the researcher's Ubuntu WSL terminal, transcribed in the [C3D-01 research log](docs/C3D_01_ESTADO_REAL_20261110_ES.md). Full mesh/log output is still local, **not** published on GitHub.
+
+| Utility | What was done | Status |
+|---|---|---|
+| `source /opt/openfoam14/etc/bashrc` | Load Foundation 14 environment | **EXECUTED**; source before using `set -u` |
+| `surfaceCheck`, `surfacePointMerge`, `surfaceInertia` | Inspect and repair STL; measure geometry volume | **EXECUTED**; retain original CAD |
+| `foamDictionary` | Read 3D snappy geometry/refinement/points; set `snap false`, `addLayers false` in copied trial | **EXECUTED** |
+| `blockMesh`, `snappyHexMesh` | Background mesh and two trial variants (snapped vs native-mm castellated) | **EXECUTED**, neither accepted |
+| `checkMesh` | Diagnose quality; export defect `vtk` using `-writeSurfaces -surfaceFormat vtk -writeSets` | **EXECUTED** |
+| `topoSet` | `boxToCell`, `surfaceToCell`, `zoneToCell`, `cellToCell` for geometric classification and union | **EXECUTED** |
+| `subsetMesh -cellSet materialVolume -noFields` | Material-only diagnostic subset | **EXECUTED**; positional `subsetMesh materialVolume` fails in Foundation 14 |
+| `splitMeshRegions -disconnected -noFields` | Split disconnected components on independent trial copy | **EXECUTED**; outputs `No interfaces to add` |
+| `splitMeshRegions -cellZones 'metal'` | Investigate original connected cellZone interfaces | **PROPOSED, not executed** |
+
+### Commands already used for inspection and quality export
+
+```bash
+source /opt/openfoam14/etc/bashrc
+TRIAL="$HOME/OpenFOAM/C3D01_snappy_NTC8Dj"
+DICT="$TRIAL/system/snappyHexMeshDict"
+foamDictionary "$DICT" -entry geometry
+foamDictionary "$DICT" -entry castellatedMeshControls/refinementSurfaces
+foamDictionary "$DICT" -entry castellatedMeshControls/refinementRegions
+foamDictionary "$DICT" -entry castellatedMeshControls/insidePoints
+foamDictionary "$DICT" -entry snapControls
+# Completed on the actual laptop; do not repeat just to reproduce the result:
+# checkMesh -case "$TRIAL" -allGeometry -allTopology -writeSurfaces -surfaceFormat vtk -writeSets
+find "$TRIAL/postProcessing/checkMesh" -name '*.vtk' -print
+```
+
+### Read back the already-created material subset
+
+```bash
+source /opt/openfoam14/etc/bashrc
+CASE="$HOME/OpenFOAM/C3D01_materials_H0qgJN"
+grep -Ei 'cells:|Number of regions:|Total volume|face tets|small determinant|concave cells|Failed' "$CASE/log.checkMesh"
+cat "$CASE/constant/polyMesh/boundary"
+```
+
+The **completed material subset** has **1,209,777 cells; 151.230 cm³; 15 concave cells; 8 poor face tets; 17 small-determinant cells; 3 failed checks**. `oldInternalFaces` (8,384 faces) is **not** an automatically paired thermal interface. Do not run `subsetMesh` again on this already-trimmed mesh; copy the original first.
+
+### Read back the already-created two-region split
+
+```bash
+source /opt/openfoam14/etc/bashrc
+CASE="$HOME/OpenFOAM/C3D01_regions_Xd1POM"
+# splitMeshRegions -case "$CASE" -disconnected -noFields # ALREADY EXECUTED; DO NOT REPEAT
+for REGION in region1 region2; do
+    grep -Ei 'cells:|Total volume|face tets|small determinant|concave cells|Failed' "$CASE/log.checkMesh.$REGION"
+    cat "$CASE/constant/$REGION/polyMesh/boundary"
+done
+grep -Ei 'No interfaces to add|Region|nCells' "$CASE/log.splitMeshRegions"
+```
+
+**Observed results:** `region1`, likely sand mold, **825,994 cells**, 103.256 cm³, 6 poor face tets, 14 low determinants, 15 concave cells, **3 failed checks**; `region2`, likely metal, **383,783 cells**, 47.9735 cm³, 2 poor face tets, 3 low determinants, **2 failed checks**. Log explicitly says **`No interfaces to add`**; **NO coupled heat-transfer patches** were constructed. `-cellZones 'metal'` remains an **untested next-step proposal**; it is not evidence of a fix. C14 remains the 2D baseline and J0/G1 remain open. **No CFD solver was run.**
