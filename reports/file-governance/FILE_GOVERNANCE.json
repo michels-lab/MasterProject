@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "audit_kind": "deterministic_full_tracked_tree",
-  "tracked_files_total": 38769,
-  "classified_files_total": 38764,
+  "tracked_files_total": 38771,
+  "classified_files_total": 38766,
   "docs_content_inspected": 127,
   "large_docs_skipped": 0,
   "excluded_reports": 5,
@@ -11,7 +11,7 @@
     "analysis_tool": 1,
     "bitacora": 5,
     "config": 7,
-    "data": 19,
+    "data": 21,
     "document": 100,
     "index": 22,
     "license": 1,
@@ -28,7 +28,7 @@
     "POTENTIAL_UNLOGGED_CHANGES": 2
   },
   "finding_total": 2,
-  "inventory_fingerprint": "b264c44542148f5241bcf9e554bd1df1b9933b9d83ffa16bf0a30d3874d66b27",
+  "inventory_fingerprint": "89a8a98dcfb28c5b489a06aefb8273600adb9d748c355f24874c4ccc00e736b6",
   "evidence_fingerprint": "b25fadc64b339aecb85ff65cbd1d9da68510936c9e8ea63ba98e812058517028",
   "files": [
     {
@@ -954,6 +954,20 @@
       "purpose": "navigation/onboarding",
       "certainty": "rule",
       "blob": "a065e39f9f99101986504c258b89eae6d3bb03a9"
+    },
+    {
+      "path": "cases_3d/C3D_01_metal_mold/constant/geometry/metal.stl",
+      "role": "data",
+      "purpose": "structured/research data (semantics not validated)",
+      "certainty": "rule",
+      "blob": "d847cfd366dfe7057f15123458ea9f205c7e559d"
+    },
+    {
+      "path": "cases_3d/C3D_01_metal_mold/constant/geometry/mold.stl",
+      "role": "data",
+      "purpose": "structured/research data (semantics not validated)",
+      "certainty": "rule",
+      "blob": "907f4bbb10d4c0283558719bd99634ebc4f3f161"
     },
     {
       "path": "cases_3d/C3D_01_metal_mold/constant/triSurface/.gitignore",
