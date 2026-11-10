@@ -1,5 +1,8 @@
 # Auditoría JMatPro → OpenFOAM — MasterProject / QuickCup
 
+> **C3D-01 al 10-11-2026:** las mallas 3D y diagnósticos se ejecutaron **solo en la laptop**. `subsetMesh -cellSet materialVolume` conservó **1,209,777 celdas; 151.230 cm³; 15 concavidades, 8 face-tets deficientes, 17 determinantes pequeños y 3 fallos `checkMesh`**. `splitMeshRegions -disconnected` produjo `region1` (molde probable, **825,994 celdas; 3 fallos**) y `region2` (metal probable, **383,783 celdas; 2 fallos**), pero informó **`No interfaces to add`**: no hay interfaz térmica acoplada ni solver CFD 3D ejecutado. `-cellZones 'metal'` permanece **sin ejecutar**. [Bitácora C3D](docs/C3D_01_ESTADO_REAL_20261110_ES.md). **Los avances de malla NO cierran la trazabilidad termodinámica J0 ni la validación experimental G1.**
+
+
 > **Actualización 2026-10-03 — baseline vigente:** `C11_topFixedFlux_airGapOF14` se conserva como baseline histórico congelado. `C14_topFixedFlux_explicitRef` fue verificado a 10 s y es su sucesor actual para trabajo/validación: mantiene `fixedFluxPressure + slip`, la misma física/materiales de C11 y añade la referencia explícita de presión solicitada por el director. Las observaciones de trazabilidad de propiedades hechas sobre C11 siguen aplicando a C14 mientras no se cambien sus propiedades termofísicas.
 
 
