@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "audit_kind": "deterministic_full_tracked_tree",
-  "tracked_files_total": 38771,
-  "classified_files_total": 38766,
+  "tracked_files_total": 38776,
+  "classified_files_total": 38771,
   "docs_content_inspected": 127,
   "large_docs_skipped": 0,
   "excluded_reports": 5,
@@ -11,13 +11,13 @@
     "analysis_tool": 1,
     "bitacora": 5,
     "config": 7,
-    "data": 21,
+    "data": 22,
     "document": 100,
     "index": 22,
     "license": 1,
     "simulation_case_file": 98,
     "simulation_input": 2667,
-    "simulation_log": 3151,
+    "simulation_log": 3155,
     "simulation_output": 32613,
     "source": 42,
     "test": 12,
@@ -28,7 +28,7 @@
     "POTENTIAL_UNLOGGED_CHANGES": 2
   },
   "finding_total": 2,
-  "inventory_fingerprint": "89a8a98dcfb28c5b489a06aefb8273600adb9d748c355f24874c4ccc00e736b6",
+  "inventory_fingerprint": "4885c6d0f083e3889432370aafead1fb236cc7c160143bd5c12c729af24a4359",
   "evidence_fingerprint": "b25fadc64b339aecb85ff65cbd1d9da68510936c9e8ea63ba98e812058517028",
   "files": [
     {
@@ -970,6 +970,13 @@
       "blob": "907f4bbb10d4c0283558719bd99634ebc4f3f161"
     },
     {
+      "path": "cases_3d/C3D_01_metal_mold/constant/geometry/mold_repaired.stl",
+      "role": "data",
+      "purpose": "structured/research data (semantics not validated)",
+      "certainty": "rule",
+      "blob": "191c1820196460ced606fa2d73200bc53deaad87"
+    },
+    {
       "path": "cases_3d/C3D_01_metal_mold/constant/triSurface/.gitignore",
       "role": "config",
       "purpose": "machine-readable configuration",
@@ -1010,6 +1017,34 @@
       "purpose": "code/test implementation",
       "certainty": "rule",
       "blob": "03d39d5829f17279effd432d6fd7302883f18c8a"
+    },
+    {
+      "path": "cases_3d/C3D_01_metal_mold/surfaceCheck_outputs/mold_repair_trial/log.inertia",
+      "role": "simulation_log",
+      "purpose": "OpenFOAM solver/run log (not proof of run quality)",
+      "certainty": "inferred",
+      "blob": "25d1bbb7d7c84dde8a798556918456264b1be11d"
+    },
+    {
+      "path": "cases_3d/C3D_01_metal_mold/surfaceCheck_outputs/mold_repair_trial/log.intersections",
+      "role": "simulation_log",
+      "purpose": "OpenFOAM solver/run log (not proof of run quality)",
+      "certainty": "inferred",
+      "blob": "a0190bd411ded82be13561ac6c22c4ae5a4a6d5c"
+    },
+    {
+      "path": "cases_3d/C3D_01_metal_mold/surfaceCheck_outputs/mold_repair_trial/log.surfaceCheck.merged",
+      "role": "simulation_log",
+      "purpose": "OpenFOAM solver/run log (not proof of run quality)",
+      "certainty": "inferred",
+      "blob": "e75fba7d3a3b8fb04cb9bb24758ca3b205bcebbc"
+    },
+    {
+      "path": "cases_3d/C3D_01_metal_mold/surfaceCheck_outputs/mold_repair_trial/log.surfacePointMerge",
+      "role": "simulation_log",
+      "purpose": "OpenFOAM solver/run log (not proof of run quality)",
+      "certainty": "inferred",
+      "blob": "cb9f09a19fc333f2f04dfc5f93895d5b8038fc32"
     },
     {
       "path": "cases_3d/C3D_01_metal_mold/system/blockMeshDict",
