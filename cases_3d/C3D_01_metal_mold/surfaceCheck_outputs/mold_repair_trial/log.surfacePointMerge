@@ -1,0 +1,37 @@
+/*---------------------------------------------------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  14
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+Build  : 14-7b05503f98a8
+Exec   : surfacePointMerge /home/michel/OpenFOAM/MasterProject/cases_3d/C3D_01_metal_mold/constant/geometry/mold.stl mold_merged.stl 1e-8
+Date   : Nov 10 2026
+Time   : 09:30:25
+Host   : "Michel-DuarteHP"
+PID    : 324876
+I/O    : uncollated
+Case   : /home/michel/OpenFOAM/MasterProject/cases_3d/C3D_01_metal_mold/surfaceCheck_outputs/mold_repair_trial
+nProcs : 1
+sigFpe : Enabling floating point exception trapping (FOAM_SIGFPE).
+fileModificationChecking : Monitoring run-time modified files using timeStampMaster (fileModificationSkew 10)
+allowSystemOperations : Allowing user-supplied system call operations
+
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+Reading surface from "/home/michel/OpenFOAM/MasterProject/cases_3d/C3D_01_metal_mold/constant/geometry/mold.stl" ...
+Merging points within 1e-08 metre.
+Original surface:
+Triangles    : 3084
+Vertices     : 1563
+Bounding Box : (-4.22677e-16 -65.5 -3.80362e-32) (51.8 2.63292e-15 51.8)
+After merging points:
+Triangles    : 3084
+Vertices     : 1544
+Bounding Box : (-4.22677e-16 -65.5 -3.80362e-32) (51.8 0 51.8)
+After merging points:
+Triangles    : 3084
+Vertices     : 1544
+Bounding Box : (-4.22677e-16 -65.5 -3.80362e-32) (51.8 0 51.8)
+End
+

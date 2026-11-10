@@ -1,0 +1,42 @@
+/*---------------------------------------------------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  14
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+Build  : 14-7b05503f98a8
+Exec   : surfaceInertia mold_merged.stl
+Date   : Nov 10 2026
+Time   : 09:33:06
+Host   : "Michel-DuarteHP"
+PID    : 325638
+I/O    : uncollated
+Case   : /home/michel/OpenFOAM/MasterProject/cases_3d/C3D_01_metal_mold/surfaceCheck_outputs/mold_repair_trial
+nProcs : 1
+sigFpe : Enabling floating point exception trapping (FOAM_SIGFPE).
+fileModificationChecking : Monitoring run-time modified files using timeStampMaster (fileModificationSkew 10)
+allowSystemOperations : Allowing user-supplied system call operations
+
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+--> FOAM Warning: 
+    From function int main(int, char**)
+    in file surfaceInertia.C at line 282
+    Non-unique eigenvectors, cannot compute transformation from Cartesian axes
+
+Density: 1
+Mass: 102843.09608
+Centre of mass: (25.8999917376 -35.4959766098 25.9737314524)
+Surface area: 23325.3301838
+Inertia tensor around centre of mass: 
+(61726012.8974 3.29107190236 -0.159759280617 52419582.9334 191534.436016 61858817.6579)
+eigenValues (principal moments): (52415698.0477 61726012.8974 61862702.5436)
+eigenVectors (principal axes): 
+(-3.53761920873e-07 0.999794364173 -0.0202787910752)
+(1 3.67484465801e-07 6.72967974631e-07)
+(-6.80281729006e-07 0.020278791075 0.999794364173)
+
+Writing scaled principal axes at centre of mass of "mold_merged.stl" to "axes.obj"
+
+End
+
