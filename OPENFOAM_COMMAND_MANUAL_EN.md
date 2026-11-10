@@ -942,3 +942,17 @@ The generated dictionary assigned `cellZone metal` (383,788 cell labels), but **
 - Do not run `splitMeshRegions` or the solidification solver until metal/sand zones, interfaces, volumes and mesh quality have passed. Keep all original meshing and CFD results.
 
 **Git:** original STLs were introduced in `e391f7591`; the repaired mold and geometric verification logs in `06426781f`. Full `snappyHexMesh` trial logs remain only on the researcher's laptop; GitHub does not execute CFD.
+
+### D. Material subsetting with subsetMesh (Foundation 14)
+
+**Observed CLI failure, 10 November 2026:** the positional form `subsetMesh materialVolume -case ...` produces `Wrong number of arguments, expected 0 found 1`. Foundation 14 requires the explicit `-cellSet materialVolume` option. `-overwrite` is deprecated/default; `-noFields` skips field mapping for this mesh-only trial.
+
+```bash
+source /opt/openfoam14/etc/bashrc
+CASE="$HOME/OpenFOAM/C3D01_materials_H0qgJN"
+subsetMesh -case "$CASE" -cellSet materialVolume -noFields > "$CASE/log.subsetMesh" 2>&1
+checkMesh -case "$CASE" -allGeometry -allTopology -writeSets > "$CASE/log.checkMesh" 2>&1 || true
+grep -Ei 'cells:|Number of regions:|non-orthogonality|skewness|face tets|concave cells|Failed|Mesh OK' "$CASE/log.checkMesh"
+```
+
+Diagnostic material recut only: does **not** by itself establish CHT patches or CFD-ready mesh quality.
