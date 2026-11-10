@@ -1,5 +1,8 @@
 # Plan D — caso científico `case3d-01`
 
+> **Estado científico actualizado, 10-11-2026 — C3D-01:** recorte local metal + arena: **1,209,777 celdas; 151.230 cm³; 15 celdas cóncavas, 8 face-tets deficientes, 17 celdas de determinante pequeño; 3 fallos `checkMesh`**. `splitMeshRegions -disconnected` separó `region1` (probable arena, **825,994 celdas; 103.256 cm³; 3 fallos**) y `region2` (probable metal, **383,783 celdas; 47.9735 cm³; 2 fallos**); **`No interfaces to add`**. **Sin interfaz CHT, sin CFD 3D ni malla aprobada.** El ensayo `-cellZones 'metal'` aún **NO** se ejecutó. [Evidencia](../../docs/C3D_01_ESTADO_REAL_20261110_ES.md) · [Manual](../../OPENFOAM_COMMAND_MANUAL_ES.md).
+
+
 **Actualización 2026-11-10:** [registro íntegro de geometrías, primera malla y pendientes](../../docs/C3D_01_ESTADO_REAL_20261110_ES.md). Los STL ya se publicaron en GitHub; los logs de la prueba `snappyHexMesh` siguen en la laptop.
 
 
