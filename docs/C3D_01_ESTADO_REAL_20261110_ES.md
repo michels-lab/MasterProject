@@ -26,7 +26,7 @@ El `Mass` de `surfaceInertia` se interpreta como volumen geométrico a densidad 
 
 ## Malla 3D: primera prueba local, NO ACEPTADA
 1. `blockMesh` generó la caja de fondo de 58 × 72 × 58 mm (29 × 36 × 29 = **30,276 hexaedros**, nominalmente 2 mm). El caso técnico publicado tiene `units [mm];` en `system/blockMeshDict`.
-2. En la prueba independiente `/home/michel/OpenFOAM/C3D01_snappy_NTC8Dj`, el investigador utilizó **copias temporales escaladas a metros con `surfaceTransformPoints`** y `snappyHexMeshConfig` para generar `snappyHexMeshDict`. La prueba **no** verifica todavía un `snappyHexMesh` ejecutado sobre STL originales con `units [mm];` en `geometry`; esa es la convención **preferida para el siguiente caso** y debe comprobarse en ejecución real.
+2. En la prueba independiente `/home/michel/OpenFOAM/C3D01_snappy_NTC8Dj`, el investigador utilizó **copias temporales escaladas a metros con `surfaceTransformPoints`** y `snappyHexMeshConfig` para generar `snappyHexMeshDict`. Ese primer ensayo **no** verificaba `units [mm]` en geometry; el **segundo ensayo** descrito más abajo sí ejecutó esa variante, aunque también fue rechazado por calidad.
 3. `snappyHexMesh` finalizó y `checkMesh -allGeometry -allTopology` informó **1,505,847 celdas**, malla 3D, un componente conectado, volumen total **0.000242201 m³ = 242.201 cm³**, malla de **toda la caja**, no exclusivamente metal + arena.
 4. `refinementSurfaces`: `mold_repaired` nivel (2 2) como pared externa; `metal` nivel (2 2), `faceZone metal`, `cellZone metal`, `mode inside`. `refinementRegions` configuró ambas superficies con `mode inside; level 2`. `insidePoints`: `(0.0259 -0.02 0.0259)` y `(0.003 -0.02 0.0259)` m.
 5. La zona `metal` aparece con **383,788 etiquetas de celda**, pero su **volumen físico, pertenencia, interfaz y no solapamiento NO están demostrados**; tampoco hay `cellZone mold` comprobada ni separación multirregión. `Number of regions: 1` en `checkMesh` es el número de componentes conectados, no una certificación de acoplamiento térmico.
@@ -40,6 +40,24 @@ El `Mass` de `surfaceInertia` se interpreta como volumen geométrico a densidad 
 - Para próximas pruebas preferir los **STL originales en mm** y declarar `units [mm];` en la geometría del diccionario Foundation 14, **sin doble escalado**; no presentar como comprobada una ejecución todavía no realizada bajo esa modalidad.
 - Ejecutar mallas y CFD **solo en la laptop**; GitHub almacena fuentes, scripts, logs seleccionados y auditorías estáticas. Las carpetas de pruebas `~/OpenFOAM/C3D01_snappy_*` están fuera del repositorio y no se sincronizan automáticamente.
 - No sobrescribir `constant/polyMesh`, no ejecutar `Allclean` sobre casos históricos y no hacer `git push --force` si existen nuevos commits remotos.
+
+
+## Segundo ensayo local: unidades nativas y etapa castellated sin snapping (10-11-2026)
+
+**Fuente:** terminal del investigador, carpeta local `/home/michel/OpenFOAM/C3D01_castellated_7X7rLt`. Este caso y sus logs completos **aún no están versionados en Git**. Se copió la configuración del primer ensayo a una carpeta nueva, se utilizaron los STL originales versionados en **mm** con `units [mm];` en las dos entradas `geometry` y se establecieron `snap false` y `addLayers false`. `blockMesh`, `snappyHexMesh -overwrite` y `checkMesh -allGeometry -allTopology` corrieron en la laptop; **no hubo simulación del solver**.
+
+| Métrica checkMesh | Ensayo 1: snappy con snap, copias en m | Ensayo 2: castellated sin snap, STL en mm + units [mm] |
+|---|---:|---:|
+| Celdas | 1,505,847 | 1,505,826 |
+| No ortogonalidad máxima | 68.2102° | 25.2394° |
+| Skewness máxima | 2.60187 | 0.333333 |
+| Caras con face tets deficientes | 23 | 0 (Face tets OK) |
+| Celdas cóncavas | 6,974 | **21,353** |
+| Verificaciones fallidas | 2 | **1** |
+
+**Conclusión acotada:** el ensayo con `units [mm];` ha demostrado ejecutarse, sin conversión explícita de los STL fuente. Desactivar snapping eliminó el aviso de face tets y redujo no ortogonalidad/skewness, pero **no eliminó concavidad: la incrementó**. Esto impide adjudicar toda la concavidad al snapping; se requiere localizar defectos de la etapa castellated y verificar volúmenes/interfaces antes de otro diseño de malla. Los casos comparados **también difieren en el mecanismo de lectura de unidades**, así que no atribuir diferencias únicamente a snapping sin un control adicional.
+
+**Gates invariables:** ambas mallas **rechazadas** para CFD térmico 3D; las cantidades de células no son volúmenes validados de metal y arena. El exterior de la caja continúa sin excluirse con evidencia suficiente. Preferencia del investigador: comandos ejecutables **directamente en OpenFOAM sin Python**. No relajar criterios de `checkMesh` para declarar éxito; antes localizar concave cells, diagnosticar zona exterior, crear regiones físicas complementarias y volver a verificar.
 
 ## Próximas puertas técnicas (abiertas)
 1. Archivar `log.blockMesh`, `log.snappyHexMesh`, `log.checkMesh.final` y `snappyHexMeshDict` de la prueba local en un paquete nuevo e identificado por SHA, sin sustituir evidencia previa; cotejar cantidad y volumen real de `cellZone metal`.
