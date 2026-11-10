@@ -1,5 +1,8 @@
 # Plan D — Casos tridimensionales de QuickCup
 
+> **Estado científico actualizado, 10-11-2026 — C3D-01:** recorte local metal + arena: **1,209,777 celdas; 151.230 cm³; 15 celdas cóncavas, 8 face-tets deficientes, 17 celdas de determinante pequeño; 3 fallos `checkMesh`**. `splitMeshRegions -disconnected` separó `region1` (probable arena, **825,994 celdas; 103.256 cm³; 3 fallos**) y `region2` (probable metal, **383,783 celdas; 47.9735 cm³; 2 fallos**); **`No interfaces to add`**. **Sin interfaz CHT, sin CFD 3D ni malla aprobada.** El ensayo `-cellZones 'metal'` aún **NO** se ejecutó. [Evidencia](../docs/C3D_01_ESTADO_REAL_20261110_ES.md) · [Manual](../OPENFOAM_COMMAND_MANUAL_ES.md).
+
+
 **Estado 2026-11-10:** [diagnóstico experimental C3D-01](../docs/C3D_01_ESTADO_REAL_20261110_ES.md). Se ejecutó una malla de prueba de 1,505,847 celdas en laptop con **dos fallos `checkMesh`**; no existe malla metal–arena aceptada ni CFD 3D. El molde reparado, los dos originales y logs geométricos están en Git. La carpeta local de prueba no está versionada.
 
 
