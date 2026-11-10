@@ -11,7 +11,7 @@
 
 - `system/blockMeshDict`: `units [mm];` seguido de vértices con valores como `(-3 -69 -3)`, `(55 3 55)`. OpenFOAM genera la malla en su unidad base SI `[m]`.
 - **Geometrías SolidWorks**: `QuickCup.STL` y `metal.STL` mantienen sus coordenadas originales numéricas en **mm**, su orientación, origen y triangulación. La preparación **normal** consiste en copiar directamente estos archivos con `cp -n` a `constant/geometry/mold.stl` y `metal.stl`, sin Python ni escalado. `prepare_geometry.py` queda únicamente como auditoría opcional.
-- **Paso siguiente con `snappyHexMesh`**: cada entrada de superficie `triSurfaceMesh` declarará `units [mm];`. OpenFOAM convierte las superficies internamente a la escala física correcta.
+- **Probado en ensayo local de `snappyHexMesh`**: las entradas de geometría de la segunda malla usaron `units [mm];` y los STL fuente se conservaron en mm. Esto funcionó como lectura de unidades, aunque la malla no aprobó `checkMesh`.
 - **Prohibido doble escalado**: no usar también `scale 0.001;` en la misma geometría, ni convertir previamente los STL a metros; las dos opciones de escalado/units son alternativas.
 - Los scripts `analysis_tools/preflight_c3d_stl.py` inspeccionan la geometría **en memoria** en SI para verificar volumen/semillas; los archivos fuente no se cambian. `geometry_reference.json` conserva las huellas SHA-256 originales.
 - No se supone que poner `units [mm]` de forma global modifique todas las magnitudes del solver; cada parámetro y utilidad requiere la sintaxis admitida por OpenFOAM.
@@ -48,7 +48,7 @@ cp -n "$HOME/OpenFOAM/Piezas_STL/metal.STL" constant/geometry/metal.stl
 ls -lh constant/geometry/*.stl
 ```
 
-`cp -n` no sobrescribe archivos ya existentes; si reutilizas este caso revisa las dos rutas antes de continuar. Los STL permanecen en **mm**, bit a bit idénticos a los de SolidWorks; no aplicamos Python, cambios de escala, traslaciones ni rotaciones. La interfaz futura será interpretada en SI por OpenFOAM mediante `units [mm]` en cada entrada `triSurfaceMesh` del diccionario `snappyHexMeshDict`, que aún no está construido.
+`cp -n` no sobrescribe archivos ya existentes; si reutilizas este caso revisa las dos rutas antes de continuar. Los STL permanecen en **mm**, bit a bit idénticos a los de SolidWorks; no aplicamos Python, cambios de escala, traslaciones ni rotaciones. En la **copia local del segundo ensayo** se probó `units [mm]` por superficie dentro de `snappyHexMeshDict`; esto **no garantiza** que el árbol técnico versionado en Git contenga ya ese diccionario completo ni que exista una interfaz CHT válida.
 
 **Malla de fondo, usando OpenFOAM y sin Python:**
 
@@ -85,7 +85,7 @@ La referencia SHA-256 de la exportación corregida está en `geometry_reference.
 
 En total hay **29 × 36 × 29 = 30,276** celdas hexaédricas uniformes de 2 mm. Las seis caras tienen normales hacia el exterior, cubiertas por la prueba sintética; el parche `outerBox` y los márgenes son **temporales** y no constituyen condiciones térmicas físicas.
 
-`blockMesh` no crea por sí mismo las regiones metal/arena. **La malla física se realizará mediante `snappyHexMesh`, respetando los STL**, una vez que construyamos juntos el `system/snappyHexMeshDict`. Su `geometry` contendrá, conceptualmente:
+`blockMesh` no crea por sí mismo las regiones metal/arena. **La malla 3D definitiva sigue pendiente:** ya se probaron dos variantes locales de `snappyHexMesh`, pero ninguna superó `checkMesh` ni construyó una interfaz térmica emparejada. El diccionario reproducible deberá reconciliarse con la fuente técnica versionada. Su `geometry` contendrá, conceptualmente:
 
 ```cpp
 geometry
@@ -110,7 +110,7 @@ Esto es **un fragmento explicativo**, NO un `snappyHexMeshDict` listo para ejecu
 ## Próximas puertas de validación
 
 1. Ejecutar `blockMesh` y `checkMesh` únicamente en Ubuntu del investigador; guardar y revisar logs y dimensiones del `bounding box` en metros.
-2. Diseñar `snappyHexMeshDict` entre investigador y asistente, con regiones metal/molde, control de contacto, refino de interfaces, seguimiento de calidad y de volumen físico, sin generar una sola región por accidente.
+2. Consolidar el `snappyHexMeshDict` de los ensayos locales en la fuente técnica, verificando regiones metal/molde, control de contacto, refino de interfaces, calidad por región y volumen físico antes de aceptar una malla.
 3. Ejecutar `snappyHexMesh`, analizar interfaz y subdominios, preparar y validar `splitMeshRegions` y `checkMesh` por región.
 4. Adaptar con trazabilidad las BC/propiedades térmicas 3D desde la referencia C14, comprobar conservación de energía, pruebas de malla y curvas experimentales.
 5. Ejecutar el solver exclusivamente en la laptop. No instalar ni correr OpenFOAM en GitHub Actions; FoamLENS es independiente.
