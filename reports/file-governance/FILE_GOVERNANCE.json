@@ -24,12 +24,10 @@
     "web_ui": 1,
     "workflow": 18
   },
-  "finding_counts": {
-    "POTENTIAL_UNLOGGED_CHANGES": 2
-  },
-  "finding_total": 2,
-  "inventory_fingerprint": "b1ddf5da8479e2127f6805dbfce2035337b8bbad37ed320416a09eec44fb4f35",
-  "evidence_fingerprint": "47b4710bad4d33f377a24a39caa6d1bffd2476e3836309d05668646a2be4015d",
+  "finding_counts": {},
+  "finding_total": 0,
+  "inventory_fingerprint": "eab037e5c18b0f98dfd79945eb639f7729cbe4ee41eaac9c1aa28e81dfa172a6",
+  "evidence_fingerprint": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
   "files": [
     {
       "path": ".github/agents/openfoam-solidification.agent.md",
@@ -232,7 +230,7 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "b07a6cb95c8c958387f8b904d1191d61d3a9a26b"
+      "blob": "e2f1af7c6aef72c6900fab04f468cb0231642904"
     },
     {
       "path": "CASE_GUIDE_INTERACTIVE_ES.html",
@@ -246,28 +244,28 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "5cd7db4b671b55955915d38b9de105f69b3a4919"
+      "blob": "cb96c0e8bb1e9de50dbf3b18d1aab913d2d8e677"
     },
     {
       "path": "JMATPRO_OPENFOAM_TRACEABILITY_ES.md",
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "ea848c3dfde51bc0ce903056fb3818b8e84cd56e"
+      "blob": "52c2a415f6ee2fdde1af5ab41d27a88a572bda98"
     },
     {
       "path": "NEXT_RESEARCH_ROADMAP_ES.md",
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "c99009eca85219954bcaf6a8a90e848efd38ec6a"
+      "blob": "c142bc532f5854a230a48a063d721b7976f71ae2"
     },
     {
       "path": "OPENFOAM_COMMAND_MANUAL.md",
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "bb38e4b6723e8156f2143fe316cbdc4019ccea30"
+      "blob": "d79b4e49d82ab43c58ebfec6a6d0b838b3a0fc7e"
     },
     {
       "path": "OPENFOAM_COMMAND_MANUAL_EN.md",
@@ -288,28 +286,28 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "e1e6d174bdc8ce14dc7695d49cb9dc82e8b18c88"
+      "blob": "923d27945e0dc894fe7554a8b59fce3f8becddc9"
     },
     {
       "path": "PROJECT_AUDIT_LOG.md",
       "role": "bitacora",
       "purpose": "technical/audit change history",
       "certainty": "rule",
-      "blob": "75d6a021ef7958f5296816eea2c61e2b2ba0dd10"
+      "blob": "6456ca80c66159a3b9034843d1d963a1f113f286"
     },
     {
       "path": "PROJECT_AUDIT_LOG_EN.md",
       "role": "bitacora",
       "purpose": "technical/audit change history",
       "certainty": "rule",
-      "blob": "12e089face7813d3e9b8c9b06e412b0ee88dfccf"
+      "blob": "ba20387eecb7c8d394fd10c1b011e291d9ded0a7"
     },
     {
       "path": "PROJECT_AUDIT_LOG_ES.md",
       "role": "bitacora",
       "purpose": "technical/audit change history",
       "certainty": "rule",
-      "blob": "dbc85c69255d8cce990671001608a4b76d1848ca"
+      "blob": "e607fc47cf856817bfbd34ead97f98cee685c5e9"
     },
     {
       "path": "README.md",
@@ -330,28 +328,28 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "b8b92a64b8bf3fecd1d784e40c07897268dc8307"
+      "blob": "6117a264bd93afb1ddf133f1545a031afb9db7ef"
     },
     {
       "path": "VALIDATION_MATRIX.md",
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "dfcbe12fa06f773e41519af4ce259a55e30b1e0b"
+      "blob": "0017b3596683c7a8c8e37e9bc911dad02ec15e79"
     },
     {
       "path": "VALIDATION_MATRIX_EN.md",
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "b35e6658f46744238a7707aa8ff057f61f61227f"
+      "blob": "57bc0fc96988156602cff15b01cfbc1abe36c42a"
     },
     {
       "path": "VALIDATION_MATRIX_ES.md",
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "67c90ffced4626e9adbb52b637072dd2fa0edb45"
+      "blob": "d353a6c46971d9f8926389c40f2ffe9c77d26ead"
     },
     {
       "path": "analysis_results/c11_energy2_test/summary.md",
@@ -939,7 +937,7 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "452930ec7ff453ded2b08e7e58052f3f834af019"
+      "blob": "8d1e8a90e06801d71ef1bebe00339dabf865fceb"
     },
     {
       "path": "cases_3d/C3D_01_metal_mold/constant/geometry/.gitignore",
@@ -1065,14 +1063,14 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "6727d0a3924e186c20b7b46a152967e08710636e"
+      "blob": "5f33fbbf95014f5aa5860a1303ff6e682dbd3eac"
     },
     {
       "path": "cases_3d/case3d-01/README.md",
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "0b22325afbe4337074d93f93c89c3b01e9480f14"
+      "blob": "54170e29e47143e2e6eb9a9e461f7f6ceb234624"
     },
     {
       "path": "cases_3d/case3d-01/scripts/stage_mesh_only.sh",
@@ -270705,21 +270703,21 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "19c7cddd54f0ad90d1f82d2ec710911b7ad9817f"
+      "blob": "8389b4f5b6c75d493f39583eea6f5b08ff52f2f6"
     },
     {
       "path": "docs/DOCUMENT_SYNC_20261110_ES.md",
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "3fc0684b2d7f9e5aa86fac9551dbfba8cd767131"
+      "blob": "3e470af0039a9955b97c1469ad6a360019e899af"
     },
     {
       "path": "docs/MASTERPROJECT_IDENTITY_ES.md",
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "1ba558ddfc5ce57bfd51efe273fac4c9ae272e84"
+      "blob": "1b4348360cd0b905b359f65220a7ae1f2cd0d550"
     },
     {
       "path": "docs/OPENFOAM_ECOSYSTEM.md",
@@ -270789,7 +270787,7 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "644df3bb4c739e4fc97fa9940ee49d5be59bfcd0"
+      "blob": "ecf1543b6b52146db3698131e021e2440974f3e2"
     },
     {
       "path": "doctor_original/bcFourier/0/T",
@@ -271443,26 +271441,7 @@
       "blob": "0b65cc6aa3d29917f57a31a96fd5c3afeffb4ed4"
     }
   ],
-  "findings": [
-    {
-      "id": "25d1f5fd233e3b87",
-      "code": "POTENTIAL_UNLOGGED_CHANGES",
-      "severity": "review",
-      "path": "PROJECT_AUDIT_LOG_EN.md",
-      "observation": "4 implementation/config paths changed since this log's last commit; examples: .github/workflows/granada-file-steward-head-proof-pr.yml, CASE_GUIDE_INTERACTIVE_ES.html, tools/file_governance_audit_proof.py, tools/test_file_governance_audit_proof.py",
-      "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "6cf19a7c3ca2b1e4",
-      "code": "POTENTIAL_UNLOGGED_CHANGES",
-      "severity": "review",
-      "path": "PROJECT_AUDIT_LOG_ES.md",
-      "observation": "4 implementation/config paths changed since this log's last commit; examples: .github/workflows/granada-file-steward-head-proof-pr.yml, CASE_GUIDE_INTERACTIVE_ES.html, tools/file_governance_audit_proof.py, tools/test_file_governance_audit_proof.py",
-      "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
-      "state": "REVIEW_REQUIRED"
-    }
-  ],
+  "findings": [],
   "untracked_audited": false,
   "ignored_audited": false,
   "binary_contents_audited": false,
