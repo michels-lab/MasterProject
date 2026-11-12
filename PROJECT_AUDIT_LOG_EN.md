@@ -1,3 +1,7 @@
+## 2026-11-12 — Clean 3D restart, preserving local historical evidence (NO CFD RUN)
+
+The owner requested a new source case, `cases_3d/C3D_02_metal_sand_clean`, using exactly two material domains (iron and silica-sand mold) with C14 as the physics/material reference. Past C3D-01 local scratch cases remain historical and must not be automatically deleted. Newer local evidence supersedes the 10-Nov claim that `splitMeshRegions -cellZones 'metal'` was untested: it **was executed** on a connected mesh, creating 5,334 `mappedWall` faces between metal and **surrounding**, but surrounding still included exterior cells; each region failed three exhaustive quality checks. `topoSet` material selections were 383,783 metal, 825,994 mold, 296,070 residual; the later `subsetMesh` attempt failed due to stale/out-of-range set IDs. Source C14 material files were copied locally (7 files) but not yet proven in 3D execution. See [Spanish restart evidence](docs/C3D_REINICIO_20261112_ES.md) and [command guide](docs/OPENFOAM14_LECCIONES_C3D_20261112_ES.md). No validated 3D solver run.
+
 ## 2026-11-10 — C3D-01: physical-material subset and separate region meshes WITHOUT CHT interface [LOCAL EVIDENCE]
 
 - OpenFOAM Foundation 14 `topoSet surfaceToCell` found 6,959/6,974 concave cells outside both STL material interiors in the snapped trial, and 21,353/21,353 in the castellated trial; only 15 and 0, respectively, were selected inside the mold.
