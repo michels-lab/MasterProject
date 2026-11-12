@@ -1,3 +1,24 @@
+## 2026-11-12 — Primer mallado C3D-02 SIN reutilizar mallas previas
+
+Un único comando desde el caso nuevo, respaldado en GitHub:
+
+```bash
+source /opt/openfoam14/etc/bashrc
+cd ~/OpenFOAM/MasterProject
+git pull --ff-only
+cd cases_3d/C3D_02_metal_sand_clean
+bash scripts/run_mesh_only.sh
+```
+
+- `snappyHexMeshDict` de Foundation 14: `insidePoints` selecciona el interior del metal y el de la arena; el STL se escala desde mm mediante `geometry.*.units [mm]`.
+- La carpeta de trabajo **única** es `~/OpenFOAM/C3D02_mesh`; si existe, el script no la sobrescribe.
+- Se ejecutan `foamDictionary`, `blockMesh`, `snappyHexMesh -overwrite`, `checkMesh -allGeometry -allTopology` y un filtro inicial por volumen físico (~150.8306 cm³). No se ejecutan `topoSet`, `subsetMesh`, `splitMeshRegions` ni solver.
+- La malla no está aceptada hasta comprobar ausencia de aire, calidad, `cellZones`, parches recíprocos y áreas CHT. **No atribuir éxito al código sin log real.**
+
+[Guía C3D-02 completa](docs/C3D_02_MALLADO_INICIAL_20261112_ES.md).
+
+---
+
 ## Adenda práctica actualizada — 12 de noviembre de 2026 (OpenFOAM Foundation 14)
 
 **Inicio recomendado:** [lecciones detalladas de los ensayos C3D, comandos, opciones y errores reales](docs/OPENFOAM14_LECCIONES_C3D_20261112_ES.md). [Decisión científica y nuevo caso](docs/C3D_REINICIO_20261112_ES.md). Los capítulos siguientes documentan el historial; el nuevo caso fuente es `cases_3d/C3D_02_metal_sand_clean`, que **no se ha ejecutado**.
