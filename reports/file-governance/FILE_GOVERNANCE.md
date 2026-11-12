@@ -5,7 +5,7 @@ No file is auto-deleted or declared unused.
 
 ## Coverage
 
-Tracked: 38805; classified: 38800; readable documents: 135; above read cap: 0; findings: 0.
+Tracked: 38808; classified: 38803; readable documents: 136; above read cap: 0; findings: 0.
 
 ## File roles
 
@@ -16,14 +16,14 @@ Tracked: 38805; classified: 38800; readable documents: 135; above read cap: 0; f
 | bitacora | 5 |
 | config | 7 |
 | data | 25 |
-| document | 106 |
+| document | 107 |
 | index | 24 |
 | license | 1 |
 | simulation_case_file | 98 |
-| simulation_input | 2677 |
+| simulation_input | 2678 |
 | simulation_log | 3155 |
 | simulation_output | 32613 |
-| source | 47 |
+| source | 48 |
 | test | 14 |
 | web_ui | 1 |
 | workflow | 19 |
