@@ -1,3 +1,18 @@
+## 2026-11-12 — Dos mallas físicas independientes, un comando (C3D-02, PENDIENTE DE EJECUTAR)
+
+Después de comprobar que `insidePoints` conservó la caja exterior (589,701 celdas, 242.130 cm³), se definió un método nuevo: **un solo STL y un `insidePoint` por malla de material**, dentro de un solo workspace. Sin `subsetMesh`, `topoSet` ni `splitMeshRegions` y sin modificar los casos anteriores.
+
+```bash
+cd ~/OpenFOAM/MasterProject
+git pull --ff-only
+cd cases_3d/C3D_02_metal_sand_clean
+bash scripts/run_material_meshes.sh
+```
+
+Se crean `~/OpenFOAM/C3D02_materials/metal` y `~/OpenFOAM/C3D02_materials/mold` (si el directorio raíz no existía). Cada subcaso escribe `log.blockMesh`, `log.snappyHexMesh`, `log.checkMesh.full`; compara contra 47.9875 y 102.8431 cm³ respectivamente, comprueba que `outerBox` no conserve caras y rechaza defectos de `checkMesh`. Este control **no prueba contacto térmico entre mallas independientes** ni ejecuta solver. [Guía detallada](docs/C3D_02_DOS_MALLAS_20261112_ES.md).
+
+---
+
 ## 12-11-2026 — C3D-02: diagnóstico sin remallado después del primer fallo
 
 **Resultado real de `run_mesh_only.sh`:** 589,701 celdas, **242.130 cm³**, 1 región conectada, 2 fallos exhaustivos (`face-tets 10`, `concaveCells 14,586`). El volumen hierro+arena nominal es 150.831 cm³. Se conserva exterior; no declarar `snappyHexMesh` aprobado.
