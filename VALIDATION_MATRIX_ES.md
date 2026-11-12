@@ -1,3 +1,5 @@
+> **MALLA C3D-02 RECHAZADA, 12-11-2026:** primera ejecución `snappyHexMesh` finalizó con 589,701 celdas y 242.130 cm³, contra ~150.831 cm³ de los dos STL; `checkMesh -allGeometry -allTopology` falló 2 checks (14,586 celdas cóncavas, 10 face-tets deficientes), con un componente conectado. **No hay malla metal+arena válida, ni CHT, ni CFD 3D.** El siguiente paso debe ser diagnóstico de los logs sin ejecutar malla. [Resultado y comandos](docs/C3D_02_MALLADO_INICIAL_20261112_ES.md).
+
 > **C3D ACTUALIZADO 2026-11-12:** [nuevo caso limpio C3D_02](cases_3d/C3D_02_metal_sand_clean/README.md) en preparación de archivos, **sin simulación**. Los resultados anteriores de C3D-01 corresponden solo a experimentos de malla. El ensayo posterior `-cellZones 'metal'` creó parches `mappedWall` metal–`surrounding` (5,334 caras), pero `surrounding` no es arena pura y falló calidad. Validación geométrica/CHT/experimental: **ABIERTAS**; baseline física C14, J0/G1 abiertas. [Evidencia](docs/C3D_REINICIO_20261112_ES.md).
 
 # Matriz de validación — QuickCup Solidification
