@@ -1,3 +1,22 @@
+## November 12, 2026 — verified OpenFOAM Foundation 14 lessons (3D reset)
+
+**Current reference:** [Full Spanish command and incident guide](docs/OPENFOAM14_LECCIONES_C3D_20261112_ES.md), [scientific restart record](docs/C3D_REINICIO_20261112_ES.md). The clean source case is `cases_3d/C3D_02_metal_sand_clean` and **has not been run**.
+
+| Failed invocation/assumption | Verified correction |
+|---|---|
+| `foamDictionary -entry castellatedMeshControls.insidePoints` | `-entry castellatedMeshControls/insidePoints` |
+| `checkMesh -writeSets vtk` | `-writeSets -setFormat vtk`; for problematic surface sets use `-writeSurfaces -surfaceFormat vtk` |
+| `subsetMesh keepMaterials -case ...` | `subsetMesh -case ... -cellSet keepMaterials -noFields` |
+| `topoSet` without `system/controlDict` | Provide a controlDict in the target case |
+| Re-run `subsetMesh` with a set from a pre-extraction mesh | **Do not**: cell IDs are stale after topology changes; rebuild a clean copy |
+| `splitMeshRegions -disconnected` creates thermal contact | Not necessarily: it reported `No interfaces to add` |
+| Basic `checkMesh` says `Mesh OK` | Run and interpret `-allGeometry -allTopology`; quality tests can still fail |
+| `metal_to_surrounding` 5,334 mapped faces = metal–mold | **False**: surrounding included external volume; not a validated CHT interface |
+
+In the local tests, `topoSet` worked but printed an OpenFOAM 14 deprecation warning suggesting `createZones`. A connected-mesh `splitMeshRegions -cellZones 'metal'` test created 5,334 `mappedWall` faces but both resulting meshes had 3 failed exhaustive checks and the second region was not pure sand. Local 3D tests do not constitute CFD execution. Material baselines **castIron**/**silica**, phase-change fvModels, gravity, and pressure reference are taken from C14; 3D mesh, patch names, `0/` and solver configuration must be validated separately.
+
+---
+
 # OpenFOAM Practical Command Manual — MasterProject / QuickCup
 
 **Language:** [🇪🇸 Español](./OPENFOAM_COMMAND_MANUAL_ES.md) | 🇬🇧 English | [↩ Language selector](./OPENFOAM_COMMAND_MANUAL.md)
