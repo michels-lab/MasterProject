@@ -85,6 +85,24 @@ if ! grep -Eq 'Mesh OK' "$WORK/log.checkMesh.full"; then
     exit 5
 fi
 
+# Preliminary volume rejection only; it cannot prove the absence of exterior cells.
+# STL volumes: 47.9875 + 102.8431 = 150.8306 cm3.
+vol="$(awk '/Total volume/ {
+    for (i=1; i<=NF; ++i) {
+        if ($i=="=") {print $(i+1); exit}
+    }
+}' "$WORK/log.checkMesh.full")"
+if [[ -z "$vol" ]]; then
+    echo "SIN APROBACION: checkMesh no expuso volumen total legible."
+    exit 6
+fi
+if ! awk -v v="$vol" 'BEGIN {if ((v+0)<0.000140 || (v+0)>0.000165) exit 1}'; then
+    echo "RECHAZADO POR VOLUMEN: $vol m3."
+    echo "Referencia CAD ~0.000150831 m3; intervalo preliminar 0.000140–0.000165 m3."
+    echo "Probable retención de exterior o geometría de dos materiales inadecuada."
+    exit 6
+fi
+echo "VOLUMEN PRELIMINAR DENTRO DE BANDA: $vol m3 (NO garantiza 0 aire)."
 echo "CHECKMESH COMPLETO: sin fallos reportados."
-echo "ATENCIÓN: esto NO certifica todavía ausencia total de exterior ni interfaces CHT."
-echo "No se ejecuta splitMeshRegions ni solver hasta analizar celdas, volumen, zonas e interfaz."
+echo "ATENCIÓN: aún NO están demostradas interfaces CHT ni exclusión exhaustiva del exterior."
+echo "No se ejecuta splitMeshRegions ni solver hasta analizar zonas y parches."
