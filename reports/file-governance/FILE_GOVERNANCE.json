@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "audit_kind": "deterministic_full_tracked_tree",
-  "tracked_files_total": 38798,
-  "classified_files_total": 38793,
+  "tracked_files_total": 38801,
+  "classified_files_total": 38796,
   "docs_content_inspected": 134,
   "large_docs_skipped": 0,
   "excluded_reports": 5,
@@ -11,7 +11,7 @@
     "analysis_tool": 1,
     "bitacora": 5,
     "config": 7,
-    "data": 22,
+    "data": 25,
     "document": 105,
     "index": 24,
     "license": 1,
@@ -26,7 +26,7 @@
   },
   "finding_counts": {},
   "finding_total": 0,
-  "inventory_fingerprint": "a9c49657d99cdd731124aaf2fb79a6c85babb29597bea9ae75ad91f179545d7e",
+  "inventory_fingerprint": "dba4e95d5a7ce58fff097e3502ce051b3ef75a173b61f9697bb208efc2613adf",
   "evidence_fingerprint": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
   "files": [
     {
@@ -1078,6 +1078,27 @@
       "purpose": "navigation/onboarding",
       "certainty": "rule",
       "blob": "2a425e6cc17c89c53b051fe0c5a339dfbf3eceeb"
+    },
+    {
+      "path": "cases_3d/C3D_02_metal_sand_clean/constant/geometry/metal.stl",
+      "role": "data",
+      "purpose": "structured/research data (semantics not validated)",
+      "certainty": "rule",
+      "blob": "d847cfd366dfe7057f15123458ea9f205c7e559d"
+    },
+    {
+      "path": "cases_3d/C3D_02_metal_sand_clean/constant/geometry/mold.stl",
+      "role": "data",
+      "purpose": "structured/research data (semantics not validated)",
+      "certainty": "rule",
+      "blob": "907f4bbb10d4c0283558719bd99634ebc4f3f161"
+    },
+    {
+      "path": "cases_3d/C3D_02_metal_sand_clean/constant/geometry/mold_repaired.stl",
+      "role": "data",
+      "purpose": "structured/research data (semantics not validated)",
+      "certainty": "rule",
+      "blob": "191c1820196460ced606fa2d73200bc53deaad87"
     },
     {
       "path": "cases_3d/C3D_02_metal_sand_clean/constant/metal/fvModels",
