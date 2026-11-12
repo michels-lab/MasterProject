@@ -1,3 +1,7 @@
+## 2026-11-12 — C3D-02 first native mesh attempt FAILED (local Ubuntu evidence)
+
+The user ran `scripts/run_mesh_only.sh` after passing C14 material and three STL SHA checks. The background and snappy steps completed; full `checkMesh -allGeometry -allTopology` found **589,701 cells, two boundary patches, one connected region, 0.00024213 m³ (242.130 cm³), 10 low-quality face decomposition tets, 14,586 concave cells and two failed checks**. Compared with ~150.8306 cm³ of physical metal+sand, this leaves ~91.2994 cm³ excess material/nonphysical volume. The external mesh volume was not excluded; neither metal–mold patches nor CFD execution are verified. `insidePoints` does not produce disconnected physical regions when the mesh remains connected. State stays `PREPARED_NOT_RUN`. Next step is **read-only log inspection** with `scripts/diagnose_mesh_readonly.sh` without remeshing. [Spanish evidence](docs/C3D_02_MALLADO_INICIAL_20261112_ES.md).
+
 ## 2026-11-12 — C3D-02 native two-material meshing input prepared, NOT RUN
 
 New Foundation 14 `snappyHexMeshDict` selects two `insidePoints` (iron and sand), uses millimetre STL inputs and a metal cellZone. `scripts/run_mesh_only.sh` uses one guarded work directory `~/OpenFOAM/C3D02_mesh`, runs background mesh, snappy and full checkMesh with a preliminary STL-volume screen. It never executes subsetMesh, splitMeshRegions or CFD. This is code preparation only: physical mesh, air exclusion and mapped thermal interface remain unverified. [Stage guide](docs/C3D_02_MALLADO_INICIAL_20261112_ES.md).
