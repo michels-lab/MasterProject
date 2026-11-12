@@ -1,0 +1,68 @@
+{
+  "schema": "quickcup-granada-c3d-evidence-v1",
+  "date": "2026-10-19",
+  "scope": "C3D-01 scientific preparation; no CFD operations or physical validations",
+  "active_draft_pr": {
+    "number": 18,
+    "disposition": "LEAVE_OPEN_UNTOUCHED",
+    "reason": "Nominal <=0.5mm everywhere conflicts with open scale-justification question"
+  },
+  "run_evidence": {
+    "background_mesh": "NOT_RUN_EVIDENCED",
+    "snappy_hex_mesh": "NOT_RUN_EVIDENCED",
+    "multiregion_mesh": "NOT_RUN_EVIDENCED",
+    "three_dimensional_cfd": "NOT_RUN_EVIDENCED",
+    "mpi_benchmark": "NOT_RUN_EVIDENCED"
+  },
+  "science_gates": {
+    "MAT-01": {
+      "status": "OPEN",
+      "description": "Primary measured chemistry table per actual casting is not verified; DOE factors are not measurements"
+    },
+    "MAT-02": {
+      "status": "OPEN",
+      "description": "Gray-iron lamellar graphite morphology expected by investigator, not independently verified"
+    },
+    "MAT-03": {
+      "status": "OPEN",
+      "description": "SDAS or scale-separation/representative volume evidence missing"
+    },
+    "J0": {
+      "status": "OPEN",
+      "description": "JMatPro composition-specific thermophysical provenance missing"
+    },
+    "MESH-01": {
+      "status": "NOT_RUN",
+      "description": "Geometric multi-region CHT mesh and quality gates"
+    },
+    "MESH-02": {
+      "status": "NOT_RUN",
+      "description": "Spatial and time-step convergence with experimentally relevant observables"
+    },
+    "PHYS-01": {
+      "status": "PENDING_DESIGN",
+      "description": "Primary austenite/eutectic phase pathway and recalescence modelling"
+    }
+  },
+  "observed_from_user": {
+    "primary_phase": "USER_REPORTED_PRIMARY_AUSTENITE",
+    "alloy_family": "USER_REPORTED_HYPOEUTECTIC_CAST_IRON",
+    "gray_cast_iron": "USER_EXPECTATION_UNCONFIRMED",
+    "host1_wsl_memory_total": "7.5GiB",
+    "host2_wsl_memory_total": "7.7GiB",
+    "host2_cpu": "AMD Ryzen 5 5600X, 6 physical cores, 12 logical processors",
+    "host2_windows_physical_ram": "NOT_MEASURED"
+  },
+  "prohibitions": [
+    "DO_NOT_ATTRIBUTE_PUBLISHED_TEST2_COMPOSITION_TO_USER",
+    "DO_NOT_FORCE_0P5MM_AS_ACCEPTED_CRITERION",
+    "DO_NOT_RUN_OPENFOAM_IN_GITHUB_CI",
+    "DO_NOT_MODIFY_C14_OR_C3D_ACTIVE_DRAFT_PR"
+  ],
+  "sources": [
+    "JMATPRO_OPENFOAM_TRACEABILITY_ES.md",
+    "analysis_results/jmatpro_openfoam_audit/current_model_matrix.csv",
+    "cases_3d/C3D_01_metal_mold/geometry_reference.json",
+    "RUN_MASTER_PROTOCOL.md"
+  ]
+}
