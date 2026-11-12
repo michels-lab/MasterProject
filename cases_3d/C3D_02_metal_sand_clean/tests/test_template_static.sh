@@ -52,4 +52,19 @@ if grep -Eq '^[[:space:]]*(foamMultiRun|subsetMesh|topoSet|splitMeshRegions)([[:
     exit 1
 fi
 echo "OK: fuente de mallado Foundation 14 de dos puntos interiores, sin CFD."
+# Independent-material runner: the new approach after the retained-exterior failure.
+material_template="$ROOT/system/materialSingle/snappyHexMeshDict.template"
+material_runner="$ROOT/scripts/run_material_meshes.sh"
+test -f "$material_template"
+test -f "$material_runner"
+grep -Fq 'insidePoint MATERIAL_POINT_PLACEHOLDER;' "$material_template"
+grep -Fq 'file "MATERIAL_STL_PLACEHOLDER";' "$material_template"
+grep -Eq '^[[:space:]]*units[[:space:]]+\[mm\];' "$material_template"
+grep -Fq 'for material in metal mold; do' "$material_runner"
+grep -Fq 'C3D02_materials' "$material_runner"
+if grep -Eq '^[[:space:]]*(foamMultiRun|splitMeshRegions|subsetMesh|topoSet)([[:space:]]|$)' "$material_runner"; then
+    echo "ERROR: un runner de mallas independientes intenta CFD/separación"
+    exit 1
+fi
+echo "OK: dos STL de materiales y un insidePoint por malla, sin solver."
 echo "NO certifica malla física, contacto térmico ni CFD."
