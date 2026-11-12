@@ -1,3 +1,10 @@
+## 2026-11-12 — C3D-02: segunda ruta de mallado preparada; NO CORRIDA
+
+- Se revisaron los STL versionados y se comprobó por intersecciones de rayo que `(25.9,-20,25.9) mm` cae dentro de `metal.stl` y fuera de `mold_repaired.stl`; `(3,-20,25.9) mm` cae dentro del molde y fuera del metal. No se justifica cambiar puntos a ciegas.
+- Como `insidePoints` en la primera malla no aisló materiales de exterior (`outerBox 15929` caras, volumen 242.130 cm³), se preparó `system/materialSingle/snappyHexMeshDict.template` y `scripts/run_material_meshes.sh`: mallar **metal y arena como dos superficies cerradas independientes**, con un solo `insidePoint` por subcaso, control de volumen aproximado, ausencia de `outerBox`, calidad exhaustiva y logs aislados en `~/OpenFOAM/C3D02_materials/`.
+- Estas dos mallas no están ejecutadas ni contienen interfaces térmicas `mappedWall`. Su validación es exclusivamente la próxima puerta **geométrica**; la ingeniería CHT queda después. C14 no cambia, no hubo CFD ni modificación de RUN_CASE_REGISTRY.
+- [Protocolo completo](docs/C3D_02_DOS_MALLAS_20261112_ES.md).
+
 ## 2026-11-12 — C3D-02: primera ejecución real de mallado falló calidad y exclusión de exterior [EVIDENCIA LOCAL]
 
 - El investigador ejecutó `bash scripts/run_mesh_only.sh` tras sincronizar GitHub y verificar materiales/STL. Siete archivos idénticos a C14, tres geometrías SHA-256 correctas, ocho vértices únicos.

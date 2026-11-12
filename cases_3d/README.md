@@ -1,3 +1,5 @@
+> **Plan D, etapa 2:** [C3D-02 mallas independientes metal y arena](../docs/C3D_02_DOS_MALLAS_20261112_ES.md) reemplaza como **próxima prueba** el mallado combinado que conservó aire. Dos STL cerrados, un punto interior por material, verificaciones por separado. Código preparado; sin CFD ni CHT.
+
 > **12-11-2026: primer mallado C3D-02 local fallido.** 589,701 celdas, volumen 242.130 cm³ y 2 fallos completos `checkMesh`; un solo componente conectado. Se debe diagnosticar el log antes de modificar geometría/insidePoints. [Read-only diagnóstico](C3D_02_metal_sand_clean/scripts/diagnose_mesh_readonly.sh) · [Bitácora](../docs/C3D_02_MALLADO_INICIAL_20261112_ES.md).
 
 > **12-11-2026, candidato de mallado:** [C3D_02_metal_sand_clean](C3D_02_metal_sand_clean/README.md) ahora tiene `snappyHexMeshDict` para **dos interiores sin aire** y comando único `bash scripts/run_mesh_only.sh`. Se verificará en Ubuntu; todavía no existe malla/CFD aceptada. [Procedimiento](../docs/C3D_02_MALLADO_INICIAL_20261112_ES.md).

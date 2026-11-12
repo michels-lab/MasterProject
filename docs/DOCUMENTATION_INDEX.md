@@ -1,3 +1,5 @@
+> **C3D-02 12-11-2026:** [siguiente etapa — mallas geométricas independientes hierro/arena](C3D_02_DOS_MALLAS_20261112_ES.md), seguida del diseño y validación de contacto térmico. Esta ruta está **preparada, NO CORRIDA**; no reemplaza la evidencia del primer mallado fallido.
+
 > **Estado 12-11-2026:** primera malla local C3D-02 rechazada, 242.130 cm³ / 589,701 celdas / 2 checks fallidos. [Resultado y decisiones](C3D_02_MALLADO_INICIAL_20261112_ES.md) · [Script de diagnóstico sin remallar](../cases_3d/C3D_02_metal_sand_clean/scripts/diagnose_mesh_readonly.sh). No confundir configuración fuente con solver 3D verificado.
 
 > **Nuevo 12-11-2026:** [Guía de primer mallado físico C3D-02](C3D_02_MALLADO_INICIAL_20261112_ES.md), con comando único, selección `insidePoints`, prueba de calidad exhaustiva y condiciones de aceptación. **No confundir candidato no ejecutado con resultados.**
