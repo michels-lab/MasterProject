@@ -1,3 +1,5 @@
+> **ACTUALIZACIÓN 2026-11-12 — primer diccionario físico de malla preparado (SIN EJECUTAR).** Se añadió `system/snappyHexMeshDict` con `insidePoints` para dos interiores (hierro y arena), `faceZone/cellZone metal` y el script de ejecución protegida `scripts/run_mesh_only.sh`. Es una **hipótesis de mallado que requiere prueba en Ubuntu**, no una malla aceptada. El script no usa recortes de otras carpetas ni ejecuta solver; deja los logs completos y exige `checkMesh -allGeometry -allTopology`. [Manual de la etapa](../../docs/C3D_02_MALLADO_INICIAL_20261112_ES.md).
+
 # C3D-02 — QuickCup 3D limpio: hierro y arena
 
 **Estado 2026-11-12: NUEVO CASO FUENTE / PREPARED_NOT_RUN.** Sin malla final, sin interfaz de transferencia térmica validada y **sin solver 3D ejecutado**. Sustituye al experimento C3D-01 como línea activa, no borra su evidencia.

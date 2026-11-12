@@ -1,3 +1,5 @@
+> **12-11-2026, candidato de mallado:** [C3D_02_metal_sand_clean](C3D_02_metal_sand_clean/README.md) ahora tiene `snappyHexMeshDict` para **dos interiores sin aire** y comando único `bash scripts/run_mesh_only.sh`. Se verificará en Ubuntu; todavía no existe malla/CFD aceptada. [Procedimiento](../docs/C3D_02_MALLADO_INICIAL_20261112_ES.md).
+
 > **Nuevo caso fuente C3D (2026-11-12):** [C3D_02_metal_sand_clean](C3D_02_metal_sand_clean/README.md). C3D-01 es histórico; no reemplazar sus registros. Reinicio desde referencia material C14, dos regiones `metal` + `mold`, sin aire. Las pruebas de 1.5 M celdas, recortes y 5,334 caras `metal_to_surrounding` **no constituyen** malla CHT 3D validada. [Reinicio y trazabilidad](../docs/C3D_REINICIO_20261112_ES.md).
 
 # Plan D — Casos tridimensionales de QuickCup

@@ -34,4 +34,22 @@ if grep -Eq '^[[:space:]]*application[[:space:]]+foamMultiRun;' "$ROOT/system/co
     exit 1
 fi
 echo "OK: siete materiales C14 exactos, scripts sintácticos y caja base de 8 vertices."
+# Foundation 14 two-material meshing source checks.
+mesh_dict="$ROOT/system/snappyHexMeshDict"
+mesh_script="$ROOT/scripts/run_mesh_only.sh"
+test -f "$mesh_dict"
+test -f "$mesh_script"
+grep -Eq '^[[:space:]]*insidePoints([[:space:]]|$)' "$mesh_dict"
+grep -Eq '^[[:space:]]*cellZone[[:space:]]+metal;' "$mesh_dict"
+grep -Eq '^[[:space:]]*faceZone[[:space:]]+metalInterface;' "$mesh_dict"
+grep -Eq '^[[:space:]]*units[[:space:]]+\[mm\];' "$mesh_dict"
+if grep -Eq '^[[:space:]]*(locationInMesh|locationsInMesh)[[:space:]]' "$mesh_dict"; then
+    echo "ERROR: se mezcló sintaxis OpenCFD con Foundation 14"
+    exit 1
+fi
+if grep -Eq '^[[:space:]]*(foamMultiRun|subsetMesh|topoSet|splitMeshRegions)([[:space:]]|$)' "$mesh_script"; then
+    echo "ERROR: el script de malla ejecutaría solver/recortes/separación"
+    exit 1
+fi
+echo "OK: fuente de mallado Foundation 14 de dos puntos interiores, sin CFD."
 echo "NO certifica malla física, contacto térmico ni CFD."

@@ -1,3 +1,10 @@
+## 2026-11-12 — C3D-02: diccionario de mallado nativo preparado; ejecución LOCAL pendiente
+
+- Se agregó `cases_3d/C3D_02_metal_sand_clean/system/snappyHexMeshDict` para Foundation 14 con `insidePoints` interior al metal y arena, refinamiento en ambos STL y `cellZone metal`. Esto **no** significa que el exterior haya sido eliminado o creada una interfaz térmica.
+- `scripts/run_mesh_only.sh` usa **una sola carpeta `~/OpenFOAM/C3D02_mesh`** y prohíbe reejecución destructiva; genera `blockMesh`, `snappyHexMesh`, chequeo exhaustivo, resúmenes de volumen y defectos. No realiza subset/split/solver.
+- Se añadió condición preliminar de volumen basada en STL (150.8306 cm³) y pruebas estáticas de sintaxis. **No existe ejecución CFD ni mallado físico confirmado en la laptop**. No cambiar `RUN_CASE_REGISTRY.csv` de `PREPARED_NOT_RUN`.
+- [Procedimiento y puertas científicas](docs/C3D_02_MALLADO_INICIAL_20261112_ES.md).
+
 ## 2026-11-12 — REINICIO C3D SIN BORRAR EVIDENCIA; NUEVO CASO SIN CORRIDA
 
 - Por decisión expresa del investigador se abandona como base el conjunto de pruebas C3D-01 y se prepara [C3D_02_metal_sand_clean](cases_3d/C3D_02_metal_sand_clean/README.md) con hierro+arena, no aire. No se borran carpetas ni se alteran resultados 2D.
