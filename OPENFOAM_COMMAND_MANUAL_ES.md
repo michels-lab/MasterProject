@@ -1,3 +1,37 @@
+## Adenda práctica actualizada — 12 de noviembre de 2026 (OpenFOAM Foundation 14)
+
+**Inicio recomendado:** [lecciones detalladas de los ensayos C3D, comandos, opciones y errores reales](docs/OPENFOAM14_LECCIONES_C3D_20261112_ES.md). [Decisión científica y nuevo caso](docs/C3D_REINICIO_20261112_ES.md). Los capítulos siguientes documentan el historial; el nuevo caso fuente es `cases_3d/C3D_02_metal_sand_clean`, que **no se ha ejecutado**.
+
+### Secuencia segura de trabajo
+
+```bash
+source /opt/openfoam14/etc/bashrc
+cd ~/OpenFOAM/MasterProject
+git status --short
+# Desde el nuevo caso, comprobar que existe el controlDict:
+test -f cases_3d/C3D_02_metal_sand_clean/system/controlDict
+# Ayuda real de los comandos en tu instalación:
+checkMesh -help
+subsetMesh -help
+splitMeshRegions -help
+```
+
+### Errores de sintaxis probados (NO repetir)
+| Incorrecto / condición | Correcto / solución |
+|---|---|
+| `foamDictionary -entry castellatedMeshControls.insidePoints` | `-entry castellatedMeshControls/insidePoints` |
+| `checkMesh -writeSets vtk` | `checkMesh -writeSets -setFormat vtk` (y `-writeSurfaces -surfaceFormat vtk`) |
+| `subsetMesh keepMaterials -case ...` | `subsetMesh -cellSet keepMaterials -case ... -noFields` |
+| caso `topoSet` sin `system/controlDict` | copiar/proporcionar `controlDict` antes de lanzar la utilidad |
+| repetir `subsetMesh` sobre malla ya recortada | **No repetir**: los IDs del `cellSet` dejan de referir a esa malla; reconstruir en una copia de malla base |
+| `splitMeshRegions -disconnected` implicaría una interfaz térmica | falso: apareció `No interfaces to add` |
+| `checkMesh` básico `Mesh OK` significa validación | falso: `-allGeometry -allTopology` sigue detectando defectos |
+| 5,334 `mappedWall` metal–surrounding = metal–arena | falso: `surrounding` contenía también exterior |
+
+`topoSet` advierte deprecación hacia `createZones` en Foundation 14; **el aviso no fue causa del fallo**. Mantener `0/metal` y `0/mold`, `system/metal` y `system/mold`, `constant/metal/materials/castIron` y `constant/mold/materials/silica` como arquitectura del caso multi-región. Las BC 2D `frontAndBack type empty` **no se copian tal cual** al 3D. No usar `foamMultiRun` hasta validar geometría e interfaz.
+
+---
+
 # Manual práctico de comandos OpenFOAM — MasterProject / QuickCup
 
 **Idioma:** 🇪🇸 Español | [🇬🇧 English](./OPENFOAM_COMMAND_MANUAL_EN.md) | [↩ Selector de idioma](./OPENFOAM_COMMAND_MANUAL.md)
