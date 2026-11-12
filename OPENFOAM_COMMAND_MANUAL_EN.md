@@ -1,3 +1,18 @@
+## 2026-11-12 — One closed STL / one insidePoint per material (C3D-02, NOT RUN)
+
+The failed combined mesh retained exterior (242.130 cm³, 589,701 cells, two exhaustive check failures); both points were geometrically inside their intended STL solid. The new **single-workspace, two-independent-mesh** procedure is:
+
+```bash
+cd ~/OpenFOAM/MasterProject
+git pull --ff-only
+cd cases_3d/C3D_02_metal_sand_clean
+bash scripts/run_material_meshes.sh
+```
+
+Under `~/OpenFOAM/C3D02_materials`, metal and mold have separate Foundation 14 `insidePoint` + closed STL configurations and exhaustive checks. The source mesh and prior logs are not changed. **Passing individual mesh quality does not demonstrate a mapped thermal interface or CFD readiness.** [Scientific stage guide](docs/C3D_02_DOS_MALLAS_20261112_ES.md).
+
+---
+
 ## 2026-11-12 — C3D-02 first mesh failure: inspect existing logs, DO NOT re-run meshing
 
 First real local run generated 589,701 cells and **242.130 cm³**, one connected mesh region, 10 bad face tets and 14,586 concave cells (two full `checkMesh` failures); expected combined physical CAD volume ~150.831 cm³. The external volume was not removed. Diagnose **without writing anything**:
