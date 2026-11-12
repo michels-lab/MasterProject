@@ -1,3 +1,20 @@
+## 12-11-2026 — C3D-02: diagnóstico sin remallado después del primer fallo
+
+**Resultado real de `run_mesh_only.sh`:** 589,701 celdas, **242.130 cm³**, 1 región conectada, 2 fallos exhaustivos (`face-tets 10`, `concaveCells 14,586`). El volumen hierro+arena nominal es 150.831 cm³. Se conserva exterior; no declarar `snappyHexMesh` aprobado.
+
+Comando **de solo lectura** (NO ejecutar de nuevo `run_mesh_only.sh`):
+
+```bash
+cd ~/OpenFOAM/MasterProject
+git pull --ff-only
+cd cases_3d/C3D_02_metal_sand_clean
+bash scripts/diagnose_mesh_readonly.sh
+```
+
+La salida registra selección de regiones, remoción de celdas, parches y zonas y usa logs existentes en `~/OpenFOAM/C3D02_mesh`. Si no existen los logs, aborta sin crear otra carpeta. `insidePoints` en Foundation 14 está orientado a conservar regiones desconectadas; **no separa dos materiales por sí solo**. [Bitácora del fallo](docs/C3D_02_MALLADO_INICIAL_20261112_ES.md).
+
+---
+
 ## 2026-11-12 — Primer mallado C3D-02 SIN reutilizar mallas previas
 
 Un único comando desde el caso nuevo, respaldado en GitHub:
