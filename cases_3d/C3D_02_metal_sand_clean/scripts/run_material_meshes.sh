@@ -73,7 +73,7 @@ for material in metal mold; do
         "$SUB/log.checkMesh.full" | tail -n 22 || true
 
     # Geometry and quality checks independent of mere command completion.
-    vol="$(sed -n -E 's/.*Total volume[[:space:]]*=[[:space:]]*([0-9.eE+-]+).*/\\1/p' "$SUB/log.checkMesh.full" | tail -n 1)"
+    vol="$(sed -n -E 's/.*Total volume[[:space:]]*=[[:space:]]*([0-9.eE+-]+).*/\1/p' "$SUB/log.checkMesh.full" | tail -n 1)"
     outCount="$(awk '
         /^[[:space:]]*outerBox[[:space:]]*$/ {found=1}
         found && /nFaces[[:space:]]/ {gsub(/;/, "", $2); print $2; exit}
