@@ -1,3 +1,5 @@
+> **12-11-2026, C3D-02 etapa de malla preparada:** nuevo diccionario Foundation 14 `insidePoints` hierro+arena y script de mallado aislado [run_mesh_only.sh](cases_3d/C3D_02_metal_sand_clean/scripts/run_mesh_only.sh). **Sin ejecución local confirmada; no CHT validado.** [Protocolo y criterios](docs/C3D_02_MALLADO_INICIAL_20261112_ES.md).
+
 > **ACTUALIZACIÓN 2026-11-12 — Reinicio C3D:** la línea 3D de trabajo pasa a [C3D_02_metal_sand_clean](cases_3d/C3D_02_metal_sand_clean/README.md) (caso fuente limpio, **no simulado**). C3D-01 y sus carpetas temporales son **historial no validado, no borrar hasta respaldar**. Se reutiliza **sin cambiar valores** la física C14 (`castIron`, `silica`, `fvModels`, `g`, `pRef`); 3D requiere **dos sólidos, cero región de aire, malla y parches térmicos verificados**. [Decisión y evidencia](docs/C3D_REINICIO_20261112_ES.md) · [Lecciones OpenFOAM14](docs/OPENFOAM14_LECCIONES_C3D_20261112_ES.md). Sin CFD 3D ni validación física.
 
 # MasterProject
