@@ -16,7 +16,7 @@ done
 awk '
   /^[[:space:]]*vertices[[:space:]]*$/ {active=1; next}
   active && /^[[:space:]]*\);[[:space:]]*$/ {active=0; exit}
-  active && /^[[:space:]]*\(/ {
+  active && /^[[:space:]]*\([[:space:]]*-?[0-9]/ {
     line=$0; gsub(/[()[:space:]]/, "", line)
     if (seen[line]++) duplicate=1
     n++
