@@ -1,3 +1,17 @@
+## 2026-11-12 — Initial C3D-02 two-material mesh (NOT RUN)
+
+```bash
+source /opt/openfoam14/etc/bashrc
+cd ~/OpenFOAM/MasterProject
+git pull --ff-only
+cd cases_3d/C3D_02_metal_sand_clean
+bash scripts/run_mesh_only.sh
+```
+
+The guarded script runs `foamDictionary`, `blockMesh`, `snappyHexMesh -overwrite` with Foundation 14 `insidePoints` for **metal and mold only**, then exhaustive `checkMesh` and a **preliminary** STL-volume band check. It never executes `subsetMesh`, `splitMeshRegions` or CFD, and will not overwrite `~/OpenFOAM/C3D02_mesh`. A valid metal–mold interface and full removal of exterior cells remain **unverified**. [Detailed Spanish mesh guide](docs/C3D_02_MALLADO_INICIAL_20261112_ES.md).
+
+---
+
 ## November 12, 2026 — verified OpenFOAM Foundation 14 lessons (3D reset)
 
 **Current reference:** [Full Spanish command and incident guide](docs/OPENFOAM14_LECCIONES_C3D_20261112_ES.md), [scientific restart record](docs/C3D_REINICIO_20261112_ES.md). The clean source case is `cases_3d/C3D_02_metal_sand_clean` and **has not been run**.
