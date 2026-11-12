@@ -1,3 +1,11 @@
+## 2026-11-12 — C3D-02: primera ejecución real de mallado falló calidad y exclusión de exterior [EVIDENCIA LOCAL]
+
+- El investigador ejecutó `bash scripts/run_mesh_only.sh` tras sincronizar GitHub y verificar materiales/STL. Siete archivos idénticos a C14, tres geometrías SHA-256 correctas, ocho vértices únicos.
+- `blockMesh` y `snappyHexMesh` concluyeron. `checkMesh -allGeometry -allTopology`: **589,701 celdas, 2 boundary patches, Number of regions: 1, volumen 0.00024213 m³ (242.130 cm³), 10 caras con tetraedros deficientes, 14,586 celdas cóncavas, Failed 2 mesh checks**.
+- Volumen geométrico de referencia 150.8306 cm³ (metal+arena), por lo que quedan aproximadamente **91.2994 cm³ excedentes (~60.5%)**; no se logró excluir aire/exterior ni acreditar interfaz metal–molde. **NO** hay split de regiones, malla aceptada, solver ejecutado ni validación CFD/experimental; el registro queda `PREPARED_NOT_RUN`.
+- La sintaxis `insidePoints` es válida en Foundation 14 para *regiones desconectadas*, pero el resultado es **1 componente**; su mera presencia no obliga a separar dos volúmenes. **Próxima acción sin remallado:** inspeccionar los logs actuales con `scripts/diagnose_mesh_readonly.sh`, no editar parámetros ni repetir ciegamente.
+- Evidencia: transcripción de terminal del investigador, logs íntegros permanecen solamente en `~/OpenFOAM/C3D02_mesh/`; no se han subido a GitHub. [Guía actualizada](docs/C3D_02_MALLADO_INICIAL_20261112_ES.md).
+
 ## 2026-11-12 — C3D-02: diccionario de mallado nativo preparado; ejecución LOCAL pendiente
 
 - Se agregó `cases_3d/C3D_02_metal_sand_clean/system/snappyHexMeshDict` para Foundation 14 con `insidePoints` interior al metal y arena, refinamiento en ambos STL y `cellZone metal`. Esto **no** significa que el exterior haya sido eliminado o creada una interfaz térmica.
