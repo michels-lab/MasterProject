@@ -1,0 +1,32 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  13
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    format      ascii;
+    class       uniformDimensionedVectorField;
+    location    "constant";
+    object      g;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+dimensions      [0 1 -2 0 0 0 0];
+value           (0 -9.81 0);
+
+
+// ************************************************************************* //
+
+// ============================================================================
+// QUICKCUP DOCUMENTATION APPENDIX
+// ============================================================================
+// Archivo documentado: constant/metal/g.
+// El contenido ejecutable anterior permanece intacto; este apéndice solo explica su función e interacción con el modelo.
+// FUNCIÓN: vector de aceleración gravitacional usado en flotación y corrección hidrostática.
+// value = (0 -9.81 0): valor indicado por el diccionario; su efecto exacto depende del bloque o condición de frontera que lo contiene.
+// INTERACCIÓN: g entra en gh y por ello en p_rgh; dirección y magnitud definen la dirección y escala del término hidrostático/flotante.
+// NOTA DE SEGURIDAD: todas las líneas de este apéndice son comentarios y no cambian la ejecución del caso.
+// ============================================================================
