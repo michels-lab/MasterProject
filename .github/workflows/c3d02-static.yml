@@ -1,0 +1,20 @@
+name: C3D-02 source integrity (no CFD)
+on:
+  pull_request:
+    paths:
+      - 'cases_3d/C3D_02_metal_sand_clean/**'
+      - 'cases_controlled_buoyancy/C14_topFixedFlux_explicitRef/constant/**'
+      - '.github/workflows/c3d02-static.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'cases_3d/C3D_02_metal_sand_clean/**'
+      - 'cases_controlled_buoyancy/C14_topFixedFlux_explicitRef/constant/**'
+      - '.github/workflows/c3d02-static.yml'
+jobs:
+  static-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify exact C14 baseline and scripts
+        run: bash cases_3d/C3D_02_metal_sand_clean/tests/test_template_static.sh
