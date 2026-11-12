@@ -1,3 +1,5 @@
+> **Nuevo 12-11-2026:** [Guía de primer mallado físico C3D-02](C3D_02_MALLADO_INICIAL_20261112_ES.md), con comando único, selección `insidePoints`, prueba de calidad exhaustiva y condiciones de aceptación. **No confundir candidato no ejecutado con resultados.**
+
 > **12-11-2026:** [Reinicio de C3D y consolidación de pruebas](C3D_REINICIO_20261112_ES.md) · [Lecciones y comandos verificables de OpenFOAM 14](OPENFOAM14_LECCIONES_C3D_20261112_ES.md) · [Nuevo caso fuente 3D](../cases_3d/C3D_02_metal_sand_clean/README.md). Las notas fechadas 10-11 se conservan como evidencia histórica; las actualizaciones posteriores tienen prioridad de estado.
 
 # MasterProject — índice de documentación científica
