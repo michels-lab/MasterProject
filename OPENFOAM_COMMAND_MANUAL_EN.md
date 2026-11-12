@@ -1,3 +1,18 @@
+## 2026-11-12 — C3D-02 first mesh failure: inspect existing logs, DO NOT re-run meshing
+
+First real local run generated 589,701 cells and **242.130 cm³**, one connected mesh region, 10 bad face tets and 14,586 concave cells (two full `checkMesh` failures); expected combined physical CAD volume ~150.831 cm³. The external volume was not removed. Diagnose **without writing anything**:
+
+```bash
+cd ~/OpenFOAM/MasterProject
+git pull --ff-only
+cd cases_3d/C3D_02_metal_sand_clean
+bash scripts/diagnose_mesh_readonly.sh
+```
+
+This reads previous `snappyHexMesh` logs, patches and zones in `~/OpenFOAM/C3D02_mesh`. Foundation 14 `insidePoints` selects disconnected regions but did not separate this connected result. Do not claim CHT or CFD. [Mesh stage evidence](docs/C3D_02_MALLADO_INICIAL_20261112_ES.md).
+
+---
+
 ## 2026-11-12 — Initial C3D-02 two-material mesh (NOT RUN)
 
 ```bash
