@@ -1,0 +1,115 @@
+/* C3D-02: candidate TWO-MATERIAL surface mesh, OpenFOAM Foundation 14.
+ * STLs are in mm; units [mm] converts EACH STL to metres.
+ * One source case, one reproducible local work case. No exterior air region.
+ * This dictionary is UNRUN; accept only with full geometry/CHT checks.
+ */
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      snappyHexMeshDict;
+}
+castellatedMesh true;
+snap            true;
+addLayers       false;
+
+geometry
+{
+    mold
+    {
+        type    triSurfaceMesh;
+        file    "mold_repaired.stl";
+        units   [mm];
+    }
+    metal
+    {
+        type    triSurfaceMesh;
+        file    "metal.stl";
+        units   [mm];
+    }
+}
+
+castellatedMeshControls
+{
+    maxLocalCells       400000;
+    maxGlobalCells      3000000;
+    minRefinementCells  0;
+    nCellsBetweenLevels 2;
+
+    features ();
+
+    refinementSurfaces
+    {
+        mold
+        {
+            level       (2 2);
+            patchInfo
+            {
+                type    wall;
+            }
+        }
+
+        metal
+        {
+            level       (2 2);
+            // Preserve a metal volume tag and internal interface candidates.
+            // Whether they are useable is checked AFTER the mesh is generated.
+            faceZone    metalInterface;
+            cellZone    metal;
+            cellZoneInside inside;
+            faceType    internal;
+        }
+    }
+    resolveFeatureAngle 30;
+
+    refinementRegions {};
+
+    // Two interior points: one in the cast-iron cavity and one inside sand.
+    // Critically, NO point in the exterior of either STL.
+    // OpenFOAM Foundation uses insidePoints (not OpenCFD locationsInMesh).
+    insidePoints
+    (
+        (0.0259 -0.0200 0.0259)
+        (0.0030 -0.0200 0.0259)
+    );
+    allowFreeStandingZoneFaces false;
+}
+
+snapControls
+{
+    nSmoothPatch        3;
+    tolerance           1.0;
+    nSolveIter          50;
+    nRelaxIter          5;
+    nFeatureSnapIter    0;
+    implicitFeatureSnap false;
+    explicitFeatureSnap false;
+    multiRegionFeatureSnap false;
+}
+
+addLayersControls
+{
+    relativeSizes true;
+    layers {};
+    expansionRatio 1.0;
+    finalLayerThickness 0.3;
+    minThickness 0.1;
+    nGrow 0;
+    featureAngle 90;
+    nRelaxIter 5;
+    nSmoothSurfaceNormals 1;
+    nSmoothNormals 3;
+    nSmoothThickness 10;
+    maxFaceThicknessRatio 0.5;
+    maxThicknessToMedialRatio 0.3;
+    minMedialAxisAngle 90;
+    nBufferCellsNoExtrude 0;
+    nLayerIter 0;
+}
+
+meshQualityControls
+{
+    #includeEtc "caseDicts/mesh/generation/meshQualityDict.cfg"
+}
+mergeTolerance 1e-6;
