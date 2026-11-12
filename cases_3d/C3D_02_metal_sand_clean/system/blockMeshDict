@@ -1,0 +1,46 @@
+/* C3D-02 — caja auxiliar, NO dominio físico final.
+ * STL en mm; blockMesh convierte las coordenadas a SI con units [mm].
+ * Las dimensiones del fondo son 58 x 72 x 58 mm, 29 x 36 x 29 celdas.
+ * Nunca se debe simular metal/arena directamente en esta caja.
+ */
+FoamFile
+{
+    version 2.0;
+    format ascii;
+    class dictionary;
+    object blockMeshDict;
+}
+units [mm];
+vertices
+(
+    (-3 -69 -3)
+    (55 -69 -3)
+    (55 3 -3)
+    (-3 -69 55)
+    (55 -69 55)
+    (55 3 55)
+    (-3 3 55)
+    (55 3 55)
+);
+blocks
+(
+    hex (0 1 2 3 4 5 6 7) (29 36 29) simpleGrading (1 1 1)
+);
+edges ();
+boundary
+(
+    outerBox
+    {
+        type patch;
+        faces
+        (
+            (0 1 5 4)
+            (3 7 6 2)
+            (0 4 7 3)
+            (1 2 6 5)
+            (0 3 2 1)
+            (4 5 6 7)
+        );
+    }
+);
+mergePatchPairs ();
