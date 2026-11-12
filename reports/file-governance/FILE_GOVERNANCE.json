@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
   "audit_kind": "deterministic_full_tracked_tree",
-  "tracked_files_total": 38779,
-  "classified_files_total": 38774,
-  "docs_content_inspected": 130,
+  "tracked_files_total": 38798,
+  "classified_files_total": 38793,
+  "docs_content_inspected": 134,
   "large_docs_skipped": 0,
   "excluded_reports": 5,
   "roles": {
@@ -12,24 +12,22 @@
     "bitacora": 5,
     "config": 7,
     "data": 22,
-    "document": 103,
-    "index": 22,
+    "document": 105,
+    "index": 24,
     "license": 1,
     "simulation_case_file": 98,
-    "simulation_input": 2667,
+    "simulation_input": 2676,
     "simulation_log": 3155,
     "simulation_output": 32613,
-    "source": 42,
-    "test": 12,
+    "source": 45,
+    "test": 14,
     "web_ui": 1,
-    "workflow": 18
+    "workflow": 19
   },
-  "finding_counts": {
-    "POTENTIAL_UNLOGGED_CHANGES": 2
-  },
-  "finding_total": 2,
-  "inventory_fingerprint": "0dc1a79392d23ae8394f885dad0f6292ca656214e81c0de13d3e64e8a92b01ed",
-  "evidence_fingerprint": "99f0166fdd590869d94075cf7ef42a57e51c4b3ed263cdd65c0c32869df3e5f2",
+  "finding_counts": {},
+  "finding_total": 0,
+  "inventory_fingerprint": "a9c49657d99cdd731124aaf2fb79a6c85babb29597bea9ae75ad91f179545d7e",
+  "evidence_fingerprint": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
   "files": [
     {
       "path": ".github/agents/openfoam-solidification.agent.md",
@@ -65,6 +63,13 @@
       "purpose": "assistant role/instructions",
       "certainty": "rule",
       "blob": "9a65b506da9e8db74bcdd6f55a10b17879e24da7"
+    },
+    {
+      "path": ".github/workflows/c3d02-static.yml",
+      "role": "workflow",
+      "purpose": "GitHub Actions automation",
+      "certainty": "rule",
+      "blob": "0b7a9effb677940149772ded624881b508323877"
     },
     {
       "path": ".github/workflows/file-governance-audit.yml",
@@ -232,7 +237,7 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "e2f1af7c6aef72c6900fab04f468cb0231642904"
+      "blob": "f75e0f31152949a19d20697f01fee6c7b5d94860"
     },
     {
       "path": "CASE_GUIDE_INTERACTIVE_ES.html",
@@ -253,35 +258,35 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "52c2a415f6ee2fdde1af5ab41d27a88a572bda98"
+      "blob": "ae79809ed0bca0922008d6805a1baba1c573a71c"
     },
     {
       "path": "NEXT_RESEARCH_ROADMAP_ES.md",
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "c142bc532f5854a230a48a063d721b7976f71ae2"
+      "blob": "836257675420be703e3a08857be1413dad19b8e3"
     },
     {
       "path": "OPENFOAM_COMMAND_MANUAL.md",
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "d79b4e49d82ab43c58ebfec6a6d0b838b3a0fc7e"
+      "blob": "d0dab49b2c0781122c97965ccdc40a0e0a730b63"
     },
     {
       "path": "OPENFOAM_COMMAND_MANUAL_EN.md",
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "811c3ee41f0f1df98868add5b0fe30c945a4579e"
+      "blob": "0cde28aec616a698ce7f6dc4d8f6146719850775"
     },
     {
       "path": "OPENFOAM_COMMAND_MANUAL_ES.md",
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "ebf1c29a0dad0651384075bd9a1a8838418bf960"
+      "blob": "92b7c2735c2dbe0129f4fdd0ab3ba50bdbf3f0ff"
     },
     {
       "path": "POSTPROCESSING_FIELD_GUIDE_ES.md",
@@ -295,49 +300,49 @@
       "role": "bitacora",
       "purpose": "technical/audit change history",
       "certainty": "rule",
-      "blob": "6456ca80c66159a3b9034843d1d963a1f113f286"
+      "blob": "b06855198af9c505f840a900d3d62ece2b64f14e"
     },
     {
       "path": "PROJECT_AUDIT_LOG_EN.md",
       "role": "bitacora",
       "purpose": "technical/audit change history",
       "certainty": "rule",
-      "blob": "ba20387eecb7c8d394fd10c1b011e291d9ded0a7"
+      "blob": "d99692d07c440882a11ba2ed6d46a66d791cba54"
     },
     {
       "path": "PROJECT_AUDIT_LOG_ES.md",
       "role": "bitacora",
       "purpose": "technical/audit change history",
       "certainty": "rule",
-      "blob": "e607fc47cf856817bfbd34ead97f98cee685c5e9"
+      "blob": "f569efb209daf7dae661b250bf5f533cc71bd5e9"
     },
     {
       "path": "README.md",
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "8f9dedd0a3c3f2fdf6175657c72f93403984c2b4"
+      "blob": "ff317a2d06f5a8da4c8e70aecdaad2f01a9c3965"
     },
     {
       "path": "RUN_CASE_REGISTRY.csv",
       "role": "data",
       "purpose": "structured/research data (semantics not validated)",
       "certainty": "rule",
-      "blob": "522e969538f6432d7ddf6de8d678b9e108913b69"
+      "blob": "00daee4f0b0f503b9580d662cccd446a3cd8e620"
     },
     {
       "path": "RUN_MASTER_PROTOCOL.md",
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "6117a264bd93afb1ddf133f1545a031afb9db7ef"
+      "blob": "6b53c8040f587c7850d1452dfebfc9b95bdbc7cc"
     },
     {
       "path": "VALIDATION_MATRIX.md",
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "0017b3596683c7a8c8e37e9bc911dad02ec15e79"
+      "blob": "d147beb3b3e3683065a8b30de09151810b916f77"
     },
     {
       "path": "VALIDATION_MATRIX_EN.md",
@@ -351,7 +356,7 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "d353a6c46971d9f8926389c40f2ffe9c77d26ead"
+      "blob": "fa1a2c219521795c6b135d4b4784bc0bf93c9016"
     },
     {
       "path": "analysis_results/c11_energy2_test/summary.md",
@@ -666,7 +671,7 @@
       "role": "source",
       "purpose": "code/test implementation",
       "certainty": "rule",
-      "blob": "0f4f115d58561c9bcca8b553de1f57991459e78f"
+      "blob": "a80ff3dd06e62ce40b43b593e9d4ab86e3efa806"
     },
     {
       "path": "analysis_tools/coupling_analysis.py",
@@ -939,7 +944,7 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "6abe0234675d18366d4bad37e530806eed412e5f"
+      "blob": "f4173f9d21c32ef5ab1b9c4b817fd74680a571c8"
     },
     {
       "path": "cases_3d/C3D_01_metal_mold/constant/geometry/.gitignore",
@@ -1061,18 +1066,130 @@
       "blob": "74d073eec59c845ce67f2068789dfa7ee596bbb4"
     },
     {
+      "path": "cases_3d/C3D_02_metal_sand_clean/README.md",
+      "role": "index",
+      "purpose": "navigation/onboarding",
+      "certainty": "rule",
+      "blob": "37326357fbd62c10adad7105e9b484e464fc89dc"
+    },
+    {
+      "path": "cases_3d/C3D_02_metal_sand_clean/constant/geometry/README.md",
+      "role": "index",
+      "purpose": "navigation/onboarding",
+      "certainty": "rule",
+      "blob": "2a425e6cc17c89c53b051fe0c5a339dfbf3eceeb"
+    },
+    {
+      "path": "cases_3d/C3D_02_metal_sand_clean/constant/metal/fvModels",
+      "role": "simulation_input",
+      "purpose": "OpenFOAM case field/dictionary input (content unvalidated)",
+      "certainty": "inferred",
+      "blob": "67903ac9804f63e9c40d734d9038f628c6076a95"
+    },
+    {
+      "path": "cases_3d/C3D_02_metal_sand_clean/constant/metal/g",
+      "role": "simulation_input",
+      "purpose": "OpenFOAM case field/dictionary input (content unvalidated)",
+      "certainty": "inferred",
+      "blob": "627a74fa842f4ae7af40501765c87c4a7e26af8e"
+    },
+    {
+      "path": "cases_3d/C3D_02_metal_sand_clean/constant/metal/materials/castIron",
+      "role": "simulation_input",
+      "purpose": "OpenFOAM case field/dictionary input (content unvalidated)",
+      "certainty": "inferred",
+      "blob": "135d272b849f329bfd8a1208d4a0b5987d6e59e8"
+    },
+    {
+      "path": "cases_3d/C3D_02_metal_sand_clean/constant/metal/pRef",
+      "role": "simulation_input",
+      "purpose": "OpenFOAM case field/dictionary input (content unvalidated)",
+      "certainty": "inferred",
+      "blob": "6a1c70138dfd0ac65eb980eb966c5479efcdcd24"
+    },
+    {
+      "path": "cases_3d/C3D_02_metal_sand_clean/constant/metal/physicalProperties",
+      "role": "simulation_input",
+      "purpose": "OpenFOAM case field/dictionary input (content unvalidated)",
+      "certainty": "inferred",
+      "blob": "24e3eb8a7acc46a0de12e4eda42cdd4e50cc8a3c"
+    },
+    {
+      "path": "cases_3d/C3D_02_metal_sand_clean/constant/mold/materials/silica",
+      "role": "simulation_input",
+      "purpose": "OpenFOAM case field/dictionary input (content unvalidated)",
+      "certainty": "inferred",
+      "blob": "df4bdd5020ab70470b10746a4655c6b38bdd1d8c"
+    },
+    {
+      "path": "cases_3d/C3D_02_metal_sand_clean/constant/mold/physicalProperties",
+      "role": "simulation_input",
+      "purpose": "OpenFOAM case field/dictionary input (content unvalidated)",
+      "certainty": "inferred",
+      "blob": "ff2f209d29f4e789ab1e35d8e6918066e996eb94"
+    },
+    {
+      "path": "cases_3d/C3D_02_metal_sand_clean/scripts/prepare_geometry.sh",
+      "role": "source",
+      "purpose": "code/test implementation",
+      "certainty": "rule",
+      "blob": "9e90bf3b4773cf9872a7eec3abaf6926c715b48d"
+    },
+    {
+      "path": "cases_3d/C3D_02_metal_sand_clean/scripts/run_background_only.sh",
+      "role": "source",
+      "purpose": "code/test implementation",
+      "certainty": "rule",
+      "blob": "88c7abc830037d0f38c6f9bf750fd33977959107"
+    },
+    {
+      "path": "cases_3d/C3D_02_metal_sand_clean/scripts/validate_sources.sh",
+      "role": "source",
+      "purpose": "code/test implementation",
+      "certainty": "rule",
+      "blob": "f5b056847e80c15eac65ce424d725e914fd84a22"
+    },
+    {
+      "path": "cases_3d/C3D_02_metal_sand_clean/system/blockMeshDict",
+      "role": "simulation_input",
+      "purpose": "OpenFOAM case field/dictionary input (content unvalidated)",
+      "certainty": "inferred",
+      "blob": "d4105a283ae9408f6c48128828ab7bbebb6a0537"
+    },
+    {
+      "path": "cases_3d/C3D_02_metal_sand_clean/system/controlDict",
+      "role": "simulation_input",
+      "purpose": "OpenFOAM case field/dictionary input (content unvalidated)",
+      "certainty": "inferred",
+      "blob": "76b76623bae3a3601b33c4c2052f17cd1093ddfc"
+    },
+    {
+      "path": "cases_3d/C3D_02_metal_sand_clean/tests/test_sources.sh",
+      "role": "test",
+      "purpose": "code/test implementation",
+      "certainty": "rule",
+      "blob": "296dea001f9b8246bae484d121c08c4c845c8ac4"
+    },
+    {
+      "path": "cases_3d/C3D_02_metal_sand_clean/tests/test_template_static.sh",
+      "role": "test",
+      "purpose": "code/test implementation",
+      "certainty": "rule",
+      "blob": "b2103ef3bc157bf6ef35c7b17fa2384d2ea5c5a2"
+    },
+    {
       "path": "cases_3d/README.md",
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "5f33fbbf95014f5aa5860a1303ff6e682dbd3eac"
+      "blob": "cdac88e2f84385e1632ac35cf147391c30eafd3c"
     },
     {
       "path": "cases_3d/case3d-01/README.md",
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "54170e29e47143e2e6eb9a9e461f7f6ceb234624"
+      "blob": "fd2ed760c8f363c387079ac10a945a6d7edad811"
     },
     {
       "path": "cases_3d/case3d-01/scripts/stage_mesh_only.sh",
@@ -270698,7 +270815,14 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "182dfc44726647d8797033622eb1c61d1e2f7ad1"
+      "blob": "5ca254720e88efc618a6d05b8f6a5dd6b13b1879"
+    },
+    {
+      "path": "docs/C3D_REINICIO_20261112_ES.md",
+      "role": "document",
+      "purpose": "manual/decision/report/historical note",
+      "certainty": "inferred",
+      "blob": "24cac1bc25f9514544839c0a72a473650d39ad5e"
     },
     {
       "path": "docs/DOCUMENTATION_AUDIT_20261110_ES.md",
@@ -270712,21 +270836,28 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "8389b4f5b6c75d493f39583eea6f5b08ff52f2f6"
+      "blob": "e79b5017e95fa8455672bb3df8bef86f821e8828"
     },
     {
       "path": "docs/DOCUMENT_SYNC_20261110_ES.md",
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "3e470af0039a9955b97c1469ad6a360019e899af"
+      "blob": "2c3ea9fe0ab20b82d78da6ea9d7220c02f8c8582"
     },
     {
       "path": "docs/MASTERPROJECT_IDENTITY_ES.md",
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "1b4348360cd0b905b359f65220a7ae1f2cd0d550"
+      "blob": "34aec28ad6f4b617c0087093b3faaf9f41c18e00"
+    },
+    {
+      "path": "docs/OPENFOAM14_LECCIONES_C3D_20261112_ES.md",
+      "role": "document",
+      "purpose": "manual/decision/report/historical note",
+      "certainty": "inferred",
+      "blob": "87146851cb463435fb542f8c2be3bfef8deeecd9"
     },
     {
       "path": "docs/OPENFOAM_ECOSYSTEM.md",
@@ -271450,26 +271581,7 @@
       "blob": "0b65cc6aa3d29917f57a31a96fd5c3afeffb4ed4"
     }
   ],
-  "findings": [
-    {
-      "id": "38e9781209aab42a",
-      "code": "POTENTIAL_UNLOGGED_CHANGES",
-      "severity": "review",
-      "path": "PROJECT_AUDIT_LOG_EN.md",
-      "observation": "1 implementation/config paths changed since this log's last commit; examples: CASE_GUIDE_INTERACTIVE_ES.html",
-      "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "a81977bce1235f5b",
-      "code": "POTENTIAL_UNLOGGED_CHANGES",
-      "severity": "review",
-      "path": "PROJECT_AUDIT_LOG_ES.md",
-      "observation": "1 implementation/config paths changed since this log's last commit; examples: CASE_GUIDE_INTERACTIVE_ES.html",
-      "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
-      "state": "REVIEW_REQUIRED"
-    }
-  ],
+  "findings": [],
   "untracked_audited": false,
   "ignored_audited": false,
   "binary_contents_audited": false,
