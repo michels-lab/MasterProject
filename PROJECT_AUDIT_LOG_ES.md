@@ -1,3 +1,12 @@
+## 2026-11-12 — REINICIO C3D SIN BORRAR EVIDENCIA; NUEVO CASO SIN CORRIDA
+
+- Por decisión expresa del investigador se abandona como base el conjunto de pruebas C3D-01 y se prepara [C3D_02_metal_sand_clean](cases_3d/C3D_02_metal_sand_clean/README.md) con hierro+arena, no aire. No se borran carpetas ni se alteran resultados 2D.
+- La ejecución local posterior al registro del 10-11 confirmó `splitMeshRegions -cellZones 'metal'`: par `mappedWall` metal–surrounding de **5,334 caras**, 383,788 celdas metal y 1,122,059 surrounding. Esto **no** separó arena del volumen exterior; en ambas regiones hubo 3 fallos de chequeos exhaustivos, además de componentes aisladas e índices de `faceZones` advertidos.
+- `topoSet surfaceToCell` identificó 825,994 celdas dentro del STL del molde y 383,783 dentro del metal, sin solapamiento, y 296,070 sin clasificar en la caja original. Este resultado es selección por geometría, no CHT ni malla aprobada.
+- `C3D01_test_moldOnly`: quitar un `insidePoint` no cambió el total de 1,505,847 celdas ni la zona metal. `C3D01_metal_sand_v1`: `subsetMesh -cellSet keepMaterials` abortó con etiqueta obsoleta `1209778` fuera del rango, indicando incongruencia entre conjunto y malla presente; no repetir sobre ese mismo directorio.
+- En el árbol fuente 3D original el investigador copió desde C14 `castIron`, `silica`, sus `physicalProperties`, `fvModels`, `g`, `pRef` (**7 archivos**), confirmado por terminal el 12-11. Los cambios locales no se consideran integrados a GitHub hasta commit.
+- [Informe consolidado](docs/C3D_REINICIO_20261112_ES.md) | [Comandos y fallos Foundation 14](docs/OPENFOAM14_LECCIONES_C3D_20261112_ES.md). Sin CFD 3D ni G1/J0 cerradas.
+
 ## 2026-11-10 — C3D-01: recorte metal+molde y regiones separadas, SIN interfaz CHT [EVIDENCIA LOCAL]
 
 - En OpenFOAM Foundation 14, `topoSet surfaceToCell` mostró 6,959/6,974 celdas cóncavas fuera de ambos STL en la malla con snapping, y 21,353/21,353 en la malla castellated; 15 y 0 cóncavas, respectivamente, dentro del molde seleccionado.

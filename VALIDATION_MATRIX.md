@@ -1,3 +1,5 @@
+> **2026-11-12:** New clean C3D-02 case [source](cases_3d/C3D_02_metal_sand_clean/README.md) inherits C14 input physics without simulation. Historical 3D meshing still fails validation. [Updated evidence](docs/C3D_REINICIO_20261112_ES.md) and [OpenFOAM 14 command lessons](docs/OPENFOAM14_LECCIONES_C3D_20261112_ES.md).
+
 # Validation Matrix — MasterProject
 
 > **Estado C3D-01 actualizado al 10-11-2026:** la malla recortada metal+arena produjo **1,209,777 celdas y 151.230 cm³** (15 cóncavas, 8 face-tets deficientes, 17 determinantes pequeños; **3 fallos checkMesh**). `splitMeshRegions -disconnected` separó `region1` (**825,994 celdas, 103.256 cm³, 3 fallos**) y `region2` (**383,783 celdas, 47.9735 cm³, 2 fallos**) pero reportó **`No interfaces to add`**. No existe una interfaz CHT verificada, malla aceptada, solver CFD 3D ni validación experimental. `-cellZones 'metal'` **no se ha ejecutado**. [Scientific record](docs/C3D_01_ESTADO_REAL_20261110_ES.md). This is a language selector, not a validated result.

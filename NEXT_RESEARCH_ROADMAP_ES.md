@@ -1,3 +1,5 @@
+> **Adenda 2026-11-12:** la línea C→3D pasa a [C3D_02_metal_sand_clean](cases_3d/C3D_02_metal_sand_clean/README.md), con dos sólidos (`metal`, `mold`) y física C14 preservada. Etapa de fuente preparada; siguen pendientes geometría/malla conformante, parches CHT, configuración regional y validación, **sin modificar** los estudios B/C 2D ni adelantar el estado de V15/V16. [Evidencia e incidentes](docs/C3D_REINICIO_20261112_ES.md).
+
 # Plan de investigación QuickCup — acuerdos tras reunión con el director
 
 > **Adenda actual (10-11-2026):** esta hoja de ruta de octubre conserva su función como plan, pero el trabajo 3D ha avanzado a dos ensayos de mallado, clasificación de STL, recorte metal+molde (**1,209,777 celdas**) y `splitMeshRegions -disconnected` en copia, con **dos regiones y sin interfaces conjugadas (`No interfaces to add`)**. `checkMesh` sigue fallando por región, **no hay CFD 3D ni validación**. Para cifras y próximos gates, ver [registro C3D](docs/C3D_01_ESTADO_REAL_20261110_ES.md) y [manual ES](OPENFOAM_COMMAND_MANUAL_ES.md).

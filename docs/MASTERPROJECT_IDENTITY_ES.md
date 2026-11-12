@@ -1,3 +1,5 @@
+> **Adenda de identidad 2026-11-12:** `case3d-01` y `C3D_01_metal_mold` siguen siendo referencias **históricas** del primer estudio geométrico. `C3D_02_metal_sand_clean` es la **nueva base de fuentes** para el trabajo 3D, no un CFD ni resultados adicionales. Preservar las referencias existentes y no eliminar la historia sin migración explícita. [Reinicio](C3D_REINICIO_20261112_ES.md).
+
 # MasterProject — identidad del proyecto científico
 
 > **C3D-01 al 10-11-2026:** las mallas 3D y diagnósticos se ejecutaron **solo en la laptop**. `subsetMesh -cellSet materialVolume` conservó **1,209,777 celdas; 151.230 cm³; 15 concavidades, 8 face-tets deficientes, 17 determinantes pequeños y 3 fallos `checkMesh`**. `splitMeshRegions -disconnected` produjo `region1` (molde probable, **825,994 celdas; 3 fallos**) y `region2` (metal probable, **383,783 celdas; 2 fallos**), pero informó **`No interfaces to add`**: no hay interfaz térmica acoplada ni solver CFD 3D ejecutado. `-cellZones 'metal'` permanece **sin ejecutar**. [Registro experimental](C3D_01_ESTADO_REAL_20261110_ES.md). El repositorio y la carpeta local mantienen su identidad MasterProject.
