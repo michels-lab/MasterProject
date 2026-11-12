@@ -53,9 +53,11 @@ if ! snappyHexMesh -case "$WORK" -overwrite > "$WORK/log.snappyHexMesh" 2>&1; th
 fi
 
 echo "3/3 - checkMesh exhaustivo (NO CFD)"
+set +e
 checkMesh -case "$WORK" -allGeometry -allTopology \
     > "$WORK/log.checkMesh.full" 2>&1
 CHECK_RC=$?
+set -e
 
 echo "=== Resumen de geometría ==="
 grep -Ei 'cells:|Total volume|Number of regions:|boundary patches|face tets|concave cells|small determinant|Failed [0-9]+ mesh checks|Mesh OK' \
