@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "audit_kind": "deterministic_full_tracked_tree",
-  "tracked_files_total": 38809,
-  "classified_files_total": 38804,
+  "tracked_files_total": 38810,
+  "classified_files_total": 38805,
   "docs_content_inspected": 136,
   "large_docs_skipped": 0,
   "excluded_reports": 5,
@@ -19,14 +19,14 @@
     "simulation_input": 2678,
     "simulation_log": 3155,
     "simulation_output": 32613,
-    "source": 49,
+    "source": 50,
     "test": 14,
     "web_ui": 1,
     "workflow": 19
   },
   "finding_counts": {},
   "finding_total": 0,
-  "inventory_fingerprint": "8df08ac9fa4fc690637e42820ad33f9855357eb2f8162881f0b2c67317e75cb7",
+  "inventory_fingerprint": "e6a0f3c00d146b5b5dffa56079a9f7cc425f7677e1fe158b30f195a1c14c1e58",
   "evidence_fingerprint": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
   "files": [
     {
@@ -279,14 +279,14 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "155f656d3ce10cacf56d32d4a342d7f25fcf329a"
+      "blob": "ca7eb199d5a33460464583c5692d90878f02b510"
     },
     {
       "path": "OPENFOAM_COMMAND_MANUAL_ES.md",
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "6d6a2ac0501baa57a8903aa867b5fd50df4972c5"
+      "blob": "392fe65afc0ecaca2edb19752cce0f122ed7cd6f"
     },
     {
       "path": "POSTPROCESSING_FIELD_GUIDE_ES.md",
@@ -307,21 +307,21 @@
       "role": "bitacora",
       "purpose": "technical/audit change history",
       "certainty": "rule",
-      "blob": "d448bd871fe39462b8d5790d758d696970e9356b"
+      "blob": "78dadb5bc21853a9be875b5e977fb1b8e147761c"
     },
     {
       "path": "PROJECT_AUDIT_LOG_ES.md",
       "role": "bitacora",
       "purpose": "technical/audit change history",
       "certainty": "rule",
-      "blob": "d5be41f0f822144b370c4c930047fe831a72014a"
+      "blob": "72d4fe504f96e855eae0631dc82db5f9e54d22b6"
     },
     {
       "path": "README.md",
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "a55788ea5bd8067463033bda110c43a2273cccee"
+      "blob": "30ebb29d64a9b1d6b6966eaed1875e105c85ca68"
     },
     {
       "path": "RUN_CASE_REGISTRY.csv",
@@ -356,7 +356,7 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "e9c78525d420cf1498fc28285f0d01dcba05cd7d"
+      "blob": "cc604dad2d7b5bfbf3b28372fb40ae312cbadf19"
     },
     {
       "path": "analysis_results/c11_energy2_test/summary.md",
@@ -1070,7 +1070,7 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "b05af4e6a8ed88409f3723951153ab5f4e71c69e"
+      "blob": "a04834c40ef859de936c612274f4f866b622be24"
     },
     {
       "path": "cases_3d/C3D_02_metal_sand_clean/constant/geometry/README.md",
@@ -1182,7 +1182,7 @@
       "role": "source",
       "purpose": "code/test implementation",
       "certainty": "rule",
-      "blob": "6241fbfab4e0f30274eda6516e2b2bd4f0bea1c9"
+      "blob": "f0ba659c9cc639185324b3e6acd1b005d6c6f190"
     },
     {
       "path": "cases_3d/C3D_02_metal_sand_clean/scripts/run_mesh_only.sh",
@@ -1190,6 +1190,13 @@
       "purpose": "code/test implementation",
       "certainty": "rule",
       "blob": "059260f73816bb37e59ac8aa9d65b0f8cc4646c9"
+    },
+    {
+      "path": "cases_3d/C3D_02_metal_sand_clean/scripts/try_mold_offface.sh",
+      "role": "source",
+      "purpose": "code/test implementation",
+      "certainty": "rule",
+      "blob": "4ec137b7f005c153799bed38a4309d773cf5d015"
     },
     {
       "path": "cases_3d/C3D_02_metal_sand_clean/scripts/validate_sources.sh",
@@ -1238,14 +1245,14 @@
       "role": "test",
       "purpose": "code/test implementation",
       "certainty": "rule",
-      "blob": "92d17d9c9d48b67044e2abe6503cbcdd76c94e17"
+      "blob": "87676a15cfa4ea15123e7becca100d608eac9532"
     },
     {
       "path": "cases_3d/README.md",
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "389622e72ab9eb1333e67b1f940427ff42dd1d89"
+      "blob": "689fbe4472f5c6ede27b466f94fc78d782ac6eff"
     },
     {
       "path": "cases_3d/case3d-01/README.md",
@@ -270885,7 +270892,7 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "1b59b6f8ae33a498aefc9bd019640fd50d227797"
+      "blob": "8e583de377389b5e35c9ff6864ef80986a0e14d1"
     },
     {
       "path": "docs/C3D_02_MALLADO_INICIAL_20261112_ES.md",
@@ -270913,7 +270920,7 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "54fbab3b46141c49ce5506792b1aaab5e868b77c"
+      "blob": "d0732825952800405d611e02037dacaf214b3038"
     },
     {
       "path": "docs/DOCUMENT_SYNC_20261110_ES.md",
