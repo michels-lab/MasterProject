@@ -2,8 +2,8 @@
 # C3D-02 — volume of the EXISTING moldVolume cellZone, OpenFOAM Foundation 14.
 # NO new mesh, NO solver, NO changes to any case, STL or source polyMesh.
 # Uses a disposable shadow case, symlinking the existing polyMesh read-only.
-set -euo pipefail
 source /opt/openfoam14/etc/bashrc
+set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 SOURCE="${1:-$HOME/OpenFOAM/C3D02_materials/mold_zoned_l2_01}"
