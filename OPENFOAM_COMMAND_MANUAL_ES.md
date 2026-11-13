@@ -1,3 +1,29 @@
+## 2026-11-12 — Error por falta de allowFreeStandingZoneFaces en snappyHexMesh (Foundation 14)
+
+**Error comprobado en dos materiales:** `FOAM FATAL IO ERROR: keyword allowFreeStandingZoneFaces is undefined in castellatedMeshControls`. La opción es requerida por el lector de diccionario de la instalación Foundation 14. En el caso `C3D_02_metal_sand_clean`, incluir en `system/materialSingle/snappyHexMeshDict.template`:
+
+```cpp
+castellatedMeshControls
+{
+    // Otras opciones conservadas...
+    insidePoint (0.0259 -0.0200 0.0259);  // Ejemplo: solo metal
+    allowFreeStandingZoneFaces false;
+}
+```
+
+**No lanzar `run_material_meshes.sh` nuevamente:** ahora existe `~/OpenFOAM/C3D02_materials`. La corrección está versionada, y el comando seguro de continuación es:
+
+```bash
+cd ~/OpenFOAM/MasterProject
+git pull --ff-only
+cd cases_3d/C3D_02_metal_sand_clean
+bash scripts/resume_material_meshes.sh
+```
+
+Comprueba el error exacto y las dos mallas de fondo existentes; preserva logs anteriores, reescribe únicamente los diccionarios derivados de la plantilla nueva, ejecuta `snappyHexMesh -overwrite` y `checkMesh -allGeometry -allTopology` en cada subcaso. Si alguna precondición no se cumple, aborta. **Sin CFD, sin `subsetMesh`, sin remallar `blockMesh`, sin suponer interfaces CHT.** [Evidencia](docs/C3D_02_DOS_MALLAS_20261112_ES.md).
+
+---
+
 ## 2026-11-12 — Dos mallas físicas independientes, un comando (C3D-02, PENDIENTE DE EJECUTAR)
 
 Después de comprobar que `insidePoints` conservó la caja exterior (589,701 celdas, 242.130 cm³), se definió un método nuevo: **un solo STL y un `insidePoint` por malla de material**, dentro de un solo workspace. Sin `subsetMesh`, `topoSet` ni `splitMeshRegions` y sin modificar los casos anteriores.

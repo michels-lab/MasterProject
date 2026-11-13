@@ -1,3 +1,14 @@
+> **RESULTADO REAL 2026-11-12, primer intento con mallas independientes:** **ambos subcasos se detuvieron antes del refinamiento** en `snappyHexMesh` por `FOAM FATAL IO ERROR: keyword allowFreeStandingZoneFaces is undefined` dentro de `castellatedMeshControls`. `blockMesh` de metal y mold sí terminó, pero **no hay mallas físicas individuales generadas ni resultados `checkMesh` de este intento**. El fallo es exclusivamente una opción omitida del diccionario, no prueba de STL o material defectuoso. Se añadió `allowFreeStandingZoneFaces false;` a la plantilla y `scripts/resume_material_meshes.sh` para reanudar **sobre las mismas carpetas existentes**, conservar `log.snappyHexMesh`, crear `log.snappyHexMesh.retry1` y `log.checkMesh.retry1`, sin ejecutar de nuevo `blockMesh`. Ejecutar **una vez**:
+
+```bash
+cd ~/OpenFOAM/MasterProject
+git pull --ff-only
+cd cases_3d/C3D_02_metal_sand_clean
+bash scripts/resume_material_meshes.sh
+```
+
+**Si el script encuentra otro estado o reintento previo, aborta sin sobrescribir la evidencia.** El resultado posterior sigue sin equivaler a CHT/CFD verificado.
+
 # C3D-02 — mallas independientes por material, segundo diseño (12-11-2026)
 
 **Estado:** preparado en GitHub; **NO ejecutado en laptop**. No es una validación CFD ni un reemplazo de la bitácora del ensayo anterior.

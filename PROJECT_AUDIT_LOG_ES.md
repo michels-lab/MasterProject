@@ -1,3 +1,10 @@
+## 2026-11-12 — C3D-02: fallo de diccionario Foundation 14 en ambos subcasos independientes [EVIDENCIA LOCAL]
+
+- Tras `git pull --ff-only`, el investigador ejecutó `scripts/run_material_meshes.sh`: validaciones de materiales C14 y tres STL **OK**; `blockMesh` para `metal` y `mold` **OK**.
+- En ambos subcasos, `snappyHexMesh` abortó antes de refinar: `keyword allowFreeStandingZoneFaces is undefined` en `castellatedMeshControls`. No hubo `checkMesh` ni malla material utilizable en ese intento. La ausencia de clave en nuestra plantilla original es un **error de configuración que introdujimos**, no un defecto demostrado del CAD ni de las propiedades.
+- Corrección fuente: insertar `allowFreeStandingZoneFaces false;` en la plantilla de un material; nueva utilidad `scripts/resume_material_meshes.sh` verifica los errores anteriores y reutiliza `~/OpenFOAM/C3D02_materials/{metal,mold}`, preservando `log.snappyHexMesh` y generando logs `retry1`. **No repetir `blockMesh`, ni crear carpetas nuevas, ni ejecutar solver.**
+- `RUN_CASE_REGISTRY.csv` mantiene `PREPARED_NOT_RUN`; resultados geométricos y CHT **pendientes de ejecución en laptop**. [Guía de reanudación](docs/C3D_02_DOS_MALLAS_20261112_ES.md).
+
 ## 2026-11-12 — C3D-02: segunda ruta de mallado preparada; NO CORRIDA
 
 - Se revisaron los STL versionados y se comprobó por intersecciones de rayo que `(25.9,-20,25.9) mm` cae dentro de `metal.stl` y fuera de `mold_repaired.stl`; `(3,-20,25.9) mm` cae dentro del molde y fuera del metal. No se justifica cambiar puntos a ciegas.

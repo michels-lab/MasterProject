@@ -40,6 +40,7 @@ castellatedMeshControls
     resolveFeatureAngle 30;
     refinementRegions {};
     insidePoint MATERIAL_POINT_PLACEHOLDER;
+    allowFreeStandingZoneFaces false;
 }
 snapControls
 {
