@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "audit_kind": "deterministic_full_tracked_tree",
-  "tracked_files_total": 38811,
-  "classified_files_total": 38806,
+  "tracked_files_total": 38812,
+  "classified_files_total": 38807,
   "docs_content_inspected": 136,
   "large_docs_skipped": 0,
   "excluded_reports": 5,
@@ -20,13 +20,13 @@
     "simulation_log": 3155,
     "simulation_output": 32613,
     "source": 51,
-    "test": 14,
+    "test": 15,
     "web_ui": 1,
     "workflow": 19
   },
   "finding_counts": {},
   "finding_total": 0,
-  "inventory_fingerprint": "adccdc1b1140542c40a56dca68b606cd57205236b1a4474fb02cba851652509c",
+  "inventory_fingerprint": "a1497ddb53a3e4ad6b5e2ee285909965fbca0688fc452faede3aab399b4e2000",
   "evidence_fingerprint": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
   "files": [
     {
@@ -279,14 +279,14 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "8bcf325a1e9af504bd691ebe6559d6cc1f201aab"
+      "blob": "c6cfa2f7692c34498ccef7cf1507da36ee11f8f7"
     },
     {
       "path": "OPENFOAM_COMMAND_MANUAL_ES.md",
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "55e31bac0a6856c46cad51855b842cb3324c0a4e"
+      "blob": "22554cb03bd2ce31ec29d4b111c6a916d3b4d492"
     },
     {
       "path": "POSTPROCESSING_FIELD_GUIDE_ES.md",
@@ -307,14 +307,14 @@
       "role": "bitacora",
       "purpose": "technical/audit change history",
       "certainty": "rule",
-      "blob": "67b52934b015b8911cd8381a516bed5ec3837d27"
+      "blob": "a3202f5fbed22aef281f1e9596b7d8af1a1b2ac9"
     },
     {
       "path": "PROJECT_AUDIT_LOG_ES.md",
       "role": "bitacora",
       "purpose": "technical/audit change history",
       "certainty": "rule",
-      "blob": "90ca1cdb912549bb9938bf27689d1e2f180d940c"
+      "blob": "09b3a4c83266d5a5cba9f26a02d45d3a25434611"
     },
     {
       "path": "README.md",
@@ -356,7 +356,7 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "9c2ecfb421574f86f15bd5d7a8917c4e9020dae3"
+      "blob": "3e9042939f57c80f8f0445c4a585d6f932cc90b7"
     },
     {
       "path": "analysis_results/c11_energy2_test/summary.md",
@@ -1070,7 +1070,7 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "8df79ec9296989127962bb9ed27274779f8dc342"
+      "blob": "04589d1434bebea7a4dc18366948d652d56f627c"
     },
     {
       "path": "cases_3d/C3D_02_metal_sand_clean/constant/geometry/README.md",
@@ -1199,6 +1199,13 @@
       "blob": "059260f73816bb37e59ac8aa9d65b0f8cc4646c9"
     },
     {
+      "path": "cases_3d/C3D_02_metal_sand_clean/scripts/test_mold_level3_castellation.sh",
+      "role": "test",
+      "purpose": "code/test implementation",
+      "certainty": "rule",
+      "blob": "3e1ba86eecd71c6a38ca9608cd6662a4d0daa59b"
+    },
+    {
       "path": "cases_3d/C3D_02_metal_sand_clean/scripts/try_mold_offface.sh",
       "role": "source",
       "purpose": "code/test implementation",
@@ -1252,7 +1259,7 @@
       "role": "test",
       "purpose": "code/test implementation",
       "certainty": "rule",
-      "blob": "d5d50f07dbfac18150bc57052c6968fb028e7164"
+      "blob": "2453a0a6ceef2126ce699f52c41631b7996f1556"
     },
     {
       "path": "cases_3d/README.md",
@@ -270899,7 +270906,7 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "113d3fbd24c07459ed4e06cca4fab535bbfbd3a3"
+      "blob": "e18cecc86957b1cf993ad03b056f6f0aa1987d88"
     },
     {
       "path": "docs/C3D_02_MALLADO_INICIAL_20261112_ES.md",
