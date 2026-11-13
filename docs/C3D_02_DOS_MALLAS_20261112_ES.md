@@ -1,3 +1,16 @@
+> **RESULTADO LOCAL POSTERIOR — 12-11-2026, reanudación `retry1` ejecutada:** las dos mallas corrieron realmente, pero ninguna aprobó `checkMesh -allGeometry -allTopology`. **Metal:** 85,332 celdas; volumen **4.79621e-5 m³ = 47.9621 cm³** frente a STL 47.98749 cm³ (**−0.053 %**); `outerBox` 0 caras; `Face tets OK`; **2,422 celdas cóncavas y 1 check fallido**. **Arena:** 568,134 celdas; volumen **2.42142e-4 m³ = 242.142 cm³** frente a STL 102.8431 cm³ (**+135.4 %**); `outerBox` **15,164** caras; **13,367 cóncavas, 10 face-tets deficientes, 2 checks fallidos**. El hierro está aislado volumétricamente pero su calidad no está aprobada; la arena conserva exterior y no puede utilizarse para CHT.
+
+**Hallazgo de configuración respaldado por `system/blockMeshDict`:** el `insidePoint` anterior de arena `(0.003 -0.0200 0.0259)` m tiene **x=3 mm**, exactamente una cara de la caja uniforme de paso x = (55−(−3))/29 = **2 mm**, con caras en −3, −1, 1, **3**, 5 mm, etc. OpenFOAM Foundation 14 requiere que `insidePoint` no coincida con una cara antes o durante refinamiento ([manual Foundation 14](https://doc.cfd.direct/openfoam/user-guide/snappyhexmesh)). Esto **podría contribuir** a la selección incorrecta, pero todavía no está demostrado como única causa. Mediante prueba geométrica independiente de rayos sobre `mold_repaired.stl`, el candidato **`(4.3 −20.7 25.9)` mm** = `(0.0043 -0.0207 0.0259)` m está dentro del molde; sus componentes no coinciden con los planos de la caja original ni con la subcuadrícula nominal de 0.5 mm. No es todavía un éxito de mallado.
+
+**Siguiente ensayo único y localizado:** se añadió `scripts/try_mold_offface.sh`, que crea **solamente** `~/OpenFOAM/C3D02_materials/mold_offface_01` (sin modificar `metal/` ni `mold/` previos), usa el nuevo punto, ejecuta `blockMesh` + `snappyHexMesh` + `checkMesh` del molde una sola vez y rechaza el resultado si `outerBox>0`, volumen incompatible o fallos de calidad. Se conservan los logs anteriores. **No ejecutar** `resume_material_meshes.sh` otra vez, ni activar solver.
+
+```bash
+cd ~/OpenFOAM/MasterProject
+git pull --ff-only
+cd cases_3d/C3D_02_metal_sand_clean
+bash scripts/try_mold_offface.sh
+```
+
 > **RESULTADO REAL 2026-11-12, primer intento con mallas independientes:** **ambos subcasos se detuvieron antes del refinamiento** en `snappyHexMesh` por `FOAM FATAL IO ERROR: keyword allowFreeStandingZoneFaces is undefined` dentro de `castellatedMeshControls`. `blockMesh` de metal y mold sí terminó, pero **no hay mallas físicas individuales generadas ni resultados `checkMesh` de este intento**. El fallo es exclusivamente una opción omitida del diccionario, no prueba de STL o material defectuoso. Se añadió `allowFreeStandingZoneFaces false;` a la plantilla y `scripts/resume_material_meshes.sh` para reanudar **sobre las mismas carpetas existentes**, conservar `log.snappyHexMesh`, crear `log.snappyHexMesh.retry1` y `log.checkMesh.retry1`, sin ejecutar de nuevo `blockMesh`. Ejecutar **una vez**:
 
 ```bash

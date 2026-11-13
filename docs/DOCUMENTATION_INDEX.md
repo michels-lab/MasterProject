@@ -1,3 +1,5 @@
+> **12-11-2026, C3D-02 retry1:** la malla del hierro alcanzó **47.9621 cm³** sin exterior (pero 2,422 cóncavas); la arena retuvo **242.142 cm³ y 15,164 caras exteriores**, calidad fallida. [Resultado real, condición insidePoint y prueba solo del molde](C3D_02_DOS_MALLAS_20261112_ES.md). El punto x=3 mm de arena se encontraba sobre una cara de la malla de fondo; corrección candidata **NO ejecutada**.
+
 > **12-11-2026, actualización C3D-02:** [error y corrección de `allowFreeStandingZoneFaces` en las dos mallas materiales](C3D_02_DOS_MALLAS_20261112_ES.md), [manual OF14 con comando de reanudación](../OPENFOAM_COMMAND_MANUAL_ES.md). `snappyHexMesh` se detuvo sin malla física; el único reintento previsto preserva el workspace existente.
 
 > **C3D-02 12-11-2026:** [siguiente etapa — mallas geométricas independientes hierro/arena](C3D_02_DOS_MALLAS_20261112_ES.md), seguida del diseño y validación de contacto térmico. Esta ruta está **preparada, NO CORRIDA**; no reemplaza la evidencia del primer mallado fallido.

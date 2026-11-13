@@ -82,4 +82,19 @@ if grep -Eq '^[[:space:]]*(blockMesh|foamMultiRun|subsetMesh|splitMeshRegions|to
 fi
 echo "OK: clave Foundation 14 obligatoria y reanudación protegida."
 
+# Off-face seed: previous x=3 mm was exactly a face of the 2 mm blockMesh.
+# Test both future fresh runs and the isolated mold-only candidate script.
+grep -Fq 'inside="(0.0043 -0.0207 0.0259)"' "$material_runner" || {
+    echo "ERROR: punto de molde del runner antiguo coincide con cara de blockMesh."
+    exit 1
+}
+offface="$ROOT/scripts/try_mold_offface.sh"
+test -f "$offface"
+grep -Fq 'POINT="(0.0043 -0.0207 0.0259)"' "$offface"
+grep -Fq 'mold_offface_01' "$offface"
+if grep -Eq '^[[:space:]]*(foamMultiRun|subsetMesh|splitMeshRegions|topoSet)([[:space:]]|$)' "$offface"; then
+    echo "ERROR: esta etapa no puede ejecutar CFD ni modificadores de malla."
+    exit 1
+fi
+echo "OK: nuevo insidePoint de arena fuera de cara y prueba exclusiva de mold."
 echo "NO certifica malla física, contacto térmico ni CFD."

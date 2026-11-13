@@ -1,3 +1,22 @@
+## 12-11-2026 — insidePoint SOBRE cara de blockMesh: corrección localizada del molde
+
+**Hallazgo a partir de la salida real del investigador:** `metal` tiene volumen 47.9621 cm³ (≈47.9875 CAD), `outerBox=0`, pero 2,422 celdas cóncavas. `mold` conserva exterior (242.142 cm³ frente a 102.8431 cm³; `outerBox=15164` caras), 13,367 celdas cóncavas y 10 face-tets malos. **Ni una de las dos mallas está aprobada.**
+
+**Regla Foundation 14 (manual `snappyHexMesh`):** el `insidePoint` no debe caer sobre ninguna cara de celda antes ni durante el refinamiento. Con x min = −3 mm y 29 celdas sobre 58 mm, las caras del mallado inicial están en x=−3,−1,1,**3**,5,… mm. Se había usado **`x=3 mm`**, precisamente una cara, aunque el punto era interior al STL. La prueba corregida propone `(4.3,-20.7,25.9)` mm = `(0.0043 -0.0207 0.0259)` m; se comprobó mediante geometría STL que cae dentro del molde. No está demostrado todavía que ese cambio corrija toda la fuga exterior.
+
+**Comando único, solo arena y sin sobrescribir hierro ni mold originales:**
+
+```bash
+cd ~/OpenFOAM/MasterProject
+git pull --ff-only
+cd cases_3d/C3D_02_metal_sand_clean
+bash scripts/try_mold_offface.sh
+```
+
+Se creará únicamente `~/OpenFOAM/C3D02_materials/mold_offface_01` si no existe, con `blockMesh`, `snappyHexMesh` y `checkMesh -allGeometry -allTopology`. Las salidas separan selección de celdas, calidad, volumen y `outerBox`. Si no pasa, **no repetir al azar**. Los otros subcasos conservan sus logs `retry1` sin cambios. No ejecutar solver.
+
+---
+
 ## 2026-11-12 — Error por falta de allowFreeStandingZoneFaces en snappyHexMesh (Foundation 14)
 
 **Error comprobado en dos materiales:** `FOAM FATAL IO ERROR: keyword allowFreeStandingZoneFaces is undefined in castellatedMeshControls`. La opción es requerida por el lector de diccionario de la instalación Foundation 14. En el caso `C3D_02_metal_sand_clean`, incluir en `system/materialSingle/snappyHexMeshDict.template`:

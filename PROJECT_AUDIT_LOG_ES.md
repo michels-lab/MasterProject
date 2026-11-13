@@ -1,3 +1,12 @@
+## 2026-11-12 — C3D-02: retry1 concluyó pero ambas mallas rechazadas; semilla de arena sobre cara [EVIDENCIA LOCAL]
+
+- El investigador ejecutó `scripts/resume_material_meshes.sh` tras corregir `allowFreeStandingZoneFaces`, sobre las dos carpetas existentes de `C3D02_materials`; **ambos snappyHexMesh y checkMesh corrieron**. Logs disponibles localmente `metal/log.{snappyHexMesh,checkMesh}.retry1` y `mold/log.{snappyHexMesh,checkMesh}.retry1` (no importados a GitHub).
+- **Metal:** 85,332 celdas, volumen 4.79621e−5 m³ (47.9621 cm³; desviación −0.053 % frente a STL), 1 componente, sin `outerBox`, `Face tets OK`, **2,422 celdas cóncavas y 1 fallo geométrico exhaustivo**. Selección física inicial prometedora; no aceptada por `checkMesh`.
+- **Mold:** 568,134 celdas, volumen 0.000242142 m³ (242.142 cm³ frente a 102.8431 cm³ CAD, +135.4 %), 1 componente, **15,164 caras en outerBox**, 13,367 cóncavas, 10 face-tets deficientes, **2 fallos**. La malla **conserva el exterior**; no existe aún malla de arena ni interfaz térmica válida.
+- **Causa candidata verificable:** en el `blockMeshDict` la discretización x = 58 mm/29 = **2 mm**, empezando en x = −3 mm. El `insidePoint` antiguo del molde x = 3 mm se encuentra **exactamente sobre una cara** de la malla de fondo, lo que incumple la regla del manual Foundation 14. Ese punto era geométricamente interior al STL, pero su coincidencia con la cara invalida la ubicación como semilla robusta; no afirmar que sea la única causa de fuga.
+- Se comprobó geométricamente un nuevo punto interior para mold `(4.3,-20.7,25.9)` mm (`(0.0043 -0.0207 0.0259)` m) que no cae en los planos regulares de malla. Se corrigió `scripts/run_material_meshes.sh` para futuros casos nuevos y se preparó `scripts/try_mold_offface.sh` como **prueba aislada, una sola vez y solo de mold**. Preserva `metal/`, `mold/`, fuentes C14, geometrías y logs históricos. No se ha ejecutado esa prueba. [Protocolo](docs/C3D_02_DOS_MALLAS_20261112_ES.md).
+- Estado CFD **PREPARED_NOT_RUN**, G1 geométrica/CHT/validación experimental abiertas. No ejecutar solver ni declarar malla aceptada.
+
 ## 2026-11-12 — C3D-02: fallo de diccionario Foundation 14 en ambos subcasos independientes [EVIDENCIA LOCAL]
 
 - Tras `git pull --ff-only`, el investigador ejecutó `scripts/run_material_meshes.sh`: validaciones de materiales C14 y tres STL **OK**; `blockMesh` para `metal` y `mold` **OK**.
