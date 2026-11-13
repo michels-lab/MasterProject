@@ -1,3 +1,18 @@
+## 2026-11-13 — Mold geometry passed surfaceCheck; isolate castellation with L3 and snap disabled
+
+Native Foundation 14 `surfaceCheck -checkSelfIntersection` confirmed the repaired mold STL is watertight, one connected consistently oriented region and **not self-intersecting**. Both old mold attempts kept 568,134 of 568,135 cells at the pre-snap removal stage, leaving 242.142 cm³ and 15,164 outerBox faces. To discriminate **insufficient surface resolution** without conflating snapping quality, a new single-workspace subcase `mold_level3_cast_01` is prepared with `refinementSurfaces level (3 3)`, 2mm / 8 = nominal 0.25 mm surface size, `snap false`, no layers and maxGlobalCells 3,200,000. The script logs retained cells, boundary count, volume and preliminary full `checkMesh`; **this is not a final CHT-ready mesh or CFD run**.
+
+```bash
+cd ~/OpenFOAM/MasterProject
+git pull --ff-only
+cd cases_3d/C3D_02_metal_sand_clean
+bash scripts/test_mold_level3_castellation.sh
+```
+
+Preserve previous metal/mold meshes; do not run again if the new subcase exists. [Scientific result log](docs/C3D_02_DOS_MALLAS_20261112_ES.md).
+
+---
+
 ## 2026-11-12 — Foundation surfaceCheck options vary; use scratch directory
 
 Both mold logs show only **one** cell removed at the cropping stage: 568,135 cells after baffles, 568,134 retained. The previous diagnostic incorrectly required `-outputThreshold` alongside `-checkSelfIntersection`, so it did not run the checker on the user's installation. The updated `scripts/inspect_mold_leak.sh` now runs `surfaceCheck -checkSelfIntersection STL` if supported, or a basic `surfaceCheck STL` otherwise. It runs in a disposable `mktemp -d` directory so version-dependent `badFaces`, `problemFaces` and `selfInterPoints.obj` cannot touch the actual source case. **No new CFD, mesh, STL edit or overwrite.** Native self-intersection evidence is still pending.
