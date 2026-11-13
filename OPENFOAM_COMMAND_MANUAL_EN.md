@@ -1,3 +1,18 @@
+## 2026-11-12 — Missing allowFreeStandingZoneFaces (Foundation 14)
+
+Both independent material `snappyHexMesh` attempts aborted before refinement: `keyword allowFreeStandingZoneFaces is undefined` in `castellatedMeshControls`. This is a missing mandatory entry in the generated dictionary, **not evidence of a faulty STL**. The source template now has `allowFreeStandingZoneFaces false;`. Resume in the **same workspace** without rerunning `blockMesh`:
+
+```bash
+cd ~/OpenFOAM/MasterProject
+git pull --ff-only
+cd cases_3d/C3D_02_metal_sand_clean
+bash scripts/resume_material_meshes.sh
+```
+
+The guarded script refuses other failures or previous retries, preserves initial logs, and writes `log.snappyHexMesh.retry1` and `log.checkMesh.retry1`. Quality, volume, air exclusion and CHT interface are **still unverified**. [Stage record](docs/C3D_02_DOS_MALLAS_20261112_ES.md).
+
+---
+
 ## 2026-11-12 — One closed STL / one insidePoint per material (C3D-02, NOT RUN)
 
 The failed combined mesh retained exterior (242.130 cm³, 589,701 cells, two exhaustive check failures); both points were geometrically inside their intended STL solid. The new **single-workspace, two-independent-mesh** procedure is:
