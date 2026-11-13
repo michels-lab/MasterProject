@@ -1,3 +1,18 @@
+## 2026-11-13 — Read-only volume measurement of the existing moldVolume cellZone
+
+The successful L2 zoning experiment tagged **274,788 moldVolume cells** and **97,492 moldInterface faces**, but the **global** volume still equals 242.208 cm³; `outerBox` remains, and `checkMesh` failed a geometric quality test (49,034 concave cells). The next step is to measure the **zone-only** volume via Foundation 14 `volFieldValue` (which logs the number of cells and total zone volume when constructed) through `foamPostProcess -constant -dict ...`. The new `scripts/measure_mold_zone_volume.sh` uses a temporary shadow case with a symlink to the original `constant/polyMesh` and deletes only its own temporary output; no remeshing, subset/split, CFD, original mesh overwrite or source CAD edits.
+
+```bash
+cd ~/OpenFOAM/MasterProject
+git pull --ff-only
+cd cases_3d/C3D_02_metal_sand_clean
+bash scripts/measure_mold_zone_volume.sh
+```
+
+Scientific gate: compare zone volume with ~102.8431 cm³, then (only later) evaluate a *copied* region extraction and checkMesh. The script is prepared, **not executed in Ubuntu**. Official references: https://cpp.openfoam.org/v14/classFoam_1_1functionObjects_1_1fieldValues_1_1volFieldValue.html and https://cpp.openfoam.org/v14/foamPostProcess_8C.html .
+
+---
+
 ## 2026-11-13 — C3D-02: explicit closed-mold zoning versus connectivity-based retention
 
 L3 mold castellation without snapping kept 2,334,117/2,334,123 cells, i.e. removed only six; global volume **0.000242208 m³** equals the entire 58×72×58 mm background box, not the mold CAD 0.000102843 m³. `outerBox` 17,543 faces and one failed full mesh check. Therefore stop blind refinement increases and avoid relabeling this as an accepted sand mesh. The Foundation 14 annotated dictionary supports `faceZone`, `cellZone` and `mode inside` for a closed surface. The new independent script `scripts/test_mold_geometric_zone.sh` tests explicit mold tagging at level 2 with snapping disabled, and reads resulting cellZone/faceZone sizes without touching existing runs. **Tagged cells do not prove a physical mesh, volume validation, interface mapping or CFD.**

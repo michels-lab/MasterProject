@@ -143,4 +143,20 @@ if grep -Eq '^[[:space:]]*(foamMultiRun|foamRun|subsetMesh|topoSet|splitMeshRegi
     exit 1
 fi
 echo "OK: nueva prueba geométrica por cellZone L2, sin CFD."
+# Measure ONLY the existing moldVolume cellZone with Foundation 14.
+measurer="$ROOT/scripts/measure_mold_zone_volume.sh"
+test -f "$measurer"
+grep -Fq 'volFieldValue;' "$measurer"
+grep -Fq 'cellZone           moldVolume;' "$measurer"
+grep -Fq 'operation          none;' "$measurer"
+grep -Fq 'foamPostProcess -case "$SCRATCH"' "$measurer"
+grep -Fq 'ln -s "$SOURCE/constant/polyMesh" "$SCRATCH/constant/polyMesh"' "$measurer"
+grep -Fq 'mktemp -d' "$measurer"
+grep -Fq 'trap cleanup EXIT' "$measurer"
+grep -Fq 'Volumen cellZone' "$measurer"
+if grep -Eq '^[[:space:]]*(blockMesh|snappyHexMesh|splitMeshRegions|subsetMesh|topoSet|foamMultiRun|foamRun)([[:space:]]|$)' "$measurer"; then
+    echo "ERROR: medir el volumen zonal no permite remallar ni ejecutar CFD."
+    exit 1
+fi
+echo "OK: medición de volumen zonal vía foamPostProcess en caso sombra temporal."
 echo "NO certifica malla física, contacto térmico ni CFD."

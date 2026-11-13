@@ -1,3 +1,10 @@
+## 2026-11-13 — C3D-02: zona `moldVolume` encontrada, aún sin validar volumen zonal [EVIDENCIA LOCAL]
+
+- `test_mold_geometric_zone.sh` completó `snappyHexMesh` en `mold_zoned_l2_01` usando `mode inside`, `cellZone moldVolume` y `faceZone moldInterface`, a nivel L2 y `snap false`. Se obtuvieron **568,135 celdas globales, 274,788 celdas etiquetadas en `moldVolume` y 97,492 caras `moldInterface`**. La asignación geométrica de zonas fue efectiva.
+- `checkMesh`: volumen **global** 242.208 cm³ (= caja auxiliar completa), `outerBox=15164`, **49,034 celdas cóncavas y un test fallido** (`checkMesh` terminó con rc=0 a pesar de la condición fallida). No reportar malla aceptada ni asumir que los 274,788 elementos equivalen a 102.843 cm³. Sin conexión térmica ni CFD.
+- Se preparó `scripts/measure_mold_zone_volume.sh` para medir con `volFieldValue` nativo de Foundation 14 el volumen **exclusivo** de `cellZone moldVolume`. Crea un caso sombra temporal con `constant/polyMesh` enlazado a la malla original; toda la salida de `foamPostProcess` se aísla en ese caso y se elimina al terminar. No genera malla, no cambia el STL, no ejecuta solver; tolerancia ±5 % solamente informativa, no aceptación. La ejecución de este script aún es PENDIENTE.
+- La potencial extracción de `moldVolume` se evaluará ÚNICAMENTE después de conocer el volumen por zona, y en una copia con nuevo mapa de celdas, sin reusar sets de C3D-01 ni ejecutar CFD. Estado `RUN_CASE_REGISTRY`: **PREPARED_NOT_RUN**. [Guía detallada](docs/C3D_02_DOS_MALLAS_20261112_ES.md).
+
 ## 2026-11-13 — C3D-02: L3 retuvo el volumen total de la caja; preparar clasificación de arena por cellZone
 
 - **Ejecución real:** `mold_level3_cast_01`, `level (3 3)`, `snap false`. Después de crear baffles: 2,334,123 celdas; seleccionadas 2,334,117; **6 eliminadas**. `checkMesh`: 2,334,117 celdas, 1 región conectada, volumen **0.000242208 m³ = 242.208 cm³**, EXACTAMENTE toda la caja auxiliar de 58×72×58 mm; `outerBox=17543` caras, 225,732 celdas cóncavas, 1 chequeo exhaustivo fallido. `checkMesh rc=0` no certifica malla. El volumen CAD de arena es 102.8431 cm³.

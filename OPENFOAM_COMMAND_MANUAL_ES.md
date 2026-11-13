@@ -1,3 +1,21 @@
+## 13-11-2026 — Medir volumen de `cellZone moldVolume` sin remallar
+
+**Resultado del experimento geométrico `mold_zoned_l2_01`:** `snappyHexMesh` clasificó 274,788 celdas `moldVolume` y 97,492 caras `moldInterface`. El volumen **GLOBAL** sigue siendo 242.208 cm³, pero **el volumen de la zona es desconocido**. Antes de cualquier extracción o CHT, medir la zona con `volFieldValue` de **Foundation 14**.
+
+```bash
+source /opt/openfoam14/etc/bashrc
+cd ~/OpenFOAM/MasterProject
+git pull --ff-only
+cd cases_3d/C3D_02_metal_sand_clean
+bash scripts/measure_mold_zone_volume.sh
+```
+
+El script no ejecuta `blockMesh`, `snappyHexMesh`, `subsetMesh` ni solver. Construye una carpeta temporal para `foamPostProcess -dict ... -constant` y enlaza **solo la lectura** del `constant/polyMesh` existente; el objeto `volFieldValue` informa `number of cells = ...` y `volume = ...`. Aísla posibles archivos `postProcessing` en ese caso sombra y borra **exclusivamente esa carpeta temporal**. El resultado se compara con CAD 0.00010284309608 m³. **No confundir el volumen global de `checkMesh` con el volumen zonal**. Un volumen plausible no significa calidad geométrica ni parches térmicos conformes.
+
+Fuentes oficiales: https://cpp.openfoam.org/v14/classFoam_1_1functionObjects_1_1fieldValues_1_1volFieldValue.html y https://cpp.openfoam.org/v14/foamPostProcess_8C.html .
+
+---
+
 ## 2026-11-13 — C3D-02: pasar de insidePoint a clasificación explícita por cellZone
 
 **Ensayo local L3 sin `snap`:** el recorte eliminó solo 6/2,334,123 celdas. Volumen conservado **0.000242208 m³**, exactamente el bloque auxiliar 58×72×58 mm, y `outerBox=17543`. Calidad completa fallida: 225,732 cóncavas. No subir a nivel 4; STL sano por `surfaceCheck`.
