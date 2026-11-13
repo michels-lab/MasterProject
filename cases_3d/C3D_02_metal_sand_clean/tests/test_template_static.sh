@@ -101,7 +101,13 @@ echo "OK: nuevo insidePoint de arena fuera de cara y prueba exclusiva de mold."
 inspector="$ROOT/scripts/inspect_mold_leak.sh"
 test -f "$inspector"
 grep -Fq 'mold_offface_01/log.snappyHexMesh' "$inspector"
-grep -Fq 'surfaceCheck -checkSelfIntersection -outputThreshold 0' "$inspector"
+grep -Fq 'SCRATCH="$(mktemp -d' "$inspector"
+grep -Fq 'surfaceCheck "${args[@]}" "$STL"' "$inspector"
+if grep -Fq -- '-outputThreshold' "$inspector" && grep -Eq 'surfaceCheck[[:space:]]+.*-outputThreshold' "$inspector"; then
+    echo "ERROR: el diagnóstico requiere una opción no disponible en esta instalación"
+    exit 1
+fi
+grep -Fq "trap cleanup EXIT" "$inspector"
 if grep -Eq '^[[:space:]]*(blockMesh|snappyHexMesh|subsetMesh|topoSet|splitMeshRegions|foamMultiRun)([[:space:]]|$)' "$inspector"; then
     echo "ERROR: la inspección no debe crear/modificar mallas ni ejecutar CFD."
     exit 1

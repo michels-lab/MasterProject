@@ -31,20 +31,41 @@ echo "=== B. ETAPA DE RECORTE DE CELDAS: CONTEXTO ORIGINAL ==="
 log="$WORK/mold_offface_01/log.snappyHexMesh"
 grep -Ein -B 16 -A 10 'Selected for keeping' "$log" | tail -n 55 || true
 
-echo "=== C. VERIFICACION DE AUTO-INTERSECCIONES DEL STL SIN MODIFICARLO ==="
+echo "=== C. SURFACECHECK: SOLAMENTE LECTURA DEL STL ORIGINAL ==="
 if ! command -v surfaceCheck >/dev/null 2>&1; then
-    echo "surfaceCheck no disponible. Cargar OpenFOAM Foundation 14 antes de ejecutar."
+    echo "ERROR: surfaceCheck no está en PATH; carga OpenFOAM Foundation 14."
     exit 2
 fi
-if surfaceCheck -help 2>&1 | grep -Fq -- '-checkSelfIntersection' &&    surfaceCheck -help 2>&1 | grep -Fq -- '-outputThreshold'; then
-    set +e
-    output="$(cd "$WORK/mold_offface_01" && surfaceCheck -checkSelfIntersection -outputThreshold 0 "$STL" 2>&1)"
-    rc=$?
-    set -e
-    printf '%s\n' "$output" | grep -Ei -C 2 'Statistics|closed|non-manifold|intersect|problem|degenerate|illegal|bounding|triangle|face' | tail -n 78 || true
-    echo "surfaceCheck exit code: $rc (la existencia de intersecciones se interpreta por el texto)."
+
+# Foundation 14 may expose -checkSelfIntersection without -outputThreshold.
+# Some surfaceCheck builds write supplementary OBJ/problem-face files
+# unconditionally. Run in an OWN temporary directory, not in the source case.
+# A cleanup trap removes ONLY the exact new directory made by mktemp.
+SCRATCH="$(mktemp -d "${TMPDIR:-/tmp}/c3d02-surfaceCheck-XXXXXXXX")"
+cleanup() { [[ -n "$SCRATCH" && -d "$SCRATCH" ]] && rm -rf -- "$SCRATCH"; }
+trap cleanup EXIT
+
+help_text="$(surfaceCheck -help 2>&1 || true)"
+if printf '%s\n' "$help_text" | grep -Fq -- 'checkSelfIntersection'; then
+    echo "Opción autointersección: anunciada en esta versión; comprobando..."
+    args=(-checkSelfIntersection)
 else
-    echo "Esta instalacion no declara ambas opciones en surfaceCheck -help."
-    echo "No se ha ejecutado una alternativa que pudiera escribir archivos."
+    echo "Opción autointersección no anunciada; realizando revisión topológica básica."
+    args=()
 fi
-echo "=== FIN: NO SE HA MODIFICADO NINGUNA MALLA NI EL STL ==="
+echo "surfaceCheck se ejecuta desde carpeta temporal; el STL es solo ENTRADA."
+set +e
+output="$(cd "$SCRATCH" && surfaceCheck "${args[@]}" "$STL" 2>&1)"
+rc=$?
+set -e
+
+echo "---- RESULTADOS SURFACECHECK (salida filtrada) ----"
+printf '%s\n' "$output" | grep -Ei -C 1 \
+    'statistics|closed|self.intersect|non.manifold|unconnected|number of parts|normal orientation|degenerate|illegal|bad quality|problem|nearby points|triangles|bounding|found|error|FOAM FATAL|face|edge' \
+    | tail -n 105 || true
+echo "---- ÚLTIMAS LÍNEAS ORIGINALES ----"
+printf '%s\n' "$output" | tail -n 12
+echo "surfaceCheck código de salida: $rc"
+echo "Nota: éxito del comando NO equivale a ausencia de intersecciones."
+echo "Los archivos auxiliares, si los hubo, se escribieron SOLO en el directorio temporal."
+echo "=== FIN: las mallas de metal y arena, sus logs y las geometrías originales siguen intactos ==="

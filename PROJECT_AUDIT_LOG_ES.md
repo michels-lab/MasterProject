@@ -1,3 +1,9 @@
+## 2026-11-12 — C3D-02: selección conservó 568134/568135 celdas; corregido diagnóstico surfaceCheck
+
+- Logs locales `mold` y `mold_offface_01`: justo antes del recorte hay **568,135 celdas**; `Selected for keeping : 568134 cells`, tras el subset **568,134**. **Solo una celda fue eliminada**, permaneció un dominio de 242.142 cm³ con 15,164 caras `outerBox`. El cambio de `insidePoint` no cambió topología ni calidad. Hipótesis de fuga entre material y exterior sigue abierta; no afirmar autointersección sin correr `surfaceCheck` nativo.
+- El script previo `inspect_mold_leak.sh` **no ejecutó `surfaceCheck`** porque buscaba `-outputThreshold`, opción no anunciada en la instalación local, además de `-checkSelfIntersection`. Esta restricción fue demasiado estricta. Se eliminó la dependencia de `-outputThreshold`: con opción `checkSelfIntersection` disponible, usarla; si no, revisión topológica básica. Se ejecuta en carpeta temporal aislada para evitar que las versiones que escriben auxiliares toquen el CAD o mallas. `mktemp -d` + limpieza exclusiva del directorio creado. No se ejecuta remallado ni CFD.
+- Próxima evidencia requerida: **salida real nativa de `surfaceCheck`**, incluyendo cierre, aristas/manifold y autointersecciones si está soportada. `RUN_CASE_REGISTRY.csv` mantiene `PREPARED_NOT_RUN`.
+
 ## 2026-11-12 — C3D-02: mover el insidePoint del molde NO eliminó el exterior [EVIDENCIA LOCAL]
 
 - Se ejecutó `scripts/try_mold_offface.sh` con punto `(0.0043 -0.0207 0.0259)` m para arena; las pruebas de integridad C14 y CAD fueron correctas y `snappyHexMesh` finalizó sin error de utilidad, pero **no** pasó `checkMesh` exhaustivo.
