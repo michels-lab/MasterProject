@@ -1,3 +1,18 @@
+## 2026-11-12 — Mold insidePoint coincides with background mesh cell face: targeted follow-up
+
+Local material mesh retry1 produced **iron 85,332 cells, 47.9621 cm³ vs. 47.9875 CAD, no outerBox but 2,422 concave cells (one failed check)**; **sand mold 568,134 cells, 242.142 cm³ vs. 102.8431 CAD, outerBox 15,164 faces, 13,367 concave cells + 10 face-tets (two failed checks)**. The original mold seed **x = 3 mm** is exactly a cell face of the 2 mm base mesh (x starts at −3 mm), contrary to the Foundation 14 insidePoint rule. A new STL-interior, off-grid seed **`(0.0043 -0.0207 0.0259)` m** was checked independently; whether it removes exterior is **not yet verified**. Run only the new, isolated mold candidate:
+
+```bash
+cd ~/OpenFOAM/MasterProject
+git pull --ff-only
+cd cases_3d/C3D_02_metal_sand_clean
+bash scripts/try_mold_offface.sh
+```
+
+This creates only `~/OpenFOAM/C3D02_materials/mold_offface_01` and does not edit existing metal/mold meshes or logs. No CFD solver, no thermal coupled boundary patches, no validation of heat transfer yet. [Scientific record](docs/C3D_02_DOS_MALLAS_20261112_ES.md).
+
+---
+
 ## 2026-11-12 — Missing allowFreeStandingZoneFaces (Foundation 14)
 
 Both independent material `snappyHexMesh` attempts aborted before refinement: `keyword allowFreeStandingZoneFaces is undefined` in `castellatedMeshControls`. This is a missing mandatory entry in the generated dictionary, **not evidence of a faulty STL**. The source template now has `allowFreeStandingZoneFaces false;`. Resume in the **same workspace** without rerunning `blockMesh`:
