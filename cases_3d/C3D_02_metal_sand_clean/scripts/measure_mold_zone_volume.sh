@@ -7,6 +7,7 @@ source /opt/openfoam14/etc/bashrc
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 SOURCE="${1:-$HOME/OpenFOAM/C3D02_materials/mold_zoned_l2_01}"
+SOURCE="$(realpath -e "$SOURCE")"
 ZONE=moldVolume
 CAD_VOLUME=0.00010284309608
 
@@ -27,6 +28,7 @@ grep -Fq 'moldVolume' "$SOURCE/constant/polyMesh/cellZones" || {
     echo "ERROR: no existe la zona $ZONE en el polyMesh generado."
     exit 2
 }
+[[ -f "$SOURCE/constant/polyMesh/faceZones" ]] || { echo "ERROR: falta faceZones"; exit 2; }
 grep -Fq 'moldInterface' "$SOURCE/constant/polyMesh/faceZones" || {
     echo "ERROR: falta la faceZone moldInterface de la prueba."
     exit 2
@@ -123,6 +125,7 @@ if n <= 0 or v <= 0:
     sys.exit(5)
 if abs(delta_pct) > 5:
     print("RECHAZADO: gran discrepancia volumétrica de zone (>5%).")
+    sys.exit(5)
 else:
     print("VOLUMEN ZONAL PLAUSIBLE (±5%); todavía NO es malla válida.")
 print("PENDIENTE: extraer EN COPIA, validar fronteras, checkMesh y acoplamiento térmico.")
