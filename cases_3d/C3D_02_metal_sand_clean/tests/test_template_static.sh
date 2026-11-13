@@ -97,4 +97,14 @@ if grep -Eq '^[[:space:]]*(foamMultiRun|subsetMesh|splitMeshRegions|topoSet)([[:
     exit 1
 fi
 echo "OK: nuevo insidePoint de arena fuera de cara y prueba exclusiva de mold."
+# The next operation must diagnose existing evidence, not rerun the mesh.
+inspector="$ROOT/scripts/inspect_mold_leak.sh"
+test -f "$inspector"
+grep -Fq 'mold_offface_01/log.snappyHexMesh' "$inspector"
+grep -Fq 'surfaceCheck -checkSelfIntersection -outputThreshold 0' "$inspector"
+if grep -Eq '^[[:space:]]*(blockMesh|snappyHexMesh|subsetMesh|topoSet|splitMeshRegions|foamMultiRun)([[:space:]]|$)' "$inspector"; then
+    echo "ERROR: la inspección no debe crear/modificar mallas ni ejecutar CFD."
+    exit 1
+fi
+echo "OK: diagnóstico de fuga utiliza logs existentes y STL sin remallar."
 echo "NO certifica malla física, contacto térmico ni CFD."
