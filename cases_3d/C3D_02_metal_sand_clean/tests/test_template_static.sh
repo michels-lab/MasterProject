@@ -67,4 +67,23 @@ if grep -Eq '^[[:space:]]*(foamMultiRun|splitMeshRegions|subsetMesh|topoSet)([[:
     exit 1
 fi
 echo "OK: dos STL de materiales y un insidePoint por malla, sin solver."
+# Regression for required Foundation 14 option and safe resume of the exact abort.
+grep -Eq '^[[:space:]]*allowFreeStandingZoneFaces[[:space:]]+false;' "$material_template" || {
+    echo "ERROR: Foundation 14 exige allowFreeStandingZoneFaces en castellatedMeshControls"
+    exit 1
+}
+resume_script="$ROOT/scripts/resume_material_meshes.sh"
+test -f "$resume_script"
+grep -Fq 'keyword allowFreeStandingZoneFaces is undefined' "$resume_script"
+grep -Fq 'log.snappyHexMesh.retry1' "$resume_script"
+grep -Fq 'log.snappyHexMesh" "$SUB/constant' "$resume_script" && {
+    echo "ERROR: el script de reanudación tiene una ruta inesperada"
+    exit 1
+}
+if grep -Eq '^[[:space:]]*(blockMesh|foamMultiRun|subsetMesh|splitMeshRegions|topoSet)([[:space:]]|$)' "$resume_script"; then
+    echo "ERROR: reanudar no debe reconstruir blockMesh ni ejecutar CFD"
+    exit 1
+fi
+echo "OK: clave Foundation 14 obligatoria y reanudación protegida."
+
 echo "NO certifica malla física, contacto térmico ni CFD."
