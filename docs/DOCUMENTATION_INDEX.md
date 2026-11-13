@@ -1,3 +1,5 @@
+> **13-11-2026, C3D-02:** el aumento de refinamiento a L3 conservó el volumen total de la caja (242.208 cm³) y eliminó solo seis celdas. [Registro y nueva prueba explícita de cellZone en L2](C3D_02_DOS_MALLAS_20261112_ES.md); no se publican mallas CHT ni CFD sin checks.
+
 > **12-11-2026, actualización real C3D-02:** el nuevo punto interior de arena no cambió el fallo (568,134 celdas y 242.142 cm³; `outerBox=15164`). [Bitácora científica del intento y lecciones](C3D_02_DOS_MALLAS_20261112_ES.md), [script de auditoría sin remallado](../cases_3d/C3D_02_metal_sand_clean/scripts/inspect_mold_leak.sh). Próximo paso: comprobar autointersecciones y conectividad.
 
 > **12-11-2026, C3D-02 retry1:** la malla del hierro alcanzó **47.9621 cm³** sin exterior (pero 2,422 cóncavas); la arena retuvo **242.142 cm³ y 15,164 caras exteriores**, calidad fallida. [Resultado real, condición insidePoint y prueba solo del molde](C3D_02_DOS_MALLAS_20261112_ES.md). El punto x=3 mm de arena se encontraba sobre una cara de la malla de fondo; corrección candidata **NO ejecutada**.

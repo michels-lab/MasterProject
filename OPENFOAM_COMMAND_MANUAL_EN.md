@@ -1,3 +1,18 @@
+## 2026-11-13 — C3D-02: explicit closed-mold zoning versus connectivity-based retention
+
+L3 mold castellation without snapping kept 2,334,117/2,334,123 cells, i.e. removed only six; global volume **0.000242208 m³** equals the entire 58×72×58 mm background box, not the mold CAD 0.000102843 m³. `outerBox` 17,543 faces and one failed full mesh check. Therefore stop blind refinement increases and avoid relabeling this as an accepted sand mesh. The Foundation 14 annotated dictionary supports `faceZone`, `cellZone` and `mode inside` for a closed surface. The new independent script `scripts/test_mold_geometric_zone.sh` tests explicit mold tagging at level 2 with snapping disabled, and reads resulting cellZone/faceZone sizes without touching existing runs. **Tagged cells do not prove a physical mesh, volume validation, interface mapping or CFD.**
+
+```bash
+cd ~/OpenFOAM/MasterProject
+git pull --ff-only
+cd cases_3d/C3D_02_metal_sand_clean
+bash scripts/test_mold_geometric_zone.sh
+```
+
+[Official Foundation 14 annotated dictionary](https://github.com/OpenFOAM/OpenFOAM-14/blob/master/etc/caseDicts/annotated/snappyHexMeshDict).
+
+---
+
 ## 2026-11-13 — Mold geometry passed surfaceCheck; isolate castellation with L3 and snap disabled
 
 Native Foundation 14 `surfaceCheck -checkSelfIntersection` confirmed the repaired mold STL is watertight, one connected consistently oriented region and **not self-intersecting**. Both old mold attempts kept 568,134 of 568,135 cells at the pre-snap removal stage, leaving 242.142 cm³ and 15,164 outerBox faces. To discriminate **insufficient surface resolution** without conflating snapping quality, a new single-workspace subcase `mold_level3_cast_01` is prepared with `refinementSurfaces level (3 3)`, 2mm / 8 = nominal 0.25 mm surface size, `snap false`, no layers and maxGlobalCells 3,200,000. The script logs retained cells, boundary count, volume and preliminary full `checkMesh`; **this is not a final CHT-ready mesh or CFD run**.

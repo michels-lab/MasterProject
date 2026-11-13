@@ -1,3 +1,28 @@
+## 2026-11-13 — C3D-02: pasar de insidePoint a clasificación explícita por cellZone
+
+**Ensayo local L3 sin `snap`:** el recorte eliminó solo 6/2,334,123 celdas. Volumen conservado **0.000242208 m³**, exactamente el bloque auxiliar 58×72×58 mm, y `outerBox=17543`. Calidad completa fallida: 225,732 cóncavas. No subir a nivel 4; STL sano por `surfaceCheck`.
+
+El diccionario oficial **Foundation 14** admite, bajo `castellatedMeshControls/refinementSurfaces/material`:
+```cpp
+level (2 2);
+faceZone moldInterface;
+cellZone moldVolume;
+mode inside;
+faceType internal;
+```
+Esto **solicita** clasificación de celdas dentro del sólido y la conservación de caras de interfaz, sin depender solo del criterio de alcance desde un punto. **No implica que el exterior desaparezca**, ni certifica conformidad de malla. Fuente oficial: https://github.com/OpenFOAM/OpenFOAM-14/blob/master/etc/caseDicts/annotated/snappyHexMeshDict .
+
+```bash
+cd ~/OpenFOAM/MasterProject
+git pull --ff-only
+cd cases_3d/C3D_02_metal_sand_clean
+bash scripts/test_mold_geometric_zone.sh
+```
+
+El script genera exclusivamente `mold_zoned_l2_01`, usa el STL y la semilla comprobados, `level (2 2)`, `snap false`, y reporta cantidad de etiquetas de `cellZone`/`faceZone` y métricas exhaustivas sin CFD. Si hay zonas válidas, aún tendremos que demostrar que son geométricamente correctas y construir parches/CHT en otra fase. No ejecutar nuevamente los casos viejos.
+
+---
+
 ## 13-11-2026 — Diagnóstico de recorte en castellated phase con nivel 3, sin snapping
 
 **Resultado anterior confirmado por `surfaceCheck -checkSelfIntersection` de Foundation 14:** `mold_repaired.stl` es cerrado, no presenta triángulos ilegales ni autointersecciones, tiene un componente y normales consistentes. El problema es la selección de celdas del volumen: se conservaron **568134/568135**, antes del ajuste superficial `snap`. Por tanto no es racional aumentar iteraciones de snapping para intentar corregir la conectividad.

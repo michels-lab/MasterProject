@@ -128,4 +128,19 @@ if grep -Eq '^[[:space:]]*(foamMultiRun|foamRun|subsetMesh|topoSet|splitMeshRegi
     exit 1
 fi
 echo "OK: nueva prueba L3 de molde controlada, sin snapping ni CFD."
+# L3 retains the full background box; test geometrical zone tagging at L2.
+zone_test="$ROOT/scripts/test_mold_geometric_zone.sh"
+test -f "$zone_test"
+grep -Fq 'mold_zoned_l2_01' "$zone_test"
+grep -Fq 'cellZone moldVolume;' "$zone_test"
+grep -Fq 'faceZone moldInterface;' "$zone_test"
+grep -Fq 'mode inside;' "$zone_test"
+grep -Fq 'snap false;' "$zone_test"
+grep -Fq 'mold_repaired.stl' "$zone_test"
+grep -Fq 'zoneCount' "$zone_test"
+if grep -Eq '^[[:space:]]*(foamMultiRun|foamRun|subsetMesh|topoSet|splitMeshRegions)([[:space:]]|$)' "$zone_test"; then
+    echo "ERROR: solo se permite diagnóstico con cellZone, sin recortar CFD."
+    exit 1
+fi
+echo "OK: nueva prueba geométrica por cellZone L2, sin CFD."
 echo "NO certifica malla física, contacto térmico ni CFD."
