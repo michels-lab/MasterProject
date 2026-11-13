@@ -1,3 +1,16 @@
+## 2026-11-12 — Foundation surfaceCheck options vary; use scratch directory
+
+Both mold logs show only **one** cell removed at the cropping stage: 568,135 cells after baffles, 568,134 retained. The previous diagnostic incorrectly required `-outputThreshold` alongside `-checkSelfIntersection`, so it did not run the checker on the user's installation. The updated `scripts/inspect_mold_leak.sh` now runs `surfaceCheck -checkSelfIntersection STL` if supported, or a basic `surfaceCheck STL` otherwise. It runs in a disposable `mktemp -d` directory so version-dependent `badFaces`, `problemFaces` and `selfInterPoints.obj` cannot touch the actual source case. **No new CFD, mesh, STL edit or overwrite.** Native self-intersection evidence is still pending.
+
+```bash
+cd ~/OpenFOAM/MasterProject
+git pull --ff-only
+cd cases_3d/C3D_02_metal_sand_clean
+bash scripts/inspect_mold_leak.sh
+```
+
+---
+
 ## 2026-11-12 — Mold off-face seed still retains all exterior cells
 
 The off-face mold trial repeated the previous *identical* failed result (568,134 cells; 242.142 cm³ instead of 102.8431 cm³; outerBox 15,164 faces; 13,367 concave cells, 10 poor face-tets, 2 failed checks). Thus the original point's alignment with a background cell face was **not the cause by itself**. No additional point-sweeps are justified. The committed repaired mold surface is topologically closed, but self-intersections and snappy's surface-cell separation remain unproven. The next stage is a **read-only** audit of both retained logs and the STL:
