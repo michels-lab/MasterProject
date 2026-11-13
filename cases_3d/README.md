@@ -1,3 +1,5 @@
+> **Estado C3D-02 12-11-2026:** mover el punto de arena no cambió la malla (**568,134 celdas, 242.142 cm³, `outerBox=15164`, 2 checks fallidos**); no repetir intentos de semillas. Se preparó [diagnóstico de conexión/auto-intersección sin remallado](C3D_02_metal_sand_clean/scripts/inspect_mold_leak.sh). Hierro permanece volumétricamente aislado, con defecto de celdas cóncavas; sin interfaz térmica validada.
+
 > **12-11-2026 — C3D-02 retry1 local:** hierro **47.9621 cm³**, exterior eliminado, 2,422 celdas cóncavas; arena **242.142 cm³**, exterior retenido (15,164 caras), 13,367 cóncavas y 10 face-tets deficientes. Detectado punto de arena x=3 mm sobre una cara de `blockMesh`; prueba corregida **solo mold** en [`try_mold_offface.sh`](C3D_02_metal_sand_clean/scripts/try_mold_offface.sh), no ejecutada. Sin CHT ni malla aprobada.
 
 > **Plan D, etapa 2:** [C3D-02 mallas independientes metal y arena](../docs/C3D_02_DOS_MALLAS_20261112_ES.md) reemplaza como **próxima prueba** el mallado combinado que conservó aire. Dos STL cerrados, un punto interior por material, verificaciones por separado. Código preparado; sin CFD ni CHT.
