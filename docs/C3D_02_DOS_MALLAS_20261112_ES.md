@@ -1,3 +1,33 @@
+## 13-11-2026 — CLASIFICACIÓN GEOMÉTRICA DEL MOLDE: ÉXITO DE ETIQUETADO, VOLUMEN AÚN NO MEDIDO
+
+**Evidencia experimental real enviada por el investigador (Foundation 14), subcaso `mold_zoned_l2_01`:** la orden `test_mold_geometric_zone.sh` completó snappyHexMesh con `refinementSurfaces level (2 2)`, `snap false` y opciones `faceZone moldInterface;`, `cellZone moldVolume;`, `mode inside;`, `faceType internal;`. El log reportó `Found 1 closed, named surfaces. Assigning cells in/outside these surfaces to the corresponding cellZone`.
+
+| Métrica | Resultado real |
+|---|---:|
+| Celdas globales | 568,135 |
+| `cellZone moldVolume` (cellLabels) | **274,788** |
+| `faceZone moldInterface` (faceLabels) | **97,492** |
+| Volumen GLOBAL | **0.000242208 m³ = 242.208 cm³** (caja auxiliar íntegra) |
+| Volumen CAD molde | **0.00010284309608 m³ = 102.8431 cm³** |
+| `outerBox` | **15,164 caras** |
+| Calidad | `Face tets OK`, **49,034 celdas cóncavas**, **1 check fallido** |
+| Estado de extracción | **NO extraído** |
+
+**Interpretación:** esta vez `snappyHexMesh` etiquetó 274,788 celdas de la zona interna, pese a retener aire en la malla global. Esto demuestra clasificación **en número de etiquetas**, no su volumen ni validez de una eventual extracción. `faceZone` no equivale a parche térmico `mappedWall`. `checkMesh exit=0` pese a `Failed 1 mesh checks` **NO es aprobación**; `snap false` significa que no existe una malla final con superficie ajustada.
+
+**Siguiente etapa sin generar mallas:** medir el volumen de la **`cellZone moldVolume`**, no el volumen global, usando `volFieldValue` nativo de Foundation 14 (`cellZone moldVolume; operation none; fields ();`): su inicialización informa `number of cells = N` y `volume = V` mediante `fvCellZone::V()`. Se prepara `scripts/measure_mold_zone_volume.sh`, que ejecuta `foamPostProcess -constant -dict ...` en un **caso sombra temporal**, con un enlace de lectura a `constant/polyMesh` original. Cualquier posible carpeta `postProcessing` se escribirá **solo en el caso sombra**; ni geometrías ni casos originales se modifican.
+
+```bash
+cd ~/OpenFOAM/MasterProject
+git pull --ff-only
+cd cases_3d/C3D_02_metal_sand_clean
+bash scripts/measure_mold_zone_volume.sh
+```
+
+Se informará el volumen en m³ y cm³ y la desviación contra 102.8431 cm³; ±5 % es solo un **filtro exploratorio de plausibilidad**, **no criterio de aceptación de mallado físico**. Si Foundation 14 rechaza el diccionario/tiempo sin campos, se dará el diagnóstico sin volver a remallar, para ajustar el postprocesamiento. **Todavía NO ejecutar `subsetMesh`, `splitMeshRegions`, CHT ni solver 3D** hasta conocer volumen y revisar la calidad/contorno de una extracción en una COPIA. Fuente técnica: [`volFieldValue` Foundation 14](https://cpp.openfoam.org/v14/classFoam_1_1functionObjects_1_1fieldValues_1_1volFieldValue.html), [`foamPostProcess` Foundation 14](https://cpp.openfoam.org/v14/foamPostProcess_8C.html).
+
+---
+
 ## 13-11-2026 — Nivel 3 NO corrigió la fuga; cambiar de método de clasificación
 
 **Evidencia del investigador, ejecución local `scripts/test_mold_level3_castellation.sh`**:
