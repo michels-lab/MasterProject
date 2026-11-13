@@ -29,7 +29,7 @@ for material in metal mold; do
             ;;
         mold)
             stl="mold_repaired.stl"
-            inside="(0.003 -0.0200 0.0259)"
+            inside="(0.0043 -0.0207 0.0259)"
             expected="0.00010284309608"
             ;;
     esac
