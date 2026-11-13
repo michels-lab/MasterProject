@@ -1,3 +1,26 @@
+## 13-11-2026 — Nivel 3 NO corrigió la fuga; cambiar de método de clasificación
+
+**Evidencia del investigador, ejecución local `scripts/test_mold_level3_castellation.sh`**:
+- `After introducing baffles : cells:2334123`; `Selected for keeping : 2334117`; `After subsetting : cells:2334117`. El recorte eliminó **seis celdas**; el método por conectividad volvió a retener esencialmente el exterior.
+- `checkMesh`: 2,334,117 celdas finales, dos parches, un componente, `Total volume = 0.000242208` m³ = **242.208 cm³**. Esta cantidad coincide EXACTAMENTE con el volumen de la caja rectangular original: `0.058 × 0.072 × 0.058 = 0.000242208` m³. **No se aisló arena de volumen CAD ~102.8431 cm³**.
+- `outerBox = 17543` caras. `Face tets OK`, 225,732 celdas cóncavas y `Failed 1 mesh checks`; `checkMesh rc=0` NO implica aprobación. `snap false` implica malla castellated sin ajuste y NO es calidad final.
+- L2 y L3 fallaron en el MISMO mecanismo, aunque L3 generó unas cuatro veces más celdas; **NO continuar a niveles 4+** sin evidencia nueva. `surfaceCheck` ya aprobó integridad del STL; no hay razón para repararlo ciegamente.
+
+**Ruta alternativa todavía dentro de snappyHexMesh (código preparado, aún NO ejecutado):** en el diccionario de Foundation 14 existen `faceZone`, `cellZone` y `mode inside` para superficies cerradas, conforme al diccionario oficial `OpenFOAM-14/etc/caseDicts/annotated/snappyHexMeshDict`: https://github.com/OpenFOAM/OpenFOAM-14/blob/master/etc/caseDicts/annotated/snappyHexMeshDict . El nuevo `scripts/test_mold_geometric_zone.sh` usa el mismo STL sano, el punto anterior comprobado y el **nivel L2** (sin añadir refinamiento), pero etiqueta explícitamente el volumen interior del molde como `cellZone moldVolume` y la superficie como `faceZone moldInterface`, con `mode inside`; `snap false` permite observar la etapa de clasificación sin el desplazamiento de vértices.
+
+Se ejecuta UNA sola vez en `~/OpenFOAM/C3D02_materials/mold_zoned_l2_01`; nunca se sobrescriben metal ni los ensayos anteriores. Se reportan número de celdas globales, cantidad de etiquetas en `cellZone moldVolume` y `faceZone moldInterface`, volumen GLOBAL, caras `outerBox`, calidad preliminar y selección de celdas. **No asumir que la etiqueta por sí sola eliminó el exterior; identificar celdas en un zone NO produce una malla física aceptada, ni prueba volumen de material ni contacto CHT.** Si esta clasificación tampoco funciona, el siguiente enfoque es segmentación geométrica controlada sobre una COPIA de malla (p. ej. `surfaceToCell` y extracción con conjuntos regenerados en el mismo estado), sin reusar los conjuntos obsoletos de C3D-01.
+
+```bash
+cd ~/OpenFOAM/MasterProject
+git pull --ff-only
+cd cases_3d/C3D_02_metal_sand_clean
+bash scripts/test_mold_geometric_zone.sh
+```
+
+[Guía Foundation 14](https://cpp.openfoam.org/v14/snappyHexMeshConfig_8C.html). G1, interfaz y CFD continúan BLOQUEADOS.
+
+---
+
 ## 13-11-2026 — surfaceCheck Foundation 14 APROBADO; hipótesis siguiente: resolución insuficiente de castellation
 
 **Resultado local real recibido:** `surfaceCheck -checkSelfIntersection constant/geometry/mold_repaired.stl` terminó con código 0 y reportó:
