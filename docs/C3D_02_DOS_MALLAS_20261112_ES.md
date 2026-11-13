@@ -1,3 +1,27 @@
+## 13-11-2026 — surfaceCheck Foundation 14 APROBADO; hipótesis siguiente: resolución insuficiente de castellation
+
+**Resultado local real recibido:** `surfaceCheck -checkSelfIntersection constant/geometry/mold_repaired.stl` terminó con código 0 y reportó:
+- 3,084 triángulos, 1,544 vértices, bbox del STL en mm `(0,-65.5,0)` a `(51.8,0,51.8)` (redondeado).
+- `Surface has no illegal triangles.`, `Found 0 nearby points.`
+- `Surface is closed. All edges connected to two faces.`
+- `Number of unconnected parts : 1`, `Number of zones (connected area with consistent normal) : 1`.
+- **`Surface is not self-intersecting`**.
+
+La superficie es geométricamente válida **según las pruebas realizadas por surfaceCheck**. Esto NO certifica su resolución por la malla volumétrica. En los dos ensayos previos `mold` y `mold_offface_01`, la eliminación de celdas en castellated phase quitó **solo 1 de 568,135 celdas**, conservó `outerBox` (15,164 caras) y 242.142 cm³. La selección, no el movimiento de puntos durante `snap`, ya falló antes de la fase de ajuste de superficie. Se han descartado: cambiar solo `insidePoint`, asumir que el STL está abierto y atribuir la fuga a autointersecciones.
+
+**Hipótesis aún NO demostrada:** el refinamiento superficial previo era `level (2 2)`, es decir malla inicial de 2 mm y celdas superficiales nominales de 0.5 mm. Si hay detalles del contorno que no forman barreras cerradas a 0.5 mm, un nivel más puede cambiar la conectividad. Para discriminar ese mecanismo sin confundir con los defectos de `snap`, se ha programado un **único** ensayo de arena con `refinementSurfaces level (3 3)`, celdas superficiales nominales de 0.25 mm, **`snap false`** y límite de 3,200,000 celdas de refinamiento. Se genera solamente `~/OpenFOAM/C3D02_materials/mold_level3_cast_01`; ni hierro ni mold previos se modifican. La prueba NO es CFD, NO es interfaz CHT, NO pretende certificar calidad de malla final.
+
+```bash
+cd ~/OpenFOAM/MasterProject
+git pull --ff-only
+cd cases_3d/C3D_02_metal_sand_clean
+bash scripts/test_mold_level3_castellation.sh
+```
+
+El script muestra cuántas celdas se retienen ANTES de snapping, volumen total, parches `outerBox` y calidad preliminar. Si sigue reteniendo el exterior, no se harán más cambios aleatorios a los puntos interiores ni se asumirá que basta con aumentar indefinidamente la densidad; habrá que estudiar las intersecciones entre superficie y caras de celda y la resolución de tramos delgados. **La misma malla de hierro sigue volumétricamente bien aislada, pero con 2,422 cóncavas y un fallo `checkMesh`.**
+
+---
+
 > **Diagnóstico 12-11-2026: el recorte eliminó UNA SOLA celda.** Los dos logs de `snappyHexMesh` muestran, antes de recortar: `After introducing baffles : cells:568135`; selección: `Selected for keeping : 568134 cells`; y después: `After subsetting : cells:568134`. Por tanto la separación entre la arena y el exterior **no se produjo en la malla volumétrica**. Se retuvo ~99.9998 % de las celdas en ambas pruebas, pese a cambiar `insidePoint`. Esto es evidencia de conectividad/recorte, **no una identificación inequívoca de qué parte del STL o qué faceta la causa**.
 
 **Corrección al diagnóstico:** `inspect_mold_leak.sh` anterior omitía por completo `surfaceCheck` porque exigía dos opciones simultáneas: `-checkSelfIntersection` y `-outputThreshold`. La instalación del investigador no anuncia ambas. El script ahora detecta solo `checkSelfIntersection`; cuando existe, ejecuta `surfaceCheck -checkSelfIntersection STL`, y si no, `surfaceCheck STL` para comprobar al menos la topología. **Se ejecuta desde un directorio temporal creado mediante `mktemp -d`**, porque versiones de Foundation pueden generar archivos `badFaces`, `problemFaces` y `selfInterPoints.obj`. La carpeta temporal se elimina en el trap al salir; ni STL ni mallas o logs históricos se sobrescriben. La salida de `surfaceCheck` nativa en Ubuntu **todavía no se ha recibido**, así que no declarar existencia/ausencia de autointersecciones.

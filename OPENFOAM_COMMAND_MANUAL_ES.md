@@ -1,3 +1,20 @@
+## 13-11-2026 — Diagnóstico de recorte en castellated phase con nivel 3, sin snapping
+
+**Resultado anterior confirmado por `surfaceCheck -checkSelfIntersection` de Foundation 14:** `mold_repaired.stl` es cerrado, no presenta triángulos ilegales ni autointersecciones, tiene un componente y normales consistentes. El problema es la selección de celdas del volumen: se conservaron **568134/568135**, antes del ajuste superficial `snap`. Por tanto no es racional aumentar iteraciones de snapping para intentar corregir la conectividad.
+
+**Prueba fuente nueva (pendiente de ejecución local):** solo molde, refinamiento `level (3 3)` (2 mm/8 = **0.25 mm** en superficies), `snap false`, sin capas, máximo **3,200,000** celdas en refinamiento. Archivo `system/materialSingle/snappyHexMeshDict.template` conserva sus parámetros originales; la variación se escribe en una copia dentro de `mold_level3_cast_01`, para preservar reproducibilidad. Se miden celdas pre/post eliminación, `outerBox`, volumen y `checkMesh`; este último **no certifica calidad final** porque no hubo snapping.
+
+```bash
+cd ~/OpenFOAM/MasterProject
+git pull --ff-only
+cd cases_3d/C3D_02_metal_sand_clean
+bash scripts/test_mold_level3_castellation.sh
+```
+
+No repetir la prueba si se creó la carpeta; conservar logs. No reutilizarla directamente como región CHT, ni correr solver antes de comprobar volumen y parches. Fuente técnica: [OpenFOAM Foundation 14](https://openfoam.org/release/14/) y [Manual de snappyHexMesh](https://doc.cfd.direct/openfoam/user-guide/snappyhexmesh).
+
+---
+
 ## 12-11-2026 — surfaceCheck en Foundation 14 sin suponer opción outputThreshold
 
 **Resultado cuantitativo del ensayo:** `snappyHexMesh` había creado 568,135 celdas tras la etapa de baffles y seleccionó **568,134** para conservar. Retiró solo **una**; el exterior nunca quedó aislado. Repetir con otro `insidePoint` ya se probó sin cambios.
