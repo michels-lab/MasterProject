@@ -26,7 +26,7 @@
   },
   "finding_counts": {},
   "finding_total": 0,
-  "inventory_fingerprint": "6e734c2340b7cefc459a9703da68e0eec6f192de46f24b515cf9d29383ba3642",
+  "inventory_fingerprint": "adccdc1b1140542c40a56dca68b606cd57205236b1a4474fb02cba851652509c",
   "evidence_fingerprint": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
   "files": [
     {
@@ -279,14 +279,14 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "9c96debcc52ec23ddb6776bdd34953cc33ca0b48"
+      "blob": "8bcf325a1e9af504bd691ebe6559d6cc1f201aab"
     },
     {
       "path": "OPENFOAM_COMMAND_MANUAL_ES.md",
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "b6f541be2203ec723440b982188b405d27bd0d18"
+      "blob": "55e31bac0a6856c46cad51855b842cb3324c0a4e"
     },
     {
       "path": "POSTPROCESSING_FIELD_GUIDE_ES.md",
@@ -307,14 +307,14 @@
       "role": "bitacora",
       "purpose": "technical/audit change history",
       "certainty": "rule",
-      "blob": "d043ce5285135644f17f5f8b4c494089d6a5f033"
+      "blob": "67b52934b015b8911cd8381a516bed5ec3837d27"
     },
     {
       "path": "PROJECT_AUDIT_LOG_ES.md",
       "role": "bitacora",
       "purpose": "technical/audit change history",
       "certainty": "rule",
-      "blob": "d04ce802b3f7c8db14aa45cab05448eb990b4eaf"
+      "blob": "90ca1cdb912549bb9938bf27689d1e2f180d940c"
     },
     {
       "path": "README.md",
@@ -356,7 +356,7 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "11e84f2dd3cdba68830fc2b1e28300a013a455d2"
+      "blob": "9c2ecfb421574f86f15bd5d7a8917c4e9020dae3"
     },
     {
       "path": "analysis_results/c11_energy2_test/summary.md",
@@ -1070,7 +1070,7 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "fd2b6b3136cd0e1b3f72d58c8c050fbb9bfd61a4"
+      "blob": "8df79ec9296989127962bb9ed27274779f8dc342"
     },
     {
       "path": "cases_3d/C3D_02_metal_sand_clean/constant/geometry/README.md",
@@ -1161,7 +1161,7 @@
       "role": "source",
       "purpose": "code/test implementation",
       "certainty": "rule",
-      "blob": "252a3e92b28c43cdb4cd7cecff665569baeddbb2"
+      "blob": "388b3db9684dac3ee2fba9ac0319246016038b63"
     },
     {
       "path": "cases_3d/C3D_02_metal_sand_clean/scripts/prepare_geometry.sh",
@@ -1252,7 +1252,7 @@
       "role": "test",
       "purpose": "code/test implementation",
       "certainty": "rule",
-      "blob": "dc71cfaac4c0698f6c32d323f018e9ffbff881a7"
+      "blob": "d5d50f07dbfac18150bc57052c6968fb028e7164"
     },
     {
       "path": "cases_3d/README.md",
@@ -270899,7 +270899,7 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "4eb42663c2eea91fa20867d7314e855dff4b0a2e"
+      "blob": "113d3fbd24c07459ed4e06cca4fab535bbfbd3a3"
     },
     {
       "path": "docs/C3D_02_MALLADO_INICIAL_20261112_ES.md",
