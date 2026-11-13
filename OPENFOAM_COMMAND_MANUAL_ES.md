@@ -1,3 +1,20 @@
+## 12-11-2026 — surfaceCheck en Foundation 14 sin suponer opción outputThreshold
+
+**Resultado cuantitativo del ensayo:** `snappyHexMesh` había creado 568,135 celdas tras la etapa de baffles y seleccionó **568,134** para conservar. Retiró solo **una**; el exterior nunca quedó aislado. Repetir con otro `insidePoint` ya se probó sin cambios.
+
+La instalación local **no anunció las dos opciones** que nuestro script anterior exigía simultáneamente, y por eso no ejecutó `surfaceCheck`. El diagnóstico corregido usa `-checkSelfIntersection` **solo si `surfaceCheck -help` la anuncia**, o ejecuta la comprobación topológica básica si no. El programa puede escribir `selfInterPoints.obj`, `badFaces` o `problemFaces` en algunas versiones; por eso se llama desde un **directorio temporal, nunca dentro del caso fuente**.
+
+```bash
+cd ~/OpenFOAM/MasterProject
+git pull --ff-only
+cd cases_3d/C3D_02_metal_sand_clean
+bash scripts/inspect_mold_leak.sh
+```
+
+Ninguna malla nueva ni solver. Esperar a la salida de `surfaceCheck` antes de decidir si el STL requiere reparación o hay otra causa del recorte. Referencia de sintaxis/capacidades: código fuente de `surfaceCheck` de la rama Foundation y documentación: https://cpp.openfoam.org/v13/surfaceCheck_8C_source.html .
+
+---
+
 ## 12-11-2026 — Lección: una superficie cerrada no garantiza la separación de volúmenes en snappyHexMesh
 
 **Hecho comprobado:** el ensayo mold-only con nuevo punto interior fuera de cara de `blockMesh` **repitió exactamente el fallo previo** (568,134 celdas, 242.142 cm³, `outerBox` 15,164 caras, 2 checks fallidos). Un `insidePoint` es la semilla del componente que se conservará; si existe una conectividad no deseada a través de la superficie discretizada, la selección puede retener el exterior. Un STL cerrado topológicamente no descarta autointersecciones ni fugas de discretización. **No seguir cambiando semillas, sin resultados discriminantes.** La documentación de Foundation 14 requiere una superficie que encierre completamente los componentes deseados durante la eliminación de celdas: https://doc.cfd.direct/openfoam/user-guide/snappyhexmesh.
