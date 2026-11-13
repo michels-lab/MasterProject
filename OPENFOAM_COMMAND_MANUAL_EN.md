@@ -1,3 +1,19 @@
+## 2026-11-12 — Mold off-face seed still retains all exterior cells
+
+The off-face mold trial repeated the previous *identical* failed result (568,134 cells; 242.142 cm³ instead of 102.8431 cm³; outerBox 15,164 faces; 13,367 concave cells, 10 poor face-tets, 2 failed checks). Thus the original point's alignment with a background cell face was **not the cause by itself**. No additional point-sweeps are justified. The committed repaired mold surface is topologically closed, but self-intersections and snappy's surface-cell separation remain unproven. The next stage is a **read-only** audit of both retained logs and the STL:
+
+```bash
+source /opt/openfoam14/etc/bashrc
+cd ~/OpenFOAM/MasterProject
+ git pull --ff-only
+cd cases_3d/C3D_02_metal_sand_clean
+bash scripts/inspect_mold_leak.sh
+```
+
+This runs no meshing or CFD; it optionally invokes `surfaceCheck -checkSelfIntersection -outputThreshold 0` if the local version advertises both switches. See [Spanish evidence](docs/C3D_02_DOS_MALLAS_20261112_ES.md).
+
+---
+
 ## 2026-11-12 — Mold insidePoint coincides with background mesh cell face: targeted follow-up
 
 Local material mesh retry1 produced **iron 85,332 cells, 47.9621 cm³ vs. 47.9875 CAD, no outerBox but 2,422 concave cells (one failed check)**; **sand mold 568,134 cells, 242.142 cm³ vs. 102.8431 CAD, outerBox 15,164 faces, 13,367 concave cells + 10 face-tets (two failed checks)**. The original mold seed **x = 3 mm** is exactly a cell face of the 2 mm base mesh (x starts at −3 mm), contrary to the Foundation 14 insidePoint rule. A new STL-interior, off-grid seed **`(0.0043 -0.0207 0.0259)` m** was checked independently; whether it removes exterior is **not yet verified**. Run only the new, isolated mold candidate:

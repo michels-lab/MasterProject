@@ -1,3 +1,21 @@
+## 12-11-2026 — Lección: una superficie cerrada no garantiza la separación de volúmenes en snappyHexMesh
+
+**Hecho comprobado:** el ensayo mold-only con nuevo punto interior fuera de cara de `blockMesh` **repitió exactamente el fallo previo** (568,134 celdas, 242.142 cm³, `outerBox` 15,164 caras, 2 checks fallidos). Un `insidePoint` es la semilla del componente que se conservará; si existe una conectividad no deseada a través de la superficie discretizada, la selección puede retener el exterior. Un STL cerrado topológicamente no descarta autointersecciones ni fugas de discretización. **No seguir cambiando semillas, sin resultados discriminantes.** La documentación de Foundation 14 requiere una superficie que encierre completamente los componentes deseados durante la eliminación de celdas: https://doc.cfd.direct/openfoam/user-guide/snappyhexmesh.
+
+**Inspección sin volver a generar mallas (comando único):**
+
+```bash
+source /opt/openfoam14/etc/bashrc
+cd ~/OpenFOAM/MasterProject
+git pull --ff-only
+cd cases_3d/C3D_02_metal_sand_clean
+bash scripts/inspect_mold_leak.sh
+```
+
+La utilidad lee logs `mold` y `mold_offface_01`, compara selección de celdas, volumen y fallos, muestra contexto de selección de `snappyHexMesh` y, si están disponibles las opciones Foundation 14 `-checkSelfIntersection` y `-outputThreshold`, ejecuta `surfaceCheck` sobre STL reparado sin escribir reparaciones ni generar malla. **No se cambia ningún archivo fuente, STL ni caso CFD.** Reportar la salida para determinar la estrategia siguiente.
+
+---
+
 ## 12-11-2026 — insidePoint SOBRE cara de blockMesh: corrección localizada del molde
 
 **Hallazgo a partir de la salida real del investigador:** `metal` tiene volumen 47.9621 cm³ (≈47.9875 CAD), `outerBox=0`, pero 2,422 celdas cóncavas. `mold` conserva exterior (242.142 cm³ frente a 102.8431 cm³; `outerBox=15164` caras), 13,367 celdas cóncavas y 10 face-tets malos. **Ni una de las dos mallas está aprobada.**

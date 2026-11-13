@@ -1,3 +1,11 @@
+## 2026-11-12 — C3D-02: mover el insidePoint del molde NO eliminó el exterior [EVIDENCIA LOCAL]
+
+- Se ejecutó `scripts/try_mold_offface.sh` con punto `(0.0043 -0.0207 0.0259)` m para arena; las pruebas de integridad C14 y CAD fueron correctas y `snappyHexMesh` finalizó sin error de utilidad, pero **no** pasó `checkMesh` exhaustivo.
+- Resultados `mold_offface_01`: 568,134 celdas, 2 parches, 1 componente conectado, volumen **0.000242142 m³** (242.142 cm³, frente a 102.8431 cm³ del STL), `outerBox` 15,164 caras, 13,367 cóncavas, 10 face-tets de mala calidad, **2 comprobaciones fallidas**. Son **idénticos** al anterior `mold/log.checkMesh.retry1`. `snappyHexMesh` informó `Selected for keeping : 568134 cells`.
+- **Conclusión técnica:** el punto anterior x=3 mm estaba sobre una cara de `blockMesh`, pero moverlo a un punto interior alejado de la retícula **no solucionó la retención de aire**. No seguir cambiando semillas a ciegas ni declarar que esa coincidencia fuera la única causa.
+- Revisión estática de `mold_repaired.stl` versionado: 3,084 facetas, 1,544 vértices, 4,626 aristas con valencia 2, orientación de aristas coherente, una componente de superficie, volumen firmado 102.843097 cm³. Cierre topológico != ausencia de autointersecciones != malla volumétrica conformante. La geometría incluye facetas muy delgadas, pero el STL del metal también posee algunas; **causa de la fuga por determinar**.
+- Próximo único paso: leer los logs locales y usar `surfaceCheck -checkSelfIntersection -outputThreshold 0` si está soportado, mediante `scripts/inspect_mold_leak.sh`. **No se generan nuevas mallas, no se borran casos, no se toca C14 ni se activa CFD.** [Bitácora de la línea 3D](docs/C3D_02_DOS_MALLAS_20261112_ES.md).
+
 ## 2026-11-12 — C3D-02: retry1 concluyó pero ambas mallas rechazadas; semilla de arena sobre cara [EVIDENCIA LOCAL]
 
 - El investigador ejecutó `scripts/resume_material_meshes.sh` tras corregir `allowFreeStandingZoneFaces`, sobre las dos carpetas existentes de `C3D02_materials`; **ambos snappyHexMesh y checkMesh corrieron**. Logs disponibles localmente `metal/log.{snappyHexMesh,checkMesh}.retry1` y `mold/log.{snappyHexMesh,checkMesh}.retry1` (no importados a GitHub).
