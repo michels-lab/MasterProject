@@ -113,4 +113,19 @@ if grep -Eq '^[[:space:]]*(blockMesh|snappyHexMesh|subsetMesh|topoSet|splitMeshR
     exit 1
 fi
 echo "OK: diagnóstico de fuga utiliza logs existentes y STL sin remallar."
+# Controlled L3 castellation: test the lost exterior at the pre-snap stage.
+cast_script="$ROOT/scripts/test_mold_level3_castellation.sh"
+test -f "$cast_script"
+grep -Fq 'mold_level3_cast_01' "$cast_script"
+grep -Fq "level (3 3);" "$cast_script"
+grep -Fq "snap false;" "$cast_script"
+grep -Fq 'maxGlobalCells 3200000;' "$cast_script"
+grep -Fq 'mold_repaired.stl' "$cast_script"
+grep -Fq 'Selected for keeping' "$cast_script"
+grep -Fq 'After introducing baffles' "$cast_script"
+if grep -Eq '^[[:space:]]*(foamMultiRun|foamRun|subsetMesh|topoSet|splitMeshRegions)([[:space:]]|$)' "$cast_script"; then
+    echo "ERROR: el ensayo de castellation no debe realizar CFD ni split/subset"
+    exit 1
+fi
+echo "OK: nueva prueba L3 de molde controlada, sin snapping ni CFD."
 echo "NO certifica malla física, contacto térmico ni CFD."
