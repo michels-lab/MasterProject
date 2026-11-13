@@ -1,3 +1,16 @@
+> **Diagnóstico 12-11-2026: el recorte eliminó UNA SOLA celda.** Los dos logs de `snappyHexMesh` muestran, antes de recortar: `After introducing baffles : cells:568135`; selección: `Selected for keeping : 568134 cells`; y después: `After subsetting : cells:568134`. Por tanto la separación entre la arena y el exterior **no se produjo en la malla volumétrica**. Se retuvo ~99.9998 % de las celdas en ambas pruebas, pese a cambiar `insidePoint`. Esto es evidencia de conectividad/recorte, **no una identificación inequívoca de qué parte del STL o qué faceta la causa**.
+
+**Corrección al diagnóstico:** `inspect_mold_leak.sh` anterior omitía por completo `surfaceCheck` porque exigía dos opciones simultáneas: `-checkSelfIntersection` y `-outputThreshold`. La instalación del investigador no anuncia ambas. El script ahora detecta solo `checkSelfIntersection`; cuando existe, ejecuta `surfaceCheck -checkSelfIntersection STL`, y si no, `surfaceCheck STL` para comprobar al menos la topología. **Se ejecuta desde un directorio temporal creado mediante `mktemp -d`**, porque versiones de Foundation pueden generar archivos `badFaces`, `problemFaces` y `selfInterPoints.obj`. La carpeta temporal se elimina en el trap al salir; ni STL ni mallas o logs históricos se sobrescriben. La salida de `surfaceCheck` nativa en Ubuntu **todavía no se ha recibido**, así que no declarar existencia/ausencia de autointersecciones.
+
+**Comando único, sin remallar:**
+
+```bash
+cd ~/OpenFOAM/MasterProject
+git pull --ff-only
+cd cases_3d/C3D_02_metal_sand_clean
+bash scripts/inspect_mold_leak.sh
+```
+
 > **RESULTADO DEL ENSAYO `mold_offface_01` (12-11-2026): HIPÓTESIS DESCARTADA COMO SOLUCIÓN.** El investigador ejecutó el nuevo punto `insidePoint (0.0043 -0.0207 0.0259)` m, interior al STL reparado y separado de las caras regulares de `blockMesh`. **El resultado fue idéntico al ensayo original:** 568,134 celdas, 1 componente, 2 parches, volumen **0.000242142 m³ = 242.142 cm³** frente a CAD arena 102.8431 cm³, **15,164 caras `outerBox`**, 13,367 celdas cóncavas, 10 face-tets defectuosos y 2 fallos `checkMesh -allGeometry -allTopology`. El log confirmó `Selected for keeping : 568134 cells`. Por tanto, **la coincidencia del primer punto con una cara NO explica por sí sola la retención del exterior**. No crear más puntos candidatos ni aumentar el refinamiento sin estudiar cómo se cierran las superficies en el recorte de celdas.
 
 **Inspección de geometría versionada, independiente de OpenFOAM:** `mold_repaired.stl` contiene 3,084 triángulos, 1,544 vértices únicos, 4,626 aristas (todas incidentes a dos caras), orientación de aristas consistente y un componente de superficie. Su volumen firmado es ~102.843097 cm³, consistente con el CAD histórico. **Eso demuestra cierre topológico en la triangulación, NO descarta autointersecciones ni una fuga de conectividad en la malla refinada.** Hay triángulos con aristas muy cortas y proporciones muy alargadas; también se observaron triángulos delgados en el STL del hierro, así que **no atribuir causalidad únicamente a esa propiedad**.
