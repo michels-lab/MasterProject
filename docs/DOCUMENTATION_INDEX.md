@@ -1,3 +1,5 @@
+> **12-11-2026, actualización C3D-02:** [error y corrección de `allowFreeStandingZoneFaces` en las dos mallas materiales](C3D_02_DOS_MALLAS_20261112_ES.md), [manual OF14 con comando de reanudación](../OPENFOAM_COMMAND_MANUAL_ES.md). `snappyHexMesh` se detuvo sin malla física; el único reintento previsto preserva el workspace existente.
+
 > **C3D-02 12-11-2026:** [siguiente etapa — mallas geométricas independientes hierro/arena](C3D_02_DOS_MALLAS_20261112_ES.md), seguida del diseño y validación de contacto térmico. Esta ruta está **preparada, NO CORRIDA**; no reemplaza la evidencia del primer mallado fallido.
 
 > **Estado 12-11-2026:** primera malla local C3D-02 rechazada, 242.130 cm³ / 589,701 celdas / 2 checks fallidos. [Resultado y decisiones](C3D_02_MALLADO_INICIAL_20261112_ES.md) · [Script de diagnóstico sin remallar](../cases_3d/C3D_02_metal_sand_clean/scripts/diagnose_mesh_readonly.sh). No confundir configuración fuente con solver 3D verificado.
