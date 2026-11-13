@@ -1,3 +1,10 @@
+## 2026-11-13 — C3D-02: L3 retuvo el volumen total de la caja; preparar clasificación de arena por cellZone
+
+- **Ejecución real:** `mold_level3_cast_01`, `level (3 3)`, `snap false`. Después de crear baffles: 2,334,123 celdas; seleccionadas 2,334,117; **6 eliminadas**. `checkMesh`: 2,334,117 celdas, 1 región conectada, volumen **0.000242208 m³ = 242.208 cm³**, EXACTAMENTE toda la caja auxiliar de 58×72×58 mm; `outerBox=17543` caras, 225,732 celdas cóncavas, 1 chequeo exhaustivo fallido. `checkMesh rc=0` no certifica malla. El volumen CAD de arena es 102.8431 cm³.
+- **Decisión:** la mayor densidad no produjo barrera de celdas. No intentar L4 o cambiar puntos a ciegas. El STL ya pasó `surfaceCheck -checkSelfIntersection` en Foundation 14.
+- **Nueva hipótesis discriminante:** probar las etiquetas `cellZone moldVolume`, `faceZone moldInterface` y `mode inside` de Foundation 14 en el mismo STL a **nivel 2 con `snap false`**. Se agregó `scripts/test_mold_geometric_zone.sh` para un subcaso independiente `~/OpenFOAM/C3D02_materials/mold_zoned_l2_01`. Etiquetar células dentro de un STL cerrado no implica eliminar exterior ni validar interfaz. Se informarán tamaños de zona y calidad; no `subsetMesh`, `splitMeshRegions`, solver ni borrados.
+- **Ejecutado en GitHub solo a nivel estático; aún NO ejecutado en Ubuntu.** C14, metal, todas las pruebas históricas y STL intactos. Mantener `RUN_CASE_REGISTRY.csv=PREPARED_NOT_RUN`. [Protocolo](docs/C3D_02_DOS_MALLAS_20261112_ES.md).
+
 ## 13-11-2026 — C3D-02: surfaceCheck del molde correcto; preparar castellation L3 sin snap [EVIDENCIA LOCAL + NUEVO CÓDIGO NO EJECUTADO]
 
 - El investigador ejecutó finalmente `surfaceCheck -checkSelfIntersection` de OpenFOAM Foundation 14, compilación `14-7b05503f98a8`, sobre `mold_repaired.stl`. Resultado **sin triángulos ilegales, sin puntos cercanos problemáticos, cerrada (todas las aristas con dos caras), una parte conectada, una zona de normales consistentes, sin autointersecciones**, `End` y código 0. Estadísticas: **3,084 triángulos, 1,544 vértices**. No manipular ni reparar la superficie sin nueva evidencia.
