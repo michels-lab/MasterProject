@@ -1,3 +1,5 @@
+> **12-11-2026 — C3D-02 retry1 local:** hierro **47.9621 cm³**, exterior eliminado, 2,422 celdas cóncavas; arena **242.142 cm³**, exterior retenido (15,164 caras), 13,367 cóncavas y 10 face-tets deficientes. Detectado punto de arena x=3 mm sobre una cara de `blockMesh`; prueba corregida **solo mold** en [`try_mold_offface.sh`](C3D_02_metal_sand_clean/scripts/try_mold_offface.sh), no ejecutada. Sin CHT ni malla aprobada.
+
 > **Plan D, etapa 2:** [C3D-02 mallas independientes metal y arena](../docs/C3D_02_DOS_MALLAS_20261112_ES.md) reemplaza como **próxima prueba** el mallado combinado que conservó aire. Dos STL cerrados, un punto interior por material, verificaciones por separado. Código preparado; sin CFD ni CHT.
 
 > **12-11-2026: primer mallado C3D-02 local fallido.** 589,701 celdas, volumen 242.130 cm³ y 2 fallos completos `checkMesh`; un solo componente conectado. Se debe diagnosticar el log antes de modificar geometría/insidePoints. [Read-only diagnóstico](C3D_02_metal_sand_clean/scripts/diagnose_mesh_readonly.sh) · [Bitácora](../docs/C3D_02_MALLADO_INICIAL_20261112_ES.md).
