@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "audit_kind": "deterministic_full_tracked_tree",
-  "tracked_files_total": 38812,
-  "classified_files_total": 38807,
+  "tracked_files_total": 38813,
+  "classified_files_total": 38808,
   "docs_content_inspected": 136,
   "large_docs_skipped": 0,
   "excluded_reports": 5,
@@ -20,13 +20,13 @@
     "simulation_log": 3155,
     "simulation_output": 32613,
     "source": 51,
-    "test": 15,
+    "test": 16,
     "web_ui": 1,
     "workflow": 19
   },
   "finding_counts": {},
   "finding_total": 0,
-  "inventory_fingerprint": "a1497ddb53a3e4ad6b5e2ee285909965fbca0688fc452faede3aab399b4e2000",
+  "inventory_fingerprint": "e6a62007769f998b8c7765afdf5deba5794f23aeb907e6487a398ddbad2f134c",
   "evidence_fingerprint": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
   "files": [
     {
@@ -279,14 +279,14 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "c6cfa2f7692c34498ccef7cf1507da36ee11f8f7"
+      "blob": "31941c7a8e5b8944c80be6655571212534dee883"
     },
     {
       "path": "OPENFOAM_COMMAND_MANUAL_ES.md",
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "22554cb03bd2ce31ec29d4b111c6a916d3b4d492"
+      "blob": "2b24e66b86953c0e28ee7a7ee31d0a47956502ed"
     },
     {
       "path": "POSTPROCESSING_FIELD_GUIDE_ES.md",
@@ -307,14 +307,14 @@
       "role": "bitacora",
       "purpose": "technical/audit change history",
       "certainty": "rule",
-      "blob": "a3202f5fbed22aef281f1e9596b7d8af1a1b2ac9"
+      "blob": "cbbac6f74a511a5e1ec3ad37f3b9a03369434e70"
     },
     {
       "path": "PROJECT_AUDIT_LOG_ES.md",
       "role": "bitacora",
       "purpose": "technical/audit change history",
       "certainty": "rule",
-      "blob": "09b3a4c83266d5a5cba9f26a02d45d3a25434611"
+      "blob": "aa5285f61b41f042befc8c41e5c8b34d3d4f433d"
     },
     {
       "path": "README.md",
@@ -356,7 +356,7 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "3e9042939f57c80f8f0445c4a585d6f932cc90b7"
+      "blob": "66eeb0891382a86f2c9b20f2a144d6de09c41a82"
     },
     {
       "path": "analysis_results/c11_energy2_test/summary.md",
@@ -1070,7 +1070,7 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "04589d1434bebea7a4dc18366948d652d56f627c"
+      "blob": "04552d3a1cc8f999173f8757fb0e2324cbfa7e06"
     },
     {
       "path": "cases_3d/C3D_02_metal_sand_clean/constant/geometry/README.md",
@@ -1199,6 +1199,13 @@
       "blob": "059260f73816bb37e59ac8aa9d65b0f8cc4646c9"
     },
     {
+      "path": "cases_3d/C3D_02_metal_sand_clean/scripts/test_mold_geometric_zone.sh",
+      "role": "test",
+      "purpose": "code/test implementation",
+      "certainty": "rule",
+      "blob": "9ce5fc702b38d0133813b1ddd45a949eb4fb9abe"
+    },
+    {
       "path": "cases_3d/C3D_02_metal_sand_clean/scripts/test_mold_level3_castellation.sh",
       "role": "test",
       "purpose": "code/test implementation",
@@ -1259,7 +1266,7 @@
       "role": "test",
       "purpose": "code/test implementation",
       "certainty": "rule",
-      "blob": "2453a0a6ceef2126ce699f52c41631b7996f1556"
+      "blob": "5b4aeb15cde7c5e62c36fab56899b381945c9845"
     },
     {
       "path": "cases_3d/README.md",
@@ -270906,7 +270913,7 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "e18cecc86957b1cf993ad03b056f6f0aa1987d88"
+      "blob": "d0bf230ba6f3a885639263eacd12d9d461ac908d"
     },
     {
       "path": "docs/C3D_02_MALLADO_INICIAL_20261112_ES.md",
@@ -270934,7 +270941,7 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "1d9273f7adb8a1af64c30f5a0ef61551ec4a22e0"
+      "blob": "bf37006df0fc258c201a6a44c5c2b0c1cd964eca"
     },
     {
       "path": "docs/DOCUMENT_SYNC_20261110_ES.md",
