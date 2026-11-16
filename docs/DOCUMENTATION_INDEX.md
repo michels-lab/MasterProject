@@ -1,3 +1,5 @@
+> **15-11-2026, C3D-02:** [medición local de moldVolume 103.409 cm³ y protocolo de extracción en copia](C3D_02_DOS_MALLAS_20261112_ES.md). Nuevo `scripts/extract_mold_zone_copy.sh` usa `subsetMesh -cellZone moldVolume -noFields` exclusivamente en carpeta nueva. Pendientes fronteras/convexidad, no CFD.
+
 > **13-11-2026 — C3D-02:** [geometric zoning result](C3D_02_DOS_MALLAS_20261112_ES.md): `moldVolume` 274,788 cells and `moldInterface` 97,492 faces, but global box volume 242.208 cm³ and checkMesh failure. Next operation is **read-only zone-volume measurement** through `scripts/measure_mold_zone_volume.sh`, *not* new meshing or CFD.
 
 > **13-11-2026, C3D-02:** el aumento de refinamiento a L3 conservó el volumen total de la caja (242.208 cm³) y eliminó solo seis celdas. [Registro y nueva prueba explícita de cellZone en L2](C3D_02_DOS_MALLAS_20261112_ES.md); no se publican mallas CHT ni CFD sin checks.
