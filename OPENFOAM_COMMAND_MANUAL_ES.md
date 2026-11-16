@@ -1,3 +1,20 @@
+## 15-11-2026 — C3D-02: localizar celdas malas con checkMesh sin modificar casos
+
+**Resultado local ya confirmado:** la arena fue extraída de la zona etiquetada por `subsetMesh` en `mold_extracted_l2_01`, volumen correcto y sin `outerBox`. Sin embargo, `checkMesh` reportó **22,737 celdas cóncavas, una de determinante <0.001 y dos verificaciones fallidas**. El hierro tiene 2,422 cóncavas y también está rechazado. `oldInternalFaces` de la arena tiene 97,492 caras con `type=internal`, no son los parches CHT entre materiales.
+
+Para generar evidencia de localización, usar la **utilidad `checkMesh` de Foundation 14**, que ofrece `-writeSurfaces` (reconstruye caras de celdas/faceSets problemáticos) y `-writeSets` (puntos problemáticos), usualmente en VTK. [Referencia Foundation](https://github.com/OpenFOAM/OpenFOAM-14/blob/master/src/functionObjects/utilities/checkMesh/checkMesh.H). No modificar controles de calidad para ocultar el fallo:
+
+```bash
+cd ~/OpenFOAM/MasterProject
+git pull --ff-only
+cd cases_3d/C3D_02_metal_sand_clean
+bash scripts/inspect_extracted_mesh_quality.sh
+```
+
+Script: verifica los fallos previos y que ambas mallas no contengan enlaces, y copia `constant/polyMesh` y `controlDict` de hierro y de arena extraída a `~/OpenFOAM/C3D02_materials/quality_evidence_01/{metal,mold}`. Sobre esas copias se ejecuta `checkMesh -case ... -allGeometry -allTopology` con `-writeSurfaces`/`-writeSets` según el `-help` local; guarda `log.checkMesh.evidence`, detecta `Failed N mesh checks` aunque el return code sea 0, lista parches y rutas de archivos VTK, cuando se hayan exportado. **No remalla, no desplaza puntos y no ejecuta CFD.** La carpeta única `quality_evidence_01` se protege contra sobrescritura. Para interpretar defectos, revisar las geometrías VTK y log antes de cualquier ensayo con snapping.
+
+---
+
 ## 15-11-2026 — Extraer moldVolume con subsetMesh SOLO EN COPIA (Foundation 14)
 
 La medición real `foamPostProcess` confirmó `cellZone moldVolume`: **274,788 celdas, 0.000103409 m³ = 103.409 cm³**, desviación **+0.550 %** respecto al CAD arena de 102.843 cm³. `checkMesh` original sigue fallando por 49,034 cóncavas. El próximo paso NO es seguir generando mallas con `snappyHexMesh`, sino aislar estas celdas etiquetadas.
