@@ -1,3 +1,10 @@
+## 2026-11-15 — C3D-02: se midió el volumen REAL de moldVolume; extracción en copia preparada
+
+- **Ejecución Ubuntu verificada por log:** `foamPostProcess` creó `volFieldValue moldZoneVolume`; identificó 274,788 celdas en `cellZone moldVolume` y reportó **0.000103409 m³ = 103.409 cm³**, frente a **0.00010284309608 m³ = 102.8431 cm³** para el STL reparado: diferencia **+0.550 %**. El filtro exploratorio ±5 % se cumplió. La malla global del ensayo tiene 568,135 celdas, volumen 242.208 cm³, `outerBox` 15164 caras y 49,034 celdas cóncavas, **NO aprobada**.
+- La etiqueta geométrica es cuantitativamente plausible pero **no es una región física extraída ni prueba calidad de la interfaz**. Continúa sin definirse `mappedWall` recíproco metal-arena.
+- Nuevo script `scripts/extract_mold_zone_copy.sh` preparado para crear una **única copia física nueva** `mold_extracted_l2_01`, usar la opción **`subsetMesh -cellZone moldVolume -noFields` de Foundation 14** solo allí y verificar con `checkMesh -allGeometry -allTopology` las 274,788 celdas, volumen, exterior, conectividad, calidad y parches. El código fuente oficial advierte que `subsetMesh` NO preserva los tipos de fronteras originales; esta malla es diagnóstica, no CHT.
+- **Extracción NO ejecutada en Ubuntu todavía**; CI verifica únicamente sintaxis, integridad de C14 y restricciones de escritura. No cambiar STL, C14, otros casos ni registros de ejecución. `RUN_CASE_REGISTRY.csv` permanece `PREPARED_NOT_RUN`. [Bitácora completa](docs/C3D_02_DOS_MALLAS_20261112_ES.md).
+
 ## 2026-11-13 — C3D-02: zona `moldVolume` encontrada, aún sin validar volumen zonal [EVIDENCIA LOCAL]
 
 - `test_mold_geometric_zone.sh` completó `snappyHexMesh` en `mold_zoned_l2_01` usando `mode inside`, `cellZone moldVolume` y `faceZone moldInterface`, a nivel L2 y `snap false`. Se obtuvieron **568,135 celdas globales, 274,788 celdas etiquetadas en `moldVolume` y 97,492 caras `moldInterface`**. La asignación geométrica de zonas fue efectiva.
