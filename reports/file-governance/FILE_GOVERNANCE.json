@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "audit_kind": "deterministic_full_tracked_tree",
-  "tracked_files_total": 38815,
-  "classified_files_total": 38810,
+  "tracked_files_total": 38816,
+  "classified_files_total": 38811,
   "docs_content_inspected": 136,
   "large_docs_skipped": 0,
   "excluded_reports": 5,
@@ -19,14 +19,14 @@
     "simulation_input": 2678,
     "simulation_log": 3155,
     "simulation_output": 32613,
-    "source": 53,
+    "source": 54,
     "test": 16,
     "web_ui": 1,
     "workflow": 19
   },
   "finding_counts": {},
   "finding_total": 0,
-  "inventory_fingerprint": "19cff74e433d9fe75752e2353d5f66506c4ab0c2168b41dc577d95d31e8acc73",
+  "inventory_fingerprint": "07bb535336c85caadad6004b4d1316c0017fca48483cf33604137737d6092462",
   "evidence_fingerprint": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
   "files": [
     {
@@ -279,14 +279,14 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "a923c1d5fa8b0b63dfa31e02609a127e3c9e96ad"
+      "blob": "55b06b1c26b0f38cc17491947537639cdbd89298"
     },
     {
       "path": "OPENFOAM_COMMAND_MANUAL_ES.md",
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "67077e4d4c2dab2cf7dc6654770dd0fa5c1a21bd"
+      "blob": "887466f654e12c795df7e78afec5905a63d7eec7"
     },
     {
       "path": "POSTPROCESSING_FIELD_GUIDE_ES.md",
@@ -307,14 +307,14 @@
       "role": "bitacora",
       "purpose": "technical/audit change history",
       "certainty": "rule",
-      "blob": "13fd728894a5607ee2773ca15f4e169abfd6a3b0"
+      "blob": "56a8543733fd42687be2f340c3cac86ada3d4ef8"
     },
     {
       "path": "PROJECT_AUDIT_LOG_ES.md",
       "role": "bitacora",
       "purpose": "technical/audit change history",
       "certainty": "rule",
-      "blob": "cec515e8285e0f0fa1a13a870f959b6fe8a6e3f5"
+      "blob": "bceb68ff815ffa657347064f9cf7115e3702f599"
     },
     {
       "path": "README.md",
@@ -356,7 +356,7 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "30eb94b4bdbbbe0f0eac8da9ca55e8c4f2b445f9"
+      "blob": "12e33046f1c270c78bbcb729b7bfa1ad0919ab9e"
     },
     {
       "path": "analysis_results/c11_energy2_test/summary.md",
@@ -1070,7 +1070,7 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "5c5680b351d8e1eddad9579eaf59b8b50a95159c"
+      "blob": "7431d45f5ff5bade84390047b3378a4d352c2e21"
     },
     {
       "path": "cases_3d/C3D_02_metal_sand_clean/constant/geometry/README.md",
@@ -1162,6 +1162,13 @@
       "purpose": "code/test implementation",
       "certainty": "rule",
       "blob": "3ccaeb2b469453cd4bf06bd848bb7b64a3c0d041"
+    },
+    {
+      "path": "cases_3d/C3D_02_metal_sand_clean/scripts/inspect_extracted_mesh_quality.sh",
+      "role": "source",
+      "purpose": "code/test implementation",
+      "certainty": "rule",
+      "blob": "e02a471b441bbdf16a687476187f2106e1c9967c"
     },
     {
       "path": "cases_3d/C3D_02_metal_sand_clean/scripts/inspect_mold_leak.sh",
@@ -1280,7 +1287,7 @@
       "role": "test",
       "purpose": "code/test implementation",
       "certainty": "rule",
-      "blob": "5f80c1561da2e82f9b872fa8335add6a8ada1e71"
+      "blob": "1624758cad02d08cf951cb9c76535138a04dd8cc"
     },
     {
       "path": "cases_3d/README.md",
@@ -270927,7 +270934,7 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "049ec7d7350cd76b20a4d111d5485e41917638a8"
+      "blob": "83cdf9f8510070cd36b64ecca0de43094eecde4d"
     },
     {
       "path": "docs/C3D_02_MALLADO_INICIAL_20261112_ES.md",
@@ -270955,7 +270962,7 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "7507fe0b9583030ef64ee2d2e966dd8a5f08d77b"
+      "blob": "8ad6c18120d48bb50a122b7a4d546e3c282f5475"
     },
     {
       "path": "docs/DOCUMENT_SYNC_20261110_ES.md",
