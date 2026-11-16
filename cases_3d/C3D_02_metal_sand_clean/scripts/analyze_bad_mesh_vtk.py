@@ -8,6 +8,7 @@ The exact bad-cell counts come from the existing checkMesh logs.
 from __future__ import annotations
 
 import argparse
+from collections import deque
 import math
 import re
 import struct
@@ -58,7 +59,7 @@ def vtk_points(path: Path) -> Iterator[tuple[float, float, float]]:
                     raise ValueError("VTK contiene coordenadas no finitas")
                 yield x, y, z
         else:
-            buf: list[str] = []
+            buf: deque[str] = deque()
             seen = 0
             for raw in handle:
                 try:
@@ -66,7 +67,7 @@ def vtk_points(path: Path) -> Iterator[tuple[float, float, float]]:
                 except UnicodeDecodeError as exc:
                     raise ValueError("Bloque POINTS ASCII ilegible") from exc
                 while len(buf) >= 3 and seen < n:
-                    x, y, z = (float(buf.pop(0)), float(buf.pop(0)), float(buf.pop(0)))
+                    x, y, z = (float(buf.popleft()), float(buf.pop(0)), float(buf.pop(0)))
                     if not all(math.isfinite(v) for v in (x, y, z)):
                         raise ValueError("VTK contiene coordenadas no finitas")
                     yield x, y, z
@@ -94,7 +95,7 @@ def summary(path: Path, keep_points: bool = False) -> dict:
             high[k] = max(high[k], val)
             weighted_sum[k] += val
         y_mm = p[1] * 1000
-        if AXIAL_MM[0] <= y_mm <= AXIAL_MM[-1]:
+        if AXIAL_MM[0] - 0.001 <= y_mm <= AXIAL_MM[-1] + 0.001:
             index = min(3, max(0, int((y_mm - AXIAL_MM[0]) / 16.375)))
             counts[index] += 1
         else:
