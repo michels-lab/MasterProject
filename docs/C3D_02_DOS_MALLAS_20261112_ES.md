@@ -1,3 +1,25 @@
+## 15-11-2026 — Extracción real de moldVolume confirmada; calidad aún rechazada
+
+**Prueba local REAL `scripts/extract_mold_zone_copy.sh` terminada con OpenFOAM Foundation 14.** La extracción de la zona geométrica `moldVolume` desde `mold_zoned_l2_01` mediante `subsetMesh -cellZone moldVolume -noFields` se efectuó **exclusivamente en la copia** `~/OpenFOAM/C3D02_materials/mold_extracted_l2_01`. `checkMesh -allGeometry -allTopology` encontró:
+- **274,788 celdas**, igual a las etiquetas de la zona. **Volumen 0.000103409 m³ = 103.409 cm³**, idéntico al volumen zonal medido anteriormente; CAD arena 102.8431 cm³ (**+0.550 %**).
+- **1 región conectada**, `outerBox`: **0 caras**. El dominio de aire quedó excluido en la COPIA, no en la malla madre.
+- **Calidad RECHAZADA: 22,737 celdas cóncavas (8.27 % del total) y 1 celda de determinante pequeño (<0.001)**, `Failed 2 mesh checks`, aunque el proceso `checkMesh` devolvió código 0. `Face tets OK` y `Cell volumes OK` no invalidan los dos fallos.
+- **Parches derivados:** `outerBox type=patch nFaces=0` y `oldInternalFaces type=internal nFaces=97492`. Este último es **solo una frontera generada por subsetMesh, NO una interfaz térmica funcional**; `faceZone moldInterface` anterior no es un `mappedWall` recíproco.
+- La malla del hierro previo alcanzó 85,332 celdas y volumen 47.9621 cm³ (CAD 47.9875), `outerBox=0`, pero tenía **2,422 cóncavas y un fallo exhaustivo**. **Ninguno de los dos sólidos está todavía listo para el solver.**
+
+**Siguiente paso NUEVO: estudiar la distribución espacial de los defectos ANTES de tocar `snapControls` o inventar nuevos umbrales.** Se preparó `scripts/inspect_extracted_mesh_quality.sh` (por correr en laptop) que copia físicamente `metal` y `mold_extracted_l2_01` a `~/OpenFOAM/C3D02_materials/quality_evidence_01/{metal,mold}`, y ejecuta **`checkMesh -allGeometry -allTopology -writeSurfaces -writeSets`** cuando la instalación anuncia esas opciones. Se guardan logs de cada material y conjuntos de geometría problemática, generalmente VTK bajo `postProcessing`, permitiendo visualizarlos en ParaView sin tocar las mallas anteriores. El script muestra métricas, tipos de parches y rutas de evidencia. **Es diagnóstico, no suavizado, ni remallado, ni CFD.**
+
+```bash
+cd ~/OpenFOAM/MasterProject
+git pull --ff-only
+cd cases_3d/C3D_02_metal_sand_clean
+bash scripts/inspect_extracted_mesh_quality.sh
+```
+
+**Reglas de aceptación vigentes:** no declarar ni ejecutar CHT/CFD hasta resolver celdas cóncavas/determinantes y demostrar superficies térmicas pertinentes del hierro y de la arena, además de mapear o acoplar ambas geometrías. Las 97,492 caras del parche de extracción NO necesariamente coinciden con la superficie de contacto metal–arena. Guía de opciones `checkMesh`: [Foundation 14 fuente oficial](https://github.com/OpenFOAM/OpenFOAM-14/blob/master/src/functionObjects/utilities/checkMesh/checkMesh.H).
+
+---
+
 ## 15-11-2026 — ÉXITO de volumen zonal; preparar extracción física en copia
 
 **Salida nativa REAL proporcionada por el investigador:** ejecutó `bash scripts/measure_mold_zone_volume.sh` y `foamPostProcess` de OpenFOAM Foundation 14 informó para `cellZone moldVolume`: **274,788 celdas**, `volume = 0.000103409` m³ = **103.40900 cm³**. Frente al volumen CAD de arena `0.00010284309608` m³ = **102.84310 cm³**, desviación **+0.550 %**. Esto confirma volumen zonal coherente; no confundir con el **volumen global de 242.208 cm³**, correspondiente a toda la caja auxiliar. Fuente del resultado: salida Ubuntu del investigador de 15-11-2026, `foamPostProcess -constant` en shadow case temporal. El postprocesado preservó archivos anteriores.
