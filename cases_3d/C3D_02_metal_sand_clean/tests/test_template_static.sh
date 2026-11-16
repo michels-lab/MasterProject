@@ -175,4 +175,20 @@ if grep -Eq '^[[:space:]]*(foamMultiRun|foamRun|snappyHexMesh|blockMesh|topoSet|
     exit 1
 fi
 echo "OK: extraccion de zona medida solo en copia física, con checkMesh completo."
+# Mesh-quality forensic evidence must operate on two fresh PHYSICAL COPIES.
+quality="$ROOT/scripts/inspect_extracted_mesh_quality.sh"
+test -f "$quality"
+grep -Fq 'quality_evidence_01' "$quality"
+grep -Fq 'mold_extracted_l2_01' "$quality"
+grep -Fq 'log.checkMesh.retry1' "$quality"
+grep -Fq 'cp -a -- "$SRC/constant/polyMesh" "$DEST/constant/polyMesh"' "$quality"
+grep -Fq 'checkMesh -case "$DEST"' "$quality"
+grep -Fq -- '-writeSurfaces' "$quality"
+grep -Fq -- '-writeSets' "$quality"
+grep -Fq 'oldInternalFaces type=internal' "$quality"
+if grep -Eq '^[[:space:]]*(blockMesh|snappyHexMesh|subsetMesh|splitMeshRegions|topoSet|foamMultiRun|foamRun)([[:space:]]|$)' "$quality"; then
+    echo "ERROR: evidencia de calidad no puede alterar ni remallar regiones."
+    exit 1
+fi
+echo "OK: diagnóstico VTK checkMesh sobre copias independientes, sin CFD."
 echo "NO certifica malla física, contacto térmico ni CFD."

@@ -1,3 +1,16 @@
+## 2026-11-15 — Inspect copied metal and extracted mold for bad cells; no further meshing yet
+
+Local Foundation 14 extraction from `moldVolume` completed correctly: 274,788 cells, 103.409 cm³ (+0.550% CAD), zero outerBox and one connected region. **Quality still failed:** 22,737 concave cells and one cell with determinant <0.001 (two checkMesh failures). The extracted patch `oldInternalFaces type=internal nFaces=97492` is NOT a conjugate heat-transfer interface. Iron remains volumetrically isolated but with 2,422 concave cells/one failed check. Use `scripts/inspect_extracted_mesh_quality.sh` on fresh separate physical copies under `quality_evidence_01/{metal,mold}`; it invokes Foundation 14 `checkMesh -allGeometry -allTopology` plus supported `-writeSurfaces` and `-writeSets`, reports patch info and exports geometry-problem VTK sets (if supported). Older meshes and CAD untouched, no remeshing, no CFD. [Scientific record](docs/C3D_02_DOS_MALLAS_20261112_ES.md).
+
+```bash
+cd ~/OpenFOAM/MasterProject
+git pull --ff-only
+cd cases_3d/C3D_02_metal_sand_clean
+bash scripts/inspect_extracted_mesh_quality.sh
+```
+
+---
+
 ## 2026-11-15 — Extract the measured moldVolume ONLY into a physical copy (Foundation 14)
 
 The real `foamPostProcess` result is **274,788 moldVolume cells** and **103.409 cm³**, +0.550% against CAD mold 102.8431 cm³. This is the zone's volume, not the global box; full parent mesh still has 49,034 concave cells and no accepted quality. Foundation 14 source supports `subsetMesh -cellZone moldVolume -noFields`, with overwrite being the default (deprecated `-overwrite` switch). `subsetMesh` does not preserve attached boundary types; a generated `oldInternalFaces` patch is **not** a thermal coupling interface.

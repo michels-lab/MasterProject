@@ -1,3 +1,12 @@
+## 2026-11-15 — C3D-02: arena físicamente extraída en copia; calidad NO aprobada [EVIDENCIA LOCAL]
+
+- Investigador ejecutó `scripts/extract_mold_zone_copy.sh`: `subsetMesh` concluyó y validó la copia `mold_extracted_l2_01`: **274,788 celdas**, volumen **0.000103409 m³ (103.409 cm³; +0.550% vs CAD)**, una componente, `outerBox=0`. La zona medida `moldVolume` y la extracción física concuerdan exactamente en celdas/volumen.
+- `checkMesh -allGeometry -allTopology` en copia: `Face tets OK`, pero **22,737 celdas cóncavas** y **una celda con determinante <0.001**, **2 checks fallidos** (código de retorno 0 NO indica aprobación). Arena RECHAZADA para CFD.
+- Fronteras de la copia: `outerBox type=patch nFaces=0`, `oldInternalFaces type=internal nFaces=97492`. El segundo no es interfaz térmica ni par recíproco compatible con metal; diseño de frontera pendiente.
+- Hierro anterior: **85,332 celdas, 47.9621 cm³, 2,422 celdas cóncavas/1 check fallido**. Ambas mallas conservan problemas. **No ejecutar solver ni crear `mappedWall` sin validación geométrica.**
+- Nuevo `scripts/inspect_extracted_mesh_quality.sh` preparado: se ejecutará `checkMesh` con exportación `-writeSurfaces -writeSets` VTK, **solo sobre COPIAS FÍSICAS** de hierro y arena en `quality_evidence_01`, con diagnóstico de celdas/zonas defectuosas, parches y calidad, sin cambiar geometrías ni materiales C14. **Aún NO ejecutado**. [Bitácora técnica](docs/C3D_02_DOS_MALLAS_20261112_ES.md).
+- `RUN_CASE_REGISTRY.csv` conserva `PREPARED_NOT_RUN`; no hay CHT/CFD real 3D.
+
 ## 2026-11-15 — C3D-02: se midió el volumen REAL de moldVolume; extracción en copia preparada
 
 - **Ejecución Ubuntu verificada por log:** `foamPostProcess` creó `volFieldValue moldZoneVolume`; identificó 274,788 celdas en `cellZone moldVolume` y reportó **0.000103409 m³ = 103.409 cm³**, frente a **0.00010284309608 m³ = 102.8431 cm³** para el STL reparado: diferencia **+0.550 %**. El filtro exploratorio ±5 % se cumplió. La malla global del ensayo tiene 568,135 celdas, volumen 242.208 cm³, `outerBox` 15164 caras y 49,034 celdas cóncavas, **NO aprobada**.

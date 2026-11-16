@@ -1,3 +1,5 @@
+> **15-11-2026 — C3D-02 extracción validada por volumen, calidad fallida:** [bitácora de `moldVolume` (274,788 celdas, 103.409 cm³, outerBox=0)](C3D_02_DOS_MALLAS_20261112_ES.md), 22,737 cóncavas + un determinante bajo; [script de diagnóstico de defectos en copias](../cases_3d/C3D_02_metal_sand_clean/scripts/inspect_extracted_mesh_quality.sh). Aún no hay interfaz CHT ni CFD.
+
 > **15-11-2026, C3D-02:** [medición local de moldVolume 103.409 cm³ y protocolo de extracción en copia](C3D_02_DOS_MALLAS_20261112_ES.md). Nuevo `scripts/extract_mold_zone_copy.sh` usa `subsetMesh -cellZone moldVolume -noFields` exclusivamente en carpeta nueva. Pendientes fronteras/convexidad, no CFD.
 
 > **13-11-2026 — C3D-02:** [geometric zoning result](C3D_02_DOS_MALLAS_20261112_ES.md): `moldVolume` 274,788 cells and `moldInterface` 97,492 faces, but global box volume 242.208 cm³ and checkMesh failure. Next operation is **read-only zone-volume measurement** through `scripts/measure_mold_zone_volume.sh`, *not* new meshing or CFD.
