@@ -1,3 +1,20 @@
+## 15-11-2026 — Analizar superficies de defectos VTK sin remallado ni dependencias
+
+Después de ejecutar `checkMesh -allGeometry -allTopology -writeSurfaces -writeSets`, se generaron 4 archivos de superficies VTK bajo `~/OpenFOAM/C3D02_materials/quality_evidence_01/{metal,mold}/postProcessing/checkMesh/constant`. **Hierro:** `concaveCells.vtk` (2,422 celdas malas). **Arena:** `concaveCells.vtk` (22,737), `underdeterminedCells.vtk` (1) y `twoInternalFacesCells.vtk` (1 advertencia topológica). Ambas mallas están rechazadas; el segundo tipo de aviso no es necesariamente un tercer fallo independiente.
+
+Para inspeccionar espacialmente los VTK sin abrir ParaView:
+
+```bash
+cd ~/OpenFOAM/MasterProject
+git pull --ff-only
+cd cases_3d/C3D_02_metal_sand_clean
+python3 scripts/analyze_bad_mesh_vtk.py
+```
+
+El nuevo lector Python acepta legacy VTK en ASCII y binario, mide cajas `X/Y/Z` en mm, centroide de **vértices** exportados, distribución axial Y por bandas de −65.5 a 0 mm y distancia espacial entre las 2 anomalías puntuales del molde. **No equiparar porcentaje de puntos VTK con porcentaje de CELDAS defectuosas por intervalo**, porque una cara/celda aporta varios vértices. No escribe archivos ni ejecuta OpenFOAM. Comparar después en ParaView con el STL y con `metal`/`mold` antes de corregir snapping. Documentación Foundation: https://github.com/OpenFOAM/OpenFOAM-14/blob/master/src/functionObjects/utilities/checkMesh/checkMesh.H .
+
+---
+
 ## 15-11-2026 — C3D-02: localizar celdas malas con checkMesh sin modificar casos
 
 **Resultado local ya confirmado:** la arena fue extraída de la zona etiquetada por `subsetMesh` en `mold_extracted_l2_01`, volumen correcto y sin `outerBox`. Sin embargo, `checkMesh` reportó **22,737 celdas cóncavas, una de determinante <0.001 y dos verificaciones fallidas**. El hierro tiene 2,422 cóncavas y también está rechazado. `oldInternalFaces` de la arena tiene 97,492 caras con `type=internal`, no son los parches CHT entre materiales.

@@ -1,3 +1,18 @@
+## 2026-11-15 — Read-only spatial analysis of native checkMesh defect VTKs
+
+The user completed the Foundation 14 `-writeSurfaces -writeSets` audit on physical copies: **iron 2,422 concave cells; sand 22,737 concave cells + one low-determinant cell and one topology-set warning**. Four VTK legacy surface files now exist under `quality_evidence_01`. The new `scripts/analyze_bad_mesh_vtk.py` reads those four files without external packages, outputs X/Y/Z bounds and exported-vertex axial histograms, and compares distance between the two localized sand anomaly surfaces. It performs **no remeshing, correction, writes or CFD**. Output fractions are *VTK surface vertex* counts, **not volume-cell frequencies**.
+
+```bash
+cd ~/OpenFOAM/MasterProject
+git pull --ff-only
+cd cases_3d/C3D_02_metal_sand_clean
+python3 scripts/analyze_bad_mesh_vtk.py
+```
+
+Legacy VTK ASCII/BINARY parser synthetic regressions are performed by static CI. See [scientific evidence](docs/C3D_02_DOS_MALLAS_20261112_ES.md).
+
+---
+
 ## 2026-11-15 — Inspect copied metal and extracted mold for bad cells; no further meshing yet
 
 Local Foundation 14 extraction from `moldVolume` completed correctly: 274,788 cells, 103.409 cm³ (+0.550% CAD), zero outerBox and one connected region. **Quality still failed:** 22,737 concave cells and one cell with determinant <0.001 (two checkMesh failures). The extracted patch `oldInternalFaces type=internal nFaces=97492` is NOT a conjugate heat-transfer interface. Iron remains volumetrically isolated but with 2,422 concave cells/one failed check. Use `scripts/inspect_extracted_mesh_quality.sh` on fresh separate physical copies under `quality_evidence_01/{metal,mold}`; it invokes Foundation 14 `checkMesh -allGeometry -allTopology` plus supported `-writeSurfaces` and `-writeSets`, reports patch info and exports geometry-problem VTK sets (if supported). Older meshes and CAD untouched, no remeshing, no CFD. [Scientific record](docs/C3D_02_DOS_MALLAS_20261112_ES.md).
