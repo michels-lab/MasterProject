@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # C3D-02. Extract a pre-existing moldVolume cellZone IN A NEW COPY ONLY.
-# OpenFOAM Foundation 14: subsetMesh -cellZone moldVolume -noFields.\n# Overwrite is the v14 default, but applies ONLY to the separate copy.
+# OpenFOAM Foundation 14: subsetMesh -cellZone moldVolume -noFields.
+# Overwrite is the v14 default, but applies ONLY to the separate copy.
 # No snappyHexMesh, no re-meshing, no original-case modification, no CFD.
 source /opt/openfoam14/etc/bashrc
 set -euo pipefail
