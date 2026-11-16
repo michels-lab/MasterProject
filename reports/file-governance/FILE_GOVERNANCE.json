@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "audit_kind": "deterministic_full_tracked_tree",
-  "tracked_files_total": 38816,
-  "classified_files_total": 38811,
+  "tracked_files_total": 38817,
+  "classified_files_total": 38812,
   "docs_content_inspected": 136,
   "large_docs_skipped": 0,
   "excluded_reports": 5,
@@ -19,14 +19,14 @@
     "simulation_input": 2678,
     "simulation_log": 3155,
     "simulation_output": 32613,
-    "source": 54,
+    "source": 55,
     "test": 16,
     "web_ui": 1,
     "workflow": 19
   },
   "finding_counts": {},
   "finding_total": 0,
-  "inventory_fingerprint": "07bb535336c85caadad6004b4d1316c0017fca48483cf33604137737d6092462",
+  "inventory_fingerprint": "de76408a4d296861e000bb0fe5a7d69c00ba7704dfdfed50e5750f33186c5f4b",
   "evidence_fingerprint": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
   "files": [
     {
@@ -279,14 +279,14 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "55b06b1c26b0f38cc17491947537639cdbd89298"
+      "blob": "c59c4ff252faad1809a9ce5eea8a19bea69b47b9"
     },
     {
       "path": "OPENFOAM_COMMAND_MANUAL_ES.md",
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "887466f654e12c795df7e78afec5905a63d7eec7"
+      "blob": "e018f04e12ba97e4d55cf488b45d6bbcbc23d5f6"
     },
     {
       "path": "POSTPROCESSING_FIELD_GUIDE_ES.md",
@@ -307,14 +307,14 @@
       "role": "bitacora",
       "purpose": "technical/audit change history",
       "certainty": "rule",
-      "blob": "56a8543733fd42687be2f340c3cac86ada3d4ef8"
+      "blob": "c39892065d8a70662104eda191e5986d9a4d4783"
     },
     {
       "path": "PROJECT_AUDIT_LOG_ES.md",
       "role": "bitacora",
       "purpose": "technical/audit change history",
       "certainty": "rule",
-      "blob": "bceb68ff815ffa657347064f9cf7115e3702f599"
+      "blob": "732e3fd3717202dfe9df10929e18478ea501b3e7"
     },
     {
       "path": "README.md",
@@ -356,7 +356,7 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "12e33046f1c270c78bbcb729b7bfa1ad0919ab9e"
+      "blob": "fa36b54255d18d66372c401403d9855b65d65e09"
     },
     {
       "path": "analysis_results/c11_energy2_test/summary.md",
@@ -1070,7 +1070,7 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "7431d45f5ff5bade84390047b3378a4d352c2e21"
+      "blob": "7f57aa8631decd11bc5640048be216c1ee307414"
     },
     {
       "path": "cases_3d/C3D_02_metal_sand_clean/constant/geometry/README.md",
@@ -1148,6 +1148,13 @@
       "purpose": "OpenFOAM case field/dictionary input (content unvalidated)",
       "certainty": "inferred",
       "blob": "ff2f209d29f4e789ab1e35d8e6918066e996eb94"
+    },
+    {
+      "path": "cases_3d/C3D_02_metal_sand_clean/scripts/analyze_bad_mesh_vtk.py",
+      "role": "source",
+      "purpose": "code/test implementation",
+      "certainty": "rule",
+      "blob": "5da670857294f8b3ddbef8858477a65f9201ebeb"
     },
     {
       "path": "cases_3d/C3D_02_metal_sand_clean/scripts/diagnose_mesh_readonly.sh",
@@ -1287,7 +1294,7 @@
       "role": "test",
       "purpose": "code/test implementation",
       "certainty": "rule",
-      "blob": "1624758cad02d08cf951cb9c76535138a04dd8cc"
+      "blob": "e1063b91af37fca74bc3cd74900d1c40b5ebacc9"
     },
     {
       "path": "cases_3d/README.md",
@@ -270934,7 +270941,7 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "83cdf9f8510070cd36b64ecca0de43094eecde4d"
+      "blob": "1f235d9c6797c6ebecf316b2752d30b24e361403"
     },
     {
       "path": "docs/C3D_02_MALLADO_INICIAL_20261112_ES.md",
