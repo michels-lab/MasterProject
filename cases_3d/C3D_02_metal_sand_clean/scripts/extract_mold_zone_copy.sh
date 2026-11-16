@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # C3D-02. Extract a pre-existing moldVolume cellZone IN A NEW COPY ONLY.
-# OpenFOAM Foundation 14: subsetMesh -cellZone moldVolume -noFields -overwrite.
+# OpenFOAM Foundation 14: subsetMesh -cellZone moldVolume -noFields.\n# Overwrite is the v14 default, but applies ONLY to the separate copy.
 # No snappyHexMesh, no re-meshing, no original-case modification, no CFD.
 source /opt/openfoam14/etc/bashrc
 set -euo pipefail
@@ -43,7 +43,7 @@ command -v subsetMesh >/dev/null && command -v checkMesh >/dev/null || {
     echo "ERROR: utilidades de malla no disponibles."; exit 2;
 }
 help="$(subsetMesh -help 2>&1 || true)"
-for opt in -cellZone -noFields -overwrite; do
+for opt in -cellZone -noFields; do
     if ! grep -Fq -- "$opt" <<< "$help"; then
         echo "ERROR: Foundation local no anuncia $opt para subsetMesh."; exit 2;
     fi
@@ -69,7 +69,7 @@ cp -p -- "$SOURCE/system/controlDict" "$DEST/system/controlDict"
 }
 
 echo "=== UTILIDAD DE EXTRACCION DE FOUNDATION 14 ==="
-if ! subsetMesh -case "$DEST" -cellZone "$ZONE" -noFields -overwrite \
+if ! subsetMesh -case "$DEST" -cellZone "$ZONE" -noFields \
     > "$DEST/log.subsetMesh" 2>&1; then
     echo "subsetMesh no terminó; revisar log.subsetMesh. No se tocó el origen."
     tail -n 65 "$DEST/log.subsetMesh"
