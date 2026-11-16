@@ -191,4 +191,14 @@ if grep -Eq '^[[:space:]]*(blockMesh|snappyHexMesh|subsetMesh|splitMeshRegions|t
     exit 1
 fi
 echo "OK: diagnóstico VTK checkMesh sobre copias independientes, sin CFD."
+# Read-only standalone VTK localization; synthetic ASCII+binary parser regression.
+vtk_audit="$ROOT/scripts/analyze_bad_mesh_vtk.py"
+test -f "$vtk_audit"
+grep -Fq 'underdeterminedCells' "$vtk_audit"
+grep -Fq 'twoInternalFacesCells' "$vtk_audit"
+grep -Fq 'concaveCells' "$vtk_audit"
+grep -Fq 'quality_evidence_01' "$vtk_audit"
+grep -Fq 'VERTICES' "$vtk_audit"
+python3 "$vtk_audit" --self-test
+echo "OK: diagnóstico espacial VTK autocontenido, sin dependencias/CFD."
 echo "NO certifica malla física, contacto térmico ni CFD."
