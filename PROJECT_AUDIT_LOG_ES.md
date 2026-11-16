@@ -1,3 +1,20 @@
+## 2026-11-15 — C3D-02: defectos de metal y arena exportados en VTK, sin remallado [EVIDENCIA LOCAL]
+
+- El investigador ejecutó `scripts/inspect_extracted_mesh_quality.sh`, `checkMesh -allGeometry -allTopology -writeSurfaces -writeSets` sobre **copias físicas** en `~/OpenFOAM/C3D02_materials/quality_evidence_01/{metal,mold}`; no se modificaron fuentes históricas ni STL ni materiales C14. `checkMesh` devolvió rc=0 para ambos, **pero anunció FAILED 1 (metal) y FAILED 2 (arena)**.
+- **Metal:** 85,332 celdas, volumen **4.79621e-05 m³ = 47.9621 cm³**, una región, 30,028 caras en `material type=wall`; 2,422 celdas cóncavas, 1 fallo. Exportó **`metal/postProcessing/checkMesh/constant/concaveCells.vtk`**.
+- **Arena extraída:** 274,788 celdas, volumen **0.000103409 m³ = 103.409 cm³**, una región; **22,737 celdas cóncavas, 1 celda con determinante menor de 0.001**, dos fallos. Además se exportó `twoInternalFacesCells` para **una** celda topológica; esto es una advertencia adicional, **no necesariamente un tercer fallo independiente**. Parches: `outerBox type=patch nFaces=0`, `oldInternalFaces type=internal nFaces=97492`. Archivos **`mold/postProcessing/checkMesh/constant/{concaveCells,underdeterminedCells,twoInternalFacesCells}.vtk`**.
+- Los dos dominios están volumétricamente aislados, pero **NINGUNO pasa calidad exhaustiva** y no existe una interfaz metal-arena térmica validada.
+- Nuevo análisis PREPARADO, NO EJECUTADO EN LAPTOP: `scripts/analyze_bad_mesh_vtk.py` lee `POINTS` de los cuatro VTK (legacy ASCII/binary sin dependencias), reporta cajas X/Y/Z y distribución axial Y **de vértices de superficies**, no de centros ni cantidad de celdas defectuosas, y calcula distancia mínima entre los puntos de las dos anomalías puntuales del molde. Un solapamiento espacial no prueba que sean la misma celda. Tiene prueba de regresión con VTK sintéticos. **No genera CFD, ni modifica malla ni archivos originales.**
+
+```bash
+cd ~/OpenFOAM/MasterProject
+git pull --ff-only
+cd cases_3d/C3D_02_metal_sand_clean
+python3 scripts/analyze_bad_mesh_vtk.py
+```
+
+La salida indicará si las anomalías parecen agruparse cerca de extremos, centro o interfaz del STL; sin esa evidencia no conviene cambiar indiscriminadamente `snapControls` o relajar la calidad. `RUN_CASE_REGISTRY.csv` permanece `PREPARED_NOT_RUN`.
+
 ## 2026-11-15 — C3D-02: arena físicamente extraída en copia; calidad NO aprobada [EVIDENCIA LOCAL]
 
 - Investigador ejecutó `scripts/extract_mold_zone_copy.sh`: `subsetMesh` concluyó y validó la copia `mold_extracted_l2_01`: **274,788 celdas**, volumen **0.000103409 m³ (103.409 cm³; +0.550% vs CAD)**, una componente, `outerBox=0`. La zona medida `moldVolume` y la extracción física concuerdan exactamente en celdas/volumen.
