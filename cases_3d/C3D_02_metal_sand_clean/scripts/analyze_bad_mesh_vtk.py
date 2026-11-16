@@ -67,7 +67,7 @@ def vtk_points(path: Path) -> Iterator[tuple[float, float, float]]:
                 except UnicodeDecodeError as exc:
                     raise ValueError("Bloque POINTS ASCII ilegible") from exc
                 while len(buf) >= 3 and seen < n:
-                    x, y, z = (float(buf.popleft()), float(buf.pop(0)), float(buf.pop(0)))
+                    x, y, z = (float(buf.popleft()), float(buf.popleft()), float(buf.popleft()))
                     if not all(math.isfinite(v) for v in (x, y, z)):
                         raise ValueError("VTK contiene coordenadas no finitas")
                     yield x, y, z
