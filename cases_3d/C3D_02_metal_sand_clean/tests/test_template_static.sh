@@ -159,4 +159,20 @@ if grep -Eq '^[[:space:]]*(blockMesh|snappyHexMesh|splitMeshRegions|subsetMesh|t
     exit 1
 fi
 echo "OK: medición de volumen zonal vía foamPostProcess en caso sombra temporal."
+# Scientific extraction of the measured zone ONLY in a new physical copy.
+extraction="$ROOT/scripts/extract_mold_zone_copy.sh"
+test -f "$extraction"
+grep -Fq 'mold_extracted_l2_01' "$extraction"
+grep -Fq 'mold_zoned_l2_01' "$extraction"
+grep -Fq 'EXPECTED_CELLS=274788' "$extraction"
+grep -Fq 'MEASURED_ZONE_VOLUME="0.000103409"' "$extraction"
+grep -Fq 'cp -a -- "$SOURCE/constant/polyMesh" "$DEST/constant/polyMesh"' "$extraction"
+grep -Fq 'subsetMesh -case "$DEST" -cellZone "$ZONE" -noFields' "$extraction"
+grep -Fq 'checkMesh -case "$DEST" -allGeometry -allTopology' "$extraction"
+grep -Fq '[[ ! -e "$DEST" && ! -L "$DEST" ]]' "$extraction"
+if grep -Eq '^[[:space:]]*(foamMultiRun|foamRun|snappyHexMesh|blockMesh|topoSet|splitMeshRegions)([[:space:]]|$)' "$extraction"; then
+    echo "ERROR: extraccion no puede ejecutar solver, remallado o splitMeshRegions"
+    exit 1
+fi
+echo "OK: extraccion de zona medida solo en copia física, con checkMesh completo."
 echo "NO certifica malla física, contacto térmico ni CFD."

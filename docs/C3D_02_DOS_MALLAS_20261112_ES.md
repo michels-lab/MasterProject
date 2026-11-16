@@ -1,3 +1,22 @@
+## 15-11-2026 — ÉXITO de volumen zonal; preparar extracción física en copia
+
+**Salida nativa REAL proporcionada por el investigador:** ejecutó `bash scripts/measure_mold_zone_volume.sh` y `foamPostProcess` de OpenFOAM Foundation 14 informó para `cellZone moldVolume`: **274,788 celdas**, `volume = 0.000103409` m³ = **103.40900 cm³**. Frente al volumen CAD de arena `0.00010284309608` m³ = **102.84310 cm³**, desviación **+0.550 %**. Esto confirma volumen zonal coherente; no confundir con el **volumen global de 242.208 cm³**, correspondiente a toda la caja auxiliar. Fuente del resultado: salida Ubuntu del investigador de 15-11-2026, `foamPostProcess -constant` en shadow case temporal. El postprocesado preservó archivos anteriores.
+
+**Nueva etapa preparada, sin ejecución local aún:** extraer **solo** las celdas de `moldVolume` en **una copia física separada** `~/OpenFOAM/C3D02_materials/mold_extracted_l2_01`. El script `scripts/extract_mold_zone_copy.sh` verifica insumos y fuentes, rechaza si la carpeta de destino ya existe, copia sin enlaces la carpeta `constant/polyMesh` y el `controlDict` del subcaso zonificado, y ejecuta **Foundation 14 `subsetMesh -cellZone moldVolume -noFields`** *solo en esa copia* (en esta versión `-overwrite` es un alias obsoleto y el comportamiento de sobrescritura es predeterminado, limitado a la carpeta pasada con `-case`). Luego ejecuta `checkMesh -allGeometry -allTopology` en la copia y compara **274788 celdas, volumen 103.409 cm³, cero caras `outerBox`, una región** con los valores esperados; además informa todos los fallos de calidad y parches.
+
+**Precaución fundamental del código fuente Foundation 14:** `subsetMesh` no preserva automáticamente los tipos de frontera de la malla original. Las caras nuevas se asignan por defecto al parche `oldInternalFaces` (u otro indicado); **eso no es una interfaz CHT válida ni un `mappedWall` recíproco** con el hierro. Si `checkMesh` falla por celdas cóncavas, registrar resultado rechazado, no maquillar los umbrales. Malla original y STL sanos permanecen intactos. Nada de solver, `splitMeshRegions` ni fundición activa.
+
+```bash
+cd ~/OpenFOAM/MasterProject
+git pull --ff-only
+cd cases_3d/C3D_02_metal_sand_clean
+bash scripts/extract_mold_zone_copy.sh
+```
+
+**Aceptación:** el volumen extraído debe coincidir con el volumen zonal previo (±0.1 % es **test de consistencia de extracción**, no precisión metrológica del CAD), celdas 274788, cero `outerBox`, un componente y `Mesh OK` sin fallos exhaustivos. Incluso en ese caso, **faltaría caracterización de parches/cobertura de contacto y construcción térmica**. Referencia del algoritmo real: [`subsetMesh.C`, Foundation 14](https://cpp.openfoam.org/v14/subsetMesh_8C_source.html).
+
+---
+
 ## 13-11-2026 — CLASIFICACIÓN GEOMÉTRICA DEL MOLDE: ÉXITO DE ETIQUETADO, VOLUMEN AÚN NO MEDIDO
 
 **Evidencia experimental real enviada por el investigador (Foundation 14), subcaso `mold_zoned_l2_01`:** la orden `test_mold_geometric_zone.sh` completó snappyHexMesh con `refinementSurfaces level (2 2)`, `snap false` y opciones `faceZone moldInterface;`, `cellZone moldVolume;`, `mode inside;`, `faceType internal;`. El log reportó `Found 1 closed, named surfaces. Assigning cells in/outside these surfaces to the corresponding cellZone`.

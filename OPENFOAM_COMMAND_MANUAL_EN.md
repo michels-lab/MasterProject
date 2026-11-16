@@ -1,3 +1,20 @@
+## 2026-11-15 — Extract the measured moldVolume ONLY into a physical copy (Foundation 14)
+
+The real `foamPostProcess` result is **274,788 moldVolume cells** and **103.409 cm³**, +0.550% against CAD mold 102.8431 cm³. This is the zone's volume, not the global box; full parent mesh still has 49,034 concave cells and no accepted quality. Foundation 14 source supports `subsetMesh -cellZone moldVolume -noFields`, with overwrite being the default (deprecated `-overwrite` switch). `subsetMesh` does not preserve attached boundary types; a generated `oldInternalFaces` patch is **not** a thermal coupling interface.
+
+The new `scripts/extract_mold_zone_copy.sh` creates **only** `~/OpenFOAM/C3D02_materials/mold_extracted_l2_01`, independently copies parent `constant/polyMesh` and `controlDict` (never symlinking), and executes Foundation 14 `subsetMesh` and full `checkMesh` there. It compares new cells=274788, volume=0.000103409 m³ (within 0.1%), outerBox=0, regions=1, and all quality checks. It never edits earlier meshes, CAD, physics C14 or runs CFD.
+
+```bash
+cd ~/OpenFOAM/MasterProject
+git pull --ff-only
+cd cases_3d/C3D_02_metal_sand_clean
+bash scripts/extract_mold_zone_copy.sh
+```
+
+This is a **pending local** mesh-isolation diagnostic, not CFD-ready sand. [Foundation 14 `subsetMesh.C`](https://cpp.openfoam.org/v14/subsetMesh_8C_source.html).
+
+---
+
 ## 2026-11-13 — Read-only volume measurement of the existing moldVolume cellZone
 
 The successful L2 zoning experiment tagged **274,788 moldVolume cells** and **97,492 moldInterface faces**, but the **global** volume still equals 242.208 cm³; `outerBox` remains, and `checkMesh` failed a geometric quality test (49,034 concave cells). The next step is to measure the **zone-only** volume via Foundation 14 `volFieldValue` (which logs the number of cells and total zone volume when constructed) through `foamPostProcess -constant -dict ...`. The new `scripts/measure_mold_zone_volume.sh` uses a temporary shadow case with a symlink to the original `constant/polyMesh` and deletes only its own temporary output; no remeshing, subset/split, CFD, original mesh overwrite or source CAD edits.

@@ -1,3 +1,20 @@
+## 15-11-2026 — Extraer moldVolume con subsetMesh SOLO EN COPIA (Foundation 14)
+
+La medición real `foamPostProcess` confirmó `cellZone moldVolume`: **274,788 celdas, 0.000103409 m³ = 103.409 cm³**, desviación **+0.550 %** respecto al CAD arena de 102.843 cm³. `checkMesh` original sigue fallando por 49,034 cóncavas. El próximo paso NO es seguir generando mallas con `snappyHexMesh`, sino aislar estas celdas etiquetadas.
+
+**IMPORTANTE: sintaxis Foundation 14**, verificada contra [fuente `subsetMesh.C`](https://cpp.openfoam.org/v14/subsetMesh_8C_source.html): usar `subsetMesh -case <copia> -cellZone moldVolume -noFields`, sin obligar a `-overwrite` (opción marcada como obsoleta; sobrescritura es el valor por defecto en esta versión), y ejecutar únicamente sobre la nueva copia, nunca sobre `mold_zoned_l2_01`. En esta versión el programa puede asignar caras recién expuestas a `oldInternalFaces` y **no conservar tipos de frontera**, por lo que no declaramos una interfaz metal-arena funcional.
+
+```bash
+cd ~/OpenFOAM/MasterProject
+git pull --ff-only
+cd cases_3d/C3D_02_metal_sand_clean
+bash scripts/extract_mold_zone_copy.sh
+```
+
+Este script crea `~/OpenFOAM/C3D02_materials/mold_extracted_l2_01`, duplica solo `constant/polyMesh` y `controlDict`, ejecuta `subsetMesh` allí y `checkMesh -allGeometry -allTopology` sobre la copia, mostrando celdas, volumen, fronteras, calidad, exterior y regiones. **No sobrescribe resultados históricos, STL ni materiales C14.** Si detecta diferencias respecto al volumen zonal o fallos de calidad, señala RECHAZADO sin activar CFD. Aun con `Mesh OK`, falta definir interfaz térmica recíproca y validar la correspondencia con el hierro.
+
+---
+
 ## 13-11-2026 — Medir volumen de `cellZone moldVolume` sin remallar
 
 **Resultado del experimento geométrico `mold_zoned_l2_01`:** `snappyHexMesh` clasificó 274,788 celdas `moldVolume` y 97,492 caras `moldInterface`. El volumen **GLOBAL** sigue siendo 242.208 cm³, pero **el volumen de la zona es desconocido**. Antes de cualquier extracción o CHT, medir la zona con `volFieldValue` de **Foundation 14**.
