@@ -1,3 +1,27 @@
+## 15-11-2026 — Localización de defectos: exportación VTK REAL y análisis geométrico reproducible
+
+El investigador ejecutó `bash scripts/inspect_extracted_mesh_quality.sh` tras descargar la implementación mediante `git pull`. Las opciones **`checkMesh -allGeometry -allTopology -writeSurfaces -writeSets`** fueron aceptadas por Foundation 14. El comando operó exclusivamente sobre **COPIAS** de la malla de hierro y de la arena ya extraída bajo `quality_evidence_01/`.
+
+| Sólido | Celdas físicas | Volumen | Errores en checkMesh | Archivo(s) de defectos |
+|---|---:|---:|---|---|
+| Hierro | 85,332 | 47.9621 cm³ | **2,422 celdas cóncavas**, 1 check fallido | `metal/postProcessing/checkMesh/constant/concaveCells.vtk` |
+| Arena | 274,788 | 103.409 cm³ | **22,737 cóncavas** y **1 celda de determinante bajo**, 2 checks fallidos | `mold/postProcessing/checkMesh/constant/concaveCells.vtk`, `underdeterminedCells.vtk` |
+
+Existe además un **archivo `mold/postProcessing/checkMesh/constant/twoInternalFacesCells.vtk`** (una celda con dos caras internas no fronterizas), correspondiente a una advertencia de topología que no aparece como una tercera comprobación fallida. Esta anomalía podría coincidir o no con la celda de determinante bajo; aún se desconoce su ubicación espacial. `oldInternalFaces type=internal nFaces=97492` es un parche derivado de extracción, NO una interfaz de transferencia de calor con metal. La exportación VTK **NO repara la calidad**. El código de retorno 0 no significa aprobación cuando hay `Failed N mesh checks`.
+
+**Siguiente experimento únicamente de LECTURA:** `scripts/analyze_bad_mesh_vtk.py` analiza los cuatro VTK ya disponibles. Es independiente de librerías VTK/ParaView; acepta legacy VTK ASCII y binario. Muestra rango de coordenadas de los vértices, distribución axial Y en cuatro bandas geométricas del molde (−65.5 a 0 mm), y proximidad de las dos anomalías puntuales de arena. **Los porcentajes son de VÉRTICES de las superficies exportadas, no de las celdas defectuosas**; por sí solos no son una métrica de incidencia por posición ni demuestran causa. Abre después las superficies VTK en ParaView sobre la malla original para localizar si la concavidad se concentra en extremos, aristas o contacto metal-arena.
+
+```bash
+cd ~/OpenFOAM/MasterProject
+git pull --ff-only
+cd cases_3d/C3D_02_metal_sand_clean
+python3 scripts/analyze_bad_mesh_vtk.py
+```
+
+Este script es solo lectura y **no debe confundirse con mejora de calidad**. El siguiente bloque de optimización de `snappyHexMesh` deberá dirigirse a regiones problemáticas demostradas y retener comparación de volumen, calidad y correspondencia material–interface, sin nuevos cambios indiscriminados de densidad. Fuente opciones `checkMesh` Foundation 14: https://github.com/OpenFOAM/OpenFOAM-14/blob/master/src/functionObjects/utilities/checkMesh/checkMesh.H .
+
+---
+
 ## 15-11-2026 — Extracción real de moldVolume confirmada; calidad aún rechazada
 
 **Prueba local REAL `scripts/extract_mold_zone_copy.sh` terminada con OpenFOAM Foundation 14.** La extracción de la zona geométrica `moldVolume` desde `mold_zoned_l2_01` mediante `subsetMesh -cellZone moldVolume -noFields` se efectuó **exclusivamente en la copia** `~/OpenFOAM/C3D02_materials/mold_extracted_l2_01`. `checkMesh -allGeometry -allTopology` encontró:
