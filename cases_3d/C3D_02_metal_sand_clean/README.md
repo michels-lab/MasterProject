@@ -1,3 +1,5 @@
+> **17-11-2026 — CONSTRUCTOR ÚNICO CON DIAGNÓSTICO DE ERRORES OBLIGATORIO:** `build_c3d02.py` crea automáticamente `ERROR_ZONES.json` y `ERROR_ZONES.md` desde preflight, y los actualiza al concluir o fallar. Para `global/metal/mold`, si la malla existe, analiza una copia con `checkMesh -allGeometry -allTopology -writeSurfaces -writeSets` y extrae coordenadas XYZ en mm/rangos Y de sus VTK; si falla antes de mallar, registra etapa y errores de log, sin coordenadas inventadas. Los rangos corresponden a vértices exportados, no centroides de celdas. **Ningún comando manual adicional** para localizar defectos. G1 sigue bloqueando `foamMultiRun` si no hay calidad o contacto recíproco. [Política](../../docs/AUTOMATIC_MESH_ERROR_LOCALIZATION_POLICY_ES.md).
+
 ## 17-11-2026 — Ruta ÚNICA DE PRODUCCIÓN (sustituye la cadena de ensayos manuales)
 
 **Comando integral:** desde la raíz local de MasterProject actualizado, ejecutar **una sola vez**:
