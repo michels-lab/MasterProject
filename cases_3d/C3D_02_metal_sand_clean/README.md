@@ -1,6 +1,24 @@
+> **17-11-2026 — PRIORIDAD ACTUAL: OPENFOAM NATIVO.** En C3D-02, el mallado, la creación de regiones y la comprobación de calidad se ejecutan con **utilidades OpenFOAM Foundation 14**, no con un constructor Python. El diccionario fuente `system/snappyHexMeshDict` declara `cellZone metal` y `cellZone mold`. El integrador anterior `scripts/build_c3d02.py` queda como ruta experimental histórica y **NO es el comando recomendado**. La nueva ruta de preparación de malla es `Allmesh`, descrita aquí; **NO ejecuta el solver ni afirma una malla aprobada sin evidencia real de Ubuntu**.
+
+## Ruta actual — mallado nativo OpenFOAM (SIN Python)
+
+```bash
+cd ~/OpenFOAM/MasterProject
+git pull --ff-only
+bash cases_3d/C3D_02_metal_sand_clean/Allmesh
+```
+
+El script Bash **solo coordina** `blockMesh`, `snappyHexMesh`, `splitMeshRegions`, `checkMesh` y `foamDictionary`. No crea los diccionarios físicos mediante Python y conserva en disco el diccionario `snappyHexMeshDict` como fuente de verdad. Los archivos termofísicos se copian idénticos de C14 (hierro: `castIron`; arena: `silica`), sin modificar coeficientes. Para cada material, `checkMesh -allGeometry -allTopology -writeSurfaces -writeSets` produce logs y exportaciones de diagnóstico **nativos**. El script exige `Mesh OK`, ausencia de checks fallidos, una única región conectada, volumen compatible con CAD (±2 %) e interfaz de contacto `mappedWall` recíproca con igual número de caras.
+
+Destino fijo sin sobreescritura: `~/OpenFOAM/C3D02_NATIVE_OF14_01/`. Su `NATIVE_BUILD_STATUS.txt` indica la etapa. Si el destino ya existe, el comando se detiene **para preservar evidencia**. No relanzar sobre la misma carpeta ni eliminar ensayos anteriores sin respaldo.
+
+**Límite científico obligatorio:** `Allmesh` termina después de comprobar la malla. Siguen pendientes las condiciones de frontera tridimensionales (incluidas paredes hacia el exterior auxiliar), los campos `0/`, la lectura por `foamMultiRun`, la comprobación de la fuente de solidificación y la validación experimental. El exterior auxiliar no es un material del solver CHT. No interpretar una malla con `Mesh OK` como resultado CFD.
+
+## Ruta anterior — integrador Python (legado, no prioritaria)
+
 > **17-11-2026 — CONSTRUCTOR ÚNICO CON DIAGNÓSTICO DE ERRORES OBLIGATORIO:** `build_c3d02.py` crea automáticamente `ERROR_ZONES.json` y `ERROR_ZONES.md` desde preflight, y los actualiza al concluir o fallar. Para `global/metal/mold`, si la malla existe, analiza una copia con `checkMesh -allGeometry -allTopology -writeSurfaces -writeSets` y extrae coordenadas XYZ en mm/rangos Y de sus VTK; si falla antes de mallar, registra etapa y errores de log, sin coordenadas inventadas. Los rangos corresponden a vértices exportados, no centroides de celdas. **Ningún comando manual adicional** para localizar defectos. G1 sigue bloqueando `foamMultiRun` si no hay calidad o contacto recíproco. [Política](../../docs/AUTOMATIC_MESH_ERROR_LOCALIZATION_POLICY_ES.md).
 
-## 17-11-2026 — Ruta ÚNICA DE PRODUCCIÓN (sustituye la cadena de ensayos manuales)
+## Registro previo 17-11-2026 — Constructor Python experimental (NO recomendado actualmente)
 
 **Comando integral:** desde la raíz local de MasterProject actualizado, ejecutar **una sola vez**:
 
