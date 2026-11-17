@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
   "audit_kind": "deterministic_full_tracked_tree",
-  "tracked_files_total": 38818,
-  "classified_files_total": 38813,
-  "docs_content_inspected": 136,
+  "tracked_files_total": 38820,
+  "classified_files_total": 38815,
+  "docs_content_inspected": 137,
   "large_docs_skipped": 0,
   "excluded_reports": 5,
   "roles": {
@@ -12,21 +12,21 @@
     "bitacora": 5,
     "config": 7,
     "data": 25,
-    "document": 107,
+    "document": 108,
     "index": 24,
     "license": 1,
     "simulation_case_file": 98,
     "simulation_input": 2678,
     "simulation_log": 3155,
     "simulation_output": 32613,
-    "source": 56,
+    "source": 57,
     "test": 16,
     "web_ui": 1,
     "workflow": 19
   },
   "finding_counts": {},
   "finding_total": 0,
-  "inventory_fingerprint": "fc19b70ae5c28ca9b3e64c6d334cc68593db335fdfc0f1d732b3b2e6bb1e1db9",
+  "inventory_fingerprint": "a9845b6c0631d5f4a8d26b343912d9c936c672da889522ec3b3712dc35a0bb07",
   "evidence_fingerprint": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
   "files": [
     {
@@ -279,14 +279,14 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "c59c4ff252faad1809a9ce5eea8a19bea69b47b9"
+      "blob": "92abd081b15e87767e3a8171014d4ea3442fcb75"
     },
     {
       "path": "OPENFOAM_COMMAND_MANUAL_ES.md",
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "e018f04e12ba97e4d55cf488b45d6bbcbc23d5f6"
+      "blob": "c35eaeba44d54f17f0c88a5129459c8eb28f4c4c"
     },
     {
       "path": "POSTPROCESSING_FIELD_GUIDE_ES.md",
@@ -307,21 +307,21 @@
       "role": "bitacora",
       "purpose": "technical/audit change history",
       "certainty": "rule",
-      "blob": "ff681c77f8e8459738b09c44c3e1392a7d1ba8ea"
+      "blob": "2bb274d0daeb40ace285063993e2af9ba92c00fd"
     },
     {
       "path": "PROJECT_AUDIT_LOG_ES.md",
       "role": "bitacora",
       "purpose": "technical/audit change history",
       "certainty": "rule",
-      "blob": "644970324bae0008208490bf2cc19f4794b25150"
+      "blob": "ffd08b96d1512f8f974dca6457fb040fc553eb86"
     },
     {
       "path": "README.md",
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "8f430fd504450a7157f464ea753b6fa0302ba4ec"
+      "blob": "e8842a7dce3e4eabf8c314b3af139c9bf7e3a8d9"
     },
     {
       "path": "RUN_CASE_REGISTRY.csv",
@@ -356,7 +356,7 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "4b99c9e34fe3585b8c0241827492c3b8233a9a37"
+      "blob": "0ea77d18875d1a539a406713d4e53274392aad45"
     },
     {
       "path": "analysis_results/c11_energy2_test/summary.md",
@@ -1070,7 +1070,7 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "a6e4d4fba48c5cf961c9865ef74c86b9155d5902"
+      "blob": "f354abe19d75d9192b162733ca44bee7b3c32811"
     },
     {
       "path": "cases_3d/C3D_02_metal_sand_clean/constant/geometry/README.md",
@@ -1161,7 +1161,7 @@
       "role": "source",
       "purpose": "code/test implementation",
       "certainty": "rule",
-      "blob": "51a9cf353fca2f90dfde64e8d17b9955f70518f7"
+      "blob": "8a859a1b8c54d9ac32cee1d572399e8bcf3915ed"
     },
     {
       "path": "cases_3d/C3D_02_metal_sand_clean/scripts/diagnose_mesh_readonly.sh",
@@ -1197,6 +1197,13 @@
       "purpose": "code/test implementation",
       "certainty": "rule",
       "blob": "976f7f3837277c29f6a9dd75b5cd9b990031df49"
+    },
+    {
+      "path": "cases_3d/C3D_02_metal_sand_clean/scripts/mesh_error_zones.py",
+      "role": "source",
+      "purpose": "code/test implementation",
+      "certainty": "rule",
+      "blob": "84425875ee65f739a56b54ec8cd8a72a3fd50eba"
     },
     {
       "path": "cases_3d/C3D_02_metal_sand_clean/scripts/prepare_geometry.sh",
@@ -1301,7 +1308,7 @@
       "role": "test",
       "purpose": "code/test implementation",
       "certainty": "rule",
-      "blob": "6c7588e866bdeafec5c1e9289607805ca2de408b"
+      "blob": "c1c992247421bceb7e3d53b30137dc0df24edd56"
     },
     {
       "path": "cases_3d/README.md",
@@ -270935,6 +270942,13 @@
       "purpose": "OpenFOAM case field/dictionary input (content unvalidated)",
       "certainty": "inferred",
       "blob": "227b64df30aee765d9ad67742d9258c8a88a596d"
+    },
+    {
+      "path": "docs/AUTOMATIC_MESH_ERROR_LOCALIZATION_POLICY_ES.md",
+      "role": "document",
+      "purpose": "manual/decision/report/historical note",
+      "certainty": "inferred",
+      "blob": "65b39ecb03341319c814e5eafdc3437e43cea2b0"
     },
     {
       "path": "docs/C3D_01_ESTADO_REAL_20261110_ES.md",
