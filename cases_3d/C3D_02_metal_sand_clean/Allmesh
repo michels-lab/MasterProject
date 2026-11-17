@@ -58,7 +58,7 @@ for material in metal mold; do
 done
 
 run_native splitMeshRegions splitMeshRegions -case "$CASE" \
-    -cellZones '(metal mold)' -defaultRegion exterior -noFields
+    -cellZones 'metal mold' -defaultRegion exterior -noFields
 for material in metal mold; do
     [[ -f "$CASE/constant/$material/polyMesh/boundary" ]] ||
         fail "Missing generated physical mesh for $material"
