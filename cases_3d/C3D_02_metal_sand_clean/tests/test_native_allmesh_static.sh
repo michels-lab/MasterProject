@@ -26,6 +26,10 @@ for region in metal mold; do
 done
 grep -Fq -- "-cellZones 'metal mold'" "$RUN"
 grep -Fq "NO_CFD" "$RUN"
+grep -Fq -- '--diagnose' "$RUN"
+grep -Fq -- 'native_quality' "$RUN"
+grep -Fq -- 'checkMesh -case "$dest" -allGeometry -allTopology' "$RUN"
+grep -Fq -- '-writeSurfaces -writeSets' "$RUN"
 grep -Fq "Mesh OK" "$RUN"
 grep -Fq "Failed[[:space:]]+" "$RUN"
 grep -Fq 'validate_sources.sh' "$RUN"
