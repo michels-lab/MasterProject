@@ -5,7 +5,7 @@ No file is auto-deleted or declared unused.
 
 ## Coverage
 
-Tracked: 38820; classified: 38815; readable documents: 137; above read cap: 0; findings: 0.
+Tracked: 38820; classified: 38815; readable documents: 137; above read cap: 0; findings: 2.
 
 ## File roles
 
@@ -30,6 +30,8 @@ Tracked: 38820; classified: 38815; readable documents: 137; above read cap: 0; f
 
 ## Findings (human review required)
 
+- **REVIEW / POTENTIAL_UNLOGGED_CHANGES** PROJECT_AUDIT_LOG_EN.md: 1 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_02_metal_sand_clean/scripts/build_c3d02.py. Next: Inspect diffs and reconcile only meaningful decisions/results in the canonical log (ID 24951629a9758252)
+- **REVIEW / POTENTIAL_UNLOGGED_CHANGES** PROJECT_AUDIT_LOG_ES.md: 1 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_02_metal_sand_clean/scripts/build_c3d02.py. Next: Inspect diffs and reconcile only meaningful decisions/results in the canonical log (ID b505d806b6fd1e6f)
 
 Complete path → purpose/role/certainty list lives in FILE_GOVERNANCE.json. SUMMARY.json has counts only for master polling.
 A dated file, duplicate, or suspicious name is an **investigation candidate**, not unwanted material.
