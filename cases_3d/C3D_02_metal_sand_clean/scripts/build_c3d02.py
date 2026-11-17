@@ -256,6 +256,23 @@ def prepare_c14(case, patches):
             if "boundaryField" in content:
                 content = field_with_3d_patches(content, region, patches[region], source.name)
             (out0 / source.name).write_text(content)
+    # The 3D metal region contains ONLY iron. Preserve the controlled C14
+    # source terms; if splitMeshRegions drops the named cellZone, selection
+    # of the entire regional mesh is physically equivalent to that cellZone.
+    zoned = case / "constant/metal/polyMesh/cellZones"
+    if not zoned.is_file() or not re.search(r"\\bmetal\\b", zoned.read_text()):
+        model = case / "constant/metal/fvModels"
+        model_text = model.read_text()
+        model_text, count = re.subn(
+            r"(?m)^\\s*selectionMode\\s+cellZone;\\s*\\n\\s*cellZone\\s+metal;",
+            "    selectionMode   all;", model_text, count=1)
+        if count != 1:
+            raise RuntimeError("Cannot map C14 phase-change cellZone to the 3D metal-only mesh")
+        model.write_text(model_text)
+        (case / "G1_FVMODELS_REGION_ADAPTATION.txt").write_text(
+            "Metal contains iron only. phaseChangeSource selectionMode all "
+            "replaces cellZone metal if the split removed that zone; "
+            "phase-change constants are unchanged.\\n")
     for name in ("fvSolution", "controlDict"):
         shutil.copy2(C14 / "system" / name, case / "system" / name)
     # The C14 2D pressure reference uses y=+0.04 m, outside the 3D metal.
