@@ -1,3 +1,9 @@
+## 2026-11-17 — Always-on spatial error reporting from the single integrated C3D-02 command
+
+`build_c3d02.py` now creates `ERROR_ZONES.json` and `ERROR_ZONES.md` from PREFLIGHT and updates them on exit regardless of success/failure. Whenever the global/iron/sand mesh exists, a new `mesh_error_zones.py` runs Foundation 14 `checkMesh -allGeometry -allTopology -writeSurfaces -writeSets` on an **independent physical copy** for each available mesh. Reports include region, failure counts, actual exported VTK surface vertex XYZ bounds and axial Y distribution, plus references to logs. No mesh -> stage and logs only; never invented coordinates. No extra terminal command is needed. Preserves historical results and keeps strict G1 gate before `foamMultiRun`. The policy is mandatory for new future builders but not retroactively implemented in all historical scripts. [Policy ES](docs/AUTOMATIC_MESH_ERROR_LOCALIZATION_POLICY_ES.md).
+
+---
+
 ## 2026-11-15 — Read-only spatial analysis of native checkMesh defect VTKs
 
 The user completed the Foundation 14 `-writeSurfaces -writeSets` audit on physical copies: **iron 2,422 concave cells; sand 22,737 concave cells + one low-determinant cell and one topology-set warning**. Four VTK legacy surface files now exist under `quality_evidence_01`. The new `scripts/analyze_bad_mesh_vtk.py` reads those four files without external packages, outputs X/Y/Z bounds and exported-vertex axial histograms, and compares distance between the two localized sand anomaly surfaces. It performs **no remeshing, correction, writes or CFD**. Output fractions are *VTK surface vertex* counts, **not volume-cell frequencies**.

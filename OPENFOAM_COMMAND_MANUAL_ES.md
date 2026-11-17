@@ -1,3 +1,15 @@
+## 17-11-2026 — Diagnóstico automático obligatorio desde el primer paso del comando integral
+
+**Comando completo, único:**
+```bash
+cd ~/OpenFOAM/MasterProject && git pull --ff-only && python3 cases_3d/C3D_02_metal_sand_clean/scripts/build_c3d02.py
+```
+Ya no se requiere una segunda orden de inspección. El builder genera de manera automática `ERROR_ZONES.json` y `ERROR_ZONES.md` en `~/OpenFOAM/C3D02_DELIVERY_01`, empezando desde `PREFLIGHT`. Si OpenFOAM genera un `polyMesh`, llama a `mesh_error_zones.py` para ejecutar `checkMesh -allGeometry -allTopology -writeSurfaces -writeSets` desde **copias** de `global`, `metal` y `mold` (si existen). Reporta conjunto defectuoso, cantidad de celdas o caras del set cuando se conoce, rangos XYZ, bandas Y en mm, rutas a VTK y log, e identifica fallos aunque `checkMesh` devuelva código cero.
+
+Si el error ocurre antes de que exista la malla, el informe registra **la etapa exacta y las líneas de error disponibles, pero no genera coordenadas ficticias**. El diagnóstico no corrige los defectos ni autoriza por sí solo CFD. Los vértices de la geometría VTK **no** son centros de celdas ni proporcionan porcentaje de celdas malas por franja. Esta obligación se documenta como política para futuros constructores en [Política automática](docs/AUTOMATIC_MESH_ERROR_LOCALIZATION_POLICY_ES.md).
+
+---
+
 ## 15-11-2026 — Analizar superficies de defectos VTK sin remallado ni dependencias
 
 Después de ejecutar `checkMesh -allGeometry -allTopology -writeSurfaces -writeSets`, se generaron 4 archivos de superficies VTK bajo `~/OpenFOAM/C3D02_materials/quality_evidence_01/{metal,mold}/postProcessing/checkMesh/constant`. **Hierro:** `concaveCells.vtk` (2,422 celdas malas). **Arena:** `concaveCells.vtk` (22,737), `underdeterminedCells.vtk` (1) y `twoInternalFacesCells.vtk` (1 advertencia topológica). Ambas mallas están rechazadas; el segundo tipo de aviso no es necesariamente un tercer fallo independiente.

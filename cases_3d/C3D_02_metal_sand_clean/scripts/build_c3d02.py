@@ -16,6 +16,8 @@ import tempfile
 import time
 from pathlib import Path
 
+from mesh_error_zones import run_error_localization
+
 ROOT = Path(__file__).resolve().parents[1]
 REPO = ROOT.parents[1]
 C14 = REPO / "cases_controlled_buoyancy/C14_topFixedFlux_explicitRef"
@@ -176,6 +178,28 @@ def status(case, stage, ok, message, **extra):
     record = {"stage": stage, "ok": ok, "message": message, "output": str(case),
               "updated_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()), **extra}
     case.mkdir(parents=True, exist_ok=True)
+    # MANDATORY: error-location report on success AND on every failure,
+    # even if preflight/snappy aborted before any physical region exists.
+    try:
+        details = run_error_localization(case, stage)
+        record["error_zones"] = str(case / "ERROR_ZONES.json")
+        record["error_zones_summary"] = str(case / "ERROR_ZONES.md")
+        record["regions_examined"] = sorted(
+            k for k, v in details["regions"].items() if v.get("available")
+        )
+        if details["has_mesh_quality_failures"]:
+            record["mesh_error_zones_detected"] = True
+    except Exception as diagnostic_exc:
+        # An error in diagnostics must never mask the primary CFD/build failure.
+        record["error_zones_failure"] = str(diagnostic_exc)
+        (case / "ERROR_ZONES.md").write_text(
+            "# C3D-02 — Error del diagnóstico automático\n\n"
+            + str(diagnostic_exc) + "\n"
+        )
+        (case / "ERROR_ZONES.json").write_text(
+            json.dumps({"stage": stage, "diagnostic_error": str(diagnostic_exc)},
+                       ensure_ascii=False, indent=2) + "\n"
+        )
     (case / "BUILD_STATUS.json").write_text(json.dumps(record, indent=2, ensure_ascii=False)+"\n")
     print("\n=== ESTADO FINAL C3D-02 ===\n"+json.dumps(record, indent=2, ensure_ascii=False), flush=True)
 
@@ -358,6 +382,9 @@ def main(argv=None):
         return 2
     case.mkdir(parents=True)
     step = "PREFLIGHT"
+    # Always create the two error-zone reports at launch; final status()
+    # refreshes them with VTK coordinates if a mesh has been generated.
+    run_error_localization(case, "PREFLIGHT")
     try:
         for stl in STL.values():
             if not (ROOT/"constant/geometry"/stl).is_file():
