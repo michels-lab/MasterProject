@@ -1,0 +1,127 @@
+#!/usr/bin/env bash
+# C3D-02 native OpenFOAM Foundation 14 mesh pipeline (no Python).
+# Stop before CFD: never run foamMultiRun until 3D BCs and physical interfaces are verified.
+set -Eeuo pipefail
+
+ROOT="$(cd "$(dirname "$0")" && pwd)"
+CASE="$HOME/OpenFOAM/C3D02_NATIVE_OF14_01"
+if [[ -e "$CASE" || -L "$CASE" ]]; then
+    echo "ERROR: delivery exists, preserving evidence: $CASE" >&2
+    exit 2
+fi
+mkdir -p "$CASE/system" "$CASE/constant/geometry"
+STAGE=PREFLIGHT
+fail() {
+    echo "BLOCKED / $STAGE / $*" > "$CASE/NATIVE_BUILD_STATUS.txt"
+    echo "ERROR [$STAGE]: $*" >&2
+    echo "Logs: $CASE" >&2
+    exit 5
+}
+echo "RUNNING / PREFLIGHT" > "$CASE/NATIVE_BUILD_STATUS.txt"
+[[ -r /opt/openfoam14/etc/bashrc ]] || fail "OpenFOAM Foundation 14 not installed"
+set +u
+source /opt/openfoam14/etc/bashrc
+set -u
+for app in blockMesh snappyHexMesh splitMeshRegions checkMesh foamDictionary; do
+    command -v "$app" >/dev/null 2>&1 || fail "Missing OpenFOAM utility: $app"
+done
+bash "$ROOT/scripts/validate_sources.sh" > "$CASE/log.sources" 2>&1 ||
+    fail "STL or C14 inputs failed source validation"
+cp "$ROOT/system/blockMeshDict" "$ROOT/system/snappyHexMeshDict" \
+   "$ROOT/system/controlDict" "$CASE/system/"
+cp "$ROOT/constant/geometry/metal.stl" \
+   "$ROOT/constant/geometry/mold_repaired.stl" "$CASE/constant/geometry/"
+
+# Validate the zone declarations with OpenFOAM's own dictionary reader.
+for material in metal mold; do
+    zone="$(foamDictionary "$CASE/system/snappyHexMeshDict" \
+        -entry "castellatedMeshControls/refinementSurfaces/$material/cellZone")" ||
+        fail "Cannot read cellZone for $material"
+    [[ "$zone" == *"$material"* ]] || fail "Wrong cellZone for $material: $zone"
+done
+
+run_native() {
+    local name="$1"
+    shift
+    STAGE="$name"
+    echo "RUNNING / $STAGE" > "$CASE/NATIVE_BUILD_STATUS.txt"
+    "$@" > "$CASE/log.$name" 2>&1 || fail "OpenFOAM command failed: $name"
+}
+run_native blockMesh blockMesh -case "$CASE"
+run_native snappyHexMesh snappyHexMesh -case "$CASE" -overwrite
+[[ -f "$CASE/constant/polyMesh/cellZones" ]] ||
+    fail "No cellZones in the parent mesh"
+for material in metal mold; do
+    grep -Eq "(^|[^[:alnum:]_])$material([^[:alnum:]_]|$)" \
+        "$CASE/constant/polyMesh/cellZones" ||
+        fail "The $material region was not labelled by snappyHexMesh"
+done
+
+run_native splitMeshRegions splitMeshRegions -case "$CASE" \
+    -cellZones '(metal mold)' -defaultRegion exterior -noFields
+for material in metal mold; do
+    [[ -f "$CASE/constant/$material/polyMesh/boundary" ]] ||
+        fail "Missing generated physical mesh for $material"
+done
+
+# Inspect native boundary files without modifying them.
+patch_value() {
+    local file="$1" patch="$2" key="$3"
+    awk -v p="$patch" -v k="$key" '
+        $1 == p { found=1; next }
+        found && $1 == "{" { active=1; next }
+        found && active && $1 == "}" { exit }
+        found && active && $1 == k { gsub(/;/,"",$2); print $2; exit }
+    ' "$file"
+}
+metal_boundary="$CASE/constant/metal/polyMesh/boundary"
+mold_boundary="$CASE/constant/mold/polyMesh/boundary"
+[[ "$(patch_value "$metal_boundary" metal_to_mold type)" == mappedWall ]] ||
+    fail "metal_to_mold is not mappedWall"
+[[ "$(patch_value "$mold_boundary" mold_to_metal type)" == mappedWall ]] ||
+    fail "mold_to_metal is not mappedWall"
+[[ "$(patch_value "$metal_boundary" metal_to_mold neighbourRegion)" == mold ]] ||
+    fail "Contact from metal does not target mold"
+[[ "$(patch_value "$mold_boundary" mold_to_metal neighbourRegion)" == metal ]] ||
+    fail "Contact from mold does not target metal"
+[[ "$(patch_value "$metal_boundary" metal_to_mold neighbourPatch)" == mold_to_metal ]] ||
+    fail "metal contact is not reciprocal"
+[[ "$(patch_value "$mold_boundary" mold_to_metal neighbourPatch)" == metal_to_mold ]] ||
+    fail "mold contact is not reciprocal"
+metal_faces="$(patch_value "$metal_boundary" metal_to_mold nFaces)"
+mold_faces="$(patch_value "$mold_boundary" mold_to_metal nFaces)"
+[[ "$metal_faces" =~ ^[1-9][0-9]*$ && "$metal_faces" == "$mold_faces" ]] ||
+    fail "Mismatch in contact faces: metal=$metal_faces, mold=$mold_faces"
+
+# Native checkMesh performs the geometry/topology assessment and writes VTK.
+# Its exit code alone cannot certify a mesh: require the log's Mesh OK message.
+for region in metal mold; do
+    run_native "checkMesh.$region" checkMesh -case "$CASE" -region "$region" \
+        -allGeometry -allTopology -writeSurfaces -writeSets
+    log="$CASE/log.checkMesh.$region"
+    grep -Eq '(^|[[:space:]])Mesh OK' "$log" ||
+        fail "$region: checkMesh did not report Mesh OK"
+    if grep -Eq 'Failed[[:space:]]+[1-9][0-9]*[[:space:]]+mesh checks' "$log"; then
+        fail "$region: Failed N mesh checks found in log"
+    fi
+    grep -Eq 'Number of regions:[[:space:]]*1([^0-9]|$)' "$log" ||
+        fail "$region: more than one connected region or no region count"
+    volume="$(awk '/Total volume[[:space:]]*=/{for(i=1;i<=NF;i++)if($i=="="){print $(i+1);exit}}' "$log")"
+    [[ -n "$volume" ]] || fail "$region: no region volume in checkMesh output"
+    if [[ "$region" == metal ]]; then cad=0.0000479874896432; else cad=0.00010284309608; fi
+    awk -v v="$volume" -v ref="$cad" '
+        BEGIN { d=v/ref-1; if(v<=0 || d>0.02 || d< -0.02) exit 1 }
+    ' || fail "$region: CAD volume deviation exceeds 2% ($volume m3)"
+done
+
+# Preserve the exact controlled C14 files; do NOT fabricate thermophysical data.
+for material in metal mold; do
+    cp -a "$ROOT/constant/$material/." "$CASE/constant/$material/"
+done
+echo "MESH_PRELIMINARY_ACCEPTED / NO_CFD" > "$CASE/NATIVE_BUILD_STATUS.txt"
+echo "Native checkMesh and two physical interfaces were evaluated." \
+     >> "$CASE/NATIVE_BUILD_STATUS.txt"
+echo "3D field BCs and solver-read validation are still pending." \
+     >> "$CASE/NATIVE_BUILD_STATUS.txt"
+echo "DONE: OpenFOAM native geometry/mesh at $CASE"
+echo "NO foamMultiRun: mesh quality alone is not CFD validation."
