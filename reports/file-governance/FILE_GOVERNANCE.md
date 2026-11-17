@@ -5,7 +5,7 @@ No file is auto-deleted or declared unused.
 
 ## Coverage
 
-Tracked: 38821; classified: 38816; readable documents: 137; above read cap: 0; findings: 2.
+Tracked: 38822; classified: 38817; readable documents: 137; above read cap: 0; findings: 2.
 
 ## File roles
 
@@ -24,14 +24,14 @@ Tracked: 38821; classified: 38816; readable documents: 137; above read cap: 0; f
 | simulation_log | 3155 |
 | simulation_output | 32613 |
 | source | 57 |
-| test | 16 |
+| test | 17 |
 | web_ui | 1 |
 | workflow | 19 |
 
 ## Findings (human review required)
 
-- **REVIEW / POTENTIAL_UNLOGGED_CHANGES** PROJECT_AUDIT_LOG_EN.md: 1 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_02_metal_sand_clean/scripts/build_c3d02.py. Next: Inspect diffs and reconcile only meaningful decisions/results in the canonical log (ID 24951629a9758252)
-- **REVIEW / POTENTIAL_UNLOGGED_CHANGES** PROJECT_AUDIT_LOG_ES.md: 1 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_02_metal_sand_clean/scripts/build_c3d02.py. Next: Inspect diffs and reconcile only meaningful decisions/results in the canonical log (ID b505d806b6fd1e6f)
+- **REVIEW / POTENTIAL_UNLOGGED_CHANGES** PROJECT_AUDIT_LOG_EN.md: 3 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_02_metal_sand_clean/scripts/build_c3d02.py, cases_3d/C3D_02_metal_sand_clean/tests/test_native_allmesh_static.sh, cases_3d/C3D_02_metal_sand_clean/tests/test_template_static.sh. Next: Inspect diffs and reconcile only meaningful decisions/results in the canonical log (ID fc48e45f23ba082a)
+- **REVIEW / POTENTIAL_UNLOGGED_CHANGES** PROJECT_AUDIT_LOG_ES.md: 3 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_02_metal_sand_clean/scripts/build_c3d02.py, cases_3d/C3D_02_metal_sand_clean/tests/test_native_allmesh_static.sh, cases_3d/C3D_02_metal_sand_clean/tests/test_template_static.sh. Next: Inspect diffs and reconcile only meaningful decisions/results in the canonical log (ID eed1ef1d645296ad)
 
 Complete path → purpose/role/certainty list lives in FILE_GOVERNANCE.json. SUMMARY.json has counts only for master polling.
 A dated file, duplicate, or suspicious name is an **investigation candidate**, not unwanted material.
