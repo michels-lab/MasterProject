@@ -5,6 +5,54 @@ set -Eeuo pipefail
 
 ROOT="$(cd "$(dirname "$0")" && pwd)"
 CASE="$HOME/OpenFOAM/C3D02_NATIVE_OF14_01"
+
+# Existing-mesh diagnosis: no remeshing, no Python, no material edits, no CFD.
+if (( $# > 0 )) && [[ "$1" == "--diagnose" ]]; then
+    [[ -d "$CASE" ]] || { echo "No existing C3D-02 case: $CASE" >&2; exit 2; }
+    [[ -r /opt/openfoam14/etc/bashrc ]] || { echo "Missing OpenFOAM 14" >&2; exit 2; }
+    set +u
+    source /opt/openfoam14/etc/bashrc
+    set -u
+    report="$CASE/NATIVE_DIAGNOSTIC.txt"
+    {
+        printf 'C3D-02 / native checkMesh diagnostics / existing mesh only\n'
+        printf 'Location: %s\n' "$CASE"
+        printf 'Original build status: '
+        cat "$CASE/NATIVE_BUILD_STATUS.txt" 2>/dev/null || echo unavailable
+        printf 'No blockMesh, snappyHexMesh, splitMeshRegions, or CFD is rerun.\n'
+    } > "$report"
+    for region in metal mold; do
+        log="$CASE/log.checkMesh.$region"
+        boundary="$CASE/constant/$region/polyMesh/boundary"
+        if [[ ! -f "$boundary" ]]; then
+            printf '\n%s: NO REGIONAL MESH\n' "$region" | tee -a "$report"
+            continue
+        fi
+        if [[ ! -s "$log" ]]; then
+            echo "Running native checkMesh on previously unexamined region: $region"
+            if checkMesh -case "$CASE" -region "$region" \
+                -allGeometry -allTopology -writeSurfaces -writeSets > "$log" 2>&1; then
+                :
+            else
+                echo "checkMesh $region returned nonzero; inspect its log." | tee -a "$report"
+            fi
+        fi
+        {
+            printf '\n=== %s / %s ===\n' "$region" "$log"
+            grep -Ei 'cells:|Total volume|Number of regions|Mesh OK|Failed [0-9]+ mesh checks|concave|determinant|face.tets|non.orthogonal|skew|illegal|negative|FOAM FATAL|ERROR' "$log" |
+                tail -n 65 || true
+            printf '\n--- End of native log ---\n'
+            tail -n 12 "$log"
+        } | tee -a "$report"
+    done
+    printf '\nDiagnostic summary saved: %s\n' "$report"
+    echo "Meshes preserved; this is not acceptance or CFD."
+    exit 0
+fi
+if (( $# > 0 )); then
+    echo "Usage: bash Allmesh [--diagnose]" >&2
+    exit 2
+fi
 if [[ -e "$CASE" || -L "$CASE" ]]; then
     echo "ERROR: delivery exists, preserving evidence: $CASE" >&2
     exit 2
@@ -99,11 +147,14 @@ for region in metal mold; do
     run_native "checkMesh.$region" checkMesh -case "$CASE" -region "$region" \
         -allGeometry -allTopology -writeSurfaces -writeSets
     log="$CASE/log.checkMesh.$region"
-    grep -Eq '(^|[[:space:]])Mesh OK' "$log" ||
-        fail "$region: checkMesh did not report Mesh OK"
     if grep -Eq 'Failed[[:space:]]+[1-9][0-9]*[[:space:]]+mesh checks' "$log"; then
-        fail "$region: Failed N mesh checks found in log"
+        echo "Native checkMesh findings for $region:" >&2
+        grep -Ei 'Failed [0-9]+ mesh checks|concave|determinant|face.tets|non.orthogonal|skew|illegal|negative' "$log" |
+            tail -n 25 >&2 || true
+        fail "$region: native checkMesh reported failed geometry/topology checks"
     fi
+    grep -Eq '(^|[[:space:]])Mesh OK' "$log" ||
+        fail "$region: checkMesh did not report Mesh OK; inspect log.checkMesh.$region"
     grep -Eq 'Number of regions:[[:space:]]*1([^0-9]|$)' "$log" ||
         fail "$region: more than one connected region or no region count"
     volume="$(awk '/Total volume[[:space:]]*=/{for(i=1;i<=NF;i++)if($i=="="){print $(i+1);exit}}' "$log")"
