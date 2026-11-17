@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "audit_kind": "deterministic_full_tracked_tree",
-  "tracked_files_total": 38820,
-  "classified_files_total": 38815,
+  "tracked_files_total": 38821,
+  "classified_files_total": 38816,
   "docs_content_inspected": 137,
   "large_docs_skipped": 0,
   "excluded_reports": 5,
@@ -15,7 +15,7 @@
     "document": 108,
     "index": 24,
     "license": 1,
-    "simulation_case_file": 98,
+    "simulation_case_file": 99,
     "simulation_input": 2678,
     "simulation_log": 3155,
     "simulation_output": 32613,
@@ -28,7 +28,7 @@
     "POTENTIAL_UNLOGGED_CHANGES": 2
   },
   "finding_total": 2,
-  "inventory_fingerprint": "e4f841c0fee6c7b946f0cb9dcd1c39de1c0747fc7eff7da2d49f3e70f25cc767",
+  "inventory_fingerprint": "233b9562ffa3eaa5ac3a5642cbee945514b809ee1f801dbac94ea7c4456c451f",
   "evidence_fingerprint": "81f8b35841e32fe1c8971eca84668710ae305f53a226cb9059c27db8b959714e",
   "files": [
     {
@@ -1066,6 +1066,13 @@
       "purpose": "OpenFOAM case field/dictionary input (content unvalidated)",
       "certainty": "inferred",
       "blob": "74d073eec59c845ce67f2068789dfa7ee596bbb4"
+    },
+    {
+      "path": "cases_3d/C3D_02_metal_sand_clean/Allmesh",
+      "role": "simulation_case_file",
+      "purpose": "OpenFOAM case-specific support artifact",
+      "certainty": "inferred",
+      "blob": "121ac42a8e047df60045f2bc9028e9b1f1be9478"
     },
     {
       "path": "cases_3d/C3D_02_metal_sand_clean/README.md",
