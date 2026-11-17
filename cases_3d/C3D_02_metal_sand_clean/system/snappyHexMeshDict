@@ -1,7 +1,8 @@
 /* C3D-02: candidate TWO-MATERIAL surface mesh, OpenFOAM Foundation 14.
  * STLs are in mm; units [mm] converts EACH STL to metres.
- * One source case, one reproducible local work case. No exterior air region.
- * This dictionary is UNRUN; accept only with full geometry/CHT checks.
+ * Native Foundation 14 source: metal/mold cellZones are both declared here.
+ * An auxiliary exterior is retained for splitting, never included in CFD.
+ * This dictionary is UNRUN; no claim of an accepted mesh or CHT.
  */
 FoamFile
 {
@@ -44,34 +45,35 @@ castellatedMeshControls
         mold
         {
             level       (2 2);
-            patchInfo
-            {
-                type    wall;
-            }
+            faceZone    moldInterface;
+            cellZone    mold;
+            mode        inside;
+            faceType    internal;
+            patchInfo { type wall; }
         }
 
         metal
         {
             level       (2 2);
-            // Preserve a metal volume tag and internal interface candidates.
-            // Whether they are useable is checked AFTER the mesh is generated.
             faceZone    metalInterface;
             cellZone    metal;
-            cellZoneInside inside;
+            mode        inside;
             faceType    internal;
+            patchInfo { type wall; }
         }
     }
     resolveFeatureAngle 30;
 
     refinementRegions {};
 
-    // Two interior points: one in the cast-iron cavity and one inside sand.
-    // Critically, NO point in the exterior of either STL.
+    // Seed both physical materials and auxiliary EXTERIOR for zone separation.
+    // Exterior is NOT a CHT region; all three are checked after meshing.
     // OpenFOAM Foundation uses insidePoints (not OpenCFD locationsInMesh).
     insidePoints
     (
         (0.0259 -0.0200 0.0259)
-        (0.0030 -0.0200 0.0259)
+        (0.0043 -0.0207 0.0259)
+        (-0.002 -0.068 -0.002)
     );
     allowFreeStandingZoneFaces false;
 }
