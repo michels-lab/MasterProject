@@ -217,4 +217,21 @@ grep -Fq 'build_c3d02.py' "$ROOT/README.md" || true
 python3 -m py_compile "$production"
 python3 "$production" --self-test
 echo "OK: entrada integral de produccion C3D02 con checks y BC 3D sinteticos."
+# Mandatory permanent spatial error reporting integrated into the SAME build command.
+auto_report="$ROOT/scripts/mesh_error_zones.py"
+builder="$ROOT/scripts/build_c3d02.py"
+test -f "$auto_report"
+grep -Fq 'from mesh_error_zones import run_error_localization' "$builder"
+grep -Fq 'run_error_localization(case, "PREFLIGHT")' "$builder"
+grep -Fq 'run_error_localization(case, stage)' "$builder"
+grep -Fq 'ERROR_ZONES.json' "$builder"
+grep -Fq 'ERROR_ZONES.md' "$builder"
+grep -Fq -- '-writeSurfaces -writeSets' "$auto_report"
+grep -Fq 'bounding_box_mm' "$auto_report"
+grep -Fq 'axial_Y_bands_vertex_counts' "$auto_report"
+grep -Fq 'No polyMesh' "$auto_report"
+python3 -m py_compile "$builder" "$auto_report"
+python3 "$auto_report" --self-test
+python3 "$builder" --self-test
+echo "OK: C3D02 siempre reporta localización automática de errores al terminar cada ejecución."
 echo "NO certifica malla física, contacto térmico ni CFD."
