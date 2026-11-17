@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
   "audit_kind": "deterministic_full_tracked_tree",
-  "tracked_files_total": 38822,
-  "classified_files_total": 38817,
-  "docs_content_inspected": 137,
+  "tracked_files_total": 38823,
+  "classified_files_total": 38818,
+  "docs_content_inspected": 138,
   "large_docs_skipped": 0,
   "excluded_reports": 5,
   "roles": {
@@ -12,7 +12,7 @@
     "bitacora": 5,
     "config": 7,
     "data": 25,
-    "document": 108,
+    "document": 109,
     "index": 24,
     "license": 1,
     "simulation_case_file": 99,
@@ -28,7 +28,7 @@
     "POTENTIAL_UNLOGGED_CHANGES": 2
   },
   "finding_total": 2,
-  "inventory_fingerprint": "fa61a031bfdf74cc1184b300ad0ff324f0f3eb185bf4ee60eb84aa6eb4c56fc0",
+  "inventory_fingerprint": "9cb44d0ebe316a51964060766f45e8a52e31165138c4101039f0e796959150f8",
   "evidence_fingerprint": "4b47c033a2b70f016577679bfba41e393c7120832fcfc4bd4db668f425d5b2e6",
   "files": [
     {
@@ -270986,6 +270986,13 @@
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
       "blob": "7faadd032984cb616cd16ddcf0447f20e2458655"
+    },
+    {
+      "path": "docs/C3D_02_NATIVE_CHECKMESH_20261117_ES.md",
+      "role": "document",
+      "purpose": "manual/decision/report/historical note",
+      "certainty": "inferred",
+      "blob": "75f54278fab4c2577d9534812d9a755f301f9801"
     },
     {
       "path": "docs/C3D_REINICIO_20261112_ES.md",
