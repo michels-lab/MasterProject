@@ -201,4 +201,35 @@ grep -Fq 'quality_evidence_01' "$vtk_audit"
 grep -Fq 'VERTICES' "$vtk_audit"
 python3 "$vtk_audit" --self-test
 echo "OK: diagnóstico espacial VTK autocontenido, sin dependencias/CFD."
+# One-variable controlled mold snap A/B; only fresh physical cases, no CFD.
+snap_ab="$ROOT/scripts/test_mold_zone_snap_l2.sh"
+test -f "$snap_ab"
+grep -Fq 'mold_zoned_snap_l2_01' "$snap_ab"
+grep -Fq 'mold_extracted_snap_l2_01' "$snap_ab"
+grep -Fq 'mold_extracted_l2_01' "$snap_ab"
+grep -Fq 'snap true;' "$snap_ab"
+grep -Fq 'mode inside;' "$snap_ab"
+grep -Fq 'level (2 2);' "$snap_ab"
+grep -Fq 'mold_repaired.stl' "$snap_ab"
+grep -Fq 'subsetMesh -case "$EXTRACT" -cellZone moldVolume -noFields' "$snap_ab"
+grep -Fq 'checkMesh -case "$EXTRACT" -allGeometry -allTopology -writeSets -writeSurfaces' "$snap_ab"
+grep -Fq '[[ ! -e "$dest" && ! -L "$dest" ]]' "$snap_ab"
+grep -Fq 'cp -a -- "$PARENT/constant/polyMesh" "$EXTRACT/constant/polyMesh"' "$snap_ab"
+if grep -Eq '^[[:space:]]*(foamMultiRun|foamRun|splitMeshRegions|topoSet)([[:space:]]|$)' "$snap_ab"; then
+    echo "ERROR: prueba AB no debe ejecutar CFD ni dividir la malla."
+    exit 1
+fi
+python3 - "$snap_ab" <<'PY'
+import ast
+import re
+import sys
+from pathlib import Path
+source = Path(sys.argv[1]).read_text(encoding="utf-8")
+snippets = re.findall(r"<<'PY'\n(.*?)\nPY(?:\n|$)", source, flags=re.S)
+if len(snippets) != 2:
+    raise SystemExit("ERROR: se esperaban dos bloques Python embebidos en el ensayo AB")
+for snippet in snippets:
+    ast.parse(snippet)
+print("OK: nuevo ensayo A/B de snap L2, Python embebido válido y protección de copias.")
+PY
 echo "NO certifica malla física, contacto térmico ni CFD."
