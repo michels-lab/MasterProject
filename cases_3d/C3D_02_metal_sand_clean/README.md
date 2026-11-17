@@ -1,3 +1,24 @@
+## 17-11-2026 — Ruta ÚNICA DE PRODUCCIÓN (sustituye la cadena de ensayos manuales)
+
+**Comando integral:** desde la raíz local de MasterProject actualizado, ejecutar **una sola vez**:
+
+```bash
+cd ~/OpenFOAM/MasterProject && git pull --ff-only && python3 cases_3d/C3D_02_metal_sand_clean/scripts/build_c3d02.py
+```
+
+Este comando **intenta entregar la simulación 3D CHT**, sin exigir ejecutar a mano malladores, selectores, diagnósticos, parches o solver:
+1. Valida fuentes de C3D-02 y C14; genera **una malla común para hierro+arena**, usa **ambos STL cerrados** y etiquetas `cellZone metal`/`cellZone mold`, L2 y `snap true`.
+2. Usa `splitMeshRegions -cellZones '(metal mold)' -defaultRegion exterior -noFields` de **Foundation 14** para crear los **dos polyMesh regionales desde el mismo padre** y los **parches metal_to_mold/mold_to_metal de tipo mappedWall**. La región exterior es solo auxiliar, **NO** se integra en `regionSolvers`; se convierten en paredes los parches hacia ella.
+3. Ejecuta `checkMesh -allGeometry -allTopology` por material, comprueba 1 región, volumen próximo a CAD (±2 %), parches recíprocos con caras positivas y conteos idénticos, `Mesh OK` verdadero y **cero tests fallidos**. Esto detecta que `checkMesh rc=0` puede esconder fallos.
+4. **Solo con ambas mallas y contacto conformante aprobados**, prepara **C14** copiando sus `system/{metal,mold}`, `constant/{metal,mold}` de C3D02 controlado y sus campos `0/{metal,mold}`, reescribiendo las BC para los parches 3D, sin `empty`. El punto `pRefPoint` se adapta de y=+0.04 m (fuera de la geometría 3D) a `(0.0259 -0.0200 0.0259)` m; `fvModels` conserva los coeficientes originales, adaptando `selectionMode all` solo si la región metal carece de `cellZone metal` tras separar.
+5. Arranca `foamMultiRun` solamente al cruzar la puerta G1. El producto reside en `~/OpenFOAM/C3D02_DELIVERY_01` con `BUILD_STATUS.json` y un log por operación. El código **NO borra ni sobrescribe** `C3D02_materials/`, los STL históricos o el CAD. Si el destino ya existe, muestra su estado y no lo reejecuta.
+
+**Estado REAL a la fecha:** el código y sus tests estáticos están en revisión de GitHub; **NO se ha ejecutado el nuevo flujo de producción en la laptop**. No hay base para asegurar antes de ese run que ambas mallas pasarán G1 ni que `foamMultiRun` finalizará. A diferencia de ensayos previos, este pipeline entrega una **salida única**, éxito numérico real o bloqueo explícito con logs. No pedir al usuario ejecutar scripts exploratorios en cadena. Un `End` numérico tampoco valida todavía curvas experimentales ni parámetros JMatPro.
+
+Fuente: [splitMeshRegions Foundation 14](https://cpp.openfoam.org/v14/splitMeshRegions_8C.html) genera los mappedWall recíprocos desde una malla común.
+
+---
+
 > **15-11-2026, VTK de calidad EXPORTADOS sobre COPIAS:** `quality_evidence_01/metal` produjo `concaveCells.vtk` con **2,422 celdas cóncavas**; `quality_evidence_01/mold` produjo `concaveCells.vtk` (**22,737**), `underdeterminedCells.vtk` (una con determinante <0.001) y `twoInternalFacesCells.vtk` (una advertencia topológica). Ambos `checkMesh` fallaron; metal 47.9621 cm³, arena 103.409 cm³ ya aislados. Para conocer el rango XYZ y la distribución axial de los vértices de las superficies de errores, usar **`python3 scripts/analyze_bad_mesh_vtk.py`** tras `git pull`. No requiere instalar VTK; no modifica las mallas ni ejecuta CFD. **Los vértices no equivalen a contajes de celdas defectuosas**. [Bitácora y limitaciones](../../docs/C3D_02_DOS_MALLAS_20261112_ES.md).
 
 > **15-11-2026 — Extracción física de arena coherente pero checkMesh RECHAZADO:** la COPIA `mold_extracted_l2_01` contiene **274,788 celdas, 103.409 cm³ (+0.550% vs CAD), una región y outerBox=0**; falla dos verificaciones por **22,737 celdas cóncavas y una con determinante <0.001**. `oldInternalFaces type=internal nFaces=97492` NO es contacto térmico válido. Metal: **85,332 celdas, 47.9621 cm³, 2,422 cóncavas y una verificación fallida**. Nuevo diagnóstico read-only en COPIAS `scripts/inspect_extracted_mesh_quality.sh` exportará conjuntos de celdas/caras/puntos problemáticos (VTK si Foundation 14 soporta flags) y parches para ubicar defectos antes de cambiar snapping. **Sin CFD ni CHT.** [Bitácora](../../docs/C3D_02_DOS_MALLAS_20261112_ES.md).

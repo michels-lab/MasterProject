@@ -1,3 +1,14 @@
+## 2026-11-17 — Operación Granada C3D-02 cambia a un SOLO comando integral de producción
+
+El investigador pidió explícitamente **dejar de perder tiempo en arreglos y pruebas aisladas**, y recibir comandos que intenten crear el resultado completo desde el principio. **Se descontinúa como siguiente instrucción la prueba aislada `test_mold_zone_snap_l2.sh`** (su rama no se fusionó). El programa principal nuevo **`scripts/build_c3d02.py`** reemplaza la secuencia de scripts de prueba: preflight → malla combinada basada en los STL válidos → `cellZones` metal/mold → `splitMeshRegions` con **mappedWall recíprocos conformantes** → checkMesh exhaustivo + volúmenes por región y contacto → preparación C14/BC 3D y corrección explícita pRefPoint de referencia 2D → `foamMultiRun` solo después de calidad aprobada. Ninguna etapa de solver se disfraza de simulación si no concluye.
+
+Fuente técnica Foundation 14: https://cpp.openfoam.org/v14/splitMeshRegions_8C_source.html , revisión de `addRegionPatches` demuestra creación nativa de `mappedWallPolyPatch` por región. NO se afirma que una malla generada o un solver numérico hayan pasado en la laptop; **entrega pendiente de ejecución nativa**. Todos los logs y `BUILD_STATUS.json` se concentran en nueva carpeta `~/OpenFOAM/C3D02_DELIVERY_01` sin sobrescribir las mallas originales de `C3D02_materials`.
+
+**Único comando para el investigador (no más ensayos exploratorios secuenciales):**
+```bash
+cd ~/OpenFOAM/MasterProject && git pull --ff-only && python3 cases_3d/C3D_02_metal_sand_clean/scripts/build_c3d02.py
+```
+
 ## 2026-11-15 — C3D-02: defectos de metal y arena exportados en VTK, sin remallado [EVIDENCIA LOCAL]
 
 - El investigador ejecutó `scripts/inspect_extracted_mesh_quality.sh`, `checkMesh -allGeometry -allTopology -writeSurfaces -writeSets` sobre **copias físicas** en `~/OpenFOAM/C3D02_materials/quality_evidence_01/{metal,mold}`; no se modificaron fuentes históricas ni STL ni materiales C14. `checkMesh` devolvió rc=0 para ambos, **pero anunció FAILED 1 (metal) y FAILED 2 (arena)**.

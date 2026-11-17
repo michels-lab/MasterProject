@@ -201,4 +201,20 @@ grep -Fq 'quality_evidence_01' "$vtk_audit"
 grep -Fq 'VERTICES' "$vtk_audit"
 python3 "$vtk_audit" --self-test
 echo "OK: diagnóstico espacial VTK autocontenido, sin dependencias/CFD."
+# Production entrypoint: one command, BOTH materials from a common parent
+# mesh, true reciprocal mappedWall patches, quality gates, C14 only thereafter.
+production="$ROOT/scripts/build_c3d02.py"
+test -f "$production"
+grep -Fq 'splitMeshRegions' "$production"
+grep -Fq 'cellZone metal;' "$production"
+grep -Fq 'cellZone mold;' "$production"
+grep -Fq 'mode inside;' "$production"
+grep -Fq 'mappedWall' "$production"
+grep -Fq 'foamMultiRun' "$production"
+grep -Fq 'BLOCKED_G1' "$production"
+grep -Fq 'quality=measures' "$production"
+grep -Fq 'build_c3d02.py' "$ROOT/README.md" || true
+python3 -m py_compile "$production"
+python3 "$production" --self-test
+echo "OK: entrada integral de produccion C3D02 con checks y BC 3D sinteticos."
 echo "NO certifica malla física, contacto térmico ni CFD."
