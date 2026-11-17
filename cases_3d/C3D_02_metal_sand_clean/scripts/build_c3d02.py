@@ -152,8 +152,8 @@ def field_with_3d_patches(source, region, patches, field):
     exterior = "metalTop" if region == "metal" else "moldTop"
     parts = []
     for name, data in patches.items():
-        if data["nFaces"] == 0:
-            continue
+        # Even an empty mesh patch requires a matching boundaryField entry in
+        # OpenFOAM; do not silently drop zero-face patches.
         if data["type"] == "mappedWall":
             if name != contact or data["neighbourRegion"] not in ("metal", "mold"):
                 raise ValueError("Unexpected non-contact mappedWall: " + name)
