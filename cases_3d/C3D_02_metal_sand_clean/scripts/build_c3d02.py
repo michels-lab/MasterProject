@@ -165,9 +165,14 @@ def field_with_3d_patches(source, region, patches, field):
         else:
             bc = choices.get(exterior)
         if bc is None:
-            if field in ("T", "U", "p_rgh"):
-                raise ValueError("Missing mandatory C14 field BC for " + region + "/" + field)
-            bc = "type zeroGradient;"
+            raise ValueError(
+                "Missing C14 boundary condition for " + region + "/" + field
+                + " at patch " + name + "; implicit zeroGradient is forbidden"
+            )
+        if field == "T" and data["type"] == "mappedWall" and not re.search(
+            r"\btype\s+coupledTemperature\s*;", bc
+        ):
+            raise ValueError("C14 temperature contact is not coupledTemperature: " + name)
         if re.search(r"\btype\s+empty\s*;", bc):
             raise ValueError("Cannot copy a 2D empty patch to 3D")
         parts.append("    " + name + "\n    {\n        " + bc + "\n    }")
