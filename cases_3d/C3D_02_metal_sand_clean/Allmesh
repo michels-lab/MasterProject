@@ -45,6 +45,49 @@ if (( $# > 0 )) && [[ "$1" == "--diagnose" ]]; then
             tail -n 12 "$log"
         } | tee -a "$report"
     done
+    # Produce isolated native OpenFOAM VTK evidence for each material.
+    # Each region has its own physical copy, so checkMesh cannot overwrite
+    # an identically named VTK produced for the other material.
+    quality="$CASE/native_quality"
+    mkdir -p "$quality"
+    for region in metal mold; do
+        mesh="$CASE/constant/$region/polyMesh"
+        dest="$quality/$region"
+        if [[ ! -d "$mesh" ]]; then
+            continue
+        fi
+        if [[ -e "$dest" ]]; then
+            printf '\n%s: diagnostic copy already exists; preserving it: %s\n' \
+                "$region" "$dest" | tee -a "$report"
+        else
+            mkdir -p "$dest/constant" "$dest/system"
+            cp -a "$mesh" "$dest/constant/polyMesh"
+            cp "$CASE/system/controlDict" "$dest/system/controlDict"
+            printf '\n%s: native checkMesh on isolated COPY %s\n' "$region" "$dest" | tee -a "$report"
+            if checkMesh -case "$dest" -allGeometry -allTopology \
+                    -writeSurfaces -writeSets > "$dest/log.checkMesh" 2>&1; then
+                :
+            else
+                echo "OpenFOAM checkMesh returned nonzero in copy of $region." | tee -a "$report"
+            fi
+        fi
+        {
+            printf '\n--- %s: isolated native VTK defects ---\n' "$region"
+            find "$dest" -type f \( -iname '*concave*.vtk' -o \
+                -iname '*underdetermined*.vtk' -o \
+                -iname '*lowQuality*.vtk' \) -print | sort
+            printf '\n--- %s: isolated checkMesh status ---\n' "$region"
+            if [[ -s "$dest/log.checkMesh" ]]; then
+                grep -Ei 'cells:|Total volume|Mesh OK|Failed [0-9]+ mesh checks|concave|determinant|face.tets|FOAM FATAL' \
+                    "$dest/log.checkMesh" | tail -n 22 || true
+            fi
+        } | tee -a "$report"
+    done
+    {
+        printf '\nInterpretation: VTK files represent defect surfaces / vertices, not cell-centre positions.\n'
+        printf 'Visualize the region-specific VTKs in ParaView on top of the matching mesh.\n'
+        printf 'No meshing, no CFD and no physical-property changes were performed.\n'
+    } | tee -a "$report"
     printf '\nDiagnostic summary saved: %s\n' "$report"
     echo "Meshes preserved; this is not acceptance or CFD."
     exit 0
