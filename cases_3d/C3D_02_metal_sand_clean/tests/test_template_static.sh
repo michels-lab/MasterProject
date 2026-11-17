@@ -201,6 +201,9 @@ grep -Fq 'quality_evidence_01' "$vtk_audit"
 grep -Fq 'VERTICES' "$vtk_audit"
 python3 "$vtk_audit" --self-test
 echo "OK: diagnóstico espacial VTK autocontenido, sin dependencias/CFD."
+# Current preferred route: all geometry and quality operations run natively in OpenFOAM.
+bash "$ROOT/tests/test_native_allmesh_static.sh"
+# Legacy Python production entrypoint: retained for comparison only.
 # Production entrypoint: one command, BOTH materials from a common parent
 # mesh, true reciprocal mappedWall patches, quality gates, C14 only thereafter.
 production="$ROOT/scripts/build_c3d02.py"
