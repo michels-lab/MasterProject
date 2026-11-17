@@ -28,7 +28,7 @@
     "POTENTIAL_UNLOGGED_CHANGES": 2
   },
   "finding_total": 2,
-  "inventory_fingerprint": "b6f96eb94e429a7aee69ce88a1d058a90a2fa4a309abb82eaad4ec6937781670",
+  "inventory_fingerprint": "fa61a031bfdf74cc1184b300ad0ff324f0f3eb185bf4ee60eb84aa6eb4c56fc0",
   "evidence_fingerprint": "4b47c033a2b70f016577679bfba41e393c7120832fcfc4bd4db668f425d5b2e6",
   "files": [
     {
@@ -1072,14 +1072,14 @@
       "role": "simulation_case_file",
       "purpose": "OpenFOAM case-specific support artifact",
       "certainty": "inferred",
-      "blob": "c1204a1faaee22b02733af259a6eacf6efb5d767"
+      "blob": "8d077dc0654530449d334a33239dfdcf949d641a"
     },
     {
       "path": "cases_3d/C3D_02_metal_sand_clean/README.md",
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "ca9f16f27e73b44b6ae0dfdb97674e1e2a007134"
+      "blob": "4e2efbcae7ee96000558d37fe26f217fc7c63471"
     },
     {
       "path": "cases_3d/C3D_02_metal_sand_clean/constant/geometry/README.md",
