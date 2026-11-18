@@ -1,3 +1,5 @@
+> **ACTUALIZACIÓN 18-11-2026 — La alternativa A ya tiene un PILOTO PREPARADO:** se implementó [C3D-03](../cases_3d/C3D_03_doctor_multiblock_pilot/README.md), ensayo separado con `blockMeshDict` real, 24 bloques/48 vértices, moldes + metal en un solo polyMesh y apertura inferior rectangular según el STL. Sus volúmenes **calculados** metal 48,011.916 mm³ (+0.0505 %) y arena 103,169.142 mm³ (+0.3168 %); se esperan 10,048 celdas y 1,248 caras interregionales por región. **Aún no se ejecutó `blockMesh` / `checkMesh` de este piloto en Ubuntu; no presentar esos números como salida nativa.** La aproximación cuadriculada es solo el primer ensayo de topología, no fidelidad superficial CAD certificada. Los textos originales de este plan describen la etapa previa; esta adenda prevalece.
+
 # C3D-02 — Estrategia de continuación 3D con referencia al caso original del doctor
 
 **Decisión técnica provisional — 18-11-2026.** Este documento distingue criterios físicos, hechos reales ejecutados en la laptop y experimentos **propuestos y NO ejecutados**. No cambia CAD, STL, C14, mallas ni `Allmesh`.
