@@ -206,3 +206,9 @@ bash cases_3d/C3D_02_metal_sand_clean/scripts/run_stl_v2_ablation.sh
 ```
 
 **Criterio:** primero recuperar de forma objetiva decenas de miles de celdas físicas, volúmenes cercanos a CAD e interfaz metal–arena, antes de discutir concavidad o CFD. Un fallo en una variante y no en la otra identificaría qué cambio de geometría interfiere con `cellZone`; si las dos variantes funcionan y la pareja v2 colapsa, investigar interacción entre ambas triangulaciones coincidentes. No modificar originales ni `mappedWall` a mano. La ejecución de estas dos variantes sigue pendiente en la laptop.
+
+## 18-11-2026 — Preferencia del investigador: autoridad de los diagnósticos nativos OpenFOAM
+
+El investigador indicó expresamente **no implementar criterios propios que rechacen STL si `surfaceCheck` de OpenFOAM acepta su ejecución**. Por ello se revirtió `scripts/check_stl_v2.sh` al comportamiento anterior que toma como veredicto la salida/código del comando nativo, sin añadir una segunda decisión textual independiente. Se eliminaron `scripts/native_surfacecheck_gate.sh`, `tests/test_native_surfacecheck_gate.sh` y `scripts/audit_stl_surfaces_of14.sh`, así como sus dependencias en la suite estática.
+
+Regla: los resultados de **`surfaceCheck` (superficie)**, **`snappyHexMesh` (creación/clasificación)** y **`checkMesh` (malla volumétrica)** son evaluaciones distintas de OpenFOAM. Un aprobado de superficie no anula los errores reales de `cellZone` ni de `checkMesh`; no atribuir a STL defectos no reportados por OpenFOAM. No modificar los STL v2, las mallas históricas ni materiales C14, y no incorporar filtros adicionales sin petición explícita.
