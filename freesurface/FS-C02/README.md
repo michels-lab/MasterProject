@@ -116,3 +116,23 @@ Desde `~/OpenFOAM/FS_C02_WORKTREE` actualizado con la rama FS-C02 correcta, ejec
     python3 analysis_tools/diagnose_fs_c02_courant.py --run ~/OpenFOAM/FS_C02_RUNS/FS-C02_20261118T005412Z_c04dfcf6 --limit 3 --context 8
 
 El diagnóstico solamente **lee el log original FS-C02** y muestra los mayores picos y líneas circundantes. No reescribe el reporte `screen1`, no relanza `foamRun`, no toca B14/FS-C01/C3D-02. Se exige investigar primero el origen del `Co=9.41807`; no subir artificialmente `maxCo` para que pase.
+
+## 2026-11-17 — Diagnóstico localizado del pico de Co (laptop del investigador)
+
+El script `diagnose_fs_c02_courant.py` aplicado a `FS-C02_20261118T005412Z_c04dfcf6` devolvió 5383 observaciones, **1347 valores Co_max >0.25** y **un solo pico Co_max >1**. Pico absoluto `Co_max=9.41807`, `Co_mean=2.19469`, línea 100 del archivo `logs/FS-C02_foamRun.log`; `deltaT` registrado antes `1.19048e-4 s`, después `3.15988e-6 s`. Segundo mayor pico 0.376259 cerca de `Time=0.000126083s`, siguiente salto 0.342451 cerca de `Time=0.00112245s`; último Co_max=0.246551. El Courant de interfaz de estas primeras líneas es cero, sin probar por sí mismo dinámica de interfaz. **El solver terminó pero la auditoría permanece REVIEW.**
+
+Se identificó un bug del diagnóstico, no del CFD: `Time = 0.000122208s` de Foundation 14 se descartaba por el sufijo `s`; los tiempos anteriores/posteriores se mostraban `null`. Corregido el parser y probada la regresión con segundos adjuntos. Los tiempos son **marcadores cercanos**, no asignación causal de un instante exacto.
+
+**Hipótesis:** primer paso relativamente amplio, velocidades iniciales elevadas inducidas por las condiciones de arranque y limitación de paso temporal que reacciona con retraso. Esto es consistente con `setDeltaT.C` de OpenFOAM Foundation 14, pero **NO identifica todavía la causa física** (puede involucrar presión hidrostática inicial, salto térmico metal–aire, tensión superficial, tratamiento de fronteras y turbulencia). Tampoco se deben atribuir los 1347 excedentes moderados al mismo mecanismo sin estudiar su distribución temporal.
+
+### Siguiente prueba confinada: --startup-probe (NO cambia el expediente original)
+
+En un worktree FS_C02_WORKTREE limpio, actualizado a la rama `research/fs-c02-metal-air-vof-20261117`, activar Foundation 14 y ejecutar:
+
+    python3 analysis_tools/run_fs_c02_local.py --startup-probe
+
+El comando prepara una **tercera carpeta aislada nueva**, con prefijo `FS-C02_STARTUP_`, ejecuta `blockMesh`, `checkMesh`, `foamRun` **solo entre 0 y 0.002 s**, con `deltaT inicial=1e-7 s`, `maxDeltaT=1e-6 s`, `maxCo=maxAlphaCo=0.20`, escritura cada `0.0002 s` y `adjustTimeStep on`. Todos los parámetros se guardan en el manifiesto y en el estado. La salida calcula **máximo Courant en todo el log**, su recuento de excedencias y tres picos principales; condición `PROBE_COURANT_SCREEN_PASSED` solo si ninguno supera 0.20. Si sigue alto, `PROBE_REVIEW_COURANT` y exit code 1, SIN afirmar que el solver no terminó ni tratar de elevar el límite. No se usa el auditor completo FS-C02 de 0.1 s sobre esta prueba parcial de 0.002 s.
+
+Se eligió un límite de paso temporal menor al registrado después del pico, como experimento conservador; **no es una prueba científica de que se hayan eliminado todas las inestabilidades**, requiere correr en la laptop y verificar el resultado. No se modifican parámetros térmicos/metalúrgicos de la corrida anterior, ni B14, FS-C01 o C3D-02.
+
+Fuente específica: [OpenFOAM-14 foamRun setDeltaT.C](https://github.com/OpenFOAM/OpenFOAM-14/blob/master/applications/solvers/foamRun/setDeltaT.C), que ajusta el paso basado en `solver.maxDeltaT()` en un proceso transitorio. El valor `maxCo` controla el tamaño de paso de forma adaptativa, pero no es prueba automática de que todos los pasos hayan permanecido por debajo del objetivo.
