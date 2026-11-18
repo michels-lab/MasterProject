@@ -16,3 +16,8 @@ El investigador informó que la **segunda ejecución aislada** `FS-C01_20261118T
 ## FS-C02 — hierro fundido–aire, continuación de B14
 
 [FS-C02](FS-C02/README.md) dispone de un **generador y ejecutor aislado** de entradas para un smoke test VOF hierro–aire (Foundation 14), con lecturas de referencia de B14 sin modificación. **No se ha ejecutado CFD ni validado solidificación, contracción, masa, interfaz o acoplamiento a molde.** La fase agua–aire FS-C01 permanece como benchmark separado; el proyecto 3D C3D-02 no es modificado.
+
+
+## FS-C02 — Primer solver local completado, 2026-11-17
+
+El investigador reportó Foundation 14, worktree FS-C02 y corrida independiente `FS-C02_20261118T005412Z_c04dfcf6`. El ejecutor indicó `foamRun completed`. **Solo queda verificada la puerta de ejecución reportada**, no masa/interfaz/termofísica/superficie ni contracción. Para usar los resultados reales sin repetir el solver, el nuevo script `analysis_tools/audit_fs_c02_local.py` audita la carpeta FS-C02 anterior, reportando volúmenes, alpha, Courant y masa derivada (no medida). Véase [procedimiento FS-C02](FS-C02/README.md). C3D-02 y B14 siguen aislados.
