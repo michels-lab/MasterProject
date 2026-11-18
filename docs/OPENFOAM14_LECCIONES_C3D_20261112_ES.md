@@ -1,3 +1,5 @@
+> **ACTUALIZACIÓN CANÓNICA C3D-02 / 18-11-2026 — lección nueva:** el `splitMeshRegions` del caso original del doctor en Foundation 13 separó **6,400 celdas metal y 5,480 molde con 240 caras de contacto**, gracias a zonas creadas con bloques conformantes; `log.blockMesh` ya contenía `Adding cell zones` antes de `createZones`. **No copiar ciegamente** los argumentos del solver 13 al 14 ni las cajas solapadas de `createZonesDict`. El STL v2 en Foundation 14 fracasó independientemente por material (1 metal solo, 0 arena sola), lo cual señala clasificación/topología por diagnosticar y no se arregla renombrando `mappedWall`. [Resultados reales](C3D_02_ABLACION_STL_V2_20261118_ES.md) · [desglose del doctor](C3D_02_REFERENCIA_DOCTOR_Y_OPCIONES_MALLADO_20261118_ES.md). El comando nativo `Allmesh` es ruta actual de diagnóstico; Python está en legado experimental.
+
 # OpenFOAM Foundation 14 — lecciones operativas reales C3D (12-11-2026)
 
 Esta es una **adenda** al [manual de comandos español](../OPENFOAM_COMMAND_MANUAL_ES.md), no un sustituto. **Separa comandos ejecutados en Ubuntu de pasos todavía por validar.**
