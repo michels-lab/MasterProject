@@ -1,3 +1,5 @@
+> **ACTUALIZACIÓN CANÓNICA C3D-02 / 18-11-2026 — identidad científica conservada:** `C3D_02_metal_sand_clean` es la línea activa, con **ensayos de malla nativos ejecutados pero rechazados**, no `RUN_VERIFIED`. Los ensayos `v2-metal-only` (1 metal) y `v2-mold-only` (0 arena) tienen [registro propio](C3D_02_MESH_TRIAL_REGISTRY_20261118.csv). `doctor_original/cht` es una **referencia de geometría cuasi-2D en OpenFOAM13**, no el caso CFD 3D ni un reemplazo a los experimentos. [Resultados y procedencia](C3D_02_ABLACION_STL_V2_20261118_ES.md) · [análisis de referencia](C3D_02_REFERENCIA_DOCTOR_Y_OPCIONES_MALLADO_20261118_ES.md). No renombrar, mover ni borrar datos históricos.
+
 > **Adenda de identidad 2026-11-12:** `case3d-01` y `C3D_01_metal_mold` siguen siendo referencias **históricas** del primer estudio geométrico. `C3D_02_metal_sand_clean` es la **nueva base de fuentes** para el trabajo 3D, no un CFD ni resultados adicionales. Preservar las referencias existentes y no eliminar la historia sin migración explícita. [Reinicio](C3D_REINICIO_20261112_ES.md).
 
 # MasterProject — identidad del proyecto científico
