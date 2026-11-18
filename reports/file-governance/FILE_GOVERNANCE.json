@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
   "audit_kind": "deterministic_full_tracked_tree",
-  "tracked_files_total": 38840,
-  "classified_files_total": 38835,
-  "docs_content_inspected": 142,
+  "tracked_files_total": 38841,
+  "classified_files_total": 38836,
+  "docs_content_inspected": 143,
   "large_docs_skipped": 0,
   "excluded_reports": 5,
   "roles": {
@@ -12,7 +12,7 @@
     "bitacora": 5,
     "config": 7,
     "data": 28,
-    "document": 113,
+    "document": 114,
     "index": 24,
     "license": 1,
     "simulation_case_file": 99,
@@ -26,7 +26,7 @@
   },
   "finding_counts": {},
   "finding_total": 0,
-  "inventory_fingerprint": "b3d2d44bf6df8a9508cee892fc1406be6419974ec311c73a7ffb14a93d44648d",
+  "inventory_fingerprint": "ef8dc0d4a535a644e4be10cfaec220a06c6457b115e4ee06b3f498fd6a9a2653",
   "evidence_fingerprint": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
   "files": [
     {
@@ -258,7 +258,7 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "ae79809ed0bca0922008d6805a1baba1c573a71c"
+      "blob": "28f7bf73339143a63799b34e71565bf91eb844a5"
     },
     {
       "path": "NEXT_RESEARCH_ROADMAP_ES.md",
@@ -272,14 +272,14 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "d0dab49b2c0781122c97965ccdc40a0e0a730b63"
+      "blob": "4f8dfc7d1513e7954b8b1cf18cb2626158b743d4"
     },
     {
       "path": "OPENFOAM_COMMAND_MANUAL_EN.md",
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "92abd081b15e87767e3a8171014d4ea3442fcb75"
+      "blob": "80adeb8b211a38e6545c4109a46ea762580fee74"
     },
     {
       "path": "OPENFOAM_COMMAND_MANUAL_ES.md",
@@ -293,7 +293,7 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "923d27945e0dc894fe7554a8b59fce3f8becddc9"
+      "blob": "ca25ea3679a9d624f8d202d4b317c70d962f93d4"
     },
     {
       "path": "PROJECT_AUDIT_LOG.md",
@@ -307,14 +307,14 @@
       "role": "bitacora",
       "purpose": "technical/audit change history",
       "certainty": "rule",
-      "blob": "8318a9d801c2151d6835db3a2f7053e6886b175d"
+      "blob": "768688cb39d336de6b08c7a50258a44a543d6d2e"
     },
     {
       "path": "PROJECT_AUDIT_LOG_ES.md",
       "role": "bitacora",
       "purpose": "technical/audit change history",
       "certainty": "rule",
-      "blob": "ccecf6ff51b7623deedb1573bcae6ed5d0f72c25"
+      "blob": "7658ee4207a492dbc05867626bcddeb06bc84388"
     },
     {
       "path": "README.md",
@@ -328,7 +328,7 @@
       "role": "data",
       "purpose": "structured/research data (semantics not validated)",
       "certainty": "rule",
-      "blob": "00daee4f0b0f503b9580d662cccd446a3cd8e620"
+      "blob": "38a5626052c80aa1074ae9eb6bb9ab03db9441a2"
     },
     {
       "path": "RUN_MASTER_PROTOCOL.md",
@@ -271067,7 +271067,7 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "239746cd4b60fc3e741f46eeca9e9bf25be18d81"
+      "blob": "5c66a639f3dd308e211dea99fa191371d706d032"
     },
     {
       "path": "docs/C3D_02_DOS_MALLAS_20261112_ES.md",
@@ -271081,7 +271081,7 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "7faadd032984cb616cd16ddcf0447f20e2458655"
+      "blob": "9df1d942b740b50c3ad53664df9a5121b0618f7c"
     },
     {
       "path": "docs/C3D_02_MESH_TRIAL_REGISTRY_20261118.csv",
@@ -271159,6 +271159,13 @@
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
       "blob": "74b1300153ff8e98293a63c649bbf927ce84a385"
+    },
+    {
+      "path": "docs/PRIMER_AVANCE_REQUISITOS_DIRECTOR_20261118_ES.md",
+      "role": "document",
+      "purpose": "manual/decision/report/historical note",
+      "certainty": "inferred",
+      "blob": "d7f95fb36054487fc670a5a36401c3921448e980"
     },
     {
       "path": "docs/granada/B11_C11_ENERGY2_DOCUMENTATION_AUDIT_20261021.md",
