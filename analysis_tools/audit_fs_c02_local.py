@@ -58,7 +58,8 @@ def read_volume(path: Path) -> list[tuple[float, float]]:
     return rows
 
 
-def read_alpha(path: Path) -> list[float]:
+def read_alpha(path: Path, expected_cells: int = EXPECTED_CELLS) -> list[float]:
+    require(expected_cells > 0, "invalid expected mesh size")
     require(path.is_file() and not path.is_symlink(), "latest alpha.metal field missing")
     raw = path.read_text(encoding="utf-8", errors="replace")
     require(re.search(r"\bobject\s+alpha\.metal\s*;", raw) is not None,
@@ -68,7 +69,7 @@ def read_alpha(path: Path) -> list[float]:
                       internal, re.S)
     if match:
         count = int(match.group(1))
-        require(count == EXPECTED_CELLS, "unexpected alpha cell count; mesh changed")
+        require(count == expected_cells, "unexpected alpha cell count; mesh changed")
         try:
             values = [float(x) for x in match.group(2).split()]
         except ValueError as error:
@@ -78,14 +79,15 @@ def read_alpha(path: Path) -> list[float]:
         uniform = re.search(r"internalField\s+uniform\s+([+\-0-9.eE]+)\s*;", internal)
         require(uniform is not None, "unsupported/non-ASCII alpha internalField")
         try:
-            values = [float(uniform.group(1))] * EXPECTED_CELLS
+            values = [float(uniform.group(1))] * expected_cells
         except ValueError as error:
             raise ValueError("FS-C02 AUDIT: invalid uniform alpha") from error
     require(all(math.isfinite(x) for x in values), "NaN or infinite alpha cell")
     return values
 
 
-def read_temperature(path: Path) -> list[float]:
+def read_temperature(path: Path, expected_cells: int = EXPECTED_CELLS) -> list[float]:
+    require(expected_cells > 0, "invalid expected mesh size")
     """Read real saved ASCII T field (K); never infer it from setup alone."""
     require(path.is_file() and not path.is_symlink(), "final T field missing")
     raw = path.read_text(encoding="utf-8", errors="replace")
@@ -98,7 +100,7 @@ def read_temperature(path: Path) -> list[float]:
     )
     if match:
         count = int(match.group(1))
-        require(count == EXPECTED_CELLS, "unexpected temperature cell count")
+        require(count == expected_cells, "unexpected temperature cell count")
         try:
             values = [float(v) for v in match.group(2).split()]
         except ValueError as error:
@@ -110,7 +112,7 @@ def read_temperature(path: Path) -> list[float]:
         )
         require(uniform is not None, "unsupported/non-ASCII T internalField")
         try:
-            values = [float(uniform.group(1))] * EXPECTED_CELLS
+            values = [float(uniform.group(1))] * expected_cells
         except ValueError as error:
             raise ValueError("FS-C02 AUDIT: invalid uniform T") from error
     require(all(math.isfinite(v) for v in values), "non-finite T field")
