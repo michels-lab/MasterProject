@@ -25,7 +25,7 @@ class FSC02Tests(unittest.TestCase):
         self.assertEqual(CASE_ID, "FS-C02")
         self.assertEqual(B14_MATERIAL.name, "castIron")
         self.assertTrue(len(validate_b14_reference()) == 64)
-        self.assertEqual(INITIAL_VOLUME, 1.6e-5)
+        self.assertAlmostEqual(INITIAL_VOLUME, 1.6e-5)
         self.assertEqual(DENSITY, 6820.0)
 
     def test_new_case_creates_distinct_source_without_modifying_B14_or_FS_C01(self):
