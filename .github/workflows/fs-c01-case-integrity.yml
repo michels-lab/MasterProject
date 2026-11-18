@@ -5,6 +5,8 @@ on:
     paths:
       - 'freesurface/**'
       - 'analysis_tools/test_freesurface_fs_c01.py'
+      - 'analysis_tools/run_fs_c01_local.py'
+      - 'analysis_tools/test_run_fs_c01_local.py'
       - '.github/workflows/fs-c01-case-integrity.yml'
   workflow_dispatch:
 
@@ -19,6 +21,8 @@ jobs:
       - uses: actions/checkout@v4
       - name: Python input integrity and nomenclature
         run: python3 -m unittest discover -s analysis_tools -p test_freesurface_fs_c01.py -v
+      - name: FS-C01 isolated runner synthetic regression tests (no CFD)
+        run: python3 -m unittest discover -s analysis_tools -p test_run_fs_c01_local.py -v
       - name: Confirm no CFD was run in CI
         run: |
           test ! -d freesurface/FS-C01/postProcessing
