@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
   "audit_kind": "deterministic_full_tracked_tree",
-  "tracked_files_total": 38844,
-  "classified_files_total": 38839,
-  "docs_content_inspected": 144,
+  "tracked_files_total": 38847,
+  "classified_files_total": 38842,
+  "docs_content_inspected": 145,
   "large_docs_skipped": 0,
   "excluded_reports": 5,
   "roles": {
@@ -13,21 +13,23 @@
     "config": 7,
     "data": 28,
     "document": 115,
-    "index": 24,
+    "index": 25,
     "license": 1,
-    "simulation_case_file": 99,
+    "simulation_case_file": 100,
     "simulation_input": 2680,
     "simulation_log": 3155,
     "simulation_output": 32613,
     "source": 63,
-    "test": 21,
+    "test": 22,
     "web_ui": 1,
     "workflow": 19
   },
-  "finding_counts": {},
-  "finding_total": 0,
-  "inventory_fingerprint": "ad9bd6bbcfbca25433eddf95cd750911242fb6be7d8fa13ed6b3c35b26770d4b",
-  "evidence_fingerprint": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+  "finding_counts": {
+    "POTENTIAL_UNLOGGED_CHANGES": 2
+  },
+  "finding_total": 2,
+  "inventory_fingerprint": "761fa076ecdb0bb3e92cabea2eb5afcf46971033c0cc530f31b0b5fdf0d1a4a9",
+  "evidence_fingerprint": "dedc77baf6838d4cc8192ab7de51b44326530280629b5281f72ff6235a578667",
   "files": [
     {
       "path": ".github/agents/openfoam-solidification.agent.md",
@@ -1416,6 +1418,20 @@
       "blob": "7071e1415ea4288b313d6aa436fbd10e36a8fcd1"
     },
     {
+      "path": "cases_3d/C3D_03_doctor_multiblock_pilot/Allmesh",
+      "role": "simulation_case_file",
+      "purpose": "OpenFOAM case-specific support artifact",
+      "certainty": "inferred",
+      "blob": "d29a846a58363bd02fadc79e3a2ecc8dfa5fa292"
+    },
+    {
+      "path": "cases_3d/C3D_03_doctor_multiblock_pilot/README.md",
+      "role": "index",
+      "purpose": "navigation/onboarding",
+      "certainty": "rule",
+      "blob": "62373348e13fb1e8439433611ad939db2a3c2f54"
+    },
+    {
       "path": "cases_3d/C3D_03_doctor_multiblock_pilot/system/blockMeshDict",
       "role": "simulation_input",
       "purpose": "OpenFOAM case field/dictionary input (content unvalidated)",
@@ -1428,6 +1444,13 @@
       "purpose": "OpenFOAM case field/dictionary input (content unvalidated)",
       "certainty": "inferred",
       "blob": "c9928caf7bd562e8fff26d8ed301f23292daebd9"
+    },
+    {
+      "path": "cases_3d/C3D_03_doctor_multiblock_pilot/tests/test_native_multiblock_static.sh",
+      "role": "test",
+      "purpose": "code/test implementation",
+      "certainty": "rule",
+      "blob": "95f50a3c8b1228c0b26b274e493e1d7de5c385ad"
     },
     {
       "path": "cases_3d/README.md",
@@ -271903,7 +271926,26 @@
       "blob": "0b65cc6aa3d29917f57a31a96fd5c3afeffb4ed4"
     }
   ],
-  "findings": [],
+  "findings": [
+    {
+      "id": "c299d5671fec3980",
+      "code": "POTENTIAL_UNLOGGED_CHANGES",
+      "severity": "review",
+      "path": "PROJECT_AUDIT_LOG_EN.md",
+      "observation": "1 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_03_doctor_multiblock_pilot/tests/test_native_multiblock_static.sh",
+      "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
+      "state": "REVIEW_REQUIRED"
+    },
+    {
+      "id": "acabae4a6f943b11",
+      "code": "POTENTIAL_UNLOGGED_CHANGES",
+      "severity": "review",
+      "path": "PROJECT_AUDIT_LOG_ES.md",
+      "observation": "1 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_03_doctor_multiblock_pilot/tests/test_native_multiblock_static.sh",
+      "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
+      "state": "REVIEW_REQUIRED"
+    }
+  ],
   "untracked_audited": false,
   "ignored_audited": false,
   "binary_contents_audited": false,
