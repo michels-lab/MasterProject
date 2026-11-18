@@ -1,3 +1,11 @@
+# Important: FS-C01, NOT C3D-02
+
+For the recommended isolated WSL execution (independent git worktree,
+20 frozen input hash checks, protected output paths and per-stage logs),
+read RUN_ISOLATED_UBUNTU_ES.md in this FS-C01 directory.
+
+Never run this in the C3D-02 checkout or the frozen FS-C01 source directory.
+
 # FS-C01 | VOF water-air hydrodynamic analogue (B-FS-01 stage)
 
 This deliberately does NOT model iron, shrinkage, latent heat or CHT.
