@@ -24,12 +24,10 @@
     "web_ui": 1,
     "workflow": 19
   },
-  "finding_counts": {
-    "POTENTIAL_UNLOGGED_CHANGES": 2
-  },
-  "finding_total": 2,
-  "inventory_fingerprint": "896cd7055138ab1f126d0663f426c4d2dff35b2c46081e2ea7a159235cd55be3",
-  "evidence_fingerprint": "bf821818b71afbcc7b8d719481f3a5570a5ba08b3891830cfa0853c84d1a6626",
+  "finding_counts": {},
+  "finding_total": 0,
+  "inventory_fingerprint": "b3d2d44bf6df8a9508cee892fc1406be6419974ec311c73a7ffb14a93d44648d",
+  "evidence_fingerprint": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
   "files": [
     {
       "path": ".github/agents/openfoam-solidification.agent.md",
@@ -239,7 +237,7 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "f75e0f31152949a19d20697f01fee6c7b5d94860"
+      "blob": "337835ba87016fc48d8f2b27ed5999ec85d98927"
     },
     {
       "path": "CASE_GUIDE_INTERACTIVE_ES.html",
@@ -267,7 +265,7 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "836257675420be703e3a08857be1413dad19b8e3"
+      "blob": "a2121f7b9b15ccd1453f07cbe103dfef1f8efe64"
     },
     {
       "path": "OPENFOAM_COMMAND_MANUAL.md",
@@ -288,7 +286,7 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "c35eaeba44d54f17f0c88a5129459c8eb28f4c4c"
+      "blob": "2c6a4a3556fd794617bfb075476836b7006881e4"
     },
     {
       "path": "POSTPROCESSING_FIELD_GUIDE_ES.md",
@@ -302,21 +300,21 @@
       "role": "bitacora",
       "purpose": "technical/audit change history",
       "certainty": "rule",
-      "blob": "b06855198af9c505f840a900d3d62ece2b64f14e"
+      "blob": "ae026749dd0970fdb0c24316bc7d70d7eb4fe73a"
     },
     {
       "path": "PROJECT_AUDIT_LOG_EN.md",
       "role": "bitacora",
       "purpose": "technical/audit change history",
       "certainty": "rule",
-      "blob": "2bb274d0daeb40ace285063993e2af9ba92c00fd"
+      "blob": "8318a9d801c2151d6835db3a2f7053e6886b175d"
     },
     {
       "path": "PROJECT_AUDIT_LOG_ES.md",
       "role": "bitacora",
       "purpose": "technical/audit change history",
       "certainty": "rule",
-      "blob": "ffd08b96d1512f8f974dca6457fb040fc553eb86"
+      "blob": "ccecf6ff51b7623deedb1573bcae6ed5d0f72c25"
     },
     {
       "path": "README.md",
@@ -337,28 +335,28 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "6b53c8040f587c7850d1452dfebfc9b95bdbc7cc"
+      "blob": "693ac415436c886883ef95030f364b50f9e6334e"
     },
     {
       "path": "VALIDATION_MATRIX.md",
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "d147beb3b3e3683065a8b30de09151810b916f77"
+      "blob": "32961e5c4cafded317b1fe8d64142dcfa4f8b589"
     },
     {
       "path": "VALIDATION_MATRIX_EN.md",
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "57bc0fc96988156602cff15b01cfbc1abe36c42a"
+      "blob": "d4916f5bb1bf94f43bac9a236047c9bfc95e3d53"
     },
     {
       "path": "VALIDATION_MATRIX_ES.md",
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "0ea77d18875d1a539a406713d4e53274392aad45"
+      "blob": "ea58acea1b9067b5ab3763b87e36511c39472ec6"
     },
     {
       "path": "analysis_results/c11_energy2_test/summary.md",
@@ -1079,7 +1077,7 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "0998ec06fa9ec60404033be08c09d522cd33dec9"
+      "blob": "419d0928415b81c2603128f6928e0a4de436b439"
     },
     {
       "path": "cases_3d/C3D_02_metal_sand_clean/constant/geometry/README.md",
@@ -1093,7 +1091,7 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "d3dee3561a36e760925462dcaf329054b0cabaf2"
+      "blob": "7ff0d9b0fee2952413cd9c414947cbfa11c38d23"
     },
     {
       "path": "cases_3d/C3D_02_metal_sand_clean/constant/geometry/metal.stl",
@@ -1422,7 +1420,7 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "20d017c2649ca01f0d6d9f9fa175a0377b5ab18d"
+      "blob": "418ad36cbf1ef99031047ae8c26cf9701e44d4a9"
     },
     {
       "path": "cases_3d/case3d-01/README.md",
@@ -271055,7 +271053,7 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "65b39ecb03341319c814e5eafdc3437e43cea2b0"
+      "blob": "be8ee2f433229f511afc948238c26e774533be5a"
     },
     {
       "path": "docs/C3D_01_ESTADO_REAL_20261110_ES.md",
@@ -271076,7 +271074,7 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "1f235d9c6797c6ebecf316b2752d30b24e361403"
+      "blob": "fc34bac483acbd79694460d8940e00451c53584a"
     },
     {
       "path": "docs/C3D_02_MALLADO_INICIAL_20261112_ES.md",
@@ -271097,7 +271095,7 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "784ecb0f9d5db4250e1eb59cc10359acfa8143cd"
+      "blob": "1648c247819e317305b40eb88f53d82fb3206895"
     },
     {
       "path": "docs/C3D_02_REFERENCIA_DOCTOR_Y_OPCIONES_MALLADO_20261118_ES.md",
@@ -271111,7 +271109,7 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "24cac1bc25f9514544839c0a72a473650d39ad5e"
+      "blob": "87e3bd97d78c88853cddae11a87fb9476058dbfa"
     },
     {
       "path": "docs/C3D_STL_GEOMETRY_AUDIT_20261117_ES.md",
@@ -271132,7 +271130,7 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "8ad6c18120d48bb50a122b7a4d546e3c282f5475"
+      "blob": "56cb2083fda65f9bec06b1ce5bc954703e268eeb"
     },
     {
       "path": "docs/DOCUMENT_SYNC_20261110_ES.md",
@@ -271146,14 +271144,14 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "34aec28ad6f4b617c0087093b3faaf9f41c18e00"
+      "blob": "82319cd8ac29e8cefcdad2632144f6e12c67d261"
     },
     {
       "path": "docs/OPENFOAM14_LECCIONES_C3D_20261112_ES.md",
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "87146851cb463435fb542f8c2be3bfef8deeecd9"
+      "blob": "df38dbe3b75b1e339730745b0bcbfd36844d3cfc"
     },
     {
       "path": "docs/OPENFOAM_ECOSYSTEM.md",
@@ -271877,26 +271875,7 @@
       "blob": "0b65cc6aa3d29917f57a31a96fd5c3afeffb4ed4"
     }
   ],
-  "findings": [
-    {
-      "id": "34898be3f167929b",
-      "code": "POTENTIAL_UNLOGGED_CHANGES",
-      "severity": "review",
-      "path": "PROJECT_AUDIT_LOG_EN.md",
-      "observation": "13 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_02_metal_sand_clean/scripts/build_c3d02.py, cases_3d/C3D_02_metal_sand_clean/scripts/check_stl_v2.sh, cases_3d/C3D_02_metal_sand_clean/scripts/diagnose_stl_v2_zones.sh, cases_3d/C3D_02_metal_sand_clean/scripts/native_checkmesh_report.sh, cases_3d/C3D_02_metal_sand_clean/scripts/native_interface_audit.sh, cases_3d/C3D_02_metal_sand_clean/scripts/run_stl_v2_ablation.sh",
-      "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "4be42a49369ce8c0",
-      "code": "POTENTIAL_UNLOGGED_CHANGES",
-      "severity": "review",
-      "path": "PROJECT_AUDIT_LOG_ES.md",
-      "observation": "13 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_02_metal_sand_clean/scripts/build_c3d02.py, cases_3d/C3D_02_metal_sand_clean/scripts/check_stl_v2.sh, cases_3d/C3D_02_metal_sand_clean/scripts/diagnose_stl_v2_zones.sh, cases_3d/C3D_02_metal_sand_clean/scripts/native_checkmesh_report.sh, cases_3d/C3D_02_metal_sand_clean/scripts/native_interface_audit.sh, cases_3d/C3D_02_metal_sand_clean/scripts/run_stl_v2_ablation.sh",
-      "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
-      "state": "REVIEW_REQUIRED"
-    }
-  ],
+  "findings": [],
   "untracked_audited": false,
   "ignored_audited": false,
   "binary_contents_audited": false,
