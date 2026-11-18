@@ -1,6 +1,6 @@
 # C3D-03 — Piloto 3D conformante inspirado en el caso del doctor
 
-**Estado 18-11-2026:** `blockMeshDict` y ejecutor **CREADOS en GitHub, NO ejecutados en Ubuntu**. El piloto **no reemplaza** al caso principal `C3D_02_metal_sand_clean`, ni los dos STL de SolidWorks, ni el caso `doctor_original/cht`. Es un ensayo **solo de topología y calidad**, sin `snappyHexMesh`, sin Python generador, sin termofísica, sin `foamMultiRun` ni CFD.
+**Estado 18-11-2026:** `blockMeshDict` y ejecutor **CREADOS en GitHub, NO ejecutados en Ubuntu**. (estado histórico previo a la ejecución; ver actualización arriba) El piloto **no reemplaza** al caso principal `C3D_02_metal_sand_clean`, ni los dos STL de SolidWorks, ni el caso `doctor_original/cht`. Es un ensayo **solo de topología y calidad**, sin `snappyHexMesh`, sin Python generador, sin termofísica, sin `foamMultiRun` ni CFD.
 
 ## Hallazgo geométrico: fuente real, no suposición de sección circular
 
