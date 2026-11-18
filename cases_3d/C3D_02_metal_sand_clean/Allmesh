@@ -121,8 +121,11 @@ VARIANT=baseline
 if (( $# == 1 )) && [[ "$1" == "--candidate-smooth" ]]; then
     VARIANT=smooth
     CASE="$HOME/OpenFOAM/C3D02_NATIVE_SMOOTH_01"
+elif (( $# == 1 )) && [[ "$1" == "--better" ]]; then
+    VARIANT=better
+    CASE="$HOME/OpenFOAM/c3d-better"
 elif (( $# > 0 )); then
-    echo "Usage: bash Allmesh [--diagnose|--candidate-smooth|--compare]" >&2
+    echo "Usage: bash Allmesh [--diagnose|--candidate-smooth|--better|--compare]" >&2
     exit 2
 fi
 if [[ -e "$CASE" || -L "$CASE" ]]; then
@@ -237,7 +240,7 @@ for region in metal mold; do
     run_native "checkMesh.$region" checkMesh -case "$CASE" -region "$region" \
         -allGeometry -allTopology -writeSurfaces -writeSets
     log="$CASE/log.checkMesh.$region"
-    if [[ "$VARIANT" == smooth ]]; then
+    if [[ "$VARIANT" == smooth || "$VARIANT" == better ]]; then
         if grep -Eq 'Failed[[:space:]]+[1-9][0-9]*[[:space:]]+mesh checks' "$log" ||
            ! grep -Eq '(^|[[:space:]])Mesh OK' "$log" ||
            ! grep -Eq 'Number of regions:[[:space:]]*1([^0-9]|$)' "$log"; then
@@ -269,21 +272,29 @@ for region in metal mold; do
     ' || fail "$region: CAD volume deviation exceeds 2% ($volume m3)"
 done
 
-if [[ "$VARIANT" == smooth ]]; then
+if [[ "$VARIANT" == smooth || "$VARIANT" == better ]]; then
     STAGE=CONTROLLED_COMPARISON
     baseline="$HOME/OpenFOAM/C3D02_NATIVE_OF14_01"
-    comparison="$CASE/CANDIDATE_COMPARISON.tsv"
+    if [[ "$VARIANT" == better ]]; then
+        comparison="$CASE/C3D_BETTER_COMPARISON.tsv"
+        printf '%s\n' "c3d - better: native OpenFOAM repeat of the L2 source baseline" \
+            "nSmoothPatch=3; no change to STLs, properties, or C14" \
+            "Run ID: c3d-better; do not mistake the name for mesh acceptance" \
+            > "$CASE/C3D_BETTER_RUN.txt"
+    else
+        comparison="$CASE/CANDIDATE_COMPARISON.tsv"
+    fi
     foam_write_mesh_comparison "$baseline" "$CASE" "$comparison"
-    echo "=== OpenFOAM native controlled snap sensitivity ==="
+    echo "=== OpenFOAM native C3D-02: $VARIANT ==="
     cat "$comparison"
     echo "Results and native checkMesh VTK are preserved at $CASE"
     if (( candidate_rejected )); then
-        echo "REJECTED / candidate mesh quality or CAD gate failed" > "$CASE/NATIVE_BUILD_STATUS.txt"
-        echo "Neither 3D region is accepted as CFD-ready; no solver executed."
+        echo "REJECTED / $VARIANT mesh quality or CAD gate failed" > "$CASE/NATIVE_BUILD_STATUS.txt"
+        echo "At least one 3D region failed mesh acceptance; no solver executed."
         exit 5
     fi
-    echo "CANDIDATE_MESH_PRELIMINARY_ACCEPTED / NO_CFD" > "$CASE/NATIVE_BUILD_STATUS.txt"
-    echo "The candidate passed native mesh gates; 3D BCs remain unvalidated."
+    echo "MESH_PRELIMINARY_ACCEPTED / $VARIANT / NO_CFD" > "$CASE/NATIVE_BUILD_STATUS.txt"
+    echo "Both native mesh gates passed; 3D boundary conditions are still unvalidated."
     exit 0
 fi
 
