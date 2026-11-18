@@ -79,6 +79,25 @@ class ExteriorAirMeshStaticTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError,"material cell counts changed"):
             audit(damaged)
 
+    def test_wrong_shared_face_resolution_cannot_pass_static_gate(self):
+        # Same number of cells, different face layout: blockMesh would not
+        # be conformal. Catch before launching the native mesher.
+        before="air (8 8 8) simpleGrading (1 1 1) // exterior side air slab 0, face 0"
+        after="air (16 4 8) simpleGrading (1 1 1) // exterior side air slab 0, face 0"
+        self.assertEqual(self.mesh.count(before),1)
+        with self.assertRaisesRegex(ValueError,"non-conformal subdivisions"):
+            audit(self.mesh.replace(before,after,1))
+
+    def test_reference_corner_jacobian_positive(self):
+        from audit_fs_c03_exterior_mesh import orientation_jacobian,parse
+        coords,bs,_=parse(self.mesh)
+        self.assertTrue(all(orientation_jacobian(v,coords)>0 for v,_,_ in bs))
+        self.assertLess(orientation_jacobian((1,0,2,3,4,5,6,7),
+                                             ((0,0,0),(1,0,0),
+                                              (1,1,0),(0,1,0),
+                                              (0,0,1),(1,0,1),
+                                              (1,1,1),(0,1,1))),0)
+
     def test_unclassified_patch_face_rejected(self):
         damaged=self.mesh.replace(
             "(-30 -65.5 -30) // 48 new air", "(-29 -65.5 -30) // 48 new air",1)
