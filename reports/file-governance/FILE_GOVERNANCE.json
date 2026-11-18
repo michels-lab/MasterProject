@@ -28,7 +28,7 @@
     "POTENTIAL_UNLOGGED_CHANGES": 1
   },
   "finding_total": 1,
-  "inventory_fingerprint": "0ac04f4b712c82954798c04a14e0363995957d2cd4ffe555b344ff4021404bef",
+  "inventory_fingerprint": "d381fcfcef10b9ed76a47004c499de115b14b8374d74133edc12a6d135af26f2",
   "evidence_fingerprint": "4bdcb0175d11b108f1f945c492c696f362d9e47bcf7a6321ffc0ecd03f6f78d9",
   "files": [
     {
@@ -316,14 +316,14 @@
       "role": "bitacora",
       "purpose": "technical/audit change history",
       "certainty": "rule",
-      "blob": "acdc3b659db40711f11da72029a7d6f678ef6ce6"
+      "blob": "871b978367346fca52271ba347b13fa1682d47df"
     },
     {
       "path": "README.md",
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "7446b23865f8e1d8a2b42ea1ee53741c7ac4e403"
+      "blob": "1b1d0bf6c461131eb03a0da026e245c7497f5ff3"
     },
     {
       "path": "RUN_CASE_REGISTRY.csv",
@@ -1506,7 +1506,7 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "d88225e54813d1aa7820ce2dc494d345039c381b"
+      "blob": "631d63daf6a503a69aafbfa7470fc7024cb117cd"
     },
     {
       "path": "cases_3d/C3D_05_step_gmsh_conformal/constant/geometry/QuickCupmm.STEP",
@@ -1548,7 +1548,7 @@
       "role": "test",
       "purpose": "code/test implementation",
       "certainty": "rule",
-      "blob": "4dc34db597131f070185df63d42dec58405bae59"
+      "blob": "51d99bfadee8766c29462d79a227b7ac65ccf84f"
     },
     {
       "path": "cases_3d/README.md",
@@ -271258,21 +271258,21 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "53d356a3c9a8c3ccd23185ab9d700b692bbf0595"
+      "blob": "a60f9485b3577ee6d93ffc4b6d32ed00219a86c9"
     },
     {
       "path": "docs/C3D_05_STEP_SOURCE_AUDIT_20261118_ES.md",
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "21d9e6cc09f922703c9058a7d4b17de728b21fef"
+      "blob": "c51949934dd2fbf5555a461e442016f8075dd5b6"
     },
     {
       "path": "docs/C3D_MESH_PROGRESS_20261118.csv",
       "role": "data",
       "purpose": "structured/research data (semantics not validated)",
       "certainty": "rule",
-      "blob": "dfadf9c543051b884cdfa08c706a157a29eafffb"
+      "blob": "41877c01599b68053172fcf7c322aaaeee1e1fee"
     },
     {
       "path": "docs/C3D_REINICIO_20261112_ES.md",
@@ -271300,7 +271300,7 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "8e5c187122e3deb9006edf8b119ac43d0c550cdf"
+      "blob": "b94e62a0affeba863a7486619af884a4e576daca"
     },
     {
       "path": "docs/DOCUMENT_SYNC_20261110_ES.md",
