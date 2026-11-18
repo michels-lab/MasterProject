@@ -409,3 +409,32 @@ Próximas verificaciones físicas: evaluar velocidades guardadas del laminar, ev
 **Distinción científica obligatoria:** descartar laminar como enfoque de tesis **no valida automáticamente** el modelo RAS `kEpsilon` heredado del agua. La auditoría A/B solo demostró sensibilidad a desactivar conjuntamente RAS y `VoFTurbulenceDamping`, no cuál formulación predice el comportamiento real del hierro fundido. Los valores iniciales heredados `k=0.1 m²/s²`, `epsilon=0.1 m²/s³`, y `delta=1e-4 m` carecen de calibración específica del hierro/flujo/QuickCup.
 
 **Prioridad siguiente**: continuar la línea **turbulenta** de FS-C02; investigar condiciones iniciales/fuentes de turbulencia y `nut`/difusividad térmica turbulenta, validar respuesta de la superficie libre (`alpha.metal`, velocidades, altura) y presupuesto térmico/energético antes de incorporar CHT metal–molde, cambio de fase y shrinkage. No usar el criterio Courant aprobado como evidencia de validez física. Mantener B14, FS-C01, C3D-02 y carpetas ya corridas sin modificar.
+
+## 2026-11-18 — Requisito explícito: aire exterior adicional SOBRE abertura del molde, SIN techo falso
+
+**Instrucciones del investigador:** el aire caliente debe poder abandonar el cuadro al alcanzar la parte superior; el dominio debe contener **más espacio de aire exterior por encima de la abertura del molde**, y el límite superior nunca puede ser una pared cerrada ficticia. No se debe aumentar artificialmente la altura de la cavidad metálica ni introducir un techo. La observación se refiere a geometría/contornos del caso hierro–aire turbulento, NO a retomar el caso laminar (archivado).
+
+**Situación encontrada en las fuentes ya usadas:** FS-C02 inicial y extendido reproducen el dominio 2D de FS-C01 con `0<=y<=0.06 m`; la columna metal inicial ocupa `0<=y<=0.04 m`. El espacio libre de aire es **0.020 m**. El límite `atmosphere` ya era un `patch` no una `wall`; sus BC `U=pressureInletOutletVelocity`, `p_rgh=prghTotalPressure`, `T=inletOutlet` (reentrada 300 K), `alpha.metal=inletOutlet` (reentrada metal=0) permiten salida y reentrada. `p` inicial es 100 kPa y `g=(0,-9.81,0)`. Una condición de salida abierta **no prueba que haya flujo de aire positivo**, ni confirma que el contorno esté lo bastante lejos del metal.
+
+**Variante nueva de sensibilidad geométrica** `analysis_tools/run_fs_c02_high_headspace.py`: crea otra carpeta independiente en `~/OpenFOAM/FS_C02_HIGH_AIR_RUNS/FS-C02_HIGH_AIR_<UTC>_<id>/`, sin tocar FS-C02 RAS existente, FS-C01, B14, C3D-02 o el caso laminar archivado. Parte exactamente de la copia del perfil RAS `EXTENDED_PROBE_0_01S_TIGHTER_CO` y mantiene **los mismos 18 archivos de entrada**. Cambian solo:
+1. `system/blockMeshDict`: mover la frontera `atmosphere` desde y=0.060 hasta **y=0.120 m**, añadir región de aire exterior y=0.060–0.120 m; conservar `metalColumn` y `T` del metal y=0–0.040 m; malla uniforme **80×240×1 = 19 200 celdas** frente a 80×120×1=9600, con el mismo `dx=dy=0.5 mm`. El aire inicial total desde el metal hasta el parche crece **0.020→0.080 m** (factor 4). No hay sólido de molde en FS-C02: la distinción "aire exterior encima del molde" es geométrica/conceptual hasta integrar el molde.
+2. `system/controlDict`: añade el objeto `atmosphereFlux` (`surfaceFieldValue`, `patch atmosphere`, `operation sum`, `fields (phi)`), que registra flujo firmado neto de la **mezcla** por la abertura. Se mantienen `maxCo=0.15`, aceptación `Co<=0.20`, `maxDeltaT=1e-6 s`, duración 0.01 s y escritura cada 0.001 s; mantiene RAS `kEpsilon` + `VoFTurbulenceDamping`.
+
+El objeto `surfaceFieldValue` y la sintaxis `patch atmosphere; operation sum; fields (phi);` provienen de los ejemplos oficiales Foundation 14 `etc/caseDicts/functions/surfaceFieldValue/patchFlowRate` y `surfaceValue.cfg`. Un flujo firmado neto positivo indica flujo volumétrico neto hacia fuera de la **mezcla**, no demuestra flujo másico de aire puro, ni un balance de energía ni un caudal unilateral: puede haber salidas/entradas locales simultáneas. No se debe llamar `flujo másico de aire` sin separar fases; tampoco inferir que el gas ya salió si el valor resulta cero. El caso instrumentado aún **NO ha sido ejecutado** en Ubuntu.
+
+**Línea base experimental** para comparar con FS-C02 turbulento original: a t=0.01 s, `T_air casi puro≈745.2444 K`, `Co max=0.163617`, volumen metálico `1.6e-5 m3`; no es un modelo físicamente validado. El caso ampliado permitirá estudiar sensibilidad de la temperatura y recirculación al límite superior; **no garantiza** que el gas se enfríe al ampliarlo.
+
+**Comando para Ubuntu Foundation 14** desde worktree FS-C02 actualizado a la rama correspondiente (NO dentro de `~/OpenFOAM/MasterProject`, donde corre C3D-02):
+
+```bash
+cd ~/OpenFOAM/FS_C02_WORKTREE
+python3 analysis_tools/run_fs_c02_high_headspace.py
+```
+
+Alternativa para validar geometría y manifiesto **sin ejecutar CFD**:
+
+```bash
+python3 analysis_tools/run_fs_c02_high_headspace.py --stage-only
+```
+
+La nueva herramienta genera un resumen de T/alpha/volumen a t=0.01 s para la malla **19200 celdas**, verifica que el parche superior sigue abierto y registra los datos de flujo `phi` si se producen. Si el flujo superior no se ha grabado, **no se declara validación de evacuación**. La cota superior 0.12 m es **hipótesis de sensibilidad**, no dimensión real suministrada por el investigador ni definición final de un dominio abierto; se debe estudiar sensibilidad al alejamiento del contorno y al futuro diseño real del molde.
