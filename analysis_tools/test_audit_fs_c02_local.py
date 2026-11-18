@@ -150,7 +150,112 @@ class FSC02AuditTests(unittest.TestCase):
         )
         r = audit(self.run, self.root / "highCourant")
         self.assertEqual(r["status"], "REVIEW")
-        self.assertIn("Courant max exceeds configured maxCo .25", r["alerts"])
+        self.assertIn("Courant max exceeds acceptance Co 0.25", r["alerts"])
+
+    def make_extended_case(self, status_name="PROBE_COURANT_SCREEN_PASSED"):
+        """New isolated synthetic 0.01 s run: never mutate original test run."""
+        root = self.root / "FS-C02_EXTENDED_synthetic"
+        case, record = stage(root, extended_probe=True)
+        record["status"] = status_name
+        record["solver_tested_on_real_openfoam"] = True
+        record["stages"] = [
+            {"stage": s, "returncode": 0, "gate_passed": True}
+            for s in ("blockMesh", "checkMesh", "foamRun")
+        ]
+        (root / "FS-C02_RUN_STATUS.json").write_text(json.dumps(record) + "\n")
+        volume = case / "postProcessing/metalVolume/0/volFieldValue.dat"
+        volume.parent.mkdir(parents=True)
+        volume.write_text(
+            "# Time volIntegrate(alpha.metal)\n"
+            f"0 {INITIAL_VOLUME}\n"
+            f"0.001 {INITIAL_VOLUME}\n"
+            f"0.01 {INITIAL_VOLUME}\n"
+        )
+        tdir = case / "0.01"
+        tdir.mkdir()
+        alpha_values = ["1"]*6400 + ["0"]*(EXPECTED_CELLS-6400)
+        (tdir / "alpha.metal").write_text(
+            "FoamFile { class volScalarField; object alpha.metal; }\n"
+            "internalField nonuniform List<scalar>\n"
+            f"{EXPECTED_CELLS}\n(\n" + "\n".join(alpha_values)
+            + "\n);\nboundaryField {}\n"
+        )
+        temperature_values = ["1500"]*6400 + ["300"]*(EXPECTED_CELLS-6400)
+        (tdir / "T").write_text(
+            "FoamFile { class volScalarField; object T; }\n"
+            "internalField nonuniform List<scalar>\n"
+            f"{EXPECTED_CELLS}\n(\n" + "\n".join(temperature_values)
+            + "\n);\nboundaryField {}\n"
+        )
+        log = root / "logs/FS-C02_foamRun.log"
+        log.write_text(
+            "Time = 0.001s\n"
+            "Courant Number mean: 0.01 max: 0.163617\n"
+            "Interface Courant Number mean: 0.0 max: 0.009\n"
+            "Time = 0.01s\n"
+            "Courant Number mean: 0.01 max: 0.10\n"
+            "Interface Courant Number mean: 0.0 max: 0.009\nEnd\n"
+        )
+        return root, case, log
+
+    def test_extended_001s_profile_is_validated_separately(self):
+        root, _, _ = self.make_extended_case()
+        r = audit(root, self.root / "extended_report")
+        self.assertEqual(r["status"], "NUMERICAL_SCREEN_PASSED")
+        self.assertEqual(r["execution_profile"],
+                         "EXTENDED_PROBE_0_01S_TIGHTER_CO")
+        self.assertEqual(r["expected_end_time_s"], .01)
+        self.assertEqual(r["controller_target_maxCo"], .15)
+        self.assertEqual(r["acceptance_maxCo"], .20)
+        self.assertEqual(r["last_time_s"], .01)
+        self.assertEqual(r["max_courant_over_log"], .163617)
+        self.assertAlmostEqual(
+            r["temperature_screen"]["metal_weighted_mean_T_K"], 1500
+        )
+        self.assertAlmostEqual(
+            r["temperature_screen"]["air_weighted_mean_T_K"], 300
+        )
+        self.assertTrue(r["physical_mass_balance_not_verified"])
+        self.assertTrue(r["temperature_screen"]["thermal_energy_balance_verified"] is False)
+        self.assertTrue(r["shrinkage_not_modelled"])
+
+    def test_extended_courant_over_02_fails_even_with_lower_target(self):
+        root, _, log = self.make_extended_case()
+        log.write_text(
+            "Courant Number mean: 0.01 max: 0.21\n"
+            "Interface Courant Number mean: 0 max: 0.009\nEnd\n"
+        )
+        r = audit(root, self.root / "extended_high_co")
+        self.assertEqual(r["status"], "REVIEW")
+        self.assertIn("Courant max exceeds acceptance Co 0.2", r["alerts"])
+
+    def test_extended_profile_requires_temperature_field(self):
+        root, case, _ = self.make_extended_case()
+        (case / "0.01/T").unlink()
+        r = audit(root, self.root / "extended_no_t")
+        self.assertEqual(r["status"], "REVIEW")
+        self.assertIn("final T field missing in extended probe", r["alerts"])
+
+    def test_extended_status_profile_tampering_rejected(self):
+        root, _, _ = self.make_extended_case()
+        path = root / "FS-C02_RUN_STATUS.json"
+        r = json.loads(path.read_text())
+        r["extended_probe"] = False
+        path.write_text(json.dumps(r) + "\n")
+        with self.assertRaisesRegex(ValueError, "probe status"):
+            audit(root, self.root / "tampered_status")
+
+    def test_extended_profile_end_time_is_enforced(self):
+        root, case, _ = self.make_extended_case()
+        volume = case / "postProcessing/metalVolume/0/volFieldValue.dat"
+        volume.write_text(
+            "# Time volIntegrate(alpha.metal)\n"
+            f"0 {INITIAL_VOLUME}\n"
+            f"0.005 {INITIAL_VOLUME}\n"
+        )
+        # Disagreeing saved field time is a hard failure, not a fabricated match.
+        with self.assertRaisesRegex(ValueError, "last saved alpha time"):
+            audit(root, self.root / "inconsistent_end_time")
 
     def test_spatial_field_vs_function_disagreement_flagged(self):
         self.alpha_file.write_text(
