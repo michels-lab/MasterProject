@@ -84,6 +84,12 @@ class HighAirTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError,"pre-existing run directory"):
             prepare(self.new)
 
+    def test_no_CFD_for_vertical_only_air_over_missing_sand_geometry(self):
+        # Must reject BEFORE making a case directory or checking OpenFOAM env.
+        code=main(["--out",str(self.new)])
+        self.assertEqual(code,2)
+        self.assertFalse(self.new.exists())
+
     def test_19200_cell_fields_and_top_flux_summary(self):
         case,_=prepare(self.new)
         last=case/"0.01"
