@@ -93,7 +93,8 @@ def outside_repo(path: Path) -> None:
     check(resolved != base and base not in resolved.parents
           and resolved != Path.home().resolve(),
           "output must be outside the repository and not equal home")
-    check("cases_3d" not in resolved.parts and "cases_controlled_buoyancy" not in resolved.parts
+    check("MasterProject" not in resolved.parts
+          and "cases_3d" not in resolved.parts and "cases_controlled_buoyancy" not in resolved.parts
           and "FS_C01_RUNS" not in resolved.parts
           and "FS_C01_WORKTREE" not in resolved.parts,
           "refusing FS-C01/B14/C3D output namespace")
