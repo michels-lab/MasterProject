@@ -109,3 +109,11 @@ Salida nueva: `~/OpenFOAM/C3D02_NATIVE_SMOOTH_01/CANDIDATE_COMPARISON_CORRECTED.
 ### Próxima decisión técnica
 
 Revisar espacialmente los VTK de celdas cóncavas, celdas con determinantes bajos y cara tetraédrica defectuosa en ParaView **antes** de adoptar ajustes de refinamiento o snapping. Mantener ambos experimentos como baseline/candidato rechazado. No relajar `checkMesh` para superar la puerta.
+
+## 17-11-2026 — Repetición limpia identificada como c3d - better
+
+A solicitud expresa del investigador, el siguiente ensayo lleva el nombre **c3d - better**, almacenado como `~/OpenFOAM/c3d-better` para usar una ruta sin espacios compatible con herramientas OpenFOAM.
+
+Comando: `bash cases_3d/C3D_02_metal_sand_clean/Allmesh --better`.
+
+La prueba repite el mallado original con el diccionario fuente L2 y `nSmoothPatch=3` en nueva carpeta y comprueba **ambas** regiones con OpenFOAM. No continúa automáticamente al solver y no toca los STL, valores físicos C14 ni ensayos históricos. Su tabla `C3D_BETTER_COMPARISON.tsv` conserva métricas de los logs del baseline y nueva malla, incluidos volúmenes totales. El nombre **no expresa un logro de calidad** antes de ejecutar `checkMesh`. Todavía no se ha ejecutado en Ubuntu.
