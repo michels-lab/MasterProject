@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
   "audit_kind": "deterministic_full_tracked_tree",
-  "tracked_files_total": 38862,
-  "classified_files_total": 38857,
-  "docs_content_inspected": 149,
+  "tracked_files_total": 38863,
+  "classified_files_total": 38858,
+  "docs_content_inspected": 150,
   "large_docs_skipped": 0,
   "excluded_reports": 5,
   "roles": {
@@ -12,7 +12,7 @@
     "bitacora": 5,
     "config": 7,
     "data": 29,
-    "document": 117,
+    "document": 118,
     "index": 27,
     "license": 1,
     "simulation_case_file": 102,
@@ -28,7 +28,7 @@
     "POTENTIAL_UNLOGGED_CHANGES": 1
   },
   "finding_total": 1,
-  "inventory_fingerprint": "035d244e22d4863431589cb0d0e1681b7f470991c6ec71dafccc76f8b8b1b677",
+  "inventory_fingerprint": "e31006818cf1e20d9918536f4c78a30e39a794b07832efb830d90fc00da3045d",
   "evidence_fingerprint": "4bdcb0175d11b108f1f945c492c696f362d9e47bcf7a6321ffc0ecd03f6f78d9",
   "files": [
     {
@@ -271245,6 +271245,13 @@
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
       "blob": "deb3c42fc78e9f8997e7c98926d4042430463fe1"
+    },
+    {
+      "path": "docs/C3D_05_STEP_SOURCE_AUDIT_20261118_ES.md",
+      "role": "document",
+      "purpose": "manual/decision/report/historical note",
+      "certainty": "inferred",
+      "blob": "21d9e6cc09f922703c9058a7d4b17de728b21fef"
     },
     {
       "path": "docs/C3D_MESH_PROGRESS_20261118.csv",
