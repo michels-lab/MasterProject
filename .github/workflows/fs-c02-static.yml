@@ -21,6 +21,11 @@ on:
       - 'analysis_tools/test_audit_fs_c02_open_top.py'
       - 'analysis_tools/run_fs_c02_high_headspace.py'
       - 'analysis_tools/test_run_fs_c02_high_headspace.py'
+      - 'analysis_tools/audit_fs_c03_exterior_mesh.py'
+      - 'analysis_tools/test_audit_fs_c03_exterior_mesh.py'
+      - 'analysis_tools/run_fs_c03_mesh.py'
+      - 'analysis_tools/test_run_fs_c03_mesh.py'
+      - 'freesurface/FS-C03_exterior_air_pilot/**'
       - 'analysis_tools/diagnose_fs_c02_courant.py'
       - 'analysis_tools/test_diagnose_fs_c02_courant.py'
       - 'freesurface/FS-C02/**'
@@ -60,6 +65,10 @@ jobs:
         run: python3 -m unittest discover -s analysis_tools -p test_audit_fs_c02_open_top.py -v
       - name: Stage 120mm high-air RAS case and verify open patch flux/mesh size (NO CFD)
         run: python3 -m unittest discover -s analysis_tools -p test_run_fs_c02_high_headspace.py -v
+      - name: FS-C03 3D metal-sand-air exact face ownership and air-connectivity audit (NO CFD)
+        run: python3 -m unittest discover -s analysis_tools -p test_audit_fs_c03_exterior_mesh.py -v
+      - name: FS-C03 native mesh-only stage isolation and fail-closed regression (NO CFD)
+        run: python3 -m unittest discover -s analysis_tools -p test_run_fs_c03_mesh.py -v
       - name: Stage reference iron-air case outside Git checkout
         run: |
           python3 analysis_tools/run_fs_c02_local.py \
