@@ -114,7 +114,7 @@ def write_record(path: Path, record: dict) -> None:
     temp.write_text(json.dumps(record, indent=2, ensure_ascii=False)+"\n")
     temp.replace(path)
 
-def stage(out: Path) -> tuple[Path, dict]:
+def stage(out: Path, *, startup_probe: bool = False) -> tuple[Path, dict]:
     validate_source(SOURCE)
     b14_sha = validate_b14_reference()
     out = out.expanduser().resolve()
@@ -178,6 +178,19 @@ def stage(out: Path) -> tuple[Path, dict]:
     data = replace_once(data, "fields (alpha.water);",
                         "fields (alpha.metal);", "volume field")
     check("writeFields false;" in data, "Foundation 14 writeFields keyword absent")
+    if startup_probe:
+        # The original FS-C02 completed but had one early Courant=9.41807.
+        # Probe ONLY the 0-0.002 s startup, in a fresh directory.
+        # This is an empirical safer candidate, NOT guaranteed stable.
+        for before, after, label in (
+            ("endTime         0.1;", "endTime         0.002;", "short startup probe"),
+            ("deltaT          0.0001;", "deltaT          1e-7;", "initial deltaT"),
+            ("maxCo           0.25;", "maxCo           0.20;", "maximum Courant"),
+            ("maxAlphaCo      0.25;", "maxAlphaCo      0.20;", "interface Courant"),
+            ("maxDeltaT       0.001;", "maxDeltaT       5e-6;", "maximum deltaT"),
+        ):
+            data = replace_once(data, before, after, label)
+        check("adjustTimeStep  on;" in data, "automatic deltaT disabled")
     control.write_text(data)
 
     input_paths = sorted(p for directory in ("0", "constant", "system")
@@ -195,6 +208,17 @@ def stage(out: Path) -> tuple[Path, dict]:
         "b14_material_source": B14_MATERIAL.relative_to(REPO).as_posix(),
         "b14_material_sha256": b14_sha,
         "generated_input_sha256": expected,
+        "execution_profile": (
+            "STARTUP_PROBE_0_002S_CONSERVATIVE" if startup_probe else
+            "ORIGINAL_SMOKE_0_1S"
+        ),
+        "time_controls": (
+            {"endTime_s": .002, "deltaT_initial_s": 1e-7,
+             "maxDeltaT_s": 5e-6, "maxCo": .20, "maxAlphaCo": .20}
+            if startup_probe else
+            {"endTime_s": .1, "deltaT_initial_s": 1e-4,
+             "maxDeltaT_s": .001, "maxCo": .25, "maxAlphaCo": .25}
+        ),
         "initial_metal_volume_m3": INITIAL_VOLUME,
         "reference_metal_density_kg_m3": DENSITY,
         "reference_metal_mass_kg": INITIAL_VOLUME * DENSITY,
@@ -218,6 +242,8 @@ def stage(out: Path) -> tuple[Path, dict]:
         "run_directory": str(out),
         "source_case": "FS-C01 frozen inputs + B14 property reference ONLY",
         "status": "STAGED_NO_CFD_YET",
+        "startup_probe": startup_probe,
+        "time_controls": manifest["time_controls"],
         "solver_tested_on_real_openfoam": False,
         "mass_verified": False,
         "contraction_modelled": False,
@@ -252,29 +278,62 @@ def execute(out: Path, case: Path, record: dict) -> None:
         write_record(out / "FS-C02_RUN_STATUS.json", record)
         check(passed, label + " gate failed; inspect " + str(logfile))
     record["solver_tested_on_real_openfoam"] = True
-    record["status"] = "SOLVER_FINISHED_PHYSICS_NOT_VALIDATED"
-    write_record(out / "FS-C02_RUN_STATUS.json", record)
-    print("FS-C02 foamRun completed. MASS, INTERFACE, THERMAL PHYSICS, SHRINKAGE UNVERIFIED.")
+    if record.get("startup_probe"):
+        # Always inspect the entire historical startup log, not just last Co.
+        # Diagnostic reads only; does not execute or alter solver results.
+        from diagnose_fs_c02_courant import diagnose_lines
+        report = diagnose_lines(log.splitlines(), threshold=.20,
+                                count=3, context=4)
+        record["courant_probe"] = {
+            "threshold": report["threshold"],
+            "observations": report["courant_observations"],
+            "peak_max": report["courant_global_max"],
+            "last_max": report["courant_last_max"],
+            "observations_above_threshold":
+                report["observations_above_threshold"],
+            "largest_spikes": report["largest_spikes"],
+        }
+        record["status"] = (
+            "PROBE_COURANT_SCREEN_PASSED"
+            if report["observations_above_threshold"] == 0
+            else "PROBE_REVIEW_COURANT"
+        )
+        write_record(out / "FS-C02_RUN_STATUS.json", record)
+        print(
+            "FS-C02 STARTUP PROBE: " + record["status"] +
+            "; max Co=" + str(report["courant_global_max"]) +
+            "; over .20=" + str(report["observations_above_threshold"])
+        )
+    else:
+        record["status"] = "SOLVER_FINISHED_PHYSICS_NOT_VALIDATED"
+        write_record(out / "FS-C02_RUN_STATUS.json", record)
+        print("FS-C02 foamRun completed. MASS, INTERFACE, THERMAL PHYSICS, SHRINKAGE UNVERIFIED.")
+    print("NO solidification or shrinkage. C3D-02 and B14 never touched.")
 
 def main(argv=None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--out", type=Path, default=None)
     parser.add_argument("--stage-only", action="store_true",
                         help="create a provisional FS-C02 case without running OpenFOAM")
+    parser.add_argument("--startup-probe", action="store_true",
+                        help="isolated 0-0.002 s conservative startup trial; source unchanged")
     args = parser.parse_args(argv)
-    name = "FS-C02_" + datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ") + "_" + uuid.uuid4().hex[:8]
+    prefix = "FS-C02_STARTUP_" if args.startup_probe else "FS-C02_"
+    name = prefix + datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ") + "_" + uuid.uuid4().hex[:8]
     out = args.out or Path.home() / "OpenFOAM" / "FS_C02_RUNS" / name
     try:
         validate_source(SOURCE)
         validate_b14_reference()
         if not args.stage_only:
             check_runtime()
-        case, record = stage(out)
+        case, record = stage(out, startup_probe=args.startup_probe)
         print("FS-C02 isolated new case staged: " + str(case))
         if args.stage_only:
             print("FS-C02 STAGED ONLY; no metal-air CFD executed.")
         else:
             execute(out, case, record)
+            if args.startup_probe and record["status"] == "PROBE_REVIEW_COURANT":
+                return 1
         return 0
     except (ValueError, OSError, json.JSONDecodeError) as exc:
         print("FS-C02 BLOCKED: " + str(exc), file=sys.stderr)
