@@ -11,3 +11,7 @@ Los 20 archivos de entrada en `0/`, `constant/` y `system/` son idénticos a los
 **Para validar en Ubuntu/OpenFOAM 14:** dentro de este caso ejecutar `blockMesh`, `checkMesh`, revisar logs/parches y luego `foamRun`. Guardar las salidas reales y revisar `alpha.water`, volumen, masa, Co y estabilidad de la interfaz. El script `analysis_tools/granada_bfs01_vof_benchmark.py audit` comprueba volumen mediante postprocesamiento auténtico, pero no masa ni shrinkage.
 
 **Origen y licencia:** entradas derivadas del [tutorial oficial de OpenFOAM Foundation 14](https://github.com/OpenFOAM/OpenFOAM-14/tree/master/tutorials/compressibleVoF/damBreak), bajo GNU GPL. No se han incluido datos de una corrida ni se han modificado casos históricos del investigador.
+
+## 2026-11-17 — Preparación de ejecución local aislada
+
+Se añade el ejecutor de caso exclusivo FS-C01 en `analysis_tools/run_fs_c01_local.py`, junto con `RUN_ISOLATED_UBUNTU_ES.md` y pruebas sintéticas. Crea una copia nueva bajo `~/OpenFOAM/FS_C01_RUNS`, valida los 20 SHA-256 y registra logs/estado por etapa. Rechaza `checkMesh` con errores aunque su retorno sea cero. Para evitar interferencia con C3D-02, usar un worktree FS-C01 separado; NO cambiar de rama sobre el checkout que usa la simulación 3D. El código y sus pruebas estáticas NO significan que se haya ejecutado `blockMesh`, `checkMesh` o `foamRun` en la laptop; conservamos `PREPARED_NOT_MESHED_OR_RUN` y siguen pendientes masa, alpha, hidrostática y contracción.
