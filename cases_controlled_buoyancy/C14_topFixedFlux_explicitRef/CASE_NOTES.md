@@ -1,3 +1,5 @@
+> **18-11-2026 — Requisito del primer avance del director:** C14 es la referencia CFD verificada para explicar ecuaciones, BC, `deltaT`, PIMPLE, tolerancias, evolución y **Courant máximo realmente obtenido de logs**. `maxCo=0.25` con `adjustTimeStep=no` no es el máximo observado. La comparación de sensibilidad pendiente es **C14 `phaseChangeSource.relax=0.10` vs C16 `0.25`**; no confundir con `relaxationFactors=1.0`. [Plan de entrega, fuentes y checklist](../../docs/PRIMER_AVANCE_REQUISITOS_DIRECTOR_20261118_ES.md).
+
 # CASE_NOTES — C14_topFixedFlux_explicitRef
 
 > Este archivo documenta la intención y genealogía del caso. No modifica la simulación.
