@@ -251,3 +251,5 @@ Comando desde `~/OpenFOAM/FS_C02_WORKTREE`, tras actualizar solamente este workt
       --run ~/OpenFOAM/FS_C02_RUNS/FS-C02_EXTENDED_20261118T181711Z_d6b6ab92
 
 El programa imprime un JSON y **no escribe informes ni modifica archivos**, ni vuelve a correr `blockMesh`, `checkMesh` o `foamRun`. El análisis numérico de interfaz/temperatura debe revisarse antes de avanzar al acoplamiento metal–molde y `VoFSolidificationMelting`. No inferir solidificación, contracción ni alimentación de un caso que no los representa.
+
+**Salida condensada recomendada para compartir:** agregar `--brief` al comando anterior. Así se imprimen tres tiempos representativos (primero, intermedio y final) con el número de celdas y temperaturas de los tres grupos. Sin `--brief` se imprimen todos los tiempos guardados. Ambos modos son de solo lectura y nunca ejecutan CFD.
