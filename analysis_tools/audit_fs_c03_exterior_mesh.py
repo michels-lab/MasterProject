@@ -49,6 +49,22 @@ def face_key(face):
     return tuple(sorted(face))
 
 
+def orientation_jacobian(v, coordinates):
+    p0, p1, p3, p4=(coordinates[v[k]] for k in (0,1,3,4))
+    ax,ay,az=(a-b for a,b in zip(p1,p0))
+    bx,by,bz=(a-b for a,b in zip(p3,p0))
+    cx,cy,cz=(a-b for a,b in zip(p4,p0))
+    return ((ay*bz-az*by)*cx
+            +(az*bx-ax*bz)*cy
+            +(ax*by-ay*bx)*cz)
+
+
+def subdivisions_for_faces(n):
+    nx,ny,nz=n
+    return ((nx,ny),(nx,ny),(nx,nz),
+            (ny,nz),(nx,nz),(ny,nz))
+
+
 def faces_of(v):
     return (
         (v[0],v[3],v[2],v[1]),
@@ -106,13 +122,20 @@ def audit(text: str) -> dict:
     nbyregion=defaultdict(int)
     faces=defaultdict(list)
     for idx,(v,region,nc) in enumerate(blocks):
+        jac=orientation_jacobian(v,vertices)
+        require(math.isfinite(jac) and jac>0,
+                "block "+str(idx)+" has non-positive reference-corner Jacobian")
         nbyregion[region]+=math.prod(nc)
-        for side in faces_of(v):
-            faces[face_key(side)].append((idx,region,side))
+        for side,face_div in zip(faces_of(v),subdivisions_for_faces(nc)):
+            faces[face_key(side)].append((idx,region,side,face_div))
     require(dict(nbyregion)==EXPECTED_REGIONS,
             "material cell counts changed: "+str(dict(nbyregion)))
     require(all(len(owners) in (1,2) for owners in faces.values()),
             "face has more than two neighboring blocks")
+    for owners in faces.values():
+        if len(owners)==2:
+            require(sorted(owners[0][3])==sorted(owners[1][3]),
+                    "non-conformal subdivisions on shared block face")
     uncovered={key for key,owners in faces.items() if len(owners)==1}
     named={}
     for name,(typ,fs) in patches.items():
@@ -217,6 +240,8 @@ def audit(text: str) -> dict:
         "source_C3D03_lower_material_topology_preserved":True,
         "solid_mold_base_and_recess_exposure_resolved":False,
         "physical_CAD_surface_fidelity_verified":False,
+        "reference_corner_jacobians_all_positive":True,
+        "shared_face_subdivisions_all_match":True,
         "native_OpenFOAM_mesh_quality_verified":False,
         "energy_or_thermal_physics_verified":False,
         "solver_executed":False,
