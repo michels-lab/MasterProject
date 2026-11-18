@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
   "audit_kind": "deterministic_full_tracked_tree",
-  "tracked_files_total": 38828,
-  "classified_files_total": 38823,
-  "docs_content_inspected": 139,
+  "tracked_files_total": 38829,
+  "classified_files_total": 38824,
+  "docs_content_inspected": 140,
   "large_docs_skipped": 0,
   "excluded_reports": 5,
   "roles": {
@@ -12,7 +12,7 @@
     "bitacora": 5,
     "config": 7,
     "data": 25,
-    "document": 110,
+    "document": 111,
     "index": 24,
     "license": 1,
     "simulation_case_file": 99,
@@ -28,7 +28,7 @@
     "POTENTIAL_UNLOGGED_CHANGES": 2
   },
   "finding_total": 2,
-  "inventory_fingerprint": "7b1c88e6879a4062bd624ff81a9f4e635fb2b87a1403167419d5da8a0832f4c5",
+  "inventory_fingerprint": "da5efcec4945121fd99368edbf952c5d025402a69a05b023c04cfef710eb07ae",
   "evidence_fingerprint": "897f01f16d211515b7a21f0e6faa787c62b79aab4354eaceb69f84f8fb2b0a9b",
   "files": [
     {
@@ -1087,6 +1087,13 @@
       "purpose": "navigation/onboarding",
       "certainty": "rule",
       "blob": "2a425e6cc17c89c53b051fe0c5a339dfbf3eceeb"
+    },
+    {
+      "path": "cases_3d/C3D_02_metal_sand_clean/constant/geometry/STL_V2_APPROVED_SOURCES.md",
+      "role": "document",
+      "purpose": "manual/decision/report/historical note",
+      "certainty": "inferred",
+      "blob": "5eb732d4fbf686ba4a9b77b6976a85a2797c9d93"
     },
     {
       "path": "cases_3d/C3D_02_metal_sand_clean/constant/geometry/metal.stl",
