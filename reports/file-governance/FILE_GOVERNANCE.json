@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "audit_kind": "deterministic_full_tracked_tree",
-  "tracked_files_total": 38864,
-  "classified_files_total": 38859,
+  "tracked_files_total": 38865,
+  "classified_files_total": 38860,
   "docs_content_inspected": 150,
   "large_docs_skipped": 0,
   "excluded_reports": 5,
@@ -11,7 +11,7 @@
     "analysis_tool": 1,
     "bitacora": 5,
     "config": 7,
-    "data": 30,
+    "data": 31,
     "document": 118,
     "index": 27,
     "license": 1,
@@ -28,7 +28,7 @@
     "POTENTIAL_UNLOGGED_CHANGES": 1
   },
   "finding_total": 1,
-  "inventory_fingerprint": "acbe7c4f223208266df04bf45aef867ce7e4b707b65d44d3e3b92fc6867bf8e8",
+  "inventory_fingerprint": "0ac04f4b712c82954798c04a14e0363995957d2cd4ffe555b344ff4021404bef",
   "evidence_fingerprint": "4bdcb0175d11b108f1f945c492c696f362d9e47bcf7a6321ffc0ecd03f6f78d9",
   "files": [
     {
@@ -1499,7 +1499,7 @@
       "role": "simulation_case_file",
       "purpose": "OpenFOAM case-specific support artifact",
       "certainty": "inferred",
-      "blob": "3d6929f86c6245bd50b2f7f55ead8cd8d2bf58df"
+      "blob": "13bf328d6bdfffbedfa02354b38619eaa8e14e03"
     },
     {
       "path": "cases_3d/C3D_05_step_gmsh_conformal/README.md",
@@ -1507,6 +1507,13 @@
       "purpose": "navigation/onboarding",
       "certainty": "rule",
       "blob": "d88225e54813d1aa7820ce2dc494d345039c381b"
+    },
+    {
+      "path": "cases_3d/C3D_05_step_gmsh_conformal/constant/geometry/QuickCupmm.STEP",
+      "role": "data",
+      "purpose": "structured/research data (semantics not validated)",
+      "certainty": "rule",
+      "blob": "3fd753e268a3027e1dfb495a13a006b0d82101f5"
     },
     {
       "path": "cases_3d/C3D_05_step_gmsh_conformal/constant/geometry/metalmm.STEP",
