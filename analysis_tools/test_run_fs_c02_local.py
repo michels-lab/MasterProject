@@ -110,6 +110,42 @@ class FSC02Tests(unittest.TestCase):
         self.assertFalse((case/"constant/polyMesh").exists())
         self.assertFalse((case/"postProcessing").exists())
 
+    def test_extended_probe_has_tighter_target_and_same_acceptance_gate(self):
+        case, status = stage(self.out, extended_probe=True)
+        self.assertFalse(status["startup_probe"])
+        self.assertTrue(status["extended_probe"])
+        self.assertFalse(status["solver_tested_on_real_openfoam"])
+        self.assertEqual(status["status"], "STAGED_NO_CFD_YET")
+        control = (case / "system/controlDict").read_text()
+        for literal in (
+            "endTime         0.01;",
+            "writeInterval   0.001;",
+            "deltaT          1e-7;",
+            "maxDeltaT       1e-6;",
+            "maxCo           0.15;",
+            "maxAlphaCo      0.15;",
+            "adjustTimeStep  on;",
+        ):
+            self.assertIn(literal, control)
+        manifest = json.loads((case/"FS-C02_MANIFEST.json").read_text())
+        self.assertEqual(manifest["execution_profile"],
+                         "EXTENDED_PROBE_0_01S_TIGHTER_CO")
+        self.assertEqual(manifest["time_controls"]["acceptance_maxCo"], .20)
+        self.assertEqual(manifest["time_controls"]["maxCo"], .15)
+        self.assertEqual(manifest["time_controls"]["maxDeltaT_s"], 1e-6)
+        self.assertEqual(len(manifest["generated_input_sha256"]), 20)
+        self.assertEqual(
+            manifest["generated_input_sha256"]["system/controlDict"],
+            hashlib.sha256((case/"system/controlDict").read_bytes()).hexdigest()
+        )
+        self.assertFalse((case / "constant/polyMesh").exists())
+        self.assertFalse((case / "postProcessing").exists())
+
+    def test_mutually_exclusive_stage_profiles(self):
+        with self.assertRaisesRegex(ValueError, "only one probe profile"):
+            stage(self.out, startup_probe=True, extended_probe=True)
+        self.assertFalse(self.out.exists())
+
     def test_restage_same_path_fails_without_overwriting(self):
         stage(self.out)
         with self.assertRaisesRegex(ValueError, "pre-existing"):
