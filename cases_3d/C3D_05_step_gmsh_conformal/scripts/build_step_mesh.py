@@ -51,6 +51,8 @@ def main() -> None:
     ap.add_argument("--mold", type=Path, required=True)
     ap.add_argument("--out", type=Path, required=True)
     ap.add_argument("--mesh-size-mm", type=float, default=1.8)
+    ap.add_argument("--algorithm-3d", type=int, choices=(1, 4, 10), default=1,
+                    help="Gmsh 3D algorithm: 1=Delaunay baseline, 4=Frontal, 10=HXT")
     args = ap.parse_args()
     if not (0.5 <= args.mesh_size_mm <= 5.0):
         ap.error("--mesh-size-mm must be between 0.5 and 5 mm for the topology pilot")
@@ -171,11 +173,14 @@ def main() -> None:
             "mold_bbox_mm": [xmin, ymin, zmin, xmax, ymax, zmax],
             "physical_groups": {"metal": 101, "mold": 102, "contact": 201, "metalTop": 202, "moldOuterUnclassified": 203},
             "mesh_size_mm": args.mesh_size_mm,
+            "algorithm_3d": args.algorithm_3d,
+            "algorithm_label": {1: "Delaunay", 4: "Frontal", 10: "HXT"}[args.algorithm_3d],
             "physics_status": "NO_CFD_NO_BCS",
         }
         with report_path.open("x", encoding="utf-8") as f:
             json.dump(report, f, indent=2, sort_keys=True)
             f.write("\n")
+        gmsh.option.setNumber("Mesh.Algorithm3D", args.algorithm_3d)
         gmsh.option.setNumber("Mesh.MeshSizeMin", args.mesh_size_mm / 2)
         gmsh.option.setNumber("Mesh.MeshSizeMax", args.mesh_size_mm)
         gmsh.option.setNumber("Mesh.MeshSizeFromCurvature", 18)
