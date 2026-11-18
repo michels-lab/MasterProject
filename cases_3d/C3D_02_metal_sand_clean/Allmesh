@@ -37,6 +37,64 @@ if (( $# == 1 )) && [[ "$1" == "--stage-c14-better" ]]; then
     exit 0
 fi
 
+# Diagnose an ALREADY SPLIT v2 case without rerunning snappy or changing meshes.
+# Preserve the original failed build status; record all actual regional patches.
+if (( $# == 1 )) && [[ "$1" == "--audit-stl-v2" ]]; then
+    existing="$HOME/OpenFOAM/c3d-better-stl-v2"
+    [[ -d "$existing/constant/metal/polyMesh" && -d "$existing/constant/mold/polyMesh" ]] || {
+        echo "Existing v2 metal/mold meshes not found: $existing" >&2; exit 2;
+    }
+    [[ -r /opt/openfoam14/etc/bashrc ]] || { echo "OpenFOAM Foundation 14 not found" >&2; exit 2; }
+    set +u
+    source /opt/openfoam14/etc/bashrc
+    set -u
+    report="$existing/STL_V2_INTERFACE_AUDIT.txt"
+    if [[ -e "$report" ]]; then
+        echo "Preserving existing audit: $report" >&2; exit 2;
+    fi
+    {
+        echo "C3D-02 SolidWorks STL v2 / OpenFOAM 14 / diagnostic only"
+        echo "Existing case: $existing"
+        echo "Original status:"
+        cat "$existing/NATIVE_BUILD_STATUS.txt" 2>/dev/null || true
+        echo "--- Baseline interface patches ---"
+        bash "$ROOT/scripts/native_interface_audit.sh" "$HOME/OpenFOAM/C3D02_NATIVE_OF14_01"
+        echo "--- SolidWorks STL v2 interface patches ---"
+        bash "$ROOT/scripts/native_interface_audit.sh" "$existing"
+        echo "--- Native splitMeshRegions log excerpts ---"
+        grep -Ei 'interface|patch|region|zone|warn|error|fatal' "$existing/log.splitMeshRegions" | tail -n 70 || true
+    } > "$report"
+    # The previous stage stopped before checkMesh, so perform quality checks
+    # on both existing regional meshes without rebuilding any mesh.
+    for region in metal mold; do
+        checked="$existing/log.checkMesh.$region"
+        if [[ ! -s "$checked" ]]; then
+            echo "Checking existing $region mesh with OpenFOAM (no remesh)"
+            if checkMesh -case "$existing" -region "$region" -allGeometry -allTopology -writeSurfaces -writeSets > "$checked" 2>&1; then
+                :
+            else
+                echo "OpenFOAM checkMesh $region returned non-zero; preserved log." | tee -a "$report"
+            fi
+        fi
+        {
+            echo "--- checkMesh $region ---"
+            grep -Ei 'cells:|Total volume|Number of regions|Mesh OK|Failed [0-9]+ mesh checks|concave cells|small determinant|face tets|non.orthogonal|skew' "$checked" | tail -n 40 || true
+        } >> "$report"
+    done
+    baseline="$HOME/OpenFOAM/C3D02_NATIVE_OF14_01"
+    if [[ -s "$baseline/log.checkMesh.metal" && -s "$baseline/log.checkMesh.mold" ]]; then
+        comparison="$existing/STL_V2_COMPARISON_AUDIT.tsv"
+        if [[ ! -e "$comparison" ]]; then
+            foam_write_mesh_comparison "$baseline" "$existing" "$comparison"
+        fi
+        echo "--- Baseline / STL v2 comparison ---" >> "$report"
+        cat "$comparison" >> "$report"
+    fi
+    cat "$report"
+    echo "Read-only diagnosis of physical mesh; no new blockMesh/snappy/split and NO CFD."
+    exit 0
+fi
+
 # Existing-mesh diagnosis: no remeshing, no Python, no material edits, no CFD.
 if (( $# > 0 )) && [[ "$1" == "--diagnose" ]]; then
     [[ -d "$CASE" ]] || { echo "No existing C3D-02 case: $CASE" >&2; exit 2; }
@@ -136,7 +194,7 @@ elif (( $# == 1 )) && [[ "$1" == "--stl-v2" ]]; then
     VARIANT=stl_v2
     CASE="$HOME/OpenFOAM/c3d-better-stl-v2"
 elif (( $# > 0 )); then
-    echo "Usage: bash Allmesh [--diagnose|--candidate-smooth|--better|--stl-v2|--compare|--stage-c14-better]" >&2
+    echo "Usage: bash Allmesh [--diagnose|--audit-stl-v2|--candidate-smooth|--better|--stl-v2|--compare|--stage-c14-better]" >&2
     exit 2
 fi
 if [[ -e "$CASE" || -L "$CASE" ]]; then
@@ -235,6 +293,8 @@ done
 STAGE=STAGE_C14_MATERIALS
 bash "$ROOT/scripts/stage_c14_materials.sh" "$CASE" > "$CASE/log.stage_c14" 2>&1 ||
     fail "C14 material integrity failed; read log.stage_c14"
+STAGE=CHECK_INTERFACE
+# Material staging succeeded. Interface validation is a distinct gate.
 
 # Inspect native boundary files without modifying them.
 patch_value() {
