@@ -1,3 +1,5 @@
+> **ACTUALIZACIÓN 18-11-2026 — CAMBIO DE ESTADO DE CAD:** se recibieron en chat los dos STEP sólidos reales de SolidWorks, **ya validados como B-Rep auténticos**. Metal 47,988.524998 mm³; arena 102,843.320825 mm³; interfaz CAD estimada por unión booleana 6,352.821119 mm², correspondiente a la referencia STL en +0.00295 %. [Registro primario](C3D_05_STEP_SOURCE_AUDIT_20261118_ES.md). Donde el plan histórico dice «falta STEP» significa **falta disponibilidad de esos archivos en la WSL para ejecutar**, NO que todavía haya que exportarlos. C3D-04 y C3D-05 siguen sin ejecución nueva ni CFD; conservar y comparar ambas vías.
+
 # Dos rutas de mallado 3D EN PARALELO — C3D-04 / C3D-05
 
 **Registro de decisión:** 18-11-2026, proyecto de maestría QuickCup, OpenFOAM Foundation 14. Esta comparación separa **método de generación**, **fidelidad CAD** y **solver físico**.
