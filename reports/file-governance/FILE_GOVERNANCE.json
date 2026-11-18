@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "audit_kind": "deterministic_full_tracked_tree",
-  "tracked_files_total": 38830,
-  "classified_files_total": 38825,
+  "tracked_files_total": 38832,
+  "classified_files_total": 38827,
   "docs_content_inspected": 140,
   "large_docs_skipped": 0,
   "excluded_reports": 5,
@@ -11,7 +11,7 @@
     "analysis_tool": 1,
     "bitacora": 5,
     "config": 7,
-    "data": 25,
+    "data": 27,
     "document": 111,
     "index": 24,
     "license": 1,
@@ -28,7 +28,7 @@
     "POTENTIAL_UNLOGGED_CHANGES": 2
   },
   "finding_total": 2,
-  "inventory_fingerprint": "5e689aa7e3653dc46d315cf27f41bc2edf2b1ff355fd8252809607918ff742d9",
+  "inventory_fingerprint": "77e3aa6cb2fa0f3945a0dd30c96ffd04f65f2f6336fcfff42970f483a91f48ba",
   "evidence_fingerprint": "e4ecc2bc2e38f91df43d3523cc7ee44bfbf3c13739a41b32176c428d67dab6f8",
   "files": [
     {
@@ -323,7 +323,7 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "6d866e8607f2bdf2351b4d377d6ebaaf82a1c64d"
+      "blob": "dacc2c28c3b6cff8fb77d297f6da21b412f00acb"
     },
     {
       "path": "RUN_CASE_REGISTRY.csv",
@@ -1079,7 +1079,7 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "1ef55cf9a0cd27bcd62539923e417485db6d19e2"
+      "blob": "67228f50735724f36ae34a6d59792380d72c7cdb"
     },
     {
       "path": "cases_3d/C3D_02_metal_sand_clean/constant/geometry/README.md",
@@ -1103,6 +1103,13 @@
       "blob": "d847cfd366dfe7057f15123458ea9f205c7e559d"
     },
     {
+      "path": "cases_3d/C3D_02_metal_sand_clean/constant/geometry/metal_v2.stl",
+      "role": "data",
+      "purpose": "structured/research data (semantics not validated)",
+      "certainty": "rule",
+      "blob": "10b41a9edbf32ec6642587d21fa3cc6ad76a880d"
+    },
+    {
       "path": "cases_3d/C3D_02_metal_sand_clean/constant/geometry/mold.stl",
       "role": "data",
       "purpose": "structured/research data (semantics not validated)",
@@ -1115,6 +1122,13 @@
       "purpose": "structured/research data (semantics not validated)",
       "certainty": "rule",
       "blob": "191c1820196460ced606fa2d73200bc53deaad87"
+    },
+    {
+      "path": "cases_3d/C3D_02_metal_sand_clean/constant/geometry/mold_v2.stl",
+      "role": "data",
+      "purpose": "structured/research data (semantics not validated)",
+      "certainty": "rule",
+      "blob": "6ea3ccbab486ccc45842723f68af289b61d9d029"
     },
     {
       "path": "cases_3d/C3D_02_metal_sand_clean/constant/metal/fvModels",
