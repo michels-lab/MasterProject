@@ -1,0 +1,8 @@
+case,method,geometry,status_mesh,status_CFD,metal_cells,mold_cells,contact_faces_per_side,metal_volume_m3,mold_volume_m3,reference
+C3D_02_metal_sand_clean,snappyHexMesh,original_STL,REJECTED_CHECKMESH,NOT_RUN,85350,274788,27501,,,docs/C3D_02_ABLACION_STL_V2_20261118_ES.md
+C3D_02_v2_both,snappyHexMesh,STL_v2_both,REJECTED_COLLAPSED_ZONES,NOT_RUN,4,4,0,,,docs/C3D_02_ABLACION_STL_V2_20261118_ES.md
+C3D_02_v2_metal_only,snappyHexMesh,STL_v2_metal,REJECTED,NOT_RUN,1,274788,3,,,docs/C3D_02_ABLACION_STL_V2_20261118_ES.md
+C3D_02_v2_mold_only,snappyHexMesh,STL_v2_mold,BLOCKED_CHECK_INTERFACE,NOT_RUN,85350,0,0,,,docs/C3D_02_ABLACION_STL_V2_20261118_ES.md
+C3D_03_doctor_multiblock_pilot,blockMesh_hexa_3D,STL_approximated_straight,PRELIMINARY_NATIVE_CHECKMESH_ACCEPTED,NOT_RUN,2368,7680,1248,4.801191628e-5,0.0001031691429,docs/C3D_03_RESULTADO_NATIVO_20261118_ES.md
+C3D_04_rounded_multiblock_pilot,blockMesh_curvilinear_hexa_3D,STL_approximated_rounded,PREPARED_NOT_RUN,NOT_RUN,8960,12352,2496,,,cases_3d/C3D_04_rounded_multiblock_pilot/README.md
+C3D_05_step_gmsh_conformal,Gmsh_OCC_STEP_tetra_3D,REAL_STEP_REQUIRED,PREPARED_BLOCKED_CAD_INPUT,NOT_RUN,,,,,,cases_3d/C3D_05_step_gmsh_conformal/README.md
