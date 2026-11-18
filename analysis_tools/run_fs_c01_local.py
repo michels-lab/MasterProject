@@ -78,6 +78,13 @@ def validate_source(case: Path = SOURCE_CASE) -> dict:
                 and rel.parts[0] in INPUT_DIRS,
                 "unsafe input path in FS-C01 manifest: " + name)
         require(sha256(case / rel) == digest, "FS-C01 input checksum mismatch: " + name)
+    # Foundation 14 fieldValue::read() requires writeFields explicitly.
+    # SHA integrity alone cannot establish dictionary compatibility.
+    control = (case / "system" / "controlDict").read_text(encoding="utf-8")
+    match = re.search(r"(?s)\bwaterVolume\s*\{([^{}]*)\}", control)
+    require(match is not None and
+            re.search(r"\bwriteFields\s+false\s*;", match.group(1)) is not None,
+            "FS-C01 waterVolume requires writeFields false; on Foundation 14")
     require(not (case / "postProcessing").exists()
             and not (case / "constant" / "polyMesh").exists()
             and not any(case.glob("processor[0-9]*")),
