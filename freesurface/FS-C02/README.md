@@ -253,3 +253,38 @@ Comando desde `~/OpenFOAM/FS_C02_WORKTREE`, tras actualizar solamente este workt
 El programa imprime un JSON y **no escribe informes ni modifica archivos**, ni vuelve a correr `blockMesh`, `checkMesh` o `foamRun`. El análisis numérico de interfaz/temperatura debe revisarse antes de avanzar al acoplamiento metal–molde y `VoFSolidificationMelting`. No inferir solidificación, contracción ni alimentación de un caso que no los representa.
 
 **Salida condensada recomendada para compartir:** agregar `--brief` al comando anterior. Así se imprimen tres tiempos representativos (primero, intermedio y final) con el número de celdas y temperaturas de los tres grupos. Sin `--brief` se imprimen todos los tiempos guardados. Ambos modos son de solo lectura y nunca ejecutan CFD.
+
+## 2026-11-18 12:45 CST — Evidencia térmica espacial FS-C02 extendido (corrida real)
+
+El investigador ejecutó `inspect_fs_c02_thermal.py --brief` con commit `9ff0865ec` sobre `FS-C02_EXTENDED_20261118T181711Z_d6b6ab92`. Resultado `DIAGNOSTIC_RECORDED_PHYSICS_UNVERIFIED`: 10 tiempos guardados entre 0.001 s y 0.01 s.
+
+| Región de celdas por alpha.metal | 0.001 s | 0.006 s | 0.010 s |
+| --- | ---: | ---: | ---: |
+| Temperatura media gas-like, alpha<=0.01 (K) | 645.329873 | 734.694219 | **747.629612** |
+| Celdas gas-like | 3165 | 3158 | 3160 |
+| Celdas gas-like T>500 K | 2038 | 2488 | **2520** |
+| Celdas gas-like T>1000 K | 366 | 545 | **577** |
+| Temperatura media mezcla, 0.01<alpha<0.99 (K) | 1497.984426 | 1498.87425 | **1499.040128** |
+| Celdas mixtas significativas | 61 | 80 | **78** |
+| Temperatura media metal-like, alpha>=0.99 (K) | 1499.95575 | 1499.945058 | **1499.94226** |
+| Celdas metal-like | 6374 | 6362 | **6362** |
+| T ponderada por gas VOF (K) | 654.651284 | 744.722664 | **757.021262** |
+
+El área gas-like no es exclusivamente una cola en las celdas mixtas: a t=0.01 s **2520/3160 ≈79.7 %** del gas-like supera 500 K, y **577/3160 ≈18.3 %** supera 1000 K. Mediana de gas-like a t=0.01 s = **700.884 K**, mínimo 303.835 K y máximo 1499.29 K. Metal-like permanece a 1499.94 K de media. Esto merece investigación de **presión, densidad, velocidad, transferencia de calor y condiciones de contorno** antes de afirmar validez térmica. NO basta con atribuir la media gas ponderada de 757 K a la interfaz, porque la mayor parte de las celdas clasificadas como gas-like también están calientes. Tampoco es legítimo afirmar aún que es un error numérico: el modelo tiene volumen pequeño de gas, fluido compresible, pared sin molde y una sola T por celda. Falta presupuesto completo de energía y comparación con solución de referencia.
+
+### Nuevo chequeo de gas p/rho/U (solo lectura, NO corrido aquí)
+
+Se añade `analysis_tools/inspect_fs_c02_gas_state.py` para inspeccionar en tres tiempos (primer tiempo guardado, intermedio y final) los campos originales **p, rho, U, T y alpha.metal**. Clasifica gas-like y aire casi puro (`alpha<=1e-6`) y reporta temperaturas, presiones absolutas, densidades de mezcla, módulos de velocidad y una **comparación diagnóstica** `p/(rho*R_air*T)` en gas casi puro, con `R_air=8314.462618/28.9 J/(kg K)`. No interpreta `rho` de mezcla como densidad de fase gas en celdas con metal. Esta razón ideal-gas **NO** es un balance de energía, ni prueba validez física. No modifica ningún expediente, ni vuelve a ejecutar CFD.
+
+Desde `~/OpenFOAM/FS_C02_WORKTREE` actualizado a la rama FS-C02:
+
+    python3 analysis_tools/inspect_fs_c02_gas_state.py \
+      --run ~/OpenFOAM/FS_C02_RUNS/FS-C02_EXTENDED_20261118T181711Z_d6b6ab92
+
+Si `p`, `rho` o `U` no están guardados en los tiempos, el script lo indica y se revisará el archivo concreto; jamás inventa campos ni dispara solver. **No añadir solidificación ni contracción** sobre el caso actual hasta resolver suficientemente las limitaciones termofísicas y el acoplamiento molde.
+
+Para contexto de implementación: OpenFOAM Foundation 14 usa **un único campo T para ambas fases** y el solver `compressibleVoF` resuelve su ecuación de energía con términos de capacidad calorífica, advección, conducción, presión y energía cinética. Fuentes exactas:
+- [OpenFOAM-14 thermophysicalPredictor.C](https://github.com/OpenFOAM/OpenFOAM-14/blob/master/applications/modules/compressibleVoF/thermophysicalPredictor.C)
+- [OpenFOAM-14 compressibleTwoPhaseVoFMixture.C](https://github.com/OpenFOAM/OpenFOAM-14/blob/master/applications/modules/compressibleVoF/compressibleTwoPhaseVoFMixture/compressibleTwoPhaseVoFMixture.C).
+
+Estos archivos de software confirman la formulación implementada, **no** validan por sí solos el caso con hierro líquido.
