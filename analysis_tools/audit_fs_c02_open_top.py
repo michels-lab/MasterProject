@@ -122,8 +122,6 @@ def verify(run: Path) -> dict:
                     "p_rgh top does not reference ambient total pressure")
         patch_types[rel]=typ
     p=(case/"0/p").read_text()
-    require(token(p.split("boundaryField",1)[0],"internalField")=="uniform"
-            if False else True, "ignored")
     require(re.search(r"\binternalField\s+uniform\s+1e5\s*;",p) is not None,
             "initial absolute pressure not 100kPa")
     grav=(case/"constant/g").read_text()
