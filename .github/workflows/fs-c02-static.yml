@@ -11,6 +11,8 @@ on:
       - 'analysis_tools/test_inspect_fs_c02_thermal.py'
       - 'analysis_tools/inspect_fs_c02_gas_state.py'
       - 'analysis_tools/test_inspect_fs_c02_gas_state.py'
+      - 'analysis_tools/run_fs_c02_laminar_control.py'
+      - 'analysis_tools/test_run_fs_c02_laminar_control.py'
       - 'analysis_tools/diagnose_fs_c02_courant.py'
       - 'analysis_tools/test_diagnose_fs_c02_courant.py'
       - 'freesurface/FS-C02/**'
@@ -40,6 +42,8 @@ jobs:
         run: python3 -m unittest discover -s analysis_tools -p test_inspect_fs_c02_thermal.py -v
       - name: Read-only gas p/rho/U field consistency and negative regressions (NO CFD)
         run: python3 -m unittest discover -s analysis_tools -p test_inspect_fs_c02_gas_state.py -v
+      - name: Stage isolated laminar A/B and validate exact two-file input ablation (NO CFD)
+        run: python3 -m unittest discover -s analysis_tools -p test_run_fs_c02_laminar_control.py -v
       - name: Stage reference iron-air case outside Git checkout
         run: |
           python3 analysis_tools/run_fs_c02_local.py \
