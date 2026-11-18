@@ -15,3 +15,10 @@ Los 20 archivos de entrada en `0/`, `constant/` y `system/` son idénticos a los
 ## 2026-11-17 — Preparación de ejecución local aislada
 
 Se añade el ejecutor de caso exclusivo FS-C01 en `analysis_tools/run_fs_c01_local.py`, junto con `RUN_ISOLATED_UBUNTU_ES.md` y pruebas sintéticas. Crea una copia nueva bajo `~/OpenFOAM/FS_C01_RUNS`, valida los 20 SHA-256 y registra logs/estado por etapa. Rechaza `checkMesh` con errores aunque su retorno sea cero. Para evitar interferencia con C3D-02, usar un worktree FS-C01 separado; NO cambiar de rama sobre el checkout que usa la simulación 3D. El código y sus pruebas estáticas NO significan que se haya ejecutado `blockMesh`, `checkMesh` o `foamRun` en la laptop; conservamos `PREPARED_NOT_MESHED_OR_RUN` y siguen pendientes masa, alpha, hidrostática y contracción.
+
+
+## 2026-11-17 — Primera ejecución real FS-C01 / diagnóstico de fallo
+
+El investigador ejecutó la prueba FS-C01 en Ubuntu Foundation 14, worktree separado, con carpeta de salida `FS-C01_20261118T001239Z_656d1a84`. **`blockMesh` PASS** y **`checkMesh -allGeometry -allTopology` PASS**, según `FS-C01_RUN_STATUS.json` aportado por el investigador. `foamRun` devolvió código 1 **durante la inicialización, antes de pasos de tiempo**, con `FOAM FATAL IO ERROR: keyword writeFields is undefined in system/functions!waterVolume`. No constituye CFD completada ni validación de volumen.
+
+Causa: el generador `granada_bfs01_vof_benchmark.py` y el caso fuente congelado no incluían la palabra clave obligatoria `writeFields` del `volFieldValue` de Foundation 14. Corregido en esta rama con `writeFields false;`, actualizado **solo** el SHA-256 de `system/controlDict` en el manifiesto de 20 entradas y añadida barrera semántica en el preflight más regresiones positivas y negativas. El expediente original de ejecución se conserva sin modificaciones. **Nueva ejecución FS-C01 en carpeta aislada PENDIENTE**; masa, energía y contracción permanecen NO VERIFICADAS. La rama C3D-02 no se alteró.
