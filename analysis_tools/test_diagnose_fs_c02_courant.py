@@ -15,11 +15,11 @@ class FS_C02_CourantTests(unittest.TestCase):
             "Create time",
             "Courant Number mean: 0 max: 0",
             "deltaT = 0.0001",
-            "Time = 0.0001",
+            "Time = 0.0001s",
             "Courant Number mean: 0.01 max: 9.41807",
             "Interface Courant Number mean: 0 max: 0",
             "deltaT = 5e-06",
-            "Time = 0.000105",
+            "Time = 0.000105s",
             "Courant Number mean: 0.01 max: 0.246551",
             "End",
         ]
