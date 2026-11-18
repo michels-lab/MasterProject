@@ -401,3 +401,11 @@ python3 analysis_tools/audit_fs_c02_shared_cells.py \
 ```
 
 Próximas verificaciones físicas: evaluar velocidades guardadas del laminar, evolución real del frente y posible gradiente hidrostático y transporte de energía. Ningún caso representa todavía mold-CHT, fracción sólida, entalpía de fusión o shrinkage.
+
+## Decisión del investigador — 2026-11-18: retirar el caso laminar de la ruta principal
+
+**Instrucción explícita:** el investigador considera que el ensayo laminar no representa adecuadamente su escenario de interés y solicita **dejar de perseguirlo como caso representativo de tesis**. En adelante, la configuración laminar de 0.01 s se archiva exclusivamente como **experimento de sensibilidad/ablación**, no como modelo candidato recomendado, plantilla base, ni prioridad para nuevas corridas. No borrar sus resultados ni los de la referencia; conservar SHA-256 y auditorías por reproducibilidad, sin pedir más ejecuciones o análisis laminares salvo nueva instrucción.
+
+**Distinción científica obligatoria:** descartar laminar como enfoque de tesis **no valida automáticamente** el modelo RAS `kEpsilon` heredado del agua. La auditoría A/B solo demostró sensibilidad a desactivar conjuntamente RAS y `VoFTurbulenceDamping`, no cuál formulación predice el comportamiento real del hierro fundido. Los valores iniciales heredados `k=0.1 m²/s²`, `epsilon=0.1 m²/s³`, y `delta=1e-4 m` carecen de calibración específica del hierro/flujo/QuickCup.
+
+**Prioridad siguiente**: continuar la línea **turbulenta** de FS-C02; investigar condiciones iniciales/fuentes de turbulencia y `nut`/difusividad térmica turbulenta, validar respuesta de la superficie libre (`alpha.metal`, velocidades, altura) y presupuesto térmico/energético antes de incorporar CHT metal–molde, cambio de fase y shrinkage. No usar el criterio Courant aprobado como evidencia de validez física. Mantener B14, FS-C01, C3D-02 y carpetas ya corridas sin modificar.
