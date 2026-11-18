@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "audit_kind": "deterministic_full_tracked_tree",
-  "tracked_files_total": 38847,
-  "classified_files_total": 38842,
+  "tracked_files_total": 38848,
+  "classified_files_total": 38843,
   "docs_content_inspected": 145,
   "large_docs_skipped": 0,
   "excluded_reports": 5,
@@ -16,7 +16,7 @@
     "index": 25,
     "license": 1,
     "simulation_case_file": 100,
-    "simulation_input": 2680,
+    "simulation_input": 2681,
     "simulation_log": 3155,
     "simulation_output": 32613,
     "source": 63,
@@ -25,11 +25,11 @@
     "workflow": 19
   },
   "finding_counts": {
-    "POTENTIAL_UNLOGGED_CHANGES": 2
+    "POTENTIAL_UNLOGGED_CHANGES": 1
   },
-  "finding_total": 2,
-  "inventory_fingerprint": "023ebf35f2b653620fad520f15e409595a13fbc5cc5798b6b8620513d872a44b",
-  "evidence_fingerprint": "dedc77baf6838d4cc8192ab7de51b44326530280629b5281f72ff6235a578667",
+  "finding_total": 1,
+  "inventory_fingerprint": "37e98e2946e5d853e0fbc428a5d0ef20f980da7ea5f1c6b522c8987ab271668c",
+  "evidence_fingerprint": "dc2f78addbac5301f9b7ea8c9ad28431665a217534e73edb38b5da74838dad0f",
   "files": [
     {
       "path": ".github/agents/openfoam-solidification.agent.md",
@@ -316,7 +316,7 @@
       "role": "bitacora",
       "purpose": "technical/audit change history",
       "certainty": "rule",
-      "blob": "9c4dd2437fbbb87b90bbf9cb0ab71d94d9377e69"
+      "blob": "edd6cb0fe4638f761e1056ee1bd39afd8b9c2b4f"
     },
     {
       "path": "README.md",
@@ -330,14 +330,14 @@
       "role": "data",
       "purpose": "structured/research data (semantics not validated)",
       "certainty": "rule",
-      "blob": "38a5626052c80aa1074ae9eb6bb9ab03db9441a2"
+      "blob": "fbf969d2e05d3df5246e6064f0ffcad52354cf50"
     },
     {
       "path": "RUN_MASTER_PROTOCOL.md",
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "5efae961eec022ba6ec3700f50ff5891b671d70f"
+      "blob": "6616826780b06f5451fbeebe397519ef90d9c514"
     },
     {
       "path": "VALIDATION_MATRIX.md",
@@ -358,7 +358,7 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "ebe8c955d24f04b06f096abc061184bd60b3b63c"
+      "blob": "d2380d4893f5c4e9935b9572c9f4893e552d0bf1"
     },
     {
       "path": "analysis_results/c11_energy2_test/summary.md",
@@ -1079,7 +1079,7 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "6df103b01b2d3e8dc598f358a72744181c51819c"
+      "blob": "292154b0a56bb1977e0ad2d906e26cb71fc2ec31"
     },
     {
       "path": "cases_3d/C3D_02_metal_sand_clean/constant/geometry/README.md",
@@ -1453,11 +1453,18 @@
       "blob": "bf12de86f64ec7ebd652705179e9ed91065acc8f"
     },
     {
+      "path": "cases_3d/C3D_04_rounded_multiblock_pilot/system/blockMeshDict",
+      "role": "simulation_input",
+      "purpose": "OpenFOAM case field/dictionary input (content unvalidated)",
+      "certainty": "inferred",
+      "blob": "219c8a5bb290e80b607d93bd1167095807df6ece"
+    },
+    {
       "path": "cases_3d/README.md",
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "418ad36cbf1ef99031047ae8c26cf9701e44d4a9"
+      "blob": "8714288902a14c5ba52a401a8f9c3117032e7828"
     },
     {
       "path": "cases_3d/case3d-01/README.md",
@@ -271118,7 +271125,7 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "47d6cc38c95b9edebbc1895a12c5076919711c4d"
+      "blob": "5786114d9c737e28a8099988f7945347367849c9"
     },
     {
       "path": "docs/C3D_02_MALLADO_INICIAL_20261112_ES.md",
@@ -271174,7 +271181,7 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "4384a3ece7202394c2df9a787c1d901e2e1da602"
+      "blob": "e5356b5c455a6fd704afe88adee9d55e827727d9"
     },
     {
       "path": "docs/DOCUMENT_SYNC_20261110_ES.md",
@@ -271932,15 +271939,6 @@
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_EN.md",
-      "observation": "1 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_03_doctor_multiblock_pilot/tests/test_native_multiblock_static.sh",
-      "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "acabae4a6f943b11",
-      "code": "POTENTIAL_UNLOGGED_CHANGES",
-      "severity": "review",
-      "path": "PROJECT_AUDIT_LOG_ES.md",
       "observation": "1 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_03_doctor_multiblock_pilot/tests/test_native_multiblock_static.sh",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
