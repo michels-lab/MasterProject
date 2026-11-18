@@ -184,10 +184,11 @@ def stage(out: Path, *, startup_probe: bool = False) -> tuple[Path, dict]:
         # This is an empirical safer candidate, NOT guaranteed stable.
         for before, after, label in (
             ("endTime         0.1;", "endTime         0.002;", "short startup probe"),
+            ("writeInterval   0.01;", "writeInterval   0.0002;", "probe outputs"),
             ("deltaT          0.0001;", "deltaT          1e-7;", "initial deltaT"),
             ("maxCo           0.25;", "maxCo           0.20;", "maximum Courant"),
             ("maxAlphaCo      0.25;", "maxAlphaCo      0.20;", "interface Courant"),
-            ("maxDeltaT       0.001;", "maxDeltaT       5e-6;", "maximum deltaT"),
+            ("maxDeltaT       0.001;", "maxDeltaT       1e-6;", "maximum deltaT"),
         ):
             data = replace_once(data, before, after, label)
         check("adjustTimeStep  on;" in data, "automatic deltaT disabled")
@@ -214,7 +215,7 @@ def stage(out: Path, *, startup_probe: bool = False) -> tuple[Path, dict]:
         ),
         "time_controls": (
             {"endTime_s": .002, "deltaT_initial_s": 1e-7,
-             "maxDeltaT_s": 5e-6, "maxCo": .20, "maxAlphaCo": .20}
+             "maxDeltaT_s": 1e-6, "maxCo": .20, "maxAlphaCo": .20}
             if startup_probe else
             {"endTime_s": .1, "deltaT_initial_s": 1e-4,
              "maxDeltaT_s": .001, "maxCo": .25, "maxAlphaCo": .25}
