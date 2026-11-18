@@ -157,3 +157,25 @@ bash cases_3d/C3D_02_metal_sand_clean/Allmesh --audit-stl-v2
 ```
 
 **Criterio de decisión científica:** si la interfaz realmente falta, inspeccionar el contacto CAD y la asignación de celdas y superficies del nuevo STL antes de cambiar `mappedWall` a mano. Si el parche existe como `mappedWall` y el script lo interpretó mal, corregir solamente el parser; si hay un tipo distinto o no coincide el número de caras, no falsificar contacto térmico. Independientemente, evaluar las métricas de ambas mallas regionales, los volúmenes y los defectos VTK antes de autorizar CFD.
+
+## 17-11-2026 — Evidencia posterior: OpenFOAM encontró sólo 4 celdas por material (RECHAZO GRAVE)
+
+El investigador ejecutó de verdad `Allmesh --audit-stl-v2` en Ubuntu y proporcionó la salida literal. El historial de `NATIVE_BUILD_STATUS.txt` confirma el bloqueo inicial (etapa desactualizada en el log local anterior) y la nueva auditoría demuestra:
+- BASELINE: `metal_to_mold` y `mold_to_metal` son parches `mappedWall` recíprocos, **27,501 caras** por dirección.
+- STL v2: ambos parches `metal_to_mold` y `mold_to_metal` **NO EXISTEN**. Sólo hay `metal_to_exterior` y `mold_to_exterior`, ambos con **24 caras**.
+- `checkMesh` nativo del hierro v2: **4 celdas**, **4 regiones desconectadas**, `Total volume = 7.46352e-12 m³`, 4 células con determinante inferior a 0.001, **1 mesh check fallido**, no `Mesh OK`.
+- `checkMesh` nativo de arena v2: **4 celdas**, **4 regiones desconectadas**, `Total volume = 7.49195e-12 m³`, 4 células con determinante inferior a 0.001, **1 mesh check fallido**, no `Mesh OK`.
+- **No confundir cero celdas cóncavas con mejora**: las regiones son restos minúsculos, no volúmenes físicos; no es válida la comparación de calidad.
+- **No ejecutar CFD ni reparar a mano `mappedWall`**. `splitMeshRegions` no dispone de una cara de contacto metal–mold en la malla generada; cambiar etiquetas no reconstruiría el dominio.
+
+Auditoría geométrica independiente de los STL definitivos (`metal_v2.stl`, `mold_v2.stl`) usando inspección de triangulación: superficies watertight con orientación coherente, bbox metal aprox. `x,z 7.65–44.15 mm; y -40–0 mm`; arena `x,z 0–51.8 mm; y -65.5–0 mm`, volúmenes CAD `47987.697 mm³` y `102843.333 mm³`. Clasificación puntual independiente por intersecciones de rayos: `(25.9,-20,25.9) mm` cae dentro de metal, `(4.3,-20.7,25.9) mm` dentro de arena, `(-2,-68,-2) mm` fuera de ambos. Por ello, un error trivial de ubicación de los tres `insidePoints` no explica por sí solo los restos de 4 celdas. **Estas comprobaciones no equivalen al análisis del algoritmo `snappyHexMesh` real.**
+
+**Hipótesis abierta y siguiente evidencia necesaria:** las celdas físicas se perdieron o quedaron mal clasificadas en la etapa de zone assignment / snapping / splitting. No está demostrado el paso exacto. Se añadió `scripts/diagnose_stl_v2_zones.sh`, que **únicamente lee los logs existentes** `log.snappyHexMesh`, `log.splitMeshRegions`, `log.checkMesh.metal`, `log.checkMesh.mold` y enumera parches reales. Devuelve tablas de clasificación por zonas, advertencias y estado al final de snapping, sin crear mallas ni solver:
+
+```bash
+cd ~/OpenFOAM/MasterProject
+git pull --ff-only
+bash cases_3d/C3D_02_metal_sand_clean/scripts/diagnose_stl_v2_zones.sh
+```
+
+Esta salida debe fijar el punto real de pérdida: no recomendar ajustes arbitrarios de `nSmoothPatch`, `faceType` ni selección de `mappedWall` hasta identificarlo. Mantener `~/OpenFOAM/c3d-better-stl-v2` y la evidencia de STL v2 congelados.
