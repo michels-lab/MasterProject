@@ -136,3 +136,24 @@ El comando prepara una **tercera carpeta aislada nueva**, con prefijo `FS-C02_ST
 Se eligió un límite de paso temporal menor al registrado después del pico, como experimento conservador; **no es una prueba científica de que se hayan eliminado todas las inestabilidades**, requiere correr en la laptop y verificar el resultado. No se modifican parámetros térmicos/metalúrgicos de la corrida anterior, ni B14, FS-C01 o C3D-02.
 
 Fuente específica: [OpenFOAM-14 foamRun setDeltaT.C](https://github.com/OpenFOAM/OpenFOAM-14/blob/master/applications/solvers/foamRun/setDeltaT.C), que ajusta el paso basado en `solver.maxDeltaT()` en un proceso transitorio. El valor `maxCo` controla el tamaño de paso de forma adaptativa, pero no es prueba automática de que todos los pasos hayan permanecido por debajo del objetivo.
+
+## 2026-11-17 hora local / 2026-11-18 UTC — Primer experimento aislado de arranque corto
+
+**Evidencia comunicada por el investigador**, Foundation 14, commit `992b97e9d` y directorio exacto de salida:
+
+    /home/michel/OpenFOAM/FS_C02_RUNS/FS-C02_STARTUP_20261118T034734Z_75a1f5f9
+
+La opción `python3 analysis_tools/run_fs_c02_local.py --startup-probe` ejecutó `blockMesh`, `checkMesh`, `foamRun` y el cribado automático del **máximo global de Courant**. Salida literal:
+
+    FS-C02 STARTUP PROBE: PROBE_REVIEW_COURANT; max Co=0.212768; over .20=45
+    NO solidification or shrinkage. C3D-02 and B14 never touched.
+
+Comparación **no equivalente en duración** con el benchmark FS-C02 inicial: la corrida original de 0.1 s tuvo Co máximo 9.41807 con paso temporal inicial 1e-4 s; esta prueba restringida de 0.002 s (deltaT inicial 1e-7 s; maxDeltaT 1e-6 s; maxCo objetivo 0.20) tuvo Co máximo 0.212768. La magnitud del pico bajó en la ventana de arranque, pero la prueba **sigue en REVIEW**: 45 observaciones superaron 0.20 (~6.38 % de excedencia relativa en el pico). Que el solver haya terminado y el pico sea moderado no prueba convergencia, conservación física, estabilidad del caso completo de 0.1 s, ni comportamiento de la interfaz.
+
+**Decisión:** no editar la corrida `FS-C02_STARTUP_20261118T034734Z_75a1f5f9`, no relanzar automáticamente y no elevar el umbral para declarar PASS. En primer lugar consultar, mediante `analysis_tools/diagnose_fs_c02_courant.py` con `--maxCo 0.20`, los mayores picos y su distribución temporal; después comparar los límites del controlador temporal y revisar inicialización de presión, `U`, `T`, contacto y condición de fase antes de elegir un experimento de duración mayor. B14, FS-C01 y C3D-02 no fueron modificados.
+
+Comando de lectura, desde `~/OpenFOAM/FS_C02_WORKTREE`:
+
+    python3 analysis_tools/diagnose_fs_c02_courant.py --run ~/OpenFOAM/FS_C02_RUNS/FS-C02_STARTUP_20261118T034734Z_75a1f5f9 --maxCo 0.20 --limit 5 --context 5
+
+**Nota científica:** `rhoConst=6820 kg/m3`, `Cv=827` y `sigma=1` continúan como hipótesis provisionales de la prueba hierro–aire; ni solidificación ni contracción han sido modeladas.
