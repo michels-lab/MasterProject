@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
   "audit_kind": "deterministic_full_tracked_tree",
-  "tracked_files_total": 38827,
-  "classified_files_total": 38822,
-  "docs_content_inspected": 138,
+  "tracked_files_total": 38828,
+  "classified_files_total": 38823,
+  "docs_content_inspected": 139,
   "large_docs_skipped": 0,
   "excluded_reports": 5,
   "roles": {
@@ -12,7 +12,7 @@
     "bitacora": 5,
     "config": 7,
     "data": 25,
-    "document": 109,
+    "document": 110,
     "index": 24,
     "license": 1,
     "simulation_case_file": 99,
@@ -28,7 +28,7 @@
     "POTENTIAL_UNLOGGED_CHANGES": 2
   },
   "finding_total": 2,
-  "inventory_fingerprint": "1d10f74fb03c274d86e7d948d11fb690ae547311523fa3515215be4b733d9900",
+  "inventory_fingerprint": "7b1c88e6879a4062bd624ff81a9f4e635fb2b87a1403167419d5da8a0832f4c5",
   "evidence_fingerprint": "897f01f16d211515b7a21f0e6faa787c62b79aab4354eaceb69f84f8fb2b0a9b",
   "files": [
     {
@@ -271028,6 +271028,13 @@
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
       "blob": "24cac1bc25f9514544839c0a72a473650d39ad5e"
+    },
+    {
+      "path": "docs/C3D_STL_GEOMETRY_AUDIT_20261117_ES.md",
+      "role": "document",
+      "purpose": "manual/decision/report/historical note",
+      "certainty": "inferred",
+      "blob": "cce0a99d69031aa6f1f66e379db4c2ca0a0194d7"
     },
     {
       "path": "docs/DOCUMENTATION_AUDIT_20261110_ES.md",
