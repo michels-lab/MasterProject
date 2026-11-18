@@ -16,6 +16,12 @@ echo 'fe126d23bb639196258551fd156591d7fe2b0b4ce1d7c9ece47016e8ad08a40c  '"$MOLD"
 grep -Fq 'METAL_STEP="${C3D05_METAL_STEP:-$ROOT/constant/geometry/metalmm.STEP}"' "$RUN"
 grep -Fq 'MOLD_STEP="${C3D05_MOLD_STEP:-$ROOT/constant/geometry/QuickCupmm.STEP}"' "$RUN"
 bash -n "$RUN"
+bash -n "$ROOT/scripts/run_frontal_pilot.sh"
+grep -Fq 'ALGORITHM3D="${C3D05_ALGORITHM3D:-1}"' "$RUN"
+grep -Fq -- '--algorithm-3d "$ALGORITHM3D"' "$RUN"
+grep -Fq 'Mesh.Algorithm3D' "$CAD"
+grep -Fq 'choices=(1, 4, 10)' "$CAD"
+grep -Fq 'C3D05_ALGORITHM3D=4' "$ROOT/scripts/run_frontal_pilot.sh"
 python3 -c 'import ast,pathlib,sys; [ast.parse(pathlib.Path(p).read_text()) for p in sys.argv[1:]]' "$CAD" "$AREA"
 for expected in 'C3D05_METAL_STEP' 'C3D05_MOLD_STEP' 'C3D05_OUT' 'gmshToFoam' "splitMeshRegions -case" "checkMesh -case" 'measure_interface_area.py' 'NO_CFD' 'PILOT_MESH_REPORT.tsv'; do
   grep -Fq -- "$expected" "$RUN" || { echo "Runner missing $expected"; exit 1; }
