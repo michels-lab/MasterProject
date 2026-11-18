@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
   "audit_kind": "deterministic_full_tracked_tree",
-  "tracked_files_total": 38869,
-  "classified_files_total": 38864,
-  "docs_content_inspected": 151,
+  "tracked_files_total": 38871,
+  "classified_files_total": 38866,
+  "docs_content_inspected": 152,
   "large_docs_skipped": 0,
   "excluded_reports": 5,
   "roles": {
@@ -12,7 +12,7 @@
     "bitacora": 5,
     "config": 7,
     "data": 31,
-    "document": 119,
+    "document": 120,
     "index": 27,
     "license": 1,
     "simulation_case_file": 102,
@@ -20,16 +20,16 @@
     "simulation_log": 3155,
     "simulation_output": 32613,
     "source": 68,
-    "test": 25,
+    "test": 26,
     "web_ui": 1,
     "workflow": 19
   },
   "finding_counts": {
-    "POTENTIAL_UNLOGGED_CHANGES": 2
+    "POTENTIAL_UNLOGGED_CHANGES": 1
   },
-  "finding_total": 2,
-  "inventory_fingerprint": "dffab27850f7d46c823b8672ccdc1880620f6917a0a464bd3e4e35f3a58528cc",
-  "evidence_fingerprint": "beedcde6ad3e07af2731ae5c05f4e2aeea2ba20d521879af2a95f7b9e0b53913",
+  "finding_total": 1,
+  "inventory_fingerprint": "1ece24d55dfff2c2381803eb3a7d7ca1cba8b41ec3f93e3b810456df7ad78bc7",
+  "evidence_fingerprint": "703b0dd4897de253a814897980861ccfb32c52a56099cff4ea8b22b75a0aefc6",
   "files": [
     {
       "path": ".github/agents/openfoam-solidification.agent.md",
@@ -316,14 +316,14 @@
       "role": "bitacora",
       "purpose": "technical/audit change history",
       "certainty": "rule",
-      "blob": "4478469d80731ab46afa035feefdd74b59589d86"
+      "blob": "43e41137e174f0fad271f41f4115e9d1415f5f3d"
     },
     {
       "path": "README.md",
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "14411de509ba0546b24193d8e17ced679953caa8"
+      "blob": "73135fa0fde8a030ca9d551db6d2310dec132bac"
     },
     {
       "path": "RUN_CASE_REGISTRY.csv",
@@ -1506,7 +1506,7 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "f79ad57882082664ac5bf2ba8c366d552c7d6536"
+      "blob": "bd20a8819d3a8b619fe123dd9f6223b72ca53e46"
     },
     {
       "path": "cases_3d/C3D_05_step_gmsh_conformal/constant/geometry/QuickCupmm.STEP",
@@ -1556,6 +1556,13 @@
       "purpose": "OpenFOAM case field/dictionary input (content unvalidated)",
       "certainty": "inferred",
       "blob": "48a3345ff730533d47bf26cfeb73693b748a182b"
+    },
+    {
+      "path": "cases_3d/C3D_05_step_gmsh_conformal/tests/test_audit_underdetermined_topology.py",
+      "role": "test",
+      "purpose": "code/test implementation",
+      "certainty": "rule",
+      "blob": "e61811583a5a0497326e11a192f6b62d170d0404"
     },
     {
       "path": "cases_3d/C3D_05_step_gmsh_conformal/tests/test_diagnose_existing_mesh.py",
@@ -271282,11 +271289,18 @@
       "blob": "a60f9485b3577ee6d93ffc4b6d32ed00219a86c9"
     },
     {
+      "path": "docs/C3D_05_DIAGNOSTICO_DETERMINANTE_20261118_ES.md",
+      "role": "document",
+      "purpose": "manual/decision/report/historical note",
+      "certainty": "inferred",
+      "blob": "0fb75711b15e72c073cc859d2dda429b303297c8"
+    },
+    {
       "path": "docs/C3D_05_RESULTADO_PRIMER_MALLADO_20261118_ES.md",
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "a59e48428b6ec92c67bd830f71030dbdfd16331b"
+      "blob": "fbe146c38bbe1b001dd830b02678c12639951dab"
     },
     {
       "path": "docs/C3D_05_STEP_SOURCE_AUDIT_20261118_ES.md",
@@ -271300,7 +271314,7 @@
       "role": "data",
       "purpose": "structured/research data (semantics not validated)",
       "certainty": "rule",
-      "blob": "d95724265eb85e768d74e94134a55384c231e889"
+      "blob": "305faba157d2028e571159f2f2527b084e6763e7"
     },
     {
       "path": "docs/C3D_REINICIO_20261112_ES.md",
@@ -271328,7 +271342,7 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "830b140a78298cdb2e3f63408e5bdda8056ef729"
+      "blob": "ba497137f6b0ef240523b3836897f2d3c523794c"
     },
     {
       "path": "docs/DOCUMENT_SYNC_20261110_ES.md",
@@ -272082,20 +272096,11 @@
   ],
   "findings": [
     {
-      "id": "d32788ee16d0d649",
+      "id": "5e281802cc4f6a72",
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_EN.md",
-      "observation": "9 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_03_doctor_multiblock_pilot/tests/test_native_multiblock_static.sh, cases_3d/C3D_04_rounded_multiblock_pilot/scripts/measure_interface_area.py, cases_3d/C3D_04_rounded_multiblock_pilot/tests/test_rounded_multiblock_static.sh, cases_3d/C3D_05_step_gmsh_conformal/scripts/audit_underdetermined_topology.py, cases_3d/C3D_05_step_gmsh_conformal/scripts/build_step_mesh.py, cases_3d/C3D_05_step_gmsh_conformal/scripts/diagnose_existing_mesh.py",
-      "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "57611b585cfa0188",
-      "code": "POTENTIAL_UNLOGGED_CHANGES",
-      "severity": "review",
-      "path": "PROJECT_AUDIT_LOG_ES.md",
-      "observation": "1 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_05_step_gmsh_conformal/scripts/audit_underdetermined_topology.py",
+      "observation": "10 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_03_doctor_multiblock_pilot/tests/test_native_multiblock_static.sh, cases_3d/C3D_04_rounded_multiblock_pilot/scripts/measure_interface_area.py, cases_3d/C3D_04_rounded_multiblock_pilot/tests/test_rounded_multiblock_static.sh, cases_3d/C3D_05_step_gmsh_conformal/scripts/audit_underdetermined_topology.py, cases_3d/C3D_05_step_gmsh_conformal/scripts/build_step_mesh.py, cases_3d/C3D_05_step_gmsh_conformal/scripts/diagnose_existing_mesh.py",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     }
