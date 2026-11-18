@@ -26,7 +26,7 @@
   },
   "finding_counts": {},
   "finding_total": 0,
-  "inventory_fingerprint": "ef8dc0d4a535a644e4be10cfaec220a06c6457b115e4ee06b3f498fd6a9a2653",
+  "inventory_fingerprint": "ce0fff5173d7946fccf8f0f64c732b1333b31e1db5f5168b0f842665d36a4030",
   "evidence_fingerprint": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
   "files": [
     {
@@ -321,7 +321,7 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "51f07f73fc26c12612a20050fb1798d0e2c305e3"
+      "blob": "c46c30fdf67655afb0af97eb0b2bbe1e3f5f68af"
     },
     {
       "path": "RUN_CASE_REGISTRY.csv",
