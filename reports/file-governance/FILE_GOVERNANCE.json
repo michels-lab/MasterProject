@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
   "audit_kind": "deterministic_full_tracked_tree",
-  "tracked_files_total": 38866,
-  "classified_files_total": 38861,
-  "docs_content_inspected": 150,
+  "tracked_files_total": 38868,
+  "classified_files_total": 38863,
+  "docs_content_inspected": 151,
   "large_docs_skipped": 0,
   "excluded_reports": 5,
   "roles": {
@@ -12,7 +12,7 @@
     "bitacora": 5,
     "config": 7,
     "data": 31,
-    "document": 118,
+    "document": 119,
     "index": 27,
     "license": 1,
     "simulation_case_file": 102,
@@ -20,16 +20,16 @@
     "simulation_log": 3155,
     "simulation_output": 32613,
     "source": 67,
-    "test": 24,
+    "test": 25,
     "web_ui": 1,
     "workflow": 19
   },
   "finding_counts": {
-    "POTENTIAL_UNLOGGED_CHANGES": 2
+    "POTENTIAL_UNLOGGED_CHANGES": 1
   },
-  "finding_total": 2,
-  "inventory_fingerprint": "435abaeac1279e3fb93acae8439a63fde8e0fd6bda6cd6091275b0739f5d54bd",
-  "evidence_fingerprint": "562f38b84a4a68eb139edbe6dc30e42be852609a56766541a01f40103113019f",
+  "finding_total": 1,
+  "inventory_fingerprint": "8ddf3d1ba9298f87e8e31700bba20e5032a240cfd9f56be8d8ee9eead7818ff6",
+  "evidence_fingerprint": "a7f006316954b36a8392b8bef02f0d1a20cd860592d2797bc4ff35fb214a021b",
   "files": [
     {
       "path": ".github/agents/openfoam-solidification.agent.md",
@@ -316,14 +316,14 @@
       "role": "bitacora",
       "purpose": "technical/audit change history",
       "certainty": "rule",
-      "blob": "cbd8f3cefccd479b9e733b9358d836cb14864aaa"
+      "blob": "4478469d80731ab46afa035feefdd74b59589d86"
     },
     {
       "path": "README.md",
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "1b1d0bf6c461131eb03a0da026e245c7497f5ff3"
+      "blob": "14411de509ba0546b24193d8e17ced679953caa8"
     },
     {
       "path": "RUN_CASE_REGISTRY.csv",
@@ -1506,7 +1506,7 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "631d63daf6a503a69aafbfa7470fc7024cb117cd"
+      "blob": "f79ad57882082664ac5bf2ba8c366d552c7d6536"
     },
     {
       "path": "cases_3d/C3D_05_step_gmsh_conformal/constant/geometry/QuickCupmm.STEP",
@@ -1534,7 +1534,7 @@
       "role": "source",
       "purpose": "code/test implementation",
       "certainty": "rule",
-      "blob": "a3581cf8edb4ffa5e535519cfb2c0a0e4f7a189d"
+      "blob": "a5dcd8ac493542574041d152b8662e6f09c2d1f2"
     },
     {
       "path": "cases_3d/C3D_05_step_gmsh_conformal/scripts/measure_interface_area.py",
@@ -1549,6 +1549,13 @@
       "purpose": "OpenFOAM case field/dictionary input (content unvalidated)",
       "certainty": "inferred",
       "blob": "48a3345ff730533d47bf26cfeb73693b748a182b"
+    },
+    {
+      "path": "cases_3d/C3D_05_step_gmsh_conformal/tests/test_diagnose_existing_mesh.py",
+      "role": "test",
+      "purpose": "code/test implementation",
+      "certainty": "rule",
+      "blob": "f544a401596fe8107b2ec54abbe1825fb6b3b59e"
     },
     {
       "path": "cases_3d/C3D_05_step_gmsh_conformal/tests/test_step_gmsh_static.sh",
@@ -271268,6 +271275,13 @@
       "blob": "a60f9485b3577ee6d93ffc4b6d32ed00219a86c9"
     },
     {
+      "path": "docs/C3D_05_RESULTADO_PRIMER_MALLADO_20261118_ES.md",
+      "role": "document",
+      "purpose": "manual/decision/report/historical note",
+      "certainty": "inferred",
+      "blob": "a59e48428b6ec92c67bd830f71030dbdfd16331b"
+    },
+    {
       "path": "docs/C3D_05_STEP_SOURCE_AUDIT_20261118_ES.md",
       "role": "document",
       "purpose": "manual/decision/report/historical note",
@@ -271279,7 +271293,7 @@
       "role": "data",
       "purpose": "structured/research data (semantics not validated)",
       "certainty": "rule",
-      "blob": "5ffcd6aa830781d26b65d3fbe4d11ed049fd7067"
+      "blob": "d95724265eb85e768d74e94134a55384c231e889"
     },
     {
       "path": "docs/C3D_REINICIO_20261112_ES.md",
@@ -271307,7 +271321,7 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "b94e62a0affeba863a7486619af884a4e576daca"
+      "blob": "830b140a78298cdb2e3f63408e5bdda8056ef729"
     },
     {
       "path": "docs/DOCUMENT_SYNC_20261110_ES.md",
@@ -272061,20 +272075,11 @@
   ],
   "findings": [
     {
-      "id": "0047f096b5b916f6",
+      "id": "beb35a648f4b3441",
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_EN.md",
-      "observation": "7 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_03_doctor_multiblock_pilot/tests/test_native_multiblock_static.sh, cases_3d/C3D_04_rounded_multiblock_pilot/scripts/measure_interface_area.py, cases_3d/C3D_04_rounded_multiblock_pilot/tests/test_rounded_multiblock_static.sh, cases_3d/C3D_05_step_gmsh_conformal/scripts/build_step_mesh.py, cases_3d/C3D_05_step_gmsh_conformal/scripts/diagnose_existing_mesh.py, cases_3d/C3D_05_step_gmsh_conformal/scripts/measure_interface_area.py",
-      "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "75d564f290cc002e",
-      "code": "POTENTIAL_UNLOGGED_CHANGES",
-      "severity": "review",
-      "path": "PROJECT_AUDIT_LOG_ES.md",
-      "observation": "1 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_05_step_gmsh_conformal/scripts/diagnose_existing_mesh.py",
+      "observation": "8 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_03_doctor_multiblock_pilot/tests/test_native_multiblock_static.sh, cases_3d/C3D_04_rounded_multiblock_pilot/scripts/measure_interface_area.py, cases_3d/C3D_04_rounded_multiblock_pilot/tests/test_rounded_multiblock_static.sh, cases_3d/C3D_05_step_gmsh_conformal/scripts/build_step_mesh.py, cases_3d/C3D_05_step_gmsh_conformal/scripts/diagnose_existing_mesh.py, cases_3d/C3D_05_step_gmsh_conformal/scripts/measure_interface_area.py",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     }
