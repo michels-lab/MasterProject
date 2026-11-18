@@ -7,7 +7,7 @@ RUN="$ROOT/Allmesh"
 AREA="$ROOT/scripts/measure_interface_area.py"
 [[ -s "$DICT" && -s "$RUN" && -s "$ROOT/system/controlDict" && -s "$AREA" ]] || exit 1
 bash -n "$RUN"
-python3 -m py_compile "$AREA" >/dev/null
+python3 -c 'import ast,pathlib,sys; ast.parse(pathlib.Path(sys.argv[1]).read_text())' "$AREA"
 [[ "$(grep -Ec '^[[:space:]]*hex[[:space:]]*\(' "$DICT")" -eq 180 ]]
 [[ "$(grep -Ec '^[[:space:]]*hex[[:space:]]*\([^)]*\)[[:space:]]+metal[[:space:]]*\(' "$DICT")" -eq 63 ]]
 [[ "$(grep -Ec '^[[:space:]]*hex[[:space:]]*\([^)]*\)[[:space:]]+mold[[:space:]]*\(' "$DICT")" -eq 117 ]]
