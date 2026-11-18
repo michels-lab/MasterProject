@@ -19,7 +19,7 @@ LOG_FILE = Path("logs/FS-C02_foamRun.log")
 COURANT = re.compile(
     r"^Courant Number mean:\s*(\S+)\s+max:\s*(\S+)\s*$"
 )
-TIME = re.compile(r"^Time\s*=\s*(\S+)\s*$")
+TIME = re.compile(r"^Time\s*=\s*([+\-]?(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][+\-]?\d+)?)\s*s?\s*$")
 DELTA_T = re.compile(r"^\s*deltaT\s*=\s*(\S+)\s*$")
 
 
