@@ -191,3 +191,20 @@ Esta es una prueba nueva **de diez milisegundos**, no de 0.1 s, diseñada para c
 Se trata de **0–0.01 s**, cinco veces la prueba startup y una décima parte de la corrida original 0–0.1 s. El objetivo adaptativo fue `maxCo=0.15`; el **límite de aceptación separado** fue 0.20. El pico `0.163617` excede el objetivo adaptativo 0.15 pero **ninguna observación** excedió 0.20. El gate del **log completo de Courant** está aprobado para esta corrida concreta.
 
 Esto NO verifica deriva de volumen, `alpha.metal`, temperatura/energía, masa física, solidificación ni shrinkage. No promover aún el caso a benchmark físico ni comparar predicciones termodinámicas con B14. Los resultados permanecen en la laptop, no en GitHub; la corrida pasada y el historial REVIEW quedan preservados. Próxima puerta: auditoría cuantitativa de la **misma carpeta**, sin ejecutar otro `foamRun`.
+
+## 2026-11-18 — Auditoría de los resultados reales de FS-C02 extendido
+
+Se amplía `analysis_tools/audit_fs_c02_local.py` para reconocer el perfil `EXTENDED_PROBE_0_01S_TIGHTER_CO` y distinguir claramente:
+- `maxCo=0.15` como **objetivo del controlador**;
+- `acceptance_maxCo=0.20` como **límite numérico de cribado**;
+- tiempo final esperado **0.01 s**, en vez de 0.1 s del caso original.
+
+La auditoría lee **sin modificar la corrida** los 20 hashes de input, `FS-C02_RUN_STATUS.json`, integral temporal de volumen `volIntegrate(alpha.metal)`, campo final espacial `alpha.metal`, los Courant máximo/interfaz del log completo y el campo final **`T`**. Reporta deriva de volumen, límites `alpha`, discrepancia entre integral espacial y volumen archivado, `min/max T` y medias ponderadas por fracción de metal/aire, además de **masa derivada de rhoConst**, no un balance conservativo independiente ni energía validada. La falta de `T` en el ensayo extendido genera `REVIEW`; variaciones temporales/celdas incoherentes o manipulación de manifiestos hacen fallar el auditor. Un cribado `NUMERICAL_SCREEN_PASSED` **no significa validación física**, ni demuestra movimiento adecuado de interfaz, cambio de fase, acoplamiento de molde o contracción.
+
+Comando de lectura desde `~/OpenFOAM/FS_C02_WORKTREE` actualizado (sin modificar ninguna corrida):
+
+    python3 analysis_tools/audit_fs_c02_local.py \
+      --run ~/OpenFOAM/FS_C02_RUNS/FS-C02_EXTENDED_20261118T181711Z_d6b6ab92 \
+      --out ~/OpenFOAM/FS_C02_AUDITS/FS-C02_EXTENDED_20261118T181711Z_d6b6ab92_screen1
+
+La carpeta `--out` debe ser nueva; el auditor jamás reemplaza reportes previos ni ejecuta `foamRun`. El resultado de este **nuevo análisis** queda pendiente de ejecutar en la laptop del investigador.
