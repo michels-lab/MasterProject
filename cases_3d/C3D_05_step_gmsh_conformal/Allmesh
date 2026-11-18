@@ -7,8 +7,10 @@ REPO="$(cd "$ROOT/../.." && pwd)"
 OUT="${C3D05_OUT:-$HOME/OpenFOAM/C3D05_STEP_GMSH_PILOT_01}"
 METAL_STEP="${C3D05_METAL_STEP:-$ROOT/constant/geometry/metalmm.STEP}"
 MOLD_STEP="${C3D05_MOLD_STEP:-$ROOT/constant/geometry/QuickCupmm.STEP}"
+ALGORITHM3D="${C3D05_ALGORITHM3D:-1}" # 1=Delaunay baseline, 4=Frontal, 10=HXT
 STAGE="STEP_PREFLIGHT"
 if [[ "$OUT" != /* ]]; then echo "C3D05_OUT must be an absolute path" >&2; exit 2; fi
+[[ "$ALGORITHM3D" =~ ^(1|4|10)$ ]] || { echo "C3D05_ALGORITHM3D must be 1, 4 or 10" >&2; exit 2; }
 # Defaults use versioned, SHA-verified original AP214 STEP inputs.
 # Absolute paths can still be overridden for a future CAD experiment.
 [[ "$METAL_STEP" == /* && "$MOLD_STEP" == /* ]] || { echo "STEP paths must be absolute" >&2; exit 2; }
@@ -61,7 +63,7 @@ run_stage() {
   fi
 }
 run_stage gmsh3d python3 "$ROOT/scripts/build_step_mesh.py" \
-  --metal "$METAL_STEP" --mold "$MOLD_STEP" --out "$OUT"
+  --metal "$METAL_STEP" --mold "$MOLD_STEP" --out "$OUT" --algorithm-3d "$ALGORITHM3D"
 [[ -s "$OUT/cad_multivolume.msh" && -s "$OUT/STEP_CAD_AUDIT.json" ]] || fail "Missing Gmsh mesh or CAD report"
 run_stage gmshToFoam gmshToFoam "$OUT/cad_multivolume.msh" -case "$OUT"
 [[ -s "$OUT/constant/polyMesh/cellZones" ]] || fail "gmshToFoam created no physical cellZones"
