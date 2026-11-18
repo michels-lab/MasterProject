@@ -44,7 +44,7 @@ En la malla padre: **21,312 celdas**, bounding box `(0,-0.0655,0)` a `(0.0518,0,
 
 `CONTACT_AREA_REPORT.json` no apareció en la salida de terminal. El ejecutor original abortó en `CHECK_REGION_QUALITY` antes de entrar en `CHECK_CONTACT_AREA`; por tanto **no hay área nativa verificada de C3D-04**. Las 2,496 caras prueban el conteo y reciprocidad declarada, no el área.
 
-Se añadió el diagnóstico de solo lectura `cases_3d/C3D_04_rounded_multiblock_pilot/scripts/diagnose_existing_defects.py`. Revisa logs previos y busca exportaciones VTK ya disponibles, informando rangos XYZ e histogramas de vértices por intervalos Y. **Vértices VTK ≠ número de celdas defectuosas.** No ejecuta `checkMesh`, `blockMesh`, CFD ni cambia evidencia. Si no hay VTK previo, lo comunica sin fabricar coordenadas.
+Se añadió el diagnóstico de solo lectura `cases_3d/C3D_04_rounded_multiblock_pilot/scripts/diagnose_existing_defects.py`. Revisa logs previos y busca exportaciones VTK ya disponibles, informando rangos XYZ e histogramas de vértices por intervalos Y. También intenta calcular **solo en memoria y sin escribir ningún archivo** el área `metal_to_mold`, `mold_to_metal` y `metalTop` desde `polyMesh` existente, incluso cuando la calidad está rechazada. Un área preliminar favorable no autoriza CFD. **Vértices VTK ≠ número de celdas defectuosas.** No ejecuta `checkMesh`, `blockMesh`, CFD ni cambia evidencia. Si no hay VTK previo, lo comunica sin fabricar coordenadas.
 
 ```bash
 cd ~/OpenFOAM/MasterProject
