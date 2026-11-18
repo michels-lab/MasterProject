@@ -92,8 +92,14 @@ if (( $# > 0 )) && [[ "$1" == "--diagnose" ]]; then
     echo "Meshes preserved; this is not acceptance or CFD."
     exit 0
 fi
-if (( $# > 0 )); then
-    echo "Usage: bash Allmesh [--diagnose]" >&2
+# A separate, controlled native snappyHexMesh sensitivity test:
+# nSmoothPatch changes 3 -> 6 ONLY in the new local copy.
+VARIANT=baseline
+if (( $# == 1 )) && [[ "$1" == "--candidate-smooth" ]]; then
+    VARIANT=smooth
+    CASE="$HOME/OpenFOAM/C3D02_NATIVE_SMOOTH_01"
+elif (( $# > 0 )); then
+    echo "Usage: bash Allmesh [--diagnose|--candidate-smooth]" >&2
     exit 2
 fi
 if [[ -e "$CASE" || -L "$CASE" ]]; then
@@ -122,6 +128,23 @@ cp "$ROOT/system/blockMeshDict" "$ROOT/system/snappyHexMeshDict" \
    "$ROOT/system/controlDict" "$CASE/system/"
 cp "$ROOT/constant/geometry/metal.stl" \
    "$ROOT/constant/geometry/mold_repaired.stl" "$CASE/constant/geometry/"
+
+if [[ "$VARIANT" == smooth ]]; then
+    STAGE=CONTROLLED_SNAP_VARIANT
+    foamDictionary "$CASE/system/snappyHexMeshDict" \
+        -entry snapControls/nSmoothPatch -set 6 > "$CASE/log.snap_variant" 2>&1 ||
+        fail "Native foamDictionary could not set nSmoothPatch to 6"
+    selected="$(foamDictionary "$CASE/system/snappyHexMeshDict" -entry snapControls/nSmoothPatch)" ||
+        fail "Cannot verify modified snapControls/nSmoothPatch"
+    [[ "$selected" =~ (^|[^0-9])6([^0-9]|$) ]] ||
+        fail "Unexpected nSmoothPatch after native edit: $selected"
+    {
+        echo "HYPOTHESIS TEST ONLY: nSmoothPatch 3 -> 6"
+        echo "Modified with foamDictionary Foundation 14 in candidate output only"
+        echo "STL, surface refinement L2, zone definitions and all C14 files unchanged"
+        echo "NO claim that this change improves mesh quality without checkMesh"
+    } > "$CASE/CANDIDATE_CHANGE.txt"
+fi
 
 # Validate the zone declarations with OpenFOAM's own dictionary reader.
 for material in metal mold; do
@@ -184,12 +207,27 @@ mold_faces="$(patch_value "$mold_boundary" mold_to_metal nFaces)"
 [[ "$metal_faces" =~ ^[1-9][0-9]*$ && "$metal_faces" == "$mold_faces" ]] ||
     fail "Mismatch in contact faces: metal=$metal_faces, mold=$mold_faces"
 
-# Native checkMesh performs the geometry/topology assessment and writes VTK.
-# Its exit code alone cannot certify a mesh: require the log's Mesh OK message.
+# Native checkMesh does not certify success by return code alone.
+# Candidate mode checks BOTH regions to retain complete comparative evidence.
+candidate_rejected=0
 for region in metal mold; do
     run_native "checkMesh.$region" checkMesh -case "$CASE" -region "$region" \
         -allGeometry -allTopology -writeSurfaces -writeSets
     log="$CASE/log.checkMesh.$region"
+    if [[ "$VARIANT" == smooth ]]; then
+        if grep -Eq 'Failed[[:space:]]+[1-9][0-9]*[[:space:]]+mesh checks' "$log" ||
+           ! grep -Eq '(^|[[:space:]])Mesh OK' "$log" ||
+           ! grep -Eq 'Number of regions:[[:space:]]*1([^0-9]|$)' "$log"; then
+            candidate_rejected=1
+        fi
+        vol_candidate="$(awk '/Total volume[[:space:]]*=/{for(i=1;i<NF;i++)if($i=="="){print $(i+1);exit}}' "$log")"
+        if [[ "$region" == metal ]]; then cad_candidate=0.0000479874896432; else cad_candidate=0.00010284309608; fi
+        if [[ -z "$vol_candidate" ]] ||
+           ! awk -v v="$vol_candidate" -v ref="$cad_candidate" 'BEGIN{d=v/ref-1;if(v<=0||d>0.02||d< -0.02)exit 1}'; then
+            candidate_rejected=1
+        fi
+        continue
+    fi
     if grep -Eq 'Failed[[:space:]]+[1-9][0-9]*[[:space:]]+mesh checks' "$log"; then
         echo "Native checkMesh findings for $region:" >&2
         grep -Ei 'Failed [0-9]+ mesh checks|concave|determinant|face.tets|non.orthogonal|skew|illegal|negative' "$log" |
@@ -207,6 +245,52 @@ for region in metal mold; do
         BEGIN { d=v/ref-1; if(v<=0 || d>0.02 || d< -0.02) exit 1 }
     ' || fail "$region: CAD volume deviation exceeds 2% ($volume m3)"
 done
+
+if [[ "$VARIANT" == smooth ]]; then
+    STAGE=CONTROLLED_COMPARISON
+    baseline="$HOME/OpenFOAM/C3D02_NATIVE_OF14_01"
+    comparison="$CASE/CANDIDATE_COMPARISON.tsv"
+    printf 'source\tregion\tcells\tvolume_m3\tconcave_cells\tlow_determinant_cells\tbad_tet_faces\tfailed_checks\tmesh_ok\n' > "$comparison"
+    for region in metal mold; do
+        for source in BASELINE CANDIDATE; do
+            if [[ "$source" == BASELINE ]]; then
+                log="$baseline/log.checkMesh.$region"
+            else
+                log="$CASE/log.checkMesh.$region"
+            fi
+            if [[ ! -s "$log" ]]; then
+                printf '%s\t%s\tNA\tNA\tNA\tNA\tNA\tNA\tNA\n' "$source" "$region" >> "$comparison"
+                continue
+            fi
+            awk -v source="$source" -v region="$region" '
+                /^[[:space:]]*cells:/ {cells=$2}
+                /Total volume[[:space:]]*=/ {
+                    for(i=1;i<NF;i++)if($i=="="){volume=$(i+1);break}
+                }
+                /Concave cells \(using face planes\) found/ {concave=$NF}
+                /Cells with small determinant/ {lowdet=$NF}
+                /Error in face tets:/ {bad_tet=1}
+                /Failed [0-9]+ mesh checks/ {failed=$2}
+                /Mesh OK/ {mesh_ok=1}
+                END{
+                    printf "%s\t%s\t%s\t%s\t%d\t%d\t%d\t%d\t%d\n",
+                        source,region,cells,volume,concave,lowdet,bad_tet,failed,mesh_ok
+                }
+            ' "$log" >> "$comparison"
+        done
+    done
+    echo "=== OpenFOAM native controlled snap sensitivity ==="
+    cat "$comparison"
+    echo "Results and native checkMesh VTK are preserved at $CASE"
+    if (( candidate_rejected )); then
+        echo "REJECTED / candidate mesh quality or CAD gate failed" > "$CASE/NATIVE_BUILD_STATUS.txt"
+        echo "Neither 3D region is accepted as CFD-ready; no solver executed."
+        exit 5
+    fi
+    echo "CANDIDATE_MESH_PRELIMINARY_ACCEPTED / NO_CFD" > "$CASE/NATIVE_BUILD_STATUS.txt"
+    echo "The candidate passed native mesh gates; 3D BCs remain unvalidated."
+    exit 0
+fi
 
 # Preserve the exact controlled C14 files; do NOT fabricate thermophysical data.
 for material in metal mold; do
