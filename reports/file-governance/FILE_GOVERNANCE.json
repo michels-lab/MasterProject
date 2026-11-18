@@ -28,7 +28,7 @@
     "POTENTIAL_UNLOGGED_CHANGES": 2
   },
   "finding_total": 2,
-  "inventory_fingerprint": "190b9e949415bdb9d0bea4890db1148124d99931f6d4639e30a7834c8ffe32d5",
+  "inventory_fingerprint": "467b13c6d08c71ac028b0554db1295f04dee254e88ecf2deca25886ba6f3babd",
   "evidence_fingerprint": "c795a819b038ff81cee3d5c2fcf6645cdf5dc06833a26180ef88dee54043f365",
   "files": [
     {
@@ -323,7 +323,7 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "18216298eb318640e511ebfab1b16db69435fbc4"
+      "blob": "80e516839aed271b7646b7de38fd0f48c0051cf2"
     },
     {
       "path": "RUN_CASE_REGISTRY.csv",
@@ -1079,7 +1079,7 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "2c9af9172a8ee9778dfbeb6dc692f717adaf3e7a"
+      "blob": "68b04f0ba5a83c4093cb8511cfae7c80bbf3febb"
     },
     {
       "path": "cases_3d/C3D_02_metal_sand_clean/constant/geometry/README.md",
@@ -1317,7 +1317,7 @@
       "role": "test",
       "purpose": "code/test implementation",
       "certainty": "rule",
-      "blob": "c99c6a2ad6dadfa1395f7c699bb1072c0d803a52"
+      "blob": "f1ddf961011abfb86c70e99fac0c6cca2c4b8229"
     },
     {
       "path": "cases_3d/C3D_02_metal_sand_clean/tests/test_native_checkmesh_report.sh",
@@ -271006,7 +271006,7 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "bf44db7d95c91521a95c86340181f829aa34bd89"
+      "blob": "cd50d50211cab6bda9b105518ddb31df9e814fd8"
     },
     {
       "path": "docs/C3D_REINICIO_20261112_ES.md",
