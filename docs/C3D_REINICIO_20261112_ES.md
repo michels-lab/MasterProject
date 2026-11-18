@@ -1,3 +1,5 @@
+> **ACTUALIZACIÓN CANÓNICA C3D-02 / 18-11-2026 — adenda posterior:** C3D-02 **sí ha ejecutado ensayos de malla** desde este reinicio (no CFD). Baseline original metal 85,350/arena 274,788 falló `checkMesh`; par STL v2 colapsó a 4/4; ensayos separados metal v2→1 metal y arena v2→0 arena. Se conserva la metodología de zonas/volúmenes y el estado de física C14. [Resultado de las ablaciones](C3D_02_ABLACION_STL_V2_20261118_ES.md) y [caso doctor multibloque de referencia](C3D_02_REFERENCIA_DOCTOR_Y_OPCIONES_MALLADO_20261118_ES.md). Las afirmaciones «preparado/sin ejecutar» que siguen se refieren al corte histórico del 12-11, **no al estado actual del mallado**. Sin `foamMultiRun`.
+
 # C3D — Reinicio controlado del caso 3D (12 de noviembre de 2026)
 
 **Decisión del investigador:** abandonar como base de ejecución las múltiples pruebas temporales de C3D-01, conservar sus resultados y bitácoras como evidencia histórica, y construir un **caso fuente nuevo e independiente**, `cases_3d/C3D_02_metal_sand_clean/`, con dos materiales: `metal` (hierro hipoeutéctico) y `mold` (arena sílica). **No modelar aire como una tercera región.**
