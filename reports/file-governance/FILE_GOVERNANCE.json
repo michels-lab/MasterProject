@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "audit_kind": "deterministic_full_tracked_tree",
-  "tracked_files_total": 38842,
-  "classified_files_total": 38837,
+  "tracked_files_total": 38843,
+  "classified_files_total": 38838,
   "docs_content_inspected": 144,
   "large_docs_skipped": 0,
   "excluded_reports": 5,
@@ -16,7 +16,7 @@
     "index": 24,
     "license": 1,
     "simulation_case_file": 99,
-    "simulation_input": 2678,
+    "simulation_input": 2679,
     "simulation_log": 3155,
     "simulation_output": 32613,
     "source": 63,
@@ -26,7 +26,7 @@
   },
   "finding_counts": {},
   "finding_total": 0,
-  "inventory_fingerprint": "9511c092b9acc219e3f288a6341bbc9837f1ab5ebffbe844bb3320029017a37c",
+  "inventory_fingerprint": "7a80450191a8c679a3dc6d751dd5417f8f0a220c246304ee1789c66bee758b12",
   "evidence_fingerprint": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
   "files": [
     {
@@ -321,7 +321,7 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "c46c30fdf67655afb0af97eb0b2bbe1e3f5f68af"
+      "blob": "302329f7bc45dcd3c1ef358fcc731f272e79d71e"
     },
     {
       "path": "RUN_CASE_REGISTRY.csv",
@@ -1077,7 +1077,7 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "419d0928415b81c2603128f6928e0a4de436b439"
+      "blob": "6df103b01b2d3e8dc598f358a72744181c51819c"
     },
     {
       "path": "cases_3d/C3D_02_metal_sand_clean/constant/geometry/README.md",
@@ -1414,6 +1414,13 @@
       "purpose": "code/test implementation",
       "certainty": "rule",
       "blob": "7071e1415ea4288b313d6aa436fbd10e36a8fcd1"
+    },
+    {
+      "path": "cases_3d/C3D_03_doctor_multiblock_pilot/system/blockMeshDict",
+      "role": "simulation_input",
+      "purpose": "OpenFOAM case field/dictionary input (content unvalidated)",
+      "certainty": "inferred",
+      "blob": "a3ffe1f0920071b6e5f940d4e453bda7c785509c"
     },
     {
       "path": "cases_3d/README.md",
@@ -271137,7 +271144,7 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "881fd6519cf0e8a9f70ef8382858366cb6f00808"
+      "blob": "4384a3ece7202394c2df9a787c1d901e2e1da602"
     },
     {
       "path": "docs/DOCUMENT_SYNC_20261110_ES.md",
