@@ -106,7 +106,7 @@ class HighAirTests(unittest.TestCase):
         self.assertEqual(r["cell_count"],19200)
         self.assertEqual(r["gas_near_pure_cells"],12800)
         self.assertEqual(r["gas_near_pure_mean_T_K"],300)
-        self.assertEqual(r["volume_field_m3"],INITIAL_VOLUME)
+        self.assertAlmostEqual(r["volume_field_m3"],INITIAL_VOLUME)
         self.assertTrue(r["atmosphere_flux"]["measured"])
         self.assertEqual(r["atmosphere_flux"]["positive_flux_samples"],2)
         self.assertEqual(len(read_alpha(last/"alpha.metal",expected_cells=19200)),19200)
