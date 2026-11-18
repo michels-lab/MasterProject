@@ -438,3 +438,13 @@ python3 analysis_tools/run_fs_c02_high_headspace.py --stage-only
 ```
 
 La nueva herramienta genera un resumen de T/alpha/volumen a t=0.01 s para la malla **19200 celdas**, verifica que el parche superior sigue abierto y registra los datos de flujo `phi` si se producen. Si el flujo superior no se ha grabado, **no se declara validación de evacuación**. La cota superior 0.12 m es **hipótesis de sensibilidad**, no dimensión real suministrada por el investigador ni definición final de un dominio abierto; se debe estudiar sensibilidad al alejamiento del contorno y al futuro diseño real del molde.
+
+## CORRECCIÓN DE DISEÑO PRIORITARIA, 2026-11-18 — Aire TAMBIÉN sobre arena (prevalece sobre la propuesta vertical anterior)
+
+El investigador precisó que **el volumen gaseoso debe extenderse también sobre la cara superior de la arena**; no basta con aumentar de 60 a 120 mm la altura de una columna estrecha sobre el metal. Esta decisión es físicamente coherente con el CAD original QuickCup de tres zonas: hierro x/z aprox. 7.65–44.15 mm, arena x/z 0–51.8 mm, ambos con borde superior y=0. El aire exterior debe cubrir **el conjunto de metal + arena** y extenderse lateralmente **más allá** del molde, con fronteras abiertas alejadas y sin pared ficticia en la parte superior.
+
+**Cambio operativo:** `run_fs_c02_high_headspace.py` queda **SOLO PARA `--stage-only`** como artefacto de geometría/ensayo incompleto; la ejecución CFD de esa variante está bloqueada deliberadamente (no representa aire sobre la arena ni contiene arena sólida). La instrucción previa de ejecutarla sin flags está **revocada**. No intentar ese CFD para el QuickCup. Su único propósito era evaluar una distancia al techo y ahora no satisface los requisitos físicos del investigador. Las corridas reales previas FS-C02 quedan intactas y reproducibles.
+
+**Especificación 3D completa en:** [FS_C02_DOMINIO_AIRE_SOBRE_ARENA_20261118_ES.md](../../docs/FS_C02_DOMINIO_AIRE_SOBRE_ARENA_20261118_ES.md).
+
+**Próximo trabajo aprobado como diseño, no como resultado obtenido:** piloto de mallado **metal + arena sólida + aire exterior** con aire continuo por encima de ambos y extendido en X/Z; verificar malla y superficies/BC térmicas antes de activar acoplamiento VOF + CHT y solidificación. No modificar la rama principal activa de C3D-02 ni el baseline B14; no considerar la caja auxiliar de `blockMesh` de C3D-02 como dominio físico real. No confundir el experimento FS-C02 2D con la geometría CAD final.
