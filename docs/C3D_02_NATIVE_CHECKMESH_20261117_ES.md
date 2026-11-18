@@ -117,3 +117,26 @@ A solicitud expresa del investigador, el siguiente ensayo lleva el nombre **c3d 
 Comando: `bash cases_3d/C3D_02_metal_sand_clean/Allmesh --better`.
 
 La prueba repite el mallado original con el diccionario fuente L2 y `nSmoothPatch=3` en nueva carpeta y comprueba **ambas** regiones con OpenFOAM. No continúa automáticamente al solver y no toca los STL, valores físicos C14 ni ensayos históricos. Su tabla `C3D_BETTER_COMPARISON.tsv` conserva métricas de los logs del baseline y nueva malla, incluidos volúmenes totales. El nombre **no expresa un logro de calidad** antes de ejecutar `checkMesh`. Todavía no se ha ejecutado en Ubuntu.
+
+## 17-11-2026 — `c3d - better`, REPETICIÓN REAL EJECUTADA: sin mejora
+
+El investigador ejecutó `Allmesh --better` en Ubuntu y entregó el contenido de `~/OpenFOAM/c3d-better/C3D_BETTER_COMPARISON.tsv`. Los cuatro renglones son:
+
+| Fuente | Región | Celdas | Volumen total (m³) | Celdas cóncavas | Determinantes bajos | Tets defectuosos | Checks fallidos | Mesh OK |
+|---|---|---:|---:|---:|---:|---:|---:|---:|
+| BASELINE | metal | 85350 | 4.79793e-05 | 4834 | 3 | 0 | 2 | 0 |
+| BETTER | metal | 85350 | 4.79793e-05 | 4834 | 3 | 0 | 2 | 0 |
+| BASELINE | mold | 274788 | 0.000103389 | 14951 | 1 | 1 | 3 | 0 |
+| BETTER | mold | 274788 | 0.000103389 | 14951 | 1 | 1 | 3 | 0 |
+
+**Conclusión:** la repetición reproduce las **métricas de calidad, conteo y volumen**, pero no demuestra malla byte-idéntica ni mejora la calidad. `c3d-better` está **RECHAZADO**, no solver ni CHT, aunque la carpeta lleve ese nombre. El ensayo con `nSmoothPatch=6` tampoco mejoró.
+
+### Defecto adicional de montaje físico descubierto
+
+`Allmesh` copiaba los archivos `constant/{metal,mold}` de C14 **después** de la validación completa de calidad. En consecuencia, un ensayo rechazado como `c3d-better` quedaba con mallas regionales, pero sin las propiedades termofísicas físicas **copiadas a su carpeta de entrega** (aunque las fuentes controladas continuaran presentes en el repositorio). Esta ausencia de copia no explica las concavidades, porque los materiales no intervienen en `snappyHexMesh`.
+
+**Corrección publicada:** `scripts/stage_c14_materials.sh` copia exclusivamente las siete entradas controladas después de `splitMeshRegions` y **antes** de `checkMesh`, y las compara byte por byte con C14; rechaza sobrescrituras diferentes. `Allmesh --stage-c14-better` permite completar **sin remallar** la carpeta ya creada `~/OpenFOAM/c3d-better`, dejando `C14_MATERIALS_VERIFIED.txt`. El estado de rechazo de malla no cambia ni se autoriza CFD. Hay pruebas de regresión aisladas en `tests/test_native_stage_c14.sh`. Todavía no se ha ejecutado esta verificación nueva en Ubuntu.
+
+### Decisión de investigación
+
+No repetir nuevamente la misma malla, no adoptar `nSmoothPatch=6`, no disminuir criterios. Los `concaveCells.vtk`, `underdeterminedCells.vtk`, `lowQualityTetFaces.vtk` ya exportados para el baseline deben **localizarse visual/espacialmente en ParaView** para decidir si conviene cambiar controles de snap, discretización o tratamiento de intersecciones/superficies; sin evidencia de posiciones no atribuir la causa.
