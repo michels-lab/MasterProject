@@ -81,6 +81,35 @@ class FSC02Tests(unittest.TestCase):
                 self.assertEqual(
                     hashlib.sha256((case / rel).read_bytes()).hexdigest(), expected)
 
+    def test_conservative_startup_probe_is_separate_and_traceable(self):
+        case, status = stage(self.out, startup_probe=True)
+        self.assertEqual(status["case_id"], "FS-C02")
+        self.assertTrue(status["startup_probe"])
+        self.assertEqual(status["status"], "STAGED_NO_CFD_YET")
+        self.assertFalse(status["solver_tested_on_real_openfoam"])
+        control = (case / "system/controlDict").read_text()
+        for content in (
+            "endTime         0.002;",
+            "writeInterval   0.0002;",
+            "deltaT          1e-7;",
+            "maxDeltaT       1e-6;",
+            "maxCo           0.20;",
+            "maxAlphaCo      0.20;",
+            "adjustTimeStep  on;",
+            "fields (alpha.metal);",
+        ):
+            self.assertIn(content, control)
+        manifest = json.loads((case / "FS-C02_MANIFEST.json").read_text())
+        self.assertEqual(
+            manifest["execution_profile"], "STARTUP_PROBE_0_002S_CONSERVATIVE"
+        )
+        self.assertEqual(manifest["time_controls"]["maxDeltaT_s"], 1e-6)
+        self.assertEqual(len(manifest["generated_input_sha256"]), 20)
+        self.assertEqual(manifest["generated_input_sha256"]["system/controlDict"],
+                         hashlib.sha256((case/"system/controlDict").read_bytes()).hexdigest())
+        self.assertFalse((case/"constant/polyMesh").exists())
+        self.assertFalse((case/"postProcessing").exists())
+
     def test_restage_same_path_fails_without_overwriting(self):
         stage(self.out)
         with self.assertRaisesRegex(ValueError, "pre-existing"):
