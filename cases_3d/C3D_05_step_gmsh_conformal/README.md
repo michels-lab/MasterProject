@@ -1,0 +1,74 @@
+# C3D-05 — Ruta paralela CAD multivolumen STEP → Gmsh → OpenFOAM 14
+
+**18-11-2026 — Preparado en GitHub, NO ejecutado:** ruta tridimensional **independiente de `blockMesh`**. Su objetivo es comparar el mallado tetraédrico/no estructurado de dos sólidos CAD en un dominio conformante contra el multibloque curvilíneo `C3D-04`. **No existe todavía una malla C3D-05 aprobada ni CFD 3D.**
+
+## ¿Por qué no es lo mismo que C3D-04?
+
+- `C3D-03`: 3D `blockMesh` de 24 bloques, contornos rectos; **se ejecutó y pasó checkMesh**.
+- `C3D-04`: 3D **curvilíneo con `blockMesh`**, 180 bloques, 144 arcos de esquina y refinamiento de base; **preparado, no ejecutado en WSL**.
+- **`C3D-05` (este caso):** **Gmsh + OpenCASCADE**, importación de dos sólidos **STEP reales de SolidWorks**, `fragment` de los dos volúmenes para obtener **una sola cara común**, generación de mallado no estructurado, exportación MSH2 ASCII (coordenadas en metros), conversión nativa con `gmshToFoam` Foundation14 y separación mediante `splitMeshRegions`.
+
+En el caso original del doctor, metal y arena compartían caras de bloques desde `blockMesh`. Aquí el principio científico es **el mismo contacto topológicamente compartido**, pero **el mallador y la representación CAD son distintos**.
+
+## Prerrequisito que NO está disponible en este repositorio
+
+Necesitamos **dos STEP sólidos auténticos**, exportados desde el mismo modelo y sistema de referencia de SolidWorks, en **milímetros**:
+
+- `metal.step`: volumen de hierro solamente, ~47,987.697 mm³, altura Y=-40 a 0 mm.
+- `mold.step`: arena sólida, excluyendo el volumen interior ocupado por el hierro, ~102,843.333 mm³, altura Y=-65.5 a 0 mm, exterior X/Z 0 a 51.8 mm y abertura inferior rectangular 22.5×27.5 mm hasta Y=-56 mm.
+
+Ambos cuerpos deben ocupar **sus coordenadas globales originales** sin reorientaciones individuales, compartir interfaces geométricas y no solaparse. No usar STL renombrados, no fabricar STEP a partir de las cajas envolventes ni mezclar archivos con diferentes orígenes. Los STEP pueden permanecer en la laptop: el script registra sus hashes SHA256 y rutas. Si los STEP aún no existen, esta ruta está **BLOQUEADA POR INSUMO CAD**, no se interpreta como error de mallado.
+
+## Por qué se usa `fragment`
+
+`gmsh.model.occ.fragment` procesa ambos volúmenes como un solo problema geométrico, identifica su superficie de contacto y permite generar **una malla conformante**. Los volúmenes se etiquetan mediante `Physical Volume("metal")` y `Physical Volume("mold")`; superficies con etiquetas temporales `metal_mold_contact`, `metalTop` y `moldOuterUnclassified`. Esta última **NO es una BC térmica aprobada**; la clasificación posterior de pared superior, base, exterior y paredes de abertura sigue pendiente. La conversión a OpenFOAM debe **probar** que conserva las dos zonas y crea parches `mappedWall` recíprocos; el código rechaza resultados dudosos.
+
+Documentación técnica externa: [Gmsh t16 / OpenCASCADE fragment](https://gmsh.info/doc/texinfo/gmsh.html#t16); [Gmsh t20 / STEP](https://gmsh.info/doc/texinfo/gmsh.html#t20).
+
+## Puertas del script — sin física ni solver
+
+Antes de mallar, `scripts/build_step_mesh.py` obliga a confirmar:
+
+1. Dos **sólidos CAD cerrados** importables; un volumen por archivo.
+2. Fragmentación que deje **solo una región `metal` y una `mold`**, sin fragmentos volumétricos adicionales ni solapamiento.
+3. Volumen de metal y arena **dentro de ±2 %** de los STL autorizados.
+4. Superficie común metal–arena, incluyendo laterales y fondo, dentro de **±3 %** de 6,352.634 mm².
+5. `metalTop` dentro de **±3 %** de 1,326.886 mm², sin otras caras metálicas expuestas inesperadas.
+6. Dimensiones globales de arena ~51.8 × 65.5 × 51.8 mm (tolerancia de lectura 0.30 mm).
+7. Exportación `Mesh.ScalingFactor=0.001`: modelo OCC en mm, malla MSH2 en m (solo una conversión).
+
+Después, `Allmesh` ejecuta `gmshToFoam`, `checkMesh -allGeometry -allTopology` del padre y ambas regiones, `splitMeshRegions -cellZones 'metal mold' -noFields`, auditoría de parches y áreas de sus caras. La medida nativa del área de contacto debe coincidir entre metal y arena dentro de **0.1 %** y con el CAD dentro de **±3 %**. Los conteos de caras de una malla no estructurada **no tienen por qué coincidir con los 2,496 de C3D-04**.
+
+**Ninguna de estas puertas garantiza por sí sola fidelidad geométrica punto a punto, independencia de malla, correctas BC térmicas o estabilidad CFD.**
+
+## Cómo ejecutar una vez que existan los STEP
+
+```bash
+cd ~/OpenFOAM/MasterProject
+git pull --ff-only
+bash cases_3d/C3D_05_step_gmsh_conformal/tests/test_step_gmsh_static.sh
+
+# Después de exportar ambos STEP reales de SolidWorks a rutas accesibles en WSL:
+export C3D05_METAL_STEP="/ruta/absoluta/metal.step"
+export C3D05_MOLD_STEP="/ruta/absoluta/mold.step"
+
+# Verificar disponibilidad de Gmsh / Python / Foundation14 en tu máquina:
+python3 -c 'import gmsh; print("Gmsh Python OK")'
+source /opt/openfoam14/etc/bashrc
+command -v gmshToFoam
+
+# Crear salida independiente, sin solver:
+bash cases_3d/C3D_05_step_gmsh_conformal/Allmesh
+```
+
+**Salida preservada**: `~/OpenFOAM/C3D05_STEP_GMSH_PILOT_01`; rechaza carpetas existentes. Si se necesita otro ensayo, crear un destino **nuevo** mediante `C3D05_OUT=/ruta/absoluta/nueva`. La disponibilidad y versión exacta del módulo Python `gmsh` y de `gmshToFoam` en la laptop **todavía no están comprobadas**.
+
+Si OpenFOAM rechaza conversión o `checkMesh`, preservar `log.gmsh3d`, `log.gmshToFoam`, `log.splitMeshRegions`, `log.checkMesh.*`, `STEP_CAD_AUDIT.json`, `PILOT_MESH_REPORT.tsv`, `CONTACT_AREA_REPORT.json` y `NATIVE_BUILD_STATUS.txt`. No ejecutar `foamMultiRun`.
+
+## Comparación futura A/B
+
+Evaluar ambos contra los **mismos STL oficiales**, versión OF14 y umbrales: volumen, área de contacto, forma del frente de solidificación/base, distancia superficial al STL, proporción de celdas de mala calidad, cantidad de elementos, tiempo de mallado, costo de CPU y, después de validar BC, convergencia y `Co_max` observado. **No seleccionar ganador por el número de celdas ni solo por `Mesh OK`.**
+
+- [C3D-04 curvilíneo mediante blockMesh](../C3D_04_rounded_multiblock_pilot/README.md)
+- [C3D-03 resultado medido](../../docs/C3D_03_RESULTADO_NATIVO_20261118_ES.md)
+- [Criterios comparativos A/B](../../docs/C3D_04_C3D_05_MALLADO_PARALELO_20261118_ES.md)
