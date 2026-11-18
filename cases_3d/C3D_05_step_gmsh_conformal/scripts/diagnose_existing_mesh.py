@@ -16,9 +16,9 @@ from pathlib import Path
 CAD_VOLUME_M3 = {"metal": 4.7987697e-5, "mold": 1.02843333e-4}
 IMPORTANT = re.compile(
     r"\*\*\*|\b(?:fail(?:ed|ure)?|error|illegal|invalid|negative|degenerate|"
-    r"concave|determinant|orthogon|skew|volume|face\s+tets|"
-    r"region|connected|disconnected|mesh\s+ok|severe|warning|"
-    r"tetra|quality|zero\s+area)\b",
+    r"concav\w*|determinant\w*|orthogon\w*|skew\w*|volume\w*|face\s+tets|"
+    r"region\w*|connected|disconnected|mesh\s+ok|severe|warning\w*|"
+    r"tetra\w*|quality|aspect|flat|bad\w*|zero\s+area)\b",
     re.IGNORECASE,
 )
 
