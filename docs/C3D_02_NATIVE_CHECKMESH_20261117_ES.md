@@ -140,3 +140,20 @@ El investigador ejecutó `Allmesh --better` en Ubuntu y entregó el contenido de
 ### Decisión de investigación
 
 No repetir nuevamente la misma malla, no adoptar `nSmoothPatch=6`, no disminuir criterios. Los `concaveCells.vtk`, `underdeterminedCells.vtk`, `lowQualityTetFaces.vtk` ya exportados para el baseline deben **localizarse visual/espacialmente en ParaView** para decidir si conviene cambiar controles de snap, discretización o tratamiento de intersecciones/superficies; sin evidencia de posiciones no atribuir la causa.
+
+## 17-11-2026 — STL v2: primer mallado en laptop bloqueado en interfaz
+
+Evidencia **real** recibida del usuario, luego de `git pull --ff-only` y `check_stl_v2.sh`:
+- `metal_v2.stl` y `mold_v2.stl`: SHA-256 correctos y `surfaceCheck` terminó para ambos en OpenFOAM Foundation 14 (el script suprimía el detalle de superficie; no inferir aún área/cierre del log no recibido).
+- `bash cases_3d/C3D_02_metal_sand_clean/Allmesh --stl-v2` llegó a la validación de parches regionales y terminó con **`ERROR [STAGE_C14_MATERIALS]: metal_to_mold is not mappedWall`**. El mensaje de etapa era **incorrecto**: el archivo de materiales ya había sido copiado y controlado, pero `STAGE` no se actualizaba al iniciar la inspección de interfaz. El error de `mappedWall` puede significar parche ausente, tipo no conforme o un problema del parser; **la terminal compartida no contiene el `polyMesh/boundary` real**. No afirmar todavía cuál de esas posibilidades ocurrió.
+- Se conservó `~/OpenFOAM/c3d-better-stl-v2`. Ni el script ejecutó `checkMesh` regional (se detuvo antes), ni se ejecutó `foamMultiRun`. No hay comparación de calidad v2 demostrada aún.
+
+**Corrección de trazabilidad:** el pipeline cambia ahora a `STAGE=CHECK_INTERFACE` después de completar con éxito los materiales de C14. Se añadió `scripts/native_interface_audit.sh` (lector Bash/awk del archivo real `polyMesh/boundary`) y `Allmesh --audit-stl-v2` para diagnosticar **el mallado ya generado**, sin `blockMesh`, `snappyHexMesh` ni `splitMeshRegions` adicionales. El modo genera `STL_V2_INTERFACE_AUDIT.txt` con todos los parches/tipos/`nFaces`, incluye extractos del log original `splitMeshRegions`, y realiza `checkMesh -allGeometry -allTopology -writeSurfaces -writeSets` en los dos `polyMesh` **existentes** para recuperar las métricas de calidad sin volver a mallar. Genera `STL_V2_COMPARISON_AUDIT.tsv` desde los logs, preservando el estado de fallo original. La ejecución del nuevo modo en Ubuntu aún está pendiente.
+
+```bash
+cd ~/OpenFOAM/MasterProject
+git pull --ff-only
+bash cases_3d/C3D_02_metal_sand_clean/Allmesh --audit-stl-v2
+```
+
+**Criterio de decisión científica:** si la interfaz realmente falta, inspeccionar el contacto CAD y la asignación de celdas y superficies del nuevo STL antes de cambiar `mappedWall` a mano. Si el parche existe como `mappedWall` y el script lo interpretó mal, corregir solamente el parser; si hay un tipo distinto o no coincide el número de caras, no falsificar contacto térmico. Independientemente, evaluar las métricas de ambas mallas regionales, los volúmenes y los defectos VTK antes de autorizar CFD.
