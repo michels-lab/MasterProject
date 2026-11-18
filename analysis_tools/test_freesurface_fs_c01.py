@@ -59,6 +59,7 @@ class FreeSurfaceFS_C01(unittest.TestCase):
         self.assertIn("frontAndBack { type empty;", mesh)
         self.assertIn("box (0 0 -1) (0.04 0.04 1);", alpha)
         self.assertIn("fields (alpha.water);", control)
+        self.assertIn("writeFields false;", control)
         self.assertAlmostEqual(self.manifest["analytical_initial_water_volume_m3"], 1.6e-5)
         self.assertAlmostEqual(self.manifest["end_time_s"], 0.1)
 
