@@ -51,11 +51,11 @@ for trial in metal mold; do
         grep -A 5 -m1 -E 'Interface[[:space:]]+Owner Region[[:space:]]+Neighbour Region' "$CASE/log.splitMeshRegions" || true
         echo "Summary:"
         awk '
-            $1=="metal" && $3=="metal" { metal=$2 }
-            $1=="mold" && $3=="mold" { mold=$2 }
-            $1=="exterior" && $3=="<none>" { exterior=$2 }
+            $1=="metal" && $3=="metal" { metal=$2; seenMetal=1 }
+            $1=="mold" && $3=="mold" { mold=$2; seenMold=1 }
+            $1=="exterior" && $3=="<none>" { exterior=$2; seenExterior=1 }
             END {
-                printf "metal_cells=%s mold_cells=%s exterior_cells=%s\n", metal?metal:"UNKNOWN", mold?mold:"UNKNOWN", exterior?exterior:"UNKNOWN"
+                printf "metal_cells=%s mold_cells=%s exterior_cells=%s\n", seenMetal?metal:"UNKNOWN", seenMold?mold:"UNKNOWN", seenExterior?exterior:"UNKNOWN"
             }
         ' "$CASE/log.splitMeshRegions"
         if grep -q 'metal_to_mold' "$CASE/log.splitMeshRegions"; then
