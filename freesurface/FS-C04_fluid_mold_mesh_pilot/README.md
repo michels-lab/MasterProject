@@ -179,3 +179,32 @@ python3 analysis_tools/stage_fs_c04_initial_alpha.py \
 ```
 
 **Estado esperado, NO SE HA EJECUTADO:** `INITIAL_ALPHA_STAGED_GEOMETRY_ONLY_NO_CFD`. Si el script falla, conservar evidencia y revisar; no correr `foamRun` ni ignorar errores de lectura de malla. El molde real y su apoyo, propiedades térmicas dependientes de T, balance energético metal–aire–arena, turbulencia y tratamiento térmico de interfaz siguen pendientes.
+
+## 2026-11-18 — Resultado local real: campo `alpha.metal` aislado creado y auditado
+
+El investigador ejecutó `test_stage_fs_c04_initial_alpha.py` desde commit `4e0696e5c`: **`Ran 10 tests in 0.105s / OK`**. Después ejecutó `stage_fs_c04_initial_alpha.py` sobre las dos mallas nativas aprobadas. Salida:
+
+```text
+FS-C04 ALPHA: INITIAL_ALPHA_STAGED_GEOMETRY_ONLY_NO_CFD
+New isolated copy: /home/michel/OpenFOAM/FS_C04_ALPHA_RUNS/FS_C04_ALPHA_STAGE_20261118T214929Z_8d780c53
+metal cells: 2368 air: 32000
+geometric sum(alpha*V) m3: 4.801191628e-05
+alpha field SHA256: f37f6668510b471bbf123567514664cd47aeba5fa19502da87133b6a3389079d
+NO CFD. Native field/volume acceptance not yet tested.
+```
+
+**Hecho demostrado:** hay una copia nueva con `0/fluid/alpha.metal` adimensional y 34,368 valores exactos; ninguna celda del molde recibió fracción VOF, todos los límites atmosféricos admiten reentrada de aire `alpha.metal=0`, y se verificó geométricamente la integral `sum(alpha V)` de las celdas líquidas. La carpeta original FS-C04 y FS-C03 queda intacta. **No afirmar que OpenFOAM cargó nativamente el volScalarField ni integró el volumen hasta completar la etapa siguiente.**
+
+### Nuevo control preparado: `foamPostProcess` nativo (SIN CFD)
+
+Se implementó `analysis_tools/verify_fs_c04_native_alpha.py`. Emplea la plantilla oficial de OpenFOAM Foundation 14 `volIntegrate(alpha.metal)` para ejecutar `foamPostProcess -region fluid -time 0` sobre **OTRA COPIA NUEVA** del caso alpha, nunca en las fuentes originales. Antes de ejecutar recalcula las pruebas de identidad de malla padre y región fluida, los hashes SHA-256, asignación exacta 2368 metal/32000 aire, BC de atmósfera, ausencia de `alpha` en arena, integridad del manifold de malla y volumen geométrico. Después exige un resultado real de `postProcessing/**/volFieldValue.dat` de `t=0` para la función `volIntegrate(alpha.metal)`, compara con **4.801191628e-05 m³** con umbral máximo de **0.2 %**, y registra el resultado y los hashes en `FS_C04_NATIVE_ALPHA_ACCEPTANCE.json`. Sin archivo/función/hora válidos, se marca `NATIVE_ALPHA_INTEGRAL_REJECTED_NO_CFD`, sin declarar éxito ficticio.
+
+**Comando de prueba, después de actualizar FS_C02_WORKTREE:**
+
+```bash
+python3 -m unittest discover -s analysis_tools -p test_verify_fs_c04_native_alpha.py -v && \
+python3 analysis_tools/verify_fs_c04_native_alpha.py \
+  --stage ~/OpenFOAM/FS_C04_ALPHA_RUNS/FS_C04_ALPHA_STAGE_20261118T214929Z_8d780c53
+```
+
+**Resultado esperado — AÚN NO CONFIRMADO POR UBUNTU:** `NATIVE_ALPHA_INTEGRAL_VERIFIED_NO_CFD`, junto con volumen medido. La ejecución no usa `foamRun`, no arranca térmica/CHT, ni cambia la carpeta ya aprobada. Si Foundation 14 requiere alguna adaptación de formato de salida o configuración de `foamPostProcess`, atender el error y los logs, sin saltarse el gate ni tolerar valores falsos. El archivo escrito **aún no acredita** una simulación física válida: faltan las propiedades térmicas, `U/p/T`, solución de la convección, contacto real molde–metal, CHT, solidificación, grafitización y contracción.
