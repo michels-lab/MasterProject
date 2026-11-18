@@ -179,3 +179,30 @@ bash cases_3d/C3D_02_metal_sand_clean/scripts/diagnose_stl_v2_zones.sh
 ```
 
 Esta salida debe fijar el punto real de pérdida: no recomendar ajustes arbitrarios de `nSmoothPatch`, `faceType` ni selección de `mappedWall` hasta identificarlo. Mantener `~/OpenFOAM/c3d-better-stl-v2` y la evidencia de STL v2 congelados.
+
+## 18-11-2026 — Diagnóstico de zonas real: 589,821 celdas / 4 metal / 4 arena
+
+El usuario ejecutó `scripts/diagnose_stl_v2_zones.sh` y compartió **la salida completa**. Resultados literales, capturados del caso `~/OpenFOAM/c3d-better-stl-v2`:
+
+- `snappyHexMesh` terminó con **589,821 celdas**, 1,863,574 caras y 683,937 puntos tras refinamiento y snapping; registró 101,678 intersected edges durante refinamiento. La etapa no produjo error fatal, pero generó la topología que luego se clasificó erróneamente.
+- Justo antes de asignar `cellZones`, el registro dice **`Walking from locations-in-mesh ... crossing a faceZone face changes cellZone`** y **10 regiones globales**.
+- El punto del metal `(0.0259 -0.02 0.0259)` se detectó en región global 1; el punto de arena `(0.0043 -0.0207 0.0259)` se detectó en región global 0; el exterior `(-0.002 -0.068 -0.002)` **también** en región global 0. Esto demuestra que la clasificación nativa conectó el punto de arena con exterior, a pesar de ser interior del STL de arena según inspección volumétrica geométrica independiente.
+- La tabla **`splitMeshRegions` confirma que la clasificación ya venía mal**: `metal 4 metal`, `mold 4 mold`, `exterior 589813 <none>`. Las únicas interfaces son `mold_to_exterior 24` y `metal_to_exterior 24`; ninguna `metal_to_mold`.
+- `splitMeshRegions` además advierte que `faceZone::checkAddressing()` encuentra `Illegal face index 296053` y `667917` respecto a mallas regionales de solo 24 caras. Conservar como evidencia de zonas heredadas inconsistentes al separar restos; **no tratar como causa primera del colapso de la clasificación**.
+- `checkMesh` de ambas regiones: 4 componentes inconexos, determinante mínimo/promedio 0 y fallo; comparación de calidad con baseline es inválida por diferencias radicales de volumen.
+- Verificación geométrica del candidato original fuera de OpenFOAM: ambos STL son volúmenes cerrados orientados positivamente. Cortes a `z=25.9 mm` muestran que la pared de hierro y la pared interior de la arena tienen **coordenadas prácticamente coincidentes** para una amplia fracción del contacto. En muestreo geométrico de 250 puntos de superficie de metal, 71.2% coincidían con arena a menos de `1e-5 mm` (solo aproximación; el resto incluye caras de metal expuestas al aire). La interfaz coplanar/coincidente entre dos STL independientes es **hipótesis**, no causa probada.
+
+### Próximo experimento de aislamiento controlado (NO CFD)
+
+Se agregaron dos variantes de `Allmesh` que cambian un solo STL desde los binarios auditados y preservan todo lo demás:
+- `--v2-metal-only`: hierro STL nuevo + arena STL antigua `mold_repaired.stl`; salida `~/OpenFOAM/c3d-better-v2-metal-only`.
+- `--v2-mold-only`: hierro STL antiguo `metal.stl` + arena STL nueva; salida `~/OpenFOAM/c3d-better-v2-mold-only`.
+- Ejecutables en serie mediante `scripts/run_stl_v2_ablation.sh`, que NO elimina carpetas existentes, preserva estados reales aunque se rechace la interfaz y produce `~/OpenFOAM/C3D02_STL_V2_ABLATION_REPORT.txt` con las tablas **reales** `Region nCells cellZone` y `Interface Owner Region ...` de cada ensayo.
+
+```bash
+cd ~/OpenFOAM/MasterProject
+git pull --ff-only
+bash cases_3d/C3D_02_metal_sand_clean/scripts/run_stl_v2_ablation.sh
+```
+
+**Criterio:** primero recuperar de forma objetiva decenas de miles de celdas físicas, volúmenes cercanos a CAD e interfaz metal–arena, antes de discutir concavidad o CFD. Un fallo en una variante y no en la otra identificaría qué cambio de geometría interfiere con `cellZone`; si las dos variantes funcionan y la pareja v2 colapsa, investigar interacción entre ambas triangulaciones coincidentes. No modificar originales ni `mappedWall` a mano. La ejecución de estas dos variantes sigue pendiente en la laptop.
