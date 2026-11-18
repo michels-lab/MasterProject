@@ -5,19 +5,24 @@ set -Eeuo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO="$(cd "$ROOT/../.." && pwd)"
 OUT="${C3D05_OUT:-$HOME/OpenFOAM/C3D05_STEP_GMSH_PILOT_01}"
-METAL_STEP="${C3D05_METAL_STEP:-}"
-MOLD_STEP="${C3D05_MOLD_STEP:-}"
+METAL_STEP="${C3D05_METAL_STEP:-$ROOT/constant/geometry/metalmm.STEP}"
+MOLD_STEP="${C3D05_MOLD_STEP:-$ROOT/constant/geometry/QuickCupmm.STEP}"
 STAGE="STEP_PREFLIGHT"
 if [[ "$OUT" != /* ]]; then echo "C3D05_OUT must be an absolute path" >&2; exit 2; fi
-if [[ -z "$METAL_STEP" || -z "$MOLD_STEP" ]]; then
-  echo "BLOCKED_INPUT: export TWO aligned SolidWorks CAD solids (.step/.stp)" >&2
-  echo "Use C3D05_METAL_STEP=/path/metal.step C3D05_MOLD_STEP=/path/mold.step" >&2
-  echo "No mesh has been generated, no CFD executed."
-  exit 3
-fi
+# Defaults use versioned, SHA-verified original AP214 STEP inputs.
+# Absolute paths can still be overridden for a future CAD experiment.
 [[ "$METAL_STEP" == /* && "$MOLD_STEP" == /* ]] || { echo "STEP paths must be absolute" >&2; exit 2; }
 [[ -s "$METAL_STEP" && -s "$MOLD_STEP" ]] || { echo "Missing STEP input(s): $METAL_STEP / $MOLD_STEP" >&2; exit 2; }
 [[ "$METAL_STEP" != "$MOLD_STEP" ]] || { echo "Metal and mold STEP must differ" >&2; exit 2; }
+# Protect the two canonical SolidWorks exports in this public research repo.
+if [[ "$METAL_STEP" == "$ROOT/constant/geometry/metalmm.STEP" ]]; then
+  [[ "$(sha256sum "$METAL_STEP" | awk '{print $1}')" == "ea5f65796c5156e4931eaec29ff656c279120925ebc083767a16b80892d0f475" ]] ||
+    { echo "Incorrect canonical metalmm.STEP SHA256; refusing mesh" >&2; exit 2; }
+fi
+if [[ "$MOLD_STEP" == "$ROOT/constant/geometry/QuickCupmm.STEP" ]]; then
+  [[ "$(sha256sum "$MOLD_STEP" | awk '{print $1}')" == "fe126d23bb639196258551fd156591d7fe2b0b4ce1d7c9ece47016e8ad08a40c" ]] ||
+    { echo "Incorrect canonical QuickCupmm.STEP SHA256; refusing mesh" >&2; exit 2; }
+fi
 if [[ -e "$OUT" || -L "$OUT" ]]; then
   echo "PRESERVED: output exists; refusing overwrite: $OUT" >&2
   exit 2
