@@ -1,3 +1,5 @@
+> **ACTUALIZACIÓN CANÓNICA C3D-02 / 18-11-2026 — adenda posterior:** estos ensayos independientes del 12–15 de noviembre son historia preservada. El 18-11 se ejecutó una ablación distinta de STL v2 sobre una malla de DOS materiales: hierro v2 + arena antigua → **1 metal / 274,788 arena**; hierro antiguo + arena v2 → **85,350 metal / 0 arena**. Ambas rechazadas; los diagnósticos actuales están en [bitácora nueva](C3D_02_ABLACION_STL_V2_20261118_ES.md), junto al [estudio de la malla del doctor](C3D_02_REFERENCIA_DOCTOR_Y_OPCIONES_MALLADO_20261118_ES.md). No confundirlas con las dos mallas independientes históricas de este documento. CFD 3D no ejecutado.
+
 ## 15-11-2026 — Localización de defectos: exportación VTK REAL y análisis geométrico reproducible
 
 El investigador ejecutó `bash scripts/inspect_extracted_mesh_quality.sh` tras descargar la implementación mediante `git pull`. Las opciones **`checkMesh -allGeometry -allTopology -writeSurfaces -writeSets`** fueron aceptadas por Foundation 14. El comando operó exclusivamente sobre **COPIAS** de la malla de hierro y de la arena ya extraída bajo `quality_evidence_01/`.
