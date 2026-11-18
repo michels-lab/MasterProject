@@ -51,7 +51,7 @@ class OpenTopTests(unittest.TestCase):
             "atmosphere { type patch; faces ((3 7 6 2)); }",
             "atmosphere { type wall; faces ((3 7 6 2)); }",
         )
-        with self.assertRaisesRegex(ValueError,"not a generic open patch"):
+        with self.assertRaisesRegex(ValueError,"NOT a generic open patch"):
             verify(self.run)
 
     def test_wrong_top_velocity_BC_rejected(self):
