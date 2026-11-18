@@ -50,3 +50,18 @@ Requiere OpenFOAM Foundation 14 activo; crea un directorio **nuevo** bajo `~/Ope
 5. **Física de la superficie libre:** incorporar VOF y comprobar advección de `alpha.metal`, movimiento de interfaz, aire abierto, conservación de volumen/masa, propiedades, turbulencia y energía **antes** de introducir solidificación, calor latente, grafitización y contracción.
 
 **Archivos originales protegidos:** las corridas FS-C02, el FS-C03 nativo `FS_C03_AIR_TOPOLOGY_20261118T202905Z_6ef0cd90`, B14, FS-C01 y C3D-02 no se cambian ni se sobrescriben. El PR #51 sigue en modo draft hasta validar física y malla CAD.
+
+## 18-11-2026 — Gate nativo real aprobado en OpenFOAM Foundation 14
+
+**Confirmación reportada por el investigador desde Ubuntu (commit `8b4adaf19`):** `python3 analysis_tools/audit_fs_c04_fluid_mold.py` produjo `STATIC_2_ZONE_TOPOLOGY_CONSISTENT_NOT_NATIVE_CHECKMESH`; después `python3 -m unittest discover -s analysis_tools -p 'test_*fs_c04*.py' -v` reportó **11 pruebas correctas**, incluida una prueba negativa esperada por versión errónea de OpenFOAM (no es un fallo del caso). Finalmente, `python3 analysis_tools/run_fs_c04_mesh.py --native` produjo:
+
+```text
+OpenFOAM: 14
+FS-C04 2-zone mesh-only pilot staged: /home/michel/OpenFOAM/FS_C04_FLUID_MOLD_TOPOLOGY_20261118T204433Z_7fa8dc47
+FS-C04 status: NATIVE_2_REGION_FLUID_MOLD_TOPOLOGY_PASSED_NO_CFD
+NO CFD. Alpha metal initial field, real CAD fit and mold support unresolved.
+```
+
+El ejecutor solo imprime `NATIVE_2_REGION_FLUID_MOLD_TOPOLOGY_PASSED_NO_CFD` después de ejecutar `blockMesh`, `checkMesh` en el caso completo y en las dos regiones, `splitMeshRegions`, comprobar `mappedWall` recíprocos y las fronteras atmosféricas abiertas. **El gate nativo de malla FS-C04 está aprobado.** La evidencia no incluye aquí los logs completos ni valores detallados de skewness/nonorthogonality; no inventarlos.
+
+**Alcance no demostrado:** no existe todavía campo `alpha.metal` inicial, validación de volúmenes/áreas del CAD original, tratamiento del apoyo inferior, acoplamiento CHT ni corrida VOF/solidificación; no confundir éxito de geometría con validación física. El caso FS-C04 validado se conserva inmutable. La siguiente etapa debe preparar en una NUEVA carpeta una asignación reproducible de las 2368 celdas inicialmente metálicas dentro de la región fluida (`34,368` celdas), con auditoría de integridad y volumen antes de resolver CFD.
