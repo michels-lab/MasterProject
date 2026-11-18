@@ -132,8 +132,11 @@ if (( $# == 1 )) && [[ "$1" == "--candidate-smooth" ]]; then
 elif (( $# == 1 )) && [[ "$1" == "--better" ]]; then
     VARIANT=better
     CASE="$HOME/OpenFOAM/c3d-better"
+elif (( $# == 1 )) && [[ "$1" == "--stl-v2" ]]; then
+    VARIANT=stl_v2
+    CASE="$HOME/OpenFOAM/c3d-better-stl-v2"
 elif (( $# > 0 )); then
-    echo "Usage: bash Allmesh [--diagnose|--candidate-smooth|--better|--compare|--stage-c14-better]" >&2
+    echo "Usage: bash Allmesh [--diagnose|--candidate-smooth|--better|--stl-v2|--compare|--stage-c14-better]" >&2
     exit 2
 fi
 if [[ -e "$CASE" || -L "$CASE" ]]; then
@@ -162,6 +165,24 @@ cp "$ROOT/system/blockMeshDict" "$ROOT/system/snappyHexMeshDict" \
    "$ROOT/system/controlDict" "$CASE/system/"
 cp "$ROOT/constant/geometry/metal.stl" \
    "$ROOT/constant/geometry/mold_repaired.stl" "$CASE/constant/geometry/"
+
+# v2 SolidWorks: verify SHA-256 and native OpenFOAM surfaceCheck first.
+# Only the NEW case copy is modified; historical STL and meshes untouched.
+if [[ "$VARIANT" == stl_v2 ]]; then
+    STAGE=VERIFY_STL_V2
+    bash "$ROOT/scripts/check_stl_v2.sh" > "$CASE/log.verify_stl_v2" 2>&1 ||
+        fail "Missing/invalid v2 STLs: see $CASE/log.verify_stl_v2"
+    cp "$ROOT/constant/geometry/metal_v2.stl" "$CASE/constant/geometry/metal.stl"
+    cp "$ROOT/constant/geometry/mold_v2.stl" "$CASE/constant/geometry/mold_repaired.stl"
+    {
+        echo "c3d - better / SolidWorks v2 candidate"
+        echo "metal_v2.stl -> metal.stl (new case copy only)"
+        echo "mold_v2.stl -> mold_repaired.stl (new case copy only)"
+        echo "STL units [mm]; physical properties C14 unchanged"
+        sha256sum "$CASE/constant/geometry/metal.stl" "$CASE/constant/geometry/mold_repaired.stl"
+        echo "Only source candidate, not certified mesh or CFD"
+    } > "$CASE/STL_V2_SOURCE_MAP.txt"
+fi
 
 if [[ "$VARIANT" == smooth ]]; then
     STAGE=CONTROLLED_SNAP_VARIANT
@@ -251,7 +272,7 @@ for region in metal mold; do
     run_native "checkMesh.$region" checkMesh -case "$CASE" -region "$region" \
         -allGeometry -allTopology -writeSurfaces -writeSets
     log="$CASE/log.checkMesh.$region"
-    if [[ "$VARIANT" == smooth || "$VARIANT" == better ]]; then
+    if [[ "$VARIANT" == smooth || "$VARIANT" == better || "$VARIANT" == stl_v2 ]]; then
         if grep -Eq 'Failed[[:space:]]+[1-9][0-9]*[[:space:]]+mesh checks' "$log" ||
            ! grep -Eq '(^|[[:space:]])Mesh OK' "$log" ||
            ! grep -Eq 'Number of regions:[[:space:]]*1([^0-9]|$)' "$log"; then
@@ -283,10 +304,12 @@ for region in metal mold; do
     ' || fail "$region: CAD volume deviation exceeds 2% ($volume m3)"
 done
 
-if [[ "$VARIANT" == smooth || "$VARIANT" == better ]]; then
+if [[ "$VARIANT" == smooth || "$VARIANT" == better || "$VARIANT" == stl_v2 ]]; then
     STAGE=CONTROLLED_COMPARISON
     baseline="$HOME/OpenFOAM/C3D02_NATIVE_OF14_01"
-    if [[ "$VARIANT" == better ]]; then
+    if [[ "$VARIANT" == stl_v2 ]]; then
+        comparison="$CASE/STL_V2_COMPARISON.tsv"
+    elif [[ "$VARIANT" == better ]]; then
         comparison="$CASE/C3D_BETTER_COMPARISON.tsv"
         printf '%s\n' "c3d - better: native OpenFOAM repeat of the L2 source baseline" \
             "nSmoothPatch=3; no change to STLs, properties, or C14" \
