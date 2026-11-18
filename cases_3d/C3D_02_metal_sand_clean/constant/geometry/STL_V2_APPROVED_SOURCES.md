@@ -2,7 +2,7 @@
 
 **Origen:** los dos archivos finales aportados por el investigador el 17-11-2026. Nombres de origen: `metalmm(2).STL` (metal) y `QuickCupmm.STL` (arena). Los archivos `metal(2).STL`, `metal(3).STL`, `metalmm.STL`, `metalmm(1).STL`, `QuickCup(2).STL` y `QuickCup(3).STL` no son la pareja definitiva.
 
-**ATENCIÓN — ESTADO DE SINCRONIZACIÓN:** esta bitácora y el script de verificación están versionados. Los **dos STL binarios aún no están subidos a GitHub**: la conexión actual permite escritura de archivos UTF-8, pero no recibe directamente los bytes de los adjuntos del chat. Los STL deben incorporarse como archivos binarios, con los nombres exactos de la tabla, en este mismo directorio; no reemplazar ni eliminar `metal.stl`, `mold.stl` o `mold_repaired.stl`.
+**ESTADO VERIFICADO — BINARIOS YA INCORPORADOS A `main`:** `metal_v2.stl` y `mold_v2.stl` se subieron sin convertir a ASCII ni cambiar la triangulación en el commit [`e8be4afeae847411cd35b815f90748d71d1c5d90`](https://github.com/michels-lab/MasterProject/commit/e8be4afeae847411cd35b815f90748d71d1c5d90). Sus SHA de objeto Git **coinciden con los calculados sobre los archivos originales**: metal `10b41a9edbf32ec6642587d21fa3cc6ad76a880d`, molde `6ea3ccbab486ccc45842723f68af289b61d9d029`. Los archivos originales `metal.stl`, `mold.stl` y `mold_repaired.stl` permanecen intactos. Estos son los **STL correctos de origen** para el siguiente candidato 3D, no una malla CFD validada.
 
 | Archivo a versionar | Nombre recibido | Bytes | SHA-256 esperado | Triángulos | Volumen de superficie (cm³) |
 |---|---|---:|---|---:|---:|
@@ -17,7 +17,7 @@
 
 ## Auditoría y subida
 
-Una vez presentes ambos archivos binarios bajo los nombres indicados:
+Los dos STL binarios ya están presentes en este directorio; tras `git pull --ff-only`, ejecutar:
 
 ```bash
 cd ~/OpenFOAM/MasterProject
@@ -27,3 +27,16 @@ bash cases_3d/C3D_02_metal_sand_clean/scripts/check_stl_v2.sh
 La comprobación utiliza SHA-256 y `surfaceCheck -checkSelfIntersection` de Foundation 14. **No inicia la malla ni CFD.** Para la prueba de malla v2, conservar `c3d-better` y los experimentos anteriores como evidencia; usar una carpeta nueva.
 
 **NUNCA interpretar esta aprobación de procedencia como aprobación de malla**. La reparación definitiva depende de `checkMesh -allGeometry -allTopology`, volumen, áreas de interfaz, contactos térmicos y BCs 3D.
+
+## Ejecución nativa siguiente
+
+Tras `git pull --ff-only` y `check_stl_v2.sh`, el mallador controlado de OpenFOAM Foundation 14 utiliza los dos STL nuevos en una carpeta **nueva**:
+
+```bash
+cd ~/OpenFOAM/MasterProject
+git pull --ff-only
+bash cases_3d/C3D_02_metal_sand_clean/scripts/check_stl_v2.sh
+bash cases_3d/C3D_02_metal_sand_clean/Allmesh --stl-v2
+```
+
+Salida `~/OpenFOAM/c3d-better-stl-v2` y tabla `STL_V2_COMPARISON.tsv`. No se sobrescriben los experimentos anteriores; el script exige calidad de ambas regiones y **no ejecuta CFD**.
