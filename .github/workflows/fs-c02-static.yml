@@ -7,6 +7,8 @@ on:
       - 'analysis_tools/test_run_fs_c02_local.py'
       - 'analysis_tools/audit_fs_c02_local.py'
       - 'analysis_tools/test_audit_fs_c02_local.py'
+      - 'analysis_tools/inspect_fs_c02_thermal.py'
+      - 'analysis_tools/test_inspect_fs_c02_thermal.py'
       - 'analysis_tools/diagnose_fs_c02_courant.py'
       - 'analysis_tools/test_diagnose_fs_c02_courant.py'
       - 'freesurface/FS-C02/**'
@@ -32,6 +34,8 @@ jobs:
         run: python3 -m unittest discover -s analysis_tools -p test_audit_fs_c02_local.py -v
       - name: Courant spike chronology and case-id isolation tests (NO CFD)
         run: python3 -m unittest discover -s analysis_tools -p test_diagnose_fs_c02_courant.py -v
+      - name: Read-only 0.01s metal-air thermal-interface grouping regression (NO CFD)
+        run: python3 -m unittest discover -s analysis_tools -p test_inspect_fs_c02_thermal.py -v
       - name: Stage reference iron-air case outside Git checkout
         run: |
           python3 analysis_tools/run_fs_c02_local.py \
