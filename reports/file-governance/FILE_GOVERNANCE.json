@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
   "audit_kind": "deterministic_full_tracked_tree",
-  "tracked_files_total": 38848,
-  "classified_files_total": 38843,
-  "docs_content_inspected": 145,
+  "tracked_files_total": 38862,
+  "classified_files_total": 38857,
+  "docs_content_inspected": 149,
   "large_docs_skipped": 0,
   "excluded_reports": 5,
   "roles": {
@@ -11,16 +11,16 @@
     "analysis_tool": 1,
     "bitacora": 5,
     "config": 7,
-    "data": 28,
-    "document": 115,
-    "index": 25,
+    "data": 29,
+    "document": 117,
+    "index": 27,
     "license": 1,
-    "simulation_case_file": 100,
-    "simulation_input": 2681,
+    "simulation_case_file": 102,
+    "simulation_input": 2683,
     "simulation_log": 3155,
     "simulation_output": 32613,
-    "source": 63,
-    "test": 22,
+    "source": 66,
+    "test": 24,
     "web_ui": 1,
     "workflow": 19
   },
@@ -28,8 +28,8 @@
     "POTENTIAL_UNLOGGED_CHANGES": 1
   },
   "finding_total": 1,
-  "inventory_fingerprint": "37e98e2946e5d853e0fbc428a5d0ef20f980da7ea5f1c6b522c8987ab271668c",
-  "evidence_fingerprint": "dc2f78addbac5301f9b7ea8c9ad28431665a217534e73edb38b5da74838dad0f",
+  "inventory_fingerprint": "035d244e22d4863431589cb0d0e1681b7f470991c6ec71dafccc76f8b8b1b677",
+  "evidence_fingerprint": "4bdcb0175d11b108f1f945c492c696f362d9e47bcf7a6321ffc0ecd03f6f78d9",
   "files": [
     {
       "path": ".github/agents/openfoam-solidification.agent.md",
@@ -267,7 +267,7 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "be0b7068470cdd6a171446609d6a43ffbe21d811"
+      "blob": "151287e99ff13fc6183c3568fff81d6222a42a9c"
     },
     {
       "path": "OPENFOAM_COMMAND_MANUAL.md",
@@ -316,28 +316,28 @@
       "role": "bitacora",
       "purpose": "technical/audit change history",
       "certainty": "rule",
-      "blob": "edd6cb0fe4638f761e1056ee1bd39afd8b9c2b4f"
+      "blob": "9244b8578b9dab200851fdd413182f8047b1569e"
     },
     {
       "path": "README.md",
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "7dd573ae38f2ac37e7ef83c2908451b025cc3686"
+      "blob": "7446b23865f8e1d8a2b42ea1ee53741c7ac4e403"
     },
     {
       "path": "RUN_CASE_REGISTRY.csv",
       "role": "data",
       "purpose": "structured/research data (semantics not validated)",
       "certainty": "rule",
-      "blob": "fbf969d2e05d3df5246e6064f0ffcad52354cf50"
+      "blob": "e25bd2fe537ce789de1fc62883e2c97de4ded871"
     },
     {
       "path": "RUN_MASTER_PROTOCOL.md",
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "6616826780b06f5451fbeebe397519ef90d9c514"
+      "blob": "12b455ed8fff4b49bf038128addaa708e910fd1c"
     },
     {
       "path": "VALIDATION_MATRIX.md",
@@ -358,7 +358,7 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "d2380d4893f5c4e9935b9572c9f4893e552d0bf1"
+      "blob": "c45a1b52e202a6d57dd45136e70c90c745dfbfa8"
     },
     {
       "path": "analysis_results/c11_energy2_test/summary.md",
@@ -1429,7 +1429,7 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "62373348e13fb1e8439433611ad939db2a3c2f54"
+      "blob": "be02fd6a4c02c2f09d6c81061947fbc155025f43"
     },
     {
       "path": "cases_3d/C3D_03_doctor_multiblock_pilot/system/blockMeshDict",
@@ -1453,6 +1453,27 @@
       "blob": "bf12de86f64ec7ebd652705179e9ed91065acc8f"
     },
     {
+      "path": "cases_3d/C3D_04_rounded_multiblock_pilot/Allmesh",
+      "role": "simulation_case_file",
+      "purpose": "OpenFOAM case-specific support artifact",
+      "certainty": "inferred",
+      "blob": "75d9f7dc8b79e8c32a125fe9b2d4e28cf84b5b46"
+    },
+    {
+      "path": "cases_3d/C3D_04_rounded_multiblock_pilot/README.md",
+      "role": "index",
+      "purpose": "navigation/onboarding",
+      "certainty": "rule",
+      "blob": "2d2c3f4a5af2c476aea0751ef66194b35ad2704a"
+    },
+    {
+      "path": "cases_3d/C3D_04_rounded_multiblock_pilot/scripts/measure_interface_area.py",
+      "role": "source",
+      "purpose": "code/test implementation",
+      "certainty": "rule",
+      "blob": "5dd9452165c37cb27b12624a2c7bc369c105bd93"
+    },
+    {
       "path": "cases_3d/C3D_04_rounded_multiblock_pilot/system/blockMeshDict",
       "role": "simulation_input",
       "purpose": "OpenFOAM case field/dictionary input (content unvalidated)",
@@ -1460,11 +1481,67 @@
       "blob": "219c8a5bb290e80b607d93bd1167095807df6ece"
     },
     {
+      "path": "cases_3d/C3D_04_rounded_multiblock_pilot/system/controlDict",
+      "role": "simulation_input",
+      "purpose": "OpenFOAM case field/dictionary input (content unvalidated)",
+      "certainty": "inferred",
+      "blob": "5656a830e7c28684dabe317c8636147a86bdc5dc"
+    },
+    {
+      "path": "cases_3d/C3D_04_rounded_multiblock_pilot/tests/test_rounded_multiblock_static.sh",
+      "role": "test",
+      "purpose": "code/test implementation",
+      "certainty": "rule",
+      "blob": "69d099832980f16919abb4244bd1876fa70c5dfb"
+    },
+    {
+      "path": "cases_3d/C3D_05_step_gmsh_conformal/Allmesh",
+      "role": "simulation_case_file",
+      "purpose": "OpenFOAM case-specific support artifact",
+      "certainty": "inferred",
+      "blob": "3d6929f86c6245bd50b2f7f55ead8cd8d2bf58df"
+    },
+    {
+      "path": "cases_3d/C3D_05_step_gmsh_conformal/README.md",
+      "role": "index",
+      "purpose": "navigation/onboarding",
+      "certainty": "rule",
+      "blob": "d1e5e4652f793133f34b806e02a562b92981a8bb"
+    },
+    {
+      "path": "cases_3d/C3D_05_step_gmsh_conformal/scripts/build_step_mesh.py",
+      "role": "source",
+      "purpose": "code/test implementation",
+      "certainty": "rule",
+      "blob": "f25de7fd06ea1df05620b53fea87bc0c2c2781ba"
+    },
+    {
+      "path": "cases_3d/C3D_05_step_gmsh_conformal/scripts/measure_interface_area.py",
+      "role": "source",
+      "purpose": "code/test implementation",
+      "certainty": "rule",
+      "blob": "99402d7175f2b9bf64cec2ed1647bd818e0104b2"
+    },
+    {
+      "path": "cases_3d/C3D_05_step_gmsh_conformal/system/controlDict",
+      "role": "simulation_input",
+      "purpose": "OpenFOAM case field/dictionary input (content unvalidated)",
+      "certainty": "inferred",
+      "blob": "48a3345ff730533d47bf26cfeb73693b748a182b"
+    },
+    {
+      "path": "cases_3d/C3D_05_step_gmsh_conformal/tests/test_step_gmsh_static.sh",
+      "role": "test",
+      "purpose": "code/test implementation",
+      "certainty": "rule",
+      "blob": "4dc34db597131f070185df63d42dec58405bae59"
+    },
+    {
       "path": "cases_3d/README.md",
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "8714288902a14c5ba52a401a8f9c3117032e7828"
+      "blob": "4d34cd12a0fb59a592d374b9d0b4fa004deb1135"
     },
     {
       "path": "cases_3d/case3d-01/README.md",
@@ -271125,7 +271202,7 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "5786114d9c737e28a8099988f7945347367849c9"
+      "blob": "942d582f7f33d0e4a499f5eab2e9f742d08f6976"
     },
     {
       "path": "docs/C3D_02_MALLADO_INICIAL_20261112_ES.md",
@@ -271156,6 +271233,27 @@
       "blob": "73361e5867a641b2c505a5cb6bf16f04d54017e2"
     },
     {
+      "path": "docs/C3D_03_RESULTADO_NATIVO_20261118_ES.md",
+      "role": "document",
+      "purpose": "manual/decision/report/historical note",
+      "certainty": "inferred",
+      "blob": "a87b8a42698121ef73ad00bc46fa219abbeb8d66"
+    },
+    {
+      "path": "docs/C3D_04_C3D_05_MALLADO_PARALELO_20261118_ES.md",
+      "role": "document",
+      "purpose": "manual/decision/report/historical note",
+      "certainty": "inferred",
+      "blob": "deb3c42fc78e9f8997e7c98926d4042430463fe1"
+    },
+    {
+      "path": "docs/C3D_MESH_PROGRESS_20261118.csv",
+      "role": "data",
+      "purpose": "structured/research data (semantics not validated)",
+      "certainty": "rule",
+      "blob": "dfadf9c543051b884cdfa08c706a157a29eafffb"
+    },
+    {
       "path": "docs/C3D_REINICIO_20261112_ES.md",
       "role": "document",
       "purpose": "manual/decision/report/historical note",
@@ -271181,7 +271279,7 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "e5356b5c455a6fd704afe88adee9d55e827727d9"
+      "blob": "424a7e20bb74562aae35596a6e21c0fd18db0f8c"
     },
     {
       "path": "docs/DOCUMENT_SYNC_20261110_ES.md",
@@ -271935,11 +272033,11 @@
   ],
   "findings": [
     {
-      "id": "c299d5671fec3980",
+      "id": "c259d6da8aa17efc",
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_EN.md",
-      "observation": "1 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_03_doctor_multiblock_pilot/tests/test_native_multiblock_static.sh",
+      "observation": "6 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_03_doctor_multiblock_pilot/tests/test_native_multiblock_static.sh, cases_3d/C3D_04_rounded_multiblock_pilot/scripts/measure_interface_area.py, cases_3d/C3D_04_rounded_multiblock_pilot/tests/test_rounded_multiblock_static.sh, cases_3d/C3D_05_step_gmsh_conformal/scripts/build_step_mesh.py, cases_3d/C3D_05_step_gmsh_conformal/scripts/measure_interface_area.py, cases_3d/C3D_05_step_gmsh_conformal/tests/test_step_gmsh_static.sh",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     }
