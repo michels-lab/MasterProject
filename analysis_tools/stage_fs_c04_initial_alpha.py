@@ -230,9 +230,11 @@ def stage(c03:Path,c04:Path,out:Path)->dict:
     for i in metal:
         values[i]=1.0
     field_dir=out/"0/fluid"
-    field_dir.mkdir(parents=True,exist_ok=False)
+    require(not field_dir.is_symlink(),"unexpected symlink in fluid 0 directory")
+    field_dir.mkdir(parents=True,exist_ok=True)
     field=field_dir/"alpha.metal"
-    require(not field.exists(),"unexpected preexisting alpha field")
+    require(not field.exists() and not field.is_symlink(),
+            "unexpected preexisting alpha field")
     field.write_text(make_alpha(values,boundary))
     verification=verify_alpha_file(
         field,metal,native_fluid,
