@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "audit_kind": "deterministic_full_tracked_tree",
-  "tracked_files_total": 38823,
-  "classified_files_total": 38818,
+  "tracked_files_total": 38824,
+  "classified_files_total": 38819,
   "docs_content_inspected": 138,
   "large_docs_skipped": 0,
   "excluded_reports": 5,
@@ -19,7 +19,7 @@
     "simulation_input": 2678,
     "simulation_log": 3155,
     "simulation_output": 32613,
-    "source": 57,
+    "source": 58,
     "test": 17,
     "web_ui": 1,
     "workflow": 19
@@ -28,8 +28,8 @@
     "POTENTIAL_UNLOGGED_CHANGES": 2
   },
   "finding_total": 2,
-  "inventory_fingerprint": "e601fa4a2923255db16f6b39e7e611b29a36f84c01934583ab589d4e7cc4424d",
-  "evidence_fingerprint": "4b47c033a2b70f016577679bfba41e393c7120832fcfc4bd4db668f425d5b2e6",
+  "inventory_fingerprint": "c767dc245b974416fedfce6987e2cab0ae7ffde581e5f06e9a049cf2ceac3094",
+  "evidence_fingerprint": "b1d588d1a0e9cddff840bed7e6953b7dcb7954b8cfb20cec149c3efd94968747",
   "files": [
     {
       "path": ".github/agents/openfoam-solidification.agent.md",
@@ -1213,6 +1213,13 @@
       "purpose": "code/test implementation",
       "certainty": "rule",
       "blob": "84425875ee65f739a56b54ec8cd8a72a3fd50eba"
+    },
+    {
+      "path": "cases_3d/C3D_02_metal_sand_clean/scripts/native_checkmesh_report.sh",
+      "role": "source",
+      "purpose": "code/test implementation",
+      "certainty": "rule",
+      "blob": "499595e3d887b88a54932dc5f67115e6bf60bdca"
     },
     {
       "path": "cases_3d/C3D_02_metal_sand_clean/scripts/prepare_geometry.sh",
@@ -271760,20 +271767,20 @@
   ],
   "findings": [
     {
-      "id": "fc48e45f23ba082a",
+      "id": "cdafec2de11d9d8d",
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_EN.md",
-      "observation": "3 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_02_metal_sand_clean/scripts/build_c3d02.py, cases_3d/C3D_02_metal_sand_clean/tests/test_native_allmesh_static.sh, cases_3d/C3D_02_metal_sand_clean/tests/test_template_static.sh",
+      "observation": "4 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_02_metal_sand_clean/scripts/build_c3d02.py, cases_3d/C3D_02_metal_sand_clean/scripts/native_checkmesh_report.sh, cases_3d/C3D_02_metal_sand_clean/tests/test_native_allmesh_static.sh, cases_3d/C3D_02_metal_sand_clean/tests/test_template_static.sh",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     },
     {
-      "id": "eed1ef1d645296ad",
+      "id": "c223736bba470622",
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_ES.md",
-      "observation": "3 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_02_metal_sand_clean/scripts/build_c3d02.py, cases_3d/C3D_02_metal_sand_clean/tests/test_native_allmesh_static.sh, cases_3d/C3D_02_metal_sand_clean/tests/test_template_static.sh",
+      "observation": "4 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_02_metal_sand_clean/scripts/build_c3d02.py, cases_3d/C3D_02_metal_sand_clean/scripts/native_checkmesh_report.sh, cases_3d/C3D_02_metal_sand_clean/tests/test_native_allmesh_static.sh, cases_3d/C3D_02_metal_sand_clean/tests/test_template_static.sh",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     }
