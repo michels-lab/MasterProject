@@ -156,7 +156,7 @@ def audit(text: str) -> dict:
     for owners in faces.values():
         if len(owners)!=2:
             continue
-        (i,a,_),(j,b,_)=owners
+        (i,a,_,_),(j,b,_,_)=owners
         if a==b=="air":
             graph[i].add(j);graph[j].add(i)
         if a!=b:
