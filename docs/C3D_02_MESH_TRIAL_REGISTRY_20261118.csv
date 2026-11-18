@@ -1,0 +1,5 @@
+trial,source_geometry,metal_cells,mold_cells,exterior_cells,metal_to_mold_faces,mesh_status,solver_status,evidence,observed_date
+baseline_original,original_metal+repaired_mold,85350,274788,,27501,REJECTED_CHECKMESH,NOT_RUN,docs/C3D_02_NATIVE_CHECKMESH_20261117_ES.md,2026-11-17
+v2_combined,metal_v2+mold_v2,4,4,589813,0,REJECTED_COLLAPSED_ZONES,NOT_RUN,docs/C3D_02_NATIVE_CHECKMESH_20261117_ES.md,2026-11-18
+v2_metal_only,metal_v2+repaired_mold,1,274788,314913,3,REJECTED_CHECKMESH_AND_VOLUME,NOT_RUN,docs/C3D_02_ABLACION_STL_V2_20261118_ES.md,2026-11-18
+v2_mold_only,original_metal+mold_v2,85350,0,504471,0,BLOCKED_CHECK_INTERFACE,NOT_RUN,docs/C3D_02_ABLACION_STL_V2_20261118_ES.md,2026-11-18
