@@ -99,6 +99,10 @@ for spec in "metal metal_to_mold mold mold_to_metal" "mold mold_to_metal metal m
     [[ "$(patch_value "$file" "$patch" neighbourRegion)" == "$neighbour" ]] || fail "$patch has wrong neighbourRegion"
     [[ "$(patch_value "$file" "$patch" neighbourPatch)" == "$reverse" ]] || fail "$patch has wrong neighbourPatch"
 done
+# A correct blockMesh pilot must not invent unclassified outer surfaces.
+parent_unknown="$(patch_value "$OUT/constant/polyMesh/boundary" unexpectedFaces nFaces)"
+[[ -z "$parent_unknown" || "$parent_unknown" == 0 ]] ||
+    fail "Unexpected unclassified boundary faces in parent mesh: $parent_unknown"
 metal_faces="$(patch_value "$metal_boundary" metal_to_mold nFaces)"
 mold_faces="$(patch_value "$mold_boundary" mold_to_metal nFaces)"
 [[ "$metal_faces" == "$mold_faces" && "$metal_faces" == 1248 ]] ||
@@ -118,6 +122,6 @@ fi
 printf 'MESH_TOPOLOGY_PRELIMINARILY_ACCEPTED / NO_CFD\nCheck contact AREA and CAD surface deviation visually before CFD.\n' > "$OUT/NATIVE_BUILD_STATUS.txt"
 cat "$OUT/PILOT_MESH_REPORT.tsv"
 cat "$OUT/PILOT_INTERFACE_REPORT.txt"
-echo "TOPLOGY PILOT COMPLETE; no thermophysical dictionaries, 0/ fields or solver executed."
+echo "TOPOLOGY PILOT COMPLETE; no thermophysical dictionaries, 0/ fields or solver executed."
 echo "CAD surface fit and 3D boundary conditions remain UNVALIDATED."
 echo "Result: $OUT"
