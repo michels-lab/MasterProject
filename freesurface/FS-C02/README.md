@@ -180,3 +180,14 @@ Procedimiento desde `~/OpenFOAM/FS_C02_WORKTREE` con rama FS-C02 actualizada, si
     python3 analysis_tools/run_fs_c02_local.py --extended-probe
 
 Esta es una prueba nueva **de diez milisegundos**, no de 0.1 s, diseñada para caracterizar el comportamiento posterior al arranque. No es aún una validación de campos de temperatura, masa, interfaz ni propiedades metalúrgicas; no contiene solidificación, contracción ni molde. Solo se podrá cerrar el umbral tras recibir la salida de Ubuntu y leer los campos de la nueva carpeta.
+
+## 2026-11-18 — Corrida real FS-C02 extendida: gate Courant PASSED (según salida del investigador)
+
+**Evidencia textual de Ubuntu OpenFOAM Foundation 14, commit f3ab50a7b:** `FS-C02_EXTENDED_20261118T181711Z_d6b6ab92`, ruta `/home/michel/OpenFOAM/FS_C02_RUNS/FS-C02_EXTENDED_20261118T181711Z_d6b6ab92`. Se ejecutaron `blockMesh`, `checkMesh` y `foamRun`. El ejecutor reportó literalmente:
+
+    FS-C02 EXTENDED PROBE: PROBE_COURANT_SCREEN_PASSED; max Co=0.163617; over 0.2=0; configured maxCo target=0.15
+    NO solidification or shrinkage. C3D-02 and B14 never touched.
+
+Se trata de **0–0.01 s**, cinco veces la prueba startup y una décima parte de la corrida original 0–0.1 s. El objetivo adaptativo fue `maxCo=0.15`; el **límite de aceptación separado** fue 0.20. El pico `0.163617` excede el objetivo adaptativo 0.15 pero **ninguna observación** excedió 0.20. El gate del **log completo de Courant** está aprobado para esta corrida concreta.
+
+Esto NO verifica deriva de volumen, `alpha.metal`, temperatura/energía, masa física, solidificación ni shrinkage. No promover aún el caso a benchmark físico ni comparar predicciones termodinámicas con B14. Los resultados permanecen en la laptop, no en GitHub; la corrida pasada y el historial REVIEW quedan preservados. Próxima puerta: auditoría cuantitativa de la **misma carpeta**, sin ejecutar otro `foamRun`.
