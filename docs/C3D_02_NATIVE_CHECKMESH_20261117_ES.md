@@ -1,3 +1,5 @@
+> **ACTUALIZACIÓN CANÓNICA C3D-02 / 18-11-2026 — adenda posterior a los ensayos anteriores:** los dos experimentos propuestos más abajo **YA SE EJECUTARON**. Hierro v2 + arena original: 1 celda metal / 274,788 mold / 314,913 exterior / contacto residual de 3 caras; hierro original + arena v2: 85,350 metal / **0** mold / 504,471 exterior / contacto ausente. El `UNKNOWN` del resumen viejo de arena se debe al formato del reporte, NO al resultado de OpenFOAM; la tabla nativa dice cero y ya existe corrección en `main`. Las dos variantes fallaron, así que no se puede atribuir el fallo solo a la combinación de STL. [Informe primario nuevo](C3D_02_ABLACION_STL_V2_20261118_ES.md) · [estudio del `blockMesh` del doctor](C3D_02_REFERENCIA_DOCTOR_Y_OPCIONES_MALLADO_20261118_ES.md). Este registro del 17-11 se preserva como historia; **sin CFD 3D**.
+
 # C3D-02 — Diagnóstico nativo de mallas, 17-11-2026
 
 ## Procedencia
