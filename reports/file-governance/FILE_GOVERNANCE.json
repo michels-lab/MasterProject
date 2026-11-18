@@ -28,7 +28,7 @@
     "POTENTIAL_UNLOGGED_CHANGES": 2
   },
   "finding_total": 2,
-  "inventory_fingerprint": "761fa076ecdb0bb3e92cabea2eb5afcf46971033c0cc530f31b0b5fdf0d1a4a9",
+  "inventory_fingerprint": "023ebf35f2b653620fad520f15e409595a13fbc5cc5798b6b8620513d872a44b",
   "evidence_fingerprint": "dedc77baf6838d4cc8192ab7de51b44326530280629b5281f72ff6235a578667",
   "files": [
     {
@@ -323,7 +323,7 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "302329f7bc45dcd3c1ef358fcc731f272e79d71e"
+      "blob": "7dd573ae38f2ac37e7ef83c2908451b025cc3686"
     },
     {
       "path": "RUN_CASE_REGISTRY.csv",
@@ -1450,7 +1450,7 @@
       "role": "test",
       "purpose": "code/test implementation",
       "certainty": "rule",
-      "blob": "95f50a3c8b1228c0b26b274e493e1d7de5c385ad"
+      "blob": "bf12de86f64ec7ebd652705179e9ed91065acc8f"
     },
     {
       "path": "cases_3d/README.md",
