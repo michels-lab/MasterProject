@@ -28,7 +28,7 @@
     "POTENTIAL_UNLOGGED_CHANGES": 2
   },
   "finding_total": 2,
-  "inventory_fingerprint": "c4fc4de44fbdd84a6839c00a13c1b869263492977772c309aca81ecdf6ede55c",
+  "inventory_fingerprint": "2446931a054e208bf7d925ace2ba3f609647fd68bc91ba6423cd70957da01f7e",
   "evidence_fingerprint": "b8d722e23651d88930ea1a43f32de100dc4353ad82a71c185ab8ff8734b67bb5",
   "files": [
     {
@@ -1072,7 +1072,7 @@
       "role": "simulation_case_file",
       "purpose": "OpenFOAM case-specific support artifact",
       "certainty": "inferred",
-      "blob": "aafa9320c14b5bd7948ddb409b416262e8adf611"
+      "blob": "01009f62feb889722fbc818f3b4701f92dde5835"
     },
     {
       "path": "cases_3d/C3D_02_metal_sand_clean/README.md",
