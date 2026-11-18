@@ -5,6 +5,8 @@ on:
     paths:
       - 'analysis_tools/run_fs_c02_local.py'
       - 'analysis_tools/test_run_fs_c02_local.py'
+      - 'analysis_tools/audit_fs_c02_local.py'
+      - 'analysis_tools/test_audit_fs_c02_local.py'
       - 'freesurface/FS-C02/**'
       - '.github/workflows/fs-c02-static.yml'
   workflow_dispatch:
@@ -24,6 +26,8 @@ jobs:
         run: python3 -m py_compile analysis_tools/run_fs_c02_local.py analysis_tools/test_run_fs_c02_local.py
       - name: FS-C02 isolated synthetic source tests (NO OpenFOAM)
         run: python3 -m unittest discover -s analysis_tools -p test_run_fs_c02_local.py -v
+      - name: Synthetic postrun FS-C02 mass, alpha, volume and Courant audit regressions (NO CFD)
+        run: python3 -m unittest discover -s analysis_tools -p test_audit_fs_c02_local.py -v
       - name: Stage reference iron-air case outside Git checkout
         run: |
           python3 analysis_tools/run_fs_c02_local.py \
