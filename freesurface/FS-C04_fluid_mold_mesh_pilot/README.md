@@ -133,3 +133,22 @@ CFD/CHT executed: FALSE
 ```
 
 Las mallas PADRE FS-C03 y FS-C04 son **byte por byte idénticas** en puntos, caras y direccionamiento `owner/neighbour`; sólo se relabelan los grupos metal y aire como `fluid`. El conjunto metálico real comprende 2368 índices no necesariamente contiguos en el intervalo 2944–7487. **NO utilizar ese intervalo como `alpha.metal=1`.** Antes de inicializar un campo fluido hay que comparar por geometría la malla de la región `constant/fluid/polyMesh` resultante de `splitMeshRegions`, que puede numerar las celdas de otra manera, y verificar el volumen `sum(alpha*V)` con volúmenes geométricos de las celdas. Mantener ambas carpetas históricas estrictamente de solo lectura.
+
+## Nuevo gate — mapa geométrico de celdas de la región `fluid` separada (PENDIENTE DE EJECUCIÓN REAL)
+
+Se añadió el auditor **`analysis_tools/audit_fs_c04_split_cells.py`**. Parte de la identidad padre FS-C03/FS-C04 ya comprobada y lee los `polyMesh` de **tres mallas**: padre FS-C04, `constant/fluid/polyMesh` y `constant/mold/polyMesh` divididas. NO depende de que `splitMeshRegions` mantenga el orden de las celdas: reconstruye cada celda hexaédrica mediante sus **ocho coordenadas vértice únicas**, exige una biyección exacta sin duplicación hacia la zona padre correspondiente y verifica que ningún hexaedro de arena se clasifique como gas/hierro.
+
+Las coordenadas ASCII se comparan a precisión de 1 nm (los elementos previstos son de orden milimétrico). Rechaza archivos binarios no soportados, campos incompletos, degeneraciones, colisiones geométricas y cambios de topología o direccionamiento. La verificación tiene tests sintéticos que fuerzan renumeración de puntos y de celdas, incluidas condiciones corruptas. No escribe sobre ninguna carpeta nativa.
+
+Con el mapeo validado, se sumará el volumen geométrico de los **2,368 hexaedros metálicos** del `polyMesh` fluido, triangulando sus caras y comparándolo con los **48,011.91628 mm³** analíticos del piloto. Esto es una reconstrucción geométrica independiente, **no el volumen de salida de `volFieldValue` OpenFOAM**. El criterio de discrepancia relativa de malla a geometría es 0.2 %, sin relajar automáticamente si no se cumple.
+
+Ejecutar desde el worktree FS-C02 actualizado:
+
+```bash
+cd ~/OpenFOAM/FS_C02_WORKTREE
+python3 analysis_tools/audit_fs_c04_split_cells.py \
+  --fs-c03 ~/OpenFOAM/FS_C03_AIR_TOPOLOGY_20261118T202905Z_6ef0cd90 \
+  --fs-c04 ~/OpenFOAM/FS_C04_FLUID_MOLD_TOPOLOGY_20261118T204433Z_7fa8dc47
+```
+
+**Estado esperado (AÚN NO DEMOSTRADO):** `SPLIT_FLUID_METAL_MAPPING_VERIFIED_NO_FIELD_WRITTEN`. Aun con el gate aprobado, crear `alpha.metal` solo **sobre una COPIA NUEVA, nunca sobre las corridas ya aprobadas**, con una auditoría posterior de `alpha` e integral geométrica por celda antes de aceptar un nuevo caso VOF. El campo no existe actualmente, no se ejecutó CFD.
