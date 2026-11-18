@@ -152,3 +152,30 @@ python3 analysis_tools/audit_fs_c04_split_cells.py \
 ```
 
 **Estado esperado (AÚN NO DEMOSTRADO):** `SPLIT_FLUID_METAL_MAPPING_VERIFIED_NO_FIELD_WRITTEN`. Aun con el gate aprobado, crear `alpha.metal` solo **sobre una COPIA NUEVA, nunca sobre las corridas ya aprobadas**, con una auditoría posterior de `alpha` e integral geométrica por celda antes de aceptar un nuevo caso VOF. El campo no existe actualmente, no se ejecutó CFD.
+
+## 18-11-2026 — SPLIT FLUID MAPPING APROBADO, campo `alpha.metal` ahora preparado en herramienta (aún SIN EJECUTAR)
+
+**Salida real aportada por investigador:** `audit_fs_c04_split_cells.py` mostró `SPLIT_FLUID_METAL_MAPPING_VERIFIED_NO_FIELD_WRITTEN`; nueve pruebas sintéticas aprobaron. La biyección exacta por ocho vértices entre malla madre y dos mallas divididas abarca **42,048** celdas sin pérdidas. Dentro de `constant/fluid/polyMesh` se identifican **2368** celdas de metal (IDs mínimo 0, máximo 2367, por mapeo demostrable y no por suposición), **32000** aire, y las **7680** de arena permanecen en región `mold`. El volumen geométrico sumado de las celdas metálicas divididas es **4.801191628e-05 m³** (`48011.91628 mm³`), prácticamente idéntico al valor geométrico analítico del piloto; ambos difieren del CAD nominal `47987.697 mm³` en ~**0.0505%**. Es validación de geometría y numeración, **no validación física ni CFD**.
+
+Hashes comprobados en ejecución: las cuatro piezas de malla padre (`points`, `faces`, `owner`, `neighbour`) de FS-C03/FS-C04 coinciden, y las mallas separadas también se auditaron con sus propios SHA-256. No escribir nunca en las carpetas originales.
+
+### Nuevo paso: copiar FS-C04 y generar SOLAMENTE `0/fluid/alpha.metal`
+
+Se creó `analysis_tools/stage_fs_c04_initial_alpha.py` (pendiente de ejecución local) que:
+- **Vuelve a correr todos los gates de asignación de metal**, incluida comparación de celdas por geometría y SHA-256, sin confiar en la salida del chat.
+- Rechaza copias antiguas con `polyMesh` modificado, cualquier symlink/archivo no fiable, salidas preexistentes y parches atmósfera/térmico incompatibles.
+- Copia el directorio nativo aprobado FS-C04 en una carpeta NUEVA e independiente bajo `~/OpenFOAM/FS_C04_ALPHA_RUNS/FS_C04_ALPHA_STAGE_<UTC>_<id>/`; preserva intocadas todas las corridas FS-C03/FS-C04/FS-C02, B14, C3D-02.
+- Escribe **solamente un campo de fases inicial** `0/fluid/alpha.metal`, 34,368 valores explícitos: metal `1` en las 2368 celdas mapeadas, gas `0` en las otras 32000. No se crea `alpha` en arena sólida. La interfaz metal–aire es interna al fluido; no se agrega pared ficticia.
+- Declara `alpha.metal` adimensional (`[0 0 0 0 0 0 0]`); `fluid_to_mold` con `zeroGradient`; en `atmosphereTop`, `atmosphereSides` y `atmosphereLowerSides`, `inletOutlet` con reentrada `alpha.metal=0` (aire), permitiendo salida metal/gas según evolución posterior. El tratamiento final de BC/flux debe verificarse al integrar el solver.
+- Lee otra vez el campo escrito, exige EXACTAMENTE las mismas 2368 celdas metal y verifica `sum(alpha*V)` mediante geometría de celdas, con SHA-256 y manifiesto `FS_C04_ALPHA_INITIALIZATION.json`.
+- **No ejecuta CFD, no resuelve CHT, no demuestra lectura nativa del campo por OpenFOAM ni ejecuta `volFieldValue`**. Son gates futuros y no se deben presentar como realizados.
+
+```bash
+cd ~/OpenFOAM/FS_C02_WORKTREE
+python3 -m unittest discover -s analysis_tools -p test_stage_fs_c04_initial_alpha.py -v && \
+python3 analysis_tools/stage_fs_c04_initial_alpha.py \
+  --fs-c03 ~/OpenFOAM/FS_C03_AIR_TOPOLOGY_20261118T202905Z_6ef0cd90 \
+  --fs-c04 ~/OpenFOAM/FS_C04_FLUID_MOLD_TOPOLOGY_20261118T204433Z_7fa8dc47
+```
+
+**Estado esperado, NO SE HA EJECUTADO:** `INITIAL_ALPHA_STAGED_GEOMETRY_ONLY_NO_CFD`. Si el script falla, conservar evidencia y revisar; no correr `foamRun` ni ignorar errores de lectura de malla. El molde real y su apoyo, propiedades térmicas dependientes de T, balance energético metal–aire–arena, turbulencia y tratamiento térmico de interfaz siguen pendientes.
