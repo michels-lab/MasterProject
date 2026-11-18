@@ -457,3 +457,10 @@ Automatic evidence deltas, pending human triage. No deletion authority.
 - NEW — BROKEN_RELATIVE_LINK at `docs/C3D_02_ABLACION_STL_V2_20261118_ES.md` (ID d2ed3c3c420f4b22).
 - NO_LONGER_DETECTED — POTENTIAL_UNLOGGED_CHANGES at `PROJECT_AUDIT_LOG_ES.md` (ID 0b53af4ed3bec470).
 - NO_LONGER_DETECTED — POTENTIAL_UNLOGGED_CHANGES at `PROJECT_AUDIT_LOG_EN.md` (ID c792746444ccb891).
+
+## 2026-11-18 19:01 UTC
+
+- All tracked 38840; findings 2; inventory 896cd7055138; evidence bf821818b71a. Full local report in reports/file-governance/. Status REVIEW_REQUIRED.
+- Finding changes: 0 NEW; 2 NO_LONGER_DETECTED (not necessarily resolved). Inventory: 2 new paths, 0 removed paths, 0 reclassified paths.
+- NO_LONGER_DETECTED — BROKEN_RELATIVE_LINK at `docs/C3D_02_ABLACION_STL_V2_20261118_ES.md` (ID 54c8a52e427f3e0f).
+- NO_LONGER_DETECTED — BROKEN_RELATIVE_LINK at `docs/C3D_02_ABLACION_STL_V2_20261118_ES.md` (ID d2ed3c3c420f4b22).

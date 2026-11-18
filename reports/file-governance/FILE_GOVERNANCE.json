@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
   "audit_kind": "deterministic_full_tracked_tree",
-  "tracked_files_total": 38838,
-  "classified_files_total": 38833,
-  "docs_content_inspected": 141,
+  "tracked_files_total": 38840,
+  "classified_files_total": 38835,
+  "docs_content_inspected": 142,
   "large_docs_skipped": 0,
   "excluded_reports": 5,
   "roles": {
@@ -11,8 +11,8 @@
     "analysis_tool": 1,
     "bitacora": 5,
     "config": 7,
-    "data": 27,
-    "document": 112,
+    "data": 28,
+    "document": 113,
     "index": 24,
     "license": 1,
     "simulation_case_file": 99,
@@ -25,12 +25,11 @@
     "workflow": 19
   },
   "finding_counts": {
-    "BROKEN_RELATIVE_LINK": 2,
     "POTENTIAL_UNLOGGED_CHANGES": 2
   },
-  "finding_total": 4,
-  "inventory_fingerprint": "2bd419187a3dd8fc5836dde8d2b7273bea79f9b3bb6b7628a7d0b4fbafefaf02",
-  "evidence_fingerprint": "c7d49bc31315486c47e5e32c37e67c4cccc17c33a899a6322b22bee8ba4fbd0d",
+  "finding_total": 2,
+  "inventory_fingerprint": "896cd7055138ab1f126d0663f426c4d2dff35b2c46081e2ea7a159235cd55be3",
+  "evidence_fingerprint": "bf821818b71afbcc7b8d719481f3a5570a5ba08b3891830cfa0853c84d1a6626",
   "files": [
     {
       "path": ".github/agents/openfoam-solidification.agent.md",
@@ -324,7 +323,7 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "73a514d9677bd8521822ff92022e58426dff1a2b"
+      "blob": "51f07f73fc26c12612a20050fb1798d0e2c305e3"
     },
     {
       "path": "RUN_CASE_REGISTRY.csv",
@@ -271087,11 +271086,25 @@
       "blob": "7faadd032984cb616cd16ddcf0447f20e2458655"
     },
     {
+      "path": "docs/C3D_02_MESH_TRIAL_REGISTRY_20261118.csv",
+      "role": "data",
+      "purpose": "structured/research data (semantics not validated)",
+      "certainty": "rule",
+      "blob": "801dc961a1fd183b5237f450cd20fc5d048b588a"
+    },
+    {
       "path": "docs/C3D_02_NATIVE_CHECKMESH_20261117_ES.md",
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
       "blob": "784ecb0f9d5db4250e1eb59cc10359acfa8143cd"
+    },
+    {
+      "path": "docs/C3D_02_REFERENCIA_DOCTOR_Y_OPCIONES_MALLADO_20261118_ES.md",
+      "role": "document",
+      "purpose": "manual/decision/report/historical note",
+      "certainty": "inferred",
+      "blob": "73361e5867a641b2c505a5cb6bf16f04d54017e2"
     },
     {
       "path": "docs/C3D_REINICIO_20261112_ES.md",
@@ -271865,24 +271878,6 @@
     }
   ],
   "findings": [
-    {
-      "id": "54c8a52e427f3e0f",
-      "code": "BROKEN_RELATIVE_LINK",
-      "severity": "confirmed",
-      "path": "docs/C3D_02_ABLACION_STL_V2_20261118_ES.md",
-      "observation": "Missing: docs/C3D_02_REFERENCIA_DOCTOR_Y_OPCIONES_MALLADO_20261118_ES.md",
-      "recommendation": "Fix link or restore target",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "d2ed3c3c420f4b22",
-      "code": "BROKEN_RELATIVE_LINK",
-      "severity": "confirmed",
-      "path": "docs/C3D_02_ABLACION_STL_V2_20261118_ES.md",
-      "observation": "Missing: docs/C3D_02_MESH_TRIAL_REGISTRY_20261118.csv",
-      "recommendation": "Fix link or restore target",
-      "state": "REVIEW_REQUIRED"
-    },
     {
       "id": "34898be3f167929b",
       "code": "POTENTIAL_UNLOGGED_CHANGES",
