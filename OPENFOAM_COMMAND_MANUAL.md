@@ -1,3 +1,5 @@
+> **ACTUALIZACIÓN CANÓNICA C3D-02 / 18-11-2026 — documentation pointer:** For C3D-02, the current **native OpenFOAM 14** meshing path, measured STL v2 trial failures and doctor's original `blockMesh` comparison are documented in [Spanish command manual](OPENFOAM_COMMAND_MANUAL_ES.md), [measured trial report](docs/C3D_02_ABLACION_STL_V2_20261118_ES.md) and [original doctor case study](docs/C3D_02_REFERENCIA_DOCTOR_Y_OPCIONES_MALLADO_20261118_ES.md). The older Python builder sections are historical/experimental. No validated 3D CFD or CHT yet.
+
 > **Actualización 2026-11-12:** ambos manuales incluyen una nueva adenda Foundation 14. [Lecciones completas de los ensayos](docs/OPENFOAM14_LECCIONES_C3D_20261112_ES.md), [nuevo caso 3D](cases_3d/C3D_02_metal_sand_clean/README.md). El historial 10-11 sigue siendo histórico; no hay solver 3D verificado.
 
 # OpenFOAM Command Manual — MasterProject / QuickCup
