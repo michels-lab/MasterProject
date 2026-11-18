@@ -170,3 +170,13 @@ El investigador compartió el diagnóstico leído directamente de `FS-C02_STARTU
 **Interpretación limitada:** la reducción de deltaT y el comportamiento al final sugieren que la corrección temporal mejora sustancialmente respecto al primer arranque, pero no se ha demostrado estabilidad física del modelo ni la distribución temporal de todas las 45 excedencias. El control adaptativo no constituye una restricción dura del Courant en todas las iteraciones. No afirmar `NUMERICAL_SCREEN_PASSED` ni siquiera para el experimento corto.
 
 **Decisión experimental siguiente:** implementar un ensayo NUEVO de 0.01 s (cinco veces la duración del startup probe), `maxCo`/ `maxAlphaCo` de control **0.15**, sin mover el umbral de aceptación del auditor `Co_max <= 0.20`, y limitar `maxDeltaT=1e−6`. Esta propuesta es una prueba de sensibilidad temporal, NO calibración o prueba de las propiedades metalúrgicas (rhoConst, Cv, sigma siguen provisionales). Conservar el experimento fallido/REVIEW y no modificar B14, FS-C01 ni C3D-02. La corrida extendida solo podrá declararse ejecutada tras recibir salida real de Ubuntu.
+
+### 2026-11-18 — Implementación del siguiente experimento (NO EJECUTADO)
+
+Se añade `--extended-probe` al ejecutor `analysis_tools/run_fs_c02_local.py`. Produce una copia nueva aislada bajo `~/OpenFOAM/FS_C02_RUNS/FS-C02_EXTENDED_<UTC>_<id>/` y un manifiesto de 20 entradas SHA-256, sin modificar las dos corridas anteriores ni otros casos. Ejecuta `blockMesh`, `checkMesh -allGeometry -allTopology` y `foamRun` entre **0 y 0.01 s**, con `deltaT=1e-7 s` inicial, `maxDeltaT=1e-6 s`, `maxCo=maxAlphaCo=0.15`, `writeInterval=0.001 s`, `adjustTimeStep on`. Se prepara un **objetivo** más conservador que el perfil startup (0.20); el **umbral de aceptación** del cribado Courant **NO cambia: 0.20**. El cribado revisa todo el log y registra `max Co`, número de valores por encima de 0.20 y picos. La posibilidad de exceder 0.20 sigue abierta; si ocurre se informa `PROBE_REVIEW_COURANT`, no se simula aceptación.
+
+Procedimiento desde `~/OpenFOAM/FS_C02_WORKTREE` con rama FS-C02 actualizada, sin tocar `~/OpenFOAM/MasterProject` de C3D-02:
+
+    python3 analysis_tools/run_fs_c02_local.py --extended-probe
+
+Esta es una prueba nueva **de diez milisegundos**, no de 0.1 s, diseñada para caracterizar el comportamiento posterior al arranque. No es aún una validación de campos de temperatura, masa, interfaz ni propiedades metalúrgicas; no contiene solidificación, contracción ni molde. Solo se podrá cerrar el umbral tras recibir la salida de Ubuntu y leer los campos de la nueva carpeta.
