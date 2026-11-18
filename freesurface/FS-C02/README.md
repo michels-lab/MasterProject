@@ -327,3 +327,51 @@ Primero verificar `--stage-only` para inspección, sin CFD. Para ejecutar una **
 El ejecutor invoca `blockMesh/checkMesh/foamRun` en la carpeta completamente NUEVA y prepara un resumen `FS-C02_LAMINAR_THERMAL_SCREEN.json` con el volumen integrado y T media de celdas casi puras gas, y un gate del Co máximo a 0.20. **Todavía no se ha corrido.** Si OpenFOAM laminar es incompatible con alguna configuración heredada, la prueba quedará bloqueada con logs y se estudiará el error; NO se reemplazarán ni modificarán las corridas originales y NO se desactivará artificialmente un criterio de validación.
 
 Objetivo falsable: si laminar reduce sustancialmente calentamiento del gas versus referencia RAS (~745.24 K a 0.01 s), la difusión turbulenta adquiere peso como explicación; si no, habrá que estudiar conducción/energía/presión/BC y posiblemente el modelo termo-convectivo. Incluso una reducción considerable no valida en sí misma el gas, el metal, la transferencia térmica al molde o solidificación/contracción.
+
+## 2026-11-18 — Resultado real de FS-C02_LAMINAR: efecto térmico del paquete turbulento
+
+**Ejecución reportada por el investigador en Ubuntu OpenFOAM Foundation 14**, desde commit `562bb4624`, nueva carpeta independiente:
+`/home/michel/OpenFOAM/FS_C02_LAMINAR_RUNS/FS-C02_LAMINAR_20261118T190459Z_469e798a`.
+
+Salida textual (sin modificar B14, FS-C01, C3D-02 ni FS-C02_EXTENDED):
+```
+FS-C02 [blockMesh] .../FS-C02_blockMesh.log
+FS-C02 [checkMesh] .../FS-C02_checkMesh.log
+FS-C02 [foamRun] .../FS-C02_foamRun.log
+FS-C02 EXTENDED PROBE: PROBE_COURANT_SCREEN_PASSED; max Co=0.152533; over 0.2=0; configured maxCo target=0.15
+FS-C02 LAMINAR Co gate: PROBE_COURANT_SCREEN_PASSED
+FS-C02 LAMINAR Co peak: 0.152533
+FS-C02 LAMINAR near-pure air T mean K: 390.37208687500004
+FS-C02 LAMINAR near-pure air >1000K cells: 160
+FS-C02 LAMINAR max relative volume drift: 0.0
+No energy, phase mass, solidification, mold or shrinkage verification.
+```
+
+**Comparación a t = 0.01 s (evidencia de salidas reales, comparación final aún por verificar automáticamente):**
+
+| Indicador | Referencia RAS kEpsilon + VoFTurbulenceDamping | Laminar sin damping |
+| --- | ---: | ---: |
+| Tiempo simulado | 0.01 s | 0.01 s |
+| Courant máximo de log | 0.163617 | **0.152533** |
+| Co > 0.20 | 0 | 0 |
+| Temperatura media aire casi puro `alpha.metal<=1e-6` (K) | **745.2444079365079** | **390.37208687500004** |
+| Incremento de T por encima de 300 K (K) | 445.2444 | 90.3721 |
+| Diferencia media RAS menos laminar (K) | | **354.8723** |
+| Celdas aire casi puro sobre 1000 K | **567** | **160** |
+| Deriva relativa de volumen *reportada* | 0.0 | 0.0 |
+
+Por lo tanto, **desactivar conjuntamente el modelo RAS kEpsilon y su fuente de damping reduce mucho la temperatura del aire casi puro calculada**: ~79.7% menos calentamiento neto sobre los 300 K iniciales, o ~47.6% menos temperatura absoluta media a 0.01 s. Hay 407 celdas menos por encima de 1000 K, pero la cantidad y posición de celdas gas casi puro no tienen por qué ser iguales en ambas corridas; estos conteos NO identifican trayectorias de partículas. Las cifras de deriva cero están limitadas por precisión de almacenamiento, no confirman conservación exacta ni masa física.
+
+**Conclusión causal limitada:** existe fuerte evidencia de dependencia de resultados térmicos respecto al **paquete turbulento heredado** (RAS kEpsilon MÁS amortiguamiento VoF). Esta ablation A/B de dos ficheros **no** puede aislar el efecto de kEpsilon del de VoFTurbulenceDamping, ni probar que todo el calentamiento RAS sea numéricamente espurio; no existe validación experimental de las propiedades de aire/metal, interfaz o transferencia de calor. El caso laminar sigue teniendo 160 celdas gas casi puro >1000 K y T media ~390 K en 0.01 s; es un candidato para continuar el diagnóstico, NO un modelo final ya validado para el QuickCup.
+
+Se implementó `analysis_tools/compare_fs_c02_ras_laminar.py`, auditor de solo lectura de **AMBAS carpetas existentes** para cruzar toda la serie de campos guardados `alpha.metal`, `T`, los logs de Courant, las series integradas de volumen y sus manifiestos SHA-256. Rechaza resultados no alineados en tiempo, entradas cambiadas fuera de `constant/momentumTransport` y `constant/fvModels`, o fallos de gates del solver. No ejecuta CFD, no escribe archivos, no modifica ninguna carpeta. Ejemplo:
+
+```bash
+cd ~/OpenFOAM/FS_C02_WORKTREE
+python3 analysis_tools/compare_fs_c02_ras_laminar.py \
+  --ras ~/OpenFOAM/FS_C02_RUNS/FS-C02_EXTENDED_20261118T181711Z_d6b6ab92 \
+  --laminar ~/OpenFOAM/FS_C02_LAMINAR_RUNS/FS-C02_LAMINAR_20261118T190459Z_469e798a \
+  --brief
+```
+
+**Próximo criterio científico:** evaluar diferencia temporal y energía/contornos, comprobar presión y condiciones térmicas del gas laminar y una futura comparación de propiedades/Prandtl turbulento adecuadamente justificada antes de modificar la formulación de solidificación. No hacer otro experimento CFD simplemente para obtener un Courant que pase: ambos ya aprobaron Co < 0.20. Los reportes de prueba deben distinguir `NUMERICAL_SCREEN_PASSED` de validación física/metalúrgica.
