@@ -85,6 +85,38 @@ def read_alpha(path: Path) -> list[float]:
     return values
 
 
+def read_temperature(path: Path) -> list[float]:
+    """Read real saved ASCII T field (K); never infer it from setup alone."""
+    require(path.is_file() and not path.is_symlink(), "final T field missing")
+    raw = path.read_text(encoding="utf-8", errors="replace")
+    require(re.search(r"\bobject\s+T\s*;", raw) is not None,
+            "saved field is not T")
+    internal = raw.split("boundaryField", 1)[0]
+    match = re.search(
+        r"internalField\s+nonuniform\s+List<scalar>\s+(\d+)\s*\((.*?)\)\s*;",
+        internal, re.S,
+    )
+    if match:
+        count = int(match.group(1))
+        require(count == EXPECTED_CELLS, "unexpected temperature cell count")
+        try:
+            values = [float(v) for v in match.group(2).split()]
+        except ValueError as error:
+            raise ValueError("FS-C02 AUDIT: invalid T scalar") from error
+        require(len(values) == count, "temperature list/count disagreement")
+    else:
+        uniform = re.search(
+            r"internalField\s+uniform\s+([+\-0-9.eE]+)\s*;", internal,
+        )
+        require(uniform is not None, "unsupported/non-ASCII T internalField")
+        try:
+            values = [float(uniform.group(1))] * EXPECTED_CELLS
+        except ValueError as error:
+            raise ValueError("FS-C02 AUDIT: invalid uniform T") from error
+    require(all(math.isfinite(v) for v in values), "non-finite T field")
+    return values
+
+
 def latest_field(case: Path, final_time: float) -> tuple[float, Path]:
     options = []
     for child in case.iterdir():
@@ -140,7 +172,11 @@ def audit(run: Path, out: Path, max_drift: float = 0.005) -> dict:
 
     status = json.loads((run / "FS-C02_RUN_STATUS.json").read_text())
     require(status.get("case_id") == "FS-C02"
-            and status.get("status") == "SOLVER_FINISHED_PHYSICS_NOT_VALIDATED"
+            and status.get("status") in (
+                "SOLVER_FINISHED_PHYSICS_NOT_VALIDATED",
+                "PROBE_COURANT_SCREEN_PASSED",
+                "PROBE_REVIEW_COURANT",
+            )
             and status.get("solver_tested_on_real_openfoam") is True,
             "run status is not a completed FS-C02 solver")
     stages = status.get("stages", [])
@@ -162,6 +198,36 @@ def audit(run: Path, out: Path, max_drift: float = 0.005) -> dict:
     require(math.isclose(m.get("reference_metal_density_kg_m3"), DENSITY)
             and math.isclose(m.get("initial_metal_volume_m3"), INITIAL_VOLUME),
             "unknown metal density or initial geometry")
+    profile = m.get("execution_profile", "ORIGINAL_SMOKE_0_1S")
+    controls = m.get("time_controls")
+    if profile == "ORIGINAL_SMOKE_0_1S":
+        expected_end = .1
+        acceptance_co = .25
+        target_co = .25
+        require(status["status"] == "SOLVER_FINISHED_PHYSICS_NOT_VALIDATED"
+                and not status.get("startup_probe", False)
+                and not status.get("extended_probe", False),
+                "original-run status does not match profile")
+    elif profile in ("EXTENDED_PROBE_0_01S_TIGHTER_CO",
+                     "STARTUP_PROBE_0_002S_CONSERVATIVE"):
+        is_extended = profile.startswith("EXTENDED")
+        expected_end = .01 if is_extended else .002
+        target_co = .15 if is_extended else .20
+        acceptance_co = .20
+        require(status["status"] in (
+                    "PROBE_COURANT_SCREEN_PASSED", "PROBE_REVIEW_COURANT"
+                ) and status.get("extended_probe", False) is is_extended
+                and status.get("startup_probe", False) is (not is_extended),
+                "probe status does not match execution profile")
+        require(isinstance(controls, dict)
+                and math.isclose(controls.get("endTime_s", -1), expected_end)
+                and math.isclose(controls.get("maxCo", -1), target_co)
+                and math.isclose(controls.get("maxAlphaCo", -1), target_co)
+                and math.isclose(controls.get("acceptance_maxCo", -1), acceptance_co)
+                and status.get("time_controls") == controls,
+                "probe time controls differ from the original run manifest")
+    else:
+        require(False, "unrecognized FS-C02 execution profile")
     thermo = (case / "constant" / "physicalProperties.metal").read_text()
     require(bool(re.search(r"\bequationOfState\s+rhoConst\s*;", thermo))
             and bool(re.search(r"\brho\s+6820\s*;", thermo)),
@@ -193,8 +259,8 @@ def audit(run: Path, out: Path, max_drift: float = 0.005) -> dict:
     flags = []
     if abs(rows[0][0]) > 1e-7:
         flags.append("missing initial time-zero volume")
-    if time_s < FINAL_TIME_S-1e-4 or time_s > FINAL_TIME_S+1e-4:
-        flags.append("endTime 0.1 s not measured")
+    if abs(time_s - expected_end) > min(1e-4, expected_end*1e-3):
+        flags.append("endTime " + str(expected_end) + " s not measured")
     if abs(first_vol-INITIAL_VOLUME)/INITIAL_VOLUME > max_drift:
         flags.append("initial metal volume differs from expected geometry")
     if max_drift_obs > max_drift:
@@ -205,15 +271,47 @@ def audit(run: Path, out: Path, max_drift: float = 0.005) -> dict:
         flags.append("alpha.metal outside admissible bounds")
     if cour["max_courant_over_log"] is None:
         flags.append("no Courant observations in original solver log")
-    elif cour["max_courant_over_log"] > .25 * (1+1e-4):
-        flags.append("Courant max exceeds configured maxCo .25")
+    elif cour["max_courant_over_log"] > acceptance_co:
+        flags.append("Courant max exceeds acceptance Co " + str(acceptance_co))
     if cour["max_interface_courant_over_log"] is None:
         flags.append("no interface Courant observations")
-    elif cour["max_interface_courant_over_log"] > .25 * (1+1e-4):
-        flags.append("interface Courant exceeds configured maxAlphaCo .25")
+    elif cour["max_interface_courant_over_log"] > acceptance_co:
+        flags.append("interface Courant exceeds acceptance Co " + str(acceptance_co))
 
+    # Real field temperature is mandatory for the extended probe and only
+    # a screening statistic, not an energy conservation calculation.
+    temperature = None
+    if profile.startswith("EXTENDED"):
+        t_path = alpha_file.parent / "T"
+        if not t_path.is_file():
+            flags.append("final T field missing in extended probe")
+        else:
+            temperatures = read_temperature(t_path)
+            temperature = {
+                "final_T_source_sha256": digest(t_path),
+                "min_T_K": min(temperatures),
+                "max_T_K": max(temperatures),
+                "metal_weighted_mean_T_K": (
+                    sum(a*t for a,t in zip(alphas, temperatures)) /
+                    sum(alphas) if sum(alphas)>0 else None
+                ),
+                "air_weighted_mean_T_K": (
+                    sum((1-a)*t for a,t in zip(alphas, temperatures)) /
+                    sum(1-a for a in alphas) if sum(1-a for a in alphas)>0 else None
+                ),
+                "thermal_energy_balance_verified": False,
+            }
+            if min(temperatures) <= 0:
+                flags.append("nonphysical non-positive Kelvin temperatures")
+    if status["status"] == "PROBE_REVIEW_COURANT":
+        flags.append("original probe Courant gate was REVIEW")
     report = {
         "schema": "masterproject-fs-c02-postrun-screen-v1",
+        "execution_profile": profile,
+        "expected_end_time_s": expected_end,
+        "controller_target_maxCo": target_co,
+        "acceptance_maxCo": acceptance_co,
+        "temperature_screen": temperature,
         "case_id": "FS-C02",
         "status": "NUMERICAL_SCREEN_PASSED" if not flags else "REVIEW",
         "source_run_directory": str(run),
