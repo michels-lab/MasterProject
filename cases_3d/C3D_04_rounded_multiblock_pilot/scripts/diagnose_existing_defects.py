@@ -133,6 +133,32 @@ def analyze(base: Path) -> int:
         for key, value in v.items():
             if key != "present":
                 print(f"  {key}: {value}")
+    print("\n=== EXISTING METAL/MOLD PATCH AREAS (read-only) ===")
+    try:
+        # Same area routine as Allmesh, without creating the report or
+        # changing the preserved case, even though its quality gate failed.
+        from measure_interface_area import (
+            patch_area, CAD_CONTACT_MM2, CAD_TOP_MM2,
+        )
+        metal_area, nm = patch_area(base, "metal", "metal_to_mold")
+        mold_area, nd = patch_area(base, "mold", "mold_to_metal")
+        top_area, nt = patch_area(base, "metal", "metalTop")
+        mismatch = 100 * abs(metal_area - mold_area) / max(metal_area, mold_area)
+        contact_error = 100 * (metal_area * 1e6 / CAD_CONTACT_MM2 - 1)
+        top_error = 100 * (top_area * 1e6 / CAD_TOP_MM2 - 1)
+        print(f"  metal_to_mold: {nm} faces, {metal_area * 1e6:.6f} mm2")
+        print(f"  mold_to_metal: {nd} faces, {mold_area * 1e6:.6f} mm2")
+        print(f"  contact side mismatch: {mismatch:.6f} %")
+        print(f"  contact error vs STL reference: {contact_error:+.6f} %")
+        print(f"  metalTop: {nt} faces, {top_area * 1e6:.6f} mm2")
+        print(f"  metalTop error vs STL reference: {top_error:+.6f} %")
+        geometry_gate = (
+            nm == nd == 2496 and mismatch <= 0.1
+            and abs(contact_error) <= 3 and abs(top_error) <= 3
+        )
+        print("  area gate ONLY (not mesh quality):", "PASS" if geometry_gate else "FAIL")
+    except (OSError, ValueError, IndexError, UnicodeDecodeError) as exc:
+        print("  AREA NOT VERIFIED:", exc)
     print("\n=== EXISTING VTK DEFECT GEOMETRY (no utilities executed) ===")
     vtk = sorted(
         p for p in base.rglob("*")
