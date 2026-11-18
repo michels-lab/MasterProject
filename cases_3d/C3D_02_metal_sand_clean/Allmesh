@@ -29,6 +29,14 @@ if (( $# == 1 )) && [[ "$1" == "--compare" ]]; then
     exit 0
 fi
 
+# Preserve a rejected c3d - better mesh while completing its physical inputs
+# from the exact C14 baseline. Does not change quality gates or run CFD.
+if (( $# == 1 )) && [[ "$1" == "--stage-c14-better" ]]; then
+    bash "$ROOT/scripts/stage_c14_materials.sh" "$HOME/OpenFOAM/c3d-better"
+    echo "Material inputs copied and verified; the rejected mesh remains rejected."
+    exit 0
+fi
+
 # Existing-mesh diagnosis: no remeshing, no Python, no material edits, no CFD.
 if (( $# > 0 )) && [[ "$1" == "--diagnose" ]]; then
     [[ -d "$CASE" ]] || { echo "No existing C3D-02 case: $CASE" >&2; exit 2; }
@@ -125,7 +133,7 @@ elif (( $# == 1 )) && [[ "$1" == "--better" ]]; then
     VARIANT=better
     CASE="$HOME/OpenFOAM/c3d-better"
 elif (( $# > 0 )); then
-    echo "Usage: bash Allmesh [--diagnose|--candidate-smooth|--better|--compare]" >&2
+    echo "Usage: bash Allmesh [--diagnose|--candidate-smooth|--better|--compare|--stage-c14-better]" >&2
     exit 2
 fi
 if [[ -e "$CASE" || -L "$CASE" ]]; then
@@ -203,6 +211,9 @@ for material in metal mold; do
     [[ -f "$CASE/constant/$material/polyMesh/boundary" ]] ||
         fail "Missing generated physical mesh for $material"
 done
+STAGE=STAGE_C14_MATERIALS
+bash "$ROOT/scripts/stage_c14_materials.sh" "$CASE" > "$CASE/log.stage_c14" 2>&1 ||
+    fail "C14 material integrity failed; read log.stage_c14"
 
 # Inspect native boundary files without modifying them.
 patch_value() {
@@ -298,10 +309,8 @@ if [[ "$VARIANT" == smooth || "$VARIANT" == better ]]; then
     exit 0
 fi
 
-# Preserve the exact controlled C14 files; do NOT fabricate thermophysical data.
-for material in metal mold; do
-    cp -a "$ROOT/constant/$material/." "$CASE/constant/$material/"
-done
+# Material integrity was checked BEFORE quality validation, including for
+# rejected runs. Never silently overwrite an existing physical dictionary.
 echo "MESH_PRELIMINARY_ACCEPTED / NO_CFD" > "$CASE/NATIVE_BUILD_STATUS.txt"
 echo "Native checkMesh and two physical interfaces were evaluated." \
      >> "$CASE/NATIVE_BUILD_STATUS.txt"
