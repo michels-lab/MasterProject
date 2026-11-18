@@ -108,3 +108,28 @@ python3 analysis_tools/audit_fs_c04_native_metal_mapping.py \
 ```
 
 Éxito esperado, pendiente de ejecución local: `PARENT_MESH_METAL_CELL_LABELS_MATCH_NO_FIELD_WRITTEN`. Si aparece `BLOCKED`, conservar la carpeta original y revisar el error: **no saltarse el gate ni generar un campo `alpha` sintético**.
+
+## 18-11-2026 — Éxito REAL de identidad de celdas en la malla PADRE
+
+El investigador ejecutó `audit_fs_c04_native_metal_mapping.py` (no ejecutó OpenFOAM ni modificó archivos) sobre las carpetas nativas FS-C03 `20261118T202905Z_6ef0cd90` y FS-C04 `20261118T204433Z_7fa8dc47`. Resultado real:
+
+```text
+status: PARENT_MESH_METAL_CELL_LABELS_MATCH_NO_FIELD_WRITTEN
+points:   91ed714789ca3b4efe216d9361e75daf6288494a182cd1786fa5fa3d2b31da01
+faces:    66714d76a1cc1f2949dbfd74d600c1c3a62aa73ce01dad431a7742fa7a446ad4
+owner:    22c9b04b1f5901a215ef503f15ed42d92e9a6216e7819806f973fe3a468dcc81
+neighbour:873757fa25c064582e1e6e2c5c7ae946302191b6a54c1b4ac9ed3066c0cd8d1a
+metal: 2368 parent cells
+air:   32000 parent cells
+mold:  7680 parent cells
+metal + air == fluid: TRUE
+mold cell identity: TRUE
+parent metal label span: 2944 .. 7487 (NOT a contiguous cell range!)
+analytic metal volume: 48011.91627999999 mm3
+split-fluid cell mapping: NOT YET VERIFIED
+native metal cell volumes: NOT YET INTEGRATED
+alpha.metal field written: FALSE
+CFD/CHT executed: FALSE
+```
+
+Las mallas PADRE FS-C03 y FS-C04 son **byte por byte idénticas** en puntos, caras y direccionamiento `owner/neighbour`; sólo se relabelan los grupos metal y aire como `fluid`. El conjunto metálico real comprende 2368 índices no necesariamente contiguos en el intervalo 2944–7487. **NO utilizar ese intervalo como `alpha.metal=1`.** Antes de inicializar un campo fluido hay que comparar por geometría la malla de la región `constant/fluid/polyMesh` resultante de `splitMeshRegions`, que puede numerar las celdas de otra manera, y verificar el volumen `sum(alpha*V)` con volúmenes geométricos de las celdas. Mantener ambas carpetas históricas estrictamente de solo lectura.
