@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "audit_kind": "deterministic_full_tracked_tree",
-  "tracked_files_total": 38834,
-  "classified_files_total": 38829,
+  "tracked_files_total": 38835,
+  "classified_files_total": 38830,
   "docs_content_inspected": 140,
   "large_docs_skipped": 0,
   "excluded_reports": 5,
@@ -19,7 +19,7 @@
     "simulation_input": 2678,
     "simulation_log": 3155,
     "simulation_output": 32613,
-    "source": 61,
+    "source": 62,
     "test": 20,
     "web_ui": 1,
     "workflow": 19
@@ -28,8 +28,8 @@
     "POTENTIAL_UNLOGGED_CHANGES": 2
   },
   "finding_total": 2,
-  "inventory_fingerprint": "0f26dd796ae09847ea8cf229f364969875ad4dcf3f0bd448cee7e882bd95748d",
-  "evidence_fingerprint": "9543c5c98217b3c7fa138412f9bd789f1c3bd19bb5ce308c4b17c52145aba221",
+  "inventory_fingerprint": "c79895f1caccd617470915c8e853e967c36484d63f584cb860522b3b1b716931",
+  "evidence_fingerprint": "d5b4e5df88412cdcc2c3dc73deb2cea52ba5e3ad145de1f68606e12d8ee05c16",
   "files": [
     {
       "path": ".github/agents/openfoam-solidification.agent.md",
@@ -1206,6 +1206,13 @@
       "purpose": "code/test implementation",
       "certainty": "rule",
       "blob": "7fbde313cde5241fd8dd3468af58e17595f44046"
+    },
+    {
+      "path": "cases_3d/C3D_02_metal_sand_clean/scripts/diagnose_stl_v2_zones.sh",
+      "role": "source",
+      "purpose": "code/test implementation",
+      "certainty": "rule",
+      "blob": "2e16a92c77aa6fae44511df6d4e90ccf394d452a"
     },
     {
       "path": "cases_3d/C3D_02_metal_sand_clean/scripts/extract_mold_zone_copy.sh",
@@ -271837,20 +271844,20 @@
   ],
   "findings": [
     {
-      "id": "bf6429f906ef0dfb",
+      "id": "a95ecac2806977ad",
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_EN.md",
-      "observation": "10 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_02_metal_sand_clean/scripts/build_c3d02.py, cases_3d/C3D_02_metal_sand_clean/scripts/check_stl_v2.sh, cases_3d/C3D_02_metal_sand_clean/scripts/native_checkmesh_report.sh, cases_3d/C3D_02_metal_sand_clean/scripts/native_interface_audit.sh, cases_3d/C3D_02_metal_sand_clean/scripts/stage_c14_materials.sh, cases_3d/C3D_02_metal_sand_clean/tests/test_native_allmesh_static.sh",
+      "observation": "11 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_02_metal_sand_clean/scripts/build_c3d02.py, cases_3d/C3D_02_metal_sand_clean/scripts/check_stl_v2.sh, cases_3d/C3D_02_metal_sand_clean/scripts/diagnose_stl_v2_zones.sh, cases_3d/C3D_02_metal_sand_clean/scripts/native_checkmesh_report.sh, cases_3d/C3D_02_metal_sand_clean/scripts/native_interface_audit.sh, cases_3d/C3D_02_metal_sand_clean/scripts/stage_c14_materials.sh",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     },
     {
-      "id": "0dec134a8862fdb1",
+      "id": "45673fd937555cfb",
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_ES.md",
-      "observation": "10 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_02_metal_sand_clean/scripts/build_c3d02.py, cases_3d/C3D_02_metal_sand_clean/scripts/check_stl_v2.sh, cases_3d/C3D_02_metal_sand_clean/scripts/native_checkmesh_report.sh, cases_3d/C3D_02_metal_sand_clean/scripts/native_interface_audit.sh, cases_3d/C3D_02_metal_sand_clean/scripts/stage_c14_materials.sh, cases_3d/C3D_02_metal_sand_clean/tests/test_native_allmesh_static.sh",
+      "observation": "11 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_02_metal_sand_clean/scripts/build_c3d02.py, cases_3d/C3D_02_metal_sand_clean/scripts/check_stl_v2.sh, cases_3d/C3D_02_metal_sand_clean/scripts/diagnose_stl_v2_zones.sh, cases_3d/C3D_02_metal_sand_clean/scripts/native_checkmesh_report.sh, cases_3d/C3D_02_metal_sand_clean/scripts/native_interface_audit.sh, cases_3d/C3D_02_metal_sand_clean/scripts/stage_c14_materials.sh",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     }
