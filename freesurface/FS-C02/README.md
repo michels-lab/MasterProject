@@ -92,3 +92,17 @@ Leer el caso original y escribir un informe en un directorio completamente separ
 **No repite blockMesh, checkMesh ni foamRun. No escribe dentro de la carpeta de corrida.** El reporte `FS-C02_NUMERICAL_SCREEN.json` contiene: 0–0.1 s del volumen integrado, máxima deriva, alfa mínimo/máximo en campo final y número de celdas, integral espacial de alpha en el mallado uniforme, masa derivada (rhoConst × V), Courant máximo del log completo, checksums de procedencia, alertas y límites científicos. Falla si faltan entradas/campos originales, identidad del caso o manifiesto SHA-256, o si alguna prueba supera tolerancia. Nunca interpreta una superficie equivalente como altura real ni declara shrinkage/mass real, porque no hay fracción sólida ni rho(T,f_s).
 
 Este audit de Python tiene pruebas sintéticas pero requiere el archivo original `0.1/alpha.metal`; si la versión real de OpenFOAM lo representa de un modo distinto, fallará de manera segura y habrá que estudiar el formato sin inventar datos. Guardar resultados completos para revisión de malla, energía y las siguientes etapas B-FS/B-SH.
+
+## 2026-11-17 (hora local) — Primera auditoría numérica real FS-C02: REVIEW por pico de Courant
+
+El investigador compartió el **JSON íntegro** de `FS-C02_20261118T005412Z_c04dfcf6_screen1/FS-C02_NUMERICAL_SCREEN.json`, obtenido de la corrida local `FS-C02_20261118T005412Z_c04dfcf6`. El auditor pudo leer el volumen, un campo final alpha.metal y el log del solver. Estado **REVIEW** (NO `NUMERICAL_SCREEN_PASSED`).
+
+**Resultados aportados**:
+- 11 mediciones de volumen entre t=0 y t=0.1 s: V0 = `1.6e-5 m3`; Vf = `1.599999e-5 m3`; deriva máxima relativa `6.25000000043722e-7` (~0.0000625 %), frente al umbral numérico `0.005` (0.5 %).
+- Integral independiente del campo alpha.metal al tiempo final `1.5999991405848604e-5 m3`; discrepancia relativa contra salida volFieldValue `8.786553786224931e-8`.
+- alpha.metal mínimo `-1.29497e-31` (redondeo cercano a 0) y máximo `1.0`, 9600 celdas, 3208 con `0<alpha<1`. El recuento estricto incluye fracciones arbitrariamente cercanas a 0/1 y **NO demuestra un espesor de interfaz físico**.
+- rhoConst 6820 kg/m³: masa nominal `0.10912000000000002 kg`, masa final **derivada** `0.10911993179999999 kg`. NO es balance independiente de masa.
+- 5383 observaciones de Courant. **Máximo global `9.41807`**, considerablemente superior al límite `maxCo 0.25`, aunque el último registro máximo sea `0.246551`. Courant máximo de interfaz en toda la ejecución `0.00941131`, último `0.00028081`.
+- La única alerta del auditor es `Courant max exceeds configured maxCo .25`. El cribado de volumen **no autoriza** declarar estabilidad ni validez de la interfaz o energía/solidificación.
+
+**Decisión:** preservar esta corrida; buscar en `logs/FS-C02_foamRun.log` el instante, deltaT y contexto numérico del pico 9.41807, y comparar con evolución de Courant/alpha/velocidad antes de alterar `maxCo`, parámetros termodinámicos o esquema numérico. No aumentar `maxCo` para silenciar la alerta. No avanzar todavía a introducir solidificación o shrinkage. B14, FS-C01 y C3D-02 se mantienen intactos.
