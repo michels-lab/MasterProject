@@ -1,3 +1,5 @@
+> **RESULTADO REAL DE WSL — 18-11-2026:** C3D-03 **sí se ejecutó** con OpenFOAM Foundation 14: `mesh_ok YES` en metal (**2,368 celdas, 48.01191628 cm³**) y arena (**7,680 celdas, 103.1691429 cm³**); contacto `metal_to_mold` y `mold_to_metal` con **1,248 caras recíprocas `mappedWall`**. Sólo calidad y topología preliminares, **NO CFD** ni fidelidad CAD local completa. [Bitácora de ejecución](../../docs/C3D_03_RESULTADO_NATIVO_20261118_ES.md). La continuación separada es [C3D-04 curvilíneo y C3D-05 CAD STEP/Gmsh](../../docs/C3D_04_C3D_05_MALLADO_PARALELO_20261118_ES.md).
+
 # C3D-03 — Piloto 3D conformante inspirado en el caso del doctor
 
 **Estado 18-11-2026:** `blockMeshDict` y ejecutor **CREADOS en GitHub, NO ejecutados en Ubuntu**. (estado histórico previo a la ejecución; ver actualización arriba) El piloto **no reemplaza** al caso principal `C3D_02_metal_sand_clean`, ni los dos STL de SolidWorks, ni el caso `doctor_original/cht`. Es un ensayo **solo de topología y calidad**, sin `snappyHexMesh`, sin Python generador, sin termofísica, sin `foamMultiRun` ni CFD.
