@@ -375,3 +375,29 @@ python3 analysis_tools/compare_fs_c02_ras_laminar.py \
 ```
 
 **Próximo criterio científico:** evaluar diferencia temporal y energía/contornos, comprobar presión y condiciones térmicas del gas laminar y una futura comparación de propiedades/Prandtl turbulento adecuadamente justificada antes de modificar la formulación de solidificación. No hacer otro experimento CFD simplemente para obtener un Courant que pase: ambos ya aprobaron Co < 0.20. Los reportes de prueba deben distinguir `NUMERICAL_SCREEN_PASSED` de validación física/metalúrgica.
+
+## 2026-11-18 — Auditoría A/B completa, 10 instantes reales alineados
+
+El investigador ejecutó `compare_fs_c02_ras_laminar.py --brief` en OpenFOAM Foundation 14 con las carpetas RAS `FS-C02_EXTENDED_20261118T181711Z_d6b6ab92` y laminar `FS-C02_LAMINAR_20261118T190459Z_469e798a`. **Salida real**:
+
+- Estado `PAIRED_NUMERICAL_COMPARISON_NO_THERMAL_VALIDATION`; diez tiempos guardados alineados a t=0.001 ... 0.01 s; `18` archivos de entrada idénticos por SHA256; solo `constant/momentumTransport` y `constant/fvModels` modificados en laminar.
+- Co máximo RAS `0.163617`, laminar `0.152533` (ambos por debajo del límite de auditoría `0.20`); deriva relativa de volumen registrada `0.0` a precisión de salida en ambos.
+- A t=0.001 s, T media de aire casi puro `alpha.metal<=1e-6`: RAS `636.07591153 K` vs laminar `353.39612719 K`. Celdas aire casi puro: RAS 3131, laminar 3200; celdas >1000 K: 332 vs 80.
+- A t=0.006 s: RAS `726.37824072 K` vs laminar `378.17406594 K`. Celdas aire casi puro: RAS 3124, laminar 3200; celdas >1000 K: 511 vs 160.
+- A t=0.010 s: RAS `745.24440794 K` vs laminar `390.37208688 K` (diferencia **354.872321 K**, reducción relativa de ~**79.7028%** del incremento medio aparente desde 300 K). Celdas de aire casi puro: RAS **3150**, laminar **3200**; >1000 K: **567** vs **160**. Celdas metal-like `alpha.metal>=0.99`: RAS **6362**, laminar **6400**.
+- El par no comparte exactamente las mismas máscaras de celdas aire casi puro, por lo que las diferencias de las medias de cada población incluyen diferencias de **selección de celda**, además de efectos de transporte térmico. Esto NO prueba atribución individual a `kEpsilon` ni a `VoFTurbulenceDamping`.
+
+**Hipótesis crítica nueva:** en laminar, el volumen de metal según el campo es exactamente `1.6e-05 m3` en los tres tiempos muestreados, y se siguen clasificando 6400 celdas casi puramente metal + 3200 casi puramente aire, mientras que RAS cambia la clasificación y genera celdas de interfaz. Esto podría indicar **alpha.metal prácticamente inmóvil** en laminar. Pero los conteos agregados **no prueban** que las fracciones no cambien de posición ni que la velocidad sea cero. Hay que comparar valores **celda a celda** entre todos los archivos guardados y no confundir `alpha.metal` (VOF metal/aire) con fracción sólida.
+
+Para separar efectos de selección de máscara, se agregó `analysis_tools/audit_fs_c02_shared_cells.py`. Lee **únicamente** las dos corridas existentes, reutiliza el auditor A/B estricto con 18 hashes idénticos y 10 tiempos coincidentes, calcula la diferencia de temperaturas **exactamente en las celdas con `alpha.metal<=1e-6` en ambos casos**, y cuantifica `sum(|alpha(t)-alpha(t_first_saved)|)*V_celda` para cada modelo, con tiempos de referencia **0.001 s**, NO t=0. También cuenta interfaces significativas `0.01<alpha.metal<0.99`. Es un diagnóstico de desplazamiento de fracciones VOF, NO mide altura de superficie libre física ni balance de masa. Si laminar muestra alpha invariante, **no declararlo apto para simulación física de superficie libre dinámica** antes de entender si se espera o no movimiento para las condiciones de arranque.
+
+Solo lectura; desde FS_C02_WORKTREE limpio y actualizado:
+
+```bash
+python3 analysis_tools/audit_fs_c02_shared_cells.py \
+  --ras ~/OpenFOAM/FS_C02_RUNS/FS-C02_EXTENDED_20261118T181711Z_d6b6ab92 \
+  --laminar ~/OpenFOAM/FS_C02_LAMINAR_RUNS/FS-C02_LAMINAR_20261118T190459Z_469e798a \
+  --brief
+```
+
+Próximas verificaciones físicas: evaluar velocidades guardadas del laminar, evolución real del frente y posible gradiente hidrostático y transporte de energía. Ningún caso representa todavía mold-CHT, fracción sólida, entalpía de fusión o shrinkage.
