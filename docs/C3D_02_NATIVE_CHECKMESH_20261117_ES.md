@@ -50,3 +50,25 @@ Resultado esperado: `~/OpenFOAM/C3D02_NATIVE_OF14_01/NATIVE_DIAGNOSTIC.txt`, los
 ## Criterio de la próxima corrección
 
 Inspeccionar las **geometrías reales de defectos** en ParaView superpuestas a las mallas y STL; comprobar si se concentran en interfaces de materiales, aristas o extremos. Solo entonces diseñar una variante controlada de `system/snappyHexMeshDict` (p. ej. opciones de `snapControls` o refinamiento localizado) sobre carpeta **nueva**, documentando comparación de celdas cóncavas, determinantes, volumen CAD y contacto. Conservar siempre intactos C14 y los casos históricos.
+
+## 17-11-2026 — VTK de defectos confirmados y primer ensayo nativo controlado
+
+El investigador ejecutó de nuevo `Allmesh --diagnose` y confirmó **6 VTK en copias físicas** independientes:
+
+- Metal: `concaveCells.vtk` y `underdeterminedCells.vtk`.
+- Molde: `concaveCells.vtk`, `concaveFaces.vtk`, `lowQualityTetFaces.vtk` y `underdeterminedCells.vtk`.
+
+No se han remitido aún coordenadas, capturas de ParaView ni métricas de distribución espacial: **la localización real de los defectos sigue desconocida**. No confundir la mera exportación VTK con inspección espacial.
+
+Para producir una primera comparación numérica reproducible sin depender de Python, se preparó un ensayo nativo de sensibilidad al snapping. **Hipótesis, no corrección probada:** duplicar el valor de `snapControls/nSmoothPatch`, de 3 a 6, manteniendo fijos el CAD, el refinamiento L2, las zonas, los restantes controles y los materiales C14.
+
+```bash
+cd ~/OpenFOAM/MasterProject
+git pull --ff-only
+bash cases_3d/C3D_02_metal_sand_clean/Allmesh --candidate-smooth
+```
+
+Este comando copia los diccionarios de origen a `~/OpenFOAM/C3D02_NATIVE_SMOOTH_01`, modifica **solo esa copia** mediante `foamDictionary -entry snapControls/nSmoothPatch -set 6`, ejecuta `blockMesh`, `snappyHexMesh`, `splitMeshRegions` y `checkMesh` nativos en **ambos** materiales y entrega una tabla `CANDIDATE_COMPARISON.tsv` con los conteos base/candidato. El caso anterior `C3D02_NATIVE_OF14_01` se utiliza como **referencia de solo lectura**. No sobrescribe carpetas existentes, no baja criterios de calidad, no ejecuta `foamMultiRun`. Si cualquiera de las regiones no pasa, informa rechazo.
+
+**Estado:** solo código preparado y commit; ejecución del experimento aún pendiente de confirmar en Ubuntu. Si la prueba no mejora simultáneamente calidad y compatibilidad geométrica, no declarar avance; revisar VTK en ParaView para diseñar refinamiento localizado, no encadenar cambios a ciegas.
+
