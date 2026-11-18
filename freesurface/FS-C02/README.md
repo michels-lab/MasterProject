@@ -288,3 +288,42 @@ Para contexto de implementación: OpenFOAM Foundation 14 usa **un único campo T
 - [OpenFOAM-14 compressibleTwoPhaseVoFMixture.C](https://github.com/OpenFOAM/OpenFOAM-14/blob/master/applications/modules/compressibleVoF/compressibleTwoPhaseVoFMixture/compressibleTwoPhaseVoFMixture.C).
 
 Estos archivos de software confirman la formulación implementada, **no** validan por sí solos el caso con hierro líquido.
+
+## 2026-11-18 — Auditoría real gas p/rho/U en FS-C02_EXTENDED, térmica aún NO VALIDADA
+
+**Salida numérica proporcionada directamente por investigador** desde `inspect_fs_c02_gas_state.py` sobre `FS-C02_EXTENDED_20261118T181711Z_d6b6ab92` (10 snapshots disponibles, se muestrearon 0.001, 0.006, 0.01 s). Estado `GAS_STATE_DESCRIPTIVE_NOT_PHYSICALLY_VALIDATED`. Se clasificó aire casi puro por `alpha.metal<=1e-6`:
+
+| Indicador aire casi puro | t=0.001 s | t=0.006 s | t=0.01 s |
+|---|---:|---:|---:|
+| Celdas | 3131 | 3124 | 3150 |
+| T media (K) | 636.0759 | 726.3782 | **745.2444** |
+| Presión media (Pa) | 108125.5 | 99949.19 | **99946.84** |
+| rho mezcla media (kg/m³) | 0.67404 | 0.544764 | **0.533752** |
+| Módulo velocidad media (m/s) | 6.91142 | 0.894256 | **0.085125** |
+| Celdas T>1000 K | 332 | 511 | **567** |
+| Media p/(rho R_air T) | 0.99999485 | 0.99999403 | **0.99999633** |
+
+Al final, la media T del gas casi puro permanece `~745 K`, con `p~100 kPa` y `U~0.085 m/s` (en las 567 celdas con gas casi puro más caliente de 1000 K, `U~0.0155 m/s`). Esto no concuerda con la interpretación simplista de que el gas sigue caliente **porque permanece comprimido a presión muy alta**. El cociente p/(rho RT) cercano a uno **es esperado por definición de gas ideal y no constituye validación independiente** de conservación de energía, física de gas o propiedades metalúrgicas. El mecanismo del calentamiento todavía es desconocido: mezcla numérica, difusión turbulenta, transporte/BC, presión y configuración de gas deben analizarse.
+
+**Inspección de los diccionarios fuente del caso generado:** `constant/momentumTransport` se heredó desde FS-C01 agua–aire con `simulationType RAS`, `model kEpsilon`, `turbulence on`; `0/k` tiene `k=0.1 m2/s2`, `0/epsilon` tiene `epsilon=0.1 m2/s3`. La estimación de orden de magnitud `nut≈Cmu*k²/epsilon=0.09*0.1²/0.1=0.009 m²/s` es muchísimo mayor que la viscosidad cinemática molecular inicial del aire ~1.6e-5 m²/s. **Es estimación inicial, NO medición del campo nut, NO validación de su evolución ni causalidad del calentamiento**. Además FS-C01 incluye `compressible::VoFTurbulenceDamping`, fuente de amortiguamiento en ecuaciones epsilon/omega que puede alterar nut cerca de la interfaz. Este conjunto heredado de agua **no se ha calibrado** para la geometría hierro–aire.
+
+**Referencia inspeccionada del código Foundation14:**
+- [compressibleVoF thermophysicalPredictor.C](https://github.com/OpenFOAM/OpenFOAM-14/blob/master/applications/modules/compressibleVoF/thermophysicalPredictor.C) resuelve una T compartida por las fases con transporte de calor;
+- [VoFTurbulenceDamping.C](https://github.com/OpenFOAM/OpenFOAM-14/blob/master/applications/modules/compressibleVoF/fvModels/VoFTurbulenceDamping/VoFTurbulenceDamping.C) actúa sobre epsilon/omega;
+- [laminarModel.C](https://github.com/OpenFOAM/OpenFOAM-14/blob/master/src/MomentumTransportModels/momentumTransportModels/laminar/laminarModel/laminarModel.C) implementa modelo laminar.
+
+### A/B controlado siguiente: aislamiento de RAS vs laminar (NO EJECUTADO)
+
+Se añadió `analysis_tools/run_fs_c02_laminar_control.py`. Crea exclusivamente una carpeta externa nueva bajo `~/OpenFOAM/FS_C02_LAMINAR_RUNS/FS-C02_LAMINAR_<UTC>_<id>/`. Parte de **copia del perfil FS-C02_EXTENDED** y cambia exactamente DOS archivos fuente:
+1. `constant/momentumTransport`: `RAS kEpsilon` a `simulationType laminar`;
+2. `constant/fvModels`: deshabilita la fuente de damping que dependía de epsilon/omega.
+
+Retiene los archivos originales `0/k`, `0/epsilon` y `fvSolution` en el manifiesto de 20 inputs, pero el solver en modo laminar **no debe resolver** las ecuaciones turbulentas. Los hashes de los demás 18 inputs, incluyendo termofísica, presión, `T`, geometría, BC, dt y `Co`, se preservan con relación a una copia FS-C02_EXTENDED de referencia. El estudio A/B elimina **RAS más su fuente asociada** como paquete; no separa sus efectos individuales.
+
+Primero verificar `--stage-only` para inspección, sin CFD. Para ejecutar una **nueva simulación de 0.01 s** Foundation14 en el worktree FS_C02_WORKTREE actualizado:
+
+    python3 analysis_tools/run_fs_c02_laminar_control.py
+
+El ejecutor invoca `blockMesh/checkMesh/foamRun` en la carpeta completamente NUEVA y prepara un resumen `FS-C02_LAMINAR_THERMAL_SCREEN.json` con el volumen integrado y T media de celdas casi puras gas, y un gate del Co máximo a 0.20. **Todavía no se ha corrido.** Si OpenFOAM laminar es incompatible con alguna configuración heredada, la prueba quedará bloqueada con logs y se estudiará el error; NO se reemplazarán ni modificarán las corridas originales y NO se desactivará artificialmente un criterio de validación.
+
+Objetivo falsable: si laminar reduce sustancialmente calentamiento del gas versus referencia RAS (~745.24 K a 0.01 s), la difusión turbulenta adquiere peso como explicación; si no, habrá que estudiar conducción/energía/presión/BC y posiblemente el modelo termo-convectivo. Incluso una reducción considerable no valida en sí misma el gas, el metal, la transferencia térmica al molde o solidificación/contracción.
