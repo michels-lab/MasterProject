@@ -56,3 +56,13 @@ Se incluyen:
 **Clave de solver:** la separación de `metal/mold/air` en **tres regiones nativas es diagnóstica**. El eventual caso metal–aire de superficie libre requiere un **fluido único** con `alpha.metal`, y arena como sólido separado con acoplamiento térmico. No confundir la topología separada de este piloto con un caso multirregión térmico operativo ni declarar `foamMultiRun` ejecutado.
 
 Instrucciones: [FS-C03 README](../freesurface/FS-C03_exterior_air_pilot/README.md). Estado real: **sólo construcción y pruebas estáticas; sin mallado nativo ni CFD verificados**.
+
+## Continuación del 18 de noviembre — FS-C03 confirmado en Ubuntu; FS-C04 de dos regiones preparado
+
+**FS-C03 (prueba real Foundation 14):** el investigador aportó salida completa de la auditoría estática (84 vértices, 53 bloques, 42,048 celdas previstas, 29 bloques de aire conectados), los **15 tests OK** y el ejecutor nativo `NATIVE_3_REGION_TOPOLOGY_PASSED_NO_CFD` sobre `/home/michel/OpenFOAM/FS_C03_AIR_TOPOLOGY_20261118T202905Z_6ef0cd90`. Esto confirma que el ejecutor nativo pudo comprobar la malla de tres zonas, el `checkMesh` y las interfaces de acuerdo con sus criterios. No prueba fidelidad STL, balance de energía ni CFD.
+
+**FS-C04 (nuevo piloto independiente, TODAVÍA SIN resultado nativo):** `freesurface/FS-C04_fluid_mold_mesh_pilot/`. Mantiene idénticos los 53 hexaedros, vértices, subdivisiones y parches atmosféricos externos de FS-C03; **une las zonas inicialmente `metal` y `air` en una zona continua `fluid`** con **34,368 celdas previstas**, separada de `mold` con 7,680. El auditor Python comprueba dos regiones conectadas, las 37 caras de bloque fluido–arena (13 originales metal–arena + 24 aire–arena), y preserva las 9 caras de bloque de salida superior y las caras exteriores laterales abiertas. El frente metal–aire inicial deja de ser una pared y será representado más adelante por `alpha.metal` dentro del dominio fluido; **el campo `alpha.metal` no está implementado todavía**.
+
+El ejecutor `analysis_tools/run_fs_c04_mesh.py --native` (solo mallado, no CFD) deberá comprobar de forma independiente en OpenFOAM Foundation 14 `blockMesh`, `checkMesh`, `splitMeshRegions -cellZones 'fluid mold' -noFields`, las dos regiones y las **3,136 caras `mappedWall` recíprocas** que se esperan en `fluid_to_mold` / `mold_to_fluid`. Sin ese resultado nativo queda **PENDIENTE**, aunque la geometría base FS-C03 haya pasado.
+
+Se preservan todas las corridas ya aprobadas y el caso C3D-02 en paralelo. Todavía falta fidelidad CAD exacta, contacto/base inferior, separación térmica fluid–solid y propiedades/física metalúrgica antes de cualquier solver.
