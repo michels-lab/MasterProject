@@ -5,6 +5,29 @@ set -Eeuo pipefail
 
 ROOT="$(cd "$(dirname "$0")" && pwd)"
 CASE="$HOME/OpenFOAM/C3D02_NATIVE_OF14_01"
+# Parse reports from native OpenFOAM logs, never infer volumes from the first '='.
+source "$ROOT/scripts/native_checkmesh_report.sh"
+
+# Recalculate the existing comparison WITHOUT remeshing or modifying past TSV.
+if (( $# == 1 )) && [[ "$1" == "--compare" ]]; then
+    baseline="$HOME/OpenFOAM/C3D02_NATIVE_OF14_01"
+    candidate="$HOME/OpenFOAM/C3D02_NATIVE_SMOOTH_01"
+    for region in metal mold; do
+        [[ -s "$baseline/log.checkMesh.$region" ]] || {
+            echo "Missing baseline native log: $region" >&2; exit 2;
+        }
+        [[ -s "$candidate/log.checkMesh.$region" ]] || {
+            echo "Missing candidate native log: $region" >&2; exit 2;
+        }
+    done
+    corrected="$candidate/CANDIDATE_COMPARISON_CORRECTED.tsv"
+    foam_write_mesh_comparison "$baseline" "$candidate" "$corrected"
+    echo "=== Corrected comparison from existing OpenFOAM logs ==="
+    cat "$corrected"
+    echo "Saved: $corrected"
+    echo "Existing meshes, original TSV, physical dictionaries and CFD unchanged."
+    exit 0
+fi
 
 # Existing-mesh diagnosis: no remeshing, no Python, no material edits, no CFD.
 if (( $# > 0 )) && [[ "$1" == "--diagnose" ]]; then
@@ -99,7 +122,7 @@ if (( $# == 1 )) && [[ "$1" == "--candidate-smooth" ]]; then
     VARIANT=smooth
     CASE="$HOME/OpenFOAM/C3D02_NATIVE_SMOOTH_01"
 elif (( $# > 0 )); then
-    echo "Usage: bash Allmesh [--diagnose|--candidate-smooth]" >&2
+    echo "Usage: bash Allmesh [--diagnose|--candidate-smooth|--compare]" >&2
     exit 2
 fi
 if [[ -e "$CASE" || -L "$CASE" ]]; then
@@ -220,7 +243,7 @@ for region in metal mold; do
            ! grep -Eq 'Number of regions:[[:space:]]*1([^0-9]|$)' "$log"; then
             candidate_rejected=1
         fi
-        vol_candidate="$(awk '/Total volume[[:space:]]*=/{for(i=1;i<NF;i++)if($i=="="){print $(i+1);exit}}' "$log")"
+        vol_candidate="$(foam_checkmesh_total_volume "$log")"
         if [[ "$region" == metal ]]; then cad_candidate=0.0000479874896432; else cad_candidate=0.00010284309608; fi
         if [[ -z "$vol_candidate" ]] ||
            ! awk -v v="$vol_candidate" -v ref="$cad_candidate" 'BEGIN{d=v/ref-1;if(v<=0||d>0.02||d< -0.02)exit 1}'; then
@@ -238,7 +261,7 @@ for region in metal mold; do
         fail "$region: checkMesh did not report Mesh OK; inspect log.checkMesh.$region"
     grep -Eq 'Number of regions:[[:space:]]*1([^0-9]|$)' "$log" ||
         fail "$region: more than one connected region or no region count"
-    volume="$(awk '/Total volume[[:space:]]*=/{for(i=1;i<=NF;i++)if($i=="="){print $(i+1);exit}}' "$log")"
+    volume="$(foam_checkmesh_total_volume "$log")"
     [[ -n "$volume" ]] || fail "$region: no region volume in checkMesh output"
     if [[ "$region" == metal ]]; then cad=0.0000479874896432; else cad=0.00010284309608; fi
     awk -v v="$volume" -v ref="$cad" '
@@ -250,35 +273,7 @@ if [[ "$VARIANT" == smooth ]]; then
     STAGE=CONTROLLED_COMPARISON
     baseline="$HOME/OpenFOAM/C3D02_NATIVE_OF14_01"
     comparison="$CASE/CANDIDATE_COMPARISON.tsv"
-    printf 'source\tregion\tcells\tvolume_m3\tconcave_cells\tlow_determinant_cells\tbad_tet_faces\tfailed_checks\tmesh_ok\n' > "$comparison"
-    for region in metal mold; do
-        for source in BASELINE CANDIDATE; do
-            if [[ "$source" == BASELINE ]]; then
-                log="$baseline/log.checkMesh.$region"
-            else
-                log="$CASE/log.checkMesh.$region"
-            fi
-            if [[ ! -s "$log" ]]; then
-                printf '%s\t%s\tNA\tNA\tNA\tNA\tNA\tNA\tNA\n' "$source" "$region" >> "$comparison"
-                continue
-            fi
-            awk -v source="$source" -v region="$region" '
-                /^[[:space:]]*cells:/ {cells=$2}
-                /Total volume[[:space:]]*=/ {
-                    for(i=1;i<NF;i++)if($i=="="){volume=$(i+1);break}
-                }
-                /Concave cells \(using face planes\) found/ {concave=$NF}
-                /Cells with small determinant/ {lowdet=$NF}
-                /Error in face tets:/ {bad_tet=1}
-                /Failed [0-9]+ mesh checks/ {failed=$2}
-                /Mesh OK/ {mesh_ok=1}
-                END{
-                    printf "%s\t%s\t%s\t%s\t%d\t%d\t%d\t%d\t%d\n",
-                        source,region,cells,volume,concave,lowdet,bad_tet,failed,mesh_ok
-                }
-            ' "$log" >> "$comparison"
-        done
-    done
+    foam_write_mesh_comparison "$baseline" "$CASE" "$comparison"
     echo "=== OpenFOAM native controlled snap sensitivity ==="
     cat "$comparison"
     echo "Results and native checkMesh VTK are preserved at $CASE"
