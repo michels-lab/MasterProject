@@ -78,3 +78,19 @@ Para revisar un error, compartir el FS-C01_RUN_STATUS.json y el archivo logs/FS-
 Incluso con FS_C01_VOLUME_SCREEN_PASSED_MASS_NOT_VERIFIED solamente se ha superado un cribado de **volumen de agua VOF**; siguen **ABIERTOS** el balance de masa por fase, límites de alpha, coherencia hidrostática y energía. No constituye validación de contracción. El cambio a metal/aire y la ley rho(T, fracción sólida) requieren un caso posterior distinto y propiedades trazables; FS-C01 permanece congelado como benchmark.
 
 **QA del repositorio**: los tests de Python y GitHub Actions son estáticos/sintéticos; no se ejecuta CFD desde GitHub.
+
+
+## Reintento posterior al fallo real de `writeFields` (2026-11-17)
+
+La primera ejecución local `FS-C01_20261118T001239Z_656d1a84` pasó `blockMesh` y `checkMesh` y falló al inicializar `foamRun`: faltaba `writeFields` en `system/functions!waterVolume`. La corrección se realiza **en el caso fuente y generador de FS-C01**, no editando el expediente fallido. Si el worktree `~/OpenFOAM/FS_C01_WORKTREE` YA existe, **NO** ejecutar `git worktree add` otra vez.
+
+Desde una terminal nueva y sin cambiar la carpeta `~/OpenFOAM/MasterProject` que usa C3D-02:
+
+    cd ~/OpenFOAM/FS_C01_WORKTREE
+    git status --short
+    git fetch origin research/fs-c01-isolated-execution-20261117
+    git switch --detach FETCH_HEAD
+    python3 analysis_tools/run_fs_c01_local.py --preflight
+    python3 analysis_tools/run_fs_c01_local.py
+
+Nota: antes de ejecutar, `echo "$WM_PROJECT_VERSION"` debe mostrar `14`; el ejecutor lo exige. `git switch` debe hacerse **solo** si `git status --short` no revela ediciones locales que el investigador necesite conservar. Se crea automáticamente un nuevo identificador de corrida FS-C01 y nunca se reusa ni limpia la anterior. Detenerse y compartir el nuevo `FS-C01_RUN_STATUS.json` ante cualquier error.
