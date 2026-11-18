@@ -58,6 +58,21 @@ class FSC01IsolatedRunnerTests(unittest.TestCase):
         with self.assertRaisesRegex(FSC01Error, "checksum mismatch"):
             validate_source(case)
 
+    def test_openfoam14_missing_writefields_fails_even_with_consistent_sha(self):
+        _, case, _ = prepare_run(self.out, run_id="FS-C01_missing_writefields")
+        control = case / "system" / "controlDict"
+        original = control.read_text()
+        self.assertIn("writeFields false;", original)
+        control.write_text(original.replace("        writeFields false;\n", ""))
+        manifest_path = case / "BFS01_MANIFEST.json"
+        manifest = json.loads(manifest_path.read_text())
+        manifest["generated_sha256"]["system/controlDict"] = hashlib.sha256(
+            control.read_bytes()
+        ).hexdigest()
+        manifest_path.write_text(json.dumps(manifest))
+        with self.assertRaisesRegex(FSC01Error, "requires writeFields false"):
+            validate_source(case)
+
     def test_wrong_identity_rejected(self):
         _, case, _ = prepare_run(self.out, run_id="FS-C01_wrongID")
         p = case / "BFS01_MANIFEST.json"
