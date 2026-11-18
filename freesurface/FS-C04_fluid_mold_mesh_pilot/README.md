@@ -65,3 +65,26 @@ NO CFD. Alpha metal initial field, real CAD fit and mold support unresolved.
 El ejecutor solo imprime `NATIVE_2_REGION_FLUID_MOLD_TOPOLOGY_PASSED_NO_CFD` después de ejecutar `blockMesh`, `checkMesh` en el caso completo y en las dos regiones, `splitMeshRegions`, comprobar `mappedWall` recíprocos y las fronteras atmosféricas abiertas. **El gate nativo de malla FS-C04 está aprobado.** La evidencia no incluye aquí los logs completos ni valores detallados de skewness/nonorthogonality; no inventarlos.
 
 **Alcance no demostrado:** no existe todavía campo `alpha.metal` inicial, validación de volúmenes/áreas del CAD original, tratamiento del apoyo inferior, acoplamiento CHT ni corrida VOF/solidificación; no confundir éxito de geometría con validación física. El caso FS-C04 validado se conserva inmutable. La siguiente etapa debe preparar en una NUEVA carpeta una asignación reproducible de las 2368 celdas inicialmente metálicas dentro de la región fluida (`34,368` celdas), con auditoría de integridad y volumen antes de resolver CFD.
+
+## 18-11-2026 — Auditoría de preparación de `alpha.metal`: tres bloques metálicos, todavía SIN campo
+
+Se añadió `analysis_tools/audit_fs_c04_metal_seed.py` (solo lectura) y seis pruebas asociadas. El script extrae los **tres bloques originales metal** `[9, 14, 19]` de la fuente FS-C03 y confirma que su geometría y subdivisiones no cambiaron al convertirse en celdas de la zona `fluid` de FS-C04. Se deriva analíticamente su volumen como suma de secciones cuadrangulares con interpolación lineal de vértices e integración de Simpson exacta para sección cuadrática.
+
+| Metal original | Altura vertical en el piloto (mm) | Celdas previstas | Volumen analítico (mm³) |
+| --- | --- | ---: | ---: |
+| Bloque 9 | -40 a -38 | 128 | 1888.632224 |
+| Bloque 14 | -38 a -20 | 960 | 20732.540616 |
+| Bloque 19 | -20 a 0 | 1280 | 25390.743440 |
+| **Total** | **-40 a 0** | **2368** | **48011.916280** |
+
+El volumen de metal CAD v2 documentado es **47 987.697 mm³**, diferencia del piloto `+24.21928 mm³` o **+0.05047 % en volumen**. Ese ajuste volumétrico cercano NO valida superficie, redondeos, conicidad, volumen de arena ni intercambio térmico. En la futura región fluida única habría **2368 celdas con `alpha.metal=1`** y **32000 de aire con `alpha.metal=0`** si el mapeo de celdas de `blockMesh` coincide exactamente. Son objetivos **geométricos**, no resultados experimentales ni campos resueltos.
+
+**ADVERTENCIA:** los índices `[9,14,19]` son números de *bloque hexaédrico*, NO índices de celda en el `polyMesh` ni la malla dividida; **no** escribir `alpha.metal` por suposición de orden. El script no modifica la carpeta nativa FS-C04 que el investigador ya comprobó, no crea campos ni ejecuta solver. Antes de escribir `0/fluid/alpha.metal`, verificar correspondencia entre celdas nativas del FS-C03 con zona metal y la malla FS-C04, respetar `splitMeshRegions`, demostrar el volumen del campo y que las celdas del sólido tengan 0 volumen de fase metálica. No llamar a `alpha.metal` *fracción sólida*.
+
+```bash
+cd ~/OpenFOAM/FS_C02_WORKTREE
+python3 analysis_tools/audit_fs_c04_metal_seed.py
+python3 -m unittest discover -s analysis_tools -p test_audit_fs_c04_metal_seed.py -v
+```
+
+Este análisis **no necesita correr `blockMesh` de nuevo**. El resultado esperado es `ANALYTIC_METAL_SEED_IDENTIFIED_NO_FIELD_WRITTEN`, no `alpha` inicializado.
