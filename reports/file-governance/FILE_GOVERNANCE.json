@@ -28,7 +28,7 @@
     "POTENTIAL_UNLOGGED_CHANGES": 2
   },
   "finding_total": 2,
-  "inventory_fingerprint": "e657fd6c69d425197665c8d81e808aa7e5b6a6846a6c8d96bed734f85f8c805f",
+  "inventory_fingerprint": "fff66108987a77354ef5f943f7597ad20c37238ef8082fc8e1020faa2271fea8",
   "evidence_fingerprint": "bf821818b71afbcc7b8d719481f3a5570a5ba08b3891830cfa0853c84d1a6626",
   "files": [
     {
@@ -1373,7 +1373,7 @@
       "role": "test",
       "purpose": "code/test implementation",
       "certainty": "rule",
-      "blob": "f47455aab4463e92850551635847a9a5fcfee9af"
+      "blob": "3713da936e3539fd1c9366d7ddc84e61e4b80c47"
     },
     {
       "path": "cases_3d/C3D_02_metal_sand_clean/tests/test_native_checkmesh_report.sh",
@@ -271083,7 +271083,7 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "b0bce9a593d65c8b7079c1a52e5900a4b531dc53"
+      "blob": "6568fa2735a96b595d442aa15a3d1dc582a1c626"
     },
     {
       "path": "docs/C3D_REINICIO_20261112_ES.md",
