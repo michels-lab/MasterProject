@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
   "audit_kind": "deterministic_full_tracked_tree",
-  "tracked_files_total": 38841,
-  "classified_files_total": 38836,
-  "docs_content_inspected": 143,
+  "tracked_files_total": 38842,
+  "classified_files_total": 38837,
+  "docs_content_inspected": 144,
   "large_docs_skipped": 0,
   "excluded_reports": 5,
   "roles": {
@@ -12,7 +12,7 @@
     "bitacora": 5,
     "config": 7,
     "data": 28,
-    "document": 114,
+    "document": 115,
     "index": 24,
     "license": 1,
     "simulation_case_file": 99,
@@ -26,7 +26,7 @@
   },
   "finding_counts": {},
   "finding_total": 0,
-  "inventory_fingerprint": "ce0fff5173d7946fccf8f0f64c732b1333b31e1db5f5168b0f842665d36a4030",
+  "inventory_fingerprint": "9511c092b9acc219e3f288a6341bbc9837f1ab5ebffbe844bb3320029017a37c",
   "evidence_fingerprint": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
   "files": [
     {
@@ -265,7 +265,7 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "a2121f7b9b15ccd1453f07cbe103dfef1f8efe64"
+      "blob": "be0b7068470cdd6a171446609d6a43ffbe21d811"
     },
     {
       "path": "OPENFOAM_COMMAND_MANUAL.md",
@@ -314,7 +314,7 @@
       "role": "bitacora",
       "purpose": "technical/audit change history",
       "certainty": "rule",
-      "blob": "7658ee4207a492dbc05867626bcddeb06bc84388"
+      "blob": "9c4dd2437fbbb87b90bbf9cb0ab71d94d9377e69"
     },
     {
       "path": "README.md",
@@ -335,7 +335,7 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "693ac415436c886883ef95030f364b50f9e6334e"
+      "blob": "5efae961eec022ba6ec3700f50ff5891b671d70f"
     },
     {
       "path": "VALIDATION_MATRIX.md",
@@ -356,7 +356,7 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "ea58acea1b9067b5ab3763b87e36511c39472ec6"
+      "blob": "ebe8c955d24f04b06f096abc061184bd60b3b63c"
     },
     {
       "path": "analysis_results/c11_energy2_test/summary.md",
@@ -180676,7 +180676,7 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "af9a3110afd6bef6b9c9dbfbf64065e6adb277d6"
+      "blob": "8c94e66570f61553e3a62cd80621402ad1377024"
     },
     {
       "path": "cases_controlled_buoyancy/C14_topFixedFlux_explicitRef/CASE_VARIANT.md",
@@ -198785,7 +198785,7 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "83d28d9d780786885c70de3c36b43dbcc245eb72"
+      "blob": "9c48c13023003834329ca6def47da795c2eb2db4"
     },
     {
       "path": "cases_controlled_buoyancy/C16_phaseRelax025_fromC14/CASE_VARIANT.md",
@@ -271077,6 +271077,13 @@
       "blob": "fc34bac483acbd79694460d8940e00451c53584a"
     },
     {
+      "path": "docs/C3D_02_ESTRATEGIA_MALLADO_CONFORMANTE_20261118_ES.md",
+      "role": "document",
+      "purpose": "manual/decision/report/historical note",
+      "certainty": "inferred",
+      "blob": "47d6cc38c95b9edebbc1895a12c5076919711c4d"
+    },
+    {
       "path": "docs/C3D_02_MALLADO_INICIAL_20261112_ES.md",
       "role": "document",
       "purpose": "manual/decision/report/historical note",
@@ -271130,7 +271137,7 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "56cb2083fda65f9bec06b1ce5bc954703e268eeb"
+      "blob": "881fd6519cf0e8a9f70ef8382858366cb6f00808"
     },
     {
       "path": "docs/DOCUMENT_SYNC_20261110_ES.md",
