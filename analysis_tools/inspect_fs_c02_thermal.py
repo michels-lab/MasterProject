@@ -178,9 +178,26 @@ def inspect(run: Path) -> dict:
 def main(argv=None) -> int:
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument("--run", type=Path, required=True)
+    p.add_argument("--brief", action="store_true",
+                   help="print three representative saved times instead of every snapshot")
     args = p.parse_args(argv)
     try:
         result = inspect(args.run)
+        if args.brief:
+            records = result["records"]
+            selected = [records[i] for i in sorted({0, len(records)//2, len(records)-1})]
+            result["records"] = [
+                {
+                    "time_s": r["time_s"],
+                    "volume_metal_from_alpha_m3": r["volume_metal_from_alpha_m3"],
+                    "T_gas_weighted_mean_K": r["T_gas_weighted_mean_K"],
+                    "gas_like": r["gas_like_alpha_le_0_01"],
+                    "interface_like": r["interface_like_alpha_0_01_to_0_99"],
+                    "metal_like": r["metal_like_alpha_ge_0_99"],
+                }
+                for r in selected
+            ]
+            result["brief_only_three_times"] = True
         print(json.dumps(result, indent=2, ensure_ascii=False))
         return 0
     except (OSError, ValueError, KeyError, TypeError, json.JSONDecodeError) as ex:
