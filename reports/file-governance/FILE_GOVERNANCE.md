@@ -5,7 +5,7 @@ No file is auto-deleted or declared unused.
 
 ## Coverage
 
-Tracked: 38824; classified: 38819; readable documents: 138; above read cap: 0; findings: 2.
+Tracked: 38825; classified: 38820; readable documents: 138; above read cap: 0; findings: 2.
 
 ## File roles
 
@@ -24,14 +24,14 @@ Tracked: 38824; classified: 38819; readable documents: 138; above read cap: 0; f
 | simulation_log | 3155 |
 | simulation_output | 32613 |
 | source | 58 |
-| test | 17 |
+| test | 18 |
 | web_ui | 1 |
 | workflow | 19 |
 
 ## Findings (human review required)
 
-- **REVIEW / POTENTIAL_UNLOGGED_CHANGES** PROJECT_AUDIT_LOG_EN.md: 4 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_02_metal_sand_clean/scripts/build_c3d02.py, cases_3d/C3D_02_metal_sand_clean/scripts/native_checkmesh_report.sh, cases_3d/C3D_02_metal_sand_clean/tests/test_native_allmesh_static.sh, cases_3d/C3D_02_metal_sand_clean/tests/test_template_static.sh. Next: Inspect diffs and reconcile only meaningful decisions/results in the canonical log (ID cdafec2de11d9d8d)
-- **REVIEW / POTENTIAL_UNLOGGED_CHANGES** PROJECT_AUDIT_LOG_ES.md: 4 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_02_metal_sand_clean/scripts/build_c3d02.py, cases_3d/C3D_02_metal_sand_clean/scripts/native_checkmesh_report.sh, cases_3d/C3D_02_metal_sand_clean/tests/test_native_allmesh_static.sh, cases_3d/C3D_02_metal_sand_clean/tests/test_template_static.sh. Next: Inspect diffs and reconcile only meaningful decisions/results in the canonical log (ID c223736bba470622)
+- **REVIEW / POTENTIAL_UNLOGGED_CHANGES** PROJECT_AUDIT_LOG_EN.md: 5 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_02_metal_sand_clean/scripts/build_c3d02.py, cases_3d/C3D_02_metal_sand_clean/scripts/native_checkmesh_report.sh, cases_3d/C3D_02_metal_sand_clean/tests/test_native_allmesh_static.sh, cases_3d/C3D_02_metal_sand_clean/tests/test_native_checkmesh_report.sh, cases_3d/C3D_02_metal_sand_clean/tests/test_template_static.sh. Next: Inspect diffs and reconcile only meaningful decisions/results in the canonical log (ID bf401b483bf07848)
+- **REVIEW / POTENTIAL_UNLOGGED_CHANGES** PROJECT_AUDIT_LOG_ES.md: 5 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_02_metal_sand_clean/scripts/build_c3d02.py, cases_3d/C3D_02_metal_sand_clean/scripts/native_checkmesh_report.sh, cases_3d/C3D_02_metal_sand_clean/tests/test_native_allmesh_static.sh, cases_3d/C3D_02_metal_sand_clean/tests/test_native_checkmesh_report.sh, cases_3d/C3D_02_metal_sand_clean/tests/test_template_static.sh. Next: Inspect diffs and reconcile only meaningful decisions/results in the canonical log (ID ef2323613f21af35)
 
 Complete path → purpose/role/certainty list lives in FILE_GOVERNANCE.json. SUMMARY.json has counts only for master polling.
 A dated file, duplicate, or suspicious name is an **investigation candidate**, not unwanted material.

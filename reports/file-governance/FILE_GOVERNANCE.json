@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "audit_kind": "deterministic_full_tracked_tree",
-  "tracked_files_total": 38824,
-  "classified_files_total": 38819,
+  "tracked_files_total": 38825,
+  "classified_files_total": 38820,
   "docs_content_inspected": 138,
   "large_docs_skipped": 0,
   "excluded_reports": 5,
@@ -20,7 +20,7 @@
     "simulation_log": 3155,
     "simulation_output": 32613,
     "source": 58,
-    "test": 17,
+    "test": 18,
     "web_ui": 1,
     "workflow": 19
   },
@@ -28,8 +28,8 @@
     "POTENTIAL_UNLOGGED_CHANGES": 2
   },
   "finding_total": 2,
-  "inventory_fingerprint": "c767dc245b974416fedfce6987e2cab0ae7ffde581e5f06e9a049cf2ceac3094",
-  "evidence_fingerprint": "b1d588d1a0e9cddff840bed7e6953b7dcb7954b8cfb20cec149c3efd94968747",
+  "inventory_fingerprint": "190b9e949415bdb9d0bea4890db1148124d99931f6d4639e30a7834c8ffe32d5",
+  "evidence_fingerprint": "c795a819b038ff81cee3d5c2fcf6645cdf5dc06833a26180ef88dee54043f365",
   "files": [
     {
       "path": ".github/agents/openfoam-solidification.agent.md",
@@ -1072,7 +1072,7 @@
       "role": "simulation_case_file",
       "purpose": "OpenFOAM case-specific support artifact",
       "certainty": "inferred",
-      "blob": "538f85f0f5f837505ec646d89bbda7d44986d361"
+      "blob": "9b68da3cb24d746f9dd1b21c8c6c87628f938f00"
     },
     {
       "path": "cases_3d/C3D_02_metal_sand_clean/README.md",
@@ -1318,6 +1318,13 @@
       "purpose": "code/test implementation",
       "certainty": "rule",
       "blob": "c99c6a2ad6dadfa1395f7c699bb1072c0d803a52"
+    },
+    {
+      "path": "cases_3d/C3D_02_metal_sand_clean/tests/test_native_checkmesh_report.sh",
+      "role": "test",
+      "purpose": "code/test implementation",
+      "certainty": "rule",
+      "blob": "26a799582db1dd8134e9819eb4922447f438d358"
     },
     {
       "path": "cases_3d/C3D_02_metal_sand_clean/tests/test_sources.sh",
@@ -271767,20 +271774,20 @@
   ],
   "findings": [
     {
-      "id": "cdafec2de11d9d8d",
+      "id": "bf401b483bf07848",
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_EN.md",
-      "observation": "4 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_02_metal_sand_clean/scripts/build_c3d02.py, cases_3d/C3D_02_metal_sand_clean/scripts/native_checkmesh_report.sh, cases_3d/C3D_02_metal_sand_clean/tests/test_native_allmesh_static.sh, cases_3d/C3D_02_metal_sand_clean/tests/test_template_static.sh",
+      "observation": "5 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_02_metal_sand_clean/scripts/build_c3d02.py, cases_3d/C3D_02_metal_sand_clean/scripts/native_checkmesh_report.sh, cases_3d/C3D_02_metal_sand_clean/tests/test_native_allmesh_static.sh, cases_3d/C3D_02_metal_sand_clean/tests/test_native_checkmesh_report.sh, cases_3d/C3D_02_metal_sand_clean/tests/test_template_static.sh",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     },
     {
-      "id": "c223736bba470622",
+      "id": "ef2323613f21af35",
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_ES.md",
-      "observation": "4 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_02_metal_sand_clean/scripts/build_c3d02.py, cases_3d/C3D_02_metal_sand_clean/scripts/native_checkmesh_report.sh, cases_3d/C3D_02_metal_sand_clean/tests/test_native_allmesh_static.sh, cases_3d/C3D_02_metal_sand_clean/tests/test_template_static.sh",
+      "observation": "5 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_02_metal_sand_clean/scripts/build_c3d02.py, cases_3d/C3D_02_metal_sand_clean/scripts/native_checkmesh_report.sh, cases_3d/C3D_02_metal_sand_clean/tests/test_native_allmesh_static.sh, cases_3d/C3D_02_metal_sand_clean/tests/test_native_checkmesh_report.sh, cases_3d/C3D_02_metal_sand_clean/tests/test_template_static.sh",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     }
