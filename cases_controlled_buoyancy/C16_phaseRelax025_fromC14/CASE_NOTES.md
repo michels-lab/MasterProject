@@ -1,3 +1,5 @@
+> **18-11-2026 — PRIMER AVANCE (solicitud expresa del director):** C16 es la prueba controlada necesaria para medir sensibilidad de `phaseChangeSource.relax` de **0.10 (C14) a 0.25 (C16)**, con el resto fijo y postprocesamiento comparativo de `T(t)`, `alpha1(t)`, `U`, residuos, Courant **observado**, continuidad, energía y tiempo CPU. **Permanece `PREPARED_NOT_RUN`: no hay resultados C16 verificados ni curvas de sensibilidad**. `maxCo=0.25` de C14 es una entrada distinta. [Checklist obligatorio del primer avance](../../docs/PRIMER_AVANCE_REQUISITOS_DIRECTOR_20261118_ES.md).
+
 # C16 — phase-fraction relaxation experiment
 
 **Status:** PREPARED_NOT_RUN (2026-10-08). **Parent:** C14_topFixedFlux_explicitRef.
