@@ -454,3 +454,24 @@ El investigador precisó que **el volumen gaseoso debe extenderse también sobre
 La envolvente de aire no solo cubre la boca de metal y la superficie superior del molde: **debe rodear también las cuatro paredes laterales exteriores de arena**. Todo ese aire se modela como región gaseosa 3D conectada con la atmósfera superior; no como un conducto estrecho delimitado por paredes virtuales. La arena es un sólido que conduce calor y sus paredes exteriores intercambian energía con el aire por **interfaz térmica sólido–fluido sin penetración**, no por condición `atmosphere` impuesta directamente a la arena. Las fronteras atmosféricas abiertas van en el **límite lejano del aire**, por arriba y, según la sensibilidad, lateralmente. Hay que decidir aparte la base: apoyo térmico, aire externo y/o hueco inferior real según geometría y montaje, sin suponer exposición universal.
 
 Por ello el piloto `run_fs_c02_high_headspace.py` sigue **bloqueado para ejecutar CFD** y únicamente permite `--stage-only`: carece del molde sólido y del volumen de gas a sus cuatro lados. **NO ejecutar el comando CFD anterior ni reutilizarlo para el molde real.** Documento de diseño 3D actualizado: [FS_C02_DOMINIO_AIRE_SOBRE_ARENA_20261118_ES.md](../../docs/FS_C02_DOMINIO_AIRE_SOBRE_ARENA_20261118_ES.md). Aún falta construir una malla multirregión fiel al CAD y auditar sus interfaces antes de simular fluidos/CHT. Las corridas históricas, B14 y C3D-02 no se tocan.
+
+## CONTINUACIÓN IMPLEMENTADA — FS-C03 piloto de malla 3D con aire sobre y alrededor de la arena (18-11-2026)
+
+Se creó el caso independiente **[FS-C03 exterior-air](../FS-C03_exterior_air_pilot/README.md)** basado en los bloques originales de C3D-03. La malla **teórica y no ejecutada en Foundation 14** posee 53 bloques y 42,048 celdas previstas: 2,368 metal, 7,680 arena, **32,000 aire**. La superficie superior del metal, la parte superior de la arena y los cuatro costados de la arena están en contacto con una región de aire **conectada**. El aire termina en fronteras externas `atmosphereTop`, `atmosphereSides`, `atmosphereLowerSides` tipo `patch` lejos del molde; no hay techo artificial en y=0.
+
+El piloto incluye un comprobador de caras y conectividad (sin OpenFOAM), pruebas automatizadas y ejecutor nativo **exclusivamente de malla**. La forma multibloque proviene de la **aproximación geométrica** C3D-03, NO de una malla exacta de los STL de SolidWorks. **`checkMesh`, calidad de celda, áreas y interfaces nativas pendientes hasta ejecutarse en Ubuntu**; el sólido de la arena y el aire inferior/hueco de apoyo no tienen tratamiento físico completo. Los materiales divididos en tres `cellZones` y tres regiones de diagnóstico NO son todavía la partición VOF+CHT apta para CFD: **metal+aire deben compartir una región fluida** para que evolucione `alpha.metal`, mientras que arena debe ser región térmica sólida separada.
+
+Para generar solo una carpeta nueva del caso (sin malla nativa):
+```bash
+cd ~/OpenFOAM/FS_C02_WORKTREE
+python3 analysis_tools/run_fs_c03_mesh.py
+```
+
+Para verificar malla con Foundation 14 (SIN solver ni CFD):
+```bash
+python3 analysis_tools/run_fs_c03_mesh.py --native
+```
+
+No correr estos comandos en `~/OpenFOAM/MasterProject` activo; el ejecutor escribe exclusivamente a un directorio de salida único en `~/OpenFOAM/FS_C03_AIR_TOPOLOGY_<UTC>_<id>`. No repetir intentos rechazados ni suprimir `checkMesh`; conservar logs de fracaso.
+
+**La variante 40mm-wide `FS-C02_HIGH_AIR` sigue BLOQUEADA para CFD** y la corrida laminar permanece archivada como sensibilidad. Se prioriza el modelo turbulento sujeto a verificación, sin cambiar B14, C3D-02 o experimentos ya terminados.
