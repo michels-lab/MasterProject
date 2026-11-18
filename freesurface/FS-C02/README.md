@@ -106,3 +106,13 @@ El investigador compartió el **JSON íntegro** de `FS-C02_20261118T005412Z_c04d
 - La única alerta del auditor es `Courant max exceeds configured maxCo .25`. El cribado de volumen **no autoriza** declarar estabilidad ni validez de la interfaz o energía/solidificación.
 
 **Decisión:** preservar esta corrida; buscar en `logs/FS-C02_foamRun.log` el instante, deltaT y contexto numérico del pico 9.41807, y comparar con evolución de Courant/alpha/velocidad antes de alterar `maxCo`, parámetros termodinámicos o esquema numérico. No aumentar `maxCo` para silenciar la alerta. No avanzar todavía a introducir solidificación o shrinkage. B14, FS-C01 y C3D-02 se mantienen intactos.
+
+### Diagnóstico nuevo, sin volver a correr CFD
+
+El script `analysis_tools/diagnose_fs_c02_courant.py` fue añadido para localizar la observación del máximo global de Courant, el número de registros que exceden `maxCo=0.25`, la línea exacta del log, los `Time =` antes/después y el `deltaT` registrado cerca del pico. Los valores de `Time` indican **marcadores que rodean la línea**, no se deben asignar automáticamente como instante físico exacto de ese Courant.
+
+Desde `~/OpenFOAM/FS_C02_WORKTREE` actualizado con la rama FS-C02 correcta, ejecutar:
+
+    python3 analysis_tools/diagnose_fs_c02_courant.py --run ~/OpenFOAM/FS_C02_RUNS/FS-C02_20261118T005412Z_c04dfcf6 --limit 3 --context 8
+
+El diagnóstico solamente **lee el log original FS-C02** y muestra los mayores picos y líneas circundantes. No reescribe el reporte `screen1`, no relanza `foamRun`, no toca B14/FS-C01/C3D-02. Se exige investigar primero el origen del `Co=9.41807`; no subir artificialmente `maxCo` para que pase.
