@@ -1,3 +1,5 @@
+> **ACTUALIZACIÓN CANÓNICA C3D-02 / 18-11-2026 — nota de alcance 3D:** las ablaciones STL v2 de C3D-02 produjeron 1 celda metálica o 0 celdas de arena según la sustitución aislada; son fallos geométricos de mallado y **no justifican cambiar curvas JMatPro, coeficientes termofísicos ni el baseline C14**. El caso cuasi-2D del doctor se estudió solo como alternativa de construcción de malla, no como nueva referencia de propiedades ni CFD validado. [Registro de mallado](docs/C3D_02_ABLACION_STL_V2_20261118_ES.md) · [metodología original](docs/C3D_02_REFERENCIA_DOCTOR_Y_OPCIONES_MALLADO_20261118_ES.md).
+
 > **Anotación 2026-11-12 — Reinicio C3D-02:** se copiaron sin alterar valores los materiales C14 (`castIron`, `silica`, `fvModels`, `g`, `pRef`) al nuevo caso fuente, como baseline de comparación, **no** como valores nuevos de JMatPro. No cerrar J0 por copia de propiedades. Las mallas C3D-01 son pruebas históricas; sin CFD 3D ni interfaz térmica final. [Reinicio](docs/C3D_REINICIO_20261112_ES.md).
 
 # Auditoría JMatPro → OpenFOAM — MasterProject / QuickCup
