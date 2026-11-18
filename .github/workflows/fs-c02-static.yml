@@ -30,6 +30,8 @@ on:
       - 'analysis_tools/test_audit_fs_c04_fluid_mold.py'
       - 'analysis_tools/run_fs_c04_mesh.py'
       - 'analysis_tools/test_run_fs_c04_mesh.py'
+      - 'analysis_tools/audit_fs_c04_metal_seed.py'
+      - 'analysis_tools/test_audit_fs_c04_metal_seed.py'
       - 'freesurface/FS-C04_fluid_mold_mesh_pilot/**'
       - 'analysis_tools/diagnose_fs_c02_courant.py'
       - 'analysis_tools/test_diagnose_fs_c02_courant.py'
@@ -78,6 +80,8 @@ jobs:
         run: python3 -m unittest discover -s analysis_tools -p test_audit_fs_c04_fluid_mold.py -v
       - name: FS-C04 two-region native preparation isolation, zero CFD (NO OpenFOAM)
         run: python3 -m unittest discover -s analysis_tools -p test_run_fs_c04_mesh.py -v
+      - name: FS-C04 2368-cell metal-phase seed plan, analytic volume and CAD difference (NO CFD)
+        run: python3 -m unittest discover -s analysis_tools -p test_audit_fs_c04_metal_seed.py -v
       - name: Stage reference iron-air case outside Git checkout
         run: |
           python3 analysis_tools/run_fs_c02_local.py \
