@@ -60,3 +60,35 @@ Si falla la lectura de termodinámica o una BC, leer el log FS-C02_foamRun.log d
 7. Porosidad y feeding son física adicional y requieren validación independiente.
 
 Los tests del repositorio son solo sintéticos; NO ejecutan OpenFOAM ni prueban estos criterios físicos.
+
+
+## Primera ejecución real FS-C02: 2026-11-17 (hora local), 2026-11-18 (UTC)
+
+Salida textual comunicada por el investigador, con el **código fuente en commit f226913da** y **OpenFOAM 14**:
+
+    /home/michel/OpenFOAM/FS_C02_RUNS/FS-C02_20261118T005412Z_c04dfcf6
+
+Dentro de esa carpeta, el ejecutor FS-C02 imprimió la creación de un caso independiente y registró ejecución de `blockMesh`, `checkMesh`, `foamRun`, finalizando con:
+
+    FS-C02 foamRun completed. MASS, INTERFACE, THERMAL PHYSICS, SHRINKAGE UNVERIFIED.
+
+Los gates del ejecutor exigen salida de proceso 0 y ausencia de error de mallado / marcador final de solver. **Estado documentado: LOCAL_FOAMRUN_COMPLETED_REPORTED; NO análisis de campos ni validación física todavía**. No se dispone aquí de los logs o campos numéricos completos de la laptop; no afirmar valor real de volumen, alpha o Courant.
+
+La corrida se hizo en `~/OpenFOAM/FS_C02_WORKTREE`; **FS-C01, B14 y C3D-02 permanecen separados**. La rama experimentó solo el cambio programático, no el solver local.
+
+## Auditar la corrida FS-C02 existente, sin relanzar CFD
+
+Obtener la última versión de **esta rama** en el worktree FS-C02 existente (no en `~/OpenFOAM/MasterProject`). Confirmar antes que no haya archivos modificados que necesiten conservarse:
+
+    cd ~/OpenFOAM/FS_C02_WORKTREE
+    git status --short
+    git fetch origin research/fs-c02-metal-air-vof-20261117
+    git switch --detach FETCH_HEAD
+
+Leer el caso original y escribir un informe en un directorio completamente separado:
+
+    python3 analysis_tools/audit_fs_c02_local.py       --run ~/OpenFOAM/FS_C02_RUNS/FS-C02_20261118T005412Z_c04dfcf6       --out ~/OpenFOAM/FS_C02_AUDITS/FS-C02_20261118T005412Z_c04dfcf6_screen1
+
+**No repite blockMesh, checkMesh ni foamRun. No escribe dentro de la carpeta de corrida.** El reporte `FS-C02_NUMERICAL_SCREEN.json` contiene: 0–0.1 s del volumen integrado, máxima deriva, alfa mínimo/máximo en campo final y número de celdas, integral espacial de alpha en el mallado uniforme, masa derivada (rhoConst × V), Courant máximo del log completo, checksums de procedencia, alertas y límites científicos. Falla si faltan entradas/campos originales, identidad del caso o manifiesto SHA-256, o si alguna prueba supera tolerancia. Nunca interpreta una superficie equivalente como altura real ni declara shrinkage/mass real, porque no hay fracción sólida ni rho(T,f_s).
+
+Este audit de Python tiene pruebas sintéticas pero requiere el archivo original `0.1/alpha.metal`; si la versión real de OpenFOAM lo representa de un modo distinto, fallará de manera segura y habrá que estudiar el formato sin inventar datos. Guardar resultados completos para revisión de malla, energía y las siguientes etapas B-FS/B-SH.
