@@ -1,0 +1,125 @@
+#!/usr/bin/env bash
+# C3D-05: independent CAD STEP/OpenCASCADE/Gmsh -> native OpenFOAM 14 topology pilot.
+# Fresh output only; no mesh overwrite, no physical conditions or CFD.
+set -Eeuo pipefail
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+REPO="$(cd "$ROOT/../.." && pwd)"
+OUT="${C3D05_OUT:-$HOME/OpenFOAM/C3D05_STEP_GMSH_PILOT_01}"
+METAL_STEP="${C3D05_METAL_STEP:-}"
+MOLD_STEP="${C3D05_MOLD_STEP:-}"
+STAGE="STEP_PREFLIGHT"
+if [[ "$OUT" != /* ]]; then echo "C3D05_OUT must be an absolute path" >&2; exit 2; fi
+if [[ -z "$METAL_STEP" || -z "$MOLD_STEP" ]]; then
+  echo "BLOCKED_INPUT: export TWO aligned SolidWorks CAD solids (.step/.stp)" >&2
+  echo "Use C3D05_METAL_STEP=/path/metal.step C3D05_MOLD_STEP=/path/mold.step" >&2
+  echo "No mesh has been generated, no CFD executed."
+  exit 3
+fi
+[[ "$METAL_STEP" == /* && "$MOLD_STEP" == /* ]] || { echo "STEP paths must be absolute" >&2; exit 2; }
+[[ -s "$METAL_STEP" && -s "$MOLD_STEP" ]] || { echo "Missing STEP input(s): $METAL_STEP / $MOLD_STEP" >&2; exit 2; }
+[[ "$METAL_STEP" != "$MOLD_STEP" ]] || { echo "Metal and mold STEP must differ" >&2; exit 2; }
+if [[ -e "$OUT" || -L "$OUT" ]]; then
+  echo "PRESERVED: output exists; refusing overwrite: $OUT" >&2
+  exit 2
+fi
+[[ -r /opt/openfoam14/etc/bashrc ]] || { echo "Foundation 14 bashrc not found" >&2; exit 2; }
+set +u
+source /opt/openfoam14/etc/bashrc
+set -u
+command -v gmshToFoam >/dev/null || { echo "Foundation 14 gmshToFoam not found" >&2; exit 2; }
+command -v splitMeshRegions >/dev/null || { echo "Foundation 14 splitMeshRegions not found" >&2; exit 2; }
+command -v checkMesh >/dev/null || { echo "Foundation 14 checkMesh not found" >&2; exit 2; }
+python3 -c 'import gmsh' >/dev/null 2>&1 || {
+  echo "Python gmsh bindings are not installed in current python3 environment" >&2
+  echo "No CAD read or mesh generated. Install/verify python3-gmsh separately." >&2
+  exit 2
+}
+mkdir -p "$OUT/system"
+cp "$ROOT/system/controlDict" "$OUT/system/controlDict"
+cat > "$OUT/NATIVE_BUILD_STATUS.txt" <<EOF
+C3D05_STEP_INPUTS_PRESENT / NO_CFD
+Metal CAD: $METAL_STEP
+Mold CAD: $MOLD_STEP
+Runner source: $ROOT
+EOF
+fail() {
+  echo "REJECTED / stage=$STAGE / $1 / NO_CFD" | tee "$OUT/NATIVE_BUILD_STATUS.txt" >&2
+  echo "Preserved: $OUT" >&2
+  exit 5
+}
+run_stage() {
+  STAGE="$1"; shift
+  echo "RUNNING / stage=$STAGE / NO_CFD" > "$OUT/NATIVE_BUILD_STATUS.txt"
+  if ! "$@" > "$OUT/log.$STAGE" 2>&1; then
+    tail -n 45 "$OUT/log.$STAGE" >&2 || true
+    fail "See log.$STAGE"
+  fi
+}
+run_stage gmsh3d python3 "$ROOT/scripts/build_step_mesh.py" \
+  --metal "$METAL_STEP" --mold "$MOLD_STEP" --out "$OUT"
+[[ -s "$OUT/cad_multivolume.msh" && -s "$OUT/STEP_CAD_AUDIT.json" ]] || fail "Missing Gmsh mesh or CAD report"
+run_stage gmshToFoam gmshToFoam "$OUT/cad_multivolume.msh" -case "$OUT"
+[[ -s "$OUT/constant/polyMesh/cellZones" ]] || fail "gmshToFoam created no physical cellZones"
+for material in metal mold; do
+  grep -Eq "(^|[^[:alnum:]_])$material([^[:alnum:]_]|$)" "$OUT/constant/polyMesh/cellZones" ||
+    fail "Converted mesh missing $material cellZone"
+done
+run_stage checkMesh.parent checkMesh -case "$OUT" -allGeometry -allTopology -writeSurfaces -writeSets
+run_stage splitMeshRegions splitMeshRegions -case "$OUT" -cellZones 'metal mold' -noFields
+for region in metal mold; do
+  [[ -s "$OUT/constant/$region/polyMesh/boundary" ]] || fail "Missing $region mesh after split"
+done
+[[ ! -e "$OUT/constant/exterior/polyMesh" ]] || fail "Unexpected exterior volumetric region"
+# Run checkMesh on BOTH regions even if one fails.
+STAGE=CHECK_REGION_QUALITY
+accepted=1
+printf 'region\tcells\tvolume_m3\tCAD_m3\tmesh_ok\n' > "$OUT/PILOT_MESH_REPORT.tsv"
+source "$REPO/cases_3d/C3D_02_metal_sand_clean/scripts/native_checkmesh_report.sh"
+for region in metal mold; do
+  log="$OUT/log.checkMesh.$region"
+  if ! checkMesh -case "$OUT" -region "$region" -allGeometry -allTopology -writeSurfaces -writeSets > "$log" 2>&1; then
+    accepted=0
+  fi
+  ncells="$(awk '/^[[:space:]]*cells:/{print $2; exit}' "$log")"
+  volume="$(foam_checkmesh_total_volume "$log")"
+  if [[ "$region" == metal ]]; then cad="4.7987697e-05"; else cad="1.02843333e-04"; fi
+  verdict="NO"
+  if [[ -n "$ncells" && "$ncells" -gt 0 && -n "$volume" ]] &&
+     grep -Eq '(^|[[:space:]])Mesh OK' "$log" &&
+     grep -Eq 'Number of regions:[[:space:]]*1([^0-9]|$)' "$log" &&
+     ! grep -Eq 'Failed[[:space:]]+[1-9][0-9]*[[:space:]]+mesh checks' "$log" &&
+     awk -v v="$volume" -v target="$cad" 'BEGIN{err=v/target-1; exit !(v>0 && err>=-0.02 && err<=0.02)}'; then
+    verdict="YES"
+  else
+    accepted=0
+  fi
+  printf '%s\t%s\t%s\t%s\t%s\n' "$region" "${ncells:-NA}" "${volume:-NA}" "$cad" "$verdict" >> "$OUT/PILOT_MESH_REPORT.tsv"
+done
+if ! grep -Eq '(^|[[:space:]])Mesh OK' "$OUT/log.checkMesh.parent" ||
+   grep -Eq 'Failed[[:space:]]+[1-9][0-9]*[[:space:]]+mesh checks' "$OUT/log.checkMesh.parent"; then
+  accepted=0
+fi
+if (( accepted != 1 )); then
+  cat "$OUT/PILOT_MESH_REPORT.tsv"
+  fail "Native mesh quality, connectivity or physical volume gate failed"
+fi
+STAGE=CHECK_INTERFACE
+bash "$REPO/cases_3d/C3D_02_metal_sand_clean/scripts/native_interface_audit.sh" "$OUT" > "$OUT/PILOT_INTERFACE_REPORT.txt" || fail "Interface audit failed"
+if ! grep -Eq 'PATCH name=metal_to_mold type=mappedWall nFaces=[1-9][0-9]* neighbourRegion=mold neighbourPatch=mold_to_metal' "$OUT/PILOT_INTERFACE_REPORT.txt"; then
+  fail "metal_to_mold not mappedWall with reciprocal metadata"
+fi
+if ! grep -Eq 'PATCH name=mold_to_metal type=mappedWall nFaces=[1-9][0-9]* neighbourRegion=metal neighbourPatch=metal_to_mold' "$OUT/PILOT_INTERFACE_REPORT.txt"; then
+  fail "mold_to_metal not mappedWall with reciprocal metadata"
+fi
+STAGE=CHECK_CONTACT_AREA
+if ! python3 "$ROOT/scripts/measure_interface_area.py" "$OUT" \
+      --out "$OUT/CONTACT_AREA_REPORT.json" > "$OUT/log.contactArea" 2>&1; then
+  tail -n 45 "$OUT/log.contactArea" >&2 || true
+  fail "Contact area, top area or reciprocity failed"
+fi
+printf 'MESH_TOPOLOGY_AND_AREA_PRELIMINARILY_ACCEPTED / NO_CFD\nMesh independence and 3D physical BC unverified.\n' > "$OUT/NATIVE_BUILD_STATUS.txt"
+cat "$OUT/PILOT_MESH_REPORT.tsv"
+cat "$OUT/PILOT_INTERFACE_REPORT.txt"
+cat "$OUT/log.contactArea"
+echo "C3D-05 topology-only CAD mesh completed. NO CFD."
+echo "Result: $OUT"
