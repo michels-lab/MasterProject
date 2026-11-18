@@ -37,3 +37,22 @@ La geometría no es cilíndrica ni un prisma rectangular exacto. No sustituir am
 **Confirmación del investigador:** las cuatro paredes laterales exteriores de la arena intercambian calor con aire ambiental, igual que la cara superior expuesta. El dominio de gas debe rodear el molde 3D (dejando sin invadir las paredes sólidas) y conectar lateralmente con el volumen sobre la abertura. Esto cambia el dominio de una columna vertical a una **envolvente de aire exterior alrededor del molde**. La ampliación deberá respetar los STL reales y no construirse con una caja de metal/arena ficticia. La elección de dimensiones exteriores se hará mediante sensibilidad de frontera.
 
 La base no se clasificará automáticamente como toda expuesta: el CAD contiene un hueco inferior y el montaje podría tener apoyos; modelaremos aire donde haya una cavidad efectivamente abierta y contacto térmico donde haya apoyo. **Ni el nuevo dominio 3D ni su solver multirregión se han construido/validado todavía**. Por seguridad sigue prohibido ejecutar como caso físico el piloto vertical `run_fs_c02_high_headspace.py` (modo `--stage-only` exclusivamente).
+
+## Actualización de implementación: piloto FS-C03 creado (malla NO CFD)
+
+Ya se creó el piloto independiente `freesurface/FS-C03_exterior_air_pilot/` basado en los **24 bloques originales de C3D-03**, ampliados con **29 bloques de aire** sobre el metal, sobre la arena y en los **cuatro costados** de la arena. La nueva topología tiene **53 bloques, 84 vértices y 42,048 celdas previstas** (metal 2,368; arena 7,680; aire 32,000), pero sigue siendo una **aproximación geométrica**, no la reproducción CAD exacta ni un solver combinado VOF+CHT. La auditoría de conteo de caras en la construcción no detectó superficies exteriores sin parche; `checkMesh` y la separación nativa todavía deben ejecutarse para confirmarlo.
+
+Las interfaces topológicas teóricas son metal–arena (13 caras de bloque), metal–aire (1 cara de bloque en la boca) y arena–aire (24 caras de bloque: 4 superiores + 20 laterales). **Esto mejora el criterio físico sobre la región exterior del aire**, sin resolver todavía la exposición del hueco inferior ni la conducción/convección real.
+
+El volumen gaseoso experimental se extiende horizontalmente a x/z de `-30` a `81.8 mm`, verticalmente a y de `-65.5` a `+80 mm`, sin ocupar el sólido arena. `atmosphereTop`/`atmosphereSides`/`atmosphereLowerSides` son parches externos abiertos, mientras que la arena intercambiará calor con el gas en interfaces materiales **todavía sin BC térmicas implementadas**. Las distancias externas son provisionales para sensibilidad de malla.
+
+Se incluyen:
+- `system/blockMeshDict` y `system/controlDict` de malla-only.
+- `reference/C3D03_base_blockMeshDict` como copia inmutable de la geometría base.
+- `analysis_tools/audit_fs_c03_exterior_mesh.py` para verificar propiedad de caras, zonas e interconectividad (sin OpenFOAM).
+- `analysis_tools/run_fs_c03_mesh.py` para copiar a un directorio externo nuevo; con `--native` prueba `blockMesh/checkMesh/splitMeshRegions` **sin ejecutar CFD**.
+- Pruebas de regresión que prohíben el techo falso, solapes topológicos, aire faltante sobre arena o en los costados y sobrescritura de ensayos anteriores.
+
+**Clave de solver:** la separación de `metal/mold/air` en **tres regiones nativas es diagnóstica**. El eventual caso metal–aire de superficie libre requiere un **fluido único** con `alpha.metal`, y arena como sólido separado con acoplamiento térmico. No confundir la topología separada de este piloto con un caso multirregión térmico operativo ni declarar `foamMultiRun` ejecutado.
+
+Instrucciones: [FS-C03 README](../freesurface/FS-C03_exterior_air_pilot/README.md). Estado real: **sólo construcción y pruebas estáticas; sin mallado nativo ni CFD verificados**.
