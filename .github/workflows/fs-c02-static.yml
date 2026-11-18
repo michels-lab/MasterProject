@@ -1,0 +1,44 @@
+name: FS-C02 metal-air VOF staging and isolation (NO CFD)
+
+on:
+  pull_request:
+    paths:
+      - 'analysis_tools/run_fs_c02_local.py'
+      - 'analysis_tools/test_run_fs_c02_local.py'
+      - 'freesurface/FS-C02/**'
+      - '.github/workflows/fs-c02-static.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  fs-c02-static:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Compile FS-C02 staging and tests (Python only)
+        run: python3 -m py_compile analysis_tools/run_fs_c02_local.py analysis_tools/test_run_fs_c02_local.py
+      - name: FS-C02 isolated synthetic source tests (NO OpenFOAM)
+        run: python3 -m unittest discover -s analysis_tools -p test_run_fs_c02_local.py -v
+      - name: Stage reference iron-air case outside Git checkout
+        run: |
+          python3 analysis_tools/run_fs_c02_local.py \
+            --stage-only --out /tmp/FS-C02_static_1
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          x=Path("/tmp/FS-C02_static_1")
+          m=json.loads((x/"FS-C02"/"FS-C02_MANIFEST.json").read_text())
+          assert m["case_id"]=="FS-C02"
+          assert m["status"]=="PREPARED_NOT_MESHED_OR_RUN"
+          assert m["physical_assumptions"]["contraction"] is False
+          assert m["physical_assumptions"]["solidification"] is False
+          assert len(m["generated_input_sha256"])==20
+          assert not (x/"FS-C02"/"constant"/"polyMesh").exists()
+          assert not (x/"FS-C02"/"postProcessing").exists()
+          print("FS-C02 staged only, no blockMesh/foamRun or physical verification claimed")
+          PY
