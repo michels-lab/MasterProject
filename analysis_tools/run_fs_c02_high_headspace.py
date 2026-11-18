@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""FS-C02: 120mm atmospheric OPEN TOP / 80mm air headspace, RAS only.
+"""FS-C02: 120mm vertical-only atmospheric geometry study, STAGE-ONLY.
 
 Geometry sensitivity A/B relative to existing FS-C02_EXTENDED 60mm domain:
 - same 40mm initial metal column, same 40mm horizontal span and 10mm depth;
@@ -10,7 +10,7 @@ Geometry sensitivity A/B relative to existing FS-C02_EXTENDED 60mm domain:
 - RAS kEpsilon and VoFTurbulenceDamping unchanged (NO laminar);
 - initial air 300K, metal 1500K, Co target .15, tolerance .20, 0.01s.
 
-OpenFOAM Foundation 14 only. Does NOT change any earlier run and does NOT
+Not approved for CFD: air is NOT extended over the physical sand mold.\nOpenFOAM Foundation 14 only. Does NOT change any earlier run and does NOT
 represent a real mold solid / CHT / solidification / shrinkage. The upper
 extension is an OUTSIDE air plenum, not an artificial increase in mold cavity.
 A signed patch phi sum is NOT independently measured phase-resolved air mass.
@@ -244,8 +244,14 @@ def main(argv=None) -> int:
             datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")+"_"+uuid.uuid4().hex[:8])
     out=(args.out or Path.home()/"OpenFOAM"/"FS_C02_HIGH_AIR_RUNS"/newname).expanduser().resolve()
     try:
-        if not args.stage_only:
-            check_runtime()
+        # Do not run this old 40mm-wide air column as a substitute for
+        # exterior air over the REAL 51.8mm-wide QuickCup sand mold.
+        # Keep stage-only for geometry/provenance studies; no CFD until a
+        # conforming metal+sand+exterior-air multiregion mesh is designed.
+        check(args.stage_only,
+              "GEOMETRY BLOCK: 120mm pilot is only a 40mm-wide vertical air column; "
+              "it omits air above the 51.8mm sand mold. Use --stage-only "
+              "for historical geometry inspection; do not run this as physical CFD.")
         case,status=prepare(out)
         print("FS-C02 HIGH-AIR stage: "+str(case),flush=True)
         print("TOP open patch at y=0.12 m; metal 0-0.04 m; 80 mm of air above.",flush=True)
