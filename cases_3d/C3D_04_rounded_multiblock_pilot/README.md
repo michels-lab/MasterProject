@@ -68,3 +68,9 @@ El medidor `scripts/measure_interface_area.py` utiliza solamente la biblioteca e
 - [Caso original del doctor](../../doctor_original/cht/system/blockMeshDict)
 - [Estrategia A/B/C](../../docs/C3D_02_ESTRATEGIA_MALLADO_CONFORMANTE_20261118_ES.md)
 - [Primer avance del director](../../docs/PRIMER_AVANCE_REQUISITOS_DIRECTOR_20261118_ES.md)
+
+## Auditoría estructural adicional — 18-11-2026 (Caso A)
+
+Se revisó el `blockMeshDict` de C3D-04 **sin ejecutar OpenFOAM**, recorriendo las conectividades de los 180 bloques y sus 716 aristas únicas. El conteo estático confirma 280 vértices, 63 bloques de metal, 117 de arena, 8,960 + 12,352 celdas previstas, 144 arcos sobre aristas de bloques, 162 caras exteriores asignadas una sola vez y 2,496 caras de contacto previstas por región. No se encontraron discrepancias de subdivisión en aristas compartidas, caras compartidas con distinta discretización, arcos sin bloque ni caras exteriores huérfanas. **Esto es un cálculo estructural del diccionario, no un resultado nativo de `checkMesh`.**
+
+Para hacer repetible esta revisión, se añadió `scripts/audit_blockmesh_topology.py` a la prueba `tests/test_rounded_multiblock_static.sh`. Este verificador utiliza solo la biblioteca estándar Python; inspecciona los bloques, caras, arcos y parches declarados, y no modifica ni genera mallas. Se ejecuta automáticamente al lanzar el test estático documentado arriba. A fecha de esta nota, **la nueva prueba no se ha ejecutado en Ubuntu WSL** y C3D-04 permanece `PREPARED_NOT_RUN / NO_CFD` hasta registrar la salida nativa de Foundation 14. Si la prueba reporta `REJECTED`, no omitirla: corregir el origen del rechazo antes de usar `Allmesh`.
