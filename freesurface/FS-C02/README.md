@@ -233,3 +233,21 @@ La carpeta `--out` debe ser nueva; el auditor jamás reemplaza reportes previos 
 **Alcance:** el cribado numérico de esta corrida 0.01 s sí PASÓ. La media ponderada por gas `sum((1-alpha)*T)/sum(1-alpha)` de ~757 K **NO** representa necesariamente solo el gas puro; cada celda parcialmente ocupada contribuye. Verificar T espacial de gas casi puro y zona interfacial y su evolución temporal antes de asociar 757 K a calentamiento gaseoso físicamente válido. Las condiciones termofísicas siguen siendo provisionales y no hay validación de conservación de energía, flujos de contorno, temperatura por termopar, curva de solidificación, fracción sólida, cambio de volumen/contracción, feeding, grafitización ni CHT metal–molde. No atribuir éxito metalúrgico ni afirmar que `alpha.metal` equivale a fracción sólida.
 
 **Decisión:** usar los campos ya guardados de la misma corrida para comprobar temperaturas y clasificación gas/interfaz/metal; no repetir `foamRun` automáticamente ni modificar fuentes de B14, FS-C01 o C3D-02.
+
+## 2026-11-18 — Diagnóstico espacial de temperatura/interfaz sin volver a correr CFD
+
+Para investigar `T_gas_weighted≈757.02 K` del cribado extendido y evitar confundir la media ponderada de la fase con una temperatura experimental del gas, se añade `analysis_tools/inspect_fs_c02_thermal.py`. Este **lee únicamente** `alpha.metal` y `T` de cada carpeta de tiempo guardada de la corrida 0.01 s, valida los 20 hashes de entradas congeladas y confirma estado `PROBE_COURANT_SCREEN_PASSED`.
+
+Estadísticas por tiempo, por regiones **numéricas, no fases sólidas**:
+- gas semejante: `alpha.metal <= 0.01`
+- zona mixta/interfacial: `0.01 < alpha.metal < 0.99`
+- metal semejante: `alpha.metal >= 0.99`.
+
+Se informan conteos de celdas, media/mínimo/máximo/mediana térmicos, celdas por encima de 500/1000 K, media por ponderación VOF y volumen `sum(alpha.metal)*V_celda`. Se separan las colas diminutas de `alpha`, que en el auditor previo daban 3240 celdas formalmente estrictas `0 < alpha < 1` **sin que todas constituyan un frente interfacial físicamente resuelto**. El campo T es **único por celda de mezcla**: ninguna clasificación representa por sí misma dos temperaturas independientes de metal y aire ni un balance de energía.
+
+Comando desde `~/OpenFOAM/FS_C02_WORKTREE`, tras actualizar solamente este worktree a `research/fs-c02-metal-air-vof-20261117`:
+
+    python3 analysis_tools/inspect_fs_c02_thermal.py \
+      --run ~/OpenFOAM/FS_C02_RUNS/FS-C02_EXTENDED_20261118T181711Z_d6b6ab92
+
+El programa imprime un JSON y **no escribe informes ni modifica archivos**, ni vuelve a correr `blockMesh`, `checkMesh` o `foamRun`. El análisis numérico de interfaz/temperatura debe revisarse antes de avanzar al acoplamiento metal–molde y `VoFSolidificationMelting`. No inferir solidificación, contracción ni alimentación de un caso que no los representa.
