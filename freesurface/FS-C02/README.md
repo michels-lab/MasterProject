@@ -208,3 +208,28 @@ Comando de lectura desde `~/OpenFOAM/FS_C02_WORKTREE` actualizado (sin modificar
       --out ~/OpenFOAM/FS_C02_AUDITS/FS-C02_EXTENDED_20261118T181711Z_d6b6ab92_screen1
 
 La carpeta `--out` debe ser nueva; el auditor jamás reemplaza reportes previos ni ejecuta `foamRun`. El resultado de este **nuevo análisis** queda pendiente de ejecutar en la laptop del investigador.
+
+## 2026-11-18 — Auditoría local real de FS-C02_EXTENDED: NUMERICAL_SCREEN_PASSED
+
+**Evidencia completa aportada en el chat por el investigador** desde OpenFOAM 14, sobre la corrida real `FS-C02_EXTENDED_20261118T181711Z_d6b6ab92` (hasta t=0.01 s), analizada con commit `aa358ea67`. El informe declara `NUMERICAL_SCREEN_PASSED` y `alerts=[]`.
+
+| Indicador observado | Resultado |
+| --- | --- |
+| Muestras del volumen | 11, t=0 a 0.01 s |
+| V inicial/final de metal | 1.6e-05 / 1.6e-05 m³ |
+| Máxima deriva relativa de volumen almacenado | 0.0 a precisión de salida (NO exactitud analítica) |
+| Volumen calculado desde campo alpha final | 1.600000078683636e-05 m³ |
+| Diferencia relativa campo vs función | 4.9177272632783605e-08 |
+| alpha.metal mínima/máxima | 8.83813e-27 / 1.0 |
+| Celdas | 9600, de las cuales 3240 satisfacen 0<alpha<1 **estrictamente**; esto incluye colas numéricas diminutas y no mide espesor de interfaz |
+| Masa inicial y final DERIVADA de rhoConst=6820 | ~0.10912 kg; NO balance de masa independiente |
+| 10200 observaciones de Courant | Co máximo histórico 0.163617, último 0.00119836; límite de aceptación 0.20 |
+| Courant de interfaz máximo | 0.00272587, último 4.01924e-05 |
+| Campo T final mínimo/máximo | 303.835 K / 1500 K |
+| Promedio T ponderado por alpha.metal | 1499.9373581645336 K |
+| Promedio T ponderado por (1-alpha.metal) | 757.0212621642578 K; requiere evaluación de gas puro vs zona mixta |
+| Alertas | ninguna |
+
+**Alcance:** el cribado numérico de esta corrida 0.01 s sí PASÓ. La media ponderada por gas `sum((1-alpha)*T)/sum(1-alpha)` de ~757 K **NO** representa necesariamente solo el gas puro; cada celda parcialmente ocupada contribuye. Verificar T espacial de gas casi puro y zona interfacial y su evolución temporal antes de asociar 757 K a calentamiento gaseoso físicamente válido. Las condiciones termofísicas siguen siendo provisionales y no hay validación de conservación de energía, flujos de contorno, temperatura por termopar, curva de solidificación, fracción sólida, cambio de volumen/contracción, feeding, grafitización ni CHT metal–molde. No atribuir éxito metalúrgico ni afirmar que `alpha.metal` equivale a fracción sólida.
+
+**Decisión:** usar los campos ya guardados de la misma corrida para comprobar temperaturas y clasificación gas/interfaz/metal; no repetir `foamRun` automáticamente ni modificar fuentes de B14, FS-C01 o C3D-02.
