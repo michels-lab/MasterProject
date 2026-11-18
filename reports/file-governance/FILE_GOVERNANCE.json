@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "audit_kind": "deterministic_full_tracked_tree",
-  "tracked_files_total": 38837,
-  "classified_files_total": 38832,
+  "tracked_files_total": 38838,
+  "classified_files_total": 38833,
   "docs_content_inspected": 140,
   "large_docs_skipped": 0,
   "excluded_reports": 5,
@@ -19,7 +19,7 @@
     "simulation_input": 2678,
     "simulation_log": 3155,
     "simulation_output": 32613,
-    "source": 63,
+    "source": 64,
     "test": 21,
     "web_ui": 1,
     "workflow": 19
@@ -28,8 +28,8 @@
     "POTENTIAL_UNLOGGED_CHANGES": 2
   },
   "finding_total": 2,
-  "inventory_fingerprint": "fff66108987a77354ef5f943f7597ad20c37238ef8082fc8e1020faa2271fea8",
-  "evidence_fingerprint": "bf821818b71afbcc7b8d719481f3a5570a5ba08b3891830cfa0853c84d1a6626",
+  "inventory_fingerprint": "284e828a362f807de0bef7580832c183aaebff432a5f87460740f0cc611d65cd",
+  "evidence_fingerprint": "c14e04458ca15ae8fc16dab83de0f3e7fa20fc8d92b51d8572dd2a21811e04ae",
   "files": [
     {
       "path": ".github/agents/openfoam-solidification.agent.md",
@@ -323,7 +323,7 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "67f34d3296d68f92bd9a52b5b4361e1b94cf3c5b"
+      "blob": "73a514d9677bd8521822ff92022e58426dff1a2b"
     },
     {
       "path": "RUN_CASE_REGISTRY.csv",
@@ -1079,7 +1079,7 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "268d56bc42da063703032b4bd9086a7e49e935db"
+      "blob": "0998ec06fa9ec60404033be08c09d522cd33dec9"
     },
     {
       "path": "cases_3d/C3D_02_metal_sand_clean/constant/geometry/README.md",
@@ -1185,6 +1185,13 @@
       "purpose": "code/test implementation",
       "certainty": "rule",
       "blob": "5da670857294f8b3ddbef8858477a65f9201ebeb"
+    },
+    {
+      "path": "cases_3d/C3D_02_metal_sand_clean/scripts/audit_stl_surfaces_of14.sh",
+      "role": "source",
+      "purpose": "code/test implementation",
+      "certainty": "rule",
+      "blob": "1c5cd745df4bacdefc88cb437bb3a54adcfd2257"
     },
     {
       "path": "cases_3d/C3D_02_metal_sand_clean/scripts/build_c3d02.py",
@@ -271858,20 +271865,20 @@
   ],
   "findings": [
     {
-      "id": "34898be3f167929b",
+      "id": "f503adcf956321e1",
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_EN.md",
-      "observation": "13 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_02_metal_sand_clean/scripts/build_c3d02.py, cases_3d/C3D_02_metal_sand_clean/scripts/check_stl_v2.sh, cases_3d/C3D_02_metal_sand_clean/scripts/diagnose_stl_v2_zones.sh, cases_3d/C3D_02_metal_sand_clean/scripts/native_checkmesh_report.sh, cases_3d/C3D_02_metal_sand_clean/scripts/native_interface_audit.sh, cases_3d/C3D_02_metal_sand_clean/scripts/run_stl_v2_ablation.sh",
+      "observation": "14 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_02_metal_sand_clean/scripts/audit_stl_surfaces_of14.sh, cases_3d/C3D_02_metal_sand_clean/scripts/build_c3d02.py, cases_3d/C3D_02_metal_sand_clean/scripts/check_stl_v2.sh, cases_3d/C3D_02_metal_sand_clean/scripts/diagnose_stl_v2_zones.sh, cases_3d/C3D_02_metal_sand_clean/scripts/native_checkmesh_report.sh, cases_3d/C3D_02_metal_sand_clean/scripts/native_interface_audit.sh",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     },
     {
-      "id": "4be42a49369ce8c0",
+      "id": "3e579dc964d0302d",
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_ES.md",
-      "observation": "13 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_02_metal_sand_clean/scripts/build_c3d02.py, cases_3d/C3D_02_metal_sand_clean/scripts/check_stl_v2.sh, cases_3d/C3D_02_metal_sand_clean/scripts/diagnose_stl_v2_zones.sh, cases_3d/C3D_02_metal_sand_clean/scripts/native_checkmesh_report.sh, cases_3d/C3D_02_metal_sand_clean/scripts/native_interface_audit.sh, cases_3d/C3D_02_metal_sand_clean/scripts/run_stl_v2_ablation.sh",
+      "observation": "14 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_02_metal_sand_clean/scripts/audit_stl_surfaces_of14.sh, cases_3d/C3D_02_metal_sand_clean/scripts/build_c3d02.py, cases_3d/C3D_02_metal_sand_clean/scripts/check_stl_v2.sh, cases_3d/C3D_02_metal_sand_clean/scripts/diagnose_stl_v2_zones.sh, cases_3d/C3D_02_metal_sand_clean/scripts/native_checkmesh_report.sh, cases_3d/C3D_02_metal_sand_clean/scripts/native_interface_audit.sh",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     }
