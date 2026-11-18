@@ -66,3 +66,25 @@ El ejecutor `--native` crea un caso nuevo único en `~/OpenFOAM/FS_C03_AIR_TOPOL
 5. **Validación metalúrgica:** solo tras lo anterior incorporar entalpía de fusión, microestructura/expansión por grafitización, contracción y cotejo con curvas QuickCup.
 
 **Ningún caso de C3D-02, B14, FS-C01, FS-C02 RAS o el experimento laminar archivado se modifica o elimina.** Esta es una tercera línea piloto independiente de mallado.
+
+## 2026-11-18 — RESULTADO NATIVO REAL CONFIRMADO por Ubuntu Foundation 14
+
+El investigador ejecutó en su laptop (OpenFOAM Foundation 14) desde commit `b96f863e2`:
+
+```bash
+python3 analysis_tools/audit_fs_c03_exterior_mesh.py &&
+python3 -m unittest discover -s analysis_tools -p 'test_*fs_c03*.py' -v &&
+python3 analysis_tools/run_fs_c03_mesh.py --native
+```
+
+**Evidencia textual aportada directamente:**
+- `STATIC_TOPOLOGY_CONSISTENT_NOT_NATIVE_CHECKMESH`; 84 vértices, 53 bloques, 42,048 celdas previstas, aire único conectado en 29 bloques, 20 bloques laterales y nueve sobre la superficie superior; todas las caras asignadas; 3 interfaces de materiales; Jacobianos de esquina positivos y subdivisiones conformes.
+- `Ran 15 tests in 0.104s` y `OK` (incluye un rechazo esperado de una versión incorrecta de OpenFOAM, que es una prueba de seguridad y no una falla).
+- `FS-C03 mesh-only pilot staged: /home/michel/OpenFOAM/FS_C03_AIR_TOPOLOGY_20261118T202905Z_6ef0cd90`
+- `FS-C03 status: NATIVE_3_REGION_TOPOLOGY_PASSED_NO_CFD`.
+
+El ejecutor sólo emite ese estado si `blockMesh`, `checkMesh -allGeometry -allTopology` del padre y cada región, `splitMeshRegions`, conteos y `mappedWall` recíprocos pasan; también comprueba que las tres aberturas exteriores del aire son `patch`. El chat confirma el **gate nativo aprobado**; no se han recuperado los logs completos ni las métricas de no-ortogonalidad/skewness, y no se deben inventar.
+
+**Alcance estricto:** esto **aprueba topología y calidad según el gate nativo implementado**, no ajuste exacto a superficies STL, tratamiento correcto del apoyo/hueco inferior, campo fluido unificado, VOF, conducción conjugada, cierre energético ni solidificación. **No se ejecutó ningún solver CFD**. La carpeta real y todas las corridas anteriores se mantienen intactas.
+
+**Próximo proyecto independiente:** convertir sólo en nuevo piloto la región geométrica metal+aire a **una sola región fluida**, conservar arena como región sólida, mantener `alpha.metal` como marcador inicial de hierro frente a gas, y comprobar `mappedWall` fluido–arena y conectividad con `blockMesh/checkMesh` antes de agregar propiedades térmicas o solver. No modificar FS-C03 validado ni C3D-02.
