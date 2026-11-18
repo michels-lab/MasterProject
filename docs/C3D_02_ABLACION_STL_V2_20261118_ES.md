@@ -2,7 +2,7 @@
 
 ## Procedencia y alcance
 
-**Fuente primaria de los resultados:** salida literal de terminal proporcionada por el investigador, ejecutada en su equipo `Michel-DuarteHP`, bajo `~/OpenFOAM/MasterProject` con Foundation 14. El investigador ejecutó `git pull --ff-only`, `tests/test_native_allmesh_static.sh` y `scripts/run_stl_v2_ablation.sh`. Los tests estáticos declararon OK, pero **no equivalen a aprobación de malla ni de CFD**. Los logs de las variantes y el reporte completo permanecen en el WSL del investigador; el contenido de terminal se transcribe aquí, no se afirma haber descargado los logs binarios o VTK.
+**Fuente primaria de los resultados:** salida literal de terminal proporcionada por el investigador, ejecutada en su equipo `Michel-DuarteHP`, bajo `~/OpenFOAM/MasterProject` con Foundation 14. El investigador ejecutó `git pull --ff-only`, `tests/test_native_allmesh_static.sh` y `scripts/run_stl_v2_ablation.sh`. La salida compartida muestra **cuatro mensajes `OK` de subpruebas**, pero no incluye el mensaje final ni el código de retorno de `test_native_allmesh_static.sh`; por tanto **no se declara aprobada la suite estática completa**. Independientemente se ejecutó la ablación nativa, que **no equivale a aprobación de malla ni de CFD**. Los logs de las variantes y el reporte completo permanecen en el WSL del investigador; el contenido de terminal se transcribe aquí, no se afirma haber descargado los logs binarios o VTK.
 
 **Objetivo:** aislar el efecto de sustituir un solo STL, manteniendo los mismos controles de `blockMesh`, `snappyHexMesh` y los materiales físicos C14. Las geometrías originales y los STL v2 verificados se conservaron. No se ejecutó `foamMultiRun`.
 
