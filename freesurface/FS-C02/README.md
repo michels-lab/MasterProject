@@ -157,3 +157,16 @@ Comando de lectura, desde `~/OpenFOAM/FS_C02_WORKTREE`:
     python3 analysis_tools/diagnose_fs_c02_courant.py --run ~/OpenFOAM/FS_C02_RUNS/FS-C02_STARTUP_20261118T034734Z_75a1f5f9 --maxCo 0.20 --limit 5 --context 5
 
 **Nota científica:** `rhoConst=6820 kg/m3`, `Cv=827` y `sigma=1` continúan como hipótesis provisionales de la prueba hierro–aire; ni solidificación ni contracción han sido modeladas.
+
+## 2026-11-18 11:37 CST — Evaluación detallada de FS-C02_STARTUP (0–0.002 s)
+
+El investigador compartió el diagnóstico leído directamente de `FS-C02_STARTUP_20261118T034734Z_75a1f5f9`, de OpenFOAM Foundation 14:
+- `courant_observations=2072`; `courant_global_max=0.212768`; `courant_last_max=0.010811`.
+- **45 de 2072** observaciones superaron el objetivo 0.20 (2.17 %); ninguna superó 1 ni 5. Excedencia máxima relativa al objetivo: (0.212768/0.20−1)≈6.38 %.
+- Los cinco registros con los mayores Courant están en líneas 1396–1468 del log y se sitúan alrededor de 4.55123e−05 a 4.91430e−05 s (marcadores cercanos, no tiempos exactos de evaluación de Co).
+- El pico `Co_max=0.212768` (media `0.0227473`) está en línea 1414, entre marcadores `Time=4.63254e−05s` y `Time=4.70862e−05s`; `deltaT` antes `8.13093e−07 s` y después `7.60765e−07 s`.
+- `Interface Courant Number mean: 0 max: 0` para esos máximos no verifica por sí mismo movimiento de interfaz.
+
+**Interpretación limitada:** la reducción de deltaT y el comportamiento al final sugieren que la corrección temporal mejora sustancialmente respecto al primer arranque, pero no se ha demostrado estabilidad física del modelo ni la distribución temporal de todas las 45 excedencias. El control adaptativo no constituye una restricción dura del Courant en todas las iteraciones. No afirmar `NUMERICAL_SCREEN_PASSED` ni siquiera para el experimento corto.
+
+**Decisión experimental siguiente:** implementar un ensayo NUEVO de 0.01 s (cinco veces la duración del startup probe), `maxCo`/ `maxAlphaCo` de control **0.15**, sin mover el umbral de aceptación del auditor `Co_max <= 0.20`, y limitar `maxDeltaT=1e−6`. Esta propuesta es una prueba de sensibilidad temporal, NO calibración o prueba de las propiedades metalúrgicas (rhoConst, Cv, sigma siguen provisionales). Conservar el experimento fallido/REVIEW y no modificar B14, FS-C01 ni C3D-02. La corrida extendida solo podrá declararse ejecutada tras recibir salida real de Ubuntu.
