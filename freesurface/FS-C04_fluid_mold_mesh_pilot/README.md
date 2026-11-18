@@ -88,3 +88,23 @@ python3 -m unittest discover -s analysis_tools -p test_audit_fs_c04_metal_seed.p
 ```
 
 Este análisis **no necesita correr `blockMesh` de nuevo**. El resultado esperado es `ANALYTIC_METAL_SEED_IDENTIFIED_NO_FIELD_WRITTEN`, no `alpha` inicializado.
+
+## Siguiente gate implementado — identidad de las celdas nativas, sin crear campos
+
+Se añadió `analysis_tools/audit_fs_c04_native_metal_mapping.py` (SOLO LECTURA) para comparar las **dos corridas nativas ya terminadas** del mismo día:
+
+- FS-C03 de tres `cellZones`: `~/OpenFOAM/FS_C03_AIR_TOPOLOGY_20261118T202905Z_6ef0cd90`
+- FS-C04 de dos `cellZones`: `~/OpenFOAM/FS_C04_FLUID_MOLD_TOPOLOGY_20261118T204433Z_7fa8dc47`
+
+El nuevo auditor **NO ejecuta ninguna utilidad de OpenFOAM**. Valida estado nativo exitoso, manifiestos de los 53 bloques idénticos, hashes exactos de los cuatro archivos `constant/polyMesh/{points,faces,owner,neighbour}` en los padres originales, y partición de los 42,048 índices de celda dentro de `constant/polyMesh/cellZones` ASCII. Compara el conjunto de 2,368 índices `metal` del FS-C03 con el `fluid` del FS-C04 y exige `metal ∪ air = fluid` y que las celdas `mold` sean exactamente las mismas. Cualquier discrepancia bloquea el análisis, sin modificar las mallas, según principio fail-closed. Los archivos `cellZones` binarios no se aceptan automáticamente sin un exportador comprobado.
+
+**Esta auditoría prueba solo la identidad de índices de celdas en la malla PADRE**, no el direccionamiento después de `splitMeshRegions` dentro de `constant/fluid/polyMesh`. **Sigue prohibido inicializar `0/fluid/alpha.metal` a partir de índices de bloque o índices de la malla padre sin verificar el mapeo del `fluid` dividido.** No se ha escrito ninguna fracción de fase ni arrancado CFD.
+
+```bash
+cd ~/OpenFOAM/FS_C02_WORKTREE
+python3 analysis_tools/audit_fs_c04_native_metal_mapping.py \
+  --fs-c03 ~/OpenFOAM/FS_C03_AIR_TOPOLOGY_20261118T202905Z_6ef0cd90 \
+  --fs-c04 ~/OpenFOAM/FS_C04_FLUID_MOLD_TOPOLOGY_20261118T204433Z_7fa8dc47
+```
+
+Éxito esperado, pendiente de ejecución local: `PARENT_MESH_METAL_CELL_LABELS_MATCH_NO_FIELD_WRITTEN`. Si aparece `BLOCKED`, conservar la carpeta original y revisar el error: **no saltarse el gate ni generar un campo `alpha` sintético**.
