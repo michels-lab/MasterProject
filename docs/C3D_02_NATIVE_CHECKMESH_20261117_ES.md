@@ -72,3 +72,40 @@ Este comando copia los diccionarios de origen a `~/OpenFOAM/C3D02_NATIVE_SMOOTH_
 
 **Estado:** solo código preparado y commit; ejecución del experimento aún pendiente de confirmar en Ubuntu. Si la prueba no mejora simultáneamente calidad y compatibilidad geométrica, no declarar avance; revisar VTK en ParaView para diseñar refinamiento localizado, no encadenar cambios a ciegas.
 
+
+## 17-11-2026 — Prueba real `nSmoothPatch=6`: RECHAZADA
+
+El investigador ejecutó en Ubuntu:
+
+```bash
+bash cases_3d/C3D_02_metal_sand_clean/Allmesh --candidate-smooth
+```
+
+Resultados de `checkMesh` (ambas regiones):
+
+| Región | Celdas cóncavas base | Candidata | Diferencia | Determinantes bajos base→candidata | Tetraedros defectuosos base→candidata | Checks fallidos |
+|---|---:|---:|---:|---|---|---|
+| metal | 4,834 | 5,004 | +170 (+3.52 %) | 3→3 | 0→0 | 2→2 |
+| mold | 14,951 | 15,079 | +128 (+0.86 %) | 1→1 | 1→1 | 3→3 |
+
+Ambas mallas mantienen **el mismo número de celdas** (metal 85,350; mold 274,788). Aumentar `nSmoothPatch` de 3 a 6 **empeoró la concavidad** y no resolvió ninguno de los checks fallidos. **No adoptar la variante para CFD**. No se puede inferir la distribución espacial de defectos a partir del recuento.
+
+### Bug de posprocesamiento detectado y corregido
+
+El reporte original `CANDIDATE_COMPARISON.tsv` de la variante mostraba en `volume_m3` el **mínimo volumen de celda** (`3.62642e-11` para metal base, `3.01694e-11` para mold base), no el `Total volume` de la región (`4.79793e-05` y `0.000103389` m³, respectivamente). La línea de `checkMesh` contiene **tres signos =**, y el AWK anterior leía el primero. Este defecto afectaba **también el rechazo de candidatos en la puerta de volumen CAD**. Es un bug del script Bash, no de OpenFOAM.
+
+Se centralizó la lectura de `Total volume` en `scripts/native_checkmesh_report.sh`, buscando explícitamente `Total volume =` antes de tomar el valor. Se añadió el test Bash `tests/test_native_checkmesh_report.sh` con formato de log real y los cuatro conteos de concavidad observados. La corrección **no vuelve aceptable** el candidato: las 2+3 fallas de malla persisten.
+
+Para **recalcular desde los logs existentes sin remallar**, ejecutar:
+
+```bash
+cd ~/OpenFOAM/MasterProject
+git pull --ff-only
+bash cases_3d/C3D_02_metal_sand_clean/Allmesh --compare
+```
+
+Salida nueva: `~/OpenFOAM/C3D02_NATIVE_SMOOTH_01/CANDIDATE_COMPARISON_CORRECTED.tsv`. Se preserva la tabla defectuosa original para auditoría, no se sobrescriben logs, no se modifica C14 ni se ejecuta OpenFOAM/CFD. **Aún no se ha ejecutado este modo corregido en Ubuntu del investigador.**
+
+### Próxima decisión técnica
+
+Revisar espacialmente los VTK de celdas cóncavas, celdas con determinantes bajos y cara tetraédrica defectuosa en ParaView **antes** de adoptar ajustes de refinamiento o snapping. Mantener ambos experimentos como baseline/candidato rechazado. No relajar `checkMesh` para superar la puerta.
