@@ -104,7 +104,8 @@ def _foam_list(path: Path, kind: str) -> list:
             values.append(int(t))
     require(len(values)==expected,
             f"{kind}: list count {len(values)} != declared {expected}")
-    require(expected>0,"empty native mesh list "+kind)
+    require(expected>0 or (kind=="neighbour" and expected==0),
+            "empty native mesh list "+kind)
     return values
 
 
