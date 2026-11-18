@@ -47,7 +47,7 @@ def token(text: str, name: str) -> str:
     return m[0]
 
 
-def parse_geometry(case: Path) -> tuple[float, float, float]:
+def parse_geometry(case: Path, *, expected_top_y: float = .06) -> tuple[float, float, float]:
     mesh = (case/"system/blockMeshDict").read_text()
     section = re.search(r"\bvertices\s*\(\s*(.*?)\s*\)\s*;",mesh,re.S)
     require(section is not None, "blockMesh vertices absent")
@@ -59,9 +59,9 @@ def parse_geometry(case: Path) -> tuple[float, float, float]:
     xyz = [[float(v) for v in c] for c in coords]
     top = max(v[1] for v in xyz)
     bottom = min(v[1] for v in xyz)
-    require(math.isclose(top,.06,abs_tol=1e-9) and
+    require(math.isclose(top,expected_top_y,abs_tol=1e-9) and
             math.isclose(bottom,0.,abs_tol=1e-9),
-            "unexpected FS-C02 60mm domain")
+            "unexpected FS-C02 top height; no fake roof allowed")
     face=block(mesh,"atmosphere")
     require(token(face,"type") == "patch",
             "top is NOT a generic open patch in blockMeshDict")
@@ -104,7 +104,10 @@ def verify(run: Path) -> dict:
                 "invalid/missing frozen solver input")
         require(digest(case/p)==hash_value,
                 "solver input has changed: "+rel)
-    top,bottom,metal_y=parse_geometry(case)
+    profile=manifest.get("execution_profile")
+    extended_air = profile == "HIGH_HEADSPACE_0_01S_RAS_ATMOSPHERE"
+    expected_top = .12 if extended_air else .06
+    top,bottom,metal_y=parse_geometry(case,expected_top_y=expected_top)
     patch_types={}
     for rel,(expected_type,inflow_value) in REQUIRED_PATCHES.items():
         raw=(case/rel).read_text()
@@ -160,7 +163,7 @@ def verify(run: Path) -> dict:
         "notes":[
             "OPEN patch does not mean atmospheric gas actually leaves in a saved time window",
             "Need face flux phi/rhoPhi or explicit patch flux monitoring to prove air outflow",
-            "20mm initial air gap may influence solution; assess boundary placement sensitivity",
+            f"{(top-metal_y)*1000:.0f}mm initial air gap; boundary placement sensitivity remains unverified",
             "Does not model mold, solidification, feeding, porosity or shrinkage",
         ],
     }
