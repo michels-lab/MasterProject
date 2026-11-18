@@ -1,4 +1,6 @@
-> **18-11-2026 — STEP YA RECIBIDOS Y VERIFICADOS EN CHAT:** `metalmm.STEP` y `QuickCupmm.STEP` exportados desde SolidWorks 2026, STEP AP214, **un sólido válido por archivo**. Volúmenes CAD **47,988.524998 mm³ metal** y **102,843.320825 mm³ molde**. La unión booleana da un único sólido, volumen igual a la suma y un área interior compartida deducida de **6,352.821119 mm²**, diferencia apenas **+0.00295 %** frente a STL. **Aclaración de unidades:** ambos STEP declaran **SI metros** internamente; OCC lee e interpreta en milímetros, y el mallado a OpenFOAM debe convertirse a metros exactamente una vez. [Evidencia completa y SHA](../../docs/C3D_05_STEP_SOURCE_AUDIT_20261118_ES.md). Estos STEP existen como adjuntos de conversación, **no están aún almacenados en GitHub ni comprobados en la laptop WSL**. Por tanto el *bloqueo de obtención de CAD está resuelto*, pero aún hay que ponerlos en una ruta local, verificar Gmsh y ejecutar `Allmesh` para obtener una malla nativa. **NO CFD**.
+> **18-11-2026 — CAD ORIGINAL VERSIONADO EN GITHUB:** los dos STEP AP214 auténticos **ya están incorporados a `main`, bit a bit idénticos a los adjuntos** (comprobación mediante Git SHA-1 de los archivos originales y blob remoto). [Metal `metalmm.STEP`](constant/geometry/metalmm.STEP) (SHA256 `ea5f65796c5156e4931eaec29ff656c279120925ebc083767a16b80892d0f475`) y [molde `QuickCupmm.STEP`](constant/geometry/QuickCupmm.STEP) (SHA256 `fe126d23bb639196258551fd156591d7fe2b0b4ce1d7c9ece47016e8ad08a40c`). **Ya no necesitas enviar ni copiar los archivos**: `git pull --ff-only` los descargará, y `Allmesh` selecciona las dos rutas del repositorio de manera automática y comprueba los SHA. `C3D05_METAL_STEP` y `C3D05_MOLD_STEP` permanecen como sobrescrituras opcionales para futuros ensayos controlados. **No hay Gmsh, conversión nativa, `checkMesh` ni CFD ejecutados todavía**.
+
+> **18-11-2026 — STEP YA RECIBIDOS Y VERIFICADOS EN CHAT:** `metalmm.STEP` y `QuickCupmm.STEP` exportados desde SolidWorks 2026, STEP AP214, **un sólido válido por archivo**. Volúmenes CAD **47,988.524998 mm³ metal** y **102,843.320825 mm³ molde**. La unión booleana da un único sólido, volumen igual a la suma y un área interior compartida deducida de **6,352.821119 mm²**, diferencia apenas **+0.00295 %** frente a STL. **Aclaración de unidades:** ambos STEP declaran **SI metros** internamente; OCC lee e interpreta en milímetros, y el mallado a OpenFOAM debe convertirse a metros exactamente una vez. [Evidencia completa y SHA](../../docs/C3D_05_STEP_SOURCE_AUDIT_20261118_ES.md). Los archivos recibidos ya se versionaron **sin cambios de bytes** dentro de `constant/geometry/`; la copia en WSL queda disponible tras el siguiente `git pull`. Por tanto el *bloqueo de obtención y versionado CAD está resuelto*; todavía hay que verificar Gmsh en WSL y ejecutar `Allmesh` para obtener una malla nativa. **NO CFD**.
 
 # C3D-05 — Ruta paralela CAD multivolumen STEP → Gmsh → OpenFOAM 14
 
@@ -12,14 +14,14 @@
 
 En el caso original del doctor, metal y arena compartían caras de bloques desde `blockMesh`. Aquí el principio científico es **el mismo contacto topológicamente compartido**, pero **el mallador y la representación CAD son distintos**.
 
-## Prerrequisito que NO está disponible en este repositorio
+## CAD original disponible en este repositorio
 
-Necesitamos **dos STEP sólidos auténticos**, exportados desde el mismo modelo y sistema de referencia de SolidWorks, en **milímetros**:
+**Los dos STEP sólidos auténticos ya están en `constant/geometry/`, exportados desde SolidWorks con el mismo sistema de referencia** (coordenadas físicas de la pieza en mm, cabecera STEP declara SI metros internamente):
 
-- `metal.step`: volumen de hierro solamente, ~47,987.697 mm³, altura Y=-40 a 0 mm.
-- `mold.step`: arena sólida, excluyendo el volumen interior ocupado por el hierro, ~102,843.333 mm³, altura Y=-65.5 a 0 mm, exterior X/Z 0 a 51.8 mm y abertura inferior rectangular 22.5×27.5 mm hasta Y=-56 mm.
+- [`metalmm.STEP`](constant/geometry/metalmm.STEP): volumen de hierro solamente, ~47,987.697 mm³, altura Y=-40 a 0 mm.
+- [`QuickCupmm.STEP`](constant/geometry/QuickCupmm.STEP): arena sólida, excluyendo el volumen interior ocupado por el hierro, ~102,843.333 mm³, altura Y=-65.5 a 0 mm, exterior X/Z 0 a 51.8 mm y abertura inferior rectangular 22.5×27.5 mm hasta Y=-56 mm.
 
-Ambos cuerpos deben ocupar **sus coordenadas globales originales** sin reorientaciones individuales, compartir interfaces geométricas y no solaparse. No usar STL renombrados, no fabricar STEP a partir de las cajas envolventes ni mezclar archivos con diferentes orígenes. Los STEP pueden permanecer en la laptop: el script registra sus hashes SHA256 y rutas. Si los STEP aún no existen, esta ruta está **BLOQUEADA POR INSUMO CAD**, no se interpreta como error de mallado.
+Ambos cuerpos deben ocupar **sus coordenadas globales originales** sin reorientaciones individuales, compartir interfaces geométricas y no solaparse. No usar STL renombrados, no fabricar STEP a partir de las cajas envolventes ni mezclar archivos con diferentes orígenes. Los STEP pueden permanecer en la laptop: el script registra sus hashes SHA256 y rutas. Los STEP ya son insumos versionados y verificados. El paso pendiente es **verificar disponibilidad de Gmsh/Python y compatibilidad de conversión con OpenFOAM Foundation 14 en WSL**, no conseguir nuevos archivos.
 
 ## Por qué se usa `fragment`
 
@@ -50,9 +52,9 @@ cd ~/OpenFOAM/MasterProject
 git pull --ff-only
 bash cases_3d/C3D_05_step_gmsh_conformal/tests/test_step_gmsh_static.sh
 
-# Después de exportar ambos STEP reales de SolidWorks a rutas accesibles en WSL:
-export C3D05_METAL_STEP="/ruta/absoluta/metal.step"
-export C3D05_MOLD_STEP="/ruta/absoluta/mold.step"
+# Los dos STEP auténticos ya están incluidos en el repositorio.
+# `Allmesh` los detecta sin variables de entorno.
+# Opcional: C3D05_METAL_STEP y C3D05_MOLD_STEP permiten probar otros CAD.
 
 # Verificar disponibilidad de Gmsh / Python / Foundation14 en tu máquina:
 python3 -c 'import gmsh; print("Gmsh Python OK")'
