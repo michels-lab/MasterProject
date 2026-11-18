@@ -1,3 +1,5 @@
+> **POSTMORTEM ACTUALIZADO 18-11-2026:** la causa que este documento histórico marca como «pendiente» **YA fue identificada** por los logs de WSL: **un solo check fallido por determinante <0.001** (306 celdas en malla padre, 96 metal, 402 arena tras split), con ortogonalidad, skewness, conectividad y volumen aprobados. La distribución espacial/topológica y el área de contacto aún **NO** se han estudiado; no bajar umbral ni relanzar Gmsh. [Diagnóstico y protocolo siguiente](C3D_05_DIAGNOSTICO_DETERMINANTE_20261118_ES.md).
+
 # C3D-05 — Primera ejecución nativa Gmsh/OF14 con STEP auténticos (18-11-2026)
 
 **Fuente de evidencia:** salida de terminal WSL proporcionada por el investigador. Se respeta la distinción entre los resultados mostrados y el contenido de los logs **que todavía no se ha compartido**. Este documento no dice que la malla fue aceptada.
