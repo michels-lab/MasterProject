@@ -1,3 +1,5 @@
+> **ACTUALIZACIÓN CANÓNICA C3D-02 / 18-11-2026:** 3D C3D-02 Native Foundation14 **meshing experiments ran but failed** (metal-v2-only: 1 metal cell / 274,788 mold; mold-v2-only: 85,350 metal / **0** mold). `foamMultiRun` was **not** run, coupled CHT contact and 3D validation remain **OPEN**. Master's CSV `PREPARED_NOT_RUN` labels the **CFD** status, whereas [3D mesh-trial CSV](docs/C3D_02_MESH_TRIAL_REGISTRY_20261118.csv) labels actual mesh runs. [Scientific evidence](docs/C3D_02_ABLACION_STL_V2_20261118_ES.md) · [doctor's quasi-2D conformal blockMesh](docs/C3D_02_REFERENCIA_DOCTOR_Y_OPCIONES_MALLADO_20261118_ES.md).
+
 > **2026-11-12:** New clean C3D-02 case [source](cases_3d/C3D_02_metal_sand_clean/README.md) inherits C14 input physics without simulation. Historical 3D meshing still fails validation. [Updated evidence](docs/C3D_REINICIO_20261112_ES.md) and [OpenFOAM 14 command lessons](docs/OPENFOAM14_LECCIONES_C3D_20261112_ES.md).
 
 # Validation Matrix — MasterProject
