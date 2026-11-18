@@ -51,3 +51,20 @@ Solo después ejecutar una **nueva** comparación en OpenFOAM Foundation 14 con 
 ## Estado
 
 **Propuesta de diseño, no reparación aplicada.** Esta auditoría no reemplaza ni modifica STL, malla o propiedades termofísicas. Falta un candidato CAD/STL nuevo y la inspección espacial de los VTK defectuosos.
+
+## 17-11-2026 — Nuevos STL v2 de SolidWorks, SUBIDOS A GIT
+
+El investigador confirmó que los **archivos definitivos** son `metalmm(2).STL` y `QuickCupmm.STL`. Fueron inspeccionados como superficies con una región, orientadas consistentemente y cerradas tras unificación geométrica de vértices duplicados.
+
+| Característica | metal v2 | mold v2 |
+|---|---:|---:|
+| Ruta Git | `cases_3d/C3D_02_metal_sand_clean/constant/geometry/metal_v2.stl` | `cases_3d/C3D_02_metal_sand_clean/constant/geometry/mold_v2.stl` |
+| Origen | `metalmm(2).STL` | `QuickCupmm.STL` |
+| Triángulos | 4,628 | 3,716 |
+| Volumen | 47.987697 cm³ | 102.843333 cm³ |
+| SHA-256 | `f8c0fb90f9b5650261d39f1faa2430b3fc7fce462c0d44e460afb5a37b4ddccf` | `ac52991eb254c1bcc65eaf546a25f663343e006e89aeff3ac26aa8e9a1d95a32` |
+| SHA de blob Git | `10b41a9edbf32ec6642587d21fa3cc6ad76a880d` | `6ea3ccbab486ccc45842723f68af289b61d9d029` |
+
+**Commit real con ambos STL binarios:** [`e8be4afeae847411cd35b815f90748d71d1c5d90`](https://github.com/michels-lab/MasterProject/commit/e8be4afeae847411cd35b815f90748d71d1c5d90). Se comprobó que los SHA de blob Git coinciden exactamente con los calculados sobre los binarios recibidos; no hubo conversión a formato ASCII ni modificación geométrica por la transferencia.
+
+No se han reemplazado `metal.stl`, `mold.stl`, `mold_repaired.stl` ni archivos de C14. Los dos nuevos son las **fuentes candidatas correctas** del próximo ensayo de mallado. La opción `Allmesh --stl-v2` verifica ambos SHA y ejecuta `surfaceCheck` nativo, copia los STL a una carpeta nueva `~/OpenFOAM/c3d-better-stl-v2` y realiza `blockMesh`, `snappyHexMesh`, `splitMeshRegions` y `checkMesh` sin solver. Que los STL sean correctos **no implica** que la malla volumétrica esté validada: habrá que comparar sus resultados con el baseline y revisar la interfaz metal–arena.
