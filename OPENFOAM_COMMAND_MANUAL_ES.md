@@ -1,3 +1,5 @@
+> **ACTUALIZACIÓN CANÓNICA C3D-02 / 18-11-2026 — IMPORTANTE, esta nota prevalece sobre instrucciones antiguas del mismo manual:** para C3D-02 la vía de malla prioritaria es **Foundation 14 nativo**, coordinada por `cases_3d/C3D_02_metal_sand_clean/Allmesh`. El antiguo comando `python3 .../build_c3d02.py` y sus `ERROR_ZONES` son una ruta experimental **NO recomendada actualmente**; no ejecutarlo como supuesto comando integral vigente. Las pruebas de STL v2 ya se ejecutaron (metal v2 solo → 1 celda; arena v2 sola → **0 celdas**) y se rechazaron, por lo que **no volver a lanzar `run_stl_v2_ablation.sh` sobre destinos existentes**. Revisar primero los logs locales conservados, sin remallar. [Resultados y rutas locales](docs/C3D_02_ABLACION_STL_V2_20261118_ES.md) · [Caso del doctor: `blockMesh` con zonas existentes desde los bloques](docs/C3D_02_REFERENCIA_DOCTOR_Y_OPCIONES_MALLADO_20261118_ES.md). La alternativa multibloque 3D **todavía es propuesta**, y no hay CFD C3D-02.
+
 ## 17-11-2026 — Diagnóstico automático obligatorio desde el primer paso del comando integral
 
 **Comando completo, único:**
