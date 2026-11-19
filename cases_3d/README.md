@@ -1,3 +1,5 @@
+> **19-11-2026 — Caso B C3D05 fvSolution C14:** plantilla T0 fuente global/metal/arena de C14 y SHA validada; 2 sólidos, PCG+DIC regional, sin CFD. [Bitácora](../docs/granada/C3D05_FVSOLUTION_C14_20261119_ES.md). **Etapa B 3/7, avance 2/7 hitos (29% técnico, NO tesis).**
+
 > **19-11-2026 | GRANADA_C3D05_T0_INTEGRAL_20261119:** Caso B C3D-05 GRANADA entrega T0 integrada (runner, CI, pruebas sintéticas, preservación de malla) sin solver, ver [informe](../docs/granada/C3D05_T0_INTEGRATED_GRANADA_20261119_ES.md). **Etapa 3/7; 2/7 = 29% hitos técnicos (NO tesis/CFD)**. Norma aplica a todos los casos.
 
 > **19-11-2026 | PROJECT_PROGRESS_CONTRACT_20261119 — TODOS LOS CASOS 3D:** obligatorio reportar etapa y avance y entregar bloques técnicos completos, sin micropruebas repetidas en WSL. Caso B: **etapa 3/7, 2/7 hitos técnicos (29%; NO tesis/CFD)**. [Regla](../docs/POLITICA_ENTREGA_INTEGRAL_Y_ESTADO_ES.md) · [Estado](../docs/PROJECT_STAGE_STATUS.json). Los antecedentes históricos se conservan debajo.
