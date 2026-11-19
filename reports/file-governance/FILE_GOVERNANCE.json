@@ -28,8 +28,8 @@
     "POTENTIAL_UNLOGGED_CHANGES": 2
   },
   "finding_total": 2,
-  "inventory_fingerprint": "8892ada02e97821e3e96d333459673932e217a7f8a5cf88e962c4edc0b4470ae",
-  "evidence_fingerprint": "863c21af33682912df97e673efbc01791cb9b78435c55b06f5cb0caff13cfd54",
+  "inventory_fingerprint": "7acbf161de36bf9df96a89f6fa1776e7570a0393041c71706f10cc08136a636e",
+  "evidence_fingerprint": "3fb27e7eed8e78285fa5e94e5d234417d9f507340270201c76ee1a8088d9a73f",
   "files": [
     {
       "path": ".github/agents/openfoam-solidification.agent.md",
@@ -1562,14 +1562,14 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "3b89c3798d5f548b39692fec11b0bea06a0d004e"
+      "blob": "822f4401a93caf8353ce0537a7698efdffefc8b1"
     },
     {
       "path": "cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V4_TRANSITION_REPAIR/run_v4_sweep.sh",
       "role": "source",
       "purpose": "code/test implementation",
       "certainty": "rule",
-      "blob": "c5073dd375993030c6de08403e524e6197e98743"
+      "blob": "351043914522f6e0c0cf02a7db566f00184d69b3"
     },
     {
       "path": "cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V4_TRANSITION_REPAIR/scripts/build_v4_dictionary.py",
@@ -1583,7 +1583,7 @@
       "role": "source",
       "purpose": "code/test implementation",
       "certainty": "rule",
-      "blob": "bfe710634fb1144ce20879c1556b10700ac1ad8c"
+      "blob": "a9cdbffa04ae73b693b0900d2f4e6b2167da77e1"
     },
     {
       "path": "cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V4_TRANSITION_REPAIR/tests/test_v4_diff.py",
@@ -1597,7 +1597,7 @@
       "role": "test",
       "purpose": "code/test implementation",
       "certainty": "rule",
-      "blob": "1b91862cecbc387ba21c7c74a6261d55090c8d06"
+      "blob": "78b26a8de21c3091923af98dd785d0dfed219403"
     },
     {
       "path": "cases_3d/C3D_04_rounded_multiblock_pilot/scripts/audit_blockmesh_topology.py",
@@ -272343,11 +272343,11 @@
       "state": "REVIEW_REQUIRED"
     },
     {
-      "id": "d200a4a745f27d17",
+      "id": "1aaa2609b4119a63",
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_ES.md",
-      "observation": "1 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V4_TRANSITION_REPAIR/scripts/build_v4_dictionary.py",
+      "observation": "4 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V4_TRANSITION_REPAIR/run_v4_sweep.sh, cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V4_TRANSITION_REPAIR/scripts/build_v4_dictionary.py, cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V4_TRANSITION_REPAIR/scripts/summarize_trial.py, cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V4_TRANSITION_REPAIR/tests/test_v4_static.sh",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     }
