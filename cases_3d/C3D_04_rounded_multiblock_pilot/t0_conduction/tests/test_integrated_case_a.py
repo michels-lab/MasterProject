@@ -65,7 +65,7 @@ class IntegratedCaseAT0(unittest.TestCase):
         with self.assertRaises(ValueError):
             engine.generate(cfg)
 
-    def test_03_all_nine_thermal_dictionaries_generated_from_synthetic_fixture(self):
+    def test_03_all_ten_thermal_dictionaries_generated_from_synthetic_fixture(self):
         cfg = engine.synthetic_fixture()
         self.assertEqual(engine.validate(cfg, allow_synthetic_test=True), [])
         self.assertNotEqual(engine.validate(cfg), [])
@@ -102,11 +102,18 @@ class IntegratedCaseAT0(unittest.TestCase):
             field = items[f"0/{region}/T"]
             self.assertEqual(field.count("type coupledTemperature;"), 1)
             self.assertEqual(
-                field.count("type externalWallHeatFluxTemperature;"),
+                field.count("type externalTemperature;"),
                 len(engine.EXTERIOR[region])
             )
             for patch in engine.EXTERIOR[region] + (engine.COUPLED[region],):
                 self.assertIn(patch + "\n", field)
+        for region in ("metal", "mold"):
+            field = items[f"0/{region}/T"]
+            self.assertNotIn("externalWallHeatFluxTemperature", field)
+            self.assertNotIn("kappaMethod solidThermo", field)
+            self.assertNotIn("mode coefficient", field)
+            self.assertIn("h constant 10;", field)
+            self.assertIn("Ta constant 300;", field)
         self.assertIn("thicknessLayers (0.0002);", items["0/metal/T"])
         self.assertIn("kappaLayers (0.1);", items["0/metal/T"])
         self.assertIn("emissivity 0.3;", items["0/metal/T"])
