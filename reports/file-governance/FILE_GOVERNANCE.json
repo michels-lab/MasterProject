@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "audit_kind": "deterministic_full_tracked_tree",
-  "tracked_files_total": 38960,
-  "classified_files_total": 38955,
+  "tracked_files_total": 38961,
+  "classified_files_total": 38956,
   "docs_content_inspected": 172,
   "large_docs_skipped": 1,
   "excluded_reports": 5,
@@ -20,7 +20,7 @@
     "simulation_log": 3155,
     "simulation_output": 32615,
     "source": 100,
-    "test": 38,
+    "test": 39,
     "web_ui": 1,
     "workflow": 22
   },
@@ -28,8 +28,8 @@
     "POTENTIAL_UNLOGGED_CHANGES": 2
   },
   "finding_total": 2,
-  "inventory_fingerprint": "0898d047822f90368dfcd5a631a501eb33b11751d5a0d0d77eab58364e18230d",
-  "evidence_fingerprint": "dc8db57af03aa6774dc29bb490c5b10298cc6c0ea21f5ba9a5217891fab22c63",
+  "inventory_fingerprint": "7425a6ed09a07f81d5dbf4d6b85f22a570ab005c4d7476bc83c5116f14883d2c",
+  "evidence_fingerprint": "7d22711542d41975fb44cdd5c581cfef0db5cd66f61dd173d8aab608b62add5a",
   "files": [
     {
       "path": ".github/agents/openfoam-solidification.agent.md",
@@ -1912,7 +1912,7 @@
       "role": "source",
       "purpose": "code/test implementation",
       "certainty": "rule",
-      "blob": "2def62fa05a4d6b8f2a879c0c1785d4a0ed99eb7"
+      "blob": "01682f753bf4cb20ac040588eca63a91dafb7f16"
     },
     {
       "path": "cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/scripts/run_t0_granada.py",
@@ -1975,7 +1975,7 @@
       "role": "simulation_case_file",
       "purpose": "OpenFOAM case-specific support artifact",
       "certainty": "inferred",
-      "blob": "16cd25b9395ca509bb46f08880d958f24d180a15"
+      "blob": "448b5b706f7a88fc3c34e96b64c12ee05fbe23f7"
     },
     {
       "path": "cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/templates/system/metal/fvSchemes.tpl",
@@ -1989,7 +1989,7 @@
       "role": "simulation_case_file",
       "purpose": "OpenFOAM case-specific support artifact",
       "certainty": "inferred",
-      "blob": "9ef71c483601f521a5f7e64ff621f817ae6b7f9c"
+      "blob": "aed220ecc0d7543e0a15fc244c6b5fa2d8ff7d40"
     },
     {
       "path": "cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/templates/system/mold/fvSchemes.tpl",
@@ -2003,7 +2003,14 @@
       "role": "simulation_case_file",
       "purpose": "OpenFOAM case-specific support artifact",
       "certainty": "inferred",
-      "blob": "51b4faec6ae947395b8c0d2ac5b9d25d2774189e"
+      "blob": "ea8798ebaaae71cfce90be91a72d6e9129a2e9bf"
+    },
+    {
+      "path": "cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/tests/test_c14_fvsolution.py",
+      "role": "test",
+      "purpose": "code/test implementation",
+      "certainty": "rule",
+      "blob": "662e2b5705c758e04a2b6f083dc3e6efe9ac76c0"
     },
     {
       "path": "cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/tests/test_prepare_t0.py",
@@ -272719,20 +272726,20 @@
   ],
   "findings": [
     {
-      "id": "73dd20371263c011",
+      "id": "2dabe1ec6fe648ab",
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_EN.md",
-      "observation": "12 implementation/config paths changed since this log's last commit; examples: .github/workflows/case-a-t0-stage-contract.yml, cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/T0_INPUTS.json, cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/run_integrated_milestone.sh, cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/scripts/prepare_case_a_t0.py, cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/tests/test_integrated_case_a.py, cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/C14_FVSOLUTION_PROVENANCE.json",
+      "observation": "13 implementation/config paths changed since this log's last commit; examples: .github/workflows/case-a-t0-stage-contract.yml, cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/T0_INPUTS.json, cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/run_integrated_milestone.sh, cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/scripts/prepare_case_a_t0.py, cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/tests/test_integrated_case_a.py, cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/C14_FVSOLUTION_PROVENANCE.json",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     },
     {
-      "id": "316f7794033ba7ec",
+      "id": "0bc8564eadf66239",
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_ES.md",
-      "observation": "1 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/C14_FVSOLUTION_PROVENANCE.json",
+      "observation": "3 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/C14_FVSOLUTION_PROVENANCE.json, cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/scripts/prepare_t0.py, cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/tests/test_c14_fvsolution.py",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     }
