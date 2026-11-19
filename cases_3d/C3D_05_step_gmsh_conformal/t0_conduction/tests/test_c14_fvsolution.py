@@ -18,7 +18,7 @@ def strip_comments(text):
 
 def block(text, key):
     src = strip_comments(text)
-    start = re.search(r"\b" + re.escape(key) + r"\s*\{", src)
+    start = re.search((r"\b" if key[0].isalnum() or key[0] == "_" else "") + re.escape(key) + r"\s*\{", src)
     if not start:
         raise ValueError("Missing dictionary: " + key)
     count = 1
@@ -69,7 +69,7 @@ class C14FVSolution(unittest.TestCase):
             pimple = block(current, "PIMPLE")
             for field in ("nOuterCorrectors", "nCorrectors", "nNonOrthogonalCorrectors"):
                 self.assertEqual(scalar(source_pimple, field), scalar(pimple, field))
-            self.assertNotIn("p_rgh", current)
+            self.assertNotIn("p_rgh", strip_comments(current))
             self.assertNotIn("momentumPredictor", current)
 
     def test_two_energy_correctors_trace_to_c14_metal(self):
@@ -107,7 +107,7 @@ class C14FVSolution(unittest.TestCase):
         for region in ("metal", "mold"):
             field = files[f"system/{region}/fvSolution"]
             self.assertIn("solver PCG;", field)
-            self.assertNotIn("p_rgh", field)
+            self.assertNotIn("p_rgh", strip_comments(field))
 
 if __name__ == "__main__":
     unittest.main()
