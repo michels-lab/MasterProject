@@ -5,7 +5,7 @@ This module:
 - validates real sourced material data, stage acknowledgement and BC hypothesis;
 - reuses the previously accepted V4/T02 mesh, read-only;
 - checks actual patch names/types, native checkMesh status/contact acceptance;
-- builds nine Foundation14-oriented dictionaries IN MEMORY;
+- builds ten Foundation14-oriented dictionaries IN MEMORY;
 - materializes a new isolated directory ONLY if explicitly requested and
   every documented guard is satisfied.
 It NEVER runs CFD, checkMesh or blockMesh. T0 is not solidification physics.
@@ -192,12 +192,10 @@ def temperature(region: str, initial_K, bc: dict) -> str:
     for patch in EXTERIOR[region]:
         lines += [
             f"    {patch}", "    {",
-            "        type externalWallHeatFluxTemperature;",
-            "        mode coefficient;",
-            f"        h uniform {fmt(exterior['h_W_m2_K'])};",
+            "        type externalTemperature;",
             f"        Ta constant {fmt(exterior['Ta_K'])};",
+            f"        h constant {fmt(exterior['h_W_m2_K'])};",
             f"        emissivity {fmt(exterior['emissivity'])};",
-            "        kappaMethod solidThermo;",
             "        value $internalField;",
             "    }",
         ]
