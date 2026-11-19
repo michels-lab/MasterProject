@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "audit_kind": "deterministic_full_tracked_tree",
-  "tracked_files_total": 38914,
-  "classified_files_total": 38909,
+  "tracked_files_total": 38917,
+  "classified_files_total": 38912,
   "docs_content_inspected": 164,
   "large_docs_skipped": 1,
   "excluded_reports": 5,
@@ -19,8 +19,8 @@
     "simulation_input": 2683,
     "simulation_log": 3155,
     "simulation_output": 32613,
-    "source": 86,
-    "test": 33,
+    "source": 88,
+    "test": 34,
     "web_ui": 1,
     "workflow": 19
   },
@@ -28,8 +28,8 @@
     "POTENTIAL_UNLOGGED_CHANGES": 2
   },
   "finding_total": 2,
-  "inventory_fingerprint": "fa0803effe8670966181f4d7f744708e39bdff7093e1c7e7105da6970e9e15ea",
-  "evidence_fingerprint": "88b7df3073b7da3acf51b459e9badc2350ad421e025113200e8ec3e937331919",
+  "inventory_fingerprint": "41f1ad3dfb8cb193e8b9480152c03dece7e9a9b94b2df2593ba59ab54c8c30e0",
+  "evidence_fingerprint": "19ad77acfb7b37ce387f0367e288b283ff513caea81a821fb468a5d8b5e4bcac",
   "files": [
     {
       "path": ".github/agents/openfoam-solidification.agent.md",
@@ -1684,6 +1684,13 @@
       "blob": "604c63f136dc53443f73fe1259aedde9d798fc42"
     },
     {
+      "path": "cases_3d/C3D_05_step_gmsh_conformal/scripts/audit_nonorthogonal_faces.py",
+      "role": "source",
+      "purpose": "code/test implementation",
+      "certainty": "rule",
+      "blob": "8aa4a8c6151f68eef0a7add8a83301fc88cbb56c"
+    },
+    {
       "path": "cases_3d/C3D_05_step_gmsh_conformal/scripts/audit_underdetermined_topology.py",
       "role": "source",
       "purpose": "code/test implementation",
@@ -1768,11 +1775,25 @@
       "blob": "b95f5e057d879415095ba57c38d3a430419c6972"
     },
     {
+      "path": "cases_3d/C3D_05_step_gmsh_conformal/scripts/run_nonorth_face_audit.sh",
+      "role": "source",
+      "purpose": "code/test implementation",
+      "certainty": "rule",
+      "blob": "a97fe362c3b63e6fa9d4c91f36c231185538b47d"
+    },
+    {
       "path": "cases_3d/C3D_05_step_gmsh_conformal/system/controlDict",
       "role": "simulation_input",
       "purpose": "OpenFOAM case field/dictionary input (content unvalidated)",
       "certainty": "inferred",
       "blob": "48a3345ff730533d47bf26cfeb73693b748a182b"
+    },
+    {
+      "path": "cases_3d/C3D_05_step_gmsh_conformal/tests/test_audit_nonorthogonal_faces.py",
+      "role": "test",
+      "purpose": "code/test implementation",
+      "certainty": "rule",
+      "blob": "b5d1bca88e8ecb7d65a3fe17589831e69be746c1"
     },
     {
       "path": "cases_3d/C3D_05_step_gmsh_conformal/tests/test_audit_underdetermined_topology.py",
@@ -272397,20 +272418,20 @@
   ],
   "findings": [
     {
-      "id": "494eac63e253e6a2",
+      "id": "d1f2d08233151327",
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_EN.md",
-      "observation": "35 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_03_doctor_multiblock_pilot/tests/test_native_multiblock_static.sh, cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V2_BASAL_QUALITY/tests/test_candidate_geometry.py, cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V3_BASAL_SWEEP/run_v3_sweep.sh, cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V3_BASAL_SWEEP/scripts/build_v3_dictionary.py, cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V3_BASAL_SWEEP/scripts/summarize_trial.py, cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V3_BASAL_SWEEP/tests/test_v3_diff.py",
+      "observation": "38 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_03_doctor_multiblock_pilot/tests/test_native_multiblock_static.sh, cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V2_BASAL_QUALITY/tests/test_candidate_geometry.py, cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V3_BASAL_SWEEP/run_v3_sweep.sh, cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V3_BASAL_SWEEP/scripts/build_v3_dictionary.py, cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V3_BASAL_SWEEP/scripts/summarize_trial.py, cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V3_BASAL_SWEEP/tests/test_v3_diff.py",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     },
     {
-      "id": "f6ceff81cf88cc36",
+      "id": "7fd8b995f9b65b8a",
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_ES.md",
-      "observation": "1 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_04_rounded_multiblock_pilot/scripts/audit_v4_t02_nonorth.py",
+      "observation": "4 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_04_rounded_multiblock_pilot/scripts/audit_v4_t02_nonorth.py, cases_3d/C3D_05_step_gmsh_conformal/scripts/audit_nonorthogonal_faces.py, cases_3d/C3D_05_step_gmsh_conformal/scripts/run_nonorth_face_audit.sh, cases_3d/C3D_05_step_gmsh_conformal/tests/test_audit_nonorthogonal_faces.py",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     }
