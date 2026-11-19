@@ -260,6 +260,25 @@ def generate(cfg: dict) -> dict[str, str]:
     return items
 
 
+def physical_patch_names(boundary_path: Path) -> set[str]:
+    """Count active patches, protecting T0 from unmodelled physical boundaries.
+
+    Preserve zero-face placeholders but do not silently miss a nonempty wall.
+    """
+    body = boundary_path.read_text(encoding="utf-8")
+    blocks = re.finditer(
+        r"(?m)^\\s*([A-Za-z_][A-Za-z_0-9]*)\\s*\\{([^{}]*)\\}",
+        body, re.S
+    )
+    found: set[str] = set()
+    for match in blocks:
+        inner = match.group(2)
+        number = re.search(r"\\bnFaces\\s+(\\d+)\\s*;", inner)
+        if number and int(number.group(1)) > 0:
+            found.add(match.group(1))
+    return found
+
+
 def native_case_gate(source: Path) -> dict:
     if not source.is_dir():
         raise FileNotFoundError(f"Preserved Case A V4/T02 missing: {source}")
@@ -281,6 +300,14 @@ def native_case_gate(source: Path) -> dict:
         coupled = patch_metadata(root/"boundary", COUPLED[region])
         if coupled["type"] != "mappedWall" or coupled["nFaces"] != 2496:
             raise ValueError(f"Invalid native coupled patch {region}/{COUPLED[region]}")
+        actual_nonempty = physical_patch_names(root/"boundary")
+        expected_nonempty = set(EXTERIOR[region]) | {COUPLED[region]}
+        if actual_nonempty != expected_nonempty:
+            raise ValueError(
+                f"Case A {region}: T0 does not cover all active polyMesh patches; "
+                f"missing field BC={sorted(actual_nonempty - expected_nonempty)}, "
+                f"incorrectly assumed BC={sorted(expected_nonempty - actual_nonempty)}"
+            )
     return {
         "source": str(source),
         "native_mesh_quality_and_contact_from_saved_evidence": True,
