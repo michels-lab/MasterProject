@@ -31,7 +31,8 @@
     "One integrated C14-source parity and native C3D04 boundary/mesh validation is CODE_COMMITTED but no successful WSL Foundation14 dictionary parse / source materials realization has been observed.",
     "Nonorthogonality solver stability has NOT been validated, despite passed V4/T02 native checkMesh and the closed 64-face interface identity investigation.",
     "T1 fluid-solid phase-change, temperature-dependent materials, actual casting cooling curves, mesh/time independence and experimental validation remain not executed.",
-    "STL surface fit distances are sample-only, not rigorous Hausdorff to exact STEP."
+    "STL surface fit distances are sample-only, not rigorous Hausdorff to exact STEP.",
+    "F14 externalTemperature and coupledTemperature have been authored and crosschecked with official docs, but actual runtime initialization/energy equation integration in WSL remains unverified"
   ],
   "milestones": [
     {
@@ -99,30 +100,36 @@
   "execution_rule": "Integrate validations into one cohesive milestone; no one-script-per-subproblem loops, no rerun already closed V4/T02 audits; one user command only at a meaningful end-to-end delivery; preserve case and audit evidence.",
   "last_integrated_delivery": {
     "date": "2026-11-19",
-    "source_status": "C14_BASELINE_AND_NUMERICAL_T0_COMMITTED_WITH_SOURCE_PARITY_GUARD_NOT_WSL_VERIFIED",
     "stage": "05_THERMAL_T0_DESIGN",
+    "status": "CODE_COMMITTED_STATIC_TESTS_DEFINED_NATIVE_OF14_AND_CFD_NOT_CONFIRMED",
     "milestone_not_closed": true,
+    "scope": "CASE_A_C3D04_ONLY_T0_TWO_SOLIDS_USING_C14_REFERENCE",
     "changes": [
-      "C14 original historical case located and source files read: cases_controlled_buoyancy/C14_topFixedFlux_explicitRef",
-      "C14 baseline JSON stores iron rho6820 Cp827 molWeight56 mu0.0055 Pr0.14; silica rho1500 Cv700 kappa2 molWeight28; 1500K/300K initial",
-      "Derived metal kappa=mu*Cp/Pr in a strictly labelled T0 numerical solid surrogate; effective Cv=C14 Cp is an explicitly limited approximation, NOT original C14 thermodynamics",
-      "C14 exterior h10 W/(m2K), Ta300K, emissivities .3/.5, layer 0.0002m kappa0.1 conductance500 W/(m2K) replace T0 old adiabatic/ideal-contact assumptions",
-      "C14 time deltaT0.001 s endTime10 s writeEverySteps100, root nOuterCorrectors3 nNonOrthogonalCorrectors1; regional metal nEnergyCorrectors2 is explicitly a separate numerical T0 hypothesis",
-      "Integrated source guard reads original executable C14 files and checks 25 scalar pairs plus two interface layer properties, records source-file SHA256",
-      "Preexisting strict C3D04 V4/T02 native gates, ten F14 dictionaries, SHA-checked atomic materialization and integrated no-CFD tests retained",
-      "The old two-solid insulated analytical equilibrium is labelled counterfactual, NOT acceptance under C14 convective boundaries"
+      "Official OpenFOAM Foundation14 thermal boundary docs used to migrate legacy C14 externalWallHeatFluxTemperature to externalTemperature with Ta constant 300, h constant 10, emissivity 0.3 metal/0.5 mold",
+      "Retained coupledTemperature interfacial resistance from C14 at 0.0002 m / 0.1 W(m K), equivalent to 500 W/(m2 K); regional material and time inputs sourced to original C14",
+      "Exact archived C14 Git blob SHA1 check (all eight baseline files) added in addition to numeric source parity of 27 parameter/layer readings; byte-tamper test included in integrated suite",
+      "Initial thermal scale from real native T02 polyMesh face areas including all external metal/mold patches and reciprocal 2496-face interface; G=h*A and initial power estimates, no heat flux from solver",
+      "Native parsing remains gated; no case source overwritten; 10 F14 dictionaries prepared atomically and CI source updated"
     ],
     "not_observed": [
-      "Successful updated integrated static CI test run",
-      "Native OpenFOAM Foundation14 parsing of 10 generated dictionaries on laptop",
-      "Any 3D C3D04 T0 solver run, energy balance, convergence or solidification",
-      "Equivalence of C14 metal fluid thermo and numerical T0 solid surrogate"
+      "GitHub Actions CI pass for newest commit",
+      "OpenFOAM Foundation14 native parsing in researcher's WSL",
+      "foamMultiRun thermal solution and energy-conservation results",
+      "Grid/time independence or physical QuickCup validation"
     ],
-    "source_refs": [
+    "scientific_qualifiers": [
+      "C14 historical model is a 2D fluid+solid with phase change, T0 3D is an explicit two-solid conduction surrogate",
+      "C14 Cp 827 reused as effective solid Cv ONLY under stated numerical approximation, not physically measured Cv",
+      "Metal conductivity 32.4892857 W/(m K) derived from C14 mu*Cp/Pr, not a measured k(T)",
+      "Initial 1500 K metal is above original C14 liquidus 1473 K; T0 intentionally omits fluid flow and latent heat",
+      "Initial power-scale estimates use uniform wall T and do not equal actual local CFD heat-flux integrals",
+      "Exterior losses are nonzero, so adiabatic two-capacity equilibrium is a counterfactual reference, not T0 acceptance"
+    ],
+    "source_docs": [
+      "cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/README.md",
       "cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/C14_PARAMETER_BASELINE.json",
       "cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/T0_INPUTS.json",
-      "cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/README.md",
-      "cases_controlled_buoyancy/C14_topFixedFlux_explicitRef"
+      "https://doc.cfd.direct/openfoam/user-guide-v14/thermal-boundary-conditions"
     ]
   }
 }
