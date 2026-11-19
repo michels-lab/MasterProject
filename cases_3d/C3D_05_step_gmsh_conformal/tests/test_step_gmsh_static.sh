@@ -44,3 +44,21 @@ for expected in 'C3D05_ALGORITHM3D=10' 'preflight_hxt.py' 'C3D05_STEP_GMSH_HXT_0
 done
 grep -Fq '"Mesh.Algorithm3D", 10' "$PREFLIGHT"
 grep -Fq -- '--algorithm-3d "$ALGORITHM3D"' "$RUN"
+
+# Pure static gates for a separately preserved CAD -> HEX8/QUAD4 topology pilot.
+HEX_RUN="$ROOT/scripts/run_hex_subdivision_pilot.sh"
+HEX_PREFLIGHT="$ROOT/scripts/preflight_hex_subdivision.py"
+[[ -s "$HEX_RUN" && -s "$HEX_PREFLIGHT" ]] || { echo "Missing HEX8 runner or preflight"; exit 1; }
+bash -n "$HEX_RUN"
+python3 -c 'import ast,pathlib,sys; ast.parse(pathlib.Path(sys.argv[1]).read_text())' "$HEX_PREFLIGHT"
+for token in 'C3D05_SUBDIVIDE_HEX=1' 'C3D05_MESH_SIZE_MM=3.6' 'C3D05_MAX_BASE_TETS=150000' 'C3D05_STEP_GMSH_HEX_SUBDIV_COARSE_01' 'preflight_hex_subdivision.py' 'NO CFD'; do
+  grep -Fq -- "$token" "$HEX_RUN" || { echo "HEX8 runner missing safety contract: $token"; exit 1; }
+done
+for token in 'Mesh.SubdivisionAlgorithm' 'gmsh.model.mesh.refine()' 'volume_types' 'surface_types' 'max_base_tets' 'SUBDIVISION_INCOMPLETE'; do
+  grep -Fq -- "$token" "$CAD" || { echo "CAD generator missing HEX8 contract: $token"; exit 1; }
+done
+for token in 'C3D05_SUBDIVIDE_HEX' 'C3D05_MESH_SIZE_MM' 'C3D05_MAX_BASE_TETS' 'run_stage gmsh3d'; do
+  grep -Fq -- "$token" "$RUN" || { echo "Allmesh missing HEX8 option: $token"; exit 1; }
+done
+grep -Fq 'gmsh.model.mesh.refine()' "$HEX_PREFLIGHT"
+grep -Fq 'final_volume != {5} or final_surface != {3}' "$HEX_PREFLIGHT"
