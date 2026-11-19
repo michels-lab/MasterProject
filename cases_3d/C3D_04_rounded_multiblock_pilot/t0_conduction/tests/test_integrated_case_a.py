@@ -84,6 +84,7 @@ class IntegratedCaseAT0(unittest.TestCase):
             self.assertEqual(content.count("{"), content.count("}"), name)
         self.assertIn("application foamMultiRun;", items["system/controlDict"])
         self.assertIn("nEnergyCorrectors 2;", items["system/fvSolution"])
+        self.assertIn("nOuterCorrectors 3;", items["system/fvSolution"])
         self.assertIn("metal solid;", items["system/controlDict"])
         self.assertIn("mold solid;", items["system/controlDict"])
         self.assertIn("nNonOrthogonalCorrectors 2;", items["system/metal/fvSolution"])
@@ -100,11 +101,38 @@ class IntegratedCaseAT0(unittest.TestCase):
         for region in ("metal", "mold"):
             field = items[f"0/{region}/T"]
             self.assertEqual(field.count("type coupledTemperature;"), 1)
-            self.assertEqual(field.count("type zeroGradient;"), len(engine.EXTERIOR[region]))
+            self.assertEqual(
+                field.count("type externalWallHeatFluxTemperature;"),
+                len(engine.EXTERIOR[region])
+            )
             for patch in engine.EXTERIOR[region] + (engine.COUPLED[region],):
                 self.assertIn(patch + "\n", field)
+        self.assertIn("thicknessLayers (0.0002);", items["0/metal/T"])
+        self.assertIn("kappaLayers (0.1);", items["0/metal/T"])
+        self.assertIn("emissivity 0.3;", items["0/metal/T"])
+        self.assertIn("emissivity 0.5;", items["0/mold/T"])
         self.assertNotIn("moldOuterUnclassified", items["0/mold/T"])
         self.assertNotIn("type patch;", items["0/metal/T"])
+
+    def test_044_real_original_C14_source_parity_and_negative_regression(self):
+        raw = json.loads(engine.INPUTS.read_text(encoding="utf-8"))
+        evidence = engine.c14_source_gate(raw)
+        self.assertEqual(evidence["verified_scalar_comparisons"], 26)
+        self.assertTrue(
+            evidence["Cp_as_Cv_surrogate_explicit_not_original_C14_thermo"]
+        )
+        changed = copy.deepcopy(raw)
+        changed["metal"]["Cp_C14_J_kg_K"] = 828
+        with self.assertRaises(ValueError):
+            engine.c14_source_gate(changed)
+        changed = copy.deepcopy(raw)
+        changed["c14_boundary_reference"]["metal_to_mold"]["layer_thickness_m"] = .001
+        with self.assertRaises(ValueError):
+            engine.c14_source_gate(changed)
+        changed = copy.deepcopy(raw)
+        changed["simulation"]["deltaT_s"] = .005
+        with self.assertRaises(ValueError):
+            engine.c14_source_gate(changed)
 
     def test_045_real_boundary_coverage_detects_extra_patches(self):
         with tempfile.TemporaryDirectory() as folder:
@@ -140,7 +168,7 @@ class IntegratedCaseAT0(unittest.TestCase):
             target = engine.closed_t0_energy_target(cfg, measured)
             self.assertTrue(6 < target["ideal_equilibrium_K_no_heat_loss"] < 7)
             self.assertEqual(target["validation_status"],
-                             "ANALYTICAL_TARGET_ONLY_NOT_CFD_OUTPUT")
+                             "COUNTERFACTUAL_INSULATED_LIMIT_NOT_T0_WITH_C14_CONVECTIVE_BOUNDARIES")
             report.write_text(report.read_text().replace("YES", "NO", 1))
             with self.assertRaises(ValueError):
                 engine.read_preserved_mesh_volumes(root)
