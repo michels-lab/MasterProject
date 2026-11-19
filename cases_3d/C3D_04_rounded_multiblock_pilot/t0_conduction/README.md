@@ -3,6 +3,28 @@
 **19-11-2026 · Etapa 5/10 · Avance 4/10 = 40 % de hitos operativos.**  
 **Estado: `C14_VALUES_PORTED / SOURCE_PARITY_GUARD_CODE_COMMITTED / CI_NOT_CONFIRMED / WSL_NOT_RUN / NO_CFD`.** Se trata de un paquete 3D de **verificación de conducción térmica entre dos sólidos**, no del modelo C14 original de metal líquido con solidificación. Malla de referencia **solo lectura**: `~/OpenFOAM/C3D04_V4_TRANSITION_REPAIR_01/T02`.
 
+## Operación Granada: compatibilidad Foundation14, auditoría térmica e integridad C14
+
+**Corrección preventiva validada contra documentación oficial Foundation 14:** el `0/T` de C14 histórico utilizaba `externalWallHeatFluxTemperature`, sintaxis heredada que **no se debe copiar tal cual a Foundation 14**. El nuevo generador de C3D-04 conserva los valores **h=10, Ta=300 K y emisividad hierro 0.3/arena 0.5**, pero utiliza la condición Foundation14 **`externalTemperature`** con `h constant 10;`, `Ta constant 300;`, `emissivity 0.3/0.5;` y `value $internalField;` para las seis paredes físicas no vacías de V4/T02. Se elimina de la configuración generada el modo legado `mode coefficient` y `kappaMethod solidThermo`. El contacto `coupledTemperature` con el modelo `wallLayersHeatTransferCoefficient` de 0.2 mm y 0.1 W/(m K) permanece correcto para F14. Fuente oficial: https://doc.cfd.direct/openfoam/user-guide-v14/thermal-boundary-conditions.
+
+**Protección C14 estricta:** el preflight coteja cada archivo ejecutable original C14 con su **Git blob SHA-1** guardado en `C14_PARAMETER_BASELINE.json`, además de cotejar por contenido cada parámetro numérico con `T0_INPUTS.json`. Si cambia cualquiera de los archivos originales, el paquete se **detiene**: no interpreta como verificada una simulación alterada ni reescribe C14. La suite única de regresión incluye perturbación positiva/negativa de parámetros y modificación de bytes del C14 para probar el rechazo.
+
+**Nuevo presupuesto térmico de arranque sobre la geometría nativa 3D:** `thermal_network_budget()` reutiliza el lector previamente aprobado `measure_interface_area.patch_area`, lee `constant/{metal,mold}/polyMesh` de V4/T02 **sin escribirlo**, suma las áreas reales de `metalTop` y de las cinco paredes externas del molde, verifica por separado las 2,496 caras y áreas recíprocas de ambos lados del contacto, y estima escalas iniciales:
+
+```text
+C_metal = rho_metal * Cv_eff_metal * V_metal            [J/K]
+C_mold  = rho_mold * Cv_mold * V_mold                  [J/K]
+G_contact = (kappa_layer/thickness_layer) * A_contact  [W/K]
+G_exterior = h_C14 * A_exterior                       [W/K]
+P_contact,inicial = G_contact * (1500 - 300)           [W]
+P_conv_metal,inicial = G_exterior_metal * (1500 - 300) [W]
+P_rad,inicial ~ emissivity * sigma * A * (T^4 - Ta^4)  [W]
+```
+
+La expresión del contacto **no representa por sí sola la resistencia efectiva de celdas e interfaz**. Se trata de un **estimador inicial con temperaturas uniformes de los dos sólidos y la geometría mapeada**, no de una solución 3D, potencia medida en OpenFOAM ni un balance de energía cerrado. La malla de origen, las propiedades originales y los casos anteriores no son modificados. La batería de tests incluye áreas recíprocas consistentes y un caso de áreas de contacto incompatibles que debe fallar.
+
+**Estado al cierre de esta implementación:** `CODE_COMMITTED`, pruebas fuente preparadas para CI, **sin confirmación de ejecución exitosa del CI ni de Foundation14 nativo en WSL**, ni una corrida CFD. Continúa **etapa 5/10 y avance 40 % de hitos**. La validez del esquema numérico, las variables térmicas dependientes de temperatura, la solidificación real y la independencia de malla están pendientes. No repetir auditorías de geometría ya resueltas.
+
 ## Fuente original C14 — NO confundir con OpenFOAM Foundation 14
 
 La referencia única es `cases_controlled_buoyancy/C14_topFixedFlux_explicitRef`. Los materiales originales también están copiados sin modificación en `cases_3d/C3D_02_metal_sand_clean`. La tabla de procedencia, parámetros de fusión, configuraciones y hashes de fuente se conserva en [`C14_PARAMETER_BASELINE.json`](C14_PARAMETER_BASELINE.json). Los valores operativos que reutiliza la **aproximación T0** están en [`T0_INPUTS.json`](T0_INPUTS.json).
