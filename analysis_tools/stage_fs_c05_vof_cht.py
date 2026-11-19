@@ -92,6 +92,43 @@ def patch_bcs(wall_setting:str,outer_setting:str)->dict[str,str]:
     return {"fluid_to_mold":wall_setting,**{p:outer_setting for p in ATMOSPHERES}}
 
 
+
+def ensure_compressible_kepsilon_divergence(source:str)->tuple[str,list[str]]:
+    """Install BOTH rhoPhi RAS transport schemes required by Foundation14.
+
+    The compressible kEpsilon model transports rho*k and rho*epsilon with
+    rhoPhi, not phi; the stock VOF tutorial is not a kEpsilon RAS tutorial.
+    No silent overwrites of existing, potentially intentional schemes.
+    """
+    anchor=r"(?m)^(\s*)div\(phi,k\)\s+\$turbulence\s*;"
+    found=list(re.finditer(anchor,source))
+    require(len(found)==1,
+            "Foundation14 div(phi,k) turbulence anchor changed or duplicated")
+    additions=[]
+    for name in ("k","epsilon"):
+        needle=rf"(?m)^\s*div\(rhoPhi,{name}\)\s+([^;]+);"
+        existing=list(re.finditer(needle,source))
+        require(len(existing)<=1,"duplicate compressible turbulence scheme: "+name)
+        if existing:
+            require(existing[0].group(1).strip()=="$turbulence",
+                    "unexpected compressible turbulence scheme: "+name)
+        else:
+            additions.append(name)
+    if additions:
+        match=found[0]
+        indent=match.group(1)
+        insert="".join(
+            "\n"+indent+f"div(rhoPhi,{name})    $turbulence;"
+            for name in additions
+        )
+        source=source[:match.end()]+insert+source[match.end():]
+    for name in ("k","epsilon"):
+        require(len(re.findall(
+            rf"(?m)^\s*div\(rhoPhi,{name}\)\s+\$turbulence\s*;",source))==1,
+            "compressible turbulence divergence missing: "+name)
+    return source,additions
+
+
 def control_dict(src:str)->str:
     require("fluid           compressibleVoF;" in src
             and "solid           solid;" in src,
@@ -167,8 +204,10 @@ def stage(source:Path,acceptance:Path,tutorial:Path,out:Path)->dict:
     control_dict((tutorial/"system/controlDict").read_text(encoding="utf-8"))
     fv_schemes_source=(tutorial/"system/fluid/fvSchemes").read_text(
         encoding="utf-8")
-    require(len(re.findall(r"div\(phi,k\)\s+\$turbulence;",fv_schemes_source))==1,
-            "official Foundation14 turbulence transport scheme changed")
+    _,preflight_installed=ensure_compressible_kepsilon_divergence(
+        fv_schemes_source)
+    require(preflight_installed==["k","epsilon"],
+            "official Foundation14 tutorial RAS input scheme changed unexpectedly")
     source_hashes={}
     for root,dirs,files in os.walk(source,followlinks=False):
         for name in dirs+files:
@@ -198,13 +237,10 @@ def stage(source:Path,acceptance:Path,tutorial:Path,out:Path)->dict:
         return p.read_text(encoding="utf-8")
     write("system/controlDict",control_dict(official("system/controlDict")))
     write("system/fvSolution",official("system/fvSolution"))
-    fluid_schemes,changed=re.subn(
-        r"div\(phi,k\)\s+\$turbulence;",
-        "div(phi,k)         $turbulence;\n"
-        "    div(phi,epsilon)   $turbulence;",
+    fluid_schemes,installed=ensure_compressible_kepsilon_divergence(
         official("system/fluid/fvSchemes"))
-    require(changed==1 and "div(phi,epsilon)" in fluid_schemes,
-            "could not install kEpsilon energy/divergence transport scheme")
+    require(installed==["k","epsilon"],
+            "official Foundation14 VOF tutorial RAS transport changed unexpectedly")
     write("system/fluid/fvSchemes",fluid_schemes)
     fv=official("system/fluid/fvSolution")
     require(fv.count('"alpha.water.*"')==1
