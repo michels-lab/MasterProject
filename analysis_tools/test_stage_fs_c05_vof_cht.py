@@ -173,7 +173,7 @@ class CHTTemplateTests(unittest.TestCase):
         base=(self.tutorial/"system/fluid/fvSchemes").read_text()
         bad=base.replace(
             "div(phi,k)         $turbulence;",
-            "div(phi,k)         $turbulence;\\n"
+            "div(phi,k)         $turbulence;\n"
             "    div(rhoPhi,epsilon) Gauss upwind;")
         with self.assertRaisesRegex(ValueError,"unexpected compressible"):
             ensure_compressible_kepsilon_divergence(bad)
