@@ -28,8 +28,8 @@
     "POTENTIAL_UNLOGGED_CHANGES": 2
   },
   "finding_total": 2,
-  "inventory_fingerprint": "2a82d79ced6a2d23cfffa6b3a7450ba98b6c35f7c499a990700d62b664f15cac",
-  "evidence_fingerprint": "6311a008b16954d8d1271c414f829f35dcf0665baf52fc4366e963f63fe06b6e",
+  "inventory_fingerprint": "765844c252476ab7b7e5d7bf608d47095bca77f815a10869b31ceb74b5cce820",
+  "evidence_fingerprint": "ef4772bb9d0d5f9f41fe9be4bb86f5b1921353d166c96eaf9ab32914e1afbb38",
   "files": [
     {
       "path": ".github/agents/openfoam-solidification.agent.md",
@@ -316,7 +316,7 @@
       "role": "bitacora",
       "purpose": "technical/audit change history",
       "certainty": "rule",
-      "blob": "0508689442389898576f9a994b2be63a162e7000"
+      "blob": "1f49627e9588c1bd1176683dce7f80192d8e2e31"
     },
     {
       "path": "README.md",
@@ -1723,7 +1723,7 @@
       "role": "source",
       "purpose": "code/test implementation",
       "certainty": "rule",
-      "blob": "f3f5b3e0537e0498b4b9ad67ee94c6c9ac863acc"
+      "blob": "9bba15a19ea441f5867e2939e32dc267127fded2"
     },
     {
       "path": "cases_3d/C3D_05_step_gmsh_conformal/scripts/run_frontal_pilot.sh",
@@ -1793,7 +1793,7 @@
       "role": "test",
       "purpose": "code/test implementation",
       "certainty": "rule",
-      "blob": "755b81faceeaee6ba1482b1d8e81074bdbb4bfcb"
+      "blob": "11e93c546308aae01cda0b27967ded018c22a770"
     },
     {
       "path": "cases_3d/C3D_05_step_gmsh_conformal/tests/test_step_gmsh_static.sh",
@@ -271615,7 +271615,7 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "7f67e425fc0779ba43d5cda6a29c23cf8af7522f"
+      "blob": "c9248509f1c9fcc605520eac5cf852eb98c4b211"
     },
     {
       "path": "docs/DOCUMENT_SYNC_20261110_ES.md",
@@ -272385,11 +272385,11 @@
       "state": "REVIEW_REQUIRED"
     },
     {
-      "id": "50af65b5e29c84cc",
+      "id": "3bf72c6b93d96534",
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_ES.md",
-      "observation": "1 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_04_rounded_multiblock_pilot/scripts/audit_accepted_surface_fit.py",
+      "observation": "2 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_05_step_gmsh_conformal/scripts/review_accepted_hex_mesh.py, cases_3d/C3D_05_step_gmsh_conformal/tests/test_review_accepted_hex_mesh.py",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     }
