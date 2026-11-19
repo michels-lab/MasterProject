@@ -68,6 +68,53 @@ Failed 1 mesh checks.
             with self.assertRaises(ValueError):
                 mod.boundary_patch(p, "wrong_patch")
 
+    def test_cad_provenance_seven_conditions_pass_when_matching(self):
+        data = {
+            "mesh_element_topology": "HEX8_QUAD4_ONLY",
+            "subdivide_to_hex": True,
+            "algorithm_3d": 1,
+            "mesh_size_mm": 3.6,
+            "source": {
+                "metal_sha256": mod.SHA_METAL,
+                "mold_sha256": mod.SHA_MOLD,
+            },
+            "post_subdivision_hex_count": 270788,
+        }
+        details = mod.cad_provenance_details(data, 270788)
+        self.assertEqual(len(details), 7)
+        self.assertTrue(all(item["passed"] for item in details.values()))
+
+    def test_cad_provenance_reports_exact_failure_instead_of_waiving_it(self):
+        data = {
+            "mesh_element_topology": "HEX8_QUAD4_ONLY",
+            "subdivide_to_hex": True,
+            "algorithm_3d": 1,
+            "mesh_size_mm": 3.6,
+            "source": {
+                "metal_sha256": mod.SHA_METAL,
+                "mold_sha256": mod.SHA_MOLD,
+            },
+            "post_subdivision_hex_count": 270787,
+        }
+        details = mod.cad_provenance_details(data, 270788)
+        self.assertFalse(details["post_subdivision_hex_count_vs_native_parent_cells"]["passed"])
+        self.assertEqual(details["post_subdivision_hex_count_vs_native_parent_cells"]["observed"], 270787)
+        self.assertEqual(details["post_subdivision_hex_count_vs_native_parent_cells"]["expected"], 270788)
+        self.assertTrue(all(
+            value["passed"] for name, value in details.items()
+            if name != "post_subdivision_hex_count_vs_native_parent_cells"
+        ))
+        data["post_subdivision_hex_count"] = 270788
+        data["source"]["mold_sha256"] = "bad-sha"
+        details = mod.cad_provenance_details(data, 270788)
+        self.assertFalse(details["source.mold_sha256"]["passed"])
+        self.assertTrue(details["post_subdivision_hex_count_vs_native_parent_cells"]["passed"])
+
+    def test_cad_provenance_missing_fields_stay_failed(self):
+        details = mod.cad_provenance_details({}, 270788)
+        self.assertFalse(any(item["passed"] for item in details.values()))
+        self.assertIsNone(details["mesh_element_topology"]["observed"])
+
     def test_missing_native_log_rejected(self):
         with tempfile.TemporaryDirectory() as d:
             with self.assertRaises(FileNotFoundError):
