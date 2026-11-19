@@ -160,6 +160,6 @@ done
 grep -Fq 'regionSolvers' "$T0/templates/system/controlDict.tpl"
 grep -Fq 'coupledTemperature' "$T0/templates/0/metal/T.tpl"
 grep -Fq 'coupledTemperature' "$T0/templates/0/mold/T.tpl"
-grep -Fq 'thermo eConst' "$T0/templates/constant/metal/physicalProperties.tpl"
+grep -Eq '^[[:space:]]*thermo[[:space:]]+eConst;' "$T0/templates/constant/metal/physicalProperties.tpl"
 grep -Fq 'no_solver_executed' "$T0_PY"
 grep -Fq 'T0_BLOCKED_MISSING_PHYSICAL_INPUTS_OR_EVIDENCE' "$T0_PY"
