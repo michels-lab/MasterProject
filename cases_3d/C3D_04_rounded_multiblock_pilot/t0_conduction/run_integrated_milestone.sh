@@ -22,6 +22,25 @@ PYTHONDONTWRITEBYTECODE=1 python3 -B "$CASE_A/scripts/report_case_a_progress.py"
 echo "=== B/4: full T0 static positive+negative regression ==="
 PYTHONDONTWRITEBYTECODE=1 python3 -B "$HERE/scripts/prepare_case_a_t0.py" --self-test
 echo "=== C/4: native saved V4/T02 gates and thermal inputs ==="
+# Do not create even a separate materialized case if the real Foundation14
+# executable environment is absent. Pre-check this BEFORE any side effects.
+if [[ "$MODE" == "--materialize" ]]; then
+    if [[ -r /opt/openfoam14/etc/bashrc ]]; then
+        set +u
+        source /opt/openfoam14/etc/bashrc
+        set -u
+    fi
+    if [[ "${WM_PROJECT_VERSION:-}" != "14" ]] ||
+       ! command -v foamMultiRun >/dev/null 2>&1 ||
+       ! command -v foamDictionary >/dev/null 2>&1; then
+        echo "BLOCKED_BEFORE_MATERIALIZATION: OpenFOAM Foundation14 foamMultiRun+foamDictionary required; nothing created" >&2
+        exit 4
+    fi
+    if [[ -e "$OUTPUT" || -L "$OUTPUT" ]]; then
+        echo "BLOCKED_NO_OVERWRITE: existing T0 output preserved at $OUTPUT" >&2
+        exit 4
+    fi
+fi
 if [[ "$MODE" == "--materialize" ]]; then
     PYTHONDONTWRITEBYTECODE=1 python3 -B "$HERE/scripts/prepare_case_a_t0.py" --inputs "$INPUTS" --source "$SOURCE" --out "$OUTPUT" --materialize
 else
@@ -54,4 +73,4 @@ if [[ "$MODE" == "--materialize" ]]; then
     done
     echo "T0_DICTIONARIES_PARSED: still NO CFD, no stability or energy conservation verified."
 fi
-echo "INTEGRATED_PRE_CFD_STAGE_COMPLETE_AS_FAR_AS_REAL_INPUTS_ALLOW."
+echo "INTEGRATED_T0_SOURCE_AND_STATIC_CHECKS_FINISHED; THIS IS NOT A COMPLETED PHYSICAL OR CFD HITO."
