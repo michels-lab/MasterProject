@@ -207,7 +207,7 @@ def main() -> None:
     if not case.is_dir():
         ap.error(f"Case does not exist: {case}")
     result = assess(case)
-    print("C3D-05 ACCEPTED CAD HEX8 REVIEW — ONLY SAVED EVIDENCE / NO CFD")
+    print("C3D-05 INDEPENDENT CAD HEX8 EVIDENCE REVIEW — ONLY SAVED EVIDENCE / NO CFD")
     for region, m in result["quality"].items():
         print(
             f"{region.upper()}: cells={m['cells']} native_OK={m['native_mesh_gate_passed']} "
