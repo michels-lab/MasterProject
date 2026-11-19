@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "audit_kind": "deterministic_full_tracked_tree",
-  "tracked_files_total": 38945,
-  "classified_files_total": 38940,
+  "tracked_files_total": 38946,
+  "classified_files_total": 38941,
   "docs_content_inspected": 169,
   "large_docs_skipped": 1,
   "excluded_reports": 5,
@@ -19,7 +19,7 @@
     "simulation_input": 2683,
     "simulation_log": 3155,
     "simulation_output": 32615,
-    "source": 96,
+    "source": 97,
     "test": 36,
     "web_ui": 1,
     "workflow": 19
@@ -28,8 +28,8 @@
     "POTENTIAL_UNLOGGED_CHANGES": 2
   },
   "finding_total": 2,
-  "inventory_fingerprint": "d2327425a79f896f21742e53e42107f549d97d9d855f00e79e07e4730ea5ae38",
-  "evidence_fingerprint": "9a9a76b6c2a57fb4cd598cb297941ad3e6b752d0a9f4aab208393d51eadd0b90",
+  "inventory_fingerprint": "60bd4f3d8b44015f2b45541c7d2cbb13d90c1748fdbc33483e4fd9634df09a2d",
+  "evidence_fingerprint": "99d52e914c2070f5e1b3aa0487fdc50327314becf0494c7f8cba00181ca85046",
   "files": [
     {
       "path": ".github/agents/openfoam-solidification.agent.md",
@@ -1654,6 +1654,13 @@
       "purpose": "code/test implementation",
       "certainty": "rule",
       "blob": "5dd9452165c37cb27b12624a2c7bc369c105bd93"
+    },
+    {
+      "path": "cases_3d/C3D_04_rounded_multiblock_pilot/scripts/report_case_a_progress.py",
+      "role": "source",
+      "purpose": "code/test implementation",
+      "certainty": "rule",
+      "blob": "ff10d59b92f66f469d83a91d0ddc852eae0a0a9e"
     },
     {
       "path": "cases_3d/C3D_04_rounded_multiblock_pilot/system/blockMeshDict",
@@ -272614,20 +272621,20 @@
   ],
   "findings": [
     {
-      "id": "fe1fa029abf909a4",
+      "id": "c602185f854e124a",
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_EN.md",
-      "observation": "51 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_03_doctor_multiblock_pilot/tests/test_native_multiblock_static.sh, cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V2_BASAL_QUALITY/tests/test_candidate_geometry.py, cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V3_BASAL_SWEEP/run_v3_sweep.sh, cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V3_BASAL_SWEEP/scripts/build_v3_dictionary.py, cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V3_BASAL_SWEEP/scripts/summarize_trial.py, cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V3_BASAL_SWEEP/tests/test_v3_diff.py",
+      "observation": "52 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_03_doctor_multiblock_pilot/tests/test_native_multiblock_static.sh, cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V2_BASAL_QUALITY/tests/test_candidate_geometry.py, cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V3_BASAL_SWEEP/run_v3_sweep.sh, cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V3_BASAL_SWEEP/scripts/build_v3_dictionary.py, cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V3_BASAL_SWEEP/scripts/summarize_trial.py, cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V3_BASAL_SWEEP/tests/test_v3_diff.py",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     },
     {
-      "id": "c6c0fea61c6cff09",
+      "id": "d16b56ec47cebc4d",
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_ES.md",
-      "observation": "3 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/T0_INPUTS.json, cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/scripts/prepare_case_a_t0.py, docs/C3D04_CASE_A_STATUS.json",
+      "observation": "4 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_04_rounded_multiblock_pilot/scripts/report_case_a_progress.py, cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/T0_INPUTS.json, cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/scripts/prepare_case_a_t0.py, docs/C3D04_CASE_A_STATUS.json",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     }
