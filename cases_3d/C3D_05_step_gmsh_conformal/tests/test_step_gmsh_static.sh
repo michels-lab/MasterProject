@@ -51,7 +51,7 @@ HEX_PREFLIGHT="$ROOT/scripts/preflight_hex_subdivision.py"
 [[ -s "$HEX_RUN" && -s "$HEX_PREFLIGHT" ]] || { echo "Missing HEX8 runner or preflight"; exit 1; }
 bash -n "$HEX_RUN"
 python3 -c 'import ast,pathlib,sys; ast.parse(pathlib.Path(sys.argv[1]).read_text())' "$HEX_PREFLIGHT"
-for token in 'C3D05_SUBDIVIDE_HEX=1' 'C3D05_MESH_SIZE_MM=3.6' 'C3D05_MAX_BASE_TETS=150000' 'C3D05_STEP_GMSH_HEX_SUBDIV_COARSE_01' 'preflight_hex_subdivision.py' 'NO CFD'; do
+for token in 'C3D05_SUBDIVIDE_HEX=1' 'C3D05_MESH_SIZE_MM=3.6' 'C3D05_MAX_BASE_TETS=150000' 'C3D05_STEP_GMSH_HEX_SUBDIV_COARSE_02' 'preflight_hex_subdivision.py' 'NO CFD'; do
   grep -Fq -- "$token" "$HEX_RUN" || { echo "HEX8 runner missing safety contract: $token"; exit 1; }
 done
 for token in 'Mesh.SubdivisionAlgorithm' 'gmsh.model.mesh.refine()' 'volume_types' 'surface_types' 'max_base_tets' 'SUBDIVISION_INCOMPLETE'; do
@@ -62,3 +62,14 @@ for token in 'C3D05_SUBDIVIDE_HEX' 'C3D05_MESH_SIZE_MM' 'C3D05_MAX_BASE_TETS' 'r
 done
 grep -Fq 'gmsh.model.mesh.refine()' "$HEX_PREFLIGHT"
 grep -Fq 'final_volume != {5} or final_surface != {3}' "$HEX_PREFLIGHT"
+
+# Regression contract: the HEX8 path must NOT bind 'volume_tags' inside
+# main(), since this hides the global CAD import helper (previous failure).
+REGRESS="$ROOT/tests/test_build_step_mesh_regressions.py"
+[[ -s "$REGRESS" ]] || { echo "Missing Python helper name-collision regression"; exit 1; }
+grep -Fq "test_build_step_mesh_regressions.py" "$HEX_RUN"
+grep -Fq 'FAILED_HEX="$HOME/OpenFOAM/C3D05_STEP_GMSH_HEX_SUBDIV_COARSE_01"' "$HEX_RUN"
+grep -Fq 'OUT="$HOME/OpenFOAM/C3D05_STEP_GMSH_HEX_SUBDIV_COARSE_02"' "$HEX_RUN"
+grep -Fq 'volume_types, hex_element_tags, _ = gmsh.model.mesh.getElements(3)' "$CAD"
+python3 -c 'import ast,pathlib,sys; ast.parse(pathlib.Path(sys.argv[1]).read_text())' "$REGRESS"
+PYTHONDONTWRITEBYTECODE=1 python3 -B -m unittest discover -s "$ROOT/tests" -p 'test_build_step_mesh_regressions.py' -v
