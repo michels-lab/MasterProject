@@ -117,7 +117,7 @@ class IntegratedCaseAT0(unittest.TestCase):
     def test_044_real_original_C14_source_parity_and_negative_regression(self):
         raw = json.loads(engine.INPUTS.read_text(encoding="utf-8"))
         evidence = engine.c14_source_gate(raw)
-        self.assertEqual(evidence["verified_scalar_comparisons"], 26)
+        self.assertEqual(evidence["verified_scalar_comparisons"], 27)
         self.assertTrue(
             evidence["Cp_as_Cv_surrogate_explicit_not_original_C14_thermo"]
         )
