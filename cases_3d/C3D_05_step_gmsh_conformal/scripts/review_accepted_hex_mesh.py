@@ -82,6 +82,42 @@ def boundary_patch(path: Path, name: str) -> dict:
             "neighbourPatch": field("neighbourPatch")}
 
 
+def cad_provenance_details(cad: dict, native_parent_cells: int | None) -> dict:
+    """Explain every strict CAD/source/HEX8 predicate; NEVER bypass a mismatch.
+
+    Only preserved JSON and native checkMesh logs are consulted. A mismatch
+    between Gmsh's HEX8 count and OpenFOAM's parent cell count is evidence
+    requiring an element-level follow-up, not permission to loosen the gate.
+    """
+    source = cad.get("source", {})
+    if not isinstance(source, dict):
+        source = {}
+    fields = (
+        ("mesh_element_topology", cad.get("mesh_element_topology"), "HEX8_QUAD4_ONLY"),
+        ("subdivide_to_hex", cad.get("subdivide_to_hex"), True),
+        ("algorithm_3d", cad.get("algorithm_3d"), 1),
+        ("mesh_size_mm", cad.get("mesh_size_mm"), 3.6),
+        ("source.metal_sha256", source.get("metal_sha256"), SHA_METAL),
+        ("source.mold_sha256", source.get("mold_sha256"), SHA_MOLD),
+        ("post_subdivision_hex_count_vs_native_parent_cells",
+         cad.get("post_subdivision_hex_count"), native_parent_cells),
+    )
+    result = {}
+    for key, observed, expected in fields:
+        # Strict type guard stops bool/int accidental equivalence.
+        passed = (
+            observed is not None and expected is not None
+            and type(observed) is type(expected)
+            and observed == expected
+        )
+        result[key] = {
+            "passed": passed,
+            "observed": observed,
+            "expected": expected,
+        }
+    return result
+
+
 def assess(case: Path) -> dict:
     required = [
         "STEP_CAD_AUDIT.json", "CONTACT_AREA_REPORT.json",
@@ -102,15 +138,8 @@ def assess(case: Path) -> dict:
     top_patch = boundary_patch(case / "constant/metal/polyMesh/boundary", "metalTop")
     areametal = contact.get("metal_to_mold", {})
     areamold = contact.get("mold_to_metal", {})
-    expected_topology = (
-        cad.get("mesh_element_topology") == "HEX8_QUAD4_ONLY"
-        and cad.get("subdivide_to_hex") is True
-        and cad.get("algorithm_3d") == 1
-        and cad.get("mesh_size_mm") == 3.6
-        and cad.get("source", {}).get("metal_sha256") == SHA_METAL
-        and cad.get("source", {}).get("mold_sha256") == SHA_MOLD
-        and cad.get("post_subdivision_hex_count") == q["parent"]["cells"]
-    )
+    provenance = cad_provenance_details(cad, q["parent"]["cells"])
+    expected_topology = all(item["passed"] for item in provenance.values())
     reciprocal = (
         metal_patch["type"] == "mappedWall" and mold_patch["type"] == "mappedWall"
         and metal_patch["neighbourRegion"] == "mold"
@@ -144,6 +173,7 @@ def assess(case: Path) -> dict:
         "source": "PRESERVED_NATIVE_LOGS_AND_CAD_REPORTS_ONLY",
         "no_remesh_no_cfd": True,
         "quality": q,
+        "cad_provenance_checks": provenance,
         "checks": {
             "source_STEP_authentic_and_expected_hex8_topology": expected_topology,
             "native_mesh_OK_all_three": all_mesh_ok,
@@ -184,6 +214,12 @@ def main() -> None:
             f"det_min={m['minimum_cell_determinant']} "
             f"nonorth_max={m['max_nonorthogonality_degrees']}deg "
             f"severe_nonorth_>70deg={m['severely_nonorthogonal_faces_above_70deg']}"
+        )
+    print("=== CAD/STEP/HEX8 SOURCE DETAIL (observed vs expected) ===")
+    for key, detail in result["cad_provenance_checks"].items():
+        print(
+            f"{'PASS' if detail['passed'] else 'FAIL'}: {key}: "
+            f"observed={detail['observed']!r} expected={detail['expected']!r}"
         )
     for key, passed in result["checks"].items():
         print(f"{'PASS' if passed else 'FAIL'}: {key}")
