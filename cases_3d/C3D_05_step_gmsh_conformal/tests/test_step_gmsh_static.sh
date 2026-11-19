@@ -95,3 +95,18 @@ grep -Fq 'cad_provenance_details' "$HEX_REVIEW"
 grep -Fq 'post_subdivision_hex_count_vs_native_parent_cells' "$HEX_REVIEW"
 grep -Fq 'HEX8_NATIVE_ACCEPTANCE_REVIEW_CANONICAL_SHA_20261119.json' "$HEX_REVIEW_RUN"
 grep -Fq 'PREVIOUS="$CASE/HEX8_NATIVE_ACCEPTANCE_REVIEW_20261119.json"' "$HEX_REVIEW_RUN"
+
+# C3D-05 accepted-HEX8 severe nonorth faceSet diagnosis is READ-ONLY.
+NONORTH="$ROOT/scripts/audit_nonorthogonal_faces.py"
+NONORTH_RUN="$ROOT/scripts/run_nonorth_face_audit.sh"
+NONORTH_TEST="$ROOT/tests/test_audit_nonorthogonal_faces.py"
+[[ -s "$NONORTH" && -s "$NONORTH_RUN" && -s "$NONORTH_TEST" ]] || {
+  echo "Missing C3D-05 nonorth read-only diagnostics"; exit 1;
+}
+bash -n "$NONORTH_RUN"
+python3 -c 'import ast,pathlib,sys; [ast.parse(pathlib.Path(p).read_text()) for p in sys.argv[1:]]' "$NONORTH" "$NONORTH_TEST"
+grep -Fq 'NATIVE_FACESET_AUDIT: PASSED' "$NONORTH"
+grep -Fq 'nonOrthoFaces' "$NONORTH"
+grep -Fq 'NONORTH_FACESET_TOPOLOGY_AUDIT_20261119.json' "$NONORTH_RUN"
+grep -Fq 'test_audit_nonorthogonal_faces.py' "$NONORTH_RUN"
+! grep -Eq '^[[:space:]]*(gmshToFoam|checkMesh|blockMesh|foamMultiRun|rm -rf)[[:space:]]' "$NONORTH_RUN"
