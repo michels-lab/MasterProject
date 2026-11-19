@@ -25,11 +25,11 @@
     "workflow": 22
   },
   "finding_counts": {
-    "POTENTIAL_UNLOGGED_CHANGES": 2
+    "POTENTIAL_UNLOGGED_CHANGES": 1
   },
-  "finding_total": 2,
-  "inventory_fingerprint": "a0a4154694f9b872efac02647eeb437ea089494e0f6183f72e5627c8d6506847",
-  "evidence_fingerprint": "36af11a53c3054d119fe89c28d642925ffe8d5c0e47565b6f1f610d6c232e664",
+  "finding_total": 1,
+  "inventory_fingerprint": "b0c4fd12b7b11bd4cfac2da7df98d943e0412e7834e141c8ee35e34c559d453b",
+  "evidence_fingerprint": "550933dbc570abb4382596eac7c2675457c476016eefe3c09628d25919ecaaf8",
   "files": [
     {
       "path": ".github/agents/openfoam-solidification.agent.md",
@@ -337,14 +337,14 @@
       "role": "bitacora",
       "purpose": "technical/audit change history",
       "certainty": "rule",
-      "blob": "aabc6ae305ae4fa19b07a2f01c23c634dad4f8aa"
+      "blob": "456b6335eee63df79663c5a43a549954a5843295"
     },
     {
       "path": "README.md",
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "df609c03a2590360d210ea6b3654393e1339d9f7"
+      "blob": "ba574de16053436e74c5372ab4914209b8d52480"
     },
     {
       "path": "RUN_CASE_REGISTRY.csv",
@@ -358,7 +358,7 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "0d30c310f916ad75d6741b47bb66e1297b59f86d"
+      "blob": "ec8d58630e8a3b90e9561f129acf68ba8ed78d28"
     },
     {
       "path": "VALIDATION_MATRIX.md",
@@ -1492,7 +1492,7 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "4bf543239516d7178f5a6b16b283194beab5d6a7"
+      "blob": "0e0bcb74d0f33aa178ffaad2a27d35fa6a109fbb"
     },
     {
       "path": "cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V2_BASAL_QUALITY/Allmesh",
@@ -271706,7 +271706,7 @@
       "role": "config",
       "purpose": "machine-readable configuration",
       "certainty": "rule",
-      "blob": "419a37c2bdeaba63671044abe1c8c1e8e8b43ba6"
+      "blob": "7d61ac108bdf50ceb854f7122b8f6b2bab5ba367"
     },
     {
       "path": "docs/C3D_01_ESTADO_REAL_20261110_ES.md",
@@ -271923,7 +271923,7 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "ebef0e7864906c6f02759a2caed157c91cf4f2f8"
+      "blob": "f578514eafb48341467344c2c00177ef31dffab1"
     },
     {
       "path": "docs/DOCUMENT_SYNC_20261110_ES.md",
@@ -272716,15 +272716,6 @@
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_EN.md",
-      "observation": "11 implementation/config paths changed since this log's last commit; examples: .github/workflows/case-a-t0-stage-contract.yml, cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/T0_INPUTS.json, cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/run_integrated_milestone.sh, cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/scripts/prepare_case_a_t0.py, cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/tests/test_integrated_case_a.py, cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/scripts/prepare_t0.py",
-      "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "d1625b0729939d91",
-      "code": "POTENTIAL_UNLOGGED_CHANGES",
-      "severity": "review",
-      "path": "PROJECT_AUDIT_LOG_ES.md",
       "observation": "11 implementation/config paths changed since this log's last commit; examples: .github/workflows/case-a-t0-stage-contract.yml, cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/T0_INPUTS.json, cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/run_integrated_milestone.sh, cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/scripts/prepare_case_a_t0.py, cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/tests/test_integrated_case_a.py, cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/scripts/prepare_t0.py",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
