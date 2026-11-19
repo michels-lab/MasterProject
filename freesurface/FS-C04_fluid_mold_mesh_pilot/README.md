@@ -225,3 +225,29 @@ Por lo tanto, **`0/fluid/alpha.metal` está comprobado con lector y postprocesam
 **Estado actualizado:** la etapa de *malla topológica + mapeo de fase + volumen nativo inicial* está APROBADA. Todavía NO existe un solver VOF+CHT acoplado, ni una física de gas exterior validada, ni modelos de solidificación/contracción. No confundir `alpha.metal` (VOF metal–aire) con fracción sólida.
 
 **Siguiente control térmico de interfaz:** auditar en forma **read-only** las 3136 caras `fluid_to_mold` / `mold_to_fluid`, incluyendo concordancia de áreas y normales recíprocas, separación por `alpha.metal` de las superficies inicialmente metal–arena (1248 caras) y aire–arena (1888), y la clasificación de las caras superiores/laterales de la arena. No aplicar de momento valores heredados de `h=10`, `T=300` sobre arena–aire como BC impuesta de la frontera: en la futura formulación conjugada, el **aire circundante se debe resolver explícitamente**, y esas paredes son interfaces sólido–fluido, no parches externos. La base y el hueco inferior necesitan condiciones fieles al montaje. Materiales de C14/C3D-02 son *candidatos de procedencia*, no propiedades de la mezcla gas/metal validadas.
+
+## Nuevo control de contacto térmico — área y normal de interfaz fluido–arena (todavía SIN EJECUTAR localmente)
+
+Se implementó `analysis_tools/audit_fs_c04_thermal_interfaces.py`, auditor **read-only**, para verificar que la futura transferencia de calor conjugada tiene superficies geométricas reales y recíprocas. Toma exclusivamente la copia cuya lectura e integral de `alpha.metal` fueron aprobadas con Foundation 14:
+
+```text
+/home/michel/OpenFOAM/FS_C04_ALPHA_NATIVE_CHECKS/FS_C04_ALPHA_NATIVE_CHECK_20261119T045227Z_50756897
+```
+
+Antes de analizarla, vuelve a comprobar el manifiesto de aceptación `NATIVE_ALPHA_INTEGRAL_VERIFIED_NO_CFD`, el resultado nativo de `volIntegrate(alpha.metal)`, los SHA de la malla, el campo `alpha` y los originales FS-C03/FS-C04, sin ejecutar ninguna utilidad de OpenFOAM ni modificar ningún caso. Luego reconstruye las caras nativas desde `polyMesh/points,faces,owner` y verifica:
+
+- `fluid_to_mold` y `mold_to_fluid` `mappedWall` recíprocos, con **3,136 caras** cada uno.
+- Para cada cara fluido–arena: mismos cuatro vértices geométricos en ambas regiones, área igual con tolerancia de `1e-12 m²`, normales salientes opuestas, sin duplicados ni caras huérfanas.
+- Clasificación inicial por `alpha.metal` **de la celda fluida propietaria**: **1,248 caras** metal–arena y **1,888 caras** aire–arena; estas últimas deben incluir **128 caras superiores** del molde (en y=0) y **1,760 laterales**.
+- Integración geométrica de las áreas reales de las caras, reportadas en m²/cm²: área metal–arena, aire–arena superior, aire–arena lateral y total. **No inventar áreas hasta leer la malla nativa y comprobarlas**.
+
+```bash
+cd ~/OpenFOAM/FS_C02_WORKTREE
+python3 -m unittest discover -s analysis_tools -p test_audit_fs_c04_thermal_interfaces.py -v &&
+python3 analysis_tools/audit_fs_c04_thermal_interfaces.py \
+  --accepted ~/OpenFOAM/FS_C04_ALPHA_NATIVE_CHECKS/FS_C04_ALPHA_NATIVE_CHECK_20261119T045227Z_50756897
+```
+
+El estado esperado es `RECIPROCAL_THERMAL_CONTACT_GEOMETRY_VERIFIED_NO_CHT`; **aún no está confirmado en la laptop**. Si no coincide alguna cara, área o normal, la herramienta debe rechazar el análisis sin reemplazar `mappedWall` ni ajustar arbitrariamente la tolerancia.
+
+Esto **NO** es una condición de frontera térmica funcional ni transferencia de calor resuelta. Las paredes físicas arena–aire están destinadas a intercambio conjugado con el aire **modelado explícitamente**; no imponer sobre ellas `fixedValue T=300 K` ni un coeficiente externo heredado `h=10 W/(m²K)` como sustituto de esa convección. Las fuentes `C14` y `C3D-02` tienen modelos/materiales metal–arena con parámetros provisionales; **no deben copiarse de manera directa a una región VOF conjunta hierro+aire**, cuyos modelos termofísicos, ecuaciones y solvers compatibles con Foundation14 requieren una validación independiente. La base/hueco inferior del molde sigue sin resolver.
