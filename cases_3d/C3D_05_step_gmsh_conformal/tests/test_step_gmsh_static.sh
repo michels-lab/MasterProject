@@ -87,4 +87,4 @@ for needle in 'native_quality' 'minimum_cell_determinant' 'severely_nonorthogona
 done
 grep -Fq 'C3D05_STEP_GMSH_HEX_SUBDIV_COARSE_02' "$HEX_REVIEW_RUN"
 grep -Fq 'test_review_accepted_hex_mesh.py' "$HEX_REVIEW_RUN"
-! grep -Eq '(^|[[:space:]])(gmshToFoam|checkMesh|blockMesh|foamMultiRun)([[:space:]]|$)' "$HEX_REVIEW_RUN"
+! grep -Eq '^[[:space:]]*(gmshToFoam|checkMesh|blockMesh|foamMultiRun)[[:space:]]' "$HEX_REVIEW_RUN"
