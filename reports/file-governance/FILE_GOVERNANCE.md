@@ -5,7 +5,7 @@ No file is auto-deleted or declared unused.
 
 ## Coverage
 
-Tracked: 38887; classified: 38882; readable documents: 157; above read cap: 0; findings: 2.
+Tracked: 38889; classified: 38884; readable documents: 157; above read cap: 0; findings: 2.
 
 ## File roles
 
@@ -19,19 +19,19 @@ Tracked: 38887; classified: 38882; readable documents: 157; above read cap: 0; f
 | document | 124 |
 | index | 28 |
 | license | 1 |
-| simulation_case_file | 105 |
+| simulation_case_file | 106 |
 | simulation_input | 2683 |
 | simulation_log | 3155 |
 | simulation_output | 32613 |
 | source | 75 |
-| test | 27 |
+| test | 28 |
 | web_ui | 1 |
 | workflow | 19 |
 
 ## Findings (human review required)
 
-- **REVIEW / POTENTIAL_UNLOGGED_CHANGES** PROJECT_AUDIT_LOG_EN.md: 18 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_03_doctor_multiblock_pilot/tests/test_native_multiblock_static.sh, cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V2_BASAL_QUALITY/tests/test_candidate_geometry.py, cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V3_BASAL_SWEEP/scripts/build_v3_dictionary.py, cases_3d/C3D_04_rounded_multiblock_pilot/scripts/audit_blockmesh_topology.py, cases_3d/C3D_04_rounded_multiblock_pilot/scripts/diagnose_existing_defects.py, cases_3d/C3D_04_rounded_multiblock_pilot/scripts/measure_interface_area.py. Next: Inspect diffs and reconcile only meaningful decisions/results in the canonical log (ID 593ccd346b62047e)
-- **REVIEW / POTENTIAL_UNLOGGED_CHANGES** PROJECT_AUDIT_LOG_ES.md: 1 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V3_BASAL_SWEEP/scripts/build_v3_dictionary.py. Next: Inspect diffs and reconcile only meaningful decisions/results in the canonical log (ID d53f9324972ca17d)
+- **REVIEW / POTENTIAL_UNLOGGED_CHANGES** PROJECT_AUDIT_LOG_EN.md: 19 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_03_doctor_multiblock_pilot/tests/test_native_multiblock_static.sh, cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V2_BASAL_QUALITY/tests/test_candidate_geometry.py, cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V3_BASAL_SWEEP/scripts/build_v3_dictionary.py, cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V3_BASAL_SWEEP/tests/test_v3_diff.py, cases_3d/C3D_04_rounded_multiblock_pilot/scripts/audit_blockmesh_topology.py, cases_3d/C3D_04_rounded_multiblock_pilot/scripts/diagnose_existing_defects.py. Next: Inspect diffs and reconcile only meaningful decisions/results in the canonical log (ID eef99396317334d9)
+- **REVIEW / POTENTIAL_UNLOGGED_CHANGES** PROJECT_AUDIT_LOG_ES.md: 2 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V3_BASAL_SWEEP/scripts/build_v3_dictionary.py, cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V3_BASAL_SWEEP/tests/test_v3_diff.py. Next: Inspect diffs and reconcile only meaningful decisions/results in the canonical log (ID 61466190bcbc3ae3)
 
 Complete path → purpose/role/certainty list lives in FILE_GOVERNANCE.json. SUMMARY.json has counts only for master polling.
 A dated file, duplicate, or suspicious name is an **investigation candidate**, not unwanted material.

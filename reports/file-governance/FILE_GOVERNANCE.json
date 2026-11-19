@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "audit_kind": "deterministic_full_tracked_tree",
-  "tracked_files_total": 38887,
-  "classified_files_total": 38882,
+  "tracked_files_total": 38889,
+  "classified_files_total": 38884,
   "docs_content_inspected": 157,
   "large_docs_skipped": 0,
   "excluded_reports": 5,
@@ -15,12 +15,12 @@
     "document": 124,
     "index": 28,
     "license": 1,
-    "simulation_case_file": 105,
+    "simulation_case_file": 106,
     "simulation_input": 2683,
     "simulation_log": 3155,
     "simulation_output": 32613,
     "source": 75,
-    "test": 27,
+    "test": 28,
     "web_ui": 1,
     "workflow": 19
   },
@@ -28,8 +28,8 @@
     "POTENTIAL_UNLOGGED_CHANGES": 2
   },
   "finding_total": 2,
-  "inventory_fingerprint": "2c629441a52ca9b146a38ee083482c1cf9df7f3e62ccd6d5e30909ea582057c6",
-  "evidence_fingerprint": "6246f1fe9df8d195972abbc8e3c288ef747e55b2ce5f603f2628ef8c779dcc52",
+  "inventory_fingerprint": "cd359665f0d9027a9ec38f803813e962a9f61e065df08e0bb88ea3d5d595aa8f",
+  "evidence_fingerprint": "e90fad3d1ba52f12ec934ad852daf172d303a0a66015f171676cb4ecdaa8383a",
   "files": [
     {
       "path": ".github/agents/openfoam-solidification.agent.md",
@@ -1502,11 +1502,25 @@
       "blob": "e8f9962a43e085aaacdf6353dd2f8422af41ff92"
     },
     {
+      "path": "cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V3_BASAL_SWEEP/Allmesh",
+      "role": "simulation_case_file",
+      "purpose": "OpenFOAM case-specific support artifact",
+      "certainty": "inferred",
+      "blob": "69d4ab5b2988f56a62efdc688c6e20eb09d9546c"
+    },
+    {
       "path": "cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V3_BASAL_SWEEP/scripts/build_v3_dictionary.py",
       "role": "source",
       "purpose": "code/test implementation",
       "certainty": "rule",
       "blob": "44060e4c3130749ede1a28bc5f638a57b8c55aca"
+    },
+    {
+      "path": "cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V3_BASAL_SWEEP/tests/test_v3_diff.py",
+      "role": "test",
+      "purpose": "code/test implementation",
+      "certainty": "rule",
+      "blob": "8cdac9e9f01d4119a7dbc540b02c0760e70e1a0e"
     },
     {
       "path": "cases_3d/C3D_04_rounded_multiblock_pilot/scripts/audit_blockmesh_topology.py",
@@ -272208,20 +272222,20 @@
   ],
   "findings": [
     {
-      "id": "593ccd346b62047e",
+      "id": "eef99396317334d9",
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_EN.md",
-      "observation": "18 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_03_doctor_multiblock_pilot/tests/test_native_multiblock_static.sh, cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V2_BASAL_QUALITY/tests/test_candidate_geometry.py, cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V3_BASAL_SWEEP/scripts/build_v3_dictionary.py, cases_3d/C3D_04_rounded_multiblock_pilot/scripts/audit_blockmesh_topology.py, cases_3d/C3D_04_rounded_multiblock_pilot/scripts/diagnose_existing_defects.py, cases_3d/C3D_04_rounded_multiblock_pilot/scripts/measure_interface_area.py",
+      "observation": "19 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_03_doctor_multiblock_pilot/tests/test_native_multiblock_static.sh, cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V2_BASAL_QUALITY/tests/test_candidate_geometry.py, cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V3_BASAL_SWEEP/scripts/build_v3_dictionary.py, cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V3_BASAL_SWEEP/tests/test_v3_diff.py, cases_3d/C3D_04_rounded_multiblock_pilot/scripts/audit_blockmesh_topology.py, cases_3d/C3D_04_rounded_multiblock_pilot/scripts/diagnose_existing_defects.py",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     },
     {
-      "id": "d53f9324972ca17d",
+      "id": "61466190bcbc3ae3",
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_ES.md",
-      "observation": "1 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V3_BASAL_SWEEP/scripts/build_v3_dictionary.py",
+      "observation": "2 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V3_BASAL_SWEEP/scripts/build_v3_dictionary.py, cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V3_BASAL_SWEEP/tests/test_v3_diff.py",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     }
