@@ -5,12 +5,14 @@ on:
     paths:
       - "AGENTS.md"
       - "cases_3d/C3D_04_rounded_multiblock_pilot/**"
+      - "cases_controlled_buoyancy/C14_topFixedFlux_explicitRef/**"
       - "docs/C3D04_CASE_A_STATUS.json"
       - ".github/workflows/case-a-t0-stage-contract.yml"
   pull_request:
     paths:
       - "AGENTS.md"
       - "cases_3d/C3D_04_rounded_multiblock_pilot/**"
+      - "cases_controlled_buoyancy/C14_topFixedFlux_explicitRef/**"
       - "docs/C3D04_CASE_A_STATUS.json"
       - ".github/workflows/case-a-t0-stage-contract.yml"
 
