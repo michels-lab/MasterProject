@@ -13,7 +13,8 @@ import re
 from pathlib import Path
 
 SHA_METAL = "ea5f65796c5156e4931eaec29ff656c279120925ebc083767a16b80892d0f475"
-SHA_MOLD = "fe126d23bb639196258551fd156591d7c9ece47016e8ad08a40c"
+# Canonical QuickCupmm.STEP SHA256, 64 hex chars; independently checked in Allmesh.
+SHA_MOLD = "fe126d23bb639196258551fd156591d7fe2b0b4ce1d7c9ece47016e8ad08a40c"
 VOLUMES_M3 = {"metal": 4.7987697e-5, "mold": 1.02843333e-4}
 
 
