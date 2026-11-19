@@ -30,6 +30,19 @@ def csv_rows(path: Path) -> list[dict[str, str]]:
         return list(csv.DictReader(handle))
 
 
+def existing_registry_case_dirs(
+    registry: list[dict[str, str]], controlled_dir: Path, three_d_dir: Path
+) -> set[str]:
+    """Find real case folders; registered 3D pilot categories use cases_3d."""
+    found = {p.name for p in controlled_dir.iterdir() if p.is_dir()} if controlled_dir.is_dir() else set()
+    for row in registry:
+        group = row.get("group", "").strip()
+        name = row.get("case", "").strip()
+        if group.startswith("THREE_D_") and name and (three_d_dir / name).is_dir():
+            found.add(name)
+    return found
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
@@ -57,16 +70,12 @@ def main() -> int:
         errors.append("Duplicate case names in case_metrics.csv.")
     case_set = set(names)
     audit_set = set(audited)
-    # The historical campaign contains 2D controlled cases. Explicitly registered
-    # THREE_D_CLEAN_RESTART cases live under cases_3d/ and must also exist.
-    # Do not auto-register older 3D geometry/prototype directories as CFD runs.
-    disk_set = {p.name for p in CASES_DIR.iterdir() if p.is_dir()} if CASES_DIR.is_dir() else set()
-    clean_3d = ROOT / "cases_3d"
-    for row in registry:
-        if row.get("group", "").strip() == "THREE_D_CLEAN_RESTART":
-            name = row.get("case", "").strip()
-            if name and (clean_3d / name).is_dir():
-                disk_set.add(name)
+    # The historical campaign includes the legacy controlled 2D cases.
+    # All EXPLICITLY registered THREE_D_* categories (restart, topology,
+    # curvilinear blockMesh, STEP/Gmsh) live under cases_3d/, not only the
+    # first 3D clean-restart pilot. Never auto-register unlisted experiments
+    # or upgrade a registered 3D mesh to a RUN_VERIFIED CFD result.
+    disk_set = existing_registry_case_dirs(registry, CASES_DIR, ROOT / "cases_3d")
     unregistered = sorted(disk_set - case_set)
     absent_dirs = sorted(case_set - disk_set)
     unregistered_csv = sorted(audit_set - case_set)
