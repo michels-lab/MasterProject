@@ -347,7 +347,7 @@ def self_test():
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--case", type=Path, default=Path.home()/"OpenFOAM/C3D04_V4_TRANSITION_REPAIR_01/T02")
-    parser.add_argument("--stl-root", type=Path, default=Path(__file__).resolve().parents[1]/"C3D_02_metal_sand_clean"/"constant"/"geometry")
+    parser.add_argument("--stl-root", type=Path, default=Path(__file__).resolve().parents[2]/"C3D_02_metal_sand_clean"/"constant"/"geometry")
     parser.add_argument("--output", type=Path, default=Path.home()/"OpenFOAM/C3D04_V4_T02_CAD_SURFACE_AUDIT_01")
     parser.add_argument("--max-samples", type=int, default=5000)
     parser.add_argument("--self-test", action="store_true")
