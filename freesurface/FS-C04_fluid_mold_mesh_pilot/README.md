@@ -317,3 +317,23 @@ python3 analysis_tools/verify_fs_c04_native_temperature.py \
 ```
 
 **Estado esperado, todavía SIN prueba en laptop**: `NATIVE_2_REGION_T_INTEGRALS_VERIFIED_NO_CHT`. Si se bloquea por formato/compatibilidad de `foamPostProcess`, revisar los logs propios del verificador antes de seguir. No usar `foamRun` en estas copias: todos los parches de `T` siguen en `calculated` como condiciones provisionales no aptas para resolver. Este gate valida solamente lectura e integrales de T inicial, **no transferencia de calor, convección, balance de energía o solidificación**.
+
+## 19-11-2026 — Resultado nativo CONFIRMADO: ambas temperaturas leídas e integradas en OpenFOAM 14
+
+El investigador ejecutó desde commit `3136f982a`, con `WM_PROJECT_VERSION=14`, `test_verify_fs_c04_native_temperature.py` (**14 tests / OK**) y `verify_fs_c04_native_temperature.py` sobre el caso `FS_C04_T_INITIAL_STAGE_20261119T054751Z_b2a08cb7`.
+
+Salida confirmada:
+```text
+FS-C04 T: NATIVE_2_REGION_T_INTEGRALS_VERIFIED_NO_CHT
+Independent native-check folder: /home/michel/OpenFOAM/FS_C04_T_NATIVE_CHECKS/FS_C04_T_NATIVE_CHECK_20261119T055532Z_7145a68b
+fluid volAverage(T) K: 333.70061068
+fluid volIntegrate(T) K*m3: 0.57049194518
+mold volAverage(T) K: 300.0
+mold volIntegrate(T) K*m3: 0.030950742856
+NO CFD / NO CHT / NO SOLIDIFICATION / no solver-ready thermal BC.
+```
+Se han demostrado cuatro operaciones nativas `foamPostProcess` en (t=0), sin arranque de `foamRun` ni `foamMultiRun`. El promedio volumétrico `fluid` de ~333.70 K es dominado por el gran volumen de aire y NO representa un promedio energético del hierro. `T=1500 K` metal; `T=300 K` gas y arena son condiciones iniciales provisionales, NO curvas experimentales. Las BC `calculated` que permiten leer estos campos SON **NO APTAS PARA CORRER CFD/CHT** y deben sustituirse por BC térmicas correctas antes de cualquier paso de tiempo.
+
+**Fase de datos iniciales concluida y auditada:** malla 3D, fracción VOF metal-aire, volumen inicial, región sólida, interfaces de 3136 caras y valores de T. **Fase de física térmica todavía NO iniciada:** requiere identificar y probar solvers de OpenFOAM Foundation14 compatibles con ambas regiones, propiedades termofísicas metal/gas/arena dependientes de T, BC conjugadas de interfaz y BC atmosféricas de presión/T; contacto inferior y abertura del molde; conservación de energía/masa y sensibilidad de malla; finalmente solidificación y contracción. Evitar sustituir el intercambio arena–aire por un (h) externo mientras se resuelve el aire explícitamente.
+
+No repetir más gates de geometría como sustituto de avanzar en física: el próximo paquete de trabajo debe buscar el mecanismo real de acoplamiento conjugado VOF+solid que permita mover calor, y separar claramente lo que se implementa de lo que se verifica en ejecución nativa. No modificar los casos nativos aprobados.
