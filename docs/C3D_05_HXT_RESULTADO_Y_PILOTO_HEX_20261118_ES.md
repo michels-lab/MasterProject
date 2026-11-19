@@ -1,3 +1,5 @@
+> **ACTUALIZACIÓN 18–19/11/2026:** este documento describía el HEX8 como «no ejecutado». Hubo **un primer intento real `_01`**, con preflight Gmsh in-memory de dos sólidos **aprobado (3092 HEX8)**; la ejecución QuickCup abortó **antes de importar STEP** por nombre local `volume_tags` que ocultó función global. **Fuente corregida y prueba regresiva integradas en GitHub**. La prueba QuickCup HEX8 corregida sigue **sin ejecutar**; se hará en carpeta nueva `C3D05_STEP_GMSH_HEX_SUBDIV_COARSE_02` sin sobrescribir `_01`. [Evidencia y procedimiento actualizado](C3D_05_HEX8_PRIMER_INTENTO_PYTHON_20261119_ES.md).
+
 # Caso B — C3D-05: HXT falló el mismo determinante; piloto HEX8 independiente
 
 **Fuente primaria:** transcripción del investigador `Pasted text(20261119-053507).txt`, ejecución en Ubuntu WSL de `run_hxt_pilot.sh` con ambos SolidWorks STEP originales. **Datos nativos de Gmsh + OpenFOAM 14**; el ensayo HXT fue ejecutado, los números **no son estimaciones**. Candidato hexagonal nuevo **preparado, todavía NO ejecutado**. NO CFD.
