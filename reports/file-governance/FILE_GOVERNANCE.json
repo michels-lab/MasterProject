@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "audit_kind": "deterministic_full_tracked_tree",
-  "tracked_files_total": 38962,
-  "classified_files_total": 38957,
+  "tracked_files_total": 38963,
+  "classified_files_total": 38958,
   "docs_content_inspected": 173,
   "large_docs_skipped": 1,
   "excluded_reports": 5,
@@ -10,7 +10,7 @@
     "agent": 8,
     "analysis_tool": 1,
     "bitacora": 5,
-    "config": 12,
+    "config": 13,
     "data": 31,
     "document": 137,
     "index": 32,
@@ -28,8 +28,8 @@
     "POTENTIAL_UNLOGGED_CHANGES": 2
   },
   "finding_total": 2,
-  "inventory_fingerprint": "9d59cf38ef808af819d0bbe73074a90f8d45cb71b5f526da7fcf8fcc0ad52bb5",
-  "evidence_fingerprint": "1da112f0f0eb6ff9d7aa268ee0a214a53fdd73260537184a8887e591ee173588",
+  "inventory_fingerprint": "aba75047b188c4493a57adbb962a34aa28fe3d46172d71a50c877ff4b75f0d1d",
+  "evidence_fingerprint": "de20d22cf1dec5081cbdef4ab9248fc0459a8821fe94a98a82a20db725eeb17e",
   "files": [
     {
       "path": ".github/agents/openfoam-solidification.agent.md",
@@ -1698,6 +1698,13 @@
       "blob": "5656a830e7c28684dabe317c8636147a86bdc5dc"
     },
     {
+      "path": "cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/C14_PARAMETER_BASELINE.json",
+      "role": "config",
+      "purpose": "machine-readable configuration",
+      "certainty": "rule",
+      "blob": "75f15039e5319f93c935188247ee46f9d4476ae1"
+    },
+    {
       "path": "cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/README.md",
       "role": "index",
       "purpose": "navigation/onboarding",
@@ -1709,7 +1716,7 @@
       "role": "config",
       "purpose": "machine-readable configuration",
       "certainty": "rule",
-      "blob": "fb0c6e892807acbb8b2117f6c2b0c04ed76b8070"
+      "blob": "111e478f7280851f601bba33ba84cf98f4f6e551"
     },
     {
       "path": "cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/run_integrated_milestone.sh",
@@ -2024,7 +2031,7 @@
       "role": "test",
       "purpose": "code/test implementation",
       "certainty": "rule",
-      "blob": "7748b1af71438406703f6d735a39cb455ab54171"
+      "blob": "a3367d535f6b55411ec9ecd67851a1a490d54f0e"
     },
     {
       "path": "cases_3d/C3D_05_step_gmsh_conformal/tests/test_audit_nonorth_hop_distance.py",
@@ -272733,20 +272740,20 @@
   ],
   "findings": [
     {
-      "id": "537b337147f980d6",
+      "id": "3dfe4d9ccc1669d7",
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_EN.md",
-      "observation": "1 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/scripts/run_t0_granada.py",
+      "observation": "4 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/C14_PARAMETER_BASELINE.json, cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/T0_INPUTS.json, cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/scripts/run_t0_granada.py, cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/tests/test_t0_granada.py",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     },
     {
-      "id": "ebf2a8fbe3369c1e",
+      "id": "3f7be7c09005ff56",
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_ES.md",
-      "observation": "1 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/scripts/run_t0_granada.py",
+      "observation": "4 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/C14_PARAMETER_BASELINE.json, cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/T0_INPUTS.json, cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/scripts/run_t0_granada.py, cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/tests/test_t0_granada.py",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     }

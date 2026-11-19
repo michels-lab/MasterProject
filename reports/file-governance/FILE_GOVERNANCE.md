@@ -5,7 +5,7 @@ No file is auto-deleted or declared unused.
 
 ## Coverage
 
-Tracked: 38962; classified: 38957; readable documents: 173; above read cap: 1; findings: 2.
+Tracked: 38963; classified: 38958; readable documents: 173; above read cap: 1; findings: 2.
 
 ## File roles
 
@@ -14,7 +14,7 @@ Tracked: 38962; classified: 38957; readable documents: 173; above read cap: 1; f
 | agent | 8 |
 | analysis_tool | 1 |
 | bitacora | 5 |
-| config | 12 |
+| config | 13 |
 | data | 31 |
 | document | 137 |
 | index | 32 |
@@ -30,8 +30,8 @@ Tracked: 38962; classified: 38957; readable documents: 173; above read cap: 1; f
 
 ## Findings (human review required)
 
-- **REVIEW / POTENTIAL_UNLOGGED_CHANGES** PROJECT_AUDIT_LOG_EN.md: 1 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/scripts/run_t0_granada.py. Next: Inspect diffs and reconcile only meaningful decisions/results in the canonical log (ID 537b337147f980d6)
-- **REVIEW / POTENTIAL_UNLOGGED_CHANGES** PROJECT_AUDIT_LOG_ES.md: 1 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/scripts/run_t0_granada.py. Next: Inspect diffs and reconcile only meaningful decisions/results in the canonical log (ID ebf2a8fbe3369c1e)
+- **REVIEW / POTENTIAL_UNLOGGED_CHANGES** PROJECT_AUDIT_LOG_EN.md: 4 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/C14_PARAMETER_BASELINE.json, cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/T0_INPUTS.json, cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/scripts/run_t0_granada.py, cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/tests/test_t0_granada.py. Next: Inspect diffs and reconcile only meaningful decisions/results in the canonical log (ID 3dfe4d9ccc1669d7)
+- **REVIEW / POTENTIAL_UNLOGGED_CHANGES** PROJECT_AUDIT_LOG_ES.md: 4 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/C14_PARAMETER_BASELINE.json, cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/T0_INPUTS.json, cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/scripts/run_t0_granada.py, cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/tests/test_t0_granada.py. Next: Inspect diffs and reconcile only meaningful decisions/results in the canonical log (ID 3f7be7c09005ff56)
 
 Complete path → purpose/role/certainty list lives in FILE_GOVERNANCE.json. SUMMARY.json has counts only for master polling.
 A dated file, duplicate, or suspicious name is an **investigation candidate**, not unwanted material.
