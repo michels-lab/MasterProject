@@ -303,34 +303,82 @@ def isolated_output(source: Path, dest: Path):
 
 def materialize(source: Path, dest: Path, cfg: dict, input_file: Path,
                 items: dict[str, str], evidence: dict):
+    """Build, parse and verify in staging; publish only a complete isolated T0.
+
+    A failed native foamDictionary parse or copy leaves NO final directory.
+    Native geometry is copied verbatim, never moved from the accepted T02.
+    """
     isolated_output(source, dest)
-    dest.mkdir(parents=True, exist_ok=False)
-    for region in ("metal", "mold"):
-        shutil.copytree(
-            source/"constant"/region/"polyMesh",
-            dest/"constant"/region/"polyMesh",
-            symlinks=False,
-        )
-    for name, content in items.items():
-        file = dest/name
-        file.parent.mkdir(parents=True, exist_ok=True)
-        with file.open("x", encoding="utf-8") as stream:
-            stream.write(content)
-    record = {
-        "status": "T0_FILESET_MATERIALIZED_NOT_SOLVED",
-        "not_validated_physics": True,
-        "not_CFD_executed": True,
-        "source_case_preserved": str(source),
-        "new_case": str(dest),
-        "input_sha256": hashlib.sha256(input_file.read_bytes()).hexdigest(),
-        "source_native_gates": evidence,
-        "thermophysical_parameters_and_sources": cfg,
-        "expected_solver": "foamMultiRun",
-        "next_gate": "NATIVE_F14_DICTIONARY_PARSE_THEN_PERMISSION_TO_RUN_ENERGY_BALANCE",
-    }
-    with (dest/"T0_PREPARATION_REPORT.json").open("x", encoding="utf-8") as f:
-        json.dump(record, f, ensure_ascii=False, sort_keys=True, indent=2)
-        f.write("\n")
+    if os.environ.get("WM_PROJECT_VERSION") != "14":
+        raise RuntimeError("Foundation 14 environment required BEFORE materialization")
+    foam_dictionary = shutil.which("foamDictionary")
+    if foam_dictionary is None:
+        raise RuntimeError("foamDictionary unavailable; refusing incomplete output")
+    dest.parent.mkdir(parents=True, exist_ok=True)
+    with tempfile.TemporaryDirectory(
+        prefix=f".{dest.name}.staging.", dir=dest.parent
+    ) as temp:
+        stage = Path(temp)/"candidate"
+        stage.mkdir()
+        hashes = {}
+        for region in ("metal", "mold"):
+            base = Path("constant")/region/"polyMesh"
+            for name in ("points", "faces", "owner", "neighbour", "boundary"):
+                relative = base/name
+                source_hash = hashlib.sha256((source/relative).read_bytes()).hexdigest()
+                hashes[str(relative)] = source_hash
+            shutil.copytree(
+                source/base, stage/base, symlinks=False
+            )
+            for name in ("points", "faces", "owner", "neighbour", "boundary"):
+                relative = base/name
+                copy_hash = hashlib.sha256((stage/relative).read_bytes()).hexdigest()
+                if copy_hash != hashes[str(relative)]:
+                    raise ValueError(
+                        f"Copy mismatch on preserved native mesh: {relative}"
+                    )
+        for name, content in items.items():
+            target = stage/name
+            target.parent.mkdir(parents=True, exist_ok=True)
+            with target.open("x", encoding="utf-8") as stream:
+                stream.write(content)
+        parsed = []
+        for relative in sorted(items):
+            command = subprocess.run(
+                [foam_dictionary, str(stage/relative)],
+                cwd=stage, capture_output=True, text=True,
+                timeout=30, check=False
+            )
+            if command.returncode != 0:
+                detail = (command.stdout + "\n" + command.stderr).strip()
+                raise RuntimeError(
+                    f"Foundation14 foamDictionary rejected {relative}; "
+                    f"no final T0 case created. Output: {detail[-3000:]}"
+                )
+            parsed.append(relative)
+        record = {
+            "status": "T0_FILESET_MATERIALIZED_NATIVE_DICTIONARIES_PARSED_NOT_SOLVED",
+            "not_validated_physics": True,
+            "not_CFD_executed": True,
+            "source_case_preserved": str(source),
+            "new_case": str(dest),
+            "input_sha256": hashlib.sha256(input_file.read_bytes()).hexdigest(),
+            "source_native_gates": evidence,
+            "source_and_copy_mesh_sha256": hashes,
+            "native_foundation14_parsed_files": parsed,
+            "thermophysical_parameters_and_sources": cfg,
+            "expected_solver": "foamMultiRun",
+            "next_gate": "EXPLICIT_PERMISSION_AND_THERMAL_COUPLING_ENERGY_CONSERVATION",
+            "no_solver_executed": True,
+        }
+        with (stage/"T0_PREPARATION_REPORT.json").open(
+            "x", encoding="utf-8"
+        ) as stream:
+            json.dump(record, stream, ensure_ascii=False, sort_keys=True, indent=2)
+            stream.write("\n")
+        # Final stage last, without overwriting any prior evidence.
+        isolated_output(source, dest)
+        os.rename(stage, dest)
 
 
 def synthetic_fixture():
