@@ -696,7 +696,7 @@ def self_test():
         synthetic_fixture(), {"metal": 1.0, "mold": 1.0}
     )
     assert abs(target["ideal_equilibrium_K_no_heat_loss"] - 6.5) < 1e-12
-    print("STATIC_INTEGRATED_T0_PASS: null data blocked; 10 files incl global PIMPLE; all native patch names; energy target; provenance; rejection regressions")
+    print("STATIC_INTEGRATED_T0_PASS: archived C14 input schema; synthetic counterexamples; 10 files incl global PIMPLE; native patch contracts; source parity suite; zero solver runs")
     print("STATIC_ONLY: no OpenFOAM, CFD or thermal case creation.")
 
 
@@ -707,7 +707,7 @@ def main() -> int:
     p.add_argument("--out", type=Path, default=OUTPUT)
     p.add_argument("--self-test", action="store_true")
     p.add_argument("--materialize", action="store_true",
-                   help="Explicitly copy native mesh and nine dictionaries to a brand-new isolated directory, NEVER run solver")
+                   help="Atomically copy native meshes and ten parsed dictionaries to a new directory, NEVER run CFD")
     args = p.parse_args()
     if args.self_test:
         self_test()
@@ -721,7 +721,7 @@ def main() -> int:
     evidence = native_case_gate(source)
     errors = validate(cfg)
     if errors:
-        print("CASE_A_T0_BLOCKED_PENDING_REAL_INPUTS | native mesh/contact and real patch names verified:")
+        print("CASE_A_T0_CONFIG_INVALID_OR_UNSUPPORTED | native mesh/contact and patch names verified:")
         for e in errors:
             print(" - " + e)
         print("No physical parameters invented. No materialization. No CFD.")
@@ -742,7 +742,7 @@ def main() -> int:
         return 0
     materialize(source, dest, cfg, input_file, files, evidence)
     print(f"CASE_A_T0_MATERIALIZED_NOT_SOLVED: {dest}")
-    print("Native Foundation14 dictionary syntax and coupled thermophysics must still be verified.")
+    print("All 10 dictionaries parsed with native Foundation14 foamDictionary; actual coupled thermophysics/CFD still UNVERIFIED.")
     return 0
 
 
