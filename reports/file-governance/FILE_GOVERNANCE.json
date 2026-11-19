@@ -28,7 +28,7 @@
     "POTENTIAL_UNLOGGED_CHANGES": 2
   },
   "finding_total": 2,
-  "inventory_fingerprint": "c5667ae295f7dff3c9e37ecf7189eb84c28bd67a5c95d834b82989de8ae912d8",
+  "inventory_fingerprint": "5db151b2be48ad103c6187af2939ac66504dede30cfe21caaed800fed70b0f29",
   "evidence_fingerprint": "0335c637bfda3e4f0a9cb7393e74a8a946b92a9c3aac54d04d6a9e04c56ceae5",
   "files": [
     {
@@ -323,7 +323,7 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "c709193632060f5847777552e07ea5e22b4a24ff"
+      "blob": "8e520dc348647c33b8ce22c6d5925384b2431d08"
     },
     {
       "path": "RUN_CASE_REGISTRY.csv",
@@ -1821,7 +1821,7 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "751c6f9e6a6f233c3f22dd9576e49a9d87f271c4"
+      "blob": "1d2f2018ef3b43d9056dcdf25971565a17d96382"
     },
     {
       "path": "cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/T0_INPUTS.json",
