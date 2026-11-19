@@ -1,0 +1,87 @@
+#!/usr/bin/env python3
+"""Forensic report of a separate C14-numerical-only foamMultiRun attempt.
+
+Reads the actual log and input config, never fabricates successful CFD or
+evaluates energy conservation from log text alone. No solver called.
+"""
+from __future__ import annotations
+import argparse
+import hashlib
+import json
+import math
+from pathlib import Path
+import re
+
+NUM = r"[-+]?(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][-+]?\d+)?"
+
+
+def audit(text: str, return_code: int, config: dict) -> dict:
+    if type(return_code) is not int or return_code < 0:
+        raise ValueError("invalid process return code")
+    expected = float(config["simulation"]["endTime_s"])
+    timestep = float(config["simulation"]["deltaT_s"])
+    if not math.isfinite(expected) or not math.isfinite(timestep) or min(expected, timestep) <= 0:
+        raise ValueError("invalid numerical time configuration")
+    found = re.findall(r"(?m)^\s*Time\s*=\s*(" + NUM + r")\s*$", text)
+    observed = [float(x) for x in found]
+    if any(not math.isfinite(x) for x in observed):
+        raise ValueError("nonfinite time in foamMultiRun output")
+    strictly_monotonic = all(y > x for x, y in zip(observed, observed[1:]))
+    fatal = bool(re.search(r"(?i)FOAM FATAL(?: IO)? ERROR|floating point exception|sigfpe|segmentation fault", text))
+    residual_invalid = bool(re.search(
+        r"(?i)(?:Initial residual|Final residual)\s*=\s*(?:nan|[-+]?inf)\b", text))
+    end_marker = bool(re.search(r"(?m)^\s*End\s*$", text))
+    last = observed[-1] if observed else None
+    completed = (return_code == 0 and not fatal and not residual_invalid
+                 and end_marker and len(observed) > 1 and strictly_monotonic
+                 and last is not None and abs(last - expected) <= max(1e-10, abs(expected)*1e-7))
+    return {
+        "status": "NUMERICAL_ONLY_SOLVER_COMPLETED_NEEDS_ENERGY_VERIFICATION" if completed
+                  else "NUMERICAL_ONLY_SOLVER_NOT_VERIFIED_COMPLETE",
+        "exit_code": return_code,
+        "final_time_observed_s": last,
+        "configured_end_time_s": expected,
+        "times_observed": len(observed),
+        "strictly_monotonic_times": strictly_monotonic,
+        "end_marker_observed": end_marker,
+        "fatal_openfoam_pattern": fatal,
+        "invalid_residual_pattern": residual_invalid,
+        "numerical_run_completed": completed,
+        "energy_conservation_verified": False,
+        "interface_flux_verified": False,
+        "experimental_validation": False,
+        "physical_properties_jmatpro_verified": False,
+        "scope": "C14_ARCHIVED_NUMERICAL_TWO_SOLID_T0_ONLY",
+    }
+
+
+def save(path: Path, report: dict) -> str:
+    data = json.dumps(report, indent=2, sort_keys=True, ensure_ascii=False) + "\n"
+    if path.exists() or path.is_symlink():
+        if path.is_file() and path.read_text(encoding="utf-8") == data:
+            return "RUN_REPORT_EXISTS_IDENTICAL"
+        raise FileExistsError(f"Existing run report preserved: {path}")
+    with path.open("x", encoding="utf-8") as f:
+        f.write(data)
+    return "RUN_ATTEMPT_CLASSIFIED"
+
+
+def main():
+    ap = argparse.ArgumentParser(description=__doc__)
+    ap.add_argument("--inputs", type=Path, required=True)
+    ap.add_argument("--log", type=Path, required=True)
+    ap.add_argument("--exit-code", type=int, required=True)
+    ap.add_argument("--out", type=Path, required=True)
+    args = ap.parse_args()
+    inputs = args.inputs.read_bytes()
+    log = args.log.read_bytes()
+    result = audit(log.decode("utf-8", errors="replace"), args.exit_code, json.loads(inputs))
+    result["input_sha256"] = hashlib.sha256(inputs).hexdigest()
+    result["log_sha256"] = hashlib.sha256(log).hexdigest()
+    result["log_path"] = str(args.log)
+    print(save(args.out, result), result["status"])
+    return 0 if result["numerical_run_completed"] else 6
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
