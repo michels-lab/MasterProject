@@ -291,3 +291,29 @@ Estado esperado, **NO CONFIRMADO LOCALMENTE**: `INITIAL_T_STAGED_READBACK_NO_NAT
 ## Resultado REAL del investigador: temperatura inicial de cribado preparada y releída
 
 El investigador ejecutó en Ubuntu el commit `32b049eaa` y aportó `Ran 12 tests in 0.263s / OK`, seguido de `FS-C04: INITIAL_T_STAGED_READBACK_NO_NATIVE_OR_CHT`. Carpeta NUEVA generada: `/home/michel/OpenFOAM/FS_C04_T_INITIAL_RUNS/FS_C04_T_INITIAL_STAGE_20261119T054751Z_b2a08cb7`. Condiciones iniciales **provisionales de cribado**: 2368 celdas de metal a **1500 K**, 32000 celdas de aire a **300 K** y 7680 de arena a **300 K**. Los archivos `0/fluid/T` y `0/mold/T` fueron escritos y releídos por las verificaciones de Python; los parches `calculated` son **solo marcadores de postprocesamiento, NO condiciones térmicas aptas para un solver**. No se ejecutó CFD, CHT, enfriamiento ni solidificación; **lectura nativa de T todavía no confirmada**. Malla, fracción de fase y casos anteriores permanecen sin modificación.
+
+## Control implementado para validar nativamente `T` en DOS regiones, sin CFD (pendiente de ejecución local)
+
+Se añadieron `analysis_tools/verify_fs_c04_native_temperature.py` y `test_verify_fs_c04_native_temperature.py`, incluidos en la CI estática del PR #51. Esta es una etapa nueva, independiente de la carpeta de temperatura inicial ya aprobada.
+
+**Origen local confirmado:** `~/OpenFOAM/FS_C04_T_INITIAL_RUNS/FS_C04_T_INITIAL_STAGE_20261119T054751Z_b2a08cb7`. El verificador reevalúa las 3136 interfaces metal/aire–arena y el `alpha.metal` anterior, comprueba los SHA-256 y lectura de `0/fluid/T` y `0/mold/T`, y calcula las integrales geométricas `∑ V·T` y promedios `∑ V·T/∑V` por región desde los hexaedros nativos. Mantiene intocados los casos aprobados. Para la verificación **nativa**, construye una nueva carpeta `FS_C04_T_NATIVE_CHECK_<UTC>_<id>` con dos copias independientes (`case_fluid` y `case_mold`) y ejecuta exclusivamente cuatro operaciones no CFD en Foundation14:
+
+```text
+foamPostProcess -case <copia-fluid> -region fluid -time 0 -func 'volAverage(T)'
+foamPostProcess -case <copia-fluid> -region fluid -time 0 -func 'volIntegrate(T)'
+foamPostProcess -case <copia-mold> -region mold -time 0 -func 'volAverage(T)'
+foamPostProcess -case <copia-mold> -region mold -time 0 -func 'volIntegrate(T)'
+```
+
+Los cuatro resultados deben estar efectivamente en `postProcessing/**/volFieldValue.dat` con encabezados `volAverage(T)` y `volIntegrate(T)`, tiempo único `t=0` y coincidencia con la geometría dentro de tolerancia de 5 ppm (con tolerancias absolutas de 1e-3 K y 1e-8 K·m³ para limitaciones de precisión decimal). No basta con código de salida 0 ni se aceptan tablas ausentes/duplicadas. El resultado y logs quedan en `FS_C04_NATIVE_T_ACCEPTANCE.json`. Un error conserva la evidencia y marca rechazo, **nunca éxito ficticio**.
+
+Comandos tras actualizar `FS_C02_WORKTREE`:
+
+```bash
+cd ~/OpenFOAM/FS_C02_WORKTREE
+python3 -m unittest discover -s analysis_tools -p test_verify_fs_c04_native_temperature.py -v &&
+python3 analysis_tools/verify_fs_c04_native_temperature.py \
+  --stage ~/OpenFOAM/FS_C04_T_INITIAL_RUNS/FS_C04_T_INITIAL_STAGE_20261119T054751Z_b2a08cb7
+```
+
+**Estado esperado, todavía SIN prueba en laptop**: `NATIVE_2_REGION_T_INTEGRALS_VERIFIED_NO_CHT`. Si se bloquea por formato/compatibilidad de `foamPostProcess`, revisar los logs propios del verificador antes de seguir. No usar `foamRun` en estas copias: todos los parches de `T` siguen en `calculated` como condiciones provisionales no aptas para resolver. Este gate valida solamente lectura e integrales de T inicial, **no transferencia de calor, convección, balance de energía o solidificación**.
