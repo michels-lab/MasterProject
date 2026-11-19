@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
   "audit_kind": "deterministic_full_tracked_tree",
-  "tracked_files_total": 38954,
-  "classified_files_total": 38949,
-  "docs_content_inspected": 171,
+  "tracked_files_total": 38958,
+  "classified_files_total": 38953,
+  "docs_content_inspected": 172,
   "large_docs_skipped": 1,
   "excluded_reports": 5,
   "roles": {
@@ -12,24 +12,24 @@
     "bitacora": 5,
     "config": 11,
     "data": 31,
-    "document": 135,
+    "document": 136,
     "index": 32,
     "license": 1,
     "simulation_case_file": 114,
     "simulation_input": 2683,
     "simulation_log": 3155,
     "simulation_output": 32615,
-    "source": 99,
-    "test": 37,
+    "source": 100,
+    "test": 38,
     "web_ui": 1,
-    "workflow": 21
+    "workflow": 22
   },
   "finding_counts": {
     "POTENTIAL_UNLOGGED_CHANGES": 2
   },
   "finding_total": 2,
-  "inventory_fingerprint": "9ff3c1fd889b4a1e486f15bf5c8cfd5e8b3b8e0e193439037d6bafbe79a42e80",
-  "evidence_fingerprint": "feaa7cceb613e0dea72bb8bee857658e4402bcd3b9d24f7f3cc29ba330097a78",
+  "inventory_fingerprint": "56c7ab9421e70f591a383592e953ab136ffa1adc1be454c1f495dfcddf8e6523",
+  "evidence_fingerprint": "fa51ddfb5cd3f2f3d0cb9d744100c554e89b0fead3ea92f960a244f13fbe363b",
   "files": [
     {
       "path": ".github/agents/openfoam-solidification.agent.md",
@@ -74,11 +74,18 @@
       "blob": "0b7a9effb677940149772ded624881b508323877"
     },
     {
+      "path": ".github/workflows/c3d05-t0-granada-static.yml",
+      "role": "workflow",
+      "purpose": "GitHub Actions automation",
+      "certainty": "rule",
+      "blob": "8d95382ed02d72352b03106abc66e0c733ef89f6"
+    },
+    {
       "path": ".github/workflows/case-a-t0-stage-contract.yml",
       "role": "workflow",
       "purpose": "GitHub Actions automation",
       "certainty": "rule",
-      "blob": "aa538ef9b796829c39013f38add2771f4d082b4a"
+      "blob": "c98bf1f9d14ebbfcb43a9dea75981005244e9803"
     },
     {
       "path": ".github/workflows/file-governance-audit.yml",
@@ -1901,6 +1908,13 @@
       "blob": "2f6c2aa1e03d6d5de43abe1c74cfc3689bc9a23c"
     },
     {
+      "path": "cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/scripts/run_t0_granada.py",
+      "role": "source",
+      "purpose": "code/test implementation",
+      "certainty": "rule",
+      "blob": "b031e732d201cad7e2b67f9f568b7e6682e5ab65"
+    },
+    {
       "path": "cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/scripts/run_t0_materialize.sh",
       "role": "source",
       "purpose": "code/test implementation",
@@ -1983,6 +1997,13 @@
       "purpose": "code/test implementation",
       "certainty": "rule",
       "blob": "7bd68424132049e02dde53f03e203bd6769397f8"
+    },
+    {
+      "path": "cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/tests/test_t0_granada.py",
+      "role": "test",
+      "purpose": "code/test implementation",
+      "certainty": "rule",
+      "blob": "a67159cdf603eeda768e5451a4308a88e0aa5067"
     },
     {
       "path": "cases_3d/C3D_05_step_gmsh_conformal/tests/test_audit_nonorth_hop_distance.py",
@@ -271930,7 +271951,7 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "14d8eabfb059d64a4a130a61c2307c0195b89471"
+      "blob": "8188e2e1ff65a6e04710e274a8ea7f2c5c915149"
     },
     {
       "path": "docs/PRIMER_AVANCE_REQUISITOS_DIRECTOR_20261118_ES.md",
@@ -271980,6 +272001,13 @@
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
       "blob": "393b029ea89239d24ed4c1e30e1fec596fedc22c"
+    },
+    {
+      "path": "docs/granada/C3D05_T0_INTEGRATED_GRANADA_20261119_ES.md",
+      "role": "document",
+      "purpose": "manual/decision/report/historical note",
+      "certainty": "inferred",
+      "blob": "67f7781a2c2984a46d2b3c36cfa0a6fc3b20c803"
     },
     {
       "path": "docs/granada/ENERGY_PHASE_V14_V16_20261020.md",
@@ -272677,20 +272705,20 @@
   ],
   "findings": [
     {
-      "id": "c4337295dd8fb3b3",
+      "id": "f301b6323be01dba",
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_EN.md",
-      "observation": "6 implementation/config paths changed since this log's last commit; examples: .github/workflows/case-a-t0-stage-contract.yml, .github/workflows/project-delivery-contract.yml, cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/run_integrated_milestone.sh, cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/tests/test_integrated_case_a.py, docs/PROJECT_STAGE_STATUS.json, tools/check_project_delivery_contract.py",
+      "observation": "9 implementation/config paths changed since this log's last commit; examples: .github/workflows/c3d05-t0-granada-static.yml, .github/workflows/case-a-t0-stage-contract.yml, .github/workflows/project-delivery-contract.yml, cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/run_integrated_milestone.sh, cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/tests/test_integrated_case_a.py, cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/scripts/run_t0_granada.py",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     },
     {
-      "id": "283d32c9ce8fe05d",
+      "id": "89ead7b74255a192",
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_ES.md",
-      "observation": "4 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/run_integrated_milestone.sh, cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/tests/test_integrated_case_a.py, docs/PROJECT_STAGE_STATUS.json, tools/check_project_delivery_contract.py",
+      "observation": "8 implementation/config paths changed since this log's last commit; examples: .github/workflows/c3d05-t0-granada-static.yml, .github/workflows/case-a-t0-stage-contract.yml, cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/run_integrated_milestone.sh, cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/tests/test_integrated_case_a.py, cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/scripts/run_t0_granada.py, cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/tests/test_t0_granada.py",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     }
