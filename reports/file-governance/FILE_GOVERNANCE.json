@@ -28,8 +28,8 @@
     "POTENTIAL_UNLOGGED_CHANGES": 2
   },
   "finding_total": 2,
-  "inventory_fingerprint": "b5b738b39879526537ef18503a97bba6153b4fe4d309dfaa55abc943dbc04795",
-  "evidence_fingerprint": "2df775c52dfa4a5d9a06e741d46872c0f9972a9c37fb68d48caf2963346601fa",
+  "inventory_fingerprint": "fb0b679359d2e50055ba73509e1c3e633e9e02be534b7e858b6cb5bdff9b295a",
+  "evidence_fingerprint": "23eb5069f05155a8e8909caafa5a5ba9adce4d48978b6859b22f57068cd4d3cb",
   "files": [
     {
       "path": ".github/agents/openfoam-solidification.agent.md",
@@ -272637,7 +272637,7 @@
       "role": "source",
       "purpose": "code/test implementation",
       "certainty": "rule",
-      "blob": "f7ee51e432a3fd6d520b318cd5d2bd2fc34c17e9"
+      "blob": "9b8dbf3f09dbbd53a269b8eb69e60ee66ec1c430"
     },
     {
       "path": "tools/file_governance_audit_proof.py",
@@ -272677,20 +272677,20 @@
   ],
   "findings": [
     {
-      "id": "ccfd901900be5b5f",
+      "id": "c4337295dd8fb3b3",
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_EN.md",
-      "observation": "5 implementation/config paths changed since this log's last commit; examples: .github/workflows/case-a-t0-stage-contract.yml, .github/workflows/project-delivery-contract.yml, cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/run_integrated_milestone.sh, cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/tests/test_integrated_case_a.py, docs/PROJECT_STAGE_STATUS.json",
+      "observation": "6 implementation/config paths changed since this log's last commit; examples: .github/workflows/case-a-t0-stage-contract.yml, .github/workflows/project-delivery-contract.yml, cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/run_integrated_milestone.sh, cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/tests/test_integrated_case_a.py, docs/PROJECT_STAGE_STATUS.json, tools/check_project_delivery_contract.py",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     },
     {
-      "id": "b7e85c814cfe1fac",
+      "id": "584b1d545bc574e8",
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_ES.md",
-      "observation": "1 implementation/config paths changed since this log's last commit; examples: docs/PROJECT_STAGE_STATUS.json",
+      "observation": "2 implementation/config paths changed since this log's last commit; examples: docs/PROJECT_STAGE_STATUS.json, tools/check_project_delivery_contract.py",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     }

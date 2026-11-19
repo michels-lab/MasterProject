@@ -30,8 +30,8 @@ Tracked: 38954; classified: 38949; readable documents: 171; above read cap: 1; f
 
 ## Findings (human review required)
 
-- **REVIEW / POTENTIAL_UNLOGGED_CHANGES** PROJECT_AUDIT_LOG_EN.md: 5 implementation/config paths changed since this log's last commit; examples: .github/workflows/case-a-t0-stage-contract.yml, .github/workflows/project-delivery-contract.yml, cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/run_integrated_milestone.sh, cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/tests/test_integrated_case_a.py, docs/PROJECT_STAGE_STATUS.json. Next: Inspect diffs and reconcile only meaningful decisions/results in the canonical log (ID ccfd901900be5b5f)
-- **REVIEW / POTENTIAL_UNLOGGED_CHANGES** PROJECT_AUDIT_LOG_ES.md: 1 implementation/config paths changed since this log's last commit; examples: docs/PROJECT_STAGE_STATUS.json. Next: Inspect diffs and reconcile only meaningful decisions/results in the canonical log (ID b7e85c814cfe1fac)
+- **REVIEW / POTENTIAL_UNLOGGED_CHANGES** PROJECT_AUDIT_LOG_EN.md: 6 implementation/config paths changed since this log's last commit; examples: .github/workflows/case-a-t0-stage-contract.yml, .github/workflows/project-delivery-contract.yml, cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/run_integrated_milestone.sh, cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/tests/test_integrated_case_a.py, docs/PROJECT_STAGE_STATUS.json, tools/check_project_delivery_contract.py. Next: Inspect diffs and reconcile only meaningful decisions/results in the canonical log (ID c4337295dd8fb3b3)
+- **REVIEW / POTENTIAL_UNLOGGED_CHANGES** PROJECT_AUDIT_LOG_ES.md: 2 implementation/config paths changed since this log's last commit; examples: docs/PROJECT_STAGE_STATUS.json, tools/check_project_delivery_contract.py. Next: Inspect diffs and reconcile only meaningful decisions/results in the canonical log (ID 584b1d545bc574e8)
 
 Complete path → purpose/role/certainty list lives in FILE_GOVERNANCE.json. SUMMARY.json has counts only for master polling.
 A dated file, duplicate, or suspicious name is an **investigation candidate**, not unwanted material.
