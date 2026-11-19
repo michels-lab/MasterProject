@@ -1,3 +1,5 @@
+> **19-11-2026 | PROJECT_PROGRESS_CONTRACT_20261119:** REGLA PARA ESTE Y TODOS LOS CASOS: etapa y avance siempre explícitos, entregas integrales con QA automática, sin rondas sucesivas de pruebas WSL individuales, sin repetir evidencia aceptada. Estado actual del trabajo principal: Caso B C3D-05 **etapa 3/7 T0, 2/7 = 29% de hitos técnicos, NO CFD/tesis**. [Regla general](../../docs/POLITICA_ENTREGA_INTEGRAL_Y_ESTADO_ES.md) · [estado](../../docs/PROJECT_STAGE_STATUS.json). Este caso conserva su estado histórico propio debajo.
+
 > **RESULTADO REAL DE WSL — 18-11-2026:** C3D-03 **sí se ejecutó** con OpenFOAM Foundation 14: `mesh_ok YES` en metal (**2,368 celdas, 48.01191628 cm³**) y arena (**7,680 celdas, 103.1691429 cm³**); contacto `metal_to_mold` y `mold_to_metal` con **1,248 caras recíprocas `mappedWall`**. Sólo calidad y topología preliminares, **NO CFD** ni fidelidad CAD local completa. [Bitácora de ejecución](../../docs/C3D_03_RESULTADO_NATIVO_20261118_ES.md). La continuación separada es [C3D-04 curvilíneo y C3D-05 CAD STEP/Gmsh](../../docs/C3D_04_C3D_05_MALLADO_PARALELO_20261118_ES.md).
 
 # C3D-03 — Piloto 3D conformante inspirado en el caso del doctor

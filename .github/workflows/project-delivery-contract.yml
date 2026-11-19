@@ -1,0 +1,45 @@
+name: MasterProject delivery contract - static only
+on:
+  push:
+    branches: [main]
+    paths:
+      - "AGENTS.md"
+      - "README.md"
+      - "PROJECT_AUDIT_LOG*.md"
+      - "VALIDATION_MATRIX*.md"
+      - "RUN_MASTER_PROTOCOL.md"
+      - "NEXT_RESEARCH_ROADMAP_ES.md"
+      - "GITHUB_EXECUTION_POLICY.md"
+      - "RUN_CASE_REGISTRY.csv"
+      - "cases_3d/**"
+      - "docs/**"
+      - "tools/check_project_delivery_contract.py"
+      - ".github/workflows/project-delivery-contract.yml"
+  pull_request:
+    paths:
+      - "AGENTS.md"
+      - "README.md"
+      - "PROJECT_AUDIT_LOG*.md"
+      - "VALIDATION_MATRIX*.md"
+      - "RUN_MASTER_PROTOCOL.md"
+      - "NEXT_RESEARCH_ROADMAP_ES.md"
+      - "GITHUB_EXECUTION_POLICY.md"
+      - "RUN_CASE_REGISTRY.csv"
+      - "cases_3d/**"
+      - "docs/**"
+      - "tools/check_project_delivery_contract.py"
+      - ".github/workflows/project-delivery-contract.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+jobs:
+  validate-delivery-contract:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Validate stage, advancement and sync
+        run: python3 tools/check_project_delivery_contract.py --check
+      - name: Report current case stage
+        run: python3 tools/check_project_delivery_contract.py --status
