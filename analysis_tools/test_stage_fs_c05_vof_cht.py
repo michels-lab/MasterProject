@@ -15,7 +15,7 @@ from stage_fs_c04_initial_alpha import make_alpha, ATMOSPHERE_PATCHES, MOLD_CONT
 from stage_fs_c04_initial_temperature import create_T, FLUID_PATCHES, MOLD_PATCHES
 from stage_fs_c05_vof_cht import (
     stage, control_dict, scalar_field, vector_field, REGION_FIELDS,
-    ATMOSPHERES, CASE_PREFIX,
+    ATMOSPHERES, CASE_PREFIX, ensure_compressible_kepsilon_divergence,
 )
 
 
@@ -138,8 +138,10 @@ class CHTTemplateTests(unittest.TestCase):
                       (self.out/"system/fvSolution").read_text())
         self.assertIn("alpha.metal.*",
                       (self.out/"system/fluid/fvSolution").read_text())
-        self.assertIn("div(phi,epsilon)",
-                      (self.out/"system/fluid/fvSchemes").read_text())
+        schemes=(self.out/"system/fluid/fvSchemes").read_text()
+        self.assertIn("div(rhoPhi,k)",schemes)
+        self.assertIn("div(rhoPhi,epsilon)",schemes)
+        self.assertNotIn("div(phi,epsilon)",schemes)
         self.assertIn("type coupledTemperature;",
                       (self.out/"0/fluid/T").read_text())
         self.assertIn("type coupledTemperature;",
@@ -150,6 +152,27 @@ class CHTTemplateTests(unittest.TestCase):
                          (self.out/"0/fluid/T").read_text())
         self.assertNotIn("type calculated;",
                          (self.out/"0/mold/T").read_text())
+
+    def test_compressible_ras_rhoPhi_schemes_are_idempotent_and_safe(self):
+        official=(self.tutorial/"system/fluid/fvSchemes").read_text()
+        fixed,added=ensure_compressible_kepsilon_divergence(official)
+        self.assertEqual(added,["k","epsilon"])
+        self.assertEqual(fixed.count("div(rhoPhi,k)"),1)
+        self.assertEqual(fixed.count("div(rhoPhi,epsilon)"),1)
+        again,added_again=ensure_compressible_kepsilon_divergence(fixed)
+        self.assertEqual(again,fixed)
+        self.assertEqual(added_again,[])
+        self.assertEqual(
+            (self.tutorial/"system/fluid/fvSchemes").read_text(),official)
+
+    def test_wrong_rhoPhi_epsilon_discretization_fails_closed(self):
+        base=(self.tutorial/"system/fluid/fvSchemes").read_text()
+        bad=base.replace(
+            "div(phi,k)         $turbulence;",
+            "div(phi,k)         $turbulence;\\n"
+            "    div(rhoPhi,epsilon) Gauss upwind;")
+        with self.assertRaisesRegex(ValueError,"unexpected compressible"):
+            ensure_compressible_kepsilon_divergence(bad)
 
     def test_retains_exact_native_alpha_and_initial_temperature_mask(self):
         source_alpha=(self.source/"0/fluid/alpha.metal").read_bytes()
