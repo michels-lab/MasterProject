@@ -119,3 +119,22 @@ La carpeta `~/OpenFOAM/C3D04_V2_BASAL_QUALITY_01` está preservada. Se publica a
 cd ~/OpenFOAM/MasterProject && git pull --ff-only && \
 bash cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V3_BASAL_SWEEP/run_v3_sweep.sh
 ```
+
+## V3: seis ensayos nativos completados — evidencia WSL recibida
+
+La salida del investigador confirma `ALL_TRIALS_REJECTED_OR_BLOCKED / NO_CFD` de `C3D04_V3_BASAL_SWEEP_01`. Las seis carpetas `T01`–`T06` contienen `checkMesh` real y la tabla `C3D04_V3_SWEEP_SUMMARY.tsv`. **En las seis, el padre y la arena son `Mesh OK`; solo falla la región metal por exactamente 4 celdas de determinante <0.001.** Ninguna pasó las tres puertas simultáneamente. No se ejecutó CFD.
+
+| Ensayo | Core Δ [mm] | Grading arena | Padre | Metal | Arena | Celdas metal det bajo | Caras arena muy skew | Max skew arena | Max no orto metal [°] |
+|---|---:|---:|---|---|---|---:|---:|---:|---:|
+| T01 | −0.15 | 1.75 | YES | NO | YES | 4 | 0 | 3.711322729 | 80.56302942 |
+| T02 | +0.15 | 1.90 | YES | NO | YES | 4 | 0 | 3.527405153 | 79.95376529 |
+| T03 | −0.30 | 2.10 | YES | NO | YES | 4 | 0 | 3.311127175 | 80.87007118 |
+| T04 | +0.30 | 2.30 | YES | NO | YES | 4 | 0 | 3.121918438 | 79.6505921 |
+| T05 | −0.45 | 2.50 | YES | NO | YES | 4 | 0 | 2.95478911 | 81.17902399 |
+| T06 | +0.45 | 2.65 | YES | NO | YES | 4 | 0 | **2.841609695** | **79.34727593** |
+
+El área de contacto se mantuvo en **6,343.771874 mm² en todos los ensayos**, por ambos lados cuando se midió. La malla de arena queda **resuelta según el protocolo nativo**; todavía es necesaria prueba de independencia de malla y no ortogonalidad, máxima ~82.058° en T06.
+
+**Conclusión empírica:** mover ±0.15..±0.45 mm la cuadrícula interior XZ del metal en Y=−39.8 no reduce el **número** de cuatro celdas con determinante deficiente; no afirmar que tampoco cambiaron sus valores mínimos, aún no reportados. El cambio de `simpleGrading` radial de 1.5 hasta 2.65 llevó la arena a `Mesh OK` a partir de T01. T06 es un **punto de partida para la siguiente corrección**, no ganador ni modelo CFD aprobado.
+
+El siguiente candidato debe modificar otra dimensión de la deformación (Y interior o transición de contorno metal) bajo una comparación nativa y de área CAD estrictas. Toda modificación del contorno curvilíneo, aunque preserve continuidad y parches, puede empeorar el ajuste local CAD: se debe volver a medir.
