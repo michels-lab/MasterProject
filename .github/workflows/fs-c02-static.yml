@@ -52,6 +52,8 @@ on:
       - 'analysis_tools/test_run_fs_c05_native_smoke.py'
       - 'analysis_tools/audit_fs_c05_postrun_fields.py'
       - 'analysis_tools/test_audit_fs_c05_postrun_fields.py'
+      - 'analysis_tools/run_fs_c05_wall_heat_flux.py'
+      - 'analysis_tools/test_run_fs_c05_wall_heat_flux.py'
       - 'freesurface/FS-C04_fluid_mold_mesh_pilot/**'
       - 'analysis_tools/diagnose_fs_c02_courant.py'
       - 'analysis_tools/test_diagnose_fs_c02_courant.py'
@@ -128,6 +130,10 @@ jobs:
         run: python3 -m unittest discover -s analysis_tools -p test_audit_fs_c05_postrun_fields.py -v
       - name: FS-C05 postrun Python syntax check
         run: python3 -m py_compile analysis_tools/audit_fs_c05_postrun_fields.py analysis_tools/test_audit_fs_c05_postrun_fields.py
+      - name: FS-C05 two-region native wall heat-flux probe diagnostic, synthetic no-CFD gates
+        run: python3 -m unittest discover -s analysis_tools -p test_run_fs_c05_wall_heat_flux.py -v
+      - name: FS-C05 wall heat-flux runner Python syntax only
+        run: python3 -m py_compile analysis_tools/run_fs_c05_wall_heat_flux.py analysis_tools/test_run_fs_c05_wall_heat_flux.py
       - name: Stage reference iron-air case outside Git checkout
         run: |
           python3 analysis_tools/run_fs_c02_local.py \
