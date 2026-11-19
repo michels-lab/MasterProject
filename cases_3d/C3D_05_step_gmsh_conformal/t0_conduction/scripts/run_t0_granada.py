@@ -96,7 +96,7 @@ def source_fingerprint(source: Path) -> str:
     digest = hashlib.sha256()
     for rel in parts:
         file = source / rel
-        digest.update(rel.encode("utf-8") + b"\\0")
+        digest.update(rel.encode("utf-8") + b"\0")
         with file.open("rb") as stream:
             while chunk := stream.read(1024 * 1024):
                 digest.update(chunk)
@@ -210,7 +210,7 @@ def pipeline(inputs: Path, source: Path, out: Path) -> int:
         preparation = json.loads(prep_path.read_text(encoding="utf-8"))
         preparation["output"] = str(out)
         preparation["staging_finalized_into_output"] = True
-        prep_path.write_text(json.dumps(preparation, ensure_ascii=False, indent=2) + "\\n", encoding="utf-8")
+        prep_path.write_text(json.dumps(preparation, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
         report = {
             "status": STAGE,
             "case": "C3D_05_step_gmsh_conformal",
