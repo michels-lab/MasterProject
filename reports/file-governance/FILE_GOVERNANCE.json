@@ -28,8 +28,8 @@
     "POTENTIAL_UNLOGGED_CHANGES": 2
   },
   "finding_total": 2,
-  "inventory_fingerprint": "a4d81f207c7bdb7bac5ee1ed9afe7f2da707b190edf1218c28d81c056ecaca6f",
-  "evidence_fingerprint": "2eb77ee3c5b59067fa20f2639f408574e92df05c935fdacad4bd21e80e650a03",
+  "inventory_fingerprint": "b5b738b39879526537ef18503a97bba6153b4fe4d309dfaa55abc943dbc04795",
+  "evidence_fingerprint": "2df775c52dfa4a5d9a06e741d46872c0f9972a9c37fb68d48caf2963346601fa",
   "files": [
     {
       "path": ".github/agents/openfoam-solidification.agent.md",
@@ -330,7 +330,7 @@
       "role": "bitacora",
       "purpose": "technical/audit change history",
       "certainty": "rule",
-      "blob": "b8f35deecc6cae47f1137fea2aa07fd4ff859c9d"
+      "blob": "7cd844070c2bfd96895e88701a4f216fe2a9c520"
     },
     {
       "path": "README.md",
@@ -351,7 +351,7 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "7f2ff9c8586af1e2ea31b6c0fcc9669a1d916b4b"
+      "blob": "06fb7a0baa4aa6d2f772b03d8af1c9fcfbcffb3f"
     },
     {
       "path": "VALIDATION_MATRIX.md",
@@ -1485,7 +1485,7 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "0ebf4e0d67f8bef5d54ec69b088234bd02bca0d6"
+      "blob": "4bf543239516d7178f5a6b16b283194beab5d6a7"
     },
     {
       "path": "cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V2_BASAL_QUALITY/Allmesh",
@@ -271895,7 +271895,7 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "58c5d1e50595b21353ee7c75ec42b9ccae7bd36b"
+      "blob": "9c496175df916e3f4f1adafe5123a359a9a34c53"
     },
     {
       "path": "docs/DOCUMENT_SYNC_20261110_ES.md",
@@ -271944,7 +271944,7 @@
       "role": "config",
       "purpose": "machine-readable configuration",
       "certainty": "rule",
-      "blob": "b4d30d9d20ee7a591a3662c1ab8c1430f3bd8c20"
+      "blob": "1947e7cd34a38ae5d9e764ec0d181cb1d60a24a7"
     },
     {
       "path": "docs/REGLA_INSTRUCCIONES_UNIFICADAS_ES.md",
@@ -272677,20 +272677,20 @@
   ],
   "findings": [
     {
-      "id": "f2244a47be07a56a",
+      "id": "ccfd901900be5b5f",
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_EN.md",
-      "observation": "4 implementation/config paths changed since this log's last commit; examples: .github/workflows/case-a-t0-stage-contract.yml, .github/workflows/project-delivery-contract.yml, cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/run_integrated_milestone.sh, cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/tests/test_integrated_case_a.py",
+      "observation": "5 implementation/config paths changed since this log's last commit; examples: .github/workflows/case-a-t0-stage-contract.yml, .github/workflows/project-delivery-contract.yml, cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/run_integrated_milestone.sh, cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/tests/test_integrated_case_a.py, docs/PROJECT_STAGE_STATUS.json",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     },
     {
-      "id": "f4033b1767b156c2",
+      "id": "b7e85c814cfe1fac",
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_ES.md",
-      "observation": "4 implementation/config paths changed since this log's last commit; examples: .github/workflows/case-a-t0-stage-contract.yml, .github/workflows/project-delivery-contract.yml, cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/run_integrated_milestone.sh, cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/tests/test_integrated_case_a.py",
+      "observation": "1 implementation/config paths changed since this log's last commit; examples: docs/PROJECT_STAGE_STATUS.json",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     }
