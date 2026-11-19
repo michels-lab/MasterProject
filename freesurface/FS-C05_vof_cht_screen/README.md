@@ -185,3 +185,48 @@ El investigador ejecutó en Foundation14 el script `audit_fs_c05_postrun_fields.
 **Advertencia:** `alpha` invariante no demuestra conservación de la **masa** metal `Σalpha rho V`, que además requiere flujos entrantes/salientes, ni indica estabilidad para mayores intervalos. Las medias T ponderadas por (alpha·V) tampoco equivalen a energía/entalpía, pues (rho), (c_p), termodinámica de compresión y términos de transporte pueden variar. La subida de ~1.683 K del gas en (0.2) µs NO prueba ni descarta un error de energía sin conocer (Q) a ambas caras y el transporte de entalpía/trabajo por el contorno abierto. **No extender tiempo ni afirmar termodinámica válida sin instrumentar flujos.**
 
 **Pendientes explícitos:** no se midió aún `Q [W]` a la interfaz fluido/arena, no se hizo cierre de energía, no hay `solidificationMelting`, ni curvas experimentales ni STL exacto.
+
+## 19-11-2026 — Instrumentación REAL del flujo conjugado en ambas caras del contacto
+
+Se creó `analysis_tools/run_fs_c05_wall_heat_flux.py`, conectado con 14 pruebas sintéticas al workflow CI. El instrumento se basa en el functionObject **real de OpenFOAM Foundation 14** `wallHeatFlux`: fuentes `OpenFOAM/OpenFOAM-14/src/functionObjects/field/wallHeatFlux/{wallHeatFlux.H,wallHeatFlux.C}`. Ese objeto obtiene el flujo de la instancia `thermophysicalTransportModel` y escribe por parche **mínimo/máximo de (q) [W/m²], (Q) [W] y promedio (q) [W/m²]**. La clase usa `-qBf` para su convenio de signo; en paredes recíprocas fluido/arena se debe comparar (Q_{m fluid}+Q_{m mold}) y los signos opuestos.
+
+El ejecutor revisa el manifiesto original FS-C05, el (alpha) inicial y los archivos de esquema originales, **crea otra copia nueva** bajo `~/OpenFOAM/FS_C05_WALL_Q_RUNS/FS_C05_WALL_Q_PROBE_<UTC>_<id>` y allí (SOLO allí) corrige los esquemas `div(rhoPhi,k)` y `div(rhoPhi,epsilon)`, limita a dos pasos de `1e-7` s e instala en `system/functions`:
+
+```foam
+wallHeatFluxFluid
+{
+    type wallHeatFlux;
+    libs ("libfieldFunctionObjects.so");
+    region fluid;
+    patches (fluid_to_mold);
+    executeControl timeStep;
+    executeInterval 1;
+    writeControl timeStep;
+    writeInterval 1;
+}
+wallHeatFluxMold
+{
+    type wallHeatFlux;
+    libs ("libfieldFunctionObjects.so");
+    region mold;
+    patches (mold_to_fluid);
+    executeControl timeStep;
+    executeInterval 1;
+    writeControl timeStep;
+    writeInterval 1;
+}
+```
+
+**Por defecto no arranca CFD**. Con `--native` ejecuta `foamMultiRun` (Foundation14), exige 2 pasos y estado de salida 0, exige **DOS archivos `wallHeatFlux.dat` nativos distintos** en `postProcessing/wallHeatFluxFluid/**/` y `postProcessing/wallHeatFluxMold/**/` (con encabezado de `Q [W]`) y dos valores por región a `1e-7` y `2e-7` s; reporta (Q_f), (Q_s), (Q_f+Q_s) y diferencia relativa. Umbral de **5 % es bandera de diagnóstico**, no aprobación de conservación. Si el objeto no se carga, no genera archivos o el solver falla, conserva carpeta/log y muestra últimas 50 líneas, estado `WALL_Q_PROBE_REJECTED`. **NO inventa un flujo a partir de T.**
+
+```bash
+cd ~/OpenFOAM/FS_C02_WORKTREE
+python3 -m unittest discover -s analysis_tools -p test_run_fs_c05_wall_heat_flux.py -v &&
+python3 analysis_tools/run_fs_c05_wall_heat_flux.py \
+  --source ~/OpenFOAM/FS_C05_VOF_CHT_RUNS/FS_C05_VOF_CHT_SCREEN_20261119T063448Z_84d08b6e \
+  --native
+```
+
+**Estado esperado tras ejecución nativa que capture ambos parches (AÚN NO DEMOSTRADO):** `TWO_STEP_FLUID_MOLD_WALL_Q_MEASURED_NO_ENERGY_VALIDATION`. La existencia de las funciones en la librería Foundation14 NO significa que estén comprobadas en nuestro VOF/solid particular; la próxima salida real puede mostrar incompatibilidad de modelos. No mover ni rehacer corridas existentes: se audita el error en la copia nueva.
+
+Aun con (Q_f+Q_s≈0), **NO hay balance energético global**: faltan (rho(T)), (C_p(T)), entalpía y (p,dV), transportes de entalpía y masa por los parches atmosféricos, contribución RAS y tratamiento de discontinuidades VOF; tampoco hay solidificación o contracción. No aumentar drásticamente el tiempo físico sin estas pruebas.
