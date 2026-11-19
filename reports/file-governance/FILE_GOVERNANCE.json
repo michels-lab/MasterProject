@@ -28,8 +28,8 @@
     "POTENTIAL_UNLOGGED_CHANGES": 2
   },
   "finding_total": 2,
-  "inventory_fingerprint": "f703388b443577646b589da8bb90fcd5a51ac37b23001b977f2cccef4b6fa50f",
-  "evidence_fingerprint": "ef4772bb9d0d5f9f41fe9be4bb86f5b1921353d166c96eaf9ab32914e1afbb38",
+  "inventory_fingerprint": "c3e99f8e73f197741720f25418e1ba3c9ad13af15fde8edb11aa040df5d0e772",
+  "evidence_fingerprint": "d5768c9198c5bb889789d4702f6cc5e6424e24fe2c283bf65b6ac64f20f9a1a7",
   "files": [
     {
       "path": ".github/agents/openfoam-solidification.agent.md",
@@ -316,7 +316,7 @@
       "role": "bitacora",
       "purpose": "technical/audit change history",
       "certainty": "rule",
-      "blob": "401b1db336616a5f2f8994ed91cda48443b4f0bb"
+      "blob": "8b6302bbdb3de921842bcd8198b125c8b7147160"
     },
     {
       "path": "README.md",
@@ -1660,7 +1660,7 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "26d5bbc9f1827c24050554fa3c82b8999e2c6e64"
+      "blob": "b13cfa8a728c132b0ceda6c2c81cc12119470d92"
     },
     {
       "path": "cases_3d/C3D_05_step_gmsh_conformal/constant/geometry/QuickCupmm.STEP",
@@ -1744,7 +1744,7 @@
       "role": "source",
       "purpose": "code/test implementation",
       "certainty": "rule",
-      "blob": "e4e588c0a9abb34aaafcdc166797e286573d24db"
+      "blob": "5a75f8867a7ba8739819b2cb0a9bd8340f66542c"
     },
     {
       "path": "cases_3d/C3D_05_step_gmsh_conformal/scripts/run_hex_subdivision_pilot.sh",
@@ -1800,7 +1800,7 @@
       "role": "test",
       "purpose": "code/test implementation",
       "certainty": "rule",
-      "blob": "4219bf5115423608af27d381661de7cd99fa782e"
+      "blob": "9876354df2ba981d5d24bb578062b96d86045200"
     },
     {
       "path": "cases_3d/README.md",
@@ -271559,14 +271559,14 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "64a59e09e4bcd00311ec44914c0b6e8d2c19be25"
+      "blob": "af934702aab3859f6ff822d16077fe0d43a606cc"
     },
     {
       "path": "docs/C3D_05_HEX8_SEGUNDO_INTENTO_ACEPTADO_20261119_ES.md",
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "ee24e4c9fcb1616355329d383385855fa3f24ecc"
+      "blob": "afe23b1440480eafaa23bcf714a1521a1768dc05"
     },
     {
       "path": "docs/C3D_05_HXT_RESULTADO_Y_PILOTO_HEX_20261118_ES.md",
@@ -271594,7 +271594,7 @@
       "role": "data",
       "purpose": "structured/research data (semantics not validated)",
       "certainty": "rule",
-      "blob": "d429384a9f20d74e9e38661ded037d2e5fee678a"
+      "blob": "cb6532f0d3201975a7defac33fa54b3effc75b42"
     },
     {
       "path": "docs/C3D_REINICIO_20261112_ES.md",
@@ -271622,7 +271622,7 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "49bf6bc421c648d01b886fc6c1d1f9bfa63d2fcf"
+      "blob": "9493a020dd341c5369bc6325ea80230151b486fc"
     },
     {
       "path": "docs/DOCUMENT_SYNC_20261110_ES.md",
@@ -272392,11 +272392,11 @@
       "state": "REVIEW_REQUIRED"
     },
     {
-      "id": "3bf72c6b93d96534",
+      "id": "1af8ea3643083c78",
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_ES.md",
-      "observation": "2 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_05_step_gmsh_conformal/scripts/review_accepted_hex_mesh.py, cases_3d/C3D_05_step_gmsh_conformal/tests/test_review_accepted_hex_mesh.py",
+      "observation": "1 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_05_step_gmsh_conformal/tests/test_step_gmsh_static.sh",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     }
