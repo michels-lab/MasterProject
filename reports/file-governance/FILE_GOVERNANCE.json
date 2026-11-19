@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "audit_kind": "deterministic_full_tracked_tree",
-  "tracked_files_total": 38941,
-  "classified_files_total": 38936,
+  "tracked_files_total": 38942,
+  "classified_files_total": 38937,
   "docs_content_inspected": 169,
   "large_docs_skipped": 1,
   "excluded_reports": 5,
@@ -10,7 +10,7 @@
     "agent": 7,
     "analysis_tool": 1,
     "bitacora": 5,
-    "config": 8,
+    "config": 9,
     "data": 31,
     "document": 134,
     "index": 31,
@@ -25,11 +25,11 @@
     "workflow": 19
   },
   "finding_counts": {
-    "POTENTIAL_UNLOGGED_CHANGES": 1
+    "POTENTIAL_UNLOGGED_CHANGES": 2
   },
-  "finding_total": 1,
-  "inventory_fingerprint": "2b15fce03fec53d2ad2c20b4c13007ca5c1a1a93a9695046478e729b71f45f87",
-  "evidence_fingerprint": "066f59fc7db13cc9c93294c261d982da6c8e1597dabea046725fd2655c953340",
+  "finding_total": 2,
+  "inventory_fingerprint": "7289528d5733016dd99c8e0ad4cc5d337ecba1fe997be033bd8d8feaae63df53",
+  "evidence_fingerprint": "fbf671e13b6afb1d04fd8dc5304063771b4f5d294d535702d88a0392eb28622a",
   "files": [
     {
       "path": ".github/agents/openfoam-solidification.agent.md",
@@ -316,7 +316,7 @@
       "role": "bitacora",
       "purpose": "technical/audit change history",
       "certainty": "rule",
-      "blob": "d75dfac73fbceb4eacb60e3782d554f0593cba0b"
+      "blob": "2bbbd4d570d8a3d4e5b20f53758aa9c7f9ff28c8"
     },
     {
       "path": "README.md",
@@ -1464,7 +1464,7 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "75667fd83d7bb986a6794903afe2c64ca3b8d750"
+      "blob": "8dfdec866f64de2a97dc5f94edde6cbf79e0d4d3"
     },
     {
       "path": "cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V2_BASAL_QUALITY/Allmesh",
@@ -271611,6 +271611,13 @@
       "blob": "be8ee2f433229f511afc948238c26e774533be5a"
     },
     {
+      "path": "docs/C3D04_CASE_A_STATUS.json",
+      "role": "config",
+      "purpose": "machine-readable configuration",
+      "certainty": "rule",
+      "blob": "3b30ca4aac58479bc59df42c1bb86af0e78d39ae"
+    },
+    {
       "path": "docs/C3D_01_ESTADO_REAL_20261110_ES.md",
       "role": "document",
       "purpose": "manual/decision/report/historical note",
@@ -271797,7 +271804,7 @@
       "role": "data",
       "purpose": "structured/research data (semantics not validated)",
       "certainty": "rule",
-      "blob": "1bb1c7c54daeff93f38140a8407a7fa44d4405c2"
+      "blob": "3aabb8e89f893ad6e19a90bc3d2abe27120b5795"
     },
     {
       "path": "docs/C3D_REINICIO_20261112_ES.md",
@@ -271825,7 +271832,7 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "b9c881573fd98361674e2a82ab39eb0345dfcb83"
+      "blob": "183b9aae753a9f06fd0041d9415684444f62562f"
     },
     {
       "path": "docs/DOCUMENT_SYNC_20261110_ES.md",
@@ -272586,11 +272593,20 @@
   ],
   "findings": [
     {
-      "id": "0f85c287d02d1316",
+      "id": "9a6ddb674ee04f43",
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_EN.md",
-      "observation": "48 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_03_doctor_multiblock_pilot/tests/test_native_multiblock_static.sh, cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V2_BASAL_QUALITY/tests/test_candidate_geometry.py, cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V3_BASAL_SWEEP/run_v3_sweep.sh, cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V3_BASAL_SWEEP/scripts/build_v3_dictionary.py, cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V3_BASAL_SWEEP/scripts/summarize_trial.py, cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V3_BASAL_SWEEP/tests/test_v3_diff.py",
+      "observation": "49 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_03_doctor_multiblock_pilot/tests/test_native_multiblock_static.sh, cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V2_BASAL_QUALITY/tests/test_candidate_geometry.py, cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V3_BASAL_SWEEP/run_v3_sweep.sh, cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V3_BASAL_SWEEP/scripts/build_v3_dictionary.py, cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V3_BASAL_SWEEP/scripts/summarize_trial.py, cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V3_BASAL_SWEEP/tests/test_v3_diff.py",
+      "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
+      "state": "REVIEW_REQUIRED"
+    },
+    {
+      "id": "0be9242e70c28482",
+      "code": "POTENTIAL_UNLOGGED_CHANGES",
+      "severity": "review",
+      "path": "PROJECT_AUDIT_LOG_ES.md",
+      "observation": "1 implementation/config paths changed since this log's last commit; examples: docs/C3D04_CASE_A_STATUS.json",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     }
