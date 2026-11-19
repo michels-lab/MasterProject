@@ -1,3 +1,5 @@
+> **19-11-2026 | GRANADA_C3D05_C14_NUMERIC_SHK_20261119:** Caso B tiene ejecutor T0 numérico archivado C14 de un comando con fuente SHA, benchmark energético y auditoría de log; sin ejecución local ni validación física. Registro científico CI ahora busca los `THREE_D_*` explícitamente registrados en `cases_3d/`. **Etapa B 3/7, avance 2/7=29% técnico.** [Detalle](../docs/granada/C3D05_C14_NUMERICAL_ONE_SHOT_20261119_ES.md).
+
 > **19-11-2026 — Caso B C3D05 fvSolution C14:** plantilla T0 fuente global/metal/arena de C14 y SHA validada; 2 sólidos, PCG+DIC regional, sin CFD. [Bitácora](../docs/granada/C3D05_FVSOLUTION_C14_20261119_ES.md). **Etapa B 3/7, avance 2/7 hitos (29% técnico, NO tesis).**
 
 > **19-11-2026 | GRANADA_C3D05_T0_INTEGRAL_20261119:** Caso B C3D-05 GRANADA entrega T0 integrada (runner, CI, pruebas sintéticas, preservación de malla) sin solver, ver [informe](../docs/granada/C3D05_T0_INTEGRATED_GRANADA_20261119_ES.md). **Etapa 3/7; 2/7 = 29% hitos técnicos (NO tesis/CFD)**. Norma aplica a todos los casos.
