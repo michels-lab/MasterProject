@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
   "audit_kind": "deterministic_full_tracked_tree",
-  "tracked_files_total": 38910,
-  "classified_files_total": 38905,
-  "docs_content_inspected": 162,
+  "tracked_files_total": 38911,
+  "classified_files_total": 38906,
+  "docs_content_inspected": 163,
   "large_docs_skipped": 0,
   "excluded_reports": 5,
   "roles": {
@@ -12,7 +12,7 @@
     "bitacora": 5,
     "config": 7,
     "data": 31,
-    "document": 127,
+    "document": 128,
     "index": 30,
     "license": 1,
     "simulation_case_file": 107,
@@ -28,7 +28,7 @@
     "POTENTIAL_UNLOGGED_CHANGES": 2
   },
   "finding_total": 2,
-  "inventory_fingerprint": "b5619bac4b48fa5fda7ea6963f8998853941f72541dbb12f76d9a21a8f29afc2",
+  "inventory_fingerprint": "2a82d79ced6a2d23cfffa6b3a7450ba98b6c35f7c499a990700d62b664f15cac",
   "evidence_fingerprint": "6311a008b16954d8d1271c414f829f35dcf0665baf52fc4366e963f63fe06b6e",
   "files": [
     {
@@ -1464,7 +1464,7 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "05c0be9d0f5faebac04506869df360cd584a4eb7"
+      "blob": "8e97a8d84faf2c0546d59128cbd3ca50972cde5b"
     },
     {
       "path": "cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V2_BASAL_QUALITY/Allmesh",
@@ -271518,6 +271518,13 @@
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
       "blob": "90ce377cb0a9a1ec165aab0097c77059d2761dab"
+    },
+    {
+      "path": "docs/C3D_04_VALIDACION_SUPERFICIE_T02_20261119_ES.md",
+      "role": "document",
+      "purpose": "manual/decision/report/historical note",
+      "certainty": "inferred",
+      "blob": "3591f6c6ed2d4bc15eca6eb5f95abc41e405a993"
     },
     {
       "path": "docs/C3D_05_AREA_ARISTAS_Y_ENSAYO_FRONTAL_20261118_ES.md",
