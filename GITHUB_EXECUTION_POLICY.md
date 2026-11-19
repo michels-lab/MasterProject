@@ -1,3 +1,5 @@
+> **19-11-2026 | GRANADA_C3D05_C14_NUMERIC_SHK_20261119 — SEPARACIÓN CI/WSL:** GitHub prueba puente C14, equilibrio teórico, auditores de log y sintaxis Bash, pero NUNCA ejecuta `foamMultiRun`. Un único `--solve` manual de la laptop puede generar la referencia numérica aislada del Caso B, sin realizar pruebas individuales. Sin resultados CFD aún; etapa 3/7, avance 2/7 hitos (29% técnico). [Informe](docs/granada/C3D05_C14_NUMERICAL_ONE_SHOT_20261119_ES.md).
+
 > **19-11-2026 | PROJECT_PROGRESS_CONTRACT_20261119 — REGLA PERMANENTE PARA TODOS LOS CASOS:** entregar hitos integrales con QA interno y corrección de raíz, sin muchas pruebas WSL por pieza; comunicar SIEMPRE **ETAPA + AVANCE + evidencia + bloqueo + siguiente hito**. Caso B C3D-05: **etapa 3/7 T0; 2/7 hitos = 29% técnico** (NO tesis, CFD o validación). CAD/HEX8 y contacto aceptados; 1,826 caras >70°; T0 preparado, faltan propiedades físicas y no se ha ejecutado. [Política](docs/POLITICA_ENTREGA_INTEGRAL_Y_ESTADO_ES.md) · [estado canónico](docs/PROJECT_STAGE_STATUS.json). La evidencia histórica permanece intacta.
 
 # GitHub execution boundary — MasterProject / QuickCup
