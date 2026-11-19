@@ -28,7 +28,7 @@
     "POTENTIAL_UNLOGGED_CHANGES": 2
   },
   "finding_total": 2,
-  "inventory_fingerprint": "c02ec21823048be903da74288cd31c9f93135d627e79d446ea65392e49ef2650",
+  "inventory_fingerprint": "0e6fe63444c6bd067a932cc21c2a642309ee142e49b940978dbd177eb05987a0",
   "evidence_fingerprint": "3fb27e7eed8e78285fa5e94e5d234417d9f507340270201c76ee1a8088d9a73f",
   "files": [
     {
@@ -323,7 +323,7 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "0afcc0895ce12b93ec8dfe9fba15d369c196a20f"
+      "blob": "e7d94a15c31a7e4e22fb707ad038bd221a5fe46b"
     },
     {
       "path": "RUN_CASE_REGISTRY.csv",
@@ -337,7 +337,7 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "b4bb030a187cc1f154b5c9da483fb27631672904"
+      "blob": "132f4b4dfbd6b2626303692391e9bec8e8798a6f"
     },
     {
       "path": "VALIDATION_MATRIX.md",
@@ -271552,7 +271552,7 @@
       "role": "data",
       "purpose": "structured/research data (semantics not validated)",
       "certainty": "rule",
-      "blob": "4b52b321597e022d26dea929c49690e43edffcb2"
+      "blob": "52746d29b3e8678d993eb10b1615634f1fcba227"
     },
     {
       "path": "docs/C3D_REINICIO_20261112_ES.md",
