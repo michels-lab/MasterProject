@@ -208,3 +208,20 @@ python3 analysis_tools/verify_fs_c04_native_alpha.py \
 ```
 
 **Resultado esperado — AÚN NO CONFIRMADO POR UBUNTU:** `NATIVE_ALPHA_INTEGRAL_VERIFIED_NO_CFD`, junto con volumen medido. La ejecución no usa `foamRun`, no arranca térmica/CHT, ni cambia la carpeta ya aprobada. Si Foundation 14 requiere alguna adaptación de formato de salida o configuración de `foamPostProcess`, atender el error y los logs, sin saltarse el gate ni tolerar valores falsos. El archivo escrito **aún no acredita** una simulación física válida: faltan las propiedades térmicas, `U/p/T`, solución de la convección, contacto real molde–metal, CHT, solidificación, grafitización y contracción.
+
+## 18 de noviembre de 2026 (hora local); resultado nativo exitoso, `alpha.metal` plenamente leído e integrado
+
+**Ejecución REAL confirmada por el investigador en Ubuntu, OpenFOAM Foundation 14 (commit `7ce79841d`):** `python3 -m unittest discover -s analysis_tools -p test_verify_fs_c04_native_alpha.py -v` finalizó con **14/14 pruebas correctas**. A continuación, `verify_fs_c04_native_alpha.py` verificó una **tercera copia aislada** de FS-C04 mediante `foamPostProcess -region fluid -time 0 -func 'volIntegrate(alpha.metal)'`.
+
+```text
+FS-C04: NATIVE_ALPHA_INTEGRAL_VERIFIED_NO_CFD
+New verified-copy path: /home/michel/OpenFOAM/FS_C04_ALPHA_NATIVE_CHECKS/FS_C04_ALPHA_NATIVE_CHECK_20261119T045227Z_50756897
+OpenFOAM native volume m3: 4.801191628e-05
+NO CFD / no CHT / no solidification / no shrinkage.
+```
+
+Por lo tanto, **`0/fluid/alpha.metal` está comprobado con lector y postprocesamiento nativos**: 2368 celdas inicialmente metálicas, 32000 de gas, 7680 de arena en otra región, y **`∫alpha.metal dV=4.801191628×10⁻⁵ m³=48.01191628 cm³`**. La coincidencia con la integral geométrica es exacta a la precisión presentada; la diferencia con el volumen CAD declarado de 47.987697 cm³ es ~0.0505 %, pero la coincidencia de volúmenes no demuestra fidelidad de superficies STL.
+
+**Estado actualizado:** la etapa de *malla topológica + mapeo de fase + volumen nativo inicial* está APROBADA. Todavía NO existe un solver VOF+CHT acoplado, ni una física de gas exterior validada, ni modelos de solidificación/contracción. No confundir `alpha.metal` (VOF metal–aire) con fracción sólida.
+
+**Siguiente control térmico de interfaz:** auditar en forma **read-only** las 3136 caras `fluid_to_mold` / `mold_to_fluid`, incluyendo concordancia de áreas y normales recíprocas, separación por `alpha.metal` de las superficies inicialmente metal–arena (1248 caras) y aire–arena (1888), y la clasificación de las caras superiores/laterales de la arena. No aplicar de momento valores heredados de `h=10`, `T=300` sobre arena–aire como BC impuesta de la frontera: en la futura formulación conjugada, el **aire circundante se debe resolver explícitamente**, y esas paredes son interfaces sólido–fluido, no parches externos. La base y el hueco inferior necesitan condiciones fieles al montaje. Materiales de C14/C3D-02 son *candidatos de procedencia*, no propiedades de la mezcla gas/metal validadas.
