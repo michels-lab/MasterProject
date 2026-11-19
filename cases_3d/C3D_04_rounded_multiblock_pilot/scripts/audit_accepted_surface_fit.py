@@ -16,6 +16,7 @@ import json
 import math
 import re
 import struct
+import tempfile
 from collections import defaultdict
 from pathlib import Path
 
@@ -341,7 +342,20 @@ def self_test():
     assert abs(BVH([shifted]).closest_sq((.2,.3,0.))-.002**2) < 1e-12
     a = directed_samples([tri], BVH([tri]), 100)
     assert a["max_mm_sampled"] < 1e-8
-    print("SELF_TEST_OK: triangle nearest-point, BVH pruning, sampled matching surfaces")
+    with tempfile.TemporaryDirectory() as scratch:
+        binary_stl = Path(scratch)/"synthetic.stl"
+        header = b"TEST_STL" + b" " * (80-len(b"TEST_STL"))
+        facet = struct.pack("<12fH", *(0.,0.,1., *tri[0], *tri[1], *tri[2], 0))
+        binary_stl.write_bytes(header + struct.pack("<I", 1) + facet)
+        loaded = from_stl(binary_stl)
+        assert len(loaded) == 1
+        assert abs(triangle_area(loaded[0]) - 0.5) < 1e-7
+        scaled, factor, error = scale_stl(
+            [tuple(tuple(x*1000 for x in p) for p in tri)], [tri]
+        )
+        assert factor == 0.001 and error < 1e-12
+        assert len(scaled) == 1
+    print("SELF_TEST_OK: point-to-triangle, BVH, STL binary parser and auto unit scale")
 
 
 def main():
