@@ -382,14 +382,14 @@ def closed_t0_energy_target(cfg: dict, volumes: dict[str, float]) -> dict:
     if not math.isfinite(eq):
         raise ValueError("T0 equilibrium-temperature calculation overflow")
     return {
-        "model": "THEORETICAL_ADIABATIC_TWO_CONSTANT_CV_SOLIDS_ONLY",
+        "model": "COUNTERFACTUAL_NO_EXTERNAL_HEAT_LOSS_TWO_SOLIDS_NOT_C14_BC",
         "regional_heat_capacity_J_per_K": capacity,
         "total_heat_capacity_J_per_K": total,
         "ideal_equilibrium_K_no_heat_loss": eq,
         "energy_residual_equation": (
             "Cmetal*(Tmetal-Tmetal0)+Cmold*(Tmold-Tmold0)=0"
         ),
-        "validation_status": "ANALYTICAL_TARGET_ONLY_NOT_CFD_OUTPUT",
+        "validation_status": "COUNTERFACTUAL_INSULATED_LIMIT_NOT_T0_WITH_C14_CONVECTIVE_BOUNDARIES",
     }
 
 
@@ -490,7 +490,7 @@ def c14_source_gate(cfg: dict) -> dict:
     ):
         if not math.isclose(a[key], original, rel_tol=1e-10):
             raise ValueError(f"C14 source interface drift {key}")
-    if contents[control].find("adjustTimeStep  no;") == -1:
+    if not re.search(r"(?m)^\s*adjustTimeStep\s+no\s*;", contents[control]):
         raise ValueError("Original C14 time step no longer fixed")
     return {
         "original_case": str(C14_ROOT),
@@ -643,6 +643,10 @@ def synthetic_fixture():
             "rho_kg_m3": 2., "Cv_J_kg_K": 3.,
             "kappa_W_m_K": 4., "molWeight_g_mol": 5.,
             "T_initial_K": 6. if region == "metal" else 7.,
+            **({
+                "Cp_C14_J_kg_K": 3., "mu_C14_Pa_s": 4*0.14/3,
+                "Pr_C14": 0.14,
+            } if region == "metal" else {}),
             "source_rho": "SYNTHETIC_UNIT_TEST",
             "source_Cv": "SYNTHETIC_UNIT_TEST",
             "source_kappa": "SYNTHETIC_UNIT_TEST",
@@ -731,7 +735,7 @@ def main() -> int:
     )
     if not args.materialize:
         print(f"CASE_A_T0_CONFIG_AND_SOURCE_PRECHECK_OK: {len(files)} files renderable")
-        print("IDEALIZED_T0_CLOSED_EQUILIBRIUM_K:",
+        print("COUNTERFACTUAL_INSULATED_EQUILIBRIUM_K_NOT_C14_BC:",
               energy["ideal_equilibrium_K_no_heat_loss"],
               "| theoretical constant-Cv and adiabatic only, NOT CFD")
         print("No files written. No CFD. Native Foundation14 dictionary parse remains pending.")
