@@ -202,5 +202,86 @@ class GranadaOneShotTests(unittest.TestCase):
             assemble(probe(str(self.dest)),d)
 
 
+
+class GranadaFullFileIntegrationTests(unittest.TestCase):
+    """One fake CFD process, actual on-disk alpha/T/rho and wall-Q parsers."""
+
+    def setUp(self):
+        import test_run_fs_c05_native_smoke as fixture_module
+        self.test_fixture=fixture_module.CHTNativeSmokeTests(
+            "test_native_input_provenance_is_checked_before_clone")
+        self.test_fixture.setUp()
+        self.addCleanup(self.test_fixture.doCleanups)
+        self.source=self.test_fixture.source
+        self.target=self.source.parent/(RUN_PREFIX+"all_records")
+
+    def test_all_four_real_parsers_from_one_fake_native_execution(self):
+        import os
+        import shutil
+        import subprocess
+        from unittest.mock import patch
+        from audit_fs_c05_density_inventory import (
+            read_native_rho,phase_inventory,
+        )
+        from test_run_fs_c05_wall_heat_flux import synthetic_wall_q
+        from test_audit_fs_c05_density_inventory import write_rho
+        from test_run_fs_c05_native_smoke import success_output
+
+        def fake_solver(cmd,**kwargs):
+            self.assertEqual(cmd,["foamMultiRun","-case",str(self.target)])
+            for time in ("1e-07","2e-07"):
+                for region in ("fluid","mold"):
+                    directory=self.target/time/region
+                    directory.mkdir(parents=True,exist_ok=True)
+                    shutil.copy2(self.target/"0"/region/"T",directory/"T")
+                    if region=="fluid":
+                        shutil.copy2(self.target/"0/fluid/alpha.metal",
+                                     directory/"alpha.metal")
+                        values=[6820.]*2368+[1.16]*32000
+                        write_rho(directory/"rho",values)
+            for region,power in (("fluid",12.),("mold",-12.)):
+                synthetic_wall_q(self.target,region,
+                                 [(1e-7,power),(2e-7,power)])
+            return subprocess.CompletedProcess(cmd,0,success_output(),"")
+
+        def fake_cell_volume(mesh,i):
+            if mesh["region"]=="fluid":
+                return 4.801191628e-5/2368
+            return 0.000103169142748/7680
+
+        with patch.dict(os.environ,{"WM_PROJECT_VERSION":"14"}),\
+             patch("run_fs_c05_wall_heat_flux.shutil.which",
+                   return_value="/opt/openfoam14/bin/foamMultiRun"),\
+             patch("run_fs_c05_wall_heat_flux.subprocess.run",
+                   side_effect=fake_solver),\
+             patch("audit_fs_c05_postrun_fields.read_mesh",
+                   side_effect=lambda p,n:{"region":
+                       "fluid" if n==34368 else "mold"}),\
+             patch("audit_fs_c05_postrun_fields.cell_volume_m3",
+                   side_effect=fake_cell_volume),\
+             patch("audit_fs_c05_density_inventory.read_mesh",
+                   side_effect=lambda p,n:{"region":"fluid"}),\
+             patch("audit_fs_c05_density_inventory.cell_volume_m3",
+                   side_effect=fake_cell_volume):
+            results=run_granada(self.source,self.target,native=True)
+
+        self.assertTrue(results["actual_native_CFD_completed"])
+        self.assertEqual(results["native_mixture_density_mass_inventory"]
+                         ["status"],
+                         "NATIVE_MIXTURE_RHO_INVENTORY_MEASURED_NO_MASS_CLOSURE")
+        self.assertFalse(results["scope"]["mass_conservation_verified"])
+        self.assertFalse(results["scope"]["global_energy_conservation_verified"])
+        self.assertAlmostEqual(
+            results["all_phase_and_temperature_observables"]
+                   ["metal_volume_relative_change"],0.)
+        self.assertFalse(
+            results["reciprocal_contact_power"]["alert_mismatch_over_5pct"]
+        )
+        self.assertAlmostEqual(
+            results["coupled_wall_Q_time_integral_DIAGNOSTIC_ONLY"]
+                   ["Qfluid_trapezoid_J"]["value"],1.2e-6)
+        self.assertTrue((self.target/"FS_C05_GRANADA_REPORT.md").is_file())
+        self.assertFalse((self.source/"FS_C05_GRANADA_REPORT.md").exists())
+
 if __name__=="__main__":
     unittest.main()
