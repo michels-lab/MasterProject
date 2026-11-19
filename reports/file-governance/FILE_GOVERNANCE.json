@@ -28,7 +28,7 @@
     "POTENTIAL_UNLOGGED_CHANGES": 2
   },
   "finding_total": 2,
-  "inventory_fingerprint": "759a18c68f4282724e5b798d23f54cecc33145f060d415b029160803da9cc5af",
+  "inventory_fingerprint": "a32de316a07c7f107919d8d4aea57f31d1f0f39dc258218da3df1ea6e9fe8cf7",
   "evidence_fingerprint": "cd13390572b9c157e108227801ed2b573eecffde16426633497dd114e4b163e3",
   "files": [
     {
@@ -316,14 +316,14 @@
       "role": "bitacora",
       "purpose": "technical/audit change history",
       "certainty": "rule",
-      "blob": "762358ef3f8c8df90d79c4206537da94a3ae9607"
+      "blob": "4ecafe4258d0e390043c641fc39d6593404118c5"
     },
     {
       "path": "README.md",
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "bec67341da0d68847915dcbfe017462b84b1afa4"
+      "blob": "c709193632060f5847777552e07ea5e22b4a24ff"
     },
     {
       "path": "RUN_CASE_REGISTRY.csv",
@@ -337,7 +337,7 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "2a441bd3ef2e0e02d83daa910e7692f84e6ee0b0"
+      "blob": "c5eaa151b411b670acd7e96ba1bbfa139c798197"
     },
     {
       "path": "VALIDATION_MATRIX.md",
@@ -1625,7 +1625,7 @@
       "role": "source",
       "purpose": "code/test implementation",
       "certainty": "rule",
-      "blob": "a55d06fec59c39badd473e5dd0215c2b76197353"
+      "blob": "c7ca4049706071b75172f04b99de5bec628f450d"
     },
     {
       "path": "cases_3d/C3D_04_rounded_multiblock_pilot/scripts/diagnose_existing_defects.py",
@@ -1674,7 +1674,7 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "b3d82a3319565bdddee2024d4edf5d9e704ea7e1"
+      "blob": "21dd765a366a628ae94b20e98093b014b5f94998"
     },
     {
       "path": "cases_3d/C3D_05_step_gmsh_conformal/constant/geometry/QuickCupmm.STEP",
@@ -271706,7 +271706,7 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "2d0ed4c72a3a14c3614d36e9d02141cee6ba47bc"
+      "blob": "bd731113e5cecebd06f6bcd55a03a719a5f1c6bb"
     },
     {
       "path": "docs/DOCUMENT_SYNC_20261110_ES.md",
