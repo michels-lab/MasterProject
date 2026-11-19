@@ -24,6 +24,8 @@ ARC = re.compile(
 )
 INNER = {89, 90, 93, 94}
 OUTER = set(range(84, 100)) - INNER
+CAD_SECTION_AT_MINUS39_8_MM2 = 909.900  # STL section quoted in C3D-04 source README
+MAX_SECTION_ERROR_PERCENT = 3.0
 
 
 def build(source: Path, target: Path, mode: str, value: float) -> dict:
@@ -33,6 +35,21 @@ def build(source: Path, target: Path, mode: str, value: float) -> dict:
         raise ValueError("Inner axial move must be [-0.15,+0.20] mm")
     if mode == "profile" and not (0.20 <= value <= 0.95):
         raise ValueError("Metal profile interpolation alpha must be [0.20,0.95]")
+    # Profile edits must not silently pass an integral-area gate while
+    # becoming inaccurate at the crucial basal CAD section Y=-39.8 mm.
+    # The radius and width interpolate linearly for these rounded squares.
+    section_area = None
+    section_error_percent = None
+    if mode == "profile":
+        width = 28.280 + (30.178 - 28.280) * value
+        corner_radius = 2.0 + (1.0 - 2.0) * value
+        section_area = width**2 - (4.0 - math.pi) * corner_radius**2
+        section_error_percent = 100 * (section_area / CAD_SECTION_AT_MINUS39_8_MM2 - 1)
+        if abs(section_error_percent) > MAX_SECTION_ERROR_PERCENT:
+            raise ValueError(
+                f"Section Y=-39.8 mm departs from CAD by "
+                f"{section_error_percent:+.3f}% (>3%): alpha={value}"
+            )
     if source.resolve() == target.resolve():
         raise ValueError("Never overwrite native V3 baseline")
     data = source.read_text(encoding="utf-8")
@@ -133,6 +150,8 @@ def build(source: Path, target: Path, mode: str, value: float) -> dict:
         "changed_block_connectivity": False,
         "changed_patch_topology": False,
         "changed_surface_geometry": mode == "profile",
+        "section_y_minus39_8_area_mm2_analytic": section_area,
+        "section_y_minus39_8_error_percent_vs_STL": section_error_percent,
         "original": str(source), "output": str(target),
         "require_native_checkMesh": True,
         "require_remeasured_contact_area": True,
