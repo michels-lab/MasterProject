@@ -35,7 +35,7 @@ def boundary(names:list[str],*,fluid:bool)->str:
                       "    neighbourPatch fluid_to_mold;\n") if wall else ""
         text.extend([name,"{",
                      "    type "+typ+";",
-                     "    nFaces 0;",
+                     "    nFaces "+str((3136 if wall else {"atmosphereTop":448,"atmosphereSides":3040,"atmosphereLowerSides":256}.get(name,0)) if fluid else 0)+";",
                      "    startFace 0;",
                      *neighbor.splitlines(),
                      "}"])
@@ -95,7 +95,7 @@ class TemperatureStageTests(unittest.TestCase):
         self.assertEqual(sum(bad),METAL_CELLS)
         # This tool is deliberately aligned with the accepted alpha field,
         # not random metal order; stage() sources that alpha from audit.
-        with self.assertRaisesRegex(ValueError,"exact.*binary"):
+        with self.assertRaisesRegex(ValueError,"invalid fluid alpha length"):
             fluid_thermal_values(ALPHA[:-1])
         bad[0]=.5
         with self.assertRaisesRegex(ValueError,"initial binary"):
