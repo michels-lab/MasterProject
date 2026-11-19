@@ -74,3 +74,23 @@ Still UNTESTED: no CFD, no CHT energy/temperature evolution accepted.
 ```
 
 **HECHO:** diccionarios de solver candidatos y condiciones `coupledTemperature` instalados en una copia, originales preservados. **NO HECHO:** carga efectiva de módulos/propiedades/BC en OpenFOAM, cálculo de paso de tiempo, conservación energética o masa. Antes de cualquier corrida física larga, ejecutar un arranque breve y aislado, detener/rechazar errores reales y conservar logs; no afirmar flujo térmico a partir del éxito de preparación.
+
+## Nuevo ejecutor de primera física: 2 pasos de `foamMultiRun`, SÓLO sobre otra COPIA
+
+Se incorporó `analysis_tools/run_fs_c05_native_smoke.py` y la suite `test_run_fs_c05_native_smoke.py` con 11 pruebas simuladas (no se ejecuta CFD en GitHub Actions). El ejecutor hace un **preflight del candidato FS-C05 completo**: comprueba el manifiesto `VOF_CHT_SOLVER_INPUTS_STAGED_UNTESTED_NO_CFD`, los hashes de los archivos generados, las 2368 celdas de hierro y 32000 de aire, `T=1500/300 K` coherente con `alpha.metal`, el campo de arena de 7680 celdas a 300 K, las 3136 caras y los `mappedWall` a la arena, los tres parches de atmósfera abiertos, `coupledTemperature` a ambos lados y los nombres de solver y turbulencia RAS `kEpsilon`. Si la fuente fue manipulada, rechaza el ensayo.
+
+Luego crea una carpeta **nueva** bajo `~/OpenFOAM/FS_C05_NATIVE_SMOKE_RUNS/FS_C05_NATIVE_SMOKE_<UTC>_<id>` y acorta exclusivamente en esa copia `endTime` a **2e-7 s**, conserva `deltaT=1e-7 s`, cambia `writeControl` a `timeStep` e `writeInterval` a 1. Conserva originales FS-C04/FS-C05 y registra `FS_C05_NATIVE_SMOKE_REPORT.json`. **Por defecto no arranca OpenFOAM**; `--native` exige OpenFOAM Foundation14 y `foamMultiRun`, ejecuta dos pasos con límite de tiempo, guarda `log.FS_C05_foamMultiRun` y verifica código de salida cero, ausencia de `FOAM FATAL` y presencia de `Time = ...` y `End`. Un fallo deja el caso y el log para revisión sin sobrescribir nada.
+
+Tras comprobar que la rama está actualizada y pasar tests:
+
+```bash
+cd ~/OpenFOAM/FS_C02_WORKTREE
+python3 -m unittest discover -s analysis_tools -p test_run_fs_c05_native_smoke.py -v &&
+python3 analysis_tools/run_fs_c05_native_smoke.py \
+  --source ~/OpenFOAM/FS_C05_VOF_CHT_RUNS/FS_C05_VOF_CHT_SCREEN_20261119T063448Z_84d08b6e \
+  --native
+```
+
+**Resultado esperado si y sólo si el solver termina el arranque con éxito:** `NATIVE_TWO_STEP_VOF_CHT_STARTUP_COMPLETED_NOT_VALIDATED`. Es todavía **SIN RESULTADO REAL**, y aun si pasa NO acredita conservación de masa VOF, continuidad de flujo de calor, estabilidad transitoria ni cambios térmicos físicos: solo prueba carga de módulos e iteración temporal en un primer ensayo con propiedades provisionales. El log y los nuevos campos serán la evidencia para verificar más adelante el balance energético del contacto metal/arena y arena/aire. El aire exterior debe seguir siendo un volumen resuelto, no un coeficiente de convección inventado.
+
+**No confundir con validación para tesis:** necesitamos `∫alpha.metal dV` al final, flujo térmico recíproco de los 3136 pares de caras, termodinámica `Cp/k/rho(T)`, soporte inferior, geometría CAD fiel y finalmente solidificación/contracción.
