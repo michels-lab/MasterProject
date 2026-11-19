@@ -1,0 +1,37 @@
+{
+  "schema": "C3D05_T0_1",
+  "purpose": "T0_TRANSIENT_TWO_SOLID_NUMERICAL_VERIFICATION_NOT_CAST_IRON_SOLIDIFICATION",
+  "material_model": "constIsoSolid_rhoConst_eConst_sensibleInternalEnergy",
+  "metal": {
+    "rho_kg_m3": null,
+    "Cv_J_kg_K": null,
+    "kappa_W_m_K": null,
+    "molWeight_g_mol": null,
+    "T_initial_K": null,
+    "source_rho": null,
+    "source_Cv": null,
+    "source_kappa": null,
+    "source_molWeight": null,
+    "source_T_initial": null
+  },
+  "mold": {
+    "rho_kg_m3": null,
+    "Cv_J_kg_K": null,
+    "kappa_W_m_K": null,
+    "molWeight_g_mol": null,
+    "T_initial_K": null,
+    "source_rho": null,
+    "source_Cv": null,
+    "source_kappa": null,
+    "source_molWeight": null,
+    "source_T_initial": null
+  },
+  "simulation": {
+    "deltaT_s": null,
+    "endTime_s": null,
+    "writeEverySteps": null,
+    "source_time_choices": null
+  },
+  "thermal_BC_hypothesis": "ALL_EXTERNAL_ADIABATIC_IDEAL_METAL_MOLD_CONTACT",
+  "acknowledgement": "T0_IS_NOT_CAST_IRON_PHYSICAL_VALIDATION"
+}
