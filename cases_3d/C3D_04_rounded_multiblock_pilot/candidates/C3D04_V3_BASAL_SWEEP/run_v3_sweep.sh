@@ -4,6 +4,8 @@
 # No C14 field modifications, NO CFD and NO unrelated Case B (C3D-05) changes.
 set -Eeuo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# Fail early on an invalid generator, diff contract or syntax.
+bash "$ROOT/tests/test_v3_static.sh"
 BASE="${C3D04_V3_SWEEP_OUT:-$HOME/OpenFOAM/C3D04_V3_BASAL_SWEEP_01}"
 if [[ "$BASE" != /* ]]; then
     echo "ERROR: C3D04_V3_SWEEP_OUT must be an absolute path" >&2
