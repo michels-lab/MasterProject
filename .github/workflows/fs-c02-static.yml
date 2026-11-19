@@ -46,6 +46,8 @@ on:
       - 'analysis_tools/test_stage_fs_c04_initial_temperature.py'
       - 'analysis_tools/verify_fs_c04_native_temperature.py'
       - 'analysis_tools/test_verify_fs_c04_native_temperature.py'
+      - 'analysis_tools/stage_fs_c05_vof_cht.py'
+      - 'analysis_tools/test_stage_fs_c05_vof_cht.py'
       - 'freesurface/FS-C04_fluid_mold_mesh_pilot/**'
       - 'analysis_tools/diagnose_fs_c02_courant.py'
       - 'analysis_tools/test_diagnose_fs_c02_courant.py'
@@ -110,6 +112,10 @@ jobs:
         run: python3 -m unittest discover -s analysis_tools -p test_stage_fs_c04_initial_temperature.py -v
       - name: FS-C04 two-region native-T postProcess preparation, synthetic parser and no-CFD gates
         run: python3 -m unittest discover -s analysis_tools -p test_verify_fs_c04_native_temperature.py -v
+      - name: FS-C05 provisional real compressibleVoF+solid CHT solver inputs from official v14 tutorial (NO CFD)
+        run: python3 -m unittest discover -s analysis_tools -p test_stage_fs_c05_vof_cht.py -v
+      - name: FS-C05 candidate Python syntax (NO CFD)
+        run: python3 -m py_compile analysis_tools/stage_fs_c05_vof_cht.py analysis_tools/test_stage_fs_c05_vof_cht.py
       - name: Stage reference iron-air case outside Git checkout
         run: |
           python3 analysis_tools/run_fs_c02_local.py \
