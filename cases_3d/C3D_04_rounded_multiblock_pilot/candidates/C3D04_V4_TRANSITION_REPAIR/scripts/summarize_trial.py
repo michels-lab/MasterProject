@@ -15,6 +15,8 @@ FIELDS = (
     "trial", "mode", "value", "runner_rc", "status",
     "parent_mesh_ok", "metal_mesh_ok", "mold_mesh_ok",
     "parent_under_cells", "metal_under_cells", "mold_high_skew_faces",
+    "parent_min_determinant", "metal_min_determinant", "mold_min_determinant",
+    "section_error_vs_STL_pct_analytic",
     "parent_max_nonorth_deg", "metal_max_nonorth_deg",
     "mold_max_nonorth_deg", "mold_max_skewness", "interface_area_mm2",
 )
@@ -58,6 +60,9 @@ def extract(case: Path, trial: str, mode: str, value: str, rc: str):
             values["mold_max_skewness"] = first(
                 r"Max skewness\s*=\s*([\d.eE+-]+)", text
             )
+        values[f"{region}_min_determinant"] = first(
+            r"Cell determinant \(wellposedness\)\s*:\s*minimum:\s*([\d.eE+-]+)", text
+        )
         values[f"{region}_max_nonorth_deg"] = first(
             r"Mesh non-orthogonality Max:\s*([\d.eE+-]+)", text
         )
@@ -73,6 +78,16 @@ def extract(case: Path, trial: str, mode: str, value: str, rc: str):
         diag = case / "C3D04_V4_DIAGNOSTIC.txt"
         t = diag.read_text(errors="replace") if diag.is_file() else ""
         area = first(r"metal_to_mold:\s+\d+\s+faces,\s+([\d.]+)\s+mm2", t)
+    params = case / "log.generateDictionary"
+    values["section_error_vs_STL_pct_analytic"] = "NA"
+    if params.is_file():
+        try:
+            geometry = json.loads(params.read_text(encoding="utf-8"))
+            result = geometry.get("section_y_minus39_8_error_percent_vs_STL")
+            if result is not None:
+                values["section_error_vs_STL_pct_analytic"] = f"{float(result):+.4f}"
+        except (ValueError, TypeError, OSError):
+            pass
     values["interface_area_mm2"] = area
     return values
 
