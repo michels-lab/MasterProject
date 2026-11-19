@@ -164,6 +164,21 @@ def pipeline(inputs: Path, source: Path, out: Path) -> int:
         if fingerprint != prior.get("source_fingerprint_sha256"):
             print("BLOCKED_CHANGED_SOURCE: accepted polyMesh/native evidence SHA differs from completed case")
             return 2
+        try:
+            # No re-running native checks: compare installed dictionaries against
+            # the CURRENT C14-derived, SHA-verified templates and model.
+            prepare = load_module("case_b_t0_prepare", T0 / "scripts/prepare_t0.py")
+            current_files = prepare.file_map(config)
+            drift = [rel for rel, body in current_files.items()
+                     if not (out / rel).is_file()
+                     or (out / rel).read_text(encoding="utf-8") != body]
+        except (OSError, ValueError, KeyError) as exc:
+            print(f"BLOCKED_CHANGED_T0_MODEL: {exc}")
+            return 2
+        if drift:
+            print("BLOCKED_CHANGED_T0_MODEL: installed dictionaries differ from current templates: "
+                  + ", ".join(drift))
+            return 2
         print(f"ALREADY_PREPARED | {STAGE} | {out}")
         print("No repeat of checkMesh, materialization or foamDictionary; no CFD.")
         return 0
