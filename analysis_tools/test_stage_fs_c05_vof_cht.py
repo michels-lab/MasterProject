@@ -90,7 +90,11 @@ class CHTTemplateTests(unittest.TestCase):
                 "maxDeltaT       1;\n"
                 "writePrecision  8;\n"),
             "system/fvSolution":"PIMPLE {nOuterCorrectors 1; nEnergyCorrectors 2;}",
-            "system/fluid/fvSchemes":"divSchemes { div(phi,k)         $turbulence; }",
+            "system/fluid/fvSchemes":(
+                "divSchemes\n{\n"
+                "    turbulence Gauss limitedLinear 1;\n"
+                "    div(phi,k)         $turbulence;\n"
+                "}\n"),
             "system/fluid/fvSolution":(
                 'solvers {\n"alpha.water.*" {nCorrectors 2;}\n'
                 '"(T|k|B|nuTilda).*" {solver PBiCGStab;}\n}\n'),
