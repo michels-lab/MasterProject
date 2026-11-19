@@ -29,7 +29,8 @@
     "Real QuickCup external thermal BCs, h/contact resistance, and experimental initial conditions are NOT established",
     "Nonorthogonality risk numerical stability NOT demonstrated, despite Mesh OK",
     "STL sample error not a rigorous CAD STEP Hausdorff bound",
-    "No T0 solver run, no T1 solidification run, no mesh independence or experimental validation"
+    "No T0 solver run, no T1 solidification run, no mesh independence or experimental validation",
+    "Foundation14 parser acceptance of T0 global/regional dictionaries NOT observed in WSL (and energy corrector behavior unverified)"
   ],
   "milestones": [
     {
@@ -94,5 +95,29 @@
     }
   ],
   "response_rule": "Every update about this case must explicitly display: Etapa N/10; avance general completed/total (%) using this manifest, physical/CFD status, what changed, what remains; never imply false precision. Recompute on changes.",
-  "execution_rule": "Integrate validations into one cohesive milestone; no one-script-per-subproblem loops, no rerun already closed V4/T02 audits; one user command only at a meaningful end-to-end delivery; preserve case and audit evidence."
+  "execution_rule": "Integrate validations into one cohesive milestone; no one-script-per-subproblem loops, no rerun already closed V4/T02 audits; one user command only at a meaningful end-to-end delivery; preserve case and audit evidence.",
+  "last_integrated_delivery": {
+    "date": "2026-11-19",
+    "source_status": "CODE_COMMITTED_STATIC_SUITE_AVAILABLE_NOT_CONFIRMED_CI_OR_WSL",
+    "stage": "05_THERMAL_T0_DESIGN",
+    "milestone_not_closed": true,
+    "changes": [
+      "Added required Foundation14 top-level system/fvSolution with global PIMPLE, separate from region fvSolution",
+      "Explicit sourced nEnergyCorrectors control added to T0_INPUTS.json, no defaults invented",
+      "10 generated dictionaries now instead of 9; positive/negative integrated static tests",
+      "Atomic staging materializer checks native dictionary parsing and SHA256 identity of copied meshes before publication",
+      "All nonempty native wall patch names must map to declared thermal BCs",
+      "One integrated stage entrypoint; no repeated user microtests and no CFD"
+    ],
+    "external_verification": [
+      "Official OpenFOAM-14 heatedDuct global system/fvSolution and solid regional fvSolution consulted",
+      "Official OpenFOAM Foundation v14 thermal BC docs confirm coupledTemperature on both interface sides"
+    ],
+    "not_observed": [
+      "CI successful execution of new tests",
+      "WSL Foundation14 native dictionary parse",
+      "actual thermophysical properties/initial temperatures",
+      "any T0 energy balance or solver run"
+    ]
+  }
 }
