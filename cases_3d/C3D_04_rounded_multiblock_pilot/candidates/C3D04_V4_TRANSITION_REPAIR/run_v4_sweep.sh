@@ -36,10 +36,10 @@ TRIALS=(
   "T01 inner_y -0.12"
   "T02 inner_y 0.12"
   "T03 inner_y 0.18"
-  "T04 profile 0.90"
-  "T05 profile 0.78"
-  "T06 profile 0.65"
-  "T07 profile 0.50"
+  "T04 profile 0.95"
+  "T05 profile 0.90"
+  "T06 profile 0.84"
+  "T07 profile 0.78"
 )
 winner=""
 for item in "${TRIALS[@]}"; do
