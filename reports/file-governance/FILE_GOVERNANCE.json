@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "audit_kind": "deterministic_full_tracked_tree",
-  "tracked_files_total": 38968,
-  "classified_files_total": 38963,
+  "tracked_files_total": 38969,
+  "classified_files_total": 38964,
   "docs_content_inspected": 173,
   "large_docs_skipped": 1,
   "excluded_reports": 5,
@@ -20,16 +20,16 @@
     "simulation_log": 3155,
     "simulation_output": 32615,
     "source": 104,
-    "test": 40,
+    "test": 41,
     "web_ui": 1,
     "workflow": 22
   },
   "finding_counts": {
-    "POTENTIAL_UNLOGGED_CHANGES": 2
+    "POTENTIAL_UNLOGGED_CHANGES": 1
   },
-  "finding_total": 2,
-  "inventory_fingerprint": "3d63f4f713f5b4321b04c81c97eae0d6986052cd0cfef02515d50889e6c8818f",
-  "evidence_fingerprint": "0024c5544702a20dd8aaac2c1771ab0c5ba30520a47a2fd639e0bab67f32e1a7",
+  "finding_total": 1,
+  "inventory_fingerprint": "c85592844adf1c12c75514c86661135451abf703fa283e2c9ccd26d84484c49d",
+  "evidence_fingerprint": "820209ce992b96e6a9576a2041228951d2835a87a5a27f8d9c3d99a32e26df91",
   "files": [
     {
       "path": ".github/agents/openfoam-solidification.agent.md",
@@ -337,7 +337,7 @@
       "role": "bitacora",
       "purpose": "technical/audit change history",
       "certainty": "rule",
-      "blob": "02d81b72ea4686c5ea19ae510c292498f881d0e7"
+      "blob": "40969b95881fbcdd17e68521a7349033eeb605c0"
     },
     {
       "path": "README.md",
@@ -1492,7 +1492,7 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "9095994d065e92e663e11c5f0a7dcd9bd6ac5545"
+      "blob": "36e40438c3867c3cc27e4c066d19cda04ef87733"
     },
     {
       "path": "cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V2_BASAL_QUALITY/Allmesh",
@@ -1709,7 +1709,7 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "ab91866ec44319519b4f63ed5549998a7e701de5"
+      "blob": "5289800d8c55dfdf410c81bd9b4243697e85a317"
     },
     {
       "path": "cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/T0_INPUTS.json",
@@ -1940,7 +1940,7 @@
       "role": "source",
       "purpose": "code/test implementation",
       "certainty": "rule",
-      "blob": "65adfef8fbccb1b1ee96dbc0b74b007bd299784b"
+      "blob": "dc3a7fb26ab39fec477e1e9209aa19bb7f2d3042"
     },
     {
       "path": "cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/scripts/run_t0_granada.py",
@@ -2060,6 +2060,13 @@
       "purpose": "code/test implementation",
       "certainty": "rule",
       "blob": "59a27cf9cb91ddf71289be3b6f5d0e9ecc83c36c"
+    },
+    {
+      "path": "cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/tests/test_t0_energy_forensics.py",
+      "role": "test",
+      "purpose": "code/test implementation",
+      "certainty": "rule",
+      "blob": "e95f7b6c7ca8ce2df411f931707aaad5d7a9c3c8"
     },
     {
       "path": "cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/tests/test_t0_granada.py",
@@ -271979,7 +271986,7 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "809fc46b342937803834e3c497edc987fdf629c9"
+      "blob": "6c886c77fe7ccf104e065f75aa3804cd70491ebc"
     },
     {
       "path": "docs/DOCUMENT_SYNC_20261110_ES.md",
@@ -272775,20 +272782,11 @@
   ],
   "findings": [
     {
-      "id": "5cf21eac7f6ab30d",
+      "id": "e149577e2ed2ae07",
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_EN.md",
-      "observation": "15 implementation/config paths changed since this log's last commit; examples: .github/workflows/case-a-t0-stage-contract.yml, cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/C14_PARAMETER_BASELINE.json, cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/T0_INPUTS.json, cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/scripts/prepare_case_a_t0.py, cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/tests/test_integrated_case_a.py, cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/scripts/audit_t0_numerical_run.py",
-      "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "b428bc8dbc4a51e3",
-      "code": "POTENTIAL_UNLOGGED_CHANGES",
-      "severity": "review",
-      "path": "PROJECT_AUDIT_LOG_ES.md",
-      "observation": "10 implementation/config paths changed since this log's last commit; examples: .github/workflows/case-a-t0-stage-contract.yml, cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/scripts/prepare_case_a_t0.py, cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/tests/test_integrated_case_a.py, cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/scripts/audit_t0_numerical_run.py, cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/scripts/c14_numerical_reference.py, cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/scripts/prepare_t0.py",
+      "observation": "16 implementation/config paths changed since this log's last commit; examples: .github/workflows/case-a-t0-stage-contract.yml, cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/C14_PARAMETER_BASELINE.json, cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/T0_INPUTS.json, cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/scripts/prepare_case_a_t0.py, cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/tests/test_integrated_case_a.py, cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/scripts/audit_t0_numerical_run.py",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     }
