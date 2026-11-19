@@ -167,7 +167,7 @@ def stage(source:Path,acceptance:Path,tutorial:Path,out:Path)->dict:
     control_dict((tutorial/"system/controlDict").read_text(encoding="utf-8"))
     fv_schemes_source=(tutorial/"system/fluid/fvSchemes").read_text(
         encoding="utf-8")
-    require(len(re.findall(r"div\\(phi,k\\)\\s+\\$turbulence;",fv_schemes_source))==1,
+    require(len(re.findall(r"div\(phi,k\)\s+\$turbulence;",fv_schemes_source))==1,
             "official Foundation14 turbulence transport scheme changed")
     source_hashes={}
     for root,dirs,files in os.walk(source,followlinks=False):
@@ -199,8 +199,8 @@ def stage(source:Path,acceptance:Path,tutorial:Path,out:Path)->dict:
     write("system/controlDict",control_dict(official("system/controlDict")))
     write("system/fvSolution",official("system/fvSolution"))
     fluid_schemes,changed=re.subn(
-        r"div\\(phi,k\\)\\s+\\$turbulence;",
-        "div(phi,k)         $turbulence;\\n"
+        r"div\(phi,k\)\s+\$turbulence;",
+        "div(phi,k)         $turbulence;\n"
         "    div(phi,epsilon)   $turbulence;",
         official("system/fluid/fvSchemes"))
     require(changed==1 and "div(phi,epsilon)" in fluid_schemes,
