@@ -28,7 +28,7 @@
     "POTENTIAL_UNLOGGED_CHANGES": 1
   },
   "finding_total": 1,
-  "inventory_fingerprint": "bc6f5382646b4b30274ca0af58de19bed70de66009b4320c70b1eda35227aceb",
+  "inventory_fingerprint": "9085a3787fa836498aea4987efba1d85f81728bd4fffe434a4a511bea6b97d1a",
   "evidence_fingerprint": "fc9a81ef361e6c88caf866b772328c02f25335dce93a8260f120030e811a43c5",
   "files": [
     {
@@ -271566,7 +271566,7 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "eb028817062be06fe221a75e944fd93fc8b88f38"
+      "blob": "028f9be9da4853ab35bdd6ffe8548469746d36f0"
     },
     {
       "path": "docs/C3D_04_RESULTADO_PRIMER_MALLADO_20261118_ES.md",
