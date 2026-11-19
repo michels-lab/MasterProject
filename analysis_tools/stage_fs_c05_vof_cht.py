@@ -250,7 +250,6 @@ def stage(source:Path,acceptance:Path,tutorial:Path,out:Path)->dict:
           .split("boundaryField",1)[0].strip().removesuffix(";"),
         patch_bcs("type coupledTemperature; value uniform 300",
                   "type inletOutlet; inletValue uniform 300; value uniform 300")))
-    )
     write("0/mold/T",scalar_field("T","mold","[0 0 0 1 0 0 0]",
         "uniform 300",
         {"mold_to_fluid":"type coupledTemperature; value uniform 300",
