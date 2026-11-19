@@ -182,8 +182,10 @@ def stage(src:Path,out:Path)->dict:
         ("mold",[T_MOLD_K]*SAND_CELLS,MOLD_PATCHES),
     ):
         directory=out/"0"/region
-        require(directory.is_dir() and not directory.is_symlink(),
-                "split region initial data directory missing")
+        require(not directory.is_symlink(),
+                "split region initial data directory is a symlink")
+        directory.mkdir(parents=True,exist_ok=True)
+        require(directory.is_dir(), "cannot create split region 0 directory")
         field=directory/"T"
         require(not field.exists() and not field.is_symlink(),
                 "T already exists in isolated copy; refusing overwrite")
