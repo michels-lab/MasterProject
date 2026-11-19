@@ -30,7 +30,8 @@
     "Nonorthogonality risk numerical stability NOT demonstrated, despite Mesh OK",
     "STL sample error not a rigorous CAD STEP Hausdorff bound",
     "No T0 solver run, no T1 solidification run, no mesh independence or experimental validation",
-    "Foundation14 parser acceptance of T0 global/regional dictionaries NOT observed in WSL (and energy corrector behavior unverified)"
+    "Foundation14 parser acceptance of T0 global/regional dictionaries NOT observed in WSL (and energy corrector behavior unverified)",
+    "Ideal closed-system T0 energy target cannot be evaluated numerically until sourced rho/Cv/T inputs exist; no CFD heat flux has been measured"
   ],
   "milestones": [
     {
@@ -107,7 +108,10 @@
       "10 generated dictionaries now instead of 9; positive/negative integrated static tests",
       "Atomic staging materializer checks native dictionary parsing and SHA256 identity of copied meshes before publication",
       "All nonempty native wall patch names must map to declared thermal BCs",
-      "One integrated stage entrypoint; no repeated user microtests and no CFD"
+      "One integrated stage entrypoint; no repeated user microtests and no CFD",
+      "Read-only native PILOT_MESH_REPORT.tsv used to validate regional volumes before computing theoretical adiabatic two-solid energy-balance target",
+      "Integrated static suite rejects unknown nonempty native patches; corrected wrongly doubled regex escapes",
+      "Full suite exercises atomic cleanup on synthetic foamDictionary failure and success, without user's WSL"
     ],
     "external_verification": [
       "Official OpenFOAM-14 heatedDuct global system/fvSolution and solid regional fvSolution consulted",
@@ -117,7 +121,8 @@
       "CI successful execution of new tests",
       "WSL Foundation14 native dictionary parse",
       "actual thermophysical properties/initial temperatures",
-      "any T0 energy balance or solver run"
+      "any T0 energy balance or solver run",
+      "Any actual T0 equilibrium temperature: real material and initial T values remain null"
     ]
   }
 }
