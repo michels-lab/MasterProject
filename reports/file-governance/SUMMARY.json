@@ -28,7 +28,7 @@
     "POTENTIAL_UNLOGGED_CHANGES": 2
   },
   "finding_total": 2,
-  "inventory_fingerprint": "a32de316a07c7f107919d8d4aea57f31d1f0f39dc258218da3df1ea6e9fe8cf7",
+  "inventory_fingerprint": "21e49cc5f22843775ffb3b6726bd64d830201cee89cc19a3c4245015e13123d4",
   "evidence_fingerprint": "cd13390572b9c157e108227801ed2b573eecffde16426633497dd114e4b163e3",
   "untracked_audited": false,
   "ignored_audited": false,
