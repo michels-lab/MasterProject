@@ -28,8 +28,8 @@
     "POTENTIAL_UNLOGGED_CHANGES": 2
   },
   "finding_total": 2,
-  "inventory_fingerprint": "34764187e3a2910af2f20369ff9380a478d6ebd1a5423f28d490ced671452d48",
-  "evidence_fingerprint": "89aaf4915a7714d86899a42c27166947b546de90f908635f88e628f4be1f81d0",
+  "inventory_fingerprint": "62609dc925657c5e11507aaf7c680fec41f79ba22159d78013ec3eeae381a0de",
+  "evidence_fingerprint": "80fc60eae67a231a36fc907181f36ee28665c77bda2a9d33e177053105a5c3d5",
   "files": [
     {
       "path": ".github/agents/openfoam-solidification.agent.md",
@@ -1793,7 +1793,7 @@
       "role": "test",
       "purpose": "code/test implementation",
       "certainty": "rule",
-      "blob": "906fbe524edf6938570e4e1ca4f6db51d11ce752"
+      "blob": "244560249e0d763de2c21c6a03e86b23675ad698"
     },
     {
       "path": "cases_3d/README.md",
@@ -271545,7 +271545,7 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "7780560c6c5a2dc7881ae43a0382936d9a336625"
+      "blob": "d7b169a8bf17995c242a57b8d003d5a359b48b36"
     },
     {
       "path": "docs/C3D_05_HXT_RESULTADO_Y_PILOTO_HEX_20261118_ES.md",
@@ -272371,11 +272371,11 @@
       "state": "REVIEW_REQUIRED"
     },
     {
-      "id": "a1db03bab83ba78a",
+      "id": "0762aea1a93e5699",
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_ES.md",
-      "observation": "1 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_05_step_gmsh_conformal/scripts/run_hex_readiness_review.sh",
+      "observation": "2 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_05_step_gmsh_conformal/scripts/run_hex_readiness_review.sh, cases_3d/C3D_05_step_gmsh_conformal/tests/test_step_gmsh_static.sh",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     }
