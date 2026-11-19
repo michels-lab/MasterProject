@@ -1,3 +1,11 @@
+## MANDATORY project reporting and integrated delivery rule (2026-11-19)
+
+**Direct instruction from the project owner, persistent across conversations and agents.** Never omit project **stage and progress** when responding about MasterProject. Always inspect the owning case status first and explicitly say "**Etapa N/Total · Avance D/Total = P% de hitos**", what was concretely done, blockers, and the next integrated milestone. Explain the metric; it is NOT a percent of physical validation or time remaining. For **Caso A C3D-04**, the canonical machine-readable register is [`docs/C3D04_CASE_A_STATUS.json`](docs/C3D04_CASE_A_STATUS.json), and its mandatory scoped instructions live in [`cases_3d/C3D_04_rounded_multiblock_pilot/AGENTS.md`](cases_3d/C3D_04_rounded_multiblock_pilot/AGENTS.md). Other cases must use their own truthful register; NEVER borrow Caso A's percentage.
+
+**Do NOT impose serial one-issue/one-new-script/one-WSL-command feedback loops** or rerun completed geometry investigations. Deliver full engineering milestones with integrated internal QA, one optional end-to-end execution only when needed, and a self-diagnostic, preserving all native scientific evidence. A test or code commit is NOT the same as an OpenFOAM run or a validated model. This requirement supersedes older text suggesting a single terminal command *per small check*: the intended unit is a **meaningful integrated phase**, not a micro-test.
+
+This is a release/reporting contract: omitting the stage/progress or reverting to piecemeal testing is a project delivery defect, requiring correction of the process rather than apology alone.
+
 ## Mandatory agent prevention — root-cause and evidence (2026-10-21)
 
 Owner instruction: do not merely correct a recurring mistake; improve the agent/process rule and add a regression/verification that catches the same failure again. Applicable to ALL assistance, maintenance, QA, audits and task-automation roles; an agent instruction is not evidence that a separate AI agent has executed. For shared software-source governance see https://github.com/michels-lab/Michel-Software-Standards/blob/main/standards/AGENT_RECURRENCE_PREVENTION_STANDARD.md. This repository remains its OWN source of truth; do not move sensitive or product-specific contents across repo boundaries.
