@@ -1,35 +1,35 @@
 {
   "schema_version": 1,
   "audit_kind": "deterministic_full_tracked_tree",
-  "tracked_files_total": 38925,
-  "classified_files_total": 38920,
-  "docs_content_inspected": 167,
+  "tracked_files_total": 38936,
+  "classified_files_total": 38931,
+  "docs_content_inspected": 168,
   "large_docs_skipped": 1,
   "excluded_reports": 5,
   "roles": {
     "agent": 7,
     "analysis_tool": 1,
     "bitacora": 5,
-    "config": 7,
+    "config": 8,
     "data": 31,
     "document": 133,
-    "index": 30,
+    "index": 31,
     "license": 1,
-    "simulation_case_file": 107,
+    "simulation_case_file": 114,
     "simulation_input": 2683,
     "simulation_log": 3155,
-    "simulation_output": 32613,
+    "simulation_output": 32615,
     "source": 92,
     "test": 35,
     "web_ui": 1,
     "workflow": 19
   },
   "finding_counts": {
-    "POTENTIAL_UNLOGGED_CHANGES": 2
+    "POTENTIAL_UNLOGGED_CHANGES": 1
   },
-  "finding_total": 2,
-  "inventory_fingerprint": "8ee6ed2341161d5f9b50fd1452fcb2e0b61e567502554b1a81c65b8dc2c6b64f",
-  "evidence_fingerprint": "ab9d65575365b9a6e5c582ca0909b2a53091951bcb0a27550ccc6b8f2aaff47d",
+  "finding_total": 1,
+  "inventory_fingerprint": "6732f54458a1639c45e497e9bf9bef6490dc23341b4340160338043e953d7f87",
+  "evidence_fingerprint": "142fb5918a208413626018b3f8d2de8d4ea1cf953ed813dadac0dd2d066a5079",
   "files": [
     {
       "path": ".github/agents/openfoam-solidification.agent.md",
@@ -316,7 +316,7 @@
       "role": "bitacora",
       "purpose": "technical/audit change history",
       "certainty": "rule",
-      "blob": "553d61d7b7c8bc4f307c39c0d2b37be7d737b873"
+      "blob": "f2ed740905bcfdac11a41a814d9433aa157c4fff"
     },
     {
       "path": "README.md",
@@ -1464,7 +1464,7 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "75689b2698df40e743e823c99b54a75b31a83fd3"
+      "blob": "75667fd83d7bb986a6794903afe2c64ca3b8d750"
     },
     {
       "path": "cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V2_BASAL_QUALITY/Allmesh",
@@ -1815,6 +1815,83 @@
       "purpose": "OpenFOAM case field/dictionary input (content unvalidated)",
       "certainty": "inferred",
       "blob": "48a3345ff730533d47bf26cfeb73693b748a182b"
+    },
+    {
+      "path": "cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/README.md",
+      "role": "index",
+      "purpose": "navigation/onboarding",
+      "certainty": "rule",
+      "blob": "751c6f9e6a6f233c3f22dd9576e49a9d87f271c4"
+    },
+    {
+      "path": "cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/T0_INPUTS.json",
+      "role": "config",
+      "purpose": "machine-readable configuration",
+      "certainty": "rule",
+      "blob": "d5897f503e392c1e67150fd264453ce0b976e680"
+    },
+    {
+      "path": "cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/templates/0/metal/T.tpl",
+      "role": "simulation_output",
+      "purpose": "OpenFOAM solution time/postProcessing artifact (content unvalidated)",
+      "certainty": "inferred",
+      "blob": "eb792e8a840a7096e85def0602eaa7dddbfbc08f"
+    },
+    {
+      "path": "cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/templates/0/mold/T.tpl",
+      "role": "simulation_output",
+      "purpose": "OpenFOAM solution time/postProcessing artifact (content unvalidated)",
+      "certainty": "inferred",
+      "blob": "439232bdfe4364eaed805a823688feff2fc48d1a"
+    },
+    {
+      "path": "cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/templates/constant/metal/physicalProperties.tpl",
+      "role": "simulation_case_file",
+      "purpose": "OpenFOAM case-specific support artifact",
+      "certainty": "inferred",
+      "blob": "ba741bbafba94ff1005fb4d8bbf631fd550005e4"
+    },
+    {
+      "path": "cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/templates/constant/mold/physicalProperties.tpl",
+      "role": "simulation_case_file",
+      "purpose": "OpenFOAM case-specific support artifact",
+      "certainty": "inferred",
+      "blob": "b474e3966bc0de10639431814d96ed8c6d539a08"
+    },
+    {
+      "path": "cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/templates/system/controlDict.tpl",
+      "role": "simulation_case_file",
+      "purpose": "OpenFOAM case-specific support artifact",
+      "certainty": "inferred",
+      "blob": "cc926b5282bcce9e5efec6e047e3b6949726702e"
+    },
+    {
+      "path": "cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/templates/system/metal/fvSchemes.tpl",
+      "role": "simulation_case_file",
+      "purpose": "OpenFOAM case-specific support artifact",
+      "certainty": "inferred",
+      "blob": "ffc593b2bc7a97a5000bab89640293493301b1db"
+    },
+    {
+      "path": "cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/templates/system/metal/fvSolution.tpl",
+      "role": "simulation_case_file",
+      "purpose": "OpenFOAM case-specific support artifact",
+      "certainty": "inferred",
+      "blob": "9ef71c483601f521a5f7e64ff621f817ae6b7f9c"
+    },
+    {
+      "path": "cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/templates/system/mold/fvSchemes.tpl",
+      "role": "simulation_case_file",
+      "purpose": "OpenFOAM case-specific support artifact",
+      "certainty": "inferred",
+      "blob": "0db931e567448b6890c042e4628a101cf127eec5"
+    },
+    {
+      "path": "cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/templates/system/mold/fvSolution.tpl",
+      "role": "simulation_case_file",
+      "purpose": "OpenFOAM case-specific support artifact",
+      "certainty": "inferred",
+      "blob": "51b4faec6ae947395b8c0d2ac5b9d25d2774189e"
     },
     {
       "path": "cases_3d/C3D_05_step_gmsh_conformal/tests/test_audit_nonorth_hop_distance.py",
@@ -271587,7 +271664,7 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "601c9a8c695341fbe23511d2cbb1fdcd28125df6"
+      "blob": "645f18d6879bddfc6cbd309cd6a026277a4b26c2"
     },
     {
       "path": "docs/C3D_04_VALIDACION_SUPERFICIE_T02_20261119_ES.md",
@@ -271685,7 +271762,7 @@
       "role": "data",
       "purpose": "structured/research data (semantics not validated)",
       "certainty": "rule",
-      "blob": "11cb35bf8ad962fcf3763843fb8f74fbe441ec51"
+      "blob": "1bb1c7c54daeff93f38140a8407a7fa44d4405c2"
     },
     {
       "path": "docs/C3D_REINICIO_20261112_ES.md",
@@ -271713,7 +271790,7 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "02395cc86b6c39d1cab17db498c971c6a331641f"
+      "blob": "c874ea10411dae0485837bfef8f25bb4835385aa"
     },
     {
       "path": "docs/DOCUMENT_SYNC_20261110_ES.md",
@@ -272474,20 +272551,11 @@
   ],
   "findings": [
     {
-      "id": "809ca72975a4726a",
+      "id": "e911cdb9fa901a12",
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_EN.md",
-      "observation": "43 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_03_doctor_multiblock_pilot/tests/test_native_multiblock_static.sh, cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V2_BASAL_QUALITY/tests/test_candidate_geometry.py, cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V3_BASAL_SWEEP/run_v3_sweep.sh, cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V3_BASAL_SWEEP/scripts/build_v3_dictionary.py, cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V3_BASAL_SWEEP/scripts/summarize_trial.py, cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V3_BASAL_SWEEP/tests/test_v3_diff.py",
-      "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "0bcb40480fafe05a",
-      "code": "POTENTIAL_UNLOGGED_CHANGES",
-      "severity": "review",
-      "path": "PROJECT_AUDIT_LOG_ES.md",
-      "observation": "2 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_04_rounded_multiblock_pilot/scripts/audit_v4_t02_face_identity.py, cases_3d/C3D_04_rounded_multiblock_pilot/scripts/audit_v4_t02_vtk_faces.py",
+      "observation": "44 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_03_doctor_multiblock_pilot/tests/test_native_multiblock_static.sh, cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V2_BASAL_QUALITY/tests/test_candidate_geometry.py, cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V3_BASAL_SWEEP/run_v3_sweep.sh, cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V3_BASAL_SWEEP/scripts/build_v3_dictionary.py, cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V3_BASAL_SWEEP/scripts/summarize_trial.py, cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V3_BASAL_SWEEP/tests/test_v3_diff.py",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     }
