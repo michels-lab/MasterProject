@@ -63,7 +63,15 @@
     "case_materialized": false,
     "wsl_preflight_observed": false,
     "solver_executed": false,
-    "physical_parameters_complete": false
+    "physical_parameters_complete": false,
+    "c14_numerical_reference_code_committed": true,
+    "c14_numerical_reference_source_sha_verified_in_static_CI": true,
+    "c14_numerical_reference_local_case_prepared": false,
+    "c14_numerical_reference_local_solver_run": false,
+    "c14_energy_equilibrium_target_generated_in_local_WSL": false,
+    "one_shot_local_handoff": "cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/scripts/run_c14_numerical_granada.sh",
+    "numeric_reference_scope": "100-step archived-C14 two-solid conduction shakedown only, no JMatPro/experiment",
+    "handoff_report": "docs/granada/C3D05_C14_NUMERICAL_ONE_SHOT_20261119_ES.md"
   },
   "other_cases": [
     {
@@ -101,7 +109,7 @@
       "evidence": "docs/C3D_05_T0_CONDUCCION_MULTIRREGION_F14_20261119_ES.md"
     }
   ],
-  "blocker": "Datos rho/Cv/kappa, T metal/arena y dt con fuentes; T0 no ejecutado en laptop",
-  "next_integrated_delivery": "T0 completo documentado y una sola transferencia/ejecución WSL cuando existan insumos termofísicos válidos",
+  "blocker": "Sigue pendiente la ejecución real OpenFOAM Foundation14 en WSL, el balance de energía y flujo interfacial, y los datos termofísicos experimentales/JMatPro para G3 físico; no validar CFD por CI.",
+  "next_integrated_delivery": "Recibir una sola evidencia del ejecutor numérico C14 en WSL, auditar energía/interfaz sobre campos reales, después modelar T0 físico con propiedades documentadas sin repetir CAD/HEX8.",
   "science": "NO_CFD_3D_RUN_NO_PHYSICAL_VALIDATION"
 }
