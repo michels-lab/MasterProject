@@ -42,6 +42,8 @@ on:
       - 'analysis_tools/test_verify_fs_c04_native_alpha.py'
       - 'analysis_tools/audit_fs_c04_thermal_interfaces.py'
       - 'analysis_tools/test_audit_fs_c04_thermal_interfaces.py'
+      - 'analysis_tools/stage_fs_c04_initial_temperature.py'
+      - 'analysis_tools/test_stage_fs_c04_initial_temperature.py'
       - 'freesurface/FS-C04_fluid_mold_mesh_pilot/**'
       - 'analysis_tools/diagnose_fs_c02_courant.py'
       - 'analysis_tools/test_diagnose_fs_c02_courant.py'
@@ -102,6 +104,8 @@ jobs:
         run: python3 -m unittest discover -s analysis_tools -p test_verify_fs_c04_native_alpha.py -v
       - name: FS-C04 thermal surface interface geometry, 3136 reciprocal metal-air/sand faces (NO CFD)
         run: python3 -m unittest discover -s analysis_tools -p test_audit_fs_c04_thermal_interfaces.py -v
+      - name: FS-C04 isolated 1500K metal, 300K air/sand initial T with non-solving BCs (NO CFD)
+        run: python3 -m unittest discover -s analysis_tools -p test_stage_fs_c04_initial_temperature.py -v
       - name: Stage reference iron-air case outside Git checkout
         run: |
           python3 analysis_tools/run_fs_c02_local.py \
