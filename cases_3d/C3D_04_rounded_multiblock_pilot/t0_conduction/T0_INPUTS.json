@@ -2,47 +2,78 @@
   "schema": "C3D04_A_T0_1",
   "purpose": "TRANSIENT_TWO_SOLID_CONDUCTION_NUMERICAL_CHECK_ONLY_NOT_CAST_IRON_SOLIDIFICATION",
   "material_model": "constIsoSolid_rhoConst_eConst_sensibleInternalEnergy",
-  "thermal_BC_hypothesis": "ADIA_BC_EXTERNAL_PERFECT_THERMAL_CONTACT_UNVALIDATED_QUICKCUP",
+  "thermal_BC_hypothesis": "C14_THERMAL_EXTERIOR_H10_FINITE_CONTACT_TWO_SOLID_SURROGATE",
   "acknowledgement": "T0_NUMERICAL_CHECK_ONLY_NOT_EXPERIMENTAL_VALIDATION",
   "metal": {
-    "rho_kg_m3": null,
-    "Cv_J_kg_K": null,
-    "kappa_W_m_K": null,
-    "molWeight_g_mol": null,
-    "T_initial_K": null,
-    "source_rho": null,
-    "source_Cv": null,
-    "source_kappa": null,
-    "source_molWeight": null,
-    "source_T_initial": null
+    "rho_kg_m3": 6820,
+    "Cv_J_kg_K": 827,
+    "kappa_W_m_K": 32.48928571428571,
+    "molWeight_g_mol": 56,
+    "T_initial_K": 1500,
+    "Cp_C14_J_kg_K": 827,
+    "mu_C14_Pa_s": 0.0055,
+    "Pr_C14": 0.14,
+    "Cp_to_Cv_surrogate_assumption": "CP_AS_EFFECTIVE_CV_ONLY_FOR_TWO_SOLID_T0_NOT_C14_FLUID_ENTHALPY",
+    "source_rho": "C14/constant/metal/materials/castIron equationOfState.rho = 6820",
+    "source_Cv": "C14/constant/metal/materials/castIron Cp=827 reused explicitly as effective Cv ONLY in isolated solid T0 surrogate; not C14 native Cv",
+    "source_kappa": "C14/constant/metal/materials/castIron transport.mu=5.5e-3, Pr=0.14 and thermo.Cp=827; derived k=mu*Cp/Pr",
+    "source_molWeight": "C14/constant/metal/materials/castIron specie.molWeight=56",
+    "source_T_initial": "C14/0/metal/T internalField uniform 1500",
+    "source_Cp": "C14/constant/metal/materials/castIron thermo.hConst.Cp = 827",
+    "source_mu": "C14/constant/metal/materials/castIron const.transport.mu = 5.5e-3",
+    "source_Pr": "C14/constant/metal/materials/castIron const.transport.Pr = 0.14"
   },
   "mold": {
-    "rho_kg_m3": null,
-    "Cv_J_kg_K": null,
-    "kappa_W_m_K": null,
-    "molWeight_g_mol": null,
-    "T_initial_K": null,
-    "source_rho": null,
-    "source_Cv": null,
-    "source_kappa": null,
-    "source_molWeight": null,
-    "source_T_initial": null
+    "rho_kg_m3": 1500,
+    "Cv_J_kg_K": 700,
+    "kappa_W_m_K": 2,
+    "molWeight_g_mol": 28,
+    "T_initial_K": 300,
+    "source_rho": "C14/constant/mold/materials/silica equationOfState.rho = 1500",
+    "source_Cv": "C14/constant/mold/materials/silica thermodynamics.Cv = 700",
+    "source_kappa": "C14/constant/mold/materials/silica transport.kappa = 2",
+    "source_molWeight": "C14/constant/mold/materials/silica specie.molWeight = 28",
+    "source_T_initial": "C14/0/mold/T internalField uniform 300"
   },
   "simulation": {
-    "deltaT_s": null,
-    "endTime_s": null,
-    "writeEverySteps": null,
-    "nNonOrthogonalCorrectors": null,
-    "source_time_choices": null,
-    "source_nonorth_choice": null,
-    "nEnergyCorrectors": null,
-    "source_energy_coupling_choice": null
+    "deltaT_s": 0.001,
+    "endTime_s": 10,
+    "writeEverySteps": 100,
+    "nNonOrthogonalCorrectors": 1,
+    "nOuterCorrectors": 3,
+    "nEnergyCorrectors": 2,
+    "source_time_choices": "C14/system/controlDict: deltaT=0.001 s, endTime=10 s, writeInterval=100 time steps, adjustTimeStep=no",
+    "source_nonorth_choice": "C14/system/fvSolution root PIMPLE nNonOrthogonalCorrectors=1",
+    "source_outer_correctors": "C14/system/fvSolution root PIMPLE nOuterCorrectors=3",
+    "source_energy_coupling_choice": "C14/system/metal/fvSolution states nEnergyCorrectors=2 under metal regional PIMPLE, but actual C14 fluid module effect not confirmed; T0 root setting is a separate numerical hypothesis"
   },
   "physics_limitations": [
-    "T0 treats both phases as constant-property solids; liquid cast iron and latent heat deliberately absent",
-    "all external zeroGradient T walls are an isolated closed-energy benchmark, not measured QuickCup convection",
-    "perfect coupledTemperature interface has zero thermal contact resistance; experimental value not established",
-    "all material and numerical values require provenance and real measurements before materialization",
-    "no solver run or thermophysical/dictionary validation in actual Foundation14 at this point"
-  ]
+    "All numeric inputs are read from C14 source case; no QuickCup measurement or 3D CFD validation is inferred.",
+    "Metal C14 model is heRhoThermo/hConst/sensibleEnthalpy with Cp 827, NOT a heSolidThermo Cv; T0 TWO-SOLID uses clearly tagged Cp_as_effective_Cv surrogate ONLY.",
+    "Metal conductivity k=mu*Cp/Pr is derived from C14 constant transport; not explicitly tabulated in C14.",
+    "C14 h=10 ambient 300 K, metal emissivity .3, mold .5 and finite interfacial 0.0002m/.1WmK applied to T0; NOT an adiabatic closed energy-balance model.",
+    "Any standalone insulated equilibrium analytical calculation is counterfactual and MUST NOT be used as acceptance criterion with C14 convective walls.",
+    "C14 phase change latent heat, buoyancy, fluid velocity, p_rgh and 2D empty BC are preserved in baseline, but deliberately ABSENT from 3D solid-solid numerical T0.",
+    "Actual T0 native run, parser checks on local WSL and physical comparison still pending; do not call the model C14 equivalent."
+  ],
+  "c14_reference_path": "cases_controlled_buoyancy/C14_topFixedFlux_explicitRef",
+  "c14_baseline_file": "cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/C14_PARAMETER_BASELINE.json",
+  "c14_boundary_reference": {
+    "metalTop": {
+      "h_W_m2_K": 10,
+      "Ta_K": 300,
+      "emissivity": 0.3
+    },
+    "moldExterior": {
+      "h_W_m2_K": 10,
+      "Ta_K": 300,
+      "emissivity": 0.5
+    },
+    "metal_to_mold": {
+      "layer_thickness_m": 0.0002,
+      "layer_kappa_W_m_K": 0.1,
+      "conductance_W_m2_K": 500
+    },
+    "source": "C14/0/metal/T and C14/0/mold/T: externalWallHeatFluxTemperature and coupledTemperature with wallLayersHeatTransferCoefficient"
+  }
 }
