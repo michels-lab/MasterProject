@@ -210,9 +210,23 @@ def run(case: Path):
     parent = evidence["regions"]["parent"]["severely_nonorthogonal_faces_above_70deg"]
     metal = evidence["regions"]["metal"]["severely_nonorthogonal_faces_above_70deg"]
     mold = evidence["regions"]["mold"]["severely_nonorthogonal_faces_above_70deg"]
+    totals = {
+        key: row["native_total_faces"]
+        for key, row in evidence["regions"].items()
+    }
+    total_face_delta = (
+        totals["metal"] + totals["mold"] - totals["parent"]
+        if all(isinstance(x, int) for x in totals.values()) else None
+    )
     return {
         "case": str(case),
         "status": "READONLY_VTK_FACE_CENTROID_AUDIT_NOT_CFD",
+        "native_total_faces": totals,
+        "region_total_face_excess_vs_parent": total_face_delta,
+        "region_total_face_excess_equals_one_interface_side": (
+            total_face_delta == evidence["contact"]["faces_per_contact_side"]
+            if total_face_delta is not None else None
+        ),
         "parent_regional_contact_gates_from_saved_native_data": True,
         "native_nonorth_gt70deg_counts": {
             "parent": parent, "metal": metal, "mold": mold,
@@ -312,6 +326,12 @@ def main():
             print("  centroid Y min/max [mm]:",
                   record["centroid_XYZ_min_mm"][1],
                   record["centroid_XYZ_max_mm"][1])
+    print(
+        "Total-face split identity: parent=", result["native_total_faces"]["parent"],
+        " metal+mold-parent=", result["region_total_face_excess_vs_parent"],
+        " equals exactly one interface side:",
+        result["region_total_face_excess_equals_one_interface_side"]
+    )
     print("Native parent/region/contact audit: RECONFIRMED FROM SAVED FILES")
     print(f"Read-only report created: {output}")
     print("Not a checkMesh rerun; no CFD; not a numerical-stability acceptance.")
