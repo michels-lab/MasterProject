@@ -9,6 +9,8 @@ on:
       - 'analysis_tools/audit_postprocessing_config.py'
       - 'analysis_tools/preflight_sensitivity_cases.py'
       - 'analysis_tools/test_preflight_sensitivity.py'
+      - 'analysis_tools/check_run_registry.py'
+      - 'analysis_tools/test_check_run_registry_3d.py'
       - 'cases_controlled_buoyancy/**'
       - 'cases_3d/**'
       - 'analysis_results/**'
@@ -24,6 +26,8 @@ on:
       - 'analysis_tools/audit_pushed_results.py'
       - 'analysis_tools/preflight_sensitivity_cases.py'
       - 'analysis_tools/test_preflight_sensitivity.py'
+      - 'analysis_tools/check_run_registry.py'
+      - 'analysis_tools/test_check_run_registry_3d.py'
       - 'cases_controlled_buoyancy/**'
       - 'cases_3d/**'
       - 'RUN_CASE_REGISTRY.csv'
@@ -47,7 +51,7 @@ jobs:
           python3 - <<'PY'
           import ast
           from pathlib import Path
-          for name in ("audit_pushed_results","audit_postprocessing_config","check_run_registry","preflight_sensitivity_cases","test_preflight_sensitivity"):
+          for name in ("audit_pushed_results","audit_postprocessing_config","check_run_registry","preflight_sensitivity_cases","test_preflight_sensitivity","test_check_run_registry_3d"):
               p=Path("analysis_tools")/(name+".py")
               ast.parse(p.read_text(encoding="utf-8"),filename=str(p))
               print("Python syntax:",p)
@@ -64,6 +68,8 @@ jobs:
         run: |
           python3 -m unittest discover -s cases_3d/C3D_01_metal_mold/scripts -p 'test_c3d_background_case.py' -v
           bash -n cases_3d/C3D_01_metal_mold/scripts/run_blockMesh_only.sh
+      - name: Test registered 3D path resolution before checking registry
+        run: python3 -m unittest discover -s analysis_tools -p 'test_check_run_registry_3d.py' -v
       - name: Check scientific case registry
         run: python3 analysis_tools/check_run_registry.py
       - name: Check V14 functionObject definitions and documentation
