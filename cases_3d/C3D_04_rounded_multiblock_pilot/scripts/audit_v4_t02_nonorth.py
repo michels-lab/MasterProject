@@ -271,6 +271,54 @@ def self_test() -> None:
             "type": "wall", "nFaces": 256,
             "neighbourRegion": None, "neighbourPatch": None
         }
+        # Full synthetic strict contact gate: ACCEPT native wall + reciprocal
+        # mappedWall, REJECT a patch type/name/count or area mutation.
+        case = folder / "full_contact_gate_fixture"
+        metal_boundary = case/"constant/metal/polyMesh/boundary"
+        mold_boundary = case/"constant/mold/polyMesh/boundary"
+        metal_boundary.parent.mkdir(parents=True)
+        mold_boundary.parent.mkdir(parents=True)
+        good_metal = (
+            "metal_to_mold\n{\ntype mappedWall;\nnFaces 2496;\n"
+            "neighbourRegion mold;\nneighbourPatch mold_to_metal;\n}\n"
+            "metalTop\n{\ntype wall;\nnFaces 256;\n}\n"
+        )
+        good_mold = (
+            "mold_to_metal\n{\ntype mappedWall;\nnFaces 2496;\n"
+            "neighbourRegion metal;\nneighbourPatch metal_to_mold;\n}\n"
+        )
+        metal_boundary.write_text(good_metal, encoding="utf-8")
+        mold_boundary.write_text(good_mold, encoding="utf-8")
+        contact = {
+            "contact_gate": True,
+            "metal_to_mold": {"faces": 2496, "area_mm2": 6343.771874},
+            "mold_to_metal": {"faces": 2496, "area_mm2": 6343.771874},
+            "difference_between_coupled_sides_relative": 0,
+            "contact_area_error_percent_vs_STL": -0.139498,
+            "top_area_error_percent_vs_STL": -0.037782,
+        }
+        area = case/"CONTACT_AREA_REPORT.json"
+        area.write_text(json.dumps(contact), encoding="utf-8")
+        (case/"NATIVE_BUILD_STATUS.txt").write_text(
+            "MESH_TOPOLOGY_AND_CONTACT_AREA_PRELIMINARILY_ACCEPTED / NO_CFD\n",
+            encoding="utf-8"
+        )
+        assert verify_saved_contact(case)["actual_polyMesh_mappedWall_reciprocity_verified"]
+        def must_reject():
+            try:
+                verify_saved_contact(case)
+            except ValueError:
+                return
+            raise AssertionError("Broken contact gate was accepted")
+        metal_boundary.write_text(good_metal.replace("type wall;", "type patch;"), encoding="utf-8")
+        must_reject()
+        metal_boundary.write_text(good_metal, encoding="utf-8")
+        mold_boundary.write_text(good_mold.replace("nFaces 2496;", "nFaces 2495;"), encoding="utf-8")
+        must_reject()
+        mold_boundary.write_text(good_mold, encoding="utf-8")
+        contact["mold_to_metal"]["area_mm2"] += .01
+        area.write_text(json.dumps(contact), encoding="utf-8")
+        must_reject()
         vtk = folder / "nonOrthoFaces.vtk"
         vtk.write_text(
             "# vtk DataFile Version 3.0\nSynthetic\nASCII\nDATASET POLYDATA\n"
@@ -278,7 +326,7 @@ def self_test() -> None:
             encoding="ascii"
         )
         assert vtk_summary(vtk)["count"] == 2
-    print("SELF_TEST_OK: real checkMesh count patterns, failed-gate rejection, VTK spatial parser")
+    print("SELF_TEST_OK: strict parent/region pattern, native wall/mappedWall/contact positive and rejection regressions, VTK parser")
     print("STATIC_ONLY: no OpenFOAM or CFD executed")
 
 
