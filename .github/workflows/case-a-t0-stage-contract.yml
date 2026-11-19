@@ -1,0 +1,52 @@
+name: Case A C3D-04 integrated stage contract (static only)
+
+on:
+  push:
+    paths:
+      - "AGENTS.md"
+      - "cases_3d/C3D_04_rounded_multiblock_pilot/**"
+      - "docs/C3D04_CASE_A_STATUS.json"
+      - ".github/workflows/case-a-t0-stage-contract.yml"
+  pull_request:
+    paths:
+      - "AGENTS.md"
+      - "cases_3d/C3D_04_rounded_multiblock_pilot/**"
+      - "docs/C3D04_CASE_A_STATUS.json"
+      - ".github/workflows/case-a-t0-stage-contract.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  case-a-integrated-t0-pre-cfd:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Canonical phase and completion fraction
+        run: python3 cases_3d/C3D_04_rounded_multiblock_pilot/scripts/report_case_a_progress.py
+      - name: Positive and negative integrated Case A T0 static regression
+        run: |
+          PYTHONDONTWRITEBYTECODE=1 python3 -B -m unittest discover \
+            -s cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/tests \
+            -p 'test_integrated_case_a.py' -v
+      - name: Standalone integrated T0 self-test
+        run: |
+          PYTHONDONTWRITEBYTECODE=1 python3 -B \
+            cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/scripts/prepare_case_a_t0.py --self-test
+      - name: Bash syntax of single-stage runner
+        run: bash -n cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/run_integrated_milestone.sh
+      - name: Scientific status boundary
+        run: |
+          python3 - <<'PY'
+          import json, pathlib
+          status=json.loads(pathlib.Path("docs/C3D04_CASE_A_STATUS.json").read_text())
+          assert status["CFD_run"] is False
+          assert status["physical_validation"] is False
+          assert status["grid_independence"] is False
+          data=json.loads(pathlib.Path("cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/T0_INPUTS.json").read_text())
+          for region in ("metal","mold"):
+              for name in ("rho_kg_m3","Cv_J_kg_K","kappa_W_m_K","molWeight_g_mol","T_initial_K"):
+                  assert data[region][name] is None, f"unexpected unsourced value: {region}.{name}"
+          print("PASS: no unsourced T0 parameters or invented CFD milestone")
+          PY
