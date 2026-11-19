@@ -45,9 +45,11 @@ RUN_NAMESPACE="FS_C04_T_NATIVE_CHECK_"
 SOURCE_NAMESPACE="FS_C04_T_INITIAL_STAGE_"
 OPERATIONS=("volAverage","volIntegrate")
 REGIONS=("fluid","mold")
-RELATIVE_TOLERANCE=1e-7
-ABS_TOLERANCE_AVERAGE_K=1e-5
-ABS_TOLERANCE_INTEGRATE=1e-9
+# OpenFOAM volFieldValue typically writes rounded ASCII data: keep a
+# strict 5ppm gate without requiring unprinted digits of precision.
+RELATIVE_TOLERANCE=5e-6
+ABS_TOLERANCE_AVERAGE_K=1e-3
+ABS_TOLERANCE_INTEGRATE=1e-8
 
 
 def guard_paths(source:Path,output:Path)->None:
