@@ -1,3 +1,5 @@
+> **19-11-2026 — CORRIDA REAL V4: `T02` PRELIMINARMENTE ACEPTADA POR OPENFOAM 14.** El barrido pasó pruebas estáticas y lanzó únicamente T01 y T02: `T01 inner_y=-0.12` fue rechazado (12 celdas hierro con determinante bajo). `T02 inner_y=+0.12 mm`, cuatro nodos interiores hierro elevados de Y=-39.8 a -39.68 mm, **pasó `Mesh OK` en padre, metal y molde, más volúmenes y contacto `mappedWall` + puerta de área**. Mín. determinantes padre/metal/mold = 0.002165381027 / 0.001566024926 / 0.002165381027; non-ortho máxima = 82.92036178° / 77.9303929° / 82.058116°; skew arena = 2.841609695. Contacto 6,343.771874 mm². El runner se detuvo (no ejecutó T03–T07); los logs y malla están en `~/OpenFOAM/C3D04_V4_TRANSITION_REPAIR_01/T02`. **`NO_CFD`; falta superficie CAD completa, no ortogonalidad, independencia de malla y BC/CHT 3D.** [Evidencia y límites](../../../../docs/C3D_04_RESULTADO_PRIMER_MALLADO_20261118_ES.md).
+
 # Caso A — C3D-04 V4: reparación de cuatro celdas metálicas basales
 
 **Estado:** `CODE_PUBLISHED / PREPARED_NOT_RUN / NO_CFD`. Esta rama es **el mallado tridimensional curvilíneo de `blockMesh`**; no modifica ni trabaja el Caso B.
