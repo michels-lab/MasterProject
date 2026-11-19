@@ -222,3 +222,17 @@ Los VTK existentes de `nonOrthoFaces` presentan ocurrencias de vértices entre Y
 Se publicó el **nuevo lector de geometría facial real** [`audit_v4_t02_vtk_faces.py`](../cases_3d/C3D_04_rounded_multiblock_pilot/scripts/audit_v4_t02_vtk_faces.py), con pruebas sintéticas ASCII/BINARY para VTK PolyData/Unstructured Grid y puertas nativas read-only, que calculará centroides de polígonos por sección Y y comprobará su conteo frente al log nativo. **El nuevo lector todavía no ha sido ejecutado en WSL; no se afirma coincidencia de conteos VTK ni estabilidad numérica.** [Protocolo y siguiente ejecución](C3D_04_NO_ORTHO_T02_20261119_ES.md).
 
 **Estado científico: V4/T02 acepta preliminarmente calidad nativa y contacto; muestreo superficial STL favorable pero no Hausdorff riguroso; no ortogonalidad severa localizada en transiciones basales; no independencia de malla; NO CFD.**
+
+## V4/T02 — Centroides reales de caras de no ortogonalidad
+
+El investigador ejecutó `audit_v4_t02_vtk_faces.py` sobre los VTK previamente guardados. El test sintético para VTK ASCII y binario, `POLYDATA` y `UNSTRUCTURED_GRID`, pasó. Coincidencia **exacta del número de polígonos VTK con caras de no ortogonalidad >70° reportadas nativamente:** padre 572/572, metal 276/276 y molde 232/232.
+
+| Banda de centroides Y [mm] | Padre | Metal | Mold | Padre − metal − mold |
+|---|---:|---:|---:|---:|
+| −40.0 a −39.8 | 240 | 32 | 144 | **64** |
+| −39.8 a −39.5 | 300 | 212 | 88 | **0** |
+| −39.5 a −39.0 | 32 | 32 | 0 | **0** |
+
+Los límites de centroides de las caras exportadas son padre Y−39.9..−39.5 mm, metal Y−39.8925..−39.5 mm y arena Y−39.9..aprox.−39.8 mm. La contabilidad de **todas** las caras respeta 28,256 + 40,448 − 66,208 = **2,496**, el número de caras de la interfaz compartida por lado, validada mediante `mappedWall` y áreas.
+
+La diferencia de **64 caras severas** se restringe, por **conteos de centroides por intervalo**, al tramo basal −40..−39.8 mm; **todavía no se ha demostrado** que esas 64 caras sean todas exactamente las caras de interfaz. Se preparó `audit_v4_t02_face_identity.py` para cruzar identificaciones de polígonos con caras nativas de padre y ambas regiones y con las 2,496 caras reales de contacto. **No ejecutado aún en WSL.** [Protocolo](C3D_04_NO_ORTHO_T02_20261119_ES.md). **No CFD ni estabilidad numérica inferida.**
