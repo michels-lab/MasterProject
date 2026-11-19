@@ -28,7 +28,7 @@
     "POTENTIAL_UNLOGGED_CHANGES": 2
   },
   "finding_total": 2,
-  "inventory_fingerprint": "7acbf161de36bf9df96a89f6fa1776e7570a0393041c71706f10cc08136a636e",
+  "inventory_fingerprint": "f6217491ecd77cbc05dfaaa706f306c264ec70390a4fdcbaf9d3c0a720f3bac6",
   "evidence_fingerprint": "3fb27e7eed8e78285fa5e94e5d234417d9f507340270201c76ee1a8088d9a73f",
   "files": [
     {
@@ -271489,7 +271489,7 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "b8f9df5c1d2c98e181d04148d78016bf25d7f036"
+      "blob": "e9c4d7613c46eedf8be7b36718143763f8a14510"
     },
     {
       "path": "docs/C3D_05_AREA_ARISTAS_Y_ENSAYO_FRONTAL_20261118_ES.md",
@@ -271573,7 +271573,7 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "2d09f5d2d19f4244128182397ed7406ded6f3c0c"
+      "blob": "fb181aab81de8bcd0c5e24828c66a4c51adf4542"
     },
     {
       "path": "docs/DOCUMENT_SYNC_20261110_ES.md",
