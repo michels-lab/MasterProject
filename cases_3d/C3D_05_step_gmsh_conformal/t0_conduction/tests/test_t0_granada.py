@@ -124,6 +124,12 @@ class T0GranadaIntegration(TestCase):
             path.chmod(0o755)
         with mock.patch.dict(os.environ, {"WM_PROJECT_VERSION":"14","PATH":str(binary_dir)+os.pathsep+os.environ.get("PATH","")}), mock.patch.object(target, "source_review", return_value={"geometry_topology_gate_passed":True}):
             self.assertEqual(target.pipeline(self.inputs, self.source, self.output), 0)
+            sol = self.output / "system/fvSolution"
+            original = sol.read_text(encoding="utf-8")
+            sol.write_text(original + "\n// Stale solver control that must NOT be reused\n", encoding="utf-8")
+            self.assertEqual(target.pipeline(self.inputs, self.source, self.output), 2)
+            sol.write_text(original, encoding="utf-8")
+            self.assertEqual(target.pipeline(self.inputs, self.source, self.output), 0)
             c=synthetic_inputs()
             c["metal"]["Cv_J_kg_K"]=700
             self.write_inputs(c)
