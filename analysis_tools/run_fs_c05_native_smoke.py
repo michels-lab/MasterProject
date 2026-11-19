@@ -31,6 +31,7 @@ from audit_fs_c04_split_cells import FLUID_CELLS, SAND_CELLS
 from stage_fs_c04_initial_alpha import boundary_patches,digest
 from stage_fs_c05_vof_cht import (
     CASE_PREFIX, REGION_FIELDS, ATMOSPHERES, MOLD_PATCHES,
+    ensure_compressible_kepsilon_divergence,
 )
 
 OUTPUT_PREFIX="FS_C05_NATIVE_SMOKE_"
@@ -145,7 +146,7 @@ def validate_run_log(log:str)->dict:
             and re.search(r"(?m)^\s*End\s*$",log) is not None,
             "OpenFOAM log reports a fatal error, crash or lacks End")
     raw=re.findall(
-        r"(?m)^\s*Time\s*=\s*([+\-0-9.eE]+)\s*$",log
+        r"(?m)^\s*Time\s*=\s*([+\-0-9.eE]+)\s*s?\s*$",log
     )
     times=[float(t) for t in raw]
     require(len(times)>=2 and all(math.isfinite(t) and t>0 for t in times),
@@ -183,6 +184,18 @@ def run(source:Path,dest:Path,native:bool)->dict:
     for p in (dest/"postProcessing",):
         if p.is_dir():
             shutil.rmtree(p)
+    # Preserve the fully SHA-verified source. Only the new, disposable
+    # run-copy receives the two actual compressible RAS divergence schemes.
+    # The old FS-C05 staged case has div(phi,epsilon) but the Foundation14
+    # compressible kEpsilon transport calls div(rhoPhi,epsilon) (and k).
+    schemes=dest/"system/fluid/fvSchemes"
+    repaired,added=ensure_compressible_kepsilon_divergence(
+        schemes.read_text(encoding="utf-8"))
+    if added:
+        schemes.write_text(repaired,encoding="utf-8")
+    require("div(rhoPhi,k)" in repaired
+            and "div(rhoPhi,epsilon)" in repaired,
+            "missing verified compressible kEpsilon RAS transport schemes")
     control=dest/"system/controlDict"
     control.write_text(short_control(control.read_text()))
     data={
@@ -194,6 +207,9 @@ def run(source:Path,dest:Path,native:bool)->dict:
         "region_solvers":EXPECTED_SOLVERS,
         "expected_endTime_s":STOP_TIME,
         "controlDict_after_shortening_sha256":digest(control),
+        "rhoPhi_turbulence_schemes_sha256":digest(schemes),
+        "rhoPhi_turbulence_schemes_added_in_COPY_only":added,
+        "source_FS_C05_schemes_unchanged":True,
         "solver_ran":False,
         "initial_VOF_volume_m3":4.801191628e-05,
         "alpha_field_verified_after_run":False,
