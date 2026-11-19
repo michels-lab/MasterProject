@@ -24,10 +24,12 @@
     "web_ui": 1,
     "workflow": 22
   },
-  "finding_counts": {},
-  "finding_total": 0,
-  "inventory_fingerprint": "fac2fac8d42f3d7b6a04379e19b416c9adc6c3755718719e3039311bc5e3eba9",
-  "evidence_fingerprint": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+  "finding_counts": {
+    "POTENTIAL_UNLOGGED_CHANGES": 2
+  },
+  "finding_total": 2,
+  "inventory_fingerprint": "786bc9b30115cecaefcbd0f9f66fade7f2a3c39477a08a138ec1019cccf500dc",
+  "evidence_fingerprint": "864d895f6ea304a929bf3f4e475df1d131d2b412b3074f5978bdc7ed154b09db",
   "files": [
     {
       "path": ".github/agents/openfoam-solidification.agent.md",
@@ -1910,7 +1912,7 @@
       "role": "source",
       "purpose": "code/test implementation",
       "certainty": "rule",
-      "blob": "b031e732d201cad7e2b67f9f568b7e6682e5ab65"
+      "blob": "382ee033c0b5765a6e04821926d1600f8ae062e5"
     },
     {
       "path": "cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/scripts/run_t0_materialize.sh",
@@ -2001,7 +2003,7 @@
       "role": "test",
       "purpose": "code/test implementation",
       "certainty": "rule",
-      "blob": "a67159cdf603eeda768e5451a4308a88e0aa5067"
+      "blob": "2b4f6e94dd2c7b13172aea6ed9204c257c47db96"
     },
     {
       "path": "cases_3d/C3D_05_step_gmsh_conformal/tests/test_audit_nonorth_hop_distance.py",
@@ -272005,7 +272007,7 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "67f7781a2c2984a46d2b3c36cfa0a6fc3b20c803"
+      "blob": "d718f4e2abc0d6cb09c8d8214af5eca475f79fa1"
     },
     {
       "path": "docs/granada/ENERGY_PHASE_V14_V16_20261020.md",
@@ -272701,7 +272703,26 @@
       "blob": "0b65cc6aa3d29917f57a31a96fd5c3afeffb4ed4"
     }
   ],
-  "findings": [],
+  "findings": [
+    {
+      "id": "0ebdf3bf03cf220a",
+      "code": "POTENTIAL_UNLOGGED_CHANGES",
+      "severity": "review",
+      "path": "PROJECT_AUDIT_LOG_EN.md",
+      "observation": "2 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/scripts/run_t0_granada.py, cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/tests/test_t0_granada.py",
+      "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
+      "state": "REVIEW_REQUIRED"
+    },
+    {
+      "id": "6247220b02e6ce33",
+      "code": "POTENTIAL_UNLOGGED_CHANGES",
+      "severity": "review",
+      "path": "PROJECT_AUDIT_LOG_ES.md",
+      "observation": "2 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/scripts/run_t0_granada.py, cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/tests/test_t0_granada.py",
+      "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
+      "state": "REVIEW_REQUIRED"
+    }
+  ],
   "untracked_audited": false,
   "ignored_audited": false,
   "binary_contents_audited": false,
