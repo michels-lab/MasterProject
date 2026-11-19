@@ -72,3 +72,15 @@ En los tetraedros, el 100 % de las celdas regionales de bajo determinante estaba
 **Protocolo del investigador:** todas las instrucciones en **un solo bloque ejecutable por etapa**, con scripts orquestadores y evidencia preservada. [Regla permanente](REGLA_INSTRUCCIONES_UNIFICADAS_ES.md).
 
 Relacionado: [Primer intento HEX8 y reparación Python](C3D_05_HEX8_PRIMER_INTENTO_PYTHON_20261119_ES.md), [Delaunay/HXT y estrategia HEX8](C3D_05_HXT_RESULTADO_Y_PILOTO_HEX_20261118_ES.md).
+
+## Auditoría independiente posterior a `Allmesh` (preparada, NO ejecutada)
+
+Se versionó un segundo evaluador de solo lectura: [`scripts/review_accepted_hex_mesh.py`](../cases_3d/C3D_05_step_gmsh_conformal/scripts/review_accepted_hex_mesh.py), con regresiones sintéticas [`test_review_accepted_hex_mesh.py`](../cases_3d/C3D_05_step_gmsh_conformal/tests/test_review_accepted_hex_mesh.py). Su objetivo es evaluar independientemente, sin volver a mallar, la autenticidad SHA256 de los CAD, topología HEX8/QUAD4, número total de celdas Gmsh/OF14, `Mesh OK` para padre/metal/arena, volúmenes, determinante, parches `mappedWall`, área de contacto y no ortogonalidad severa. **No modifica la malla**, no invoca `checkMesh` ni realiza CFD. Es una validación de evidencia del caso guardado, **no sustituye un solver físico ni una comparación de independencia de malla**.
+
+El [orquestador unificado `scripts/run_hex_readiness_review.sh`](../cases_3d/C3D_05_step_gmsh_conformal/scripts/run_hex_readiness_review.sh) ejecuta pruebas rápidas y la auditoría en una sola llamada, creando únicamente un JSON nuevo `HEX8_NATIVE_ACCEPTANCE_REVIEW_20261119.json` mediante creación exclusiva y conservando informes ya existentes. Comando único para el investigador:
+
+```bash
+cd ~/OpenFOAM/MasterProject && git pull --ff-only && bash cases_3d/C3D_05_step_gmsh_conformal/scripts/run_hex_readiness_review.sh
+```
+
+**Estado de esa herramienta:** código/pruebas publicados en GitHub, **aún no probados con los archivos locales reales de WSL**. La aceptación nativa anterior basada en logs reales permanece válida; una segunda lectura puede identificar incoherencias de procedencia o advertencias de calidad. La prioridad subsiguiente son el análisis de no ortogonalidad, sensibilidad de malla y configuración térmica 3D, no lanzar CFD prematuramente.
