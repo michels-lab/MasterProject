@@ -233,6 +233,12 @@ def run(case: Path):
         totals["metal"] + totals["mold"] - totals["parent"]
         if all(isinstance(x, int) for x in totals.values()) else None
     )
+    if total_face_delta is None or total_face_delta != evidence["contact"]["faces_per_contact_side"]:
+        raise ValueError(
+            "Saved parent/regional face split differs from reciprocal contact: "
+            f"metal+mold-parent={total_face_delta}, "
+            f"contact_per_side={evidence['contact']['faces_per_contact_side']}"
+        )
     return {
         "case": str(case),
         "status": "READONLY_VTK_FACE_CENTROID_AUDIT_NOT_CFD",
@@ -322,6 +328,8 @@ def self_test():
         else:
             raise AssertionError("Invalid VTK polygon vertex was accepted")
         assert locate_y(-39.800000000000004) == "-39.800..-39.500_mm"
+        assert 28256 + 40448 - 66208 == 2496
+        assert 28256 + 40449 - 66208 != 2496
     print("SELF_TEST_OK: ASCII/BINARY POLYDATA and UNSTRUCTURED_GRID faces, centroid bins, count mismatch and malformed face rejection")
     print("STATIC_ONLY: no mesh or CFD utilities executed")
 
