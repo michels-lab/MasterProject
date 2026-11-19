@@ -12,3 +12,10 @@ Esta es una exigencia permanente del investigador: eliminar las rondas intermina
 
 ## Estado principal al 19-11-2026
 **C3D-05/B: etapa 3/7 (T0); 2/7 puertas cerradas = 29% de hitos técnicos.** CAD/procedencia y malla HEX8/contacto verificadas (270,788 celdas, 1,826 caras severamente no ortogonales). T0 en código sin valores físicos respaldados, caso no materializado, sin solver y sin independencia de malla. Próximo paquete: completar parámetros con trazabilidad y preparar verificación térmica completa para una sola ejecución WSL cuando los datos existan. [Estado legible por máquina](PROJECT_STAGE_STATUS.json).
+
+## Dos registros canónicos, sin mezclar avances
+
+**No existe un porcentaje único para toda la tesis.** El archivo `docs/PROJECT_STAGE_STATUS.json` tiene como caso principal **C3D-05 Caso B**, con su propia escala actual **3/7 y 2/7 hitos = 29 %**. La ficha `other_cases` de C3D-04 contiene un enlace al estado independiente `docs/C3D04_CASE_A_STATUS.json`, cuyo valor actual es **etapa 5/10 y 4/10 = 40 %** (Caso A). Si el usuario trabaja en C3D-04, **consultar el estado exclusivo de Caso A** y nunca usar como respuesta las cifras de Caso B. La regla se valida automáticamente con `tools/check_project_delivery_contract.py --check` y `.github/workflows/case-a-t0-stage-contract.yml`.
+
+**Evitar falsas alarmas a futuro:** los controles automáticos deben calcular hitos completados y verificar presencia de evidencias con el contenido actual del manifiesto. **Queda prohibido codificar `40%`, `4/10`, `null` para siempre en pruebas de CI**: son cifras de hoy, no límites del sistema. Si un hito avanza justificadamente, se actualiza el JSON y la documentación en la misma entrega, sin degradar el control.
+
