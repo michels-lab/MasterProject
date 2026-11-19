@@ -12,7 +12,7 @@ Se escoge `V3/T06` como **referencia de experimento, NO malla aceptada**: arena 
 
 **V4 T01–T03 (`inner_y`):** ensayan desplazamientos en Y de solo cuatro vértices internos del núcleo metálico, IDs 89, 90, 93, 94, en la estación de transición `Y=−39.8 mm`. Sus superficies externas y la interfaz con el molde **no cambian**; esto permite probar una posible reducción de la distorsión axial sin perder la fidelidad del contorno. Los tres valores son −0.12, +0.12 y +0.18 mm respecto a Y original.
 
-**V4 T04–T07 (`profile`):** si la intervención interior no pasa, se ensaya una interpolación de las coordenadas XZ de los **12 vértices de interfaz** (IDs 84–99 salvo los cuatro internos) y de los **8 puntos intermedios de `arc`** del hierro en `Y=−39.8 mm`. Cada nuevo perfil se construye entre las secciones originales `Y=−40` y `Y=−39.8 mm`, con factor `alpha` de 0.90, 0.78, 0.65 y 0.50. Este ajuste **sí cambia la geometría superficial en una estación**; aunque la interfaz seguirá siendo conformante porque el contorno es común a ambos materiales, debe **volver a pasar** el examen de áreas/volúmenes y, posteriormente, una comparación espacial CAD completa. No afirmar que conserva exactamente el área original.
+**V4 T04–T07 (`profile`):** si la intervención interior no pasa, se ensaya una interpolación de las coordenadas XZ de los **12 vértices de interfaz** (IDs 84–99 salvo los cuatro internos) y de los **8 puntos intermedios de `arc`** del hierro en `Y=−39.8 mm`. Cada nuevo perfil se construye entre las secciones originales `Y=−40` y `Y=−39.8 mm`, con factor `alpha` de 0.95, 0.90, 0.84 y 0.78. Este ajuste **sí cambia la geometría superficial en una estación**; aunque la interfaz seguirá siendo conformante porque el contorno es común a ambos materiales, debe **volver a pasar** el examen de áreas/volúmenes y, posteriormente, una comparación espacial CAD completa. No afirmar que conserva exactamente el área original. El generador además impone **error analítico de área de la sección redondeada Y=−39.8 mm ≤3 % frente al corte STL (909.900 mm²)**; una variante que lo exceda se rechaza antes del mallado. La auditoría nativa posterior sigue siendo obligatoria.
 
 Ningún modo altera `blockMesh` de los ensayos anteriores, el CAD original, la zona `metal/mold`, los 180 bloques, el número previsto de celdas, ni el número nominal de caras de contacto. No se alteran los parámetros de `checkMesh`, ni se corre `foamMultiRun`.
 
@@ -21,10 +21,10 @@ Ningún modo altera `blockMesh` de los ensayos anteriores, el CAD original, la z
 | T01 | `inner_y` | −0.12 mm | Sin cambios |
 | T02 | `inner_y` | +0.12 mm | Sin cambios |
 | T03 | `inner_y` | +0.18 mm | Sin cambios |
-| T04 | `profile` | alpha 0.90 | Ajuste localizado |
-| T05 | `profile` | alpha 0.78 | Ajuste localizado |
-| T06 | `profile` | alpha 0.65 | Ajuste localizado |
-| T07 | `profile` | alpha 0.50 | Ajuste localizado |
+| T04 | `profile` | alpha 0.95 | Ajuste localizado |
+| T05 | `profile` | alpha 0.90 | Ajuste localizado |
+| T06 | `profile` | alpha 0.84 | Ajuste localizado |
+| T07 | `profile` | alpha 0.78 | Ajuste localizado |
 
 ## Único comando de ejecución en Ubuntu WSL
 
