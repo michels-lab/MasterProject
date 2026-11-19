@@ -393,6 +393,114 @@ def closed_t0_energy_target(cfg: dict, volumes: dict[str, float]) -> dict:
     }
 
 
+def c14_source_gate(cfg: dict) -> dict:
+    """Read the ORIGINAL tracked C14 files and refuse altered values.
+
+    This checks physical input parity with the historical C14 dictionary.
+    It does NOT imply the two-solid T0 reproduces fluid-solid C14 physics.
+    """
+    reference = json.loads(
+        (T0/"C14_PARAMETER_BASELINE.json").read_text(encoding="utf-8")
+    )
+    if cfg.get("c14_reference_path") != (
+        "cases_controlled_buoyancy/C14_topFixedFlux_explicitRef"
+    ):
+        raise ValueError("T0 inputs must identify the exact original C14 case")
+    source_hashes = {}
+    contents = {}
+    for row in reference["source_details"]:
+        path = C14_ROOT/row["path"]
+        if not path.is_file():
+            raise FileNotFoundError(f"Original C14 file missing: {path}")
+        data = path.read_bytes()
+        source_hashes[row["path"]] = hashlib.sha256(data).hexdigest()
+        # The original executable dictionary is before the appended
+        # QUICKCUP DOCUMENTATION APPENDIX; never parse comment-only numbers.
+        contents[row["path"]] = data.decode("utf-8").split(
+            "// QUICKCUP DOCUMENTATION APPENDIX"
+        )[0]
+    def scalar(relative: str, key: str) -> float:
+        body = contents[relative]
+        match = re.search(
+            rf"(?m)^\s*{re.escape(key)}\s+"
+            rf"(?:uniform\s+|constant\s+)?"
+            rf"([+-]?(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][+-]?\d+)?)\s*;",
+            body
+        )
+        if match is None:
+            raise ValueError(f"C14 executable parameter not found: {relative}/{key}")
+        return float(match.group(1))
+    metal_source = "constant/metal/materials/castIron"
+    mold_source = "constant/mold/materials/silica"
+    initial_m = "0/metal/T"
+    initial_s = "0/mold/T"
+    control = "system/controlDict"
+    root_sol = "system/fvSolution"
+    metal_sol = "system/metal/fvSolution"
+    derived = (
+        scalar(metal_source, "mu") * scalar(metal_source, "Cp")
+        / scalar(metal_source, "Pr")
+    )
+    expects = [
+        ("metal.rho", cfg["metal"]["rho_kg_m3"], scalar(metal_source, "rho")),
+        ("metal.Cp", cfg["metal"]["Cp_C14_J_kg_K"], scalar(metal_source, "Cp")),
+        ("metal.T0_Cv_surrogate", cfg["metal"]["Cv_J_kg_K"], scalar(metal_source, "Cp")),
+        ("metal.kappa_derived", cfg["metal"]["kappa_W_m_K"], derived),
+        ("metal.mu", cfg["metal"]["mu_C14_Pa_s"], scalar(metal_source, "mu")),
+        ("metal.Pr", cfg["metal"]["Pr_C14"], scalar(metal_source, "Pr")),
+        ("metal.molWeight", cfg["metal"]["molWeight_g_mol"], scalar(metal_source, "molWeight")),
+        ("metal.T_initial", cfg["metal"]["T_initial_K"], scalar(initial_m, "internalField")),
+        ("mold.rho", cfg["mold"]["rho_kg_m3"], scalar(mold_source, "rho")),
+        ("mold.Cv", cfg["mold"]["Cv_J_kg_K"], scalar(mold_source, "Cv")),
+        ("mold.kappa", cfg["mold"]["kappa_W_m_K"], scalar(mold_source, "kappa")),
+        ("mold.molWeight", cfg["mold"]["molWeight_g_mol"], scalar(mold_source, "molWeight")),
+        ("mold.T_initial", cfg["mold"]["T_initial_K"], scalar(initial_s, "internalField")),
+        ("sim.deltaT", cfg["simulation"]["deltaT_s"], scalar(control, "deltaT")),
+        ("sim.endTime", cfg["simulation"]["endTime_s"], scalar(control, "endTime")),
+        ("sim.writeEverySteps", cfg["simulation"]["writeEverySteps"], scalar(control, "writeInterval")),
+        ("sim.nNonOrthogonalCorrectors",cfg["simulation"]["nNonOrthogonalCorrectors"],scalar(root_sol,"nNonOrthogonalCorrectors")),
+        ("sim.nOuterCorrectors",cfg["simulation"]["nOuterCorrectors"],scalar(root_sol,"nOuterCorrectors")),
+        # This was written in *regional* C14. Its EFFECT in C14 fluid was
+        # not demonstrated. T0 global use is a separate documented hypothesis.
+        ("sim.nEnergyCorrectors",cfg["simulation"]["nEnergyCorrectors"],scalar(metal_sol,"nEnergyCorrectors")),
+        ("BC.metalTop.h",cfg["c14_boundary_reference"]["metalTop"]["h_W_m2_K"],scalar(initial_m,"h")),
+        ("BC.metalTop.Ta",cfg["c14_boundary_reference"]["metalTop"]["Ta_K"],scalar(initial_m,"Ta")),
+        ("BC.metalTop.emissivity",cfg["c14_boundary_reference"]["metalTop"]["emissivity"],scalar(initial_m,"emissivity")),
+        ("BC.mold.h",cfg["c14_boundary_reference"]["moldExterior"]["h_W_m2_K"],scalar(initial_s,"h")),
+        ("BC.mold.Ta",cfg["c14_boundary_reference"]["moldExterior"]["Ta_K"],scalar(initial_s,"Ta")),
+        ("BC.mold.emissivity",cfg["c14_boundary_reference"]["moldExterior"]["emissivity"],scalar(initial_s,"emissivity")),
+    ]
+    for key, actual, original in expects:
+        if type(actual) not in (int,float) or not math.isclose(
+            actual, original, rel_tol=1e-10, abs_tol=1e-12
+        ):
+            raise ValueError(
+                f"C14 SOURCE DRIFT / {key}: T0={actual!r}, C14 original={original}"
+            )
+    def layer(name: str) -> float:
+        pattern=rf"\b{name}\s*\(\s*([0-9.eE+-]+)\s*\)\s*;"
+        match=re.search(pattern, contents[initial_m])
+        if match is None:
+            raise ValueError(f"C14 metal interface missing {name}")
+        return float(match.group(1))
+    a=cfg["c14_boundary_reference"]["metal_to_mold"]
+    for key, original in (
+        ("layer_thickness_m", layer("thicknessLayers")),
+        ("layer_kappa_W_m_K",layer("kappaLayers")),
+    ):
+        if not math.isclose(a[key], original, rel_tol=1e-10):
+            raise ValueError(f"C14 source interface drift {key}")
+    if contents[control].find("adjustTimeStep  no;") == -1:
+        raise ValueError("Original C14 time step no longer fixed")
+    return {
+        "original_case": str(C14_ROOT),
+        "source_file_sha256": source_hashes,
+        "verified_scalar_comparisons": len(expects)+2,
+        "Cp_as_Cv_surrogate_explicit_not_original_C14_thermo": True,
+        "model_3d_T0_is_not_original_C14_fluid_solidification": True,
+    }
+
+
 def native_case_gate(source: Path) -> dict:
     if not source.is_dir():
         raise FileNotFoundError(f"Preserved Case A V4/T02 missing: {source}")
@@ -614,6 +722,9 @@ def main() -> int:
             print(" - " + e)
         print("No physical parameters invented. No materialization. No CFD.")
         return 3 if args.materialize else 0
+    # Source parity only after full schema validation. Never treat
+    # a C14-named citation string as proof of the actual archived values.
+    evidence["c14_source_parity"] = c14_source_gate(cfg)
     files = generate(cfg)
     energy = closed_t0_energy_target(
         cfg, evidence["native_volumes_m3_from_preserved_tsv"]
