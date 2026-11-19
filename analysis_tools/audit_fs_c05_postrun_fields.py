@@ -180,9 +180,13 @@ def gate_successful_native_run(case:Path)->dict:
             "run_steps":measurements}
 
 
-def audit(case:Path)->dict:
+def measure_saved_fields(case:Path)->dict:
+    """Measure native 3-time fields only, for BOTH smoke and instrumented runs.
+
+    Caller must first authenticate its own native solver log and source
+    provenance. This function never changes any file or runs OpenFOAM.
+    """
     case=case.expanduser().resolve()
-    provenance=gate_successful_native_run(case)
     times=discover_saved_times(case)
     fluid_mesh=read_mesh(case/"constant/fluid/polyMesh",FLUID_CELLS)
     mold_mesh=read_mesh(case/"constant/mold/polyMesh",SAND_CELLS)
@@ -225,7 +229,6 @@ def audit(case:Path)->dict:
         "schema":"masterproject-fs-c05-postrun-two-step-observables-v1",
         "status":status,
         "case":str(case),
-        "native_success_provenance":provenance,
         "time_s":[0.,1e-7,STOP_TIME],
         "snapshots":[reports[t] for t in sorted(reports)],
         "initial_metal_volume_m3":initial_volume,
@@ -259,6 +262,16 @@ def audit(case:Path)->dict:
             "No heat flux or conjugate energy closure can be inferred from T change alone",
         ],
     }
+
+
+
+def audit(case:Path)->dict:
+    """READ-ONLY audit of a signed, successful original FS-C05 smoke run."""
+    case=case.expanduser().resolve()
+    provenance=gate_successful_native_run(case)
+    result=measure_saved_fields(case)
+    result["native_success_provenance"]=provenance
+    return result
 
 
 def main(argv=None)->int:
