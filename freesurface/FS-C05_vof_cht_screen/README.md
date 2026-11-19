@@ -94,3 +94,40 @@ python3 analysis_tools/run_fs_c05_native_smoke.py \
 **Resultado esperado si y sólo si el solver termina el arranque con éxito:** `NATIVE_TWO_STEP_VOF_CHT_STARTUP_COMPLETED_NOT_VALIDATED`. Es todavía **SIN RESULTADO REAL**, y aun si pasa NO acredita conservación de masa VOF, continuidad de flujo de calor, estabilidad transitoria ni cambios térmicos físicos: solo prueba carga de módulos e iteración temporal en un primer ensayo con propiedades provisionales. El log y los nuevos campos serán la evidencia para verificar más adelante el balance energético del contacto metal/arena y arena/aire. El aire exterior debe seguir siendo un volumen resuelto, no un coeficiente de convección inventado.
 
 **No confundir con validación para tesis:** necesitamos `∫alpha.metal dV` al final, flujo térmico recíproco de los 3136 pares de caras, termodinámica `Cp/k/rho(T)`, soporte inferior, geometría CAD fiel y finalmente solidificación/contracción.
+
+## 19-11-2026 — Primer arranque REAL de FS-C05: fallo de discretización turbulenta localizado y corrección instalada
+
+El investigador ejecutó con `WM_PROJECT_VERSION=14` el commit `5de56d46b`; **11 de 11 pruebas unitarias iniciales pasaron**. El primer intento REAL `foamMultiRun` se lanzó en nueva copia independiente:
+
+```text
+/home/michel/OpenFOAM/FS_C05_NATIVE_SMOKE_RUNS/FS_C05_NATIVE_SMOKE_20261119T065033Z_7503bc2b
+```
+
+El log `log.FS_C05_foamMultiRun` confirma carga real de las regiones **`fluid compressibleVoF` y `mold solid`**. En `Time = 1e-07s` el solver resolvió `alpha.metal`/MULES, `T` del fluido, `e` del molde y `p_rgh`, **antes de fallar**. Volumen de fase informado `0.0280838422309` como fracción respecto al volumen fluido; `alpha.metal` permaneció entre 0 y 1 hasta el punto del error. **NO se completó el primer paso, NO se ha demostrado flujo térmico conservativo ni dos pasos completos.**
+
+Error nativo exacto:
+```text
+FOAM FATAL IO ERROR:
+Cannot find scheme for div(rhoPhi,epsilon)
+in dictionary "$FOAM_CASE/system/fluid/fvSchemes!divSchemes"
+```
+
+**Causa:** la plantilla oficial `VoFcoolingCylinder2D` contiene `div(phi,k) $turbulence` pero, al sustituir el modelo de turbulencia laminar del ejemplo por el RAS compresible `kEpsilon`, este pide los esquemas de **`div(rhoPhi,k)` y `div(rhoPhi,epsilon)`**, no simplemente `div(phi,epsilon)`. La ausencia de uno de ellos NO constituye un fallo de la malla ni valida/desmiente por sí mismo los resultados térmicos.
+
+**Corrección implementada**: la función `ensure_compressible_kepsilon_divergence` del generador `stage_fs_c05_vof_cht.py` instala explícitamente ambos esquemas `$turbulence` para los **nuevos** casos. El ejecutor `run_fs_c05_native_smoke.py` verifica todos los hashes originales del viejo FS-C05 y aplica esa misma corrección **SOLAMENTE dentro de la nueva copia del arranque**, para permitir reutilizar de manera segura el caso `FS_C05_VOF_CHT_SCREEN_20261119T063448Z_84d08b6e` SIN modificarlo ni reconstruir FS-C04. Registra cuáles esquemas agregó y el nuevo SHA del `fvSchemes`. También se corrigió el lector de tiempos para el formato nativo `Time = 1e-07s` (con sufijo de segundos). Dos suites de pruebas nuevas incluyen reproducción de la ausencia de esos esquemas y resistencia a duplicados.
+
+**Reintento recomendado (solo después de pruebas verdes):**
+
+```bash
+cd ~/OpenFOAM/FS_C02_WORKTREE
+git status --short
+git fetch origin research/fs-c02-metal-air-vof-20261117
+git switch --detach FETCH_HEAD
+python3 -m unittest discover -s analysis_tools -p test_stage_fs_c05_vof_cht.py -v &&
+python3 -m unittest discover -s analysis_tools -p test_run_fs_c05_native_smoke.py -v &&
+python3 analysis_tools/run_fs_c05_native_smoke.py \
+  --source ~/OpenFOAM/FS_C05_VOF_CHT_RUNS/FS_C05_VOF_CHT_SCREEN_20261119T063448Z_84d08b6e \
+  --native
+```
+
+Si hay otro error de OpenFOAM, **no ocultarlo, no usar el anterior directorio fallido**. El ejecutor preserva log, ruta y estado de cada copia. Un eventual `NATIVE_TWO_STEP_VOF_CHT_STARTUP_COMPLETED_NOT_VALIDATED` solo acredita completar dos pasos, NO que las propiedades 1500/300 K, `kEpsilon`, calor `q`, Co, masa, energía ni solidificación estén validados. El apoyo inferior y CAD exacto siguen pendientes.
