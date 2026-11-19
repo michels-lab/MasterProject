@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "audit_kind": "deterministic_full_tracked_tree",
-  "tracked_files_total": 38970,
-  "classified_files_total": 38965,
+  "tracked_files_total": 38971,
+  "classified_files_total": 38966,
   "docs_content_inspected": 174,
   "large_docs_skipped": 1,
   "excluded_reports": 5,
@@ -20,7 +20,7 @@
     "simulation_log": 3155,
     "simulation_output": 32615,
     "source": 104,
-    "test": 41,
+    "test": 42,
     "web_ui": 1,
     "workflow": 22
   },
@@ -28,8 +28,8 @@
     "POTENTIAL_UNLOGGED_CHANGES": 2
   },
   "finding_total": 2,
-  "inventory_fingerprint": "816ef1c5315666a1dc360c7defd96b3fb04f47e928bb6508b7a6fbbda65bb5c1",
-  "evidence_fingerprint": "c5885a75ff40b358c5efb642a9f40244bf6dd75f012914a9c8531bf92ec46db2",
+  "inventory_fingerprint": "7d6fa9e21e941b848e97d77f68bd818bda4b7ad748ecb15b79686a3066d70e26",
+  "evidence_fingerprint": "dde830a8734228a133ab8f32d869663349422ba36c98ea13d78ca8697b1eb7e7",
   "files": [
     {
       "path": ".github/agents/openfoam-solidification.agent.md",
@@ -176,7 +176,7 @@
       "role": "workflow",
       "purpose": "GitHub Actions automation",
       "certainty": "rule",
-      "blob": "453699bc238b63515cd87c4c8ec3257b5a4802a4"
+      "blob": "8121c2fc01c62c8d4cf58750a98a0e34141f76d7"
     },
     {
       "path": ".github/workflows/uy-temporal-analysis.yml",
@@ -694,7 +694,7 @@
       "role": "source",
       "purpose": "code/test implementation",
       "certainty": "rule",
-      "blob": "a80ff3dd06e62ce40b43b593e9d4ab86e3efa806"
+      "blob": "a27d5db477f2809c4f0994d1afb5e44cb7602cf8"
     },
     {
       "path": "analysis_tools/coupling_analysis.py",
@@ -821,6 +821,13 @@
       "purpose": "technical/audit change history",
       "certainty": "rule",
       "blob": "87e95031f21bed8e24980a68ed767d7a1feb3d28"
+    },
+    {
+      "path": "analysis_tools/test_check_run_registry_3d.py",
+      "role": "test",
+      "purpose": "code/test implementation",
+      "certainty": "rule",
+      "blob": "328ac5a5d0d1884f299193760ce6ce03150dcff8"
     },
     {
       "path": "analysis_tools/test_freesurface_fs_c01.py",
@@ -272789,20 +272796,20 @@
   ],
   "findings": [
     {
-      "id": "e9cef0a15ebf94a0",
+      "id": "a580423444b458e4",
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_EN.md",
-      "observation": "17 implementation/config paths changed since this log's last commit; examples: .github/workflows/c3d05-t0-granada-static.yml, .github/workflows/case-a-t0-stage-contract.yml, cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/C14_PARAMETER_BASELINE.json, cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/T0_INPUTS.json, cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/scripts/prepare_case_a_t0.py, cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/tests/test_integrated_case_a.py",
+      "observation": "20 implementation/config paths changed since this log's last commit; examples: .github/workflows/c3d05-t0-granada-static.yml, .github/workflows/case-a-t0-stage-contract.yml, .github/workflows/quickcup-research-audit.yml, analysis_tools/check_run_registry.py, analysis_tools/test_check_run_registry_3d.py, cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/C14_PARAMETER_BASELINE.json",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     },
     {
-      "id": "47b55a13a607bfda",
+      "id": "affb4263af8f88aa",
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_ES.md",
-      "observation": "4 implementation/config paths changed since this log's last commit; examples: .github/workflows/c3d05-t0-granada-static.yml, cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/scripts/run_t0_granada.py, docs/C3D04_CASE_A_STATUS.json, docs/PROJECT_STAGE_STATUS.json",
+      "observation": "7 implementation/config paths changed since this log's last commit; examples: .github/workflows/c3d05-t0-granada-static.yml, .github/workflows/quickcup-research-audit.yml, analysis_tools/check_run_registry.py, analysis_tools/test_check_run_registry_3d.py, cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/scripts/run_t0_granada.py, docs/C3D04_CASE_A_STATUS.json",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     }
