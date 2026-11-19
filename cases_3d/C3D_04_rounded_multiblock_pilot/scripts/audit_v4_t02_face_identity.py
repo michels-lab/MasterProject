@@ -163,6 +163,17 @@ def inspect(case):
             if len(mapped_parent_ids[region]) != len(severe_ids[region]):
                 raise ValueError(f"{region} severe faces mapped to duplicate parent face IDs")
 
+    total_face_excess = (
+        len(indexes["metal"].faces) + len(indexes["mold"].faces)
+        - len(indexes["parent"].faces)
+    )
+    if total_face_excess != evidence["contact"]["faces_per_contact_side"]:
+        raise ValueError(
+            f"Native parent-region total face identity failed: "
+            f"excess={total_face_excess}, "
+            f"contact_per_side={evidence['contact']['faces_per_contact_side']}"
+        )
+
     # Classify the exact parent faces corresponding to one side of the
     # native split interface, not just to a nominal surface bounding box.
     metal_dir = case/"constant"/"metal"/"polyMesh"
@@ -221,6 +232,7 @@ def inspect(case):
             "FACE_IDENTITY_MAPPED_BUT_INTERFACE_HYPOTHESIS_NOT_CONFIRMED"
         ),
         "native_parent_regional_and_contact_gates_reverified": True,
+        "native_total_face_excess_equals_contact_side": True,
         "coordinate_matching_tolerance_mm": VERTEX_TOL_MM,
         "face_centroid_search_bucket_mm": BUCKET_MM,
         "counts": {
@@ -271,6 +283,10 @@ def self_test():
     # Region-facing orientation must not affect matching, but face topology
     # cannot collapse distinct original face geometries.
     assert vertex_match(f0, list(reversed(f0)))
+    # Simulated float32 position jitter, below the identification threshold.
+    noisy = list(f0)
+    noisy[0] = (f0[0][0]+0.00000000001, f0[0][1], f0[0][2])
+    assert idx.match(noisy) == 0
     assert not vertex_match(f0, f1)
     assert len({0, 1} - {1}) == 1
     with tempfile.TemporaryDirectory() as temp:
