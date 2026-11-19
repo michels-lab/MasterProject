@@ -33,5 +33,13 @@ for pair in "inner_y -0.12" "inner_y 0.12" "profile 0.90" "profile 0.78"; do
     python3 "$ROOT/tests/test_v4_diff.py" "$T/T06" "$p" --mode "$mode" --value "$value"
     python3 "$CASE/scripts/audit_blockmesh_topology.py" "$p" >/dev/null
 done
+# A profile with >3% error at the measured -39.8 mm CAD section
+# must be rejected BEFORE blockMesh (even if global contact area looks good).
+if python3 "$ROOT/scripts/build_v4_dictionary.py" "$T/T06" "$T/invalid_profile" \
+    --mode profile --value 0.65 > "$T/invalid_profile.log" 2>&1; then
+    echo "ERROR: CAD section-error guard unexpectedly accepted alpha=0.65" >&2
+    exit 1
+fi
+[[ ! -e "$T/invalid_profile" ]] || { echo "Invalid geometry was written" >&2; exit 1; }
 echo "V4_STATIC_SUITE_OK: four synthetic candidates; exact geometry/patch gate"
 echo "NOT EXECUTED: blockMesh, native checkMesh or CFD."
