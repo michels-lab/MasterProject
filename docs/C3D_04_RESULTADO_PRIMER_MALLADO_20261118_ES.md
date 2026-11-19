@@ -138,3 +138,16 @@ El área de contacto se mantuvo en **6,343.771874 mm² en todos los ensayos**, p
 **Conclusión empírica:** mover ±0.15..±0.45 mm la cuadrícula interior XZ del metal en Y=−39.8 no reduce el **número** de cuatro celdas con determinante deficiente; no afirmar que tampoco cambiaron sus valores mínimos, aún no reportados. El cambio de `simpleGrading` radial de 1.5 hasta 2.65 llevó la arena a `Mesh OK` a partir de T01. T06 es un **punto de partida para la siguiente corrección**, no ganador ni modelo CFD aprobado.
 
 El siguiente candidato debe modificar otra dimensión de la deformación (Y interior o transición de contorno metal) bajo una comparación nativa y de área CAD estrictas. Toda modificación del contorno curvilíneo, aunque preserve continuidad y parches, puede empeorar el ajuste local CAD: se debe volver a medir.
+
+## V4 preparada — nueva dimensión de corrección, NO resultado
+
+Tras comprobar que los seis cambios XZ del núcleo metálico V3 no redujeron las 4 celdas de determinante bajo, se implementó [`C3D04_V4_TRANSITION_REPAIR`](../cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V4_TRANSITION_REPAIR/README.md). Los tres primeros ensayos desplazan **solo 4 vértices interiores en Y**, sin modificar la interfaz. Los cuatro restantes, si persiste el fallo, prueban interpolaciones suaves del contorno exterior metálico en la única estación **Y=−39.8 mm**, incluyendo los 8 puntos de `arc` pertinentes. Todos toman como punto de partida la corrida real **V3/T06** y validan su procedencia contra V2, además de imponer `Mesh OK` de padre, metal y arena, área CAD, `mappedWall` recíproco y 2,496 caras de contacto.
+
+Las variantes de perfil quedan limitadas a alpha **0.95, 0.90, 0.84 y 0.78** porque una extrapolación mayor del perfil deformaría excesivamente el corte horizontal del CAD. Como salvaguarda cuantitativa, el generador rechaza todo candidato con **error analítico del área de sección redondeada a Y=−39.8 mm mayor al 3 %** frente a **909.900 mm²** del STL. Este guard adicional no sustituye el ajuste tridimensional de toda la superficie CAD, que aún debe comprobarse. El resumen V4 incluirá los **mínimos reales de determinante de OpenFOAM** y el error de área del corte; el script no falsea aceptaciones ni cambia los umbrales.
+
+**Estado actual V4: código publicado, ensayos nativos todavía no ejecutados. NO CFD.**
+
+```bash
+cd ~/OpenFOAM/MasterProject && git pull --ff-only && \
+bash cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V4_TRANSITION_REPAIR/run_v4_sweep.sh
+```
