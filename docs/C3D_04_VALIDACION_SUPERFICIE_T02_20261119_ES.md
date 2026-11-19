@@ -1,6 +1,6 @@
 # Caso A — Validación geométrica superficial de la malla C3D-04 V4/T02
 
-**19 de noviembre de 2026 — Estado: `HERRAMIENTA_PREPARADA / AUDITORÍA_AÚN_NO_EJECUTADA / NO_CFD`.**
+**19 de noviembre de 2026 — Estado vigente: `AUDITORÍA_MUESTRAL_BIDIRECCIONAL_EJECUTADA / RESULTADOS_FAVORABLES_PERO_NO_HAUSDORFF / NO_CFD`.** La sección inferior documenta los resultados reales WSL; los pasos anteriores se conservan como protocolo histórico.
 
 ## Contexto real
 
