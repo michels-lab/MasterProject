@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
   "audit_kind": "deterministic_full_tracked_tree",
-  "tracked_files_total": 38905,
-  "classified_files_total": 38900,
-  "docs_content_inspected": 161,
+  "tracked_files_total": 38906,
+  "classified_files_total": 38901,
+  "docs_content_inspected": 162,
   "large_docs_skipped": 0,
   "excluded_reports": 5,
   "roles": {
@@ -12,7 +12,7 @@
     "bitacora": 5,
     "config": 7,
     "data": 31,
-    "document": 126,
+    "document": 127,
     "index": 30,
     "license": 1,
     "simulation_case_file": 107,
@@ -28,7 +28,7 @@
     "POTENTIAL_UNLOGGED_CHANGES": 2
   },
   "finding_total": 2,
-  "inventory_fingerprint": "f6217491ecd77cbc05dfaaa706f306c264ec70390a4fdcbaf9d3c0a720f3bac6",
+  "inventory_fingerprint": "c02ec21823048be903da74288cd31c9f93135d627e79d446ea65392e49ef2650",
   "evidence_fingerprint": "3fb27e7eed8e78285fa5e94e5d234417d9f507340270201c76ee1a8088d9a73f",
   "files": [
     {
@@ -271518,6 +271518,13 @@
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
       "blob": "200d1007e4bad4c2ed50f06ffeb2954f61db5df9"
+    },
+    {
+      "path": "docs/C3D_05_HEX8_SEGUNDO_INTENTO_ACEPTADO_20261119_ES.md",
+      "role": "document",
+      "purpose": "manual/decision/report/historical note",
+      "certainty": "inferred",
+      "blob": "7780560c6c5a2dc7881ae43a0382936d9a336625"
     },
     {
       "path": "docs/C3D_05_HXT_RESULTADO_Y_PILOTO_HEX_20261118_ES.md",
