@@ -88,3 +88,10 @@ done
 grep -Fq 'C3D05_STEP_GMSH_HEX_SUBDIV_COARSE_02' "$HEX_REVIEW_RUN"
 grep -Fq 'test_review_accepted_hex_mesh.py' "$HEX_REVIEW_RUN"
 ! grep -Eq '^[[:space:]]*(gmshToFoam|checkMesh|blockMesh|foamMultiRun)[[:space:]]' "$HEX_REVIEW_RUN"
+
+# Preserve original rejected provenance review and expose its exact predicates.
+grep -Fq 'cad_provenance_checks' "$HEX_REVIEW"
+grep -Fq 'cad_provenance_details' "$HEX_REVIEW"
+grep -Fq 'post_subdivision_hex_count_vs_native_parent_cells' "$HEX_REVIEW"
+grep -Fq 'HEX8_NATIVE_ACCEPTANCE_REVIEW_PROVENANCE_DETAIL_20261119.json' "$HEX_REVIEW_RUN"
+grep -Fq 'PREVIOUS="$CASE/HEX8_NATIVE_ACCEPTANCE_REVIEW_20261119.json"' "$HEX_REVIEW_RUN"
