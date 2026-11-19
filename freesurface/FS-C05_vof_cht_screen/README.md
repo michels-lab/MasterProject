@@ -230,3 +230,31 @@ python3 analysis_tools/run_fs_c05_wall_heat_flux.py \
 **Estado esperado tras ejecución nativa que capture ambos parches (AÚN NO DEMOSTRADO):** `TWO_STEP_FLUID_MOLD_WALL_Q_MEASURED_NO_ENERGY_VALIDATION`. La existencia de las funciones en la librería Foundation14 NO significa que estén comprobadas en nuestro VOF/solid particular; la próxima salida real puede mostrar incompatibilidad de modelos. No mover ni rehacer corridas existentes: se audita el error en la copia nueva.
 
 Aun con (Q_f+Q_s≈0), **NO hay balance energético global**: faltan (rho(T)), (C_p(T)), entalpía y (p,dV), transportes de entalpía y masa por los parches atmosféricos, contribución RAS y tratamiento de discontinuidades VOF; tampoco hay solidificación o contracción. No aumentar drásticamente el tiempo físico sin estas pruebas.
+
+## OPERACIÓN GRANADA · una sola ejecución para el próximo control físico, sin mil pruebas manuales
+
+A partir del feedback del investigador, el proceso se consolidó en **`analysis_tools/run_fs_c05_granada.py`**. NO pedir al investigador ejecutar tests sintéticos ni comandos por cada variable; esas verificaciones ya corren en GitHub Actions, y un ensayo nativo real concentra las variables.
+
+**El script orquesta EN UN SOLO BLOQUE:**
+1. Aísla el FS-C05 fuente aprobado `FS_C05_VOF_CHT_SCREEN_20261119T063448Z_84d08b6e` (solo lectura), verifica sus SHA/campos; crea una carpeta **nueva** `FS_C05_WALL_Q_PROBE_<id>` bajo `~/OpenFOAM/FS_C05_GRANADA_RUNS/`.
+2. Añade ambos esquemas compresibles RAS `div(rhoPhi,k)` y `div(rhoPhi,epsilon)` solo a la copia, carga `wallHeatFlux` tanto en fluido como en arena, ejecuta una sola vez `foamMultiRun` con dos pasos `1e-7s` y conserva logs nativos.
+3. Exige archivos reales `wallHeatFlux.dat` para **ambos parches mapeados**, con potencia (Q) [W] en ambos tiempos. Reporta (Q_mathrm{fluid}), (Q_mathrm{mold}), suma y desajuste relativo, con alerta a más de 5 % (diagnóstico, no prueba de balance).
+4. Lee **los tres snapshots nativos generados por ESA MISMA corrida** de `alpha.metal`, `T` en fluido y `T` en arena; integra volúmenes poliedros geométricos, deriva VOF, promedios alfa-ponderados y extremos térmicos, y genera alertas.
+5. Calcula opcionalmente **indicadores aproximados de almacenamiento sensible** `rho*Cv*sum(alpha*V*T)` con las constantes `rho_iron=6820,Cv=827; rho_sand=1500,Cv=700; gas rho_ambient(100kPa,300K), Cv=718`. NO son entalpías verdaderas ni un balance global: el gas es compresible, densidades varían, hay presión, trabajo, flujo por atmósfera y transporte de energía.
+6. Escribe **`FS_C05_GRANADA_REPORT.json`** y **`FS_C05_GRANADA_REPORT.md`** dentro de la copia; imprime en pantalla un resumen conciso. Ante fallo del solver o de una medición, conserva todo el log y marca análisis incompleto, no inventa cifras.
+
+El script no repite la corrida anterior, no cambia repos ni originales, no ejecuta solidificación, no interpreta 0.2 µs como una curva de enfriamiento. **`--native` es obligatorio para autorizar CFD**, sin él solo prepara una copia. Las pruebas unitarias y de seguridad están conectadas a CI; no pedir corridas por cada subfunción.
+
+**Único comando del próximo control nativo (usar cuando el HEAD de CI esté verde):**
+```bash
+cd ~/OpenFOAM/FS_C02_WORKTREE && \
+git fetch origin research/fs-c02-metal-air-vof-20261117 && \
+git switch --detach FETCH_HEAD && \
+python3 analysis_tools/run_fs_c05_granada.py \
+  --source ~/OpenFOAM/FS_C05_VOF_CHT_RUNS/FS_C05_VOF_CHT_SCREEN_20261119T063448Z_84d08b6e \
+  --native
+```
+
+**Estado de este paquete:** instrumentación implementada, CI interna; **ninguna nueva corrida nativa se ha realizado aún**. El resultado esperado es `FS_C05_GRANADA_INTEGRATED_MEASUREMENTS_*` con advertencias científicas. Si la librería de calor conjugado no carga o el parser de archivo nativo difiere, no llamarlo validado: corregir ese problema concreto de integración en el mismo paquete, no dispersarlo en otra batería de pruebas manuales.
+
+**Criterio antes de un transitorio mayor:** validación de balance de masa `Σrho_i alpha_i V` y flujos de entrada/salida, potencia conjugada por las 3136 caras, entalpía real del gas y metal, presión/trabajo y frontera abierta. Los tres valores de temperatura existentes y `ΔV_metal=0` no demuestran esos balances.
