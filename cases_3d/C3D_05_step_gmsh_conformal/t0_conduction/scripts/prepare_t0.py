@@ -121,8 +121,24 @@ def verify_c14_fvsolution_source() -> None:
             raise ValueError("C14 fvSolution original has changed: " + entry["path"])
 
 
+def verify_c14_numerical_reference_if_present(cfg: dict) -> None:
+    """Ensure a C14-labelled input is an EXACT reproduction of versioned C14."""
+    if "reference_profile" not in cfg:
+        return
+    import importlib.util
+    module_path = HERE / "scripts/c14_numerical_reference.py"
+    spec = importlib.util.spec_from_file_location("c3d05_c14_numerical_reference", module_path)
+    assert spec is not None and spec.loader is not None
+    bridge = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(bridge)
+    errors = bridge.validate_reference(cfg)
+    if errors:
+        raise ValueError("Invalid archived C14 numerical candidate: " + "; ".join(errors))
+
+
 def file_map(cfg: dict) -> dict[str, str]:
     verify_c14_fvsolution_source()
+    verify_c14_numerical_reference_if_present(cfg)
     files = {}
     for region in ("metal", "mold"):
         mat = cfg[region]
