@@ -110,3 +110,20 @@ grep -Fq 'nonOrthoFaces' "$NONORTH"
 grep -Fq 'NONORTH_FACESET_TOPOLOGY_AUDIT_20261119.json' "$NONORTH_RUN"
 grep -Fq 'test_audit_nonorthogonal_faces.py' "$NONORTH_RUN"
 ! grep -Eq '^[[:space:]]*(gmshToFoam|checkMesh|blockMesh|foamMultiRun|rm -rf)[[:space:]]' "$NONORTH_RUN"
+
+# Read-only CSR graph distance from severe internal faces to physical interface:
+# new diagnostics must not run mesh generators/checkMesh or a solver.
+HOPS="$ROOT/scripts/audit_nonorth_hop_distance.py"
+HOPS_TEST="$ROOT/tests/test_audit_nonorth_hop_distance.py"
+HOPS_RUN="$ROOT/scripts/run_nonorth_hop_distance.sh"
+[[ -s "$HOPS" && -s "$HOPS_TEST" && -s "$HOPS_RUN" ]] ||
+  { echo "C3D-05 cell-hop audit files missing"; exit 1; }
+bash -n "$HOPS_RUN"
+python3 -c 'import ast,pathlib,sys; [ast.parse(pathlib.Path(s).read_text()) for s in sys.argv[1:]]' "$HOPS" "$HOPS_TEST"
+for token in "build_graph" "bfs_hops" "find_native_set" "graph"; do
+  grep -Fiq "$token" "$HOPS" || { echo "Hop audit contract missing: $token"; exit 1; }
+done
+grep -Fq 'NONORTH_CELL_HOP_DISTANCE_20261119.json' "$HOPS_RUN"
+grep -Fq 'test_audit_nonorth_hop_distance.py' "$HOPS_RUN"
+grep -Fq 'NONORTH_FACESET_TOPOLOGY_AUDIT_20261119.json' "$HOPS_RUN"
+! grep -Eq '^[[:space:]]*(gmsh|gmshToFoam|checkMesh|blockMesh|foamMultiRun|rm -rf)[[:space:]]' "$HOPS_RUN"
