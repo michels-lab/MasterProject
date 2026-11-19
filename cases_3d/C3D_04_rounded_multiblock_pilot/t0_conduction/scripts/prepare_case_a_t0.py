@@ -14,11 +14,14 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import os
 import json
 import math
 import re
 import shutil
+import subprocess
 import sys
+import tempfile
 from pathlib import Path
 
 T0 = Path(__file__).resolve().parents[1]
@@ -96,10 +99,13 @@ def validate(config: object, allow_synthetic_test: bool = False) -> list[str]:
         interval = simulation.get("writeEverySteps")
         if type(interval) is not int or interval <= 0:
             errors.append("simulation.writeEverySteps: positive integer required")
+        energy = simulation.get("nEnergyCorrectors")
+        if type(energy) is not int or not 1 <= energy <= 20:
+            errors.append("simulation.nEnergyCorrectors: sourced integer 1..20 required")
         nonorth = simulation.get("nNonOrthogonalCorrectors")
         if type(nonorth) is not int or not 0 <= nonorth <= 20:
             errors.append("simulation.nNonOrthogonalCorrectors: explicit integer 0..20 required")
-        for key in ("source_time_choices", "source_nonorth_choice"):
+        for key in ("source_time_choices", "source_nonorth_choice", "source_energy_coupling_choice"):
             evidence = simulation.get(key)
             if not isinstance(evidence, str) or len(evidence.strip()) < 10:
                 errors.append(f"simulation.{key}: documented numerical rationale required")
@@ -201,6 +207,16 @@ def solution(region: str, nonorth: int) -> str:
     )
 
 
+def global_solution(energy_correctors: int) -> str:
+    """Foundation14 foamMultiRun multi-region PIMPLE control (top-level)."""
+    return header("system", "fvSolution") + (
+        "PIMPLE\n{\n"
+        "    nOuterCorrectors 1; // T0 numerical hypothesis, no flow\n"
+        f"    nEnergyCorrectors {energy_correctors};\n"
+        "}\n"
+    )
+
+
 def control(cfg: dict) -> str:
     return header("system", "controlDict") + (
         "application foamMultiRun;\n"
@@ -219,7 +235,12 @@ def generate(cfg: dict) -> dict[str, str]:
     errors = validate(cfg, allow_synthetic_test=True)
     if errors:
         raise ValueError("Config validation failed: " + "; ".join(errors))
-    items = {"system/controlDict": control(cfg["simulation"])}
+    items = {
+        "system/controlDict": control(cfg["simulation"]),
+        "system/fvSolution": global_solution(
+            cfg["simulation"]["nEnergyCorrectors"]
+        ),
+    }
     for region in ("metal", "mold"):
         items[f"0/{region}/T"] = temperature(region, cfg[region]["T_initial_K"])
         items[f"constant/{region}/physicalProperties"] = thermophysical(region, cfg[region])
@@ -227,8 +248,8 @@ def generate(cfg: dict) -> dict[str, str]:
         items[f"system/{region}/fvSolution"] = solution(
             region, cfg["simulation"]["nNonOrthogonalCorrectors"]
         )
-    if len(items) != 9:
-        raise AssertionError("Expected 9 independently rendered OpenFOAM files")
+    if len(items) != 10:
+        raise AssertionError("Expected 10 independently rendered OpenFOAM files")
     for name, text in items.items():
         if "{{" in text or "}}" in text:
             raise AssertionError(f"Unresolved placeholder {name}")
@@ -329,8 +350,10 @@ def synthetic_fixture():
     cfg["simulation"].update({
         "deltaT_s": 0.01, "endTime_s": 0.10,
         "writeEverySteps": 2, "nNonOrthogonalCorrectors": 2,
+        "nEnergyCorrectors": 2,
         "source_time_choices": "SYNTHETIC_UNIT_TEST",
         "source_nonorth_choice": "SYNTHETIC_UNIT_TEST",
+        "source_energy_coupling_choice": "SYNTHETIC_UNIT_TEST",
     })
     return cfg
 
@@ -343,7 +366,8 @@ def self_test():
     assert validate(cfg, allow_synthetic_test=True) == []
     assert validate(cfg, allow_synthetic_test=False) != []
     files = generate(cfg)
-    assert len(files) == 9
+    assert len(files) == 10
+    assert "nEnergyCorrectors 2;" in files["system/fvSolution"]
     assert "application foamMultiRun;" in files["system/controlDict"]
     for region in ("metal", "mold"):
         field = files[f"0/{region}/T"]
@@ -358,7 +382,7 @@ def self_test():
     cfg["mold"]["kappa_W_m_K"] = 4.
     cfg["simulation"]["nNonOrthogonalCorrectors"] = -1
     assert any("nNonOrthogonalCorrectors" in e for e in validate(cfg))
-    print("STATIC_INTEGRATED_T0_PASS: null data blocked; nine files; all native patch names; provenance; rejection regressions")
+    print("STATIC_INTEGRATED_T0_PASS: null data blocked; 10 files incl global PIMPLE; all native patch names; provenance; rejection regressions")
     print("STATIC_ONLY: no OpenFOAM, CFD or thermal case creation.")
 
 
