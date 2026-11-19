@@ -82,6 +82,32 @@ def parse_native(log: Path, region: str) -> dict:
     }
 
 
+def patch_metadata(path: Path, patch: str) -> dict:
+    """Independently inspect original OpenFOAM polyBoundaryMesh metadata."""
+    if not path.is_file():
+        raise FileNotFoundError(f"Missing actual regional boundary: {path}")
+    body = path.read_text(encoding="utf-8")
+    match = re.search(
+        r"(?m)^\s*" + re.escape(patch) + r"\s*\{([^}]*)\}", body, re.S
+    )
+    if match is None:
+        raise ValueError(f"Missing physical patch {patch} in {path}")
+    def read(name: str):
+        field = re.search(
+            r"\b" + re.escape(name) + r"\s+([^;\s]+)\s*;", match.group(1)
+        )
+        return field.group(1) if field else None
+    n = read("nFaces")
+    if n is None or not n.isdigit():
+        raise ValueError(f"Missing integer nFaces in {path}/{patch}")
+    return {
+        "type": read("type"),
+        "nFaces": int(n),
+        "neighbourRegion": read("neighbourRegion"),
+        "neighbourPatch": read("neighbourPatch"),
+    }
+
+
 def verify_saved_contact(case: Path) -> dict:
     path = case / "CONTACT_AREA_REPORT.json"
     if not path.is_file():
@@ -101,6 +127,27 @@ def verify_saved_contact(case: Path) -> dict:
         and abs(data["top_area_error_percent_vs_STL"]) <= 3
     ):
         raise ValueError("Saved metal/mold area gate is NOT accepted")
+    metal = patch_metadata(
+        case / "constant/metal/polyMesh/boundary", "metal_to_mold"
+    )
+    mold = patch_metadata(
+        case / "constant/mold/polyMesh/boundary", "mold_to_metal"
+    )
+    top = patch_metadata(
+        case / "constant/metal/polyMesh/boundary", "metalTop"
+    )
+    if not (
+        metal["type"] == mold["type"] == "mappedWall"
+        and metal["nFaces"] == mold["nFaces"] == 2496
+        and metal["neighbourRegion"] == "mold"
+        and mold["neighbourRegion"] == "metal"
+        and metal["neighbourPatch"] == "mold_to_metal"
+        and mold["neighbourPatch"] == "metal_to_mold"
+        and top["type"] == "patch" and top["nFaces"] == 256
+        and all(isinstance(x.get("area_mm2"), (int, float)) for x in (m, s))
+        and abs(m["area_mm2"] - s["area_mm2"]) < 1.e-6
+    ):
+        raise ValueError("Real polyMesh reciprocal mappedWall/top-face gate rejected")
     status = (case / "NATIVE_BUILD_STATUS.txt")
     if not status.is_file() or not status.read_text(encoding="utf-8").startswith(
         "MESH_TOPOLOGY_AND_CONTACT_AREA_PRELIMINARILY_ACCEPTED"
@@ -108,6 +155,7 @@ def verify_saved_contact(case: Path) -> dict:
         raise ValueError("Native V4 acceptance status missing or rejected")
     return {
         "accepted_contact_gate_from_saved_report": True,
+        "actual_polyMesh_mappedWall_reciprocity_verified": True,
         "faces_per_contact_side": 2496,
         "metal_to_mold_area_mm2": m.get("area_mm2"),
         "mold_to_metal_area_mm2": s.get("area_mm2"),
@@ -196,6 +244,14 @@ def self_test() -> None:
                 pass
             else:
                 raise AssertionError("Rejected mesh incorrectly passed")
+        boundary = folder / "boundary"
+        boundary.write_text(
+            "metal_to_mold\n{\ntype mappedWall;\nnFaces 2496;\n"
+            "neighbourRegion mold;\nneighbourPatch mold_to_metal;\n}\n",
+            encoding="utf-8"
+        )
+        parsed = patch_metadata(boundary, "metal_to_mold")
+        assert parsed["type"] == "mappedWall" and parsed["nFaces"] == 2496
         vtk = folder / "nonOrthoFaces.vtk"
         vtk.write_text(
             "# vtk DataFile Version 3.0\nSynthetic\nASCII\nDATASET POLYDATA\n"
