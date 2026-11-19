@@ -25,13 +25,13 @@
     "Reference V4/T02 preserved without CFD"
   ],
   "nonnegotiable_blockers": [
-    "Real metal and sand rho(T), cp/Cv(T), k(T), phase-change thermodynamics and provenance are NOT populated",
-    "Real QuickCup external thermal BCs, h/contact resistance, and experimental initial conditions are NOT established",
-    "Nonorthogonality risk numerical stability NOT demonstrated, despite Mesh OK",
-    "STL sample error not a rigorous CAD STEP Hausdorff bound",
-    "No T0 solver run, no T1 solidification run, no mesh independence or experimental validation",
-    "Foundation14 parser acceptance of T0 global/regional dictionaries NOT observed in WSL (and energy corrector behavior unverified)",
-    "Ideal closed-system T0 energy target cannot be evaluated numerically until sourced rho/Cv/T inputs exist; no CFD heat flux has been measured"
+    "C14 numeric metal/arena parameters and 2D boundary reference NOW sourced directly in T0; they are constant C14-model inputs, NOT independently measured T-dependent iron/sand functions.",
+    "Metal C14 Cp=827 and heRhoThermo fluid enthalpy is NOT a measured Cv: 3D two-solid T0 explicitly uses Cp_as_effective_Cv approximation and derived k=mu*Cp/Pr; this must not be called physically identical to C14.",
+    "C14 exterior h=10, Ta=300, emissivity and 500 W/(m2 K) contact transferred to T0; therefore theoretical adiabatic two-solid energy equilibrium is COUNTERFACTUAL, not an acceptance condition for this T0.",
+    "One integrated C14-source parity and native C3D04 boundary/mesh validation is CODE_COMMITTED but no successful WSL Foundation14 dictionary parse / source materials realization has been observed.",
+    "Nonorthogonality solver stability has NOT been validated, despite passed V4/T02 native checkMesh and the closed 64-face interface identity investigation.",
+    "T1 fluid-solid phase-change, temperature-dependent materials, actual casting cooling curves, mesh/time independence and experimental validation remain not executed.",
+    "STL surface fit distances are sample-only, not rigorous Hausdorff to exact STEP."
   ],
   "milestones": [
     {
@@ -99,30 +99,30 @@
   "execution_rule": "Integrate validations into one cohesive milestone; no one-script-per-subproblem loops, no rerun already closed V4/T02 audits; one user command only at a meaningful end-to-end delivery; preserve case and audit evidence.",
   "last_integrated_delivery": {
     "date": "2026-11-19",
-    "source_status": "CODE_COMMITTED_STATIC_SUITE_AVAILABLE_NOT_CONFIRMED_CI_OR_WSL",
+    "source_status": "C14_BASELINE_AND_NUMERICAL_T0_COMMITTED_WITH_SOURCE_PARITY_GUARD_NOT_WSL_VERIFIED",
     "stage": "05_THERMAL_T0_DESIGN",
     "milestone_not_closed": true,
     "changes": [
-      "Added required Foundation14 top-level system/fvSolution with global PIMPLE, separate from region fvSolution",
-      "Explicit sourced nEnergyCorrectors control added to T0_INPUTS.json, no defaults invented",
-      "10 generated dictionaries now instead of 9; positive/negative integrated static tests",
-      "Atomic staging materializer checks native dictionary parsing and SHA256 identity of copied meshes before publication",
-      "All nonempty native wall patch names must map to declared thermal BCs",
-      "One integrated stage entrypoint; no repeated user microtests and no CFD",
-      "Read-only native PILOT_MESH_REPORT.tsv used to validate regional volumes before computing theoretical adiabatic two-solid energy-balance target",
-      "Integrated static suite rejects unknown nonempty native patches; corrected wrongly doubled regex escapes",
-      "Full suite exercises atomic cleanup on synthetic foamDictionary failure and success, without user's WSL"
-    ],
-    "external_verification": [
-      "Official OpenFOAM-14 heatedDuct global system/fvSolution and solid regional fvSolution consulted",
-      "Official OpenFOAM Foundation v14 thermal BC docs confirm coupledTemperature on both interface sides"
+      "C14 original historical case located and source files read: cases_controlled_buoyancy/C14_topFixedFlux_explicitRef",
+      "C14 baseline JSON stores iron rho6820 Cp827 molWeight56 mu0.0055 Pr0.14; silica rho1500 Cv700 kappa2 molWeight28; 1500K/300K initial",
+      "Derived metal kappa=mu*Cp/Pr in a strictly labelled T0 numerical solid surrogate; effective Cv=C14 Cp is an explicitly limited approximation, NOT original C14 thermodynamics",
+      "C14 exterior h10 W/(m2K), Ta300K, emissivities .3/.5, layer 0.0002m kappa0.1 conductance500 W/(m2K) replace T0 old adiabatic/ideal-contact assumptions",
+      "C14 time deltaT0.001 s endTime10 s writeEverySteps100, root nOuterCorrectors3 nNonOrthogonalCorrectors1; regional metal nEnergyCorrectors2 is explicitly a separate numerical T0 hypothesis",
+      "Integrated source guard reads original executable C14 files and checks 25 scalar pairs plus two interface layer properties, records source-file SHA256",
+      "Preexisting strict C3D04 V4/T02 native gates, ten F14 dictionaries, SHA-checked atomic materialization and integrated no-CFD tests retained",
+      "The old two-solid insulated analytical equilibrium is labelled counterfactual, NOT acceptance under C14 convective boundaries"
     ],
     "not_observed": [
-      "CI successful execution of new tests",
-      "WSL Foundation14 native dictionary parse",
-      "actual thermophysical properties/initial temperatures",
-      "any T0 energy balance or solver run",
-      "Any actual T0 equilibrium temperature: real material and initial T values remain null"
+      "Successful updated integrated static CI test run",
+      "Native OpenFOAM Foundation14 parsing of 10 generated dictionaries on laptop",
+      "Any 3D C3D04 T0 solver run, energy balance, convergence or solidification",
+      "Equivalence of C14 metal fluid thermo and numerical T0 solid surrogate"
+    ],
+    "source_refs": [
+      "cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/C14_PARAMETER_BASELINE.json",
+      "cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/T0_INPUTS.json",
+      "cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/README.md",
+      "cases_controlled_buoyancy/C14_topFixedFlux_explicitRef"
     ]
   }
 }
