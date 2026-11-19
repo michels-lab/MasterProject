@@ -1,3 +1,5 @@
+> **19-11-2026 | GRANADA_C3D05_T0_INTEGRAL_20261119:** primer paquete técnico GRANADA de Caso B implementa orquestación T0 y QA estática sin nuevas rondas WSL: [documentación de la entrega](granada/C3D05_T0_INTEGRATED_GRANADA_20261119_ES.md). El porcentaje 29% permanece basado en 2/7 hitos, sin CFD.
+
 # Regla obligatoria de entrega integral y estado de avance — MasterProject
 **PROJECT_PROGRESS_CONTRACT_20261119 · 2026-11-19 · aplicable a TODOS los casos 2D/3D A/B y futuros.**
 Esta es una exigencia permanente del investigador: eliminar las rondas interminables de pruebas por pieza, corregir causas y entregar resultados completos desde el inicio.
