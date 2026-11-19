@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "audit_kind": "deterministic_full_tracked_tree",
-  "tracked_files_total": 38951,
-  "classified_files_total": 38946,
+  "tracked_files_total": 38953,
+  "classified_files_total": 38948,
   "docs_content_inspected": 171,
   "large_docs_skipped": 1,
   "excluded_reports": 5,
@@ -20,51 +20,51 @@
     "simulation_log": 3155,
     "simulation_output": 32615,
     "source": 99,
-    "test": 36,
+    "test": 37,
     "web_ui": 1,
-    "workflow": 19
+    "workflow": 20
   },
   "finding_counts": {
     "POTENTIAL_UNLOGGED_CHANGES": 2
   },
   "finding_total": 2,
-  "inventory_fingerprint": "980f080b7c05047af3aaa74372131896f412ce9257a01a6c53f0e0f456b396d5",
-  "evidence_fingerprint": "af4d13c73d4e3461d951f9ad471fef14b7488799f411a6a975ba1f31cc420ca6",
+  "inventory_fingerprint": "f5bc9afacec8593e32535a483bd60966cc005c6bfe3fb34d5f623b7c71cb4354",
+  "evidence_fingerprint": "c8ebcb6e04ffe69e13596c10598c1e6c812c6974cda3901853b7d950357e3f2d",
   "files": [
     {
       "path": ".github/agents/openfoam-solidification.agent.md",
       "role": "agent",
       "purpose": "assistant role/instructions",
       "certainty": "rule",
-      "blob": "e7bd6a1438d54dbbb9cfa9810c5a845845721337"
+      "blob": "4cd37c7680e92b1dc34906985d3f0457503c1a78"
     },
     {
       "path": ".github/agents/quickcup-documentation-steward.agent.md",
       "role": "agent",
       "purpose": "assistant role/instructions",
       "certainty": "rule",
-      "blob": "825851b0068b789877bc246d4caf9ca79a9d7f68"
+      "blob": "2ea406b78ed70ef469bc2d5ffbee70a0816ca559"
     },
     {
       "path": ".github/agents/quickcup-live-observer.agent.md",
       "role": "agent",
       "purpose": "assistant role/instructions",
       "certainty": "rule",
-      "blob": "5c44388c2853dbc9a1a80f59576583fcaef9eacf"
+      "blob": "4a594b5e8949e69fc545af475d33c03d8e42ab59"
     },
     {
       "path": ".github/agents/quickcup-physics-verifier.agent.md",
       "role": "agent",
       "purpose": "assistant role/instructions",
       "certainty": "rule",
-      "blob": "a957cacde7c40d3ea18bafd7ab154765bcd0e02f"
+      "blob": "661cb73ead340b2a6ca158b266a7d242d729c4f7"
     },
     {
       "path": ".github/agents/quickcup-postprocess-forensics.agent.md",
       "role": "agent",
       "purpose": "assistant role/instructions",
       "certainty": "rule",
-      "blob": "9a65b506da9e8db74bcdd6f55a10b17879e24da7"
+      "blob": "7354d84cf189bc96af49b2472a78ff729ce7a480"
     },
     {
       "path": ".github/workflows/c3d02-static.yml",
@@ -149,6 +149,13 @@
       "purpose": "GitHub Actions automation",
       "certainty": "rule",
       "blob": "8110be8765b0d140cf3e47f444e1d20fa00beb2f"
+    },
+    {
+      "path": ".github/workflows/project-delivery-contract.yml",
+      "role": "workflow",
+      "purpose": "GitHub Actions automation",
+      "certainty": "rule",
+      "blob": "8e9d5efdfc757292ab1973859f8dc9f62bd48eb1"
     },
     {
       "path": ".github/workflows/quickcup-research-audit.yml",
@@ -946,7 +953,7 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "f4173f9d21c32ef5ab1b9c4b817fd74680a571c8"
+      "blob": "d965b5d7901595c0f8387285655f17a52b79a27c"
     },
     {
       "path": "cases_3d/C3D_01_metal_mold/constant/geometry/.gitignore",
@@ -1079,7 +1086,7 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "292154b0a56bb1977e0ad2d906e26cb71fc2ec31"
+      "blob": "f2ff58cd045b1b7e49f68d54306ce3a5b1f7e999"
     },
     {
       "path": "cases_3d/C3D_02_metal_sand_clean/constant/geometry/README.md",
@@ -1429,7 +1436,7 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "be02fd6a4c02c2f09d6c81061947fbc155025f43"
+      "blob": "6bad3e124ec10159c656e4814d664e3e62e520cb"
     },
     {
       "path": "cases_3d/C3D_03_doctor_multiblock_pilot/system/blockMeshDict",
@@ -1471,7 +1478,7 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "8dfdec866f64de2a97dc5f94edde6cbf79e0d4d3"
+      "blob": "0ebf4e0d67f8bef5d54ec69b088234bd02bca0d6"
     },
     {
       "path": "cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V2_BASAL_QUALITY/Allmesh",
@@ -1703,6 +1710,13 @@
       "purpose": "code/test implementation",
       "certainty": "rule",
       "blob": "b6fc4cd1b9fe863893891577ea52d5d93c06c9f5"
+    },
+    {
+      "path": "cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/tests/test_integrated_case_a.py",
+      "role": "test",
+      "purpose": "code/test implementation",
+      "certainty": "rule",
+      "blob": "7b8f93d89d09aa99c539a70907e4636d353ffdc7"
     },
     {
       "path": "cases_3d/C3D_04_rounded_multiblock_pilot/tests/test_rounded_multiblock_static.sh",
@@ -271650,7 +271664,7 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "be8ee2f433229f511afc948238c26e774533be5a"
+      "blob": "b58282ae2a9927397bc36f0a60c205db2669a50a"
     },
     {
       "path": "docs/C3D04_CASE_A_STATUS.json",
@@ -272656,20 +272670,20 @@
   ],
   "findings": [
     {
-      "id": "0b1cac104ce356fb",
+      "id": "b912159d2200268d",
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_EN.md",
-      "observation": "1 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/run_integrated_milestone.sh",
+      "observation": "3 implementation/config paths changed since this log's last commit; examples: .github/workflows/project-delivery-contract.yml, cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/run_integrated_milestone.sh, cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/tests/test_integrated_case_a.py",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     },
     {
-      "id": "eca1a82a39f7c691",
+      "id": "c8b10bd17a273e76",
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_ES.md",
-      "observation": "1 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/run_integrated_milestone.sh",
+      "observation": "3 implementation/config paths changed since this log's last commit; examples: .github/workflows/project-delivery-contract.yml, cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/run_integrated_milestone.sh, cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/tests/test_integrated_case_a.py",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     }
