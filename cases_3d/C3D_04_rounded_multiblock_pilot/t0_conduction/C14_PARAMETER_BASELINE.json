@@ -1,0 +1,180 @@
+{
+  "schema": "C3D04_C14_PARAMETER_BASELINE_V1",
+  "source_case": "cases_controlled_buoyancy/C14_topFixedFlux_explicitRef",
+  "source_identity": "C14_topFixedFlux_explicitRef is historical simulation case, not OpenFOAM version 14",
+  "source_details": [
+    {
+      "path": "constant/metal/materials/castIron",
+      "blob_sha": "135d272b849f329bfd8a1208d4a0b5987d6e59e8",
+      "properties": [
+        "rho",
+        "Cp",
+        "molWeight",
+        "mu",
+        "Pr",
+        "heRhoThermo",
+        "hConst",
+        "sensibleEnthalpy"
+      ]
+    },
+    {
+      "path": "constant/mold/materials/silica",
+      "blob_sha": "df4bdd5020ab70470b10746a4655c6b38bdd1d8c",
+      "properties": [
+        "rho",
+        "Cv",
+        "kappa",
+        "molWeight",
+        "heSolidThermo",
+        "eConst"
+      ]
+    },
+    {
+      "path": "0/metal/T",
+      "blob_sha": "fb1ff8045a285a663d3e409256f53cd4e12a63b3",
+      "properties": [
+        "initialT",
+        "h",
+        "Ta",
+        "emissivity",
+        "thicknessLayers",
+        "kappaLayers"
+      ]
+    },
+    {
+      "path": "0/mold/T",
+      "blob_sha": "76622b73e240dd05fba26628167171d736a6fdf3",
+      "properties": [
+        "initialT",
+        "h",
+        "Ta",
+        "emissivity"
+      ]
+    },
+    {
+      "path": "system/controlDict",
+      "blob_sha": "d9ea9bfcbeffe126d1449fb304745c231921fdbc",
+      "properties": [
+        "deltaT",
+        "endTime",
+        "writeInterval",
+        "adjustTimeStep",
+        "maxCo"
+      ]
+    },
+    {
+      "path": "system/fvSolution",
+      "blob_sha": "350da0b4d1bc92bc2e6e3e3e120a9ac98fd298f8",
+      "properties": [
+        "globalPIMPLE"
+      ]
+    },
+    {
+      "path": "system/metal/fvSolution",
+      "blob_sha": "eff8d8a5a7c94228c6b0931f668e330384f35810",
+      "properties": [
+        "regionalPIMPLE",
+        "nEnergyCorrectors_2_not_proven_effective"
+      ]
+    },
+    {
+      "path": "constant/metal/fvModels",
+      "blob_sha": "67903ac9804f63e9c40d734d9038f628c6076a95",
+      "properties": [
+        "phaseChangeSource"
+      ]
+    }
+  ],
+  "metal": {
+    "thermoType": {
+      "type": "heRhoThermo",
+      "transport": "const",
+      "thermo": "hConst",
+      "equationOfState": "rhoConst",
+      "energy": "sensibleEnthalpy"
+    },
+    "rho_kg_m3": 6820,
+    "Cp_J_kg_K": 827,
+    "molWeight_g_mol": 56,
+    "mu_Pa_s": 0.0055,
+    "Pr": 0.14,
+    "kappa_derived_W_m_K": 32.48928571428571,
+    "kappa_derivation": "const transport: kappa = mu * Cp / Pr; this is DERIVED, not an explicit original kappa property",
+    "T_initial_K": 1500,
+    "top": {
+      "type": "externalWallHeatFluxTemperature",
+      "h_W_m2_K": 10,
+      "Ta_K": 300,
+      "emissivity": 0.3
+    },
+    "interface": {
+      "type": "coupledTemperature",
+      "layer_thickness_m": 0.0002,
+      "layer_kappa_W_m_K": 0.1,
+      "layer_conductance_W_m2_K": 500
+    },
+    "phaseChangeSource": {
+      "Tsol_K": 1423,
+      "Tliq_K": 1473,
+      "L_J_kg": 228600,
+      "alpha1e": 0.8,
+      "relax": 0.1,
+      "Cu": 100000,
+      "q": 0.001,
+      "beta_1_K": 0.000113,
+      "rhoRef_kg_m3": 6820
+    }
+  },
+  "mold": {
+    "thermoType": {
+      "type": "heSolidThermo",
+      "transport": "constIsoSolid",
+      "thermo": "eConst",
+      "equationOfState": "rhoConst",
+      "energy": "sensibleInternalEnergy"
+    },
+    "rho_kg_m3": 1500,
+    "Cv_J_kg_K": 700,
+    "kappa_W_m_K": 2,
+    "molWeight_g_mol": 28,
+    "T_initial_K": 300,
+    "exteriors": {
+      "type": "externalWallHeatFluxTemperature",
+      "h_W_m2_K": 10,
+      "Ta_K": 300,
+      "emissivity": 0.5
+    },
+    "interface": {
+      "type": "coupledTemperature"
+    }
+  },
+  "simulation": {
+    "application": "foamMultiRun",
+    "regionSolvers": {
+      "metal": "fluid",
+      "mold": "solid"
+    },
+    "deltaT_s": 0.001,
+    "endTime_s": 10,
+    "writeEverySteps": 100,
+    "adjustTimeStep": false,
+    "maxCo_configured": 0.25,
+    "globalPIMPLE": {
+      "nOuterCorrectors": 3,
+      "nCorrectors": 2,
+      "nNonOrthogonalCorrectors": 1
+    },
+    "metalRegionPIMPLE": {
+      "nEnergyCorrectors_written": 2,
+      "effective_number_of_energy_solves_not_confirmed": true
+    }
+  },
+  "limitations": [
+    "C14 is a 2D fluid-solid phase-change model; C3D04-T0 is a 3D two-solid numerical surrogate, not identical physics.",
+    "C14 Cp=827 is NOT an explicit metal Cv; a solid surrogate can use an explicitly labeled Cp-as-Cv engineering approximation only.",
+    "Metal conductivity is derived from const transport mu, Cp, Pr, not an explicit C14 metal kappa field.",
+    "Exterior C14 h=10 and finite contact conductance do not form an adiabatically closed two-solid system.",
+    "No C14-to-3D transfer has been checked by native OpenFOAM CFD. Do not report C14 physics as validated in C3D04.",
+    "Existing C14 original source files are immutable and must never be rewritten."
+  ]
+}
