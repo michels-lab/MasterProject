@@ -11,7 +11,9 @@ TESTS="$HERE/../tests"
 # Keep the original output immutable and emit the expanded per-predicate audit
 # at a NEW path. Never overwrite either audit, logs or meshes.
 PREVIOUS="$CASE/HEX8_NATIVE_ACCEPTANCE_REVIEW_20261119.json"
-OUTPUT="$CASE/HEX8_NATIVE_ACCEPTANCE_REVIEW_PROVENANCE_DETAIL_20261119.json"
+# Follow-up after fixing a truncated *expected* mold SHA in the reader.
+# This writes fresh evidence; all prior failed audits remain untouched.
+OUTPUT="$CASE/HEX8_NATIVE_ACCEPTANCE_REVIEW_CANONICAL_SHA_20261119.json"
 
 if [[ ! -d "$CASE/constant/metal/polyMesh" || ! -d "$CASE/constant/mold/polyMesh" ]]; then
     echo "BLOCKED: preserved native HEX8 mesh missing: $CASE" >&2
