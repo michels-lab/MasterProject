@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
   "audit_kind": "deterministic_full_tracked_tree",
-  "tracked_files_total": 38897,
-  "classified_files_total": 38892,
-  "docs_content_inspected": 159,
+  "tracked_files_total": 38898,
+  "classified_files_total": 38893,
+  "docs_content_inspected": 160,
   "large_docs_skipped": 0,
   "excluded_reports": 5,
   "roles": {
@@ -12,7 +12,7 @@
     "bitacora": 5,
     "config": 7,
     "data": 31,
-    "document": 125,
+    "document": 126,
     "index": 29,
     "license": 1,
     "simulation_case_file": 106,
@@ -28,7 +28,7 @@
     "POTENTIAL_UNLOGGED_CHANGES": 2
   },
   "finding_total": 2,
-  "inventory_fingerprint": "47c1483733b20f8641d62e0bd086e448a397b4ec1dc44c2124c2d6f94812a6bf",
+  "inventory_fingerprint": "a7fb1e286de0a3924a5b770373e415d6219aeebf1e3900c7f3f23df8a25e0167",
   "evidence_fingerprint": "5cf9b79768f6ac2e48b6e539f1e7911d789d275e0699821da01ac6ec11491bfe",
   "files": [
     {
@@ -323,7 +323,7 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "269ebcbbfcdaed737fec74f1e5762ba261fea81f"
+      "blob": "0afcc0895ce12b93ec8dfe9fba15d369c196a20f"
     },
     {
       "path": "RUN_CASE_REGISTRY.csv",
@@ -271464,6 +271464,13 @@
       "blob": "2debf7a7453c1a294d0869876056503c0b1134d5"
     },
     {
+      "path": "docs/C3D_05_HEX8_PRIMER_INTENTO_PYTHON_20261119_ES.md",
+      "role": "document",
+      "purpose": "manual/decision/report/historical note",
+      "certainty": "inferred",
+      "blob": "200d1007e4bad4c2ed50f06ffeb2954f61db5df9"
+    },
+    {
       "path": "docs/C3D_05_HXT_RESULTADO_Y_PILOTO_HEX_20261118_ES.md",
       "role": "document",
       "purpose": "manual/decision/report/historical note",
@@ -271489,7 +271496,7 @@
       "role": "data",
       "purpose": "structured/research data (semantics not validated)",
       "certainty": "rule",
-      "blob": "2fbc96067cdc96e1a656e5cc4a6a398d89f1a21e"
+      "blob": "d9c130632437a1f799dad6660a952ced6cc8e8cd"
     },
     {
       "path": "docs/C3D_REINICIO_20261112_ES.md",
