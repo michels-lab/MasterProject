@@ -10,10 +10,24 @@ Un solo paquete para pasar del mallado aceptado preliminarmente a **un experimen
 Base de geometría (SOLO LECTURA): `~/OpenFOAM/C3D04_V4_TRANSITION_REPAIR_01/T02`.
 Referencia ya medida: 21,312 celdas (8,960 hierro + 12,352 arena), `Mesh OK` 3/3, contacto recíproco `mappedWall` 2,496 caras por lado, área 6,343.771874 mm². Distancia superficial STL–malla máxima **muestreada** 0.104973 mm, no Hausdorff certificado. No ortogonalidad >70°: 572 global, 276 hierro, 232 arena; diferencia 64/64 **identificada sobre interfaz**, investigación cerrada. Máximo global 82.92°; **no hay demostración de estabilidad o independencia de malla**.
 
+## Revisión integral de integridad técnica — 19-11-2026
+
+El código original omitía **`system/fvSolution` de la raíz**, necesario para configurar el PIMPLE multirregión de `foamMultiRun`. La referencia oficial Foundation 14 `tutorials/multiRegion/CHT/heatedDuct/system/fvSolution` tiene un bloque `PIMPLE` global separado de `system/metal/fvSolution`. Se añadió como **décimo archivo** y se exigió en `T0_INPUTS.json` un `nEnergyCorrectors` de procedencia/justificación explícita. **No se sustituyen valores físicos desconocidos con números de tutorial**.
+
+- Fuente oficial: https://raw.githubusercontent.com/OpenFOAM/OpenFOAM-14/master/tutorials/multiRegion/CHT/heatedDuct/system/fvSolution
+- Fuente oficial de interfaz: https://doc.cfd.direct/openfoam/user-guide-v14/thermal-boundary-conditions
+- Fuente oficial del solver multi-región: https://cpp.openfoam.org/v14/foamMultiRun_8C.html
+
+Se reforzaron los **diez diccionarios** y el proceso **de materialización atómica**: la copia de las regiones nativas se verifica por hashes SHA-256; los diccionarios se comprueban con `foamDictionary` de Foundation14 **en carpeta temporal**; solamente después se publica la carpeta final nueva. Si copia o análisis nativo falla, el directorio definitivo no aparece y la carpeta temporal se limpia. El script nunca invoca un solver. El chequeo de BC también rechaza **cualquier parche físico no vacío** que no tenga asignación térmica explícita, evitando soluciones incompletas con `unexpectedFaces` accidentalmente activo.
+
+`run_integrated_milestone.sh` integra la batería positiva/negativa completa `test_integrated_case_a.py` en una sola entrada. El CI versionado inspecciona también el estado/porcentaje dinámico, el `system/fvSolution` global, protección de V4/T02 y el modo atómico. **Estos cambios están publicados; no afirmar pruebas CI aprobadas o diccionarios ejecutados en WSL si no hay salida observada.**
+
+**Estado científico:** T0 sigue en etapa de diseño, con insumos `null` hasta que se documenten; `nEnergyCorrectors` y la corrección no ortogonal son hipótesis de estrategia numérica, **no validación de estabilidad**. T0 continúa sin representar fase líquida, solidificación o el contorno convectivo real del QuickCup.
+
 ## Archivos entregados
 
 - [`T0_INPUTS.json`](T0_INPUTS.json): **valores materiales e iniciales explícitamente `null`**, fuentes de cada propiedad igualmente nulas; seleccionar valores trazables y justificar conversiones `c_p`/`C_v` antes de continuar. Nunca usar números sintéticos como datos de fundición.
-- [`scripts/prepare_case_a_t0.py`](scripts/prepare_case_a_t0.py): controlador único Python para validar entradas, verificar los datos guardados nativos del Caso A y los nombres reales de los parches, generar **nueve archivos** OpenFOAM Foundation 14 orientativos en memoria y, **solo con autorización explícita `--materialize` y entradas completas**, crear una **carpeta separada** con copia física de `polyMesh`.
+- [`scripts/prepare_case_a_t0.py`](scripts/prepare_case_a_t0.py): controlador único Python para validar entradas, verificar los datos guardados nativos del Caso A y los nombres reales de los parches, generar **diez archivos** OpenFOAM Foundation 14 orientativos en memoria (**incluido `system/fvSolution` global**) y, **solo con autorización explícita `--materialize` y entradas completas**, crear una **carpeta separada** con copia física de `polyMesh`.
 - [`run_integrated_milestone.sh`](run_integrated_milestone.sh): **orquestador único** que integra verificación de contrato de avance, regresiones, preflight de caso nativo y propiedades, y entorno F14; `--materialize` únicamente para etapa futura autorizada. Jamás invoca `foamMultiRun`, `blockMesh` ni `checkMesh` y nunca cambia V4/T02.
 - [`scripts/report_case_a_progress.py`](../scripts/report_case_a_progress.py): recalcula `Etapa N/10` y `Avance D/10=P%`, valida consistencia con el JSON canónico.
 
