@@ -21,13 +21,20 @@ import report_case_a_progress as progress
 class IntegratedCaseAT0(unittest.TestCase):
     def test_01_progress_is_consistent_and_canonical(self):
         status = progress.report(progress.STATUS_FILE)
-        self.assertEqual(status["current_stage"], "05_THERMAL_T0_DESIGN")
-        self.assertEqual(status["progress_count_done"], 4)
+        self.assertEqual(status["scope"], "CASE_A_C3D_04_V4_T02_ONLY")
         self.assertEqual(status["progress_count_total"], 10)
-        self.assertEqual(status["progress_percent"], 40)
-        self.assertFalse(status["CFD_run"])
-        self.assertFalse(status["grid_independence"])
-        self.assertFalse(status["physical_validation"])
+        self.assertEqual(status["progress_count_done"],
+                         sum(e["status"] == "DONE" for e in status["milestones"]))
+        self.assertEqual(status["progress_percent"],
+                         10*status["progress_count_done"])
+        self.assertEqual(
+            status["current_stage"],
+            next(e["id"] for e in status["milestones"] if e["status"] == "IN_PROGRESS")
+        )
+        if status["current_stage"] == "05_THERMAL_T0_DESIGN":
+            self.assertFalse(status["CFD_run"])
+        for field in ("CFD_run", "grid_independence", "physical_validation"):
+            self.assertIs(type(status[field]), bool)
         with tempfile.TemporaryDirectory() as folder:
             p = pathlib.Path(folder) / "status.json"
             bad = copy.deepcopy(status)
@@ -37,7 +44,17 @@ class IntegratedCaseAT0(unittest.TestCase):
                 progress.report(p)
 
     def test_02_real_inputs_are_strictly_blocked_until_sourced(self):
-        cfg = json.loads(engine.INPUTS.read_text(encoding="utf-8"))
+        cfg = engine.synthetic_fixture()
+        # Synthetic deliberately unfilled fixture, independent of whether
+        # the user later enters correctly sourced real data into T0_INPUTS.
+        for region in ("metal", "mold"):
+            for field, source in engine.FIELDS.items():
+                cfg[region][field] = None
+                cfg[region][source] = None
+        for field in ("deltaT_s", "endTime_s", "writeEverySteps",
+                      "nNonOrthogonalCorrectors", "source_time_choices",
+                      "source_nonorth_choice"):
+            cfg["simulation"][field] = None
         self.assertGreaterEqual(len(engine.validate(cfg)), 15)
         self.assertFalse(engine.positive(None))
         self.assertFalse(engine.positive(float("nan")))
