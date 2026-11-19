@@ -1,3 +1,7 @@
+## Mandatory project contract — PROJECT_PROGRESS_CONTRACT_20261119
+
+For ALL MasterProject 2D/3D cases, consult `docs/POLITICA_ENTREGA_INTEGRAL_Y_ESTADO_ES.md` and `docs/PROJECT_STAGE_STATUS.json` before any work and report case, stage, progress N/Y with properly bounded %, evidence/blocker and next full integrated milestone in EVERY update. No iterative one-off WSL tests or fake validation; integrate root-cause fixes, internal tests and synchronized ES/EN logs. Preserve accepted mesh/STEP. Only user's laptop runs OpenFOAM. This overrides any older piecemeal flow.
+
 ## MANDATORY project reporting and integrated delivery rule (2026-11-19)
 
 **Direct instruction from the project owner, persistent across conversations and agents.** Never omit project **stage and progress** when responding about MasterProject. Always inspect the owning case status first and explicitly say "**Etapa N/Total · Avance D/Total = P% de hitos**", what was concretely done, blockers, and the next integrated milestone. Explain the metric; it is NOT a percent of physical validation or time remaining. For **Caso A C3D-04**, the canonical machine-readable register is [`docs/C3D04_CASE_A_STATUS.json`](docs/C3D04_CASE_A_STATUS.json), and its mandatory scoped instructions live in [`cases_3d/C3D_04_rounded_multiblock_pilot/AGENTS.md`](cases_3d/C3D_04_rounded_multiblock_pilot/AGENTS.md). Other cases must use their own truthful register; NEVER borrow Caso A's percentage.

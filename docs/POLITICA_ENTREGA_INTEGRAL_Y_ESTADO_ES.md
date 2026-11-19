@@ -1,0 +1,14 @@
+# Regla obligatoria de entrega integral y estado de avance — MasterProject
+**PROJECT_PROGRESS_CONTRACT_20261119 · 2026-11-19 · aplicable a TODOS los casos 2D/3D A/B y futuros.**
+Esta es una exigencia permanente del investigador: eliminar las rondas interminables de pruebas por pieza, corregir causas y entregar resultados completos desde el inicio.
+
+1. **SIEMPRE reportar** caso, etapa X/Y, avance N/Y y porcentaje SOLAMENTE cuando sus hitos tengan denominador definido, estado basado en evidencia (sin inventar validación), bloqueo y siguiente entregable integral. Leer `docs/PROJECT_STAGE_STATUS.json` antes de contestar. El porcentaje de hitos del Caso B nunca se anunciará como porcentaje de la tesis.
+2. **Trabajar por hitos completos**: inspeccionar el estado real, resolver cambios interdependientes juntos (geometría, malla, parches, propiedades, solver, análisis y documentación cuando aplique) y ejecutar automáticamente las pruebas de código disponibles. No entregar al investigador un preflight suelto como si resolviera un hito CFD.
+3. **No repetir pruebas ya concluidas** en entradas idénticas por SHA ni reconstruir mallas aceptadas sin causa registrada. En caso de error, corregir causa raíz y controles preventivos en la misma entrega, no añadir parches y comandos sucesivos.
+4. **Una intervención local mínima** por hito que realmente requiera WSL: crear un orquestador persistente y reversible, con diagnóstico, salida y reporte en la misma invocación. No reclamar ejecución local ni CFD desde CI/GitHub; el investigador conserva el control de la corrida real.
+5. **Actualizar simultáneamente** bitácoras audit ES/EN, matrices ES/EN, índice, README raíz/del caso, protocolo, hoja de ruta y registro cuando cambie estado. Mantener historia intacta, agregar entradas fechadas y distinguir malla PASSED, CFD RUN, VALIDACIÓN NUMÉRICA y VALIDACIÓN EXPERIMENTAL.
+6. **Criterio de término**: la entrega de etapa incluye configuración coherente, controles automáticos de código, reporte de lo comprobado, resultados que sí existen, limitaciones y siguiente hito. No lanzar pruebas de CFD ni inventar propiedades físicas.
+7. **Mecanismo de prevención**: `tools/check_project_delivery_contract.py --check` y workflow de CI revisan la coherencia documental y el estado. **Es una comprobación estática, no certifica cumplimiento humano ni CFD.**
+
+## Estado principal al 19-11-2026
+**C3D-05/B: etapa 3/7 (T0); 2/7 puertas cerradas = 29% de hitos técnicos.** CAD/procedencia y malla HEX8/contacto verificadas (270,788 celdas, 1,826 caras severamente no ortogonales). T0 en código sin valores físicos respaldados, caso no materializado, sin solver y sin independencia de malla. Próximo paquete: completar parámetros con trazabilidad y preparar verificación térmica completa para una sola ejecución WSL cuando los datos existan. [Estado legible por máquina](PROJECT_STAGE_STATUS.json).

@@ -1,0 +1,98 @@
+{
+  "schema": "MASTERPROJECT_STAGE_PROGRESS_V1",
+  "date": "2026-11-19",
+  "case": "C3D_05_step_gmsh_conformal",
+  "stage": "3/7 — T0 acoplamiento térmico: preparación de parámetros",
+  "completed": 2,
+  "total": 7,
+  "percent_hitos": 29,
+  "percentage_scope": "SOLO_HITOS_TECNICOS_DEL_CASO_NO_TESIS_NO_CFD",
+  "gates": [
+    {
+      "id": "G1",
+      "desc": "CAD STEP/procedencia verificados",
+      "done": true,
+      "evidence": "docs/C3D_05_HEX8_VALIDACION_INDEPENDIENTE_FINAL_20261119_ES.md"
+    },
+    {
+      "id": "G2",
+      "desc": "malla HEX8 metal/arena y contacto aceptados con advertencia de no ortogonalidad",
+      "done": true,
+      "evidence": "docs/C3D_05_NOORTH_HOPS_REALES_Y_TRANSICION_FISICA_20261119_ES.md"
+    },
+    {
+      "id": "G3",
+      "desc": "T0 materializado con propiedades documentadas",
+      "done": false,
+      "evidence": "docs/C3D_05_T0_CONDUCCION_MULTIRREGION_F14_20261119_ES.md"
+    },
+    {
+      "id": "G4",
+      "desc": "T0 ejecutado: acoplamiento y balance energético revisados",
+      "done": false,
+      "evidence": null
+    },
+    {
+      "id": "G5",
+      "desc": "T1 solidificación y calor latente validados numéricamente",
+      "done": false,
+      "evidence": null
+    },
+    {
+      "id": "G6",
+      "desc": "T2 contracción y alimentación verificadas",
+      "done": false,
+      "evidence": null
+    },
+    {
+      "id": "G7",
+      "desc": "convergencia malla/tiempo y comparación con curvas experimentales",
+      "done": false,
+      "evidence": null
+    }
+  ],
+  "mesh": {
+    "cells_metal": 92200,
+    "cells_mold": 178588,
+    "faces_contact_per_side": 12636,
+    "nonorth_over_70deg": 1826,
+    "independence": false
+  },
+  "t0": {
+    "source_prepared": true,
+    "case_materialized": false,
+    "wsl_preflight_observed": false,
+    "solver_executed": false,
+    "physical_parameters_complete": false
+  },
+  "other_cases": [
+    {
+      "case_id": "C3D-01",
+      "status": "Malla rechazada; interfaz CHT no verificada",
+      "evidence": "docs/C3D_01_ESTADO_REAL_20261110_ES.md"
+    },
+    {
+      "case_id": "C3D-02",
+      "status": "Ablaciones snappy/STL fallidas",
+      "evidence": "docs/C3D_02_ABLACION_STL_V2_20261118_ES.md"
+    },
+    {
+      "case_id": "C3D-03",
+      "status": "Piloto blockMesh 3D con malla preliminar aceptada",
+      "evidence": "docs/C3D_03_RESULTADO_NATIVO_20261118_ES.md"
+    },
+    {
+      "case_id": "C3D-04 Caso A",
+      "status": "V4/T02, 64 caras severas sobre interfaz confirmadas, sin CFD",
+      "evidence": "docs/C3D_04_NO_ORTHO_T02_20261119_ES.md"
+    },
+    {
+      "case_id": "C3D-05 Caso B",
+      "status": "HEX8 aceptada con 1826 nonorth severas, T0 no materializado",
+      "evidence": "docs/C3D_05_T0_CONDUCCION_MULTIRREGION_F14_20261119_ES.md"
+    }
+  ],
+  "blocker": "Datos rho/Cv/kappa, T metal/arena y dt con fuentes; T0 no ejecutado en laptop",
+  "next_integrated_delivery": "T0 completo documentado y una sola transferencia/ejecución WSL cuando existan insumos termofísicos válidos",
+  "science": "NO_CFD_3D_RUN_NO_PHYSICAL_VALIDATION"
+}
