@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
   "audit_kind": "deterministic_full_tracked_tree",
-  "tracked_files_total": 38884,
-  "classified_files_total": 38879,
-  "docs_content_inspected": 156,
+  "tracked_files_total": 38889,
+  "classified_files_total": 38884,
+  "docs_content_inspected": 157,
   "large_docs_skipped": 0,
   "excluded_reports": 5,
   "roles": {
@@ -13,23 +13,23 @@
     "config": 7,
     "data": 31,
     "document": 124,
-    "index": 27,
+    "index": 28,
     "license": 1,
-    "simulation_case_file": 105,
+    "simulation_case_file": 108,
     "simulation_input": 2683,
     "simulation_log": 3155,
     "simulation_output": 32613,
     "source": 74,
-    "test": 26,
+    "test": 27,
     "web_ui": 1,
     "workflow": 19
   },
   "finding_counts": {
-    "POTENTIAL_UNLOGGED_CHANGES": 1
+    "POTENTIAL_UNLOGGED_CHANGES": 2
   },
-  "finding_total": 1,
-  "inventory_fingerprint": "712cc582b6bc99ba5a9117abb87da6a1944958616eef0875d7608875cb82d009",
-  "evidence_fingerprint": "15f0c894c4145edcfd7892f1edbf1a868dada85b62b24dd19a5477e3e6cbdaf4",
+  "finding_total": 2,
+  "inventory_fingerprint": "33146a74685a9b9bee073c970a12d66232d7bcb16eb11238f5d834bf5b0e22ff",
+  "evidence_fingerprint": "f3e5752b136e5c8d9ef59dc790cd0cc706db64318a228f5b9e0233ec58c9756e",
   "untracked_audited": false,
   "ignored_audited": false,
   "binary_contents_audited": false,
