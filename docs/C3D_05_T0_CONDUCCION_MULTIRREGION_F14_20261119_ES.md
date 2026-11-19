@@ -1,3 +1,5 @@
+> **19-11-2026 | PROJECT_PROGRESS_CONTRACT_20261119 — ADENDA DE TRABAJO INTEGRAL:** ya no se considera un preflight aislado como una entrega completa. Caso B etapa 3/7, 2/7 hitos técnicos = 29%; T0 aún sin propiedades trazables ni materialización/solver. Al cerrar propiedades se debe preparar un solo bloque de configuración, comprobación y corrida local controlada, sin repetir auditorías STEP/HEX8 aceptadas. [Política](POLITICA_ENTREGA_INTEGRAL_Y_ESTADO_ES.md), [estado](PROJECT_STAGE_STATUS.json). La descripción técnica previa de T0 se mantiene sin alterar.
+
 # C3D-05 Caso B — Etapa T0: conducción transitoria metal–arena, estructura Foundation 14 preparada
 
 **Fecha:** 19 de noviembre de 2026. **Estado al crear:** archivos reales de configuración T0, plantillas y verificadores publicados en el repositorio; **NO se ha ejecutado el nuevo preflight en WSL**, **no se ha materializado ningún caso térmico con datos físicos**, **NO CFD**.

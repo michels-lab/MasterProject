@@ -1,3 +1,5 @@
+> **19-11-2026 | PROJECT_PROGRESS_CONTRACT_20261119 — AMPLIACIÓN QUE PREVALECE:** la regla de «un comando» es insuficiente si ese comando solo realiza un preflight. La entrega debe ser el **HITO INTEGRAL**, con pruebas de código internas, sin trabajo fragmentado para el investigador y con reporte obligatorio de **etapa y avance** para TODOS los casos. [Política](POLITICA_ENTREGA_INTEGRAL_Y_ESTADO_ES.md) · [Estado](PROJECT_STAGE_STATUS.json). Caso B: etapa 3/7, 2/7 = 29% de hitos técnicos; no CFD.
+
 # Regla permanente del proyecto — instrucciones unificadas
 
 **Fecha de incorporación:** 18-11-2026. **Origen:** instrucción explícita del investigador durante el diagnóstico C3D-05 del caso B 3D. **Ámbito:** todo `michels-lab/MasterProject` (casos A/B, mallado, solver, bitácoras, pruebas, auditorías, Linux WSL y Git).

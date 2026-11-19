@@ -1,3 +1,5 @@
+> **19-11-2026 | PROJECT_PROGRESS_CONTRACT_20261119 — SIN RONDAS DE MICROPRUEBAS:** Caso B **etapa 3/7, 2/7=29% de hitos técnicos**; T0 es fuente preparada, NO caso materializado, no CFD. Los comandos T0a/T0b debajo se conservan como herramientas históricas internas, **no** como requisito de entregar dos tandas de trabajo al investigador. Próximo bloque único: fuentes de propiedades + configuración + diccionarios + energía para una sola intervención WSL cuando existan los datos. [Política](../../../docs/POLITICA_ENTREGA_INTEGRAL_Y_ESTADO_ES.md) · [Estado](../../../docs/PROJECT_STAGE_STATUS.json).
+
 # T0 — conduction-only two-solid QuickCup (CASE B C3D-05)
 
 **Status:** template + strict generator; **NO CFD executed, NOT yet a runnable physical case**. The exact accepted source is `~/OpenFOAM/C3D05_STEP_GMSH_HEX_SUBDIV_COARSE_02`. This tree **does not contain or modify** original meshes.
