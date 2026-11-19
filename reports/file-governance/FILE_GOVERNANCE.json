@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "audit_kind": "deterministic_full_tracked_tree",
-  "tracked_files_total": 38953,
-  "classified_files_total": 38948,
+  "tracked_files_total": 38954,
+  "classified_files_total": 38949,
   "docs_content_inspected": 171,
   "large_docs_skipped": 1,
   "excluded_reports": 5,
@@ -22,14 +22,14 @@
     "source": 99,
     "test": 37,
     "web_ui": 1,
-    "workflow": 20
+    "workflow": 21
   },
   "finding_counts": {
     "POTENTIAL_UNLOGGED_CHANGES": 2
   },
   "finding_total": 2,
-  "inventory_fingerprint": "f5bc9afacec8593e32535a483bd60966cc005c6bfe3fb34d5f623b7c71cb4354",
-  "evidence_fingerprint": "c8ebcb6e04ffe69e13596c10598c1e6c812c6974cda3901853b7d950357e3f2d",
+  "inventory_fingerprint": "a4d81f207c7bdb7bac5ee1ed9afe7f2da707b190edf1218c28d81c056ecaca6f",
+  "evidence_fingerprint": "2eb77ee3c5b59067fa20f2639f408574e92df05c935fdacad4bd21e80e650a03",
   "files": [
     {
       "path": ".github/agents/openfoam-solidification.agent.md",
@@ -72,6 +72,13 @@
       "purpose": "GitHub Actions automation",
       "certainty": "rule",
       "blob": "0b7a9effb677940149772ded624881b508323877"
+    },
+    {
+      "path": ".github/workflows/case-a-t0-stage-contract.yml",
+      "role": "workflow",
+      "purpose": "GitHub Actions automation",
+      "certainty": "rule",
+      "blob": "aa538ef9b796829c39013f38add2771f4d082b4a"
     },
     {
       "path": ".github/workflows/file-governance-audit.yml",
@@ -330,7 +337,7 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "6d7efb450f6aded4467027a93b8b46b878dae7bc"
+      "blob": "e269dddaabfd8409a3dabccdfb2e1e438ad2cfa4"
     },
     {
       "path": "RUN_CASE_REGISTRY.csv",
@@ -272670,20 +272677,20 @@
   ],
   "findings": [
     {
-      "id": "b912159d2200268d",
+      "id": "f2244a47be07a56a",
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_EN.md",
-      "observation": "3 implementation/config paths changed since this log's last commit; examples: .github/workflows/project-delivery-contract.yml, cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/run_integrated_milestone.sh, cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/tests/test_integrated_case_a.py",
+      "observation": "4 implementation/config paths changed since this log's last commit; examples: .github/workflows/case-a-t0-stage-contract.yml, .github/workflows/project-delivery-contract.yml, cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/run_integrated_milestone.sh, cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/tests/test_integrated_case_a.py",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     },
     {
-      "id": "c8b10bd17a273e76",
+      "id": "f4033b1767b156c2",
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_ES.md",
-      "observation": "3 implementation/config paths changed since this log's last commit; examples: .github/workflows/project-delivery-contract.yml, cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/run_integrated_milestone.sh, cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/tests/test_integrated_case_a.py",
+      "observation": "4 implementation/config paths changed since this log's last commit; examples: .github/workflows/case-a-t0-stage-contract.yml, .github/workflows/project-delivery-contract.yml, cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/run_integrated_milestone.sh, cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/tests/test_integrated_case_a.py",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     }
