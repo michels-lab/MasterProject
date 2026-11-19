@@ -32,3 +32,15 @@ done
 ! grep -Eq '^[[:space:]]*(foamMultiRun|runApplication[[:space:]]+foamMultiRun|rm[[:space:]]+-rf)' "$RUN"
 echo "OK: C3D-05 original STEP SHA256s, automatic CAD paths, independent Gmsh pipeline and OpenFOAM 14 mesh-only static contract"
 echo "NOT EXECUTED: CAD import, Gmsh, gmshToFoam, splitMeshRegions, CFD"
+
+# HXT trial: verify safe one-command runner and no-write capability preflight.
+HXT="$ROOT/scripts/run_hxt_pilot.sh"
+PREFLIGHT="$ROOT/scripts/preflight_hxt.py"
+[[ -s "$HXT" && -s "$PREFLIGHT" ]] || { echo "HXT runner/preflight absent"; exit 1; }
+bash -n "$HXT"
+python3 -c 'import ast,pathlib,sys; ast.parse(pathlib.Path(sys.argv[1]).read_text())' "$PREFLIGHT"
+for expected in 'C3D05_ALGORITHM3D=10' 'preflight_hxt.py' 'C3D05_STEP_GMSH_HXT_01' 'diagnose_existing_mesh.py' 'measure_interface_area.py' 'NO CFD'; do
+  grep -Fq -- "$expected" "$HXT" || { echo "HXT runner missing $expected"; exit 1; }
+done
+grep -Fq '"Mesh.Algorithm3D", 10' "$PREFLIGHT"
+grep -Fq -- '--algorithm-3d "$ALGORITHM3D"' "$RUN"
