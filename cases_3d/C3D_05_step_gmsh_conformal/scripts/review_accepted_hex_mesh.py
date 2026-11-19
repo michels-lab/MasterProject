@@ -19,7 +19,10 @@ VOLUMES_M3 = {"metal": 4.7987697e-5, "mold": 1.02843333e-4}
 
 def number(pattern: str, text: str, kind=float):
     m = re.search(pattern, text, re.I)
-    return kind(m.group(1)) if m else None
+    # OpenFOAM often prints a sentence-ending period after numeric fields,
+    # e.g. "Total volume = 4.7975e-05. Cell volumes OK.".
+    # Strip punctuation but preserve a decimal point inside the number.
+    return kind(m.group(1).rstrip(".")) if m else None
 
 
 def native_quality(path: Path, region: str) -> dict:
