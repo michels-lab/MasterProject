@@ -56,3 +56,40 @@ python3 cases_3d/C3D_04_rounded_multiblock_pilot/scripts/diagnose_existing_defec
 **Puerta para un nuevo candidato curvilíneo:** identificar espacialmente las celdas de determinante bajo y caras sesgadas, modificar únicamente variables geométricas/discretización que expliquen el defecto, ejecutar en `C3D04_OUT` nuevo y comparar con el ensayo preservado. Mantener las 2 regiones, la abertura inferior y las condiciones científicas; **no reducir umbrales de `checkMesh` ni lanzar `foamMultiRun` con la malla rechazada**. No tocar las rutas del Caso B.
 
 Fuente: salida de terminal aportada por el investigador y scripts del repositorio.
+
+## Diagnóstico espacial y área realmente medidos (salida WSL posterior)
+
+El investigador ejecutó exitosamente el auto-test del lector VTK legacy ASCII/BINARY y el diagnóstico de solo lectura. El reporte confirma los defectos de los logs y **localiza los vértices de las superficies exportadas**:
+
+| Región / exportación | Vértices superficie VTK | Extensión Y [mm] | Extensión X/Z [mm] |
+|---|---:|---|---|
+| Padre `underdeterminedCells.vtk` | 88 | −40.0 a −39.8 | 10.8871 a 40.9129 |
+| Metal `underdeterminedCells.vtk` | 304 | **−40.0 a −39.8** | 10.811 a 40.989 |
+| Arena `skewFaces.vtk` | 40 | **−39.8 a −39.5** | 10.291 a 41.509 |
+| Padre `nonOrthoFaces.vtk` | 712 | −40.0 a −39.8 | 4.91446 a 46.8855 |
+| Metal `nonOrthoFaces.vtk` | 544 | −40.0 a −39.8 | 10.811 a 40.989 |
+| Arena `nonOrthoFaces.vtk` | 228 | −40.0 a −39.8 | 4.91446 a 46.8855 |
+
+**Advertencia esencial:** cantidades de vértices VTK de la superficie ≠ cantidades de celdas/caras defectuosas; estas últimas siguen siendo **92 celdas metálicas de determinante pequeño** y **16 caras de arena sesgadas** según el log. Los intervalos Y se basan en límites geométricos de VTK, no centroides de celdas.
+
+El analizador recuperó directamente del `polyMesh` preservado, SIN ejecutar `checkMesh` ni escribir archivos:
+
+- `metal_to_mold`: **2,496 caras, 6,343.771874 mm²**.
+- `mold_to_metal`: **2,496 caras, 6,343.771874 mm²**.
+- Diferencia de área entre regiones: **0.000000 %**.
+- Error de área de contacto frente al STL: **−0.139498 %**, puerta preliminar **PASS**.
+- `metalTop`: **256 caras, 1,326.384174 mm²**, error frente al STL **−0.037782 %**.
+
+**La aceptación del área no invalida el rechazo de calidad de las mallas.** Las mediciones respaldan preservar geometría externa e interfaz y trabajar sobre distribución interior de elementos.
+
+## Variante controlada Caso A — C3D-04 V2, preparada, sin corrida
+
+[**C3D04_V2_BASAL_QUALITY**](../cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V2_BASAL_QUALITY/README.md) deja el contorno curvilíneo y las 2,496 caras compartidas sin cambios. Contiene dos intervenciones diferenciadas: redistribuir con `smoothstep` 12 vértices interiores del núcleo de hierro en tres estaciones basales; cambiar a `simpleGrading (1.5 1 1)` los 108 bloques anulares de arena de forma continua entre capas. Los 180 bloques, 144 arcos, total de celdas y contornos CAD aproximados se conservan. La comparación textual auditada confirma **12 líneas de vértices + 108 de grading y ninguna otra**, pero no existe resultado `blockMesh`/`checkMesh` de V2 todavía.
+
+La hipótesis es reducir la deformación axial del núcleo del hierro y concentrar celdas de arena en la interfaz. **No afirmar mejora hasta la corrida nativa.** El runner V2 mantiene sin excepciones `Mesh OK` del padre y ambas regiones, cero checks fallidos, contacto y área; no CFD.
+
+```bash
+cd ~/OpenFOAM/MasterProject
+git pull --ff-only
+bash cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V2_BASAL_QUALITY/Allmesh
+```
