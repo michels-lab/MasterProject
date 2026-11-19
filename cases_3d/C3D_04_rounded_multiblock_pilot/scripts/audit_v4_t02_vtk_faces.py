@@ -82,8 +82,9 @@ def parse_legacy_polydata(path: Path):
         if mode not in (b"ASCII", b"BINARY"):
             raise ValueError(f"Unsupported legacy VTK encoding: {mode!r}")
         dataset = next_nonempty_line(stream)
-        if dataset.upper() != b"DATASET POLYDATA":
-            raise ValueError(f"Unsupported DATASET {dataset!r}: expected POLYDATA")
+        if dataset.upper() not in (b"DATASET POLYDATA", b"DATASET UNSTRUCTURED_GRID"):
+            raise ValueError(f"Unsupported VTK DATASET {dataset!r}")
+        grid = dataset.upper() == b"DATASET UNSTRUCTURED_GRID"
         header = next_nonempty_line(stream).split()
         if len(header) != 3 or header[0].upper() != b"POINTS":
             raise ValueError("Legacy VTK missing POINTS block")
@@ -110,13 +111,13 @@ def parse_legacy_polydata(path: Path):
         while True:
             line = next_nonempty_line(stream)
             words = line.split()
-            if words[0].upper() == b"POLYGONS":
+            if words[0].upper() == (b"CELLS" if grid else b"POLYGONS"):
                 if len(words) != 3:
-                    raise ValueError("Bad POLYGONS header")
+                    raise ValueError("Bad CELLS/POLYGONS header")
                 count, total = int(words[1]), int(words[2])
                 break
             if words[0].upper() in (b"VERTICES", b"LINES", b"TRIANGLE_STRIPS",
-                                   b"CELLS", b"OFFSETS", b"CONNECTIVITY",
+                                   b"POLYGONS", b"CELLS", b"OFFSETS", b"CONNECTIVITY",
                                    b"POINT_DATA", b"CELL_DATA"):
                 raise ValueError(f"Unsupported face connectivity: {line!r}")
             raise ValueError(f"Unexpected VTK section after POINTS: {line!r}")
@@ -129,7 +130,21 @@ def parse_legacy_polydata(path: Path):
             if len(data) != total*4:
                 raise ValueError("Truncated binary POLYGONS")
             flat = list(struct.unpack(f">{total}i", data))
-        return points, polygons_from_flat(flat, count, len(points))
+        polygons = polygons_from_flat(flat, count, len(points))
+        if grid:
+            header = next_nonempty_line(stream).split()
+            if len(header) != 2 or header[0].upper() != b"CELL_TYPES" or int(header[1]) != count:
+                raise ValueError("UNSTRUCTURED_GRID missing matching CELL_TYPES section")
+            if mode == b"ASCII":
+                types = [int(x) for x in ascii_tokens(stream, count, "CELL_TYPES")]
+            else:
+                data = stream.read(count*4)
+                if len(data) != count*4:
+                    raise ValueError("Truncated binary CELL_TYPES")
+                types = struct.unpack(f">{count}i", data)
+            if any(t not in (5, 7, 9) for t in types):
+                raise ValueError("UNSTRUCTURED_GRID contains cells that are not triangle/polygon/quad faces")
+        return points, polygons
 
 
 def locate_y(y_mm: float) -> str:
@@ -269,7 +284,22 @@ def self_test():
             + struct.pack(">15f", *(x for p in points for x in p))
             + b"\nPOLYGONS 2 8\n" + struct.pack(">8i", *flat) + b"\n"
         )
-        for path in (ascii_path, binary_path):
+        grid_ascii = directory/"grid_ascii.vtk"
+        grid_ascii.write_text(
+            head+"ASCII\nDATASET UNSTRUCTURED_GRID\nPOINTS 5 float\n"
+            + " ".join(str(x) for p in points for x in p)+"\n"
+            + "CELLS 2 8\n"+" ".join(str(i) for i in flat)+"\n"
+            + "CELL_TYPES 2\n5 5\n",
+            encoding="ascii"
+        )
+        grid_binary = directory/"grid_binary.vtk"
+        grid_binary.write_bytes(
+            head.encode("ascii") + b"BINARY\nDATASET UNSTRUCTURED_GRID\nPOINTS 5 float\n"
+            + struct.pack(">15f", *(x for p in points for x in p))
+            + b"\nCELLS 2 8\n" + struct.pack(">8i", *flat)
+            + b"\nCELL_TYPES 2\n" + struct.pack(">2i", 5, 5) + b"\n"
+        )
+        for path in (ascii_path, binary_path, grid_ascii, grid_binary):
             vertices, got = parse_legacy_polydata(path)
             assert len(vertices) == 5 and got == polygons
             report = summarize_export(path, 2)
@@ -292,7 +322,7 @@ def self_test():
         else:
             raise AssertionError("Invalid VTK polygon vertex was accepted")
         assert locate_y(-39.800000000000004) == "-39.800..-39.500_mm"
-    print("SELF_TEST_OK: ASCII/BINARY VTK face connectivity, centroid bins, count mismatch and malformed face rejection")
+    print("SELF_TEST_OK: ASCII/BINARY POLYDATA and UNSTRUCTURED_GRID faces, centroid bins, count mismatch and malformed face rejection")
     print("STATIC_ONLY: no mesh or CFD utilities executed")
 
 
