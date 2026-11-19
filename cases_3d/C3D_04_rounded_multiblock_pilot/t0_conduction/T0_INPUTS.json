@@ -34,7 +34,9 @@
     "writeEverySteps": null,
     "nNonOrthogonalCorrectors": null,
     "source_time_choices": null,
-    "source_nonorth_choice": null
+    "source_nonorth_choice": null,
+    "nEnergyCorrectors": null,
+    "source_energy_coupling_choice": null
   },
   "physics_limitations": [
     "T0 treats both phases as constant-property solids; liquid cast iron and latent heat deliberately absent",
