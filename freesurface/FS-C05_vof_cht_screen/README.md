@@ -131,3 +131,39 @@ python3 analysis_tools/run_fs_c05_native_smoke.py \
 ```
 
 Si hay otro error de OpenFOAM, **no ocultarlo, no usar el anterior directorio fallido**. El ejecutor preserva log, ruta y estado de cada copia. Un eventual `NATIVE_TWO_STEP_VOF_CHT_STARTUP_COMPLETED_NOT_VALIDATED` solo acredita completar dos pasos, NO que las propiedades 1500/300 K, `kEpsilon`, calor `q`, Co, masa, energía ni solidificación estén validados. El apoyo inferior y CAD exacto siguen pendientes.
+
+## 19-11-2026 — Primer CFD **real** de FS-C05: ambos solvers completaron dos pasos
+
+El investigador confirmó desde `FS_C02_WORKTREE`, con OpenFOAM Foundation14 y commit `b3b29942b`, que la suite FS-C05 terminó **23 pruebas, OK**. Se reutilizó sin modificación el caso fuente `FS_C05_VOF_CHT_SCREEN_20261119T063448Z_84d08b6e`; el ejecutor reparó `div(rhoPhi,k)` y `div(rhoPhi,epsilon)` sólo dentro de otra carpeta, corriendo los dos pasos de `foamMultiRun`:
+
+```text
+FS-C05 STATUS: NATIVE_TWO_STEP_VOF_CHT_STARTUP_COMPLETED_NOT_VALIDATED
+ISOLATED output:
+/home/michel/OpenFOAM/FS_C05_NATIVE_SMOKE_RUNS/FS_C05_NATIVE_SMOKE_20261119T070806Z_7e8589e3
+Native CFD executed: True
+NO physical CHT balance, metal mass conservation, or solidification VALIDATION.
+```
+
+**Éxito comprobado en máquina real:** `foamMultiRun` finalizó hasta `t=2e-7 s` con los módulos `fluid compressibleVoF` y `mold solid`. El anterior bloqueo de discretización turbulenta `div(rhoPhi,epsilon)` fue subsanado. **No afirmar todavía** que el metal conserva la masa, el balance de flujo de calor en las 3136 caras sea exacto, el modelo térmico esté calibrado o que existan enfriamiento/solidificación físicamente relevantes en 0.2 microsegundos.
+
+### Paso siguiente de resultado físico: auditoría independiente de archivos guardados 0, 1e-7 y 2e-7 s
+
+Se implementó `analysis_tools/audit_fs_c05_postrun_fields.py` que **no modifica la corrida ni ejecuta OpenFOAM**. Audita el reporte de ejecución `FS_C05_NATIVE_SMOKE_REPORT.json`, log nativo íntegro, material/proveniencia, el `fvSchemes` corregido, los SHA de las mallas fluid/mold y las fases iniciales. A continuación, exige datos ASCII realmente guardados en las tres carpetas temporales `0`, `1e-7`, `2e-7` (formatos numéricos equivalentes aceptados) y lee `{alpha.metal,T}` del fluido y `T` de la arena.
+
+Desde los volúmenes geométricos de las celdas nativas calcula para los tres instantes:
+
+- `V_metal(t)=∑ alpha.metal_i × V_i` (valor crudo y valor acotado) y cambio relativo con respecto a `t=0`; muestra células donde `alpha` abandona `[0,1]` y una alerta cuando hay deriva superior a 0.1%.
+- Temperaturas promedio ponderadas **por volumen y `alpha`** de metal y aire separadamente, `T_metal=Σ(V_i·alpha_i·T_i)/Σ(V_i·alpha_i)` y `T_aire=Σ(V_i·(1-alpha_i)·T_i)/Σ(V_i·(1-alpha_i))`; además promedios volumétricos de toda región fluid y arena, máximos y mínimos por región y deltas desde `t=0`.
+- La auditoría distingue una ligera variación de `alpha` de una **prueba de conservación de masa**: sin `rho_i` y flujo de salida/entrada por la atmósfera, `V_metal` solo NO prueba cierre de masa. Las medias `alpha·T` tampoco son medias entálpicas ni balances energéticos.
+- No se calcula `q` ni se compara (q_{fluid}+q_{mold}); requiere instrumentos específicos de flujo térmico y coeficientes del modelo. La función muestra `NATIVE_TWO_STEP_FIELDS_MEASURED_NO_CHT_VALIDATION` o alertas de deriva/fracción fuera de rango, **no una etiqueta de física validada**.
+
+**Comando sin riesgo de escritura** tras actualizar rama:
+
+```bash
+cd ~/OpenFOAM/FS_C02_WORKTREE
+python3 -m unittest discover -s analysis_tools -p test_audit_fs_c05_postrun_fields.py -v &&
+python3 analysis_tools/audit_fs_c05_postrun_fields.py \
+  --case ~/OpenFOAM/FS_C05_NATIVE_SMOKE_RUNS/FS_C05_NATIVE_SMOKE_20261119T070806Z_7e8589e3
+```
+
+**Aún no hay datos reales publicados de `V_metal(t)`, temperatura final o flujo térmico**; se obtendrán cuando se ejecute este diagnóstico. Si el solver no guardó un campo `T` o `alpha` en una de las carpetas, la auditoría lo declarará como fallo de instrumentación —sin generar resultados falsos. Para comprobar específicamente el flujo de calor se evaluará añadir a una futura **copia** el functionObject oficial `wallHeatFlux` de OpenFOAM14 en ambas regiones, disponible en `src/functionObjects/field/wallHeatFlux`, que utiliza el modelo `thermophysicalTransportModel` y reporta `Q [W]` en paredes: su disponibilidad matemática no garantiza compatibilidad automática con la configuración actual, por lo que exigirá un ensayo separado.
