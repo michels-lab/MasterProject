@@ -19,7 +19,7 @@ PYTHONDONTWRITEBYTECODE=1 python3 -B "$HERE/prepare_t0.py" \
     --inputs "$INPUTS" --source "$SRC" --out "$OUT"
 echo "=== 3/3: check parsed dictionary syntax with native foamDictionary ==="
 for file in \
-    "$OUT/system/controlDict" \
+    "$OUT/system/controlDict" "$OUT/system/fvSolution" \
     "$OUT/system/metal/fvSchemes" "$OUT/system/metal/fvSolution" \
     "$OUT/system/mold/fvSchemes" "$OUT/system/mold/fvSolution" \
     "$OUT/constant/metal/physicalProperties" "$OUT/constant/mold/physicalProperties" \

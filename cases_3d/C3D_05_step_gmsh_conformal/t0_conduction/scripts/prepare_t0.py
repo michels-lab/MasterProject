@@ -130,6 +130,10 @@ def file_map(cfg: dict) -> dict[str, str]:
                 (HERE / f"templates/system/{region}/{name}.tpl").read_text(), {}
             )
     t = cfg["simulation"]
+    # Foundation 14 multiRegion heatedDuct requires top-level system/fvSolution PIMPLE.
+    files["system/fvSolution"] = render(
+        (HERE / "templates/system/fvSolution.tpl").read_text(), {}
+    )
     files["system/controlDict"] = render(
         (HERE / "templates/system/controlDict.tpl").read_text(),
         {

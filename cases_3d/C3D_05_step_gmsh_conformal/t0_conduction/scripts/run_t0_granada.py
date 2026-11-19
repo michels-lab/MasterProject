@@ -22,7 +22,7 @@ CASE_B = T0.parent
 SRC_DEFAULT = Path.home() / "OpenFOAM/C3D05_STEP_GMSH_HEX_SUBDIV_COARSE_02"
 OUT_DEFAULT = Path.home() / "OpenFOAM/C3D05_T0_CONDUCTION_01"
 FILES = (
-    "system/controlDict", "system/metal/fvSchemes", "system/metal/fvSolution",
+    "system/controlDict", "system/fvSolution", "system/metal/fvSchemes", "system/metal/fvSolution",
     "system/mold/fvSchemes", "system/mold/fvSolution",
     "constant/metal/physicalProperties", "constant/mold/physicalProperties",
     "0/metal/T", "0/mold/T",
@@ -235,7 +235,7 @@ def pipeline(inputs: Path, source: Path, out: Path) -> int:
             raise RuntimeError("Output path appeared during preparation; refuse overwrite")
         staging.rename(out)
         print(f"{STAGE}: {out}")
-        print("9/9 native dictionaries parsed. Source mesh preserved; NO solver run or CFD validation.")
+        print("10/10 native dictionaries parsed. Source mesh preserved; NO solver run or CFD validation.")
         return 0
     except (OSError, RuntimeError) as exc:
         print(f"T0_INTEGRATED_BUILD_FAILED: {exc}")

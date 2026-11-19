@@ -99,7 +99,7 @@ class T0GranadaIntegration(TestCase):
             self.assertEqual(review.call_count, 1)
         report = json.loads((self.output / "T0_GRANADA_REPORT.json").read_text())
         self.assertEqual(report["status"], target.STAGE)
-        self.assertEqual(len(report["parsed_dictionaries"]), 9)
+        self.assertEqual(len(report["parsed_dictionaries"]), 10)
         self.assertFalse(report["cfd_executed"])
         self.assertEqual(len(report["source_fingerprint_sha256"]), 64)
         prep = json.loads((self.output / "T0_PREPARATION_REPORT.json").read_text())
