@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
   "audit_kind": "deterministic_full_tracked_tree",
-  "tracked_files_total": 38911,
-  "classified_files_total": 38906,
-  "docs_content_inspected": 163,
+  "tracked_files_total": 38912,
+  "classified_files_total": 38907,
+  "docs_content_inspected": 164,
   "large_docs_skipped": 0,
   "excluded_reports": 5,
   "roles": {
@@ -12,7 +12,7 @@
     "bitacora": 5,
     "config": 7,
     "data": 31,
-    "document": 128,
+    "document": 129,
     "index": 30,
     "license": 1,
     "simulation_case_file": 107,
@@ -28,7 +28,7 @@
     "POTENTIAL_UNLOGGED_CHANGES": 2
   },
   "finding_total": 2,
-  "inventory_fingerprint": "0c63cf1176b9fb8f7719fdd8672737b5c6d1b745c479f9d197edf20ba846599d",
+  "inventory_fingerprint": "cb43f0917ad4531ee3c54c8acb1c25bbf74e96cb7529273a82367387e628b521",
   "evidence_fingerprint": "d931df33f5292d66d87b9a7180f1e36c21e096fd9de7e068a6aa07a94a51fc51",
   "files": [
     {
@@ -323,7 +323,7 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "e7d94a15c31a7e4e22fb707ad038bd221a5fe46b"
+      "blob": "bd4fa78972624733133cd80aaa8d3b379b3bdba9"
     },
     {
       "path": "RUN_CASE_REGISTRY.csv",
@@ -337,7 +337,7 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "132f4b4dfbd6b2626303692391e9bec8e8798a6f"
+      "blob": "f6695b69ab79458b53b263aaf29d7cd4b48f8ff8"
     },
     {
       "path": "VALIDATION_MATRIX.md",
@@ -271555,6 +271555,13 @@
       "blob": "200d1007e4bad4c2ed50f06ffeb2954f61db5df9"
     },
     {
+      "path": "docs/C3D_05_HEX8_PROVENANCE_REVIEW_20261119_ES.md",
+      "role": "document",
+      "purpose": "manual/decision/report/historical note",
+      "certainty": "inferred",
+      "blob": "64a59e09e4bcd00311ec44914c0b6e8d2c19be25"
+    },
+    {
       "path": "docs/C3D_05_HEX8_SEGUNDO_INTENTO_ACEPTADO_20261119_ES.md",
       "role": "document",
       "purpose": "manual/decision/report/historical note",
@@ -271587,7 +271594,7 @@
       "role": "data",
       "purpose": "structured/research data (semantics not validated)",
       "certainty": "rule",
-      "blob": "489cb0d0dcd803772a178f1785448530f9fcbe91"
+      "blob": "4ec03ce1759da8789565b1b7ae1295a60f75226d"
     },
     {
       "path": "docs/C3D_REINICIO_20261112_ES.md",
