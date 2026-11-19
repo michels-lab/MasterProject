@@ -180,6 +180,52 @@ class IntegratedCaseAT0(unittest.TestCase):
             with self.assertRaises(ValueError):
                 engine.read_preserved_mesh_volumes(root)
 
+    def test_047_C14_convection_and_contact_budget_on_native_area_fixture(self):
+        cfg = json.loads(engine.INPUTS.read_text(encoding="utf-8"))
+        self.assertEqual(engine.validate(cfg), [])
+        areas = {
+            ("metal", "metalTop"): (0.001326, 256),
+            ("metal", "metal_to_mold"): (0.006343771874, 2496),
+            ("mold", "mold_to_metal"): (0.006343771874, 2496),
+            ("mold", "moldTop"): (0.001, 128),
+            ("mold", "moldExterior"): (0.005, 512),
+            ("mold", "moldBottom"): (0.001, 128),
+            ("mold", "moldRecessWall"): (0.002, 128),
+            ("mold", "moldRecessRoof"): (0.001, 128),
+        }
+        volumes = {"metal": 4.798e-5, "mold": 1.0284e-4}
+        with patch.object(engine, "patch_area",
+                          side_effect=lambda _case, region, name:
+                          areas[(region, name)]):
+            budget = engine.thermal_network_budget(
+                pathlib.Path("/not-a-real-mesh"), cfg, volumes
+            )
+        self.assertEqual(budget["status"],
+                         "INITIAL_C14_BC_GEOMETRIC_POWER_SCALE_NOT_CFD")
+        self.assertEqual(budget["native_contact_faces_each_side"], 2496)
+        powers = budget["initial_uniform_temperature_power_W_positive_outward"]
+        self.assertAlmostEqual(
+            powers["metal_to_mold_contact"],
+            500 * 0.006343771874 * (1500-300), places=7
+        )
+        self.assertAlmostEqual(
+            powers["metal_to_ambient_convection"],
+            10 * 0.001326 * (1500-300), places=7
+        )
+        self.assertEqual(powers["mold_to_ambient_convection"], 0.0)
+        self.assertGreater(powers["metal_to_ambient_radiation_estimate"], 0)
+        self.assertTrue(all(x > 0 for x in
+                            budget["contact_only_lumped_time_scale_s"].values()))
+        altered = dict(areas)
+        altered[("mold", "mold_to_metal")] = (0.00634, 2496)
+        with patch.object(engine, "patch_area",
+                          side_effect=lambda _case, region, name:
+                          altered[(region, name)]):
+            with self.assertRaises(ValueError):
+                engine.thermal_network_budget(
+                    pathlib.Path("/not-a-real-mesh"), cfg, volumes
+                )
+
     def test_05_negative_cases_and_isolation(self):
         cfg = engine.synthetic_fixture()
         cfg["metal"]["source_rho"] = None
