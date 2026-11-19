@@ -61,3 +61,16 @@ Opcional `--tutorial <ruta>` para instalaciones cuyo `$FOAM_TUTORIALS` no apunte
 4. **Prueba de CAD y soporte**: no interpretar temperaturas como experimentales antes de usar STL exactos y condiciones reales de apoyo. Después propiedades (ho(T), C_p(T), k(T)) de aleaciones y arena; por último solidificación y contracción.
 
 **Referencia externa de arquitectura (OpenFOAM 14, sin copiar archivos al repo):** tutorial oficial `VoFcoolingCylinder2D` de Foundation14; `foamMultiRun`, `compressibleVoF`, `solid` y `coupledTemperature`. Documentación de Foundation14: `https://doc.cfd.direct/openfoam/user-guide-v14/thermal-boundary-conditions`.
+
+## Resultado de la laptop, 19-11-2026 — entradas FS-C05 preparadas sin ejecutar CFD
+
+El investigador ejecutó `git fetch` y `git switch --detach FETCH_HEAD` al commit `01a417ce7`, con `WM_PROJECT_VERSION=14`, luego `test_stage_fs_c05_vof_cht.py` (**8 de 8 tests OK**) y `stage_fs_c05_vof_cht.py`. Resultado local:
+
+```text
+FS-C05: VOF_CHT_SOLVER_INPUTS_STAGED_UNTESTED_NO_CFD
+New untouched copy with physics candidate: /home/michel/OpenFOAM/FS_C05_VOF_CHT_RUNS/FS_C05_VOF_CHT_SCREEN_20261119T063448Z_84d08b6e
+Region solvers: {'fluid': 'compressibleVoF', 'mold': 'solid'}
+Still UNTESTED: no CFD, no CHT energy/temperature evolution accepted.
+```
+
+**HECHO:** diccionarios de solver candidatos y condiciones `coupledTemperature` instalados en una copia, originales preservados. **NO HECHO:** carga efectiva de módulos/propiedades/BC en OpenFOAM, cálculo de paso de tiempo, conservación energética o masa. Antes de cualquier corrida física larga, ejecutar un arranque breve y aislado, detener/rechazar errores reales y conservar logs; no afirmar flujo térmico a partir del éxito de preparación.
