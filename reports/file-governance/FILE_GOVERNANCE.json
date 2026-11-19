@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
   "audit_kind": "deterministic_full_tracked_tree",
-  "tracked_files_total": 38923,
-  "classified_files_total": 38918,
-  "docs_content_inspected": 166,
+  "tracked_files_total": 38924,
+  "classified_files_total": 38919,
+  "docs_content_inspected": 167,
   "large_docs_skipped": 1,
   "excluded_reports": 5,
   "roles": {
@@ -12,7 +12,7 @@
     "bitacora": 5,
     "config": 7,
     "data": 31,
-    "document": 132,
+    "document": 133,
     "index": 30,
     "license": 1,
     "simulation_case_file": 107,
@@ -28,7 +28,7 @@
     "POTENTIAL_UNLOGGED_CHANGES": 2
   },
   "finding_total": 2,
-  "inventory_fingerprint": "a1f02d092279cb6435e573394a59cc6b27c8f79afdc585dc7763782bab957223",
+  "inventory_fingerprint": "759a18c68f4282724e5b798d23f54cecc33145f060d415b029160803da9cc5af",
   "evidence_fingerprint": "cd13390572b9c157e108227801ed2b573eecffde16426633497dd114e4b163e3",
   "files": [
     {
@@ -271573,7 +271573,7 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "028f9be9da4853ab35bdd6ffe8548469746d36f0"
+      "blob": "9afb4b6ff7072d8eb44ba679b0c836ecfe66cd30"
     },
     {
       "path": "docs/C3D_04_RESULTADO_PRIMER_MALLADO_20261118_ES.md",
@@ -271653,6 +271653,13 @@
       "blob": "ab2aea0d25286a1ead34abd4c778b62de57864b8"
     },
     {
+      "path": "docs/C3D_05_NOORTH_HOPS_REALES_Y_TRANSICION_FISICA_20261119_ES.md",
+      "role": "document",
+      "purpose": "manual/decision/report/historical note",
+      "certainty": "inferred",
+      "blob": "baa96569ad1b030ccdb3585250532c6e9898cb3b"
+    },
+    {
       "path": "docs/C3D_05_RESULTADO_PRIMER_MALLADO_20261118_ES.md",
       "role": "document",
       "purpose": "manual/decision/report/historical note",
@@ -271671,7 +271678,7 @@
       "role": "data",
       "purpose": "structured/research data (semantics not validated)",
       "certainty": "rule",
-      "blob": "9a56a069fd2e38a19758c13beb1dc09459fd2b78"
+      "blob": "af2e29eb392a7698cb84135a2973c40190c384d0"
     },
     {
       "path": "docs/C3D_REINICIO_20261112_ES.md",
