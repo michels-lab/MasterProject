@@ -143,11 +143,19 @@ def verify_saved_contact(case: Path) -> dict:
         and mold["neighbourRegion"] == "metal"
         and metal["neighbourPatch"] == "mold_to_metal"
         and mold["neighbourPatch"] == "metal_to_mold"
-        and top["type"] == "patch" and top["nFaces"] == 256
+        # The versioned blockMeshDict defines metalTop as a WALL patch.
+        # Never rewrite native polyMesh to satisfy a mistaken audit expectation.
+        and top["type"] == "wall" and top["nFaces"] == 256
         and all(isinstance(x.get("area_mm2"), (int, float)) for x in (m, s))
         and abs(m["area_mm2"] - s["area_mm2"]) < 1.e-6
     ):
-        raise ValueError("Real polyMesh reciprocal mappedWall/top-face gate rejected")
+        raise ValueError(
+            "Real polyMesh reciprocal mappedWall/top-face gate rejected; "
+            f"observed metal={metal!r}, mold={mold!r}, metalTop={top!r}; "
+            "expected mappedWall 2496 reciprocal faces, "
+            "metalTop type=wall nFaces=256, "
+            "measured areas equal to within 1e-6 mm2"
+        )
     status = (case / "NATIVE_BUILD_STATUS.txt")
     if not status.is_file() or not status.read_text(encoding="utf-8").startswith(
         "MESH_TOPOLOGY_AND_CONTACT_AREA_PRELIMINARILY_ACCEPTED"
@@ -252,6 +260,17 @@ def self_test() -> None:
         )
         parsed = patch_metadata(boundary, "metal_to_mold")
         assert parsed["type"] == "mappedWall" and parsed["nFaces"] == 2496
+        # Regression: metalTop is deliberately wall, NOT patch, in C3D-04.
+        top_file = folder / "metalTop_boundary"
+        top_file.write_text(
+            "metalTop\n{\ntype wall;\nnFaces 256;\n}\n",
+            encoding="utf-8"
+        )
+        native_top = patch_metadata(top_file, "metalTop")
+        assert native_top == {
+            "type": "wall", "nFaces": 256,
+            "neighbourRegion": None, "neighbourPatch": None
+        }
         vtk = folder / "nonOrthoFaces.vtk"
         vtk.write_text(
             "# vtk DataFile Version 3.0\nSynthetic\nASCII\nDATASET POLYDATA\n"
