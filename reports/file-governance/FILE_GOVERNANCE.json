@@ -1,13 +1,13 @@
 {
   "schema_version": 1,
   "audit_kind": "deterministic_full_tracked_tree",
-  "tracked_files_total": 38942,
-  "classified_files_total": 38937,
+  "tracked_files_total": 38943,
+  "classified_files_total": 38938,
   "docs_content_inspected": 169,
   "large_docs_skipped": 1,
   "excluded_reports": 5,
   "roles": {
-    "agent": 7,
+    "agent": 8,
     "analysis_tool": 1,
     "bitacora": 5,
     "config": 9,
@@ -28,7 +28,7 @@
     "POTENTIAL_UNLOGGED_CHANGES": 2
   },
   "finding_total": 2,
-  "inventory_fingerprint": "7289528d5733016dd99c8e0ad4cc5d337ecba1fe997be033bd8d8feaae63df53",
+  "inventory_fingerprint": "7ca7a419fdf007ab333620b634c8f21e50d995e95b902a948ebfeeee85a364f3",
   "evidence_fingerprint": "fbf671e13b6afb1d04fd8dc5304063771b4f5d294d535702d88a0392eb28622a",
   "files": [
     {
@@ -1451,6 +1451,13 @@
       "purpose": "code/test implementation",
       "certainty": "rule",
       "blob": "bf12de86f64ec7ebd652705179e9ed91065acc8f"
+    },
+    {
+      "path": "cases_3d/C3D_04_rounded_multiblock_pilot/AGENTS.md",
+      "role": "agent",
+      "purpose": "assistant role/instructions",
+      "certainty": "rule",
+      "blob": "f10ff1846ac26d7e95cc32c427dc833cd4d5f7bf"
     },
     {
       "path": "cases_3d/C3D_04_rounded_multiblock_pilot/Allmesh",
