@@ -36,7 +36,8 @@ OUTPUT = Path.home() / "OpenFOAM/C3D04_A_T0_CONDUCTION_01"
 SCHEMA = "C3D04_A_T0_1"
 PURPOSE = "TRANSIENT_TWO_SOLID_CONDUCTION_NUMERICAL_CHECK_ONLY_NOT_CAST_IRON_SOLIDIFICATION"
 MODEL = "constIsoSolid_rhoConst_eConst_sensibleInternalEnergy"
-BC = "ADIA_BC_EXTERNAL_PERFECT_THERMAL_CONTACT_UNVALIDATED_QUICKCUP"
+BC = "C14_THERMAL_EXTERIOR_H10_FINITE_CONTACT_TWO_SOLID_SURROGATE"
+C14_ROOT = CASE_A.parents[1]/"cases_controlled_buoyancy"/"C14_topFixedFlux_explicitRef"
 ACK = "T0_NUMERICAL_CHECK_ONLY_NOT_EXPERIMENTAL_VALIDATION"
 FIELDS = {
     "rho_kg_m3": "source_rho",
@@ -103,10 +104,13 @@ def validate(config: object, allow_synthetic_test: bool = False) -> list[str]:
         energy = simulation.get("nEnergyCorrectors")
         if type(energy) is not int or not 1 <= energy <= 20:
             errors.append("simulation.nEnergyCorrectors: sourced integer 1..20 required")
+        outer = simulation.get("nOuterCorrectors")
+        if type(outer) is not int or not 1 <= outer <= 20:
+            errors.append("simulation.nOuterCorrectors: sourced integer 1..20 required")
         nonorth = simulation.get("nNonOrthogonalCorrectors")
         if type(nonorth) is not int or not 0 <= nonorth <= 20:
             errors.append("simulation.nNonOrthogonalCorrectors: explicit integer 0..20 required")
-        for key in ("source_time_choices", "source_nonorth_choice", "source_energy_coupling_choice"):
+        for key in ("source_time_choices", "source_nonorth_choice", "source_outer_correctors", "source_energy_coupling_choice"):
             evidence = simulation.get(key)
             if not isinstance(evidence, str) or len(evidence.strip()) < 10:
                 errors.append(f"simulation.{key}: documented numerical rationale required")
@@ -116,6 +120,44 @@ def validate(config: object, allow_synthetic_test: bool = False) -> list[str]:
         a, b = metal.get("T_initial_K"), mold.get("T_initial_K")
         if positive(a) and positive(b) and a == b:
             errors.append("metal and mold T_initial_K must differ for the T0 transfer test")
+    # A C14 numerical solid-solid surrogate is NOT the original C14 metal-fluid
+    # enthalpy formulation; the Cp→Cv approximation must be explicit and checked.
+    metal = config.get("metal")
+    if isinstance(metal, dict):
+        if metal.get("Cp_to_Cv_surrogate_assumption") != (
+            "CP_AS_EFFECTIVE_CV_ONLY_FOR_TWO_SOLID_T0_NOT_C14_FLUID_ENTHALPY"
+        ):
+            errors.append("metal.Cp_to_Cv_surrogate_assumption: must explicitly acknowledge Cp!=Cv")
+        for key in ("Cp_C14_J_kg_K", "mu_C14_Pa_s", "Pr_C14"):
+            if not positive(metal.get(key)):
+                errors.append(f"metal.{key}: C14 source value missing")
+        if positive(metal.get("Cv_J_kg_K")) and positive(metal.get("Cp_C14_J_kg_K")):
+            if not math.isclose(metal["Cv_J_kg_K"], metal["Cp_C14_J_kg_K"], rel_tol=1e-10):
+                errors.append("metal.Cv_J_kg_K: T0 surrogate must exactly trace to C14 Cp")
+        if all(positive(metal.get(k)) for k in ("kappa_W_m_K","Cp_C14_J_kg_K","mu_C14_Pa_s","Pr_C14")):
+            derived = metal["mu_C14_Pa_s"] * metal["Cp_C14_J_kg_K"] / metal["Pr_C14"]
+            if not math.isclose(metal["kappa_W_m_K"], derived, rel_tol=1e-10):
+                errors.append("metal.kappa_W_m_K: differs from C14 constTransport derived mu*Cp/Pr")
+    bc = config.get("c14_boundary_reference")
+    if not isinstance(bc, dict):
+        errors.append("c14_boundary_reference: missing original C14 exterior/contact values")
+    else:
+        for side, names in {
+            "metalTop": ("h_W_m2_K","Ta_K","emissivity"),
+            "moldExterior": ("h_W_m2_K","Ta_K","emissivity"),
+            "metal_to_mold": ("layer_thickness_m","layer_kappa_W_m_K","conductance_W_m2_K")
+        }.items():
+            item = bc.get(side)
+            if not isinstance(item, dict) or any(not positive(item.get(k)) for k in names):
+                errors.append(f"c14_boundary_reference.{side}: missing C14 values")
+        interface = bc.get("metal_to_mold", {})
+        if (isinstance(interface, dict) and
+            all(positive(interface.get(k)) for k in ("layer_thickness_m","layer_kappa_W_m_K","conductance_W_m2_K"))):
+            if not math.isclose(
+                interface["layer_kappa_W_m_K"]/interface["layer_thickness_m"],
+                interface["conductance_W_m2_K"], rel_tol=1e-10
+            ):
+                errors.append("C14 contact layer conductance must equal k/thickness")
     return errors
 
 
@@ -138,7 +180,7 @@ def header(location: str, obj: str, cls: str = "dictionary") -> str:
     )
 
 
-def temperature(region: str, initial_K) -> str:
+def temperature(region: str, initial_K, bc: dict) -> str:
     lines = [
         header(f"0/{region}", "T", "volScalarField"),
         "dimensions [0 0 0 1 0 0 0];",
@@ -146,18 +188,34 @@ def temperature(region: str, initial_K) -> str:
         "boundaryField", "{",
         '    #includeEtc "caseDicts/setConstraintTypes"',
     ]
+    exterior = bc["metalTop"] if region == "metal" else bc["moldExterior"]
     for patch in EXTERIOR[region]:
         lines += [
             f"    {patch}", "    {",
-            "        type zeroGradient; // T0 insulated TEST, not measured air cooling",
+            "        type externalWallHeatFluxTemperature;",
+            "        mode coefficient;",
+            f"        h uniform {fmt(exterior['h_W_m2_K'])};",
+            f"        Ta constant {fmt(exterior['Ta_K'])};",
+            f"        emissivity {fmt(exterior['emissivity'])};",
+            "        kappaMethod solidThermo;",
+            "        value $internalField;",
             "    }",
         ]
     lines += [
         f"    {COUPLED[region]}", "    {",
         "        type coupledTemperature;",
-        "        value $internalField;",
-        "    }", "}",
     ]
+    if region == "metal":
+        contact = bc["metal_to_mold"]
+        lines += [
+            "        h",
+            "        {",
+            "            type wallLayersHeatTransferCoefficient;",
+            f"            thicknessLayers ({fmt(contact['layer_thickness_m'])});",
+            f"            kappaLayers ({fmt(contact['layer_kappa_W_m_K'])});",
+            "        }",
+        ]
+    lines += ["        value $internalField;", "    }", "}"]
     return "\n".join(lines) + "\n"
 
 
@@ -208,11 +266,11 @@ def solution(region: str, nonorth: int) -> str:
     )
 
 
-def global_solution(energy_correctors: int) -> str:
+def global_solution(energy_correctors: int, outer_correctors: int) -> str:
     """Foundation14 foamMultiRun multi-region PIMPLE control (top-level)."""
     return header("system", "fvSolution") + (
         "PIMPLE\n{\n"
-        "    nOuterCorrectors 1; // T0 numerical hypothesis, no flow\n"
+        f"    nOuterCorrectors {outer_correctors}; // traced from C14 root PIMPLE\n"
         f"    nEnergyCorrectors {energy_correctors};\n"
         "}\n"
     )
@@ -239,11 +297,12 @@ def generate(cfg: dict) -> dict[str, str]:
     items = {
         "system/controlDict": control(cfg["simulation"]),
         "system/fvSolution": global_solution(
-            cfg["simulation"]["nEnergyCorrectors"]
+            cfg["simulation"]["nEnergyCorrectors"],
+            cfg["simulation"]["nOuterCorrectors"]
         ),
     }
     for region in ("metal", "mold"):
-        items[f"0/{region}/T"] = temperature(region, cfg[region]["T_initial_K"])
+        items[f"0/{region}/T"] = temperature(region, cfg[region]["T_initial_K"], cfg["c14_boundary_reference"])
         items[f"constant/{region}/physicalProperties"] = thermophysical(region, cfg[region])
         items[f"system/{region}/fvSchemes"] = schemes(region)
         items[f"system/{region}/fvSolution"] = solution(
@@ -485,31 +544,35 @@ def synthetic_fixture():
     cfg["simulation"].update({
         "deltaT_s": 0.01, "endTime_s": 0.10,
         "writeEverySteps": 2, "nNonOrthogonalCorrectors": 2,
-        "nEnergyCorrectors": 2,
+        "nOuterCorrectors": 3, "nEnergyCorrectors": 2,
         "source_time_choices": "SYNTHETIC_UNIT_TEST",
         "source_nonorth_choice": "SYNTHETIC_UNIT_TEST",
+        "source_outer_correctors": "SYNTHETIC_UNIT_TEST",
         "source_energy_coupling_choice": "SYNTHETIC_UNIT_TEST",
     })
+    # The local test is synthetic-only: the C14 source contract is separately
+    # validated against the actual tracked source files in production.
     return cfg
 
 
 def self_test():
     base = json.loads(INPUTS.read_text(encoding="utf-8"))
     errors = validate(base)
-    assert len(errors) >= 15, "Null physical inputs must remain blocked"
+    assert errors == [], "Original C14 source inputs must pass static schema: " + str(errors)
     cfg = synthetic_fixture()
     assert validate(cfg, allow_synthetic_test=True) == []
     assert validate(cfg, allow_synthetic_test=False) != []
     files = generate(cfg)
     assert len(files) == 10
     assert "nEnergyCorrectors 2;" in files["system/fvSolution"]
+    assert "nOuterCorrectors 3;" in files["system/fvSolution"]
     assert "application foamMultiRun;" in files["system/controlDict"]
     for region in ("metal", "mold"):
         field = files[f"0/{region}/T"]
         for patch in EXTERIOR[region] + (COUPLED[region],):
             assert patch in field
         assert "type coupledTemperature;" in field
-        assert "type zeroGradient;" in field
+        assert "type externalWallHeatFluxTemperature;" in field
         assert "constIsoSolid" in files[f"constant/{region}/physicalProperties"]
         assert "nNonOrthogonalCorrectors 2;" in files[f"system/{region}/fvSolution"]
     cfg["mold"]["kappa_W_m_K"] = None
