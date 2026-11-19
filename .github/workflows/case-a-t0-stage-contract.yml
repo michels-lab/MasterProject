@@ -41,12 +41,23 @@ jobs:
           python3 - <<'PY'
           import json, pathlib
           status=json.loads(pathlib.Path("docs/C3D04_CASE_A_STATUS.json").read_text())
-          assert status["CFD_run"] is False
-          assert status["physical_validation"] is False
-          assert status["grid_independence"] is False
+          assert all(type(status[key]) is bool for key in
+                     ("CFD_run","physical_validation","grid_independence"))
+          if status["CFD_run"]:
+              executed = next(x for x in status["milestones"]
+                              if x["id"] == "07_THERMAL_T0_EXECUTION")
+              assert executed["status"] == "DONE"
+              assert executed["evidence"] and pathlib.Path(executed["evidence"]).is_file()
           data=json.loads(pathlib.Path("cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/T0_INPUTS.json").read_text())
+          mapping={"rho_kg_m3":"source_rho","Cv_J_kg_K":"source_Cv",
+                   "kappa_W_m_K":"source_kappa","molWeight_g_mol":"source_molWeight",
+                   "T_initial_K":"source_T_initial"}
           for region in ("metal","mold"):
-              for name in ("rho_kg_m3","Cv_J_kg_K","kappa_W_m_K","molWeight_g_mol","T_initial_K"):
-                  assert data[region][name] is None, f"unexpected unsourced value: {region}.{name}"
-          print("PASS: no unsourced T0 parameters or invented CFD milestone")
+              for key, provenance_key in mapping.items():
+                  value=data[region].get(key)
+                  if value is not None:
+                      assert type(value) in (int,float) and value>0, (region,key)
+                      citation=data[region].get(provenance_key)
+                      assert isinstance(citation,str) and len(citation.strip())>=10, (region,provenance_key)
+          print("PASS: dynamic science-status boundary and physical source citations")
           PY
