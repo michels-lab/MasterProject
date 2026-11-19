@@ -37,7 +37,13 @@ EOF
 fail() {
     local message="$1"
     printf 'REJECTED / stage=%s / %s / NO_CFD\n' "$STAGE" "$message" | tee "$OUT/NATIVE_BUILD_STATUS.txt" >&2
-    echo "Inspect preserved logs at $OUT" >&2
+    # One command must leave a complete read-only postmortem, including spatial
+    # defects and contact area even when the quality gate rejects the mesh.
+    local diagnosis="$OUT/C3D04_V2_DIAGNOSTIC.txt"
+    python3 "$REPO/cases_3d/C3D_04_rounded_multiblock_pilot/scripts/diagnose_existing_defects.py" "$OUT" > "$diagnosis" 2>&1 || true
+    echo "=== C3D04 V2 AUTOMATIC DIAGNOSTIC ===" >&2
+    tail -n 100 "$diagnosis" >&2 || true
+    echo "Inspect preserved logs and diagnostic at $OUT" >&2
     exit 5
 }
 run_native() {
