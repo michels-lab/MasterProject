@@ -56,6 +56,8 @@ on:
       - 'analysis_tools/test_run_fs_c05_wall_heat_flux.py'
       - 'analysis_tools/run_fs_c05_granada.py'
       - 'analysis_tools/test_run_fs_c05_granada.py'
+      - 'analysis_tools/audit_fs_c05_density_inventory.py'
+      - 'analysis_tools/test_audit_fs_c05_density_inventory.py'
       - 'freesurface/FS-C04_fluid_mold_mesh_pilot/**'
       - 'analysis_tools/diagnose_fs_c02_courant.py'
       - 'analysis_tools/test_diagnose_fs_c02_courant.py'
@@ -140,6 +142,10 @@ jobs:
         run: python3 -m unittest discover -s analysis_tools -p test_run_fs_c05_granada.py -v
       - name: FS-C05 Granada Python syntax and modules
         run: python3 -m py_compile analysis_tools/run_fs_c05_granada.py analysis_tools/test_run_fs_c05_granada.py
+      - name: FS-C05 native phase density mass inventory and missing-rho safety gates (synthetic only)
+        run: python3 -m unittest discover -s analysis_tools -p test_audit_fs_c05_density_inventory.py -v
+      - name: FS-C05 density/mass audit Python syntax check
+        run: python3 -m py_compile analysis_tools/audit_fs_c05_density_inventory.py analysis_tools/test_audit_fs_c05_density_inventory.py
       - name: Stage reference iron-air case outside Git checkout
         run: |
           python3 analysis_tools/run_fs_c02_local.py \
