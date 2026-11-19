@@ -25,7 +25,7 @@ T="$(mktemp -d)"
 trap 'rm -rf "$T"' EXIT
 python3 "$V3/scripts/build_v3_dictionary.py" "$V2" "$T/T06" --delta 0.45 --grading 2.65 >/dev/null
 python3 "$V3/tests/test_v3_diff.py" "$V2" "$T/T06" --delta 0.45 --grading 2.65 >/dev/null
-for pair in "inner_y -0.12" "inner_y 0.12" "profile 0.90" "profile 0.70"; do
+for pair in "inner_y -0.12" "inner_y 0.12" "profile 0.90" "profile 0.78"; do
     read -r mode value <<< "$pair"
     p="$T/v4_${mode}_${value}"
     python3 "$ROOT/scripts/build_v4_dictionary.py" "$T/T06" "$p" \
