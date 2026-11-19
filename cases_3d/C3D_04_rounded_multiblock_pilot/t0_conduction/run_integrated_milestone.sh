@@ -19,8 +19,9 @@ fi
 echo "=== MASTERPROJECT CASO A: INTEGRATED T0 STAGE (NO CFD) ==="
 echo "=== A/4: canonical roadmap and explicit completion fraction ==="
 PYTHONDONTWRITEBYTECODE=1 python3 -B "$CASE_A/scripts/report_case_a_progress.py"
-echo "=== B/4: full T0 static positive+negative regression ==="
-PYTHONDONTWRITEBYTECODE=1 python3 -B "$HERE/scripts/prepare_case_a_t0.py" --self-test
+echo "=== B/4: bundled static positive+negative and source protection regressions ==="
+PYTHONDONTWRITEBYTECODE=1 python3 -B -m unittest discover \
+    -s "$HERE/tests" -p 'test_integrated_case_a.py' -v
 echo "=== C/4: native saved V4/T02 gates and thermal inputs ==="
 # Do not create even a separate materialized case if the real Foundation14
 # executable environment is absent. Pre-check this BEFORE any side effects.
@@ -66,11 +67,7 @@ else
 fi
 
 if [[ "$MODE" == "--materialize" ]]; then
-    for file in "$OUTPUT/system/controlDict" "$OUTPUT/system/metal/fvSchemes" "$OUTPUT/system/metal/fvSolution" "$OUTPUT/system/mold/fvSchemes" "$OUTPUT/system/mold/fvSolution" "$OUTPUT/constant/metal/physicalProperties" "$OUTPUT/constant/mold/physicalProperties" "$OUTPUT/0/metal/T" "$OUTPUT/0/mold/T"
-    do
-        foamDictionary "$file" >/dev/null
-        echo "NATIVE_DICTIONARY_PARSE_OK: $file"
-    done
-    echo "T0_DICTIONARIES_PARSED: still NO CFD, no stability or energy conservation verified."
+    echo "T0_ATOMICALLY_PUBLISHED_AND_ALL_10_NATIVE_DICTIONARIES_PARSED; NO CFD."
+    echo "Verified report: $OUTPUT/T0_PREPARATION_REPORT.json"
 fi
 echo "INTEGRATED_T0_SOURCE_AND_STATIC_CHECKS_FINISHED; THIS IS NOT A COMPLETED PHYSICAL OR CFD HITO."
