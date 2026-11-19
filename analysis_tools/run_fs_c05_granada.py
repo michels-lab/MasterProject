@@ -28,6 +28,7 @@ import uuid
 
 from audit_fs_c03_exterior_mesh import require
 from audit_fs_c05_postrun_fields import measure_saved_fields
+from audit_fs_c05_density_inventory import audit_density_inventory
 from run_fs_c05_wall_heat_flux import run as run_wall_probe
 
 RUN_PREFIX="FS_C05_WALL_Q_PROBE_"
@@ -77,7 +78,7 @@ def thermal_storage_proxies(first:dict,last:dict)->dict:
     }
 
 
-def assemble(probe:dict,observables:dict)->dict:
+def assemble(probe:dict,observables:dict,density:dict|None=None)->dict:
     require(probe.get("status")==
             "TWO_STEP_FLUID_MOLD_WALL_Q_MEASURED_NO_ENERGY_VALIDATION"
             and probe.get("wall_heat_flux_measured") is True
@@ -107,6 +108,31 @@ def assemble(probe:dict,observables:dict)->dict:
         alerts.append("VOF_ALPHA_OUT_OF_RANGE")
     if observables["air_alpha_weighted_T_change_K"]>0.5:
         alerts.append("FAST_AIR_WARMING_REQUIRES_OPEN_BOUNDARY_AND_ENTHALPY_AUDIT")
+    if density is None:
+        density={
+            "status":"NATIVE_RHO_NOT_INSTRUMENTED_IN_THIS_RUN",
+            "native_density_inventory_observed":False,
+            "mass_conservation_validated":False,
+            "open_atmosphere_mass_flux_measured":False,
+        }
+    if not density.get("native_density_inventory_observed",False):
+        alerts.append("MIXTURE_RHO_INVENTORY_NOT_AVAILABLE")
+    # Only t=1e-7 -> 2e-7 has TWO power snapshots; do not estimate Q(0).
+    q1,q2=power["snapshot_power_comparison"]
+    dt=q2["time_s"]-q1["time_s"]
+    require(dt>0 and math.isfinite(dt),
+            "thermal interface Q has invalid elapsed time")
+    integrated_wall_power={
+        "measured_interval_s":[q1["time_s"],q2["time_s"]],
+        "Qfluid_trapezoid_J":{
+            "value":0.5*(q1["Q_fluid_wall_W"]+q2["Q_fluid_wall_W"])*dt,
+        },
+        "Qmold_trapezoid_J":{
+            "value":0.5*(q1["Q_mold_wall_W"]+q2["Q_mold_wall_W"])*dt,
+        },
+        "heat_from_t0_to_t1_J_known":False,
+        "net_total_domain_energy_balance_computed":False,
+    }
     return {
         "schema":"masterproject-fs-c05-granada-integrated-two-step-v1",
         "status":(
@@ -118,6 +144,8 @@ def assemble(probe:dict,observables:dict)->dict:
         "initial_to_final_s":2e-7,
         "native_heat_flux":probe["native_flux_records"],
         "reciprocal_contact_power":power,
+        "coupled_wall_Q_time_integral_DIAGNOSTIC_ONLY":integrated_wall_power,
+        "native_mixture_density_mass_inventory":density,
         "all_phase_and_temperature_observables":observables,
         "constant_property_thermal_storage_PROXIES_ONLY":estimates,
         "attention_items":alerts,
@@ -184,6 +212,22 @@ def report_text(result:dict)->str:
             f"{a['absolute_relative_reciprocity_mismatch']:.5g} |")
     lines.extend([
         "",
+        "## Inventario de masa de la mezcla (solo si OpenFOAM guardó rho)",
+        "",
+        "Estado: "+result["native_mixture_density_mass_inventory"]["status"],
+        "",
+        "Sin flujo másico por la atmósfera, el inventario NO demuestra conservación.",
+        "",
+        "## Calor integrado en el intervalo instrumentado (NO balance de energía)",
+        "",
+        "Q fluido × dt aproximado [J]: "+str(
+            result["coupled_wall_Q_time_integral_DIAGNOSTIC_ONLY"]
+                  ["Qfluid_trapezoid_J"]["value"]),
+        "Q arena × dt aproximado [J]: "+str(
+            result["coupled_wall_Q_time_integral_DIAGNOSTIC_ONLY"]
+                  ["Qmold_trapezoid_J"]["value"]),
+        "No está instrumentado Q entre t=0 y t=1e-7 s.",
+        "",
         "## Indicadores de almacenamiento sensible aproximados (NO balance global)",
         "",
         f"Hierro ΔE* = {e['metal_delta_sensible_J_PROVISIONAL']:.9g} J",
@@ -226,7 +270,8 @@ def run_granada(source:Path,out:Path,native:bool)->dict:
     human=out/"FS_C05_GRANADA_REPORT.md"
     try:
         observables=measure_saved_fields(out)
-        assembled=assemble(probe,observables)
+        density=audit_density_inventory(out)
+        assembled=assemble(probe,observables,density)
         report.write_text(json.dumps(assembled,indent=2,ensure_ascii=False)+"\n")
         human.write_text(report_text(assembled))
         return assembled
@@ -267,6 +312,8 @@ def main(argv=None)->int:
             print("Iron ΔT K:",s["metal_alpha_weighted_T_change_K"])
             print("Air ΔT K:",s["air_alpha_weighted_T_change_K"])
             print("Sand ΔT K:",s["mold_volume_weighted_T_change_K"])
+            print("Mixture density inventory:",
+                  result["native_mixture_density_mass_inventory"]["status"])
             print("Wall-power reciprocity:",
                   result["reciprocal_contact_power"]["snapshot_power_comparison"])
             print("REPORT JSON:",out/"FS_C05_GRANADA_REPORT.json")
