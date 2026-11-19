@@ -127,3 +127,39 @@ grep -Fq 'NONORTH_CELL_HOP_DISTANCE_20261119.json' "$HOPS_RUN"
 grep -Fq 'test_audit_nonorth_hop_distance.py' "$HOPS_RUN"
 grep -Fq 'NONORTH_FACESET_TOPOLOGY_AUDIT_20261119.json' "$HOPS_RUN"
 ! grep -Eq '^[[:space:]]*(gmsh|gmshToFoam|checkMesh|blockMesh|foamMultiRun|rm -rf)[[:space:]]' "$HOPS_RUN"
+
+# T0 (two solids, NO CFD) model preparation uses Foundation14 templates and
+# refuses *all* uncited material/thermal inputs and overwriting accepted mesh.
+T0="$ROOT/t0_conduction"
+T0_CHECK="$T0/scripts/run_t0_preflight.sh"
+T0_PREP="$T0/scripts/run_t0_materialize.sh"
+T0_PY="$T0/scripts/prepare_t0.py"
+T0_UNIT="$T0/tests/test_prepare_t0.py"
+[[ -s "$T0_CHECK" && -s "$T0_PREP" && -s "$T0_PY" && -s "$T0_UNIT" ]] ||
+  { echo "Missing T0 strict generator, runner or tests"; exit 1; }
+bash -n "$T0_CHECK"
+bash -n "$T0_PREP"
+python3 -c 'import ast,pathlib,sys; [ast.parse(pathlib.Path(p).read_text()) for p in sys.argv[1:]]' "$T0_PY" "$T0_UNIT"
+for p in "$T0_CHECK" "$T0_PREP"; do
+  ! grep -Eq '^[[:space:]]*(foamMultiRun|foamRun|gmshToFoam|checkMesh|blockMesh)[[:space:]]' "$p" ||
+    { echo "T0 runner would execute a solver or mesh tool: $p"; exit 1; }
+done
+grep -Fq 'C3D05_STEP_GMSH_HEX_SUBDIV_COARSE_02' "$T0_CHECK"
+grep -Fq 'C3D05_T0_CONDUCTION_01' "$T0_PREP"
+grep -Fq '"schema": "C3D05_T0_1"' "$T0/T0_INPUTS.json"
+for p in \
+  "$T0/templates/0/metal/T.tpl" "$T0/templates/0/mold/T.tpl" \
+  "$T0/templates/constant/metal/physicalProperties.tpl" \
+  "$T0/templates/constant/mold/physicalProperties.tpl" \
+  "$T0/templates/system/metal/fvSchemes.tpl" "$T0/templates/system/mold/fvSchemes.tpl" \
+  "$T0/templates/system/metal/fvSolution.tpl" "$T0/templates/system/mold/fvSolution.tpl" \
+  "$T0/templates/system/controlDict.tpl"
+do
+  [[ -s "$p" ]] || { echo "Missing T0 template: $p"; exit 1; }
+done
+grep -Fq 'regionSolvers' "$T0/templates/system/controlDict.tpl"
+grep -Fq 'coupledTemperature' "$T0/templates/0/metal/T.tpl"
+grep -Fq 'coupledTemperature' "$T0/templates/0/mold/T.tpl"
+grep -Fq 'thermo eConst' "$T0/templates/constant/metal/physicalProperties.tpl"
+grep -Fq 'no_solver_executed' "$T0_PY"
+grep -Fq 'T0_BLOCKED_MISSING_PHYSICAL_INPUTS_OR_EVIDENCE' "$T0_PY"
