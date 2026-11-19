@@ -162,6 +162,13 @@ def stage(source:Path,acceptance:Path,tutorial:Path,out:Path)->dict:
               tutorial/"constant/solid/physicalProperties"):
         require(p.is_file() and not p.is_symlink(),
                 "required installed OpenFOAM v14 template missing: "+str(p))
+    # Fail closed BEFORE creating the destination if official solver grammar
+    # changed or if the kEpsilon transport entry cannot be installed.
+    control_dict((tutorial/"system/controlDict").read_text(encoding="utf-8"))
+    fv_schemes_source=(tutorial/"system/fluid/fvSchemes").read_text(
+        encoding="utf-8")
+    require(len(re.findall(r"div\\(phi,k\\)\\s+\\$turbulence;",fv_schemes_source))==1,
+            "official Foundation14 turbulence transport scheme changed")
     source_hashes={}
     for root,dirs,files in os.walk(source,followlinks=False):
         for name in dirs+files:
@@ -191,11 +198,14 @@ def stage(source:Path,acceptance:Path,tutorial:Path,out:Path)->dict:
         return p.read_text(encoding="utf-8")
     write("system/controlDict",control_dict(official("system/controlDict")))
     write("system/fvSolution",official("system/fvSolution"))
-    write("system/fluid/fvSchemes",
-          official("system/fluid/fvSchemes").replace(
-              "    div(phi,k)         $turbulence;",
-              "    div(phi,k)         $turbulence;\n"
-              "    div(phi,epsilon)   $turbulence;"))
+    fluid_schemes,changed=re.subn(
+        r"div\\(phi,k\\)\\s+\\$turbulence;",
+        "div(phi,k)         $turbulence;\\n"
+        "    div(phi,epsilon)   $turbulence;",
+        official("system/fluid/fvSchemes"))
+    require(changed==1 and "div(phi,epsilon)" in fluid_schemes,
+            "could not install kEpsilon energy/divergence transport scheme")
+    write("system/fluid/fvSchemes",fluid_schemes)
     fv=official("system/fluid/fvSolution")
     require(fv.count('"alpha.water.*"')==1
             and fv.count('"(T|k|B|nuTilda).*"')==1,
