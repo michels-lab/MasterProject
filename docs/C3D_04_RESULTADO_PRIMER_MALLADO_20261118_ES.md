@@ -204,3 +204,21 @@ Auditoría WSL con `audit_accepted_surface_fit.py` completada sobre la **malla p
 ## Siguiente control C3D-04: auditor de no ortogonalidad preparado
 
 [Auditor de no ortogonalidad V4/T02](C3D_04_NO_ORTHO_T02_20261119_ES.md) listo para leer los registros y VTK nativos preservados: recuenta caras con ángulo >70° desde los **logs**, identifica rangos espaciales solo a partir de **ocurrencias de vértices VTK**, y revalida las puertas de malla y contacto guardadas. **La herramienta no ha sido ejecutada en WSL; no inventar recuentos ni localizar caras usando cantidades de vértices. NO CFD.**
+
+## V4/T02 — Auditoría nativa de no ortogonalidad (19/11/2026)
+
+El investigador ejecutó exitosamente `audit_v4_t02_nonorth.py` corregido tras las regresiones que verifican `wall` en `metalTop`, parches `mappedWall` recíprocos y el informe de área preservado. **El auditor leyó evidencia nativa guardada, NO volvió a ejecutar `checkMesh`, no ejecutó solver.**
+
+| Dominio | Caras totales | Caras con no ortogonalidad >70° | Máximo [°] |
+|---|---:|---:|---:|
+| Padre | 66,208 | **572** | 82.92036178 |
+| Metal | 28,256 | **276** | 77.9303929 |
+| Molde | 40,448 | **232** | 82.058116 |
+
+El total de caras de ambas regiones excede al padre en **2,496**, exactamente el conteo de caras de la interfaz por lado: 28,256 + 40,448 − 66,208 = 2,496. **No confundir con la diferencia de 64 caras severamente no ortogonales** entre padre (572) y suma regional (508), cuya identidad/causa todavía no se ha demostrado.
+
+Los VTK existentes de `nonOrthoFaces` presentan ocurrencias de vértices entre Y −40 y −39 mm (padre y metal), y alrededor de −40..−39.8 mm (molde). **Esos histogramas son de vértices, no caras ni centroides.** JSON original: `~/OpenFOAM/C3D04_V4_T02_NONORTH_AUDIT_01/C3D04_V4_T02_NONORTH_REPORT.json`.
+
+Se publicó el **nuevo lector de geometría facial real** [`audit_v4_t02_vtk_faces.py`](../cases_3d/C3D_04_rounded_multiblock_pilot/scripts/audit_v4_t02_vtk_faces.py), con pruebas sintéticas ASCII/BINARY para VTK PolyData/Unstructured Grid y puertas nativas read-only, que calculará centroides de polígonos por sección Y y comprobará su conteo frente al log nativo. **El nuevo lector todavía no ha sido ejecutado en WSL; no se afirma coincidencia de conteos VTK ni estabilidad numérica.** [Protocolo y siguiente ejecución](C3D_04_NO_ORTHO_T02_20261119_ES.md).
+
+**Estado científico: V4/T02 acepta preliminarmente calidad nativa y contacto; muestreo superficial STL favorable pero no Hausdorff riguroso; no ortogonalidad severa localizada en transiciones basales; no independencia de malla; NO CFD.**
