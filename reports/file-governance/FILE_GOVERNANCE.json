@@ -25,11 +25,11 @@
     "workflow": 22
   },
   "finding_counts": {
-    "POTENTIAL_UNLOGGED_CHANGES": 1
+    "POTENTIAL_UNLOGGED_CHANGES": 2
   },
-  "finding_total": 1,
-  "inventory_fingerprint": "8f402e88b5619dbdb00ef46db87f7269cf568bbd9d5db0c93f88a26f461a016e",
-  "evidence_fingerprint": "d08ca0b649579beeb667bebd4f9ee7d2fefd7194a6da98e83ca4d4a86b24fb8a",
+  "finding_total": 2,
+  "inventory_fingerprint": "8f2a9d2afb7e22e695c8a1fc1906ed5dea91c3fa04b14d86372e13dd1c04be96",
+  "evidence_fingerprint": "b694f3fa60b2d28e3058136d3b7728a162cb401ac4d25c0bc2a6256e40666163",
   "files": [
     {
       "path": ".github/agents/openfoam-solidification.agent.md",
@@ -85,7 +85,7 @@
       "role": "workflow",
       "purpose": "GitHub Actions automation",
       "certainty": "rule",
-      "blob": "5a3b555b1bfb144289c565a7c84c559fc89c0928"
+      "blob": "c183fd6aeea4699cb4f26ec6a59e8693791a3d52"
     },
     {
       "path": ".github/workflows/file-governance-audit.yml",
@@ -344,7 +344,7 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "74646ddb906da101f97cd66de30a24be90424252"
+      "blob": "938e1518075bc6570f2859161a3769f30ed02a61"
     },
     {
       "path": "RUN_CASE_REGISTRY.csv",
@@ -358,7 +358,7 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "b6054706224dd4d6c99ca98b3018835f4fc5bded"
+      "blob": "292be114e6af6dec8228deedda401dfe49cb2340"
     },
     {
       "path": "VALIDATION_MATRIX.md",
@@ -1730,7 +1730,7 @@
       "role": "source",
       "purpose": "code/test implementation",
       "certainty": "rule",
-      "blob": "0a76d8f7bcd6bbcb0434898d01679e06d6fa14c6"
+      "blob": "b9c7f12bdbd7319d14ae6b37826199eae284052c"
     },
     {
       "path": "cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/tests/test_integrated_case_a.py",
@@ -271944,7 +271944,7 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "b7549e91129df5540610c33c17a402430ca12a7c"
+      "blob": "809fc46b342937803834e3c497edc987fdf629c9"
     },
     {
       "path": "docs/DOCUMENT_SYNC_20261110_ES.md",
@@ -271993,7 +271993,7 @@
       "role": "config",
       "purpose": "machine-readable configuration",
       "certainty": "rule",
-      "blob": "1947e7cd34a38ae5d9e764ec0d181cb1d60a24a7"
+      "blob": "8e995201ea91fa7ed9ac274ca0f7d17de9d4766b"
     },
     {
       "path": "docs/REGLA_INSTRUCCIONES_UNIFICADAS_ES.md",
@@ -272740,11 +272740,20 @@
   ],
   "findings": [
     {
-      "id": "d593e916e388a2ec",
+      "id": "b8e416f73588db75",
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_EN.md",
-      "observation": "7 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/C14_PARAMETER_BASELINE.json, cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/T0_INPUTS.json, cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/scripts/prepare_case_a_t0.py, cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/tests/test_integrated_case_a.py, cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/scripts/run_t0_granada.py, cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/tests/test_t0_granada.py",
+      "observation": "9 implementation/config paths changed since this log's last commit; examples: .github/workflows/case-a-t0-stage-contract.yml, cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/C14_PARAMETER_BASELINE.json, cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/T0_INPUTS.json, cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/scripts/prepare_case_a_t0.py, cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/tests/test_integrated_case_a.py, cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/scripts/run_t0_granada.py",
+      "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
+      "state": "REVIEW_REQUIRED"
+    },
+    {
+      "id": "d67f2097605232f3",
+      "code": "POTENTIAL_UNLOGGED_CHANGES",
+      "severity": "review",
+      "path": "PROJECT_AUDIT_LOG_ES.md",
+      "observation": "3 implementation/config paths changed since this log's last commit; examples: .github/workflows/case-a-t0-stage-contract.yml, cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/scripts/prepare_case_a_t0.py, docs/PROJECT_STAGE_STATUS.json",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     }
