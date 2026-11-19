@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Fast no-Gmsh regressions for the acceptance review of saved HEX8 evidence."""
 import importlib.util
+import hashlib
 import tempfile
 import unittest
 from pathlib import Path
@@ -114,6 +115,42 @@ Failed 1 mesh checks.
         details = mod.cad_provenance_details({}, 270788)
         self.assertFalse(any(item["passed"] for item in details.values()))
         self.assertIsNone(details["mesh_element_topology"]["observed"])
+
+    def test_canonical_step_sha256_literals_match_actual_versioned_sources(self):
+        # Independently fixed, 64-character canonical hashes, not values
+        # derived from SHA_METAL/SHA_MOLD in the code being tested.
+        expected = {
+            "metalmm.STEP": "ea5f65796c5156e4931eaec29ff656c279120925ebc083767a16b80892d0f475",
+            "QuickCupmm.STEP": "fe126d23bb639196258551fd156591d7fe2b0b4ce1d7c9ece47016e8ad08a40c",
+        }
+        self.assertEqual(mod.SHA_METAL, expected["metalmm.STEP"])
+        self.assertEqual(mod.SHA_MOLD, expected["QuickCupmm.STEP"])
+        root = SRC.parents[1] / "constant" / "geometry"
+        for name, digest in expected.items():
+            self.assertEqual(len(digest), 64)
+            self.assertTrue((root / name).is_file(), f"Canonical STEP missing: {name}")
+            self.assertEqual(hashlib.sha256((root / name).read_bytes()).hexdigest(), digest)
+
+    def test_truncated_mold_sha256_is_rejected_even_if_other_six_pass(self):
+        valid = {
+            "mesh_element_topology": "HEX8_QUAD4_ONLY",
+            "subdivide_to_hex": True,
+            "algorithm_3d": 1,
+            "mesh_size_mm": 3.6,
+            "source": {
+                "metal_sha256": mod.SHA_METAL,
+                "mold_sha256": "fe126d23bb639196258551fd156591d7c9ece47016e8ad08a40c",
+            },
+            "post_subdivision_hex_count": 270788,
+        }
+        checks = mod.cad_provenance_details(valid, 270788)
+        self.assertEqual(len(checks), 7)
+        self.assertFalse(checks["source.mold_sha256"]["passed"])
+        self.assertTrue(all(v["passed"] for k, v in checks.items()
+                            if k != "source.mold_sha256"))
+        valid["source"]["mold_sha256"] = mod.SHA_MOLD
+        self.assertTrue(all(v["passed"] for v in
+                            mod.cad_provenance_details(valid, 270788).values()))
 
     def test_missing_native_log_rejected(self):
         with tempfile.TemporaryDirectory() as d:
