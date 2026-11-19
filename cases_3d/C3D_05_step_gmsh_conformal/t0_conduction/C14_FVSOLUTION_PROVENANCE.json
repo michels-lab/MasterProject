@@ -1,0 +1,22 @@
+{
+  "schema": "C3D05_T0_FVSOLUTION_FROM_C14_V1",
+  "date": "2026-11-19",
+  "sources": [
+    {
+      "path": "cases_controlled_buoyancy/C14_topFixedFlux_explicitRef/system/fvSolution",
+      "git_blob_sha1": "350da0b4d1bc92bc2e6e3e3e120a9ac98fd298f8",
+      "role": "global PIMPLE and e relaxation"
+    },
+    {
+      "path": "cases_controlled_buoyancy/C14_topFixedFlux_explicitRef/system/metal/fvSolution",
+      "git_blob_sha1": "eff8d8a5a7c94228c6b0931f668e330384f35810",
+      "role": "nEnergyCorrectors 2; fluid field solvers not copied"
+    },
+    {
+      "path": "cases_controlled_buoyancy/C14_topFixedFlux_explicitRef/system/mold/fvSolution",
+      "git_blob_sha1": "5bd3b25ed8b043941bd9f681471eb70b6e9f4001",
+      "role": "PCG DIC and regional PIMPLE for both solid fields"
+    }
+  ],
+  "adaptation": "Global PIMPLE C14 3/2/1, e/eFinal 1.0; energy count 2 moved from C14 fluid-region intent; two solid regions from C14 mold PCG DIC 1e-6/0.05, region PIMPLE 1/2/0; p_rgh/U excluded. No WSL/CFD validation."
+}
