@@ -167,3 +167,21 @@ python3 analysis_tools/audit_fs_c05_postrun_fields.py \
 ```
 
 **Aún no hay datos reales publicados de `V_metal(t)`, temperatura final o flujo térmico**; se obtendrán cuando se ejecute este diagnóstico. Si el solver no guardó un campo `T` o `alpha` en una de las carpetas, la auditoría lo declarará como fallo de instrumentación —sin generar resultados falsos. Para comprobar específicamente el flujo de calor se evaluará añadir a una futura **copia** el functionObject oficial `wallHeatFlux` de OpenFOAM14 en ambas regiones, disponible en `src/functionObjects/field/wallHeatFlux`, que utiliza el modelo `thermophysicalTransportModel` y reporta `Q [W]` en paredes: su disponibilidad matemática no garantiza compatibilidad automática con la configuración actual, por lo que exigirá un ensayo separado.
+
+## 19-11-2026 — Primeros RESULTADOS REALES de `alpha.metal` y `T` tras 2 pasos
+
+El investigador ejecutó en Foundation14 el script `audit_fs_c05_postrun_fields.py` desde commit `1aadf246c` sobre la corrida completa `FS_C05_NATIVE_SMOKE_20261119T070806Z_7e8589e3`. Salida **28 tests OK** (suite combinada); estado `NATIVE_TWO_STEP_FIELDS_MEASURED_NO_CHT_VALIDATION`. Tres snapshots CFD leídos realmente del disco, sin modificar ninguna carpeta:
+
+| Cantidad | t = 0 s | t = 1e-7 s | t = 2e-7 s |
+|---|---:|---:|---:|
+| Volumen líquido `∑alpha.metal*V` [m³] | 4.801191628e-05 | 4.801191628e-05 | 4.801191628e-05 |
+| Temperatura hierro, media `alpha*V` [K] | 1500 | 1499.9970068022385 | 1499.9965640713197 |
+| Temperatura gas, media `(1-alpha)*V` [K] | 300 | 301.4926790660119 | 301.68342985397226 |
+| Temperatura arena, media `V` [K] | 300 | 300.0000149843143 | 300.0000299686341 |
+| Temperatura total fluido, media `V` [K] | 333.70061067495584 | 335.1512855170855 | 335.3366668564264 |
+
+**Hechos numéricos:** volumen VOF metálico sin variación observada (`0.0 m³`, deriva `0.0` con la precisión guardada); `alpha` en intervalo [0,1] en los tres tiempos, `2368` celdas con metal, ninguna con `0<alpha<1`; el hierro pierde **0.00343592868 K** de media alfa-volumen, el gas gana **1.68342985397 K** y la arena gana **2.99686341236e-05 K**. Extremos a (t=2e-7): (T_{fluid,min}=299.998946787 K), (T_{fluid,max}=1500.04863142 K), (T_{mold,min}=300 K), (T_{mold,max}=300.000467584 K). Las pequeñas sobre/suboscilaciones térmicas y la subida gas/descenso metal merecen revisión física.
+
+**Advertencia:** `alpha` invariante no demuestra conservación de la **masa** metal `Σalpha rho V`, que además requiere flujos entrantes/salientes, ni indica estabilidad para mayores intervalos. Las medias T ponderadas por (alpha·V) tampoco equivalen a energía/entalpía, pues (rho), (c_p), termodinámica de compresión y términos de transporte pueden variar. La subida de ~1.683 K del gas en (0.2) µs NO prueba ni descarta un error de energía sin conocer (Q) a ambas caras y el transporte de entalpía/trabajo por el contorno abierto. **No extender tiempo ni afirmar termodinámica válida sin instrumentar flujos.**
+
+**Pendientes explícitos:** no se midió aún `Q [W]` a la interfaz fluido/arena, no se hizo cierre de energía, no hay `solidificationMelting`, ni curvas experimentales ni STL exacto.
