@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
   "audit_kind": "deterministic_full_tracked_tree",
-  "tracked_files_total": 38917,
-  "classified_files_total": 38912,
-  "docs_content_inspected": 164,
+  "tracked_files_total": 38918,
+  "classified_files_total": 38913,
+  "docs_content_inspected": 165,
   "large_docs_skipped": 1,
   "excluded_reports": 5,
   "roles": {
@@ -12,7 +12,7 @@
     "bitacora": 5,
     "config": 7,
     "data": 31,
-    "document": 130,
+    "document": 131,
     "index": 30,
     "license": 1,
     "simulation_case_file": 107,
@@ -25,11 +25,11 @@
     "workflow": 19
   },
   "finding_counts": {
-    "POTENTIAL_UNLOGGED_CHANGES": 2
+    "POTENTIAL_UNLOGGED_CHANGES": 1
   },
-  "finding_total": 2,
-  "inventory_fingerprint": "41f1ad3dfb8cb193e8b9480152c03dece7e9a9b94b2df2593ba59ab54c8c30e0",
-  "evidence_fingerprint": "19ad77acfb7b37ce387f0367e288b283ff513caea81a821fb468a5d8b5e4bcac",
+  "finding_total": 1,
+  "inventory_fingerprint": "1b4401d392f036a645ffab597c3f93a5b5ccf6351993ef57370abe4690ca380f",
+  "evidence_fingerprint": "ee632441394ed28287d61c56369389673ba3bb516555a2a394a63b02cf8a34e0",
   "files": [
     {
       "path": ".github/agents/openfoam-solidification.agent.md",
@@ -316,14 +316,14 @@
       "role": "bitacora",
       "purpose": "technical/audit change history",
       "certainty": "rule",
-      "blob": "6186aad6c304ea4a04b3a0c169a9ca5d8957dfb4"
+      "blob": "2b20d2fbe24d8f32a6b8f6cf13408738a59b61e5"
     },
     {
       "path": "README.md",
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "bd4fa78972624733133cd80aaa8d3b379b3bdba9"
+      "blob": "36ad6ca5ac1ca0f269b8198582fba8ff59a03a6b"
     },
     {
       "path": "RUN_CASE_REGISTRY.csv",
@@ -337,7 +337,7 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "f6695b69ab79458b53b263aaf29d7cd4b48f8ff8"
+      "blob": "53351379913b3955b7d88b8695f54a6d45005b4c"
     },
     {
       "path": "VALIDATION_MATRIX.md",
@@ -1618,7 +1618,7 @@
       "role": "source",
       "purpose": "code/test implementation",
       "certainty": "rule",
-      "blob": "5541931775604f45281f60d61472da2a6f657211"
+      "blob": "0e7b4af9a7c188c1213060005ae3dcd27afc149c"
     },
     {
       "path": "cases_3d/C3D_04_rounded_multiblock_pilot/scripts/diagnose_existing_defects.py",
@@ -1667,7 +1667,7 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "b13cfa8a728c132b0ceda6c2c81cc12119470d92"
+      "blob": "2901d6500a45dbf8bb31150118b5da50cad684de"
     },
     {
       "path": "cases_3d/C3D_05_step_gmsh_conformal/constant/geometry/QuickCupmm.STEP",
@@ -1828,7 +1828,7 @@
       "role": "test",
       "purpose": "code/test implementation",
       "certainty": "rule",
-      "blob": "9876354df2ba981d5d24bb578062b96d86045200"
+      "blob": "b8038b75b3e19bb34f420cfe369b2501ebed1b41"
     },
     {
       "path": "cases_3d/README.md",
@@ -271541,6 +271541,13 @@
       "blob": "a60f9485b3577ee6d93ffc4b6d32ed00219a86c9"
     },
     {
+      "path": "docs/C3D_04_NO_ORTHO_T02_20261119_ES.md",
+      "role": "document",
+      "purpose": "manual/decision/report/historical note",
+      "certainty": "inferred",
+      "blob": "2ea4ac8e33a204f5e17c6e6c0a62273ebdea071d"
+    },
+    {
       "path": "docs/C3D_04_RESULTADO_PRIMER_MALLADO_20261118_ES.md",
       "role": "document",
       "purpose": "manual/decision/report/historical note",
@@ -271657,7 +271664,7 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "2ad764fe7681e1eb74b241b2007c027531378d14"
+      "blob": "600f297663456d83f0c98d03427b6cf1bf4ba376"
     },
     {
       "path": "docs/DOCUMENT_SYNC_20261110_ES.md",
@@ -272423,15 +272430,6 @@
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_EN.md",
       "observation": "38 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_03_doctor_multiblock_pilot/tests/test_native_multiblock_static.sh, cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V2_BASAL_QUALITY/tests/test_candidate_geometry.py, cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V3_BASAL_SWEEP/run_v3_sweep.sh, cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V3_BASAL_SWEEP/scripts/build_v3_dictionary.py, cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V3_BASAL_SWEEP/scripts/summarize_trial.py, cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V3_BASAL_SWEEP/tests/test_v3_diff.py",
-      "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "7fd8b995f9b65b8a",
-      "code": "POTENTIAL_UNLOGGED_CHANGES",
-      "severity": "review",
-      "path": "PROJECT_AUDIT_LOG_ES.md",
-      "observation": "4 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_04_rounded_multiblock_pilot/scripts/audit_v4_t02_nonorth.py, cases_3d/C3D_05_step_gmsh_conformal/scripts/audit_nonorthogonal_faces.py, cases_3d/C3D_05_step_gmsh_conformal/scripts/run_nonorth_face_audit.sh, cases_3d/C3D_05_step_gmsh_conformal/tests/test_audit_nonorthogonal_faces.py",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     }
