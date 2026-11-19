@@ -10,8 +10,8 @@ El antiguo flujo requería `run_t0_preflight.sh` y luego `run_t0_materialize.sh`
 1. valida todo el JSON y rechaza campos/supuestas fuentes sintéticas ANTES de tocar WSL o la malla;
 2. reutiliza únicamente los logs/JSON ya preservados (sin regenerar STEP, Gmsh, checkMesh o CFD) para confirmar procedencia/interfaz;
 3. confirma Foundation14 y sus herramientas; prepara una COPIA del caso en carpeta temporal única;
-4. analiza nueve diccionarios con `foamDictionary`, guarda manifiesto de entrada SHA256 y reporte explícito sin CFD;
-5. instala el caso materializado solo si todas las etapas pasan; bloquea sobrescrituras, concurrencia y cambios de entrada. Si se repite la misma invocación y SHA, informa `ALREADY_PREPARED` sin reconstrucción ni nuevas pruebas.
+4. analiza nueve diccionarios con `foamDictionary`, guarda SHA256 del JSON y huella conjunta del polyMesh regional y evidencias nativas, corrige la ruta definitiva en el reporte generado y produce resumen explícito sin CFD;
+5. instala el caso materializado solo si todas las etapas pasan; bloquea sobrescrituras, concurrencia y cambios de entrada. Si se repite la misma invocación y SHA tanto de entradas como de malla/evidencia, informa `ALREADY_PREPARED` sin reconstrucción ni nuevas pruebas.
 
 Comando único **solo cuando la matriz de propiedades esté completada con datos documentados**:
 ```bash

@@ -53,6 +53,8 @@ class T0GranadaIntegration(TestCase):
                 (poly / file).write_text("FAKE ONLY FOR TEST", encoding="utf-8")
         for file in ("STEP_CAD_AUDIT.json", "CONTACT_AREA_REPORT.json", "NATIVE_BUILD_STATUS.txt"):
             (self.source / file).write_text("TEST ONLY", encoding="utf-8")
+        for file in ("log.checkMesh.parent", "log.checkMesh.metal", "log.checkMesh.mold"):
+            (self.source / file).write_text("SYNTHETIC LOG ONLY", encoding="utf-8")
 
     def test_missing_physical_inputs_fail_before_mesh_or_wsl(self):
         self.write_inputs(json.loads((T0 / "T0_INPUTS.json").read_text()))
@@ -99,10 +101,17 @@ class T0GranadaIntegration(TestCase):
         self.assertEqual(report["status"], target.STAGE)
         self.assertEqual(len(report["parsed_dictionaries"]), 9)
         self.assertFalse(report["cfd_executed"])
+        self.assertEqual(len(report["source_fingerprint_sha256"]), 64)
+        prep = json.loads((self.output / "T0_PREPARATION_REPORT.json").read_text())
+        self.assertEqual(prep["output"], str(self.output))
+        self.assertTrue(prep["staging_finalized_into_output"])
         self.assertTrue((self.output / "constant/metal/polyMesh/points").is_file())
         self.assertFalse((self.output / "constant/metal/polyMesh").is_symlink())
         self.assertFalse((self.output.with_name(self.output.name + ".granada.lock")).exists())
         self.assertFalse(list(self.work.glob("*.granada-staging-*")))
+        (self.source / "constant/metal/polyMesh/points").write_text("SOURCE MODIFIED AFTER ACCEPTED RUN")
+        self.assertEqual(target.pipeline(self.inputs, self.source, self.output), 2)
+        self.assertTrue((self.output / "T0_GRANADA_REPORT.json").is_file())
 
     def test_changed_inputs_cannot_reuse_prepared_output(self):
         self.fake_source()

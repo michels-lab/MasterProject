@@ -83,6 +83,26 @@ def check_environment():
         raise RuntimeError("foamMultiRun (Foundation14) not on PATH")
 
 
+def source_fingerprint(source: Path) -> str:
+    """Fingerprint actual accepted polyMesh and native source reports (no checkMesh)."""
+    parts = [
+        "STEP_CAD_AUDIT.json", "CONTACT_AREA_REPORT.json",
+        "NATIVE_BUILD_STATUS.txt",
+        "log.checkMesh.parent", "log.checkMesh.metal", "log.checkMesh.mold",
+    ]
+    for region in ("metal", "mold"):
+        for name in ("points", "faces", "owner", "neighbour", "boundary"):
+            parts.append(f"constant/{region}/polyMesh/{name}")
+    digest = hashlib.sha256()
+    for rel in parts:
+        file = source / rel
+        digest.update(rel.encode("utf-8") + b"\\0")
+        with file.open("rb") as stream:
+            while chunk := stream.read(1024 * 1024):
+                digest.update(chunk)
+    return digest.hexdigest()
+
+
 def existing_output(out: Path, inp_hash: str, source: Path):
     """Idempotent success only for the *same* completed and documented preparation."""
     if not (out.exists() or out.is_symlink()):
@@ -136,12 +156,21 @@ def pipeline(inputs: Path, source: Path, out: Path) -> int:
         print("PRESERVED:", exc)
         return 2
     if prior:
+        try:
+            fingerprint = source_fingerprint(source)
+        except (OSError, ValueError) as exc:
+            print(f"BLOCKED_CHANGED_SOURCE: accepted mesh/evidence missing: {exc}")
+            return 4
+        if fingerprint != prior.get("source_fingerprint_sha256"):
+            print("BLOCKED_CHANGED_SOURCE: accepted polyMesh/native evidence SHA differs from completed case")
+            return 2
         print(f"ALREADY_PREPARED | {STAGE} | {out}")
         print("No repeat of checkMesh, materialization or foamDictionary; no CFD.")
         return 0
     try:
         check_environment()
         evidence = source_review(source)
+        fingerprint = source_fingerprint(source)
     except (RuntimeError, ValueError, OSError, KeyError, TypeError) as exc:
         print(f"BLOCKED_NATIVE_OR_SAVED_EVIDENCE: {exc}")
         return 4
@@ -175,6 +204,13 @@ def pipeline(inputs: Path, source: Path, out: Path) -> int:
             )
             if parsed.returncode != 0:
                 raise RuntimeError(f"Native foamDictionary failed {rel}: {parsed.stderr.strip()} {parsed.stdout.strip()}")
+        # The old materializer writes its temporary output path into its proof.
+        # Normalize to the FINAL location before atomically publishing the case.
+        prep_path = staging / "T0_PREPARATION_REPORT.json"
+        preparation = json.loads(prep_path.read_text(encoding="utf-8"))
+        preparation["output"] = str(out)
+        preparation["staging_finalized_into_output"] = True
+        prep_path.write_text(json.dumps(preparation, ensure_ascii=False, indent=2) + "\\n", encoding="utf-8")
         report = {
             "status": STAGE,
             "case": "C3D_05_step_gmsh_conformal",
@@ -182,6 +218,7 @@ def pipeline(inputs: Path, source: Path, out: Path) -> int:
             "source": str(source),
             "output": str(out),
             "input_sha256": inp_hash,
+            "source_fingerprint_sha256": fingerprint,
             "generated_utc": datetime.now(timezone.utc).isoformat(),
             "parsed_dictionaries": list(FILES),
             "read_only_native_evidence_gate": evidence["geometry_topology_gate_passed"],
