@@ -263,6 +263,13 @@ def main(argv=None)->int:
         return 0
     except (OSError,ValueError,TypeError,KeyError,json.JSONDecodeError) as exc:
         print("FS-C05 NATIVE STARTUP BLOCKED: "+str(exc),file=sys.stderr)
+        log=output/"log.FS_C05_foamMultiRun"
+        if log.is_file() and not log.is_symlink():
+            print("FAILED NATIVE COPY:",output,file=sys.stderr)
+            print("REAL SOLVER LOG:",log,file=sys.stderr)
+            print("--- last 45 native log lines ---",file=sys.stderr)
+            for line in log.read_text(errors="replace").splitlines()[-45:]:
+                print(line,file=sys.stderr)
         return 2
 
 
