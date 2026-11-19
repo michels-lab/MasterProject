@@ -55,3 +55,26 @@ proof of stability on this 76.8 degree maximum non-orthogonal mesh.
 preflight next; physical-parameter provenance next; materialize separate case;
 OpenFOAM dictionary/thermo compilation and *then* any deliberately authorized
 solver run. **No automatic CFD**, no claims of thermophysical validity.
+
+## ONE-COMMAND stages in Ubuntu WSL
+
+**T0a — preflight only, correct for the current missing inputs:**
+
+```bash
+cd ~/OpenFOAM/MasterProject && git pull --ff-only && bash cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/scripts/run_t0_preflight.sh
+```
+
+**T0b — guarded materialization, only AFTER T0_INPUTS.json is completed from evidence:**
+
+```bash
+cd ~/OpenFOAM/MasterProject && git pull --ff-only && bash cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/scripts/run_t0_materialize.sh
+```
+
+To store a parameter file **outside Git** and avoid changing tracked research input
+templates, set environment variable `C3D05_T0_INPUTS` to a complete JSON copy
+with exactly the same schema. Both scripts read it automatically. No physical
+property placeholders are accepted; missing fields produce a classified block.
+
+The guarded materializer, once authorized, creates **one fresh** thermal case,
+copies source polyMesh, generates T and physicalProperties, and parses all nine
+dictionaries with `foamDictionary`. It **never launches foamMultiRun**.
