@@ -93,3 +93,29 @@ cd ~/OpenFOAM/MasterProject
 git pull --ff-only
 bash cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V2_BASAL_QUALITY/Allmesh
 ```
+
+## Resultado nativo V2 y preparación V3 — 18-11-2026
+
+El usuario ejecutó `C3D04_V2_BASAL_QUALITY/Allmesh` en WSL tras `git pull --ff-only`. La suite estática probó los 12 vértices interiores corregidos y los 108 bloques de arena con grading 1.5. **`checkMesh` del padre V2 PASÓ (`Mesh OK`)**, sin celdas de determinante pequeño ni caras sesgadas registradas; valores máximos: no ortogonalidad 83.30878084°, skewness 2.575040287. Las regiones **continuaron rechazadas**:
+
+| Indicador | Metal V1 | Metal V2 | Arena V1 | Arena V2 |
+|---|---:|---:|---:|---:|
+| Celdas de determinante bajo | 92 | **4** | 0 reportadas | 0 reportadas |
+| Caras de skewness elevado | 0 reportadas | 0 reportadas | 16 | **8** |
+| No ortogonalidad máxima [°] | 84.14010705 | 80.25771334 | 80.37353325 | 81.21165315 |
+| Skewness máxima | 2.35713197 | 2.018379667 | 4.591592248 | 4.070513822 |
+| Checks fallidos | 1 | **1** | 1 | **1** |
+
+Los VTK del segundo ensayo limitan `metal/underdeterminedCells.vtk` a `Y=-40..-39.8 mm` (32 vértices superficiales; **son 4 celdas** según el log) y `mold/skewFaces.vtk` a `Y=-39.8..-39.5 mm` (24 vértices superficiales; **son 8 caras** según log). La nueva área real del `polyMesh` permanece **6,343.771874 mm² por lado**, diferencia entre regiones 0.000 %, desviación −0.139498 % frente al STL. Tapa `metalTop` = 1,326.384174 mm² (−0.037782 %).
+
+**V2 es un progreso experimental, NO una malla aprobada.** La terminal reportó:
+```text
+REJECTED / stage=CHECK_REGION_QUALITY / At least one native checkMesh, CAD volume or expected region cell count rejected / NO_CFD
+```
+
+La carpeta `~/OpenFOAM/C3D04_V2_BASAL_QUALITY_01` está preservada. Se publica ahora [**C3D04 V3: ensayo acotado**](../cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V3_BASAL_SWEEP/README.md) con un solo comando que analiza seis pares de parámetros de geometría **interior** del hierro y grading radial en arena, conserva contorno, arco, contacto, volumes, los archivos anteriores y exige todas las puertas nativas. **V3 sigue `PREPARED_NOT_RUN`; no afirmar que pase el mallado ni ejecutar CFD.**
+
+```bash
+cd ~/OpenFOAM/MasterProject && git pull --ff-only && \
+bash cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V3_BASAL_SWEEP/run_v3_sweep.sh
+```
