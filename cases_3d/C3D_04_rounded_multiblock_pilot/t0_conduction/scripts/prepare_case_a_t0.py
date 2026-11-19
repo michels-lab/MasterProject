@@ -413,7 +413,7 @@ def c14_source_gate(cfg: dict) -> dict:
             raise FileNotFoundError(f"Original C14 file missing: {path}")
         data = path.read_bytes()
         git_blob = hashlib.sha1(
-            ("blob " + str(len(data)) + "\\0").encode("ascii") + data
+            ("blob " + str(len(data))).encode("ascii") + bytes([0]) + data
         ).hexdigest()
         if git_blob != row["blob_sha"]:
             raise ValueError(
