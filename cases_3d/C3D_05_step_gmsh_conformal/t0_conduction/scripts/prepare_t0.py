@@ -107,7 +107,22 @@ def fmt(value: int | float) -> str:
     return format(value, ".12g")
 
 
+def verify_c14_fvsolution_source() -> None:
+    """Require exact committed C14 originals; do not silently drift in solver settings."""
+    import hashlib
+    root = HERE.parents[2]
+    index = json.loads((HERE / "C14_FVSOLUTION_PROVENANCE.json").read_text(encoding="utf-8"))
+    if index.get("schema") != "C3D05_T0_FVSOLUTION_FROM_C14_V1":
+        raise ValueError("Unrecognized C14 fvSolution origin")
+    for entry in index["sources"]:
+        data = (root / entry["path"]).read_bytes()
+        blob = b"blob " + str(len(data)).encode("ascii") + b"\0" + data
+        if hashlib.sha1(blob).hexdigest() != entry["git_blob_sha1"]:
+            raise ValueError("C14 fvSolution original has changed: " + entry["path"])
+
+
 def file_map(cfg: dict) -> dict[str, str]:
+    verify_c14_fvsolution_source()
     files = {}
     for region in ("metal", "mold"):
         mat = cfg[region]
