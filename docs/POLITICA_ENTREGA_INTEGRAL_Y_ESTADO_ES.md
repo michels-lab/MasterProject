@@ -1,3 +1,5 @@
+> **19-11-2026 | GRANADA_C3D05_C14_NUMERIC_SHK_20261119 — APLICACIÓN REAL DE NORMA:** Caso B ahora tiene C14 numérico trazable, preparación + referencia de energía + ejecución corta opcional + forense de log en UN ejecutor, sin rondas de micropruebas. Se corrigió el fallo de la auditoría científica causado por excluir grupos `THREE_D_*` del registro de carpetas. En TODA respuesta indicar etapa 3/7, avance 2/7 (29% hitos técnicos), ejecución/CFD pendiente. [Bitácora técnica](granada/C3D05_C14_NUMERICAL_ONE_SHOT_20261119_ES.md).
+
 > **19-11-2026 | GRANADA_C3D05_T0_INTEGRAL_20261119:** primer paquete técnico GRANADA de Caso B implementa orquestación T0 y QA estática sin nuevas rondas WSL: [documentación de la entrega](granada/C3D05_T0_INTEGRATED_GRANADA_20261119_ES.md). El porcentaje 29% permanece basado en 2/7 hitos, sin CFD.
 
 # Regla obligatoria de entrega integral y estado de avance — MasterProject
