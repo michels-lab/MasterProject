@@ -16,6 +16,44 @@ CORE = [
 "docs/DOCUMENTATION_INDEX.md","docs/REGLA_INSTRUCCIONES_UNIFICADAS_ES.md",
 "docs/POLITICA_ENTREGA_INTEGRAL_Y_ESTADO_ES.md"
 ]
+def check_case_a_status():
+    """CASE A has an independent 10-gate manifest; never borrow B's 7 gates."""
+    errors = []
+    path = ROOT/"docs/C3D04_CASE_A_STATUS.json"
+    if not path.is_file():
+        return ["Caso A: missing independent progress source"]
+    data = json.loads(path.read_text(encoding="utf-8"))
+    entries = data.get("milestones")
+    if data.get("scope") != "CASE_A_C3D_04_V4_T02_ONLY":
+        errors.append("Caso A: wrong status scope")
+    if not isinstance(entries, list) or len(entries) != 10:
+        return errors+["Caso A: expected ten defined milestones"]
+    done = sum(entry.get("status") == "DONE" for entry in entries)
+    active = [e for e in entries if e.get("status") == "IN_PROGRESS"]
+    if (
+        done != data.get("progress_count_done")
+        or data.get("progress_count_total") != 10
+        or 10*done != data.get("progress_percent")
+        or len(active) != 1
+        or active[0].get("id") != data.get("current_stage")
+    ):
+        errors.append("Caso A: stage, percentage and closed evidence gates disagree")
+    if any(not (ROOT/e["evidence"]).is_file()
+           for e in entries if e.get("status") == "DONE"):
+        errors.append("Caso A: DONE milestone with missing cited file")
+    for p in (
+        "cases_3d/C3D_04_rounded_multiblock_pilot/AGENTS.md",
+        "cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/README.md",
+        "cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/T0_INPUTS.json",
+        ".github/workflows/case-a-t0-stage-contract.yml",
+    ):
+        if not (ROOT/p).is_file():
+            errors.append("Caso A: missing mandatory governance/QA: "+p)
+    if data.get("CFD_run") is not False or data.get("physical_validation") is not False:
+        errors.append("Caso A: invalid scientific acceptance without T0/CFD evidence")
+    return errors
+
+
 def check(s):
     errors = []
     gates = s["gates"]
@@ -40,6 +78,7 @@ def check(s):
             errors.append("Regla no sincronizada: "+path)
     if "C3D_05_step_gmsh_conformal," not in (ROOT/"RUN_CASE_REGISTRY.csv").read_text():
         errors.append("C3D05 falta del registro")
+    errors.extend(check_case_a_status())
     return errors
 def main():
     parser = argparse.ArgumentParser()
