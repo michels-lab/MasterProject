@@ -50,6 +50,11 @@ def read_inputs(path: Path):
     prepare = load_module("case_b_t0_prepare", T0 / "scripts/prepare_t0.py")
     problems = prepare.validate(obj)
     if isinstance(obj, dict):
+        # Provenance verification BEFORE any expensive native mesh checks/copy.
+        try:
+            prepare.verify_c14_numerical_reference_if_present(obj)
+        except (ValueError, OSError) as exc:
+            problems.append("C14 numerical reference: " + str(exc))
         for region in ("metal", "mold"):
             props = obj.get(region, {})
             if isinstance(props, dict):
