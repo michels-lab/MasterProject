@@ -251,3 +251,39 @@ python3 analysis_tools/audit_fs_c04_thermal_interfaces.py \
 El estado esperado es `RECIPROCAL_THERMAL_CONTACT_GEOMETRY_VERIFIED_NO_CHT`; **aún no está confirmado en la laptop**. Si no coincide alguna cara, área o normal, la herramienta debe rechazar el análisis sin reemplazar `mappedWall` ni ajustar arbitrariamente la tolerancia.
 
 Esto **NO** es una condición de frontera térmica funcional ni transferencia de calor resuelta. Las paredes físicas arena–aire están destinadas a intercambio conjugado con el aire **modelado explícitamente**; no imponer sobre ellas `fixedValue T=300 K` ni un coeficiente externo heredado `h=10 W/(m²K)` como sustituto de esa convección. Las fuentes `C14` y `C3D-02` tienen modelos/materiales metal–arena con parámetros provisionales; **no deben copiarse de manera directa a una región VOF conjunta hierro+aire**, cuyos modelos termofísicos, ecuaciones y solvers compatibles con Foundation14 requieren una validación independiente. La base/hueco inferior del molde sigue sin resolver.
+
+## Resultado real, 18 de noviembre de 2026 (hora de Monterrey): superficies conjugadas verificadas
+
+El investigador ejecutó la auditoría `audit_fs_c04_thermal_interfaces.py` en Ubuntu con la copia nativa de `alpha.metal` ya aprobada desde commit `daf0b8eaa`. Resultado **real**: `Ran 11 tests in 0.008s / OK` y estado `RECIPROCAL_THERMAL_CONTACT_GEOMETRY_VERIFIED_NO_CHT`. Datos **medidos geométricamente en la malla**, no supuestos de transferencia térmica:
+
+| Contacto inicial | Caras nativas por cada lado | Área m² | Área cm² |
+|---|---:|---:|---:|
+| Hierro líquido–arena | 1248 | 0.0064837952138918934 | 64.83795213891894 |
+| Aire–arena superior | 128 | 0.001350989999999999 | 13.50989999999999 |
+| Aire–arena lateral | 1760 | 0.012834497383364844 | 128.34497383364842 |
+| **Total fluid–mold** | **3136** | **0.020669282597256734** | **206.69282597256733** |
+
+El error máximo de área en la misma cara del lado fluido y sólido fue `2.879912020664621e-20 m²`; error máximo de oposición de normales unitarias `2.220446049250313e-16`; **3136 de 3136 caras emparejadas**. El aire está realmente conectado sobre la arena y a sus cuatro lados; las condiciones atmosféricas abiertas permanecen **en el exterior** del dominio, no en la pared real arena–aire.
+
+**Significado:** la partición geométrica `fluid/mold`, los volúmenes iniciales y las superficies de contacto están validados para esta **malla piloto aproximada**, sin afirmar transferencia de calor conjugada resuelta. Las propiedades térmicas, temperatura, flujo, base/apoyo, superficies STL y solidificación todavía no se han validado.
+
+### Nueva preparación independiente de temperatura inicial, SIN CFD
+
+Se añadió `analysis_tools/stage_fs_c04_initial_temperature.py` y su suite de pruebas. Hace una **copia aislada** de la copia nativa validada `FS_C04_ALPHA_NATIVE_CHECK_20261119T045227Z_50756897`, pero solo después de volver a ejecutar la auditoría de **3136 caras, áreas, orientación y procedencia del campo `alpha.metal`**. Luego crea:
+- `0/fluid/T`: valor **1500 K** solo donde `alpha.metal=1` inicialmente (2368 celdas) y **300 K** en el aire conectado (32000 celdas).
+- `0/mold/T`: **300 K** inicial uniforme en las 7680 celdas de arena.
+- Todos los parches de `T` reciben `type calculated; value uniform 300;` **solo como marcadores de lectura NO APTOS PARA CORRER UN SOLVER**; no se han implementado `coupledTemperature` ni las condiciones térmicas abiertas de un flujo gas–metal real. **PROHIBIDO usar `foamRun`/`foamMultiRun` sobre ese estado de preparación**.
+- Se comprueban los 42,048 valores de T contra `alpha.metal`, el volumen/áreas preexistentes, el formato `volScalarField`, unidades Kelvin y que la arena no contenga un campo VOF. Los SHA de malla y `alpha` se verifican sin sobrescribir originales.
+
+**Las temperaturas 1500 K y 300 K son hipótesis iniciales de cribado derivadas de C14/FS-C02, NO resultados medidos ni propiedades calibradas.** Los parámetros termofísicos de `C3D-02` (por ejemplo, `rho_iron=6820 kg/m³`, `Cp_iron=827 J/(kg K)`, `rho_sand=1500 kg/m³`, `Cv_sand=700 J/(kg K)`, `k_sand=2 W/(m K)`) están documentados allí, pero **NO están instalados automáticamente**: no representan por sí solos un modelo de mezcla metal–aire VOF dependiente de temperatura ni un balance energético validado. No sustituir el aire exterior por `externalWallHeatFluxTemperature(h=10, Ta=300)` en las paredes de arena.
+
+Comandos SOLO para preparar T (aún no ejecutados en la laptop):
+
+```bash
+cd ~/OpenFOAM/FS_C02_WORKTREE
+python3 -m unittest discover -s analysis_tools -p test_stage_fs_c04_initial_temperature.py -v &&
+python3 analysis_tools/stage_fs_c04_initial_temperature.py \
+  --accepted ~/OpenFOAM/FS_C04_ALPHA_NATIVE_CHECKS/FS_C04_ALPHA_NATIVE_CHECK_20261119T045227Z_50756897
+```
+
+Estado esperado, **NO CONFIRMADO LOCALMENTE**: `INITIAL_T_STAGED_READBACK_NO_NATIVE_OR_CHT`. Siguiente gate tras eso: `foamPostProcess` de T a `t=0` en otra copia, comprobando lectura de ambos `volScalarField` sin solver y cálculo ponderado por volumen. No confundir T inicial con predicción de enfriamiento o solidificación. La base del QuickCup y su abertura inferior siguen pendientes.
