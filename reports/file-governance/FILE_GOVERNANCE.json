@@ -28,8 +28,8 @@
     "POTENTIAL_UNLOGGED_CHANGES": 2
   },
   "finding_total": 2,
-  "inventory_fingerprint": "786bc9b30115cecaefcbd0f9f66fade7f2a3c39477a08a138ec1019cccf500dc",
-  "evidence_fingerprint": "864d895f6ea304a929bf3f4e475df1d131d2b412b3074f5978bdc7ed154b09db",
+  "inventory_fingerprint": "db2ed071a6dc74097629eb0b873b0b9e189d6755590982133a711c990b9a7888",
+  "evidence_fingerprint": "e1a4d98dabbaaebe9a1c0ad9a9f8155122e00dd01c017be5d19a728fcbbad064",
   "files": [
     {
       "path": ".github/agents/openfoam-solidification.agent.md",
@@ -1723,7 +1723,7 @@
       "role": "source",
       "purpose": "code/test implementation",
       "certainty": "rule",
-      "blob": "b6fc4cd1b9fe863893891577ea52d5d93c06c9f5"
+      "blob": "97f90ca638d3c4100398056fb4060b919e2873a7"
     },
     {
       "path": "cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/tests/test_integrated_case_a.py",
@@ -1912,7 +1912,7 @@
       "role": "source",
       "purpose": "code/test implementation",
       "certainty": "rule",
-      "blob": "382ee033c0b5765a6e04821926d1600f8ae062e5"
+      "blob": "bc53444a8054f54156a2d1245f514e11f11bb5e7"
     },
     {
       "path": "cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/scripts/run_t0_materialize.sh",
@@ -272705,20 +272705,20 @@
   ],
   "findings": [
     {
-      "id": "0ebdf3bf03cf220a",
+      "id": "969744308d01dba8",
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_EN.md",
-      "observation": "2 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/scripts/run_t0_granada.py, cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/tests/test_t0_granada.py",
+      "observation": "3 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/scripts/prepare_case_a_t0.py, cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/scripts/run_t0_granada.py, cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/tests/test_t0_granada.py",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     },
     {
-      "id": "6247220b02e6ce33",
+      "id": "c46838c3f49bcdca",
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_ES.md",
-      "observation": "2 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/scripts/run_t0_granada.py, cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/tests/test_t0_granada.py",
+      "observation": "3 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/scripts/prepare_case_a_t0.py, cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/scripts/run_t0_granada.py, cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/tests/test_t0_granada.py",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     }
