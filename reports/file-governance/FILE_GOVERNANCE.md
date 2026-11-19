@@ -5,7 +5,7 @@ No file is auto-deleted or declared unused.
 
 ## Coverage
 
-Tracked: 38919; classified: 38914; readable documents: 165; above read cap: 1; findings: 2.
+Tracked: 38922; classified: 38917; readable documents: 166; above read cap: 1; findings: 1.
 
 ## File roles
 
@@ -16,22 +16,21 @@ Tracked: 38919; classified: 38914; readable documents: 165; above read cap: 1; f
 | bitacora | 5 |
 | config | 7 |
 | data | 31 |
-| document | 131 |
+| document | 132 |
 | index | 30 |
 | license | 1 |
 | simulation_case_file | 107 |
 | simulation_input | 2683 |
 | simulation_log | 3155 |
 | simulation_output | 32613 |
-| source | 89 |
-| test | 34 |
+| source | 90 |
+| test | 35 |
 | web_ui | 1 |
 | workflow | 19 |
 
 ## Findings (human review required)
 
-- **REVIEW / POTENTIAL_UNLOGGED_CHANGES** PROJECT_AUDIT_LOG_EN.md: 39 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_03_doctor_multiblock_pilot/tests/test_native_multiblock_static.sh, cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V2_BASAL_QUALITY/tests/test_candidate_geometry.py, cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V3_BASAL_SWEEP/run_v3_sweep.sh, cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V3_BASAL_SWEEP/scripts/build_v3_dictionary.py, cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V3_BASAL_SWEEP/scripts/summarize_trial.py, cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V3_BASAL_SWEEP/tests/test_v3_diff.py. Next: Inspect diffs and reconcile only meaningful decisions/results in the canonical log (ID 2da72ce69f760bcf)
-- **REVIEW / POTENTIAL_UNLOGGED_CHANGES** PROJECT_AUDIT_LOG_ES.md: 1 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_05_step_gmsh_conformal/scripts/audit_nonorth_hop_distance.py. Next: Inspect diffs and reconcile only meaningful decisions/results in the canonical log (ID 8fb37bc2a9173bd2)
+- **REVIEW / POTENTIAL_UNLOGGED_CHANGES** PROJECT_AUDIT_LOG_EN.md: 41 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_03_doctor_multiblock_pilot/tests/test_native_multiblock_static.sh, cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V2_BASAL_QUALITY/tests/test_candidate_geometry.py, cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V3_BASAL_SWEEP/run_v3_sweep.sh, cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V3_BASAL_SWEEP/scripts/build_v3_dictionary.py, cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V3_BASAL_SWEEP/scripts/summarize_trial.py, cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V3_BASAL_SWEEP/tests/test_v3_diff.py. Next: Inspect diffs and reconcile only meaningful decisions/results in the canonical log (ID b74344d4f68269f4)
 
 Complete path → purpose/role/certainty list lives in FILE_GOVERNANCE.json. SUMMARY.json has counts only for master polling.
 A dated file, duplicate, or suspicious name is an **investigation candidate**, not unwanted material.

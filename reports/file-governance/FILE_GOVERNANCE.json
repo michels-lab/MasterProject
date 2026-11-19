@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
   "audit_kind": "deterministic_full_tracked_tree",
-  "tracked_files_total": 38919,
-  "classified_files_total": 38914,
-  "docs_content_inspected": 165,
+  "tracked_files_total": 38922,
+  "classified_files_total": 38917,
+  "docs_content_inspected": 166,
   "large_docs_skipped": 1,
   "excluded_reports": 5,
   "roles": {
@@ -12,24 +12,24 @@
     "bitacora": 5,
     "config": 7,
     "data": 31,
-    "document": 131,
+    "document": 132,
     "index": 30,
     "license": 1,
     "simulation_case_file": 107,
     "simulation_input": 2683,
     "simulation_log": 3155,
     "simulation_output": 32613,
-    "source": 89,
-    "test": 34,
+    "source": 90,
+    "test": 35,
     "web_ui": 1,
     "workflow": 19
   },
   "finding_counts": {
-    "POTENTIAL_UNLOGGED_CHANGES": 2
+    "POTENTIAL_UNLOGGED_CHANGES": 1
   },
-  "finding_total": 2,
-  "inventory_fingerprint": "0d7daf5ea2e209c576bd5bb25cc411e16eab8bb79ad50515637095ce93d5e439",
-  "evidence_fingerprint": "c4bf0f7d2937cbdc98abd28558354cccdf827f9d24fdac5e4f094889c3b15f22",
+  "finding_total": 1,
+  "inventory_fingerprint": "bc6f5382646b4b30274ca0af58de19bed70de66009b4320c70b1eda35227aceb",
+  "evidence_fingerprint": "fc9a81ef361e6c88caf866b772328c02f25335dce93a8260f120030e811a43c5",
   "files": [
     {
       "path": ".github/agents/openfoam-solidification.agent.md",
@@ -316,14 +316,14 @@
       "role": "bitacora",
       "purpose": "technical/audit change history",
       "certainty": "rule",
-      "blob": "99f13228707529d40880dcadaffb149a822ec265"
+      "blob": "762358ef3f8c8df90d79c4206537da94a3ae9607"
     },
     {
       "path": "README.md",
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "36ad6ca5ac1ca0f269b8198582fba8ff59a03a6b"
+      "blob": "bec67341da0d68847915dcbfe017462b84b1afa4"
     },
     {
       "path": "RUN_CASE_REGISTRY.csv",
@@ -337,7 +337,7 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "53351379913b3955b7d88b8695f54a6d45005b4c"
+      "blob": "2a441bd3ef2e0e02d83daa910e7692f84e6ee0b0"
     },
     {
       "path": "VALIDATION_MATRIX.md",
@@ -1464,7 +1464,7 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "e89b590cb9ccfdbf4f7dde6257659d04ec35590b"
+      "blob": "58c6a4edae99713d47c89daab99cc9d091b6de1e"
     },
     {
       "path": "cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V2_BASAL_QUALITY/Allmesh",
@@ -1618,7 +1618,7 @@
       "role": "source",
       "purpose": "code/test implementation",
       "certainty": "rule",
-      "blob": "0e7b4af9a7c188c1213060005ae3dcd27afc149c"
+      "blob": "59dc0c2162e88280a02ab0ff28d81da20986df28"
     },
     {
       "path": "cases_3d/C3D_04_rounded_multiblock_pilot/scripts/diagnose_existing_defects.py",
@@ -1667,7 +1667,7 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "2901d6500a45dbf8bb31150118b5da50cad684de"
+      "blob": "b3d82a3319565bdddee2024d4edf5d9e704ea7e1"
     },
     {
       "path": "cases_3d/C3D_05_step_gmsh_conformal/constant/geometry/QuickCupmm.STEP",
@@ -1789,11 +1789,25 @@
       "blob": "a97fe362c3b63e6fa9d4c91f36c231185538b47d"
     },
     {
+      "path": "cases_3d/C3D_05_step_gmsh_conformal/scripts/run_nonorth_hop_distance.sh",
+      "role": "source",
+      "purpose": "code/test implementation",
+      "certainty": "rule",
+      "blob": "75deb0e9854371291ae1c9bc41aec1c8bc6fe8c0"
+    },
+    {
       "path": "cases_3d/C3D_05_step_gmsh_conformal/system/controlDict",
       "role": "simulation_input",
       "purpose": "OpenFOAM case field/dictionary input (content unvalidated)",
       "certainty": "inferred",
       "blob": "48a3345ff730533d47bf26cfeb73693b748a182b"
+    },
+    {
+      "path": "cases_3d/C3D_05_step_gmsh_conformal/tests/test_audit_nonorth_hop_distance.py",
+      "role": "test",
+      "purpose": "code/test implementation",
+      "certainty": "rule",
+      "blob": "44b09a2e43df0744a53a5294d1e02ea8efffad75"
     },
     {
       "path": "cases_3d/C3D_05_step_gmsh_conformal/tests/test_audit_nonorthogonal_faces.py",
@@ -1835,7 +1849,7 @@
       "role": "test",
       "purpose": "code/test implementation",
       "certainty": "rule",
-      "blob": "b8038b75b3e19bb34f420cfe369b2501ebed1b41"
+      "blob": "6cd6409f7763c4197af73c2cd0f9cda89bd69195"
     },
     {
       "path": "cases_3d/README.md",
@@ -271552,7 +271566,7 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "2ea4ac8e33a204f5e17c6e6c0a62273ebdea071d"
+      "blob": "eb028817062be06fe221a75e944fd93fc8b88f38"
     },
     {
       "path": "docs/C3D_04_RESULTADO_PRIMER_MALLADO_20261118_ES.md",
@@ -271625,6 +271639,13 @@
       "blob": "1739783eb94c80cbf05662e0336e4e9acee56286"
     },
     {
+      "path": "docs/C3D_05_NOORTH_CARAS_INTERNAS_20261119_ES.md",
+      "role": "document",
+      "purpose": "manual/decision/report/historical note",
+      "certainty": "inferred",
+      "blob": "ab2aea0d25286a1ead34abd4c778b62de57864b8"
+    },
+    {
       "path": "docs/C3D_05_RESULTADO_PRIMER_MALLADO_20261118_ES.md",
       "role": "document",
       "purpose": "manual/decision/report/historical note",
@@ -271643,7 +271664,7 @@
       "role": "data",
       "purpose": "structured/research data (semantics not validated)",
       "certainty": "rule",
-      "blob": "4175bc5eeb95b36bd1d601d2131e00b8fc0873a9"
+      "blob": "9a56a069fd2e38a19758c13beb1dc09459fd2b78"
     },
     {
       "path": "docs/C3D_REINICIO_20261112_ES.md",
@@ -271671,7 +271692,7 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "dd557af038da10285883e62caef9d1be8de8d771"
+      "blob": "2d0ed4c72a3a14c3614d36e9d02141cee6ba47bc"
     },
     {
       "path": "docs/DOCUMENT_SYNC_20261110_ES.md",
@@ -272432,20 +272453,11 @@
   ],
   "findings": [
     {
-      "id": "2da72ce69f760bcf",
+      "id": "b74344d4f68269f4",
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_EN.md",
-      "observation": "39 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_03_doctor_multiblock_pilot/tests/test_native_multiblock_static.sh, cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V2_BASAL_QUALITY/tests/test_candidate_geometry.py, cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V3_BASAL_SWEEP/run_v3_sweep.sh, cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V3_BASAL_SWEEP/scripts/build_v3_dictionary.py, cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V3_BASAL_SWEEP/scripts/summarize_trial.py, cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V3_BASAL_SWEEP/tests/test_v3_diff.py",
-      "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "8fb37bc2a9173bd2",
-      "code": "POTENTIAL_UNLOGGED_CHANGES",
-      "severity": "review",
-      "path": "PROJECT_AUDIT_LOG_ES.md",
-      "observation": "1 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_05_step_gmsh_conformal/scripts/audit_nonorth_hop_distance.py",
+      "observation": "41 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_03_doctor_multiblock_pilot/tests/test_native_multiblock_static.sh, cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V2_BASAL_QUALITY/tests/test_candidate_geometry.py, cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V3_BASAL_SWEEP/run_v3_sweep.sh, cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V3_BASAL_SWEEP/scripts/build_v3_dictionary.py, cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V3_BASAL_SWEEP/scripts/summarize_trial.py, cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V3_BASAL_SWEEP/tests/test_v3_diff.py",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     }
