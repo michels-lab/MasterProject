@@ -124,6 +124,27 @@ class IntegratedCaseAT0(unittest.TestCase):
                 {"metalTop", "metal_to_mold", "unexpectedFaces"}
             )
 
+    def test_046_native_volume_source_and_adiabatic_energy_target(self):
+        cfg = engine.synthetic_fixture()
+        with tempfile.TemporaryDirectory() as folder:
+            root = pathlib.Path(folder)
+            report = root/"PILOT_MESH_REPORT.tsv"
+            report.write_text(
+                "region\tcells\tvolume_m3\tCAD_m3\tmesh_ok\n"
+                "metal\t8960\t4.79e-5\t4.80e-5\tYES\n"
+                "mold\t12352\t1.028e-4\t1.028e-4\tYES\n"
+            )
+            measured = engine.read_preserved_mesh_volumes(root)
+            self.assertEqual(measured["metal"], 4.79e-5)
+            self.assertEqual(measured["mold"], 1.028e-4)
+            target = engine.closed_t0_energy_target(cfg, measured)
+            self.assertTrue(6 < target["ideal_equilibrium_K_no_heat_loss"] < 7)
+            self.assertEqual(target["validation_status"],
+                             "ANALYTICAL_TARGET_ONLY_NOT_CFD_OUTPUT")
+            report.write_text(report.read_text().replace("YES", "NO", 1))
+            with self.assertRaises(ValueError):
+                engine.read_preserved_mesh_volumes(root)
+
     def test_05_negative_cases_and_isolation(self):
         cfg = engine.synthetic_fixture()
         cfg["metal"]["source_rho"] = None
@@ -169,7 +190,11 @@ class IntegratedCaseAT0(unittest.TestCase):
                               return_value=types.SimpleNamespace(
                                   returncode=2, stdout="", stderr="bad dictionary")):
                 with self.assertRaises(RuntimeError):
-                    engine.materialize(src, output, cfg, cfg_path, items, {})
+                    engine.materialize(
+                    src, output, cfg, cfg_path, items,
+                    {"native_volumes_m3_from_preserved_tsv":
+                     {"metal": 1.0, "mold": 1.0}}
+                )
                 self.assertFalse(output.exists())
             self.assertFalse(list(root.glob(".prepared_T0.staging.*")))
             with patch.dict(engine.os.environ, environment), \
@@ -177,7 +202,11 @@ class IntegratedCaseAT0(unittest.TestCase):
                  patch.object(engine.subprocess, "run",
                               return_value=types.SimpleNamespace(
                                   returncode=0, stdout="", stderr="")) as call:
-                engine.materialize(src, output, cfg, cfg_path, items, {})
+                engine.materialize(
+                    src, output, cfg, cfg_path, items,
+                    {"native_volumes_m3_from_preserved_tsv":
+                     {"metal": 1.0, "mold": 1.0}}
+                )
                 self.assertEqual(call.call_count, 10)
             self.assertEqual((output/"system/fvSolution").is_file(), True)
             report = json.loads((output/"T0_PREPARATION_REPORT.json").read_text())
