@@ -218,8 +218,8 @@ def main() -> None:
             # generating tetrahedra, never once more accidentally.
             gmsh.option.setNumber("Mesh.SubdivisionAlgorithm", 2)
             gmsh.model.mesh.refine()
-            volume_types, volume_tags, _ = gmsh.model.mesh.getElements(3)
-            final_count = sum(len(tags) for tags in volume_tags)
+            volume_types, hex_element_tags, _ = gmsh.model.mesh.getElements(3)
+            final_count = sum(len(tags) for tags in hex_element_tags)
             surface_types = {int(t) for t in gmsh.model.mesh.getElementTypes(2)}
             if set(map(int, volume_types)) != {5} or surface_types != {3}:
                 raise ValueError(
