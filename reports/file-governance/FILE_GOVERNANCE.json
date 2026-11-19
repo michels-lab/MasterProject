@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "audit_kind": "deterministic_full_tracked_tree",
-  "tracked_files_total": 38909,
-  "classified_files_total": 38904,
+  "tracked_files_total": 38910,
+  "classified_files_total": 38905,
   "docs_content_inspected": 162,
   "large_docs_skipped": 0,
   "excluded_reports": 5,
@@ -19,7 +19,7 @@
     "simulation_input": 2683,
     "simulation_log": 3155,
     "simulation_output": 32613,
-    "source": 84,
+    "source": 85,
     "test": 33,
     "web_ui": 1,
     "workflow": 19
@@ -28,8 +28,8 @@
     "POTENTIAL_UNLOGGED_CHANGES": 2
   },
   "finding_total": 2,
-  "inventory_fingerprint": "62609dc925657c5e11507aaf7c680fec41f79ba22159d78013ec3eeae381a0de",
-  "evidence_fingerprint": "80fc60eae67a231a36fc907181f36ee28665c77bda2a9d33e177053105a5c3d5",
+  "inventory_fingerprint": "0c4234385ba17a2e04a15e4cd9829beaf5d6027a3bc2c4ddcc63176c117c5328",
+  "evidence_fingerprint": "6311a008b16954d8d1271c414f829f35dcf0665baf52fc4366e963f63fe06b6e",
   "files": [
     {
       "path": ".github/agents/openfoam-solidification.agent.md",
@@ -316,7 +316,7 @@
       "role": "bitacora",
       "purpose": "technical/audit change history",
       "certainty": "rule",
-      "blob": "7bdddb16ee7e43c2645905fcf4a7d1b782dad9fd"
+      "blob": "0508689442389898576f9a994b2be63a162e7000"
     },
     {
       "path": "README.md",
@@ -1600,6 +1600,13 @@
       "blob": "78b26a8de21c3091923af98dd785d0dfed219403"
     },
     {
+      "path": "cases_3d/C3D_04_rounded_multiblock_pilot/scripts/audit_accepted_surface_fit.py",
+      "role": "source",
+      "purpose": "code/test implementation",
+      "certainty": "rule",
+      "blob": "79f7c6252eb2cbe2fae110dc3944a751a1a6c2f3"
+    },
+    {
       "path": "cases_3d/C3D_04_rounded_multiblock_pilot/scripts/audit_blockmesh_topology.py",
       "role": "source",
       "purpose": "code/test implementation",
@@ -1716,7 +1723,7 @@
       "role": "source",
       "purpose": "code/test implementation",
       "certainty": "rule",
-      "blob": "afd67cd53be463e5a16a6123bf3418372d1b75f0"
+      "blob": "f3f5b3e0537e0498b4b9ad67ee94c6c9ac863acc"
     },
     {
       "path": "cases_3d/C3D_05_step_gmsh_conformal/scripts/run_frontal_pilot.sh",
@@ -272362,20 +272369,20 @@
   ],
   "findings": [
     {
-      "id": "c2cd91c23259acb0",
+      "id": "20d75385dfa92acc",
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_EN.md",
-      "observation": "33 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_03_doctor_multiblock_pilot/tests/test_native_multiblock_static.sh, cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V2_BASAL_QUALITY/tests/test_candidate_geometry.py, cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V3_BASAL_SWEEP/run_v3_sweep.sh, cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V3_BASAL_SWEEP/scripts/build_v3_dictionary.py, cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V3_BASAL_SWEEP/scripts/summarize_trial.py, cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V3_BASAL_SWEEP/tests/test_v3_diff.py",
+      "observation": "34 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_03_doctor_multiblock_pilot/tests/test_native_multiblock_static.sh, cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V2_BASAL_QUALITY/tests/test_candidate_geometry.py, cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V3_BASAL_SWEEP/run_v3_sweep.sh, cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V3_BASAL_SWEEP/scripts/build_v3_dictionary.py, cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V3_BASAL_SWEEP/scripts/summarize_trial.py, cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V3_BASAL_SWEEP/tests/test_v3_diff.py",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     },
     {
-      "id": "0762aea1a93e5699",
+      "id": "50af65b5e29c84cc",
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_ES.md",
-      "observation": "2 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_05_step_gmsh_conformal/scripts/run_hex_readiness_review.sh, cases_3d/C3D_05_step_gmsh_conformal/tests/test_step_gmsh_static.sh",
+      "observation": "1 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_04_rounded_multiblock_pilot/scripts/audit_accepted_surface_fit.py",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     }
