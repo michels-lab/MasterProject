@@ -10,10 +10,17 @@ ROOT="$(cd "$HERE/.." && pwd)"
 TESTS="$ROOT/tests"
 BASE="$HOME/OpenFOAM/C3D05_STEP_GMSH_PILOT_01"
 HXT="$HOME/OpenFOAM/C3D05_STEP_GMSH_HXT_01"
-OUT="$HOME/OpenFOAM/C3D05_STEP_GMSH_HEX_SUBDIV_COARSE_01"
+FAILED_HEX="$HOME/OpenFOAM/C3D05_STEP_GMSH_HEX_SUBDIV_COARSE_01"
+OUT="$HOME/OpenFOAM/C3D05_STEP_GMSH_HEX_SUBDIV_COARSE_02"
 
 if [[ -e "$OUT" || -L "$OUT" ]]; then
     echo "PRESERVED: output already exists, refusing overwrite: $OUT" >&2
+    exit 2
+fi
+if [[ ! -s "$FAILED_HEX/log.gmsh3d" ]] ||
+   ! grep -Fq "UnboundLocalError" "$FAILED_HEX/log.gmsh3d" ||
+   ! grep -Fq "volume_tags" "$FAILED_HEX/log.gmsh3d"; then
+    echo "BLOCKED: expected preserved first HEX8 pilot's Python name-collision evidence" >&2
     exit 2
 fi
 if [[ ! -s "$BASE/PILOT_MESH_REPORT.tsv" || ! -s "$HXT/PILOT_MESH_REPORT.tsv" ]]; then
@@ -31,6 +38,7 @@ fi
 echo "=== C3D-05 CASO B: PILOTO CAD HEX8 DE UNA SOLA INVOCACIÓN ==="
 echo "BASELINE Delaunay: $BASE — PRESERVED"
 echo "CONTROL HXT: $HXT — PRESERVED"
+echo "FAILED HEX8 FIRST TRY: $FAILED_HEX — PRESERVED, Python name shadowing corrected"
 echo "CANDIDATE HEX8: $OUT — FRESH OUTPUT ONLY"
 echo "Method: CAD STEP -> Delaunay coarse (3.6 mm) -> all-hexa subdivision"
 echo "Resource cap: <= 150000 initial tetra; no unbounded 2M-cell experiment"
@@ -41,6 +49,8 @@ echo "NO CFD, NO solver, NO lower checkMesh determinant tolerance."
 echo
 echo "=== 1/4: Read-only source checks and regression tests ==="
 bash "$TESTS/test_step_gmsh_static.sh"
+PYTHONDONTWRITEBYTECODE=1 python3 -B -m unittest discover \
+  -s "$TESTS" -p 'test_build_step_mesh_regressions.py' -v
 PYTHONDONTWRITEBYTECODE=1 python3 -B -m unittest discover \
   -s "$TESTS" -p 'test_diagnose_existing_mesh.py' -v
 PYTHONDONTWRITEBYTECODE=1 python3 -B -m unittest discover \
