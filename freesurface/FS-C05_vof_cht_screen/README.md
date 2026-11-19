@@ -258,3 +258,30 @@ python3 analysis_tools/run_fs_c05_granada.py \
 **Estado de este paquete:** instrumentación implementada, CI interna; **ninguna nueva corrida nativa se ha realizado aún**. El resultado esperado es `FS_C05_GRANADA_INTEGRATED_MEASUREMENTS_*` con advertencias científicas. Si la librería de calor conjugado no carga o el parser de archivo nativo difiere, no llamarlo validado: corregir ese problema concreto de integración en el mismo paquete, no dispersarlo en otra batería de pruebas manuales.
 
 **Criterio antes de un transitorio mayor:** validación de balance de masa `Σrho_i alpha_i V` y flujos de entrada/salida, potencia conjugada por las 3136 caras, entalpía real del gas y metal, presión/trabajo y frontera abierta. Los tres valores de temperatura existentes y `ΔV_metal=0` no demuestran esos balances.
+
+## Operación Granada 19-11-2026 — Paquete integrado ampliado y CI aprobada
+
+**Evidencia del estado actual:** commit de código `cd3c8660276eb237e667119063a3d2ef7ce44ce6`, CI estática de FS-C05 verde; casos anteriores y ensayo nativo de dos pasos inalterados. El último resultado **real** continúa siendo el de `FS_C05_NATIVE_SMOKE_20261119T070806Z_7e8589e3` con volumen VOF metálico constante y evolución de T medida. **La nueva operación unificada todavía NO ha sido ejecutada en Ubuntu**; solo pruebas sintéticas y revisión contra Foundation14.
+
+Se consolidó `analysis_tools/run_fs_c05_granada.py` para preparar, correr y diagnosticar **una sola vez** el ensayo instrumentado `foamMultiRun` de dos pasos en una copia nueva. Esta operación incluye:
+- Comprobación de origen y aislamiento de la corrida, lectura de T y alpha de ambas regiones en tres tiempos.
+- `wallHeatFlux` nativo en `fluid_to_mold` y `mold_to_fluid`: (Q) [W], reciprocidad (Q_f+Q_s), desfase de signos y alerta de diferencia relativa superior a 5 %. Solo calculamos energía por regla del trapecio en el intervalo **1e-7 a 2e-7 s**, pues el calor de t=0 a 1e-7 no se mide.
+- **NUEVO: inventario real de masa de mezcla**, a partir de `rho` escrito automáticamente por `compressibleTwoPhaseVoFMixture` de **OpenFOAM Foundation14** (fuente oficial: `applications/modules/compressibleVoF/compressibleTwoPhaseVoFMixture/compressibleTwoPhaseVoFMixture.C`; `rho` es `AUTO_WRITE` y `rho = alpha.metal*rho_iron+(1-alpha.metal)*rho_air`). `audit_fs_c05_density_inventory.py` exige archivo de densidad SI `[1 -3 0 0 0 0 0]` y mide `∑rho_i V_i` en los dos instantes finales. Con **rho_iron=6820 kg/m³ provisional** se obtiene inventario metal `6820*∑alpha V` y aire por diferencia, si son físicamente positivos. No se exige `0/fluid/rho` porque el stage inicial no lo escribió: si ambos snapshots finales no contienen rho, el resultado declara `NATIVE_RHO_NOT_WRITTEN_AT_BOTH_STEPS_NO_MASS_CLOSURE`, nunca inventa masas.
+- **Indicadores de almacenamiento sensible**, `rho*Cv*VT` con constantes indicativas, marcados explícitamente como proxies. No son entalpía de OpenFOAM ni prueban el balance de energía.
+- Resultados integrados automáticos `FS_C05_GRANADA_REPORT.json` y `FS_C05_GRANADA_REPORT.md` en la carpeta nueva, además de logs nativos. Alertas por calentamiento rápido de aire, `alpha` fuera de límites, deriva volumétrica y diferencia de flujo conjugado.
+
+**Pruebas automáticas integradas, sin intervención del investigador:** suites `test_run_fs_c05_granada.py`, `test_audit_fs_c05_density_inventory.py`, `test_run_fs_c05_wall_heat_flux.py` y `test_audit_fs_c05_postrun_fields.py` integradas en `.github/workflows/fs-c02-static.yml`. GitHub Actions verifica sintaxis, funciones, magnitudes y puertas de error, **no ejecuta `foamMultiRun` ni sustituye evidencia experimental**.
+
+**Procedimiento único para el próximo paso real** (NO pedir `unittest` manual al usuario):
+
+```bash
+cd ~/OpenFOAM/FS_C02_WORKTREE
+git status --short
+git fetch origin research/fs-c02-metal-air-vof-20261117
+git switch --detach FETCH_HEAD
+python3 analysis_tools/run_fs_c05_granada.py \
+  --source ~/OpenFOAM/FS_C05_VOF_CHT_RUNS/FS_C05_VOF_CHT_SCREEN_20261119T063448Z_84d08b6e \
+  --native
+```
+
+**Lo que NO certifica:** Un inventario `∑rho V` constante no significa conservación de masa si el aire puede entrar o salir por `atmosphereTop/atmosphereSides/atmosphereLowerSides`. `Q_f+Q_s≈0` no es cierre de energía global sin entalpía transportada por el aire, términos de compresión, propiedades termodinámicas reales y condiciones de apoyo. No hay `rho(T),Cv(T),k(T)` validados por JMatPro ni solidificación/grafitización/contracción. Para avance hacia segundos reales, primero instrumentar conservación por fluxes en fronteras y entalpías verdaderas; no hacer mil ensayos manuales microscópicos.
