@@ -28,8 +28,8 @@
     "POTENTIAL_UNLOGGED_CHANGES": 2
   },
   "finding_total": 2,
-  "inventory_fingerprint": "fb0b679359d2e50055ba73509e1c3e633e9e02be534b7e858b6cb5bdff9b295a",
-  "evidence_fingerprint": "23eb5069f05155a8e8909caafa5a5ba9adce4d48978b6859b22f57068cd4d3cb",
+  "inventory_fingerprint": "9ff3c1fd889b4a1e486f15bf5c8cfd5e8b3b8e0e193439037d6bafbe79a42e80",
+  "evidence_fingerprint": "feaa7cceb613e0dea72bb8bee857658e4402bcd3b9d24f7f3cc29ba330097a78",
   "files": [
     {
       "path": ".github/agents/openfoam-solidification.agent.md",
@@ -1709,7 +1709,7 @@
       "role": "source",
       "purpose": "code/test implementation",
       "certainty": "rule",
-      "blob": "929146d79478ed42e921270cf07daf718ad97a0f"
+      "blob": "1e719d779a1cbcf9a14811c42abaa089a8c460c0"
     },
     {
       "path": "cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/scripts/prepare_case_a_t0.py",
@@ -1723,7 +1723,7 @@
       "role": "test",
       "purpose": "code/test implementation",
       "certainty": "rule",
-      "blob": "7b8f93d89d09aa99c539a70907e4636d353ffdc7"
+      "blob": "06e0332d7b98325dad2a7689a2807ca21caae281"
     },
     {
       "path": "cases_3d/C3D_04_rounded_multiblock_pilot/tests/test_rounded_multiblock_static.sh",
@@ -272686,11 +272686,11 @@
       "state": "REVIEW_REQUIRED"
     },
     {
-      "id": "584b1d545bc574e8",
+      "id": "283d32c9ce8fe05d",
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_ES.md",
-      "observation": "2 implementation/config paths changed since this log's last commit; examples: docs/PROJECT_STAGE_STATUS.json, tools/check_project_delivery_contract.py",
+      "observation": "4 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/run_integrated_milestone.sh, cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/tests/test_integrated_case_a.py, docs/PROJECT_STAGE_STATUS.json, tools/check_project_delivery_contract.py",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     }
