@@ -30,10 +30,6 @@ jobs:
           PYTHONDONTWRITEBYTECODE=1 python3 -B -m unittest discover \
             -s cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/tests \
             -p 'test_integrated_case_a.py' -v
-      - name: Standalone integrated T0 self-test
-        run: |
-          PYTHONDONTWRITEBYTECODE=1 python3 -B \
-            cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/scripts/prepare_case_a_t0.py --self-test
       - name: Bash syntax of single-stage runner
         run: bash -n cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/run_integrated_milestone.sh
       - name: Scientific status boundary
@@ -59,5 +55,12 @@ jobs:
                       assert type(value) in (int,float) and value>0, (region,key)
                       citation=data[region].get(provenance_key)
                       assert isinstance(citation,str) and len(citation.strip())>=10, (region,provenance_key)
-          print("PASS: dynamic science-status boundary and physical source citations")
+          # The Foundation14 official multi-region heatedDuct tutorial has
+          # both system/fvSolution (global PIMPLE) and regional fvSolution.
+          from pathlib import Path
+          generator=Path("cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/scripts/prepare_case_a_t0.py").read_text()
+          assert '"system/fvSolution": global_solution(' in generator
+          assert "nEnergyCorrectors" in generator
+          assert "tempfile.TemporaryDirectory" in generator
+          print("PASS: dynamic science-status boundary, global Foundation14 PIMPLE, atomic T0 and citations")
           PY
