@@ -87,7 +87,12 @@ class GranadaOneShotTests(unittest.TestCase):
         with patch("run_fs_c05_granada.run_wall_probe",
                    side_effect=stub_run) as runner,\
              patch("run_fs_c05_granada.measure_saved_fields",
-                   return_value=data(str(self.dest))) as field_audit:
+                   return_value=data(str(self.dest))) as field_audit,\
+             patch("run_fs_c05_granada.audit_density_inventory",
+                   return_value={
+                       "status":"NATIVE_RHO_NOT_WRITTEN_AT_BOTH_STEPS_NO_MASS_CLOSURE",
+                       "native_density_inventory_observed":False,
+                   }):
             r=run_granada(self.src,self.dest,native=True)
         runner.assert_called_once()
         field_audit.assert_called_once_with(self.dest)
@@ -104,6 +109,29 @@ class GranadaOneShotTests(unittest.TestCase):
         for phrase in ("Hierro", "Aire", "Arena", "Q fluido", "NO VALIDADOS"):
             self.assertIn(phrase,text)
         self.assertFalse((self.src/"FS_C05_GRANADA_REPORT.json").exists())
+
+    def test_real_mixture_inventory_embedded_in_same_run_not_a_mass_closure(self):
+        rho={
+            "status":"NATIVE_MIXTURE_RHO_INVENTORY_MEASURED_NO_MASS_CLOSURE",
+            "native_density_inventory_observed":True,
+            "native_rho_inventory_change_kg":0.00001,
+            "physical_mass_conservation_validated":False,
+            "open_atmosphere_mass_flux_measured":False,
+        }
+        x=assemble(probe(str(self.dest)),data(str(self.dest)),rho)
+        self.assertEqual(
+            x["native_mixture_density_mass_inventory"],rho)
+        self.assertNotIn("MIXTURE_RHO_INVENTORY_NOT_AVAILABLE",
+                         x["attention_items"])
+        self.assertFalse(x["scope"]["mass_conservation_verified"])
+
+    def test_wall_energy_integrates_only_measured_second_interval(self):
+        x=assemble(probe(str(self.dest)),data(str(self.dest)))
+        power=x["coupled_wall_Q_time_integral_DIAGNOSTIC_ONLY"]
+        self.assertAlmostEqual(power["Qfluid_trapezoid_J"]["value"],1e-5)
+        self.assertAlmostEqual(power["Qmold_trapezoid_J"]["value"],-1e-5)
+        self.assertFalse(power["heat_from_t0_to_t1_J_known"])
+        self.assertFalse(power["net_total_domain_energy_balance_computed"])
 
     def test_stage_only_does_not_claim_openfoam_was_run(self):
         with patch("run_fs_c05_granada.run_wall_probe",
