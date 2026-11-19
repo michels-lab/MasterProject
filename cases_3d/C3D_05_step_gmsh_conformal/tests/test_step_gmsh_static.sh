@@ -73,3 +73,18 @@ grep -Fq 'OUT="$HOME/OpenFOAM/C3D05_STEP_GMSH_HEX_SUBDIV_COARSE_02"' "$HEX_RUN"
 grep -Fq 'volume_types, hex_element_tags, _ = gmsh.model.mesh.getElements(3)' "$CAD"
 python3 -c 'import ast,pathlib,sys; ast.parse(pathlib.Path(sys.argv[1]).read_text())' "$REGRESS"
 PYTHONDONTWRITEBYTECODE=1 python3 -B -m unittest discover -s "$ROOT/tests" -p 'test_build_step_mesh_regressions.py' -v
+
+# Successful HEX8 provenance review: no checkMesh rerun, only saved logs.
+HEX_REVIEW="$ROOT/scripts/review_accepted_hex_mesh.py"
+HEX_REVIEW_RUN="$ROOT/scripts/run_hex_readiness_review.sh"
+[[ -s "$HEX_REVIEW" && -s "$HEX_REVIEW_RUN" ]] ||
+    { echo "Missing native HEX8 readiness review or one-command runner"; exit 1; }
+bash -n "$HEX_REVIEW_RUN"
+python3 -c 'import ast,pathlib,sys; [ast.parse(pathlib.Path(p).read_text()) for p in sys.argv[1:]]' "$HEX_REVIEW" "$ROOT/tests/test_review_accepted_hex_mesh.py"
+for needle in 'native_quality' 'minimum_cell_determinant' 'severely_nonorthogonal_faces_above_70deg' 'geometry_topology_gate_passed' 'mesh_element_topology' 'source_STEP_authentic_and_expected_hex8_topology'; do
+    grep -Fq "$needle" "$HEX_REVIEW" ||
+        { echo "HEX8 independent review missing contract: $needle"; exit 1; }
+done
+grep -Fq 'C3D05_STEP_GMSH_HEX_SUBDIV_COARSE_02' "$HEX_REVIEW_RUN"
+grep -Fq 'test_review_accepted_hex_mesh.py' "$HEX_REVIEW_RUN"
+! grep -Eq '(^|[[:space:]])(gmshToFoam|checkMesh|blockMesh|foamMultiRun)([[:space:]]|$)' "$HEX_REVIEW_RUN"
