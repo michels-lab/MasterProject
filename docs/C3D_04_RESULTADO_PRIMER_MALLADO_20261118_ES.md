@@ -151,3 +151,46 @@ Las variantes de perfil quedan limitadas a alpha **0.95, 0.90, 0.84 y 0.78** por
 cd ~/OpenFOAM/MasterProject && git pull --ff-only && \
 bash cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V4_TRANSITION_REPAIR/run_v4_sweep.sh
 ```
+
+## V4/T02: primera aceptación nativa de C3D-04 curvilíneo — 19-11-2026
+
+**Fuente primaria:** salida de la terminal del investigador en WSL tras `git pull --ff-only` y el script nativo `C3D04_V4_TRANSITION_REPAIR/run_v4_sweep.sh`. No se han cargado los logs brutos a GitHub ni ejecutado el solver; las cifras provienen de la salida compartida, no de una inspección independiente de los archivos locales.
+
+El test estático V4 superó AST de Python y cuatro casos sintéticos de modificaciones geométricas; todavía **no** certifica el mallado nativo. La posterior corrida OpenFOAM 14 produjo:
+
+- **T01 `inner_y=-0.12 mm`: RECHAZADO.** Padre `Mesh OK=NO`, hierro `Mesh OK=NO` y molde `Mesh OK=YES`; 12 celdas metálicas con determinante bajo, mínimo metal **0.0002033082206**. No ortogonalidad máxima del metal 81.44720378°.
+- **T02 `inner_y=+0.12 mm`: `MESH_TOPOLOGY_AND_CONTACT_AREA_PRELIMINARILY_ACCEPTED`.** El ejecutor devolvió código 0; **padre, hierro y arena `Mesh OK=YES`**, cero celdas con determinante pequeño en padre/metal, cero caras muy sesgadas de arena y puerta de área aprobada. Los otros cinco ensayos T03–T07 **no se ejecutaron**, porque el orquestador se detuvo correctamente al encontrar el primer candidato que cumplió todas las puertas.
+- **Cambio causal acotado de T02:** mover axialmente de **Y=-39.8 a -39.68 mm** los cuatro vértices **internos** del hierro (IDs 89/90/93/94) respecto a la referencia nativa V3/T06. Contorno metal–arena, arcos y caras de frontera no se cambiaron en T02. No significa que se haya resuelto la no ortogonalidad elevada.
+
+| Indicador nativo V4/T02 | Resultado |
+|---|---:|
+| `checkMesh` padre / metal / mold | **YES / YES / YES** |
+| Determinante mínimo padre | **0.002165381027** |
+| Determinante mínimo metal | **0.001566024926** (umbral de reporte 0.001) |
+| Determinante mínimo arena | **0.002165381027** |
+| Celdas de hierro con determinante pequeño | **0** |
+| Caras de arena altamente sesgadas | **0** |
+| No ortogonalidad máxima padre | **82.92036178°** |
+| No ortogonalidad máxima metal | **77.9303929°** |
+| No ortogonalidad máxima arena | **82.058116°** |
+| Skewness máxima arena | **2.841609695** |
+| Área metal–arena (mm²) | **6,343.771874** |
+| Diferencia área entre lados | **0 %** (registrada en las corridas de referencia y misma interfaz geométrica) |
+| Error del área frente a STL | **−0.139498 %** (misma interfaz geométrica) |
+
+**Carpeta aceptada y preservada (no sobreescribir):**
+
+```text
+/home/michel/OpenFOAM/C3D04_V4_TRANSITION_REPAIR_01/T02
+```
+
+**Resumen auténtico del orquestador:**
+
+```text
+T02 inner_y 0.12 0 MESH_TOPOLOGY_AND_CONTACT_AREA_PRELIMINARILY_ACCEPTED YES YES YES 0 0 0 0.002165381027 0.001566024926 0.002165381027 NA 82.92036178 77.9303929 82.058116 2.841609695 6343.771874
+SELECTED PRELIMINARY NATIVE MESH: /home/michel/OpenFOAM/C3D04_V4_TRANSITION_REPAIR_01/T02
+```
+
+**Estado científico exacto:** **PRIMERA MALLA 3D CURVILÍNEA CON CHECKMESH DE PADRE Y AMBAS REGIONES APROBADO, MÁS ÁREA DE CONTACTO PRELIMINAR APROBADA.** No confundir con malla suficientemente ortogonal para todos los esquemas de discretización, coincidencia superficial plena CAD, independencia de malla, validación de condiciones de frontera, ejecución de transferencia térmica CHT o solidificación. `NO_CFD` sigue vigente.
+
+**Próximos controles previos a la física 3D:** comparación bidireccional de distancias **superficie CAD–superficie `polyMesh`** para metal y arena por separado, incluyendo cortes basales; inventario de caras con non-orthogonality severa y su ubicación; sensibilidad de resultados a discretización/mallas; revisión explícita de BC en `metalTop`, `moldTop`, `moldExterior`, `moldBottom`, `moldRecessWall`, `moldRecessRoof` y las interfaces recíprocas. `phaseChangeSource`/CHT 3D debe montarse **solo con trazabilidad a los casos C14 validados**, no asumirse configurado por esta prueba de malla.
