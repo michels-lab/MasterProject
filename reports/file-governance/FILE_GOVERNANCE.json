@@ -25,11 +25,11 @@
     "workflow": 22
   },
   "finding_counts": {
-    "POTENTIAL_UNLOGGED_CHANGES": 1
+    "POTENTIAL_UNLOGGED_CHANGES": 2
   },
-  "finding_total": 1,
-  "inventory_fingerprint": "e1ff4ab58783f41ae595966f1df3510873cd9f79d62759ca9d85652a76e2c3b7",
-  "evidence_fingerprint": "f9cc9d8fd6b1b68f250865afb9e2cdcdcd702ba64dbfe6941ab6b5c8c99b810f",
+  "finding_total": 2,
+  "inventory_fingerprint": "9d59cf38ef808af819d0bbe73074a90f8d45cb71b5f526da7fcf8fcc0ad52bb5",
+  "evidence_fingerprint": "1da112f0f0eb6ff9d7aa268ee0a214a53fdd73260537184a8887e591ee173588",
   "files": [
     {
       "path": ".github/agents/openfoam-solidification.agent.md",
@@ -288,7 +288,7 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "a0888f5c23e0e42abf8c07bf09f46361fa1be362"
+      "blob": "b5cfa300fad2f41fa6e5543f584282aad86b18ad"
     },
     {
       "path": "OPENFOAM_COMMAND_MANUAL.md",
@@ -330,7 +330,7 @@
       "role": "bitacora",
       "purpose": "technical/audit change history",
       "certainty": "rule",
-      "blob": "0a00d038f6d4b7374fd0e7d2bf95dc5f1fd6d5b8"
+      "blob": "c1c9f84041e6b84810dbf257d3ec5a8e7bcae915"
     },
     {
       "path": "PROJECT_AUDIT_LOG_ES.md",
@@ -358,28 +358,28 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "ec8d58630e8a3b90e9561f129acf68ba8ed78d28"
+      "blob": "b6054706224dd4d6c99ca98b3018835f4fc5bded"
     },
     {
       "path": "VALIDATION_MATRIX.md",
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "d9ecfe9bfa86972b2e1dbf9ea9e18c605930c966"
+      "blob": "9b12983f58c6ee49fcf1884b740a0a1c5a4927d3"
     },
     {
       "path": "VALIDATION_MATRIX_EN.md",
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "d9d30d173c8930cea30518851d3ae09a46508a88"
+      "blob": "984980b73854fae7e0ed8b85f243753fd8f9e227"
     },
     {
       "path": "VALIDATION_MATRIX_ES.md",
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "2bd28bad5b76f58e23732784eec5b4cc78d92227"
+      "blob": "74fed73655caa421bf280591bfacffe7cb2dc141"
     },
     {
       "path": "analysis_results/c11_energy2_test/summary.md",
@@ -1919,7 +1919,7 @@
       "role": "source",
       "purpose": "code/test implementation",
       "certainty": "rule",
-      "blob": "9f5476b75ac698d7a4a1b177882f2e254b7a0a89"
+      "blob": "b03025f37b64ee148c8ac4cacb7eafe6c1f1616e"
     },
     {
       "path": "cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/scripts/run_t0_materialize.sh",
@@ -1989,7 +1989,7 @@
       "role": "simulation_case_file",
       "purpose": "OpenFOAM case-specific support artifact",
       "certainty": "inferred",
-      "blob": "aed220ecc0d7543e0a15fc244c6b5fa2d8ff7d40"
+      "blob": "3583db8de9698d677a1e701cd0f18afdab2c0e34"
     },
     {
       "path": "cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/templates/system/mold/fvSchemes.tpl",
@@ -2003,7 +2003,7 @@
       "role": "simulation_case_file",
       "purpose": "OpenFOAM case-specific support artifact",
       "certainty": "inferred",
-      "blob": "ea8798ebaaae71cfce90be91a72d6e9129a2e9bf"
+      "blob": "c13bd7564128aa2551714c6dea28011878f89f31"
     },
     {
       "path": "cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/tests/test_c14_fvsolution.py",
@@ -2080,7 +2080,7 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "e41b3f58465abb7bff0adf63cca5758c31af389a"
+      "blob": "826677a02fdbc44a63eb2bc100abe4e5b4ecebad"
     },
     {
       "path": "cases_3d/case3d-01/README.md",
@@ -272733,11 +272733,20 @@
   ],
   "findings": [
     {
-      "id": "2dabe1ec6fe648ab",
+      "id": "537b337147f980d6",
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_EN.md",
-      "observation": "13 implementation/config paths changed since this log's last commit; examples: .github/workflows/case-a-t0-stage-contract.yml, cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/T0_INPUTS.json, cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/run_integrated_milestone.sh, cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/scripts/prepare_case_a_t0.py, cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/tests/test_integrated_case_a.py, cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/C14_FVSOLUTION_PROVENANCE.json",
+      "observation": "1 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/scripts/run_t0_granada.py",
+      "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
+      "state": "REVIEW_REQUIRED"
+    },
+    {
+      "id": "ebf2a8fbe3369c1e",
+      "code": "POTENTIAL_UNLOGGED_CHANGES",
+      "severity": "review",
+      "path": "PROJECT_AUDIT_LOG_ES.md",
+      "observation": "1 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/scripts/run_t0_granada.py",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     }
