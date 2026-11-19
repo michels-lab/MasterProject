@@ -4,6 +4,7 @@ import copy
 import importlib.util
 import json
 import pathlib
+import shutil
 import sys
 import tempfile
 import types
@@ -140,6 +141,22 @@ class IntegratedCaseAT0(unittest.TestCase):
         changed["simulation"]["deltaT_s"] = .005
         with self.assertRaises(ValueError):
             engine.c14_source_gate(changed)
+        # Independent drift in the archived C14 executable file must also
+        # fail, even when all input numbers remain unmodified.
+        with tempfile.TemporaryDirectory() as folder:
+            root = pathlib.Path(folder)/"archived_C14"
+            baseline = json.loads(
+                (engine.T0/"C14_PARAMETER_BASELINE.json").read_text()
+            )
+            for row in baseline["source_details"]:
+                dest = root/row["path"]
+                dest.parent.mkdir(parents=True, exist_ok=True)
+                shutil.copyfile(engine.C14_ROOT/row["path"], dest)
+            changed_source = root/"constant/metal/materials/castIron"
+            changed_source.write_bytes(changed_source.read_bytes() + b"\n")
+            with patch.object(engine, "C14_ROOT", root):
+                with self.assertRaisesRegex(ValueError, "Original C14 source changed"):
+                    engine.c14_source_gate(raw)
 
     def test_045_real_boundary_coverage_detects_extra_patches(self):
         with tempfile.TemporaryDirectory() as folder:
