@@ -1,0 +1,26 @@
+# Caso B C3D-05 — normas obligatorias de cualquier agente o nueva conversación
+
+**Última revisión: 2026-11-19.** Prioridad: [Política global de entregas integrales](../../docs/POLITICA_ENTREGA_INTEGRAL_Y_ESTADO_ES.md), [estado canónico del caso B](../../docs/PROJECT_STAGE_STATUS.json), [protocolo GRANADA](../../.michelslab/GRANADA.md).
+
+## 1. Siempre mostrar etapa y avance
+
+**Caso B, etapa 3/7: configuración T0; 2/7 hitos técnicos completos = 29 %.** El porcentaje NO mide tesis, tiempo restante ni exactitud físico-numérica. G1 CAD/STEP/procedencia y G2 malla HEX8/contacto aceptados; G3 materialización física T0, G4 balance térmico, G5 solidificación, G6 contracción/alimentación y G7 validación permanecen pendientes. **Nunca incrementar hitos por commits, CI verde, pruebas sintéticas, documentación o referencia numérica C14**.
+
+En cada informe: caso y etapa, número de hitos y %, evidencia observada, bloqueo y siguiente paquete técnico completo. Leer JSON en cada reentrada y no congelar el porcentaje por escritura manual.
+
+## 2. Cero ciclos de micropruebas
+
+Trabajar macro-bloques coherentes; **no pedir al investigador checkMesh, preflight, otro script, otra captura repetida** para validar cada modificación. Ejecutar QA de código en GitHub y preservar evidencias previas. Una sola acción WSL cuando realmente se justifique un hito end-to-end.
+
+## 3. Fuentes y límites de C14
+
+- Original aceptado **solo lectura**: `~/OpenFOAM/C3D05_STEP_GMSH_HEX_SUBDIV_COARSE_02` (270,788 HEX8, 92,200 metal y 178,588 arena; 12,636 caras de contacto por lado; 1,826 nonorth severas). No remallar, no sobreescribir evidencias de checkMesh ni afirmar estabilidad.
+- `fvSolution` T0 ya se trazó a los tres originales C14 con manifiesto [SHA](t0_conduction/C14_FVSOLUTION_PROVENANCE.json). C14 tiene fluido+sólido; T0 es deliberadamente **dos sólidos**. No copiar p_rgh/U.
+- Referencia C14 NUMÉRICA independiente en [Granada](../../docs/granada/C3D05_C14_NUMERICAL_ONE_SHOT_20261119_ES.md): `scripts/run_c14_numerical_granada.sh --solve` dentro de `t0_conduction/` es la única futura orden que prepara, valida y ejecuta un diagnóstico aislado de 100 pasos **si el investigador lo ejecuta expresamente**. No se ha ejecutado en su WSL. El generador conserva SHA de cinco archivos, explica la hipótesis **Cp≈Cv** y `k=Cp mu/Pr`; no marcarlo como JMatPro ni hierro líquido real.
+- El archivo físico `t0_conduction/T0_INPUTS.json` contiene `null` deliberados: no sustituir valores de ensayo C14 por entradas medidas inexistentes. Una corrida exitosa no sustituye balance de energía, flujo interfacial, independencia de malla, ni validación experimental.
+
+## 4. Cierre auditable
+
+Mantener código + regresiones + README caso + auditorías ES/EN + validaciones ES/EN + hoja de ruta + protocolo + índice + [estado canónico](../../docs/PROJECT_STAGE_STATUS.json) sincronizados en el mismo bloque. Distinguir `CODE_READY`, `WSL_NUMERICAL_RUN`, `ENERGY_VERIFIED`, `EXPERIMENTALLY_VALIDATED`. CI ejecuta pruebas estáticas, no `foamMultiRun`. Antes de cambiar estados, exigir evidencia y versión concreta del caso.
+
+**Regla permanente:** no presentar solo un preflight como entrega Granada, no inventar propiedades termofísicas, no rehacer malla aceptada, no contaminar Caso A ni otros pilotos.
