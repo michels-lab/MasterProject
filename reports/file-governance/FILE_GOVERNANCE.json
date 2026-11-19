@@ -28,8 +28,8 @@
     "POTENTIAL_UNLOGGED_CHANGES": 2
   },
   "finding_total": 2,
-  "inventory_fingerprint": "ff63ddda9e11a1fe54fdb8f49009df3c191ef3c0d9d9294a51800d5d7057e9b0",
-  "evidence_fingerprint": "ec14b667b1467198f775e99046e79d101bf2802581beef6cda05176dcc9174c7",
+  "inventory_fingerprint": "8892ada02e97821e3e96d333459673932e217a7f8a5cf88e962c4edc0b4470ae",
+  "evidence_fingerprint": "863c21af33682912df97e673efbc01791cb9b78435c55b06f5cb0caff13cfd54",
   "files": [
     {
       "path": ".github/agents/openfoam-solidification.agent.md",
@@ -316,7 +316,7 @@
       "role": "bitacora",
       "purpose": "technical/audit change history",
       "certainty": "rule",
-      "blob": "db747cb0d2868e613d2b3ea572140b11f8de4b7e"
+      "blob": "a5b323e1b4744e1dfa9326b70a4b86fcd445642e"
     },
     {
       "path": "README.md",
@@ -1576,7 +1576,7 @@
       "role": "source",
       "purpose": "code/test implementation",
       "certainty": "rule",
-      "blob": "398cc13b9c2a76a8535f69106d0cb689d88814c3"
+      "blob": "b21a886b0b955911d204121ec6d7b60ee747466c"
     },
     {
       "path": "cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V4_TRANSITION_REPAIR/scripts/summarize_trial.py",
@@ -272343,11 +272343,11 @@
       "state": "REVIEW_REQUIRED"
     },
     {
-      "id": "8d7c3350aa28ae09",
+      "id": "d200a4a745f27d17",
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_ES.md",
-      "observation": "5 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V4_TRANSITION_REPAIR/run_v4_sweep.sh, cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V4_TRANSITION_REPAIR/scripts/build_v4_dictionary.py, cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V4_TRANSITION_REPAIR/scripts/summarize_trial.py, cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V4_TRANSITION_REPAIR/tests/test_v4_diff.py, cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V4_TRANSITION_REPAIR/tests/test_v4_static.sh",
+      "observation": "1 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V4_TRANSITION_REPAIR/scripts/build_v4_dictionary.py",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     }
