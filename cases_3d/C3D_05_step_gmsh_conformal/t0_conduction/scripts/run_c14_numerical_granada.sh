@@ -2,16 +2,16 @@
 # ONE complete Case B T0 numerical-reference Granada handoff.
 # C14 ARCHIVED model values ONLY; not JMatPro/experiment; no accepted mesh changes.
 set -Eeuo pipefail
-HERE="$(cd "$(dirname "\${BASH_SOURCE[0]}")" && pwd)"
+HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO="$(cd "$HERE/../../../.." && pwd)"
-MODE="\${1:---prepare}"
+MODE="${1:---prepare}"
 if [[ "$MODE" != "--prepare" && "$MODE" != "--solve" ]]; then
     echo "Usage: bash $0 [--prepare | --solve]" >&2
     exit 2
 fi
-INPUTS="\${C3D05_C14_NUMERICAL_INPUTS:-$HOME/OpenFOAM/C3D05_T0_C14_NUMERICAL_INPUTS.json}"
-OUTPUT="\${C3D05_C14_NUMERICAL_OUT:-$HOME/OpenFOAM/C3D05_T0_C14_SHK_01}"
-NATIVE="\${C3D05_ACCEPTED_NATIVE:-$HOME/OpenFOAM/C3D05_STEP_GMSH_HEX_SUBDIV_COARSE_02}"
+INPUTS="${C3D05_C14_NUMERICAL_INPUTS:-$HOME/OpenFOAM/C3D05_T0_C14_NUMERICAL_INPUTS.json}"
+OUTPUT="${C3D05_C14_NUMERICAL_OUT:-$HOME/OpenFOAM/C3D05_T0_C14_SHK_01}"
+NATIVE="${C3D05_ACCEPTED_NATIVE:-$HOME/OpenFOAM/C3D05_STEP_GMSH_HEX_SUBDIV_COARSE_02}"
 RUNLOG="$OUTPUT/log.foamMultiRun.C14_NUMERICAL_T0"
 RUNREPORT="$OUTPUT/T0_NUMERICAL_RUN_STATUS.json"
 
@@ -20,7 +20,7 @@ echo "=== C14-ARCHIVED two-SOLID numerical shakedown, NOT real QuickCup paramete
 python3 -B "$REPO/tools/check_project_delivery_contract.py" --status
 
 # Verify native installed Foundation14 before generating a new destination.
-if [[ "\${WM_PROJECT_VERSION:-}" != "14" ]]; then
+if [[ "${WM_PROJECT_VERSION:-}" != "14" ]]; then
     for bashrc in /opt/openfoam14/etc/bashrc "$HOME/OpenFOAM/OpenFOAM-14/etc/bashrc"; do
         if [[ -r "$bashrc" ]]; then
             set +u
@@ -30,7 +30,7 @@ if [[ "\${WM_PROJECT_VERSION:-}" != "14" ]]; then
         fi
     done
 fi
-if [[ "\${WM_PROJECT_VERSION:-}" != "14" ]] ||
+if [[ "${WM_PROJECT_VERSION:-}" != "14" ]] ||
    ! command -v foamMultiRun >/dev/null 2>&1 ||
    ! command -v foamDictionary >/dev/null 2>&1; then
     echo "BLOCKED: OpenFOAM Foundation14 must exist. No simulation or reference case created." >&2
