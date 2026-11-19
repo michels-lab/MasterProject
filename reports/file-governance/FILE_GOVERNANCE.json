@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
   "audit_kind": "deterministic_full_tracked_tree",
-  "tracked_files_total": 38969,
-  "classified_files_total": 38964,
-  "docs_content_inspected": 173,
+  "tracked_files_total": 38970,
+  "classified_files_total": 38965,
+  "docs_content_inspected": 174,
   "large_docs_skipped": 1,
   "excluded_reports": 5,
   "roles": {
@@ -12,7 +12,7 @@
     "bitacora": 5,
     "config": 13,
     "data": 31,
-    "document": 137,
+    "document": 138,
     "index": 32,
     "license": 1,
     "simulation_case_file": 115,
@@ -28,8 +28,8 @@
     "POTENTIAL_UNLOGGED_CHANGES": 2
   },
   "finding_total": 2,
-  "inventory_fingerprint": "99a3f8ff6554fdc32de7350c9e82b142c048f7b2c2002254660b551026be384f",
-  "evidence_fingerprint": "5de7c9f636e1a352ab263e43439c5c1f2d6558a21f1416d651fbd13f86f255c3",
+  "inventory_fingerprint": "816ef1c5315666a1dc360c7defd96b3fb04f47e928bb6508b7a6fbbda65bb5c1",
+  "evidence_fingerprint": "c5885a75ff40b358c5efb642a9f40244bf6dd75f012914a9c8531bf92ec46db2",
   "files": [
     {
       "path": ".github/agents/openfoam-solidification.agent.md",
@@ -358,7 +358,7 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "292be114e6af6dec8228deedda401dfe49cb2340"
+      "blob": "0bc23e95dae8ef1b26e9d0e08c5ea18d207d80bd"
     },
     {
       "path": "VALIDATION_MATRIX.md",
@@ -272035,7 +272035,7 @@
       "role": "config",
       "purpose": "machine-readable configuration",
       "certainty": "rule",
-      "blob": "8e995201ea91fa7ed9ac274ca0f7d17de9d4766b"
+      "blob": "7127a677f79f186fdfd95210973ab62b9883cee3"
     },
     {
       "path": "docs/REGLA_INSTRUCCIONES_UNIFICADAS_ES.md",
@@ -272071,6 +272071,13 @@
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
       "blob": "393b029ea89239d24ed4c1e30e1fec596fedc22c"
+    },
+    {
+      "path": "docs/granada/C3D05_C14_NUMERICAL_ONE_SHOT_20261119_ES.md",
+      "role": "document",
+      "purpose": "manual/decision/report/historical note",
+      "certainty": "inferred",
+      "blob": "bf1c8c675bb91e89650121c01b1eb258834e21be"
     },
     {
       "path": "docs/granada/C3D05_FVSOLUTION_C14_20261119_ES.md",
@@ -272791,11 +272798,11 @@
       "state": "REVIEW_REQUIRED"
     },
     {
-      "id": "4f823d70fe1c61fc",
+      "id": "47b55a13a607bfda",
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_ES.md",
-      "observation": "3 implementation/config paths changed since this log's last commit; examples: .github/workflows/c3d05-t0-granada-static.yml, cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/scripts/run_t0_granada.py, docs/C3D04_CASE_A_STATUS.json",
+      "observation": "4 implementation/config paths changed since this log's last commit; examples: .github/workflows/c3d05-t0-granada-static.yml, cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/scripts/run_t0_granada.py, docs/C3D04_CASE_A_STATUS.json, docs/PROJECT_STAGE_STATUS.json",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     }
