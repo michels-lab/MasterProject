@@ -261,19 +261,20 @@ def generate(cfg: dict) -> dict[str, str]:
 
 
 def physical_patch_names(boundary_path: Path) -> set[str]:
-    """Count active patches, protecting T0 from unmodelled physical boundaries.
+    """Count active patches, rejecting unmodelled nonempty thermal boundaries.
 
-    Preserve zero-face placeholders but do not silently miss a nonempty wall.
+    The regex must have ONE backslash per raw-string escape. The associated
+    integrated static test checks actual mixed named/zero-face patch parsing.
     """
     body = boundary_path.read_text(encoding="utf-8")
     blocks = re.finditer(
-        r"(?m)^\\s*([A-Za-z_][A-Za-z_0-9]*)\\s*\\{([^{}]*)\\}",
+        r"(?m)^\s*([A-Za-z_][A-Za-z_0-9]*)\s*\{([^{}]*)\}",
         body, re.S
     )
     found: set[str] = set()
     for match in blocks:
         inner = match.group(2)
-        number = re.search(r"\\bnFaces\\s+(\\d+)\\s*;", inner)
+        number = re.search(r"\bnFaces\s+(\d+)\s*;", inner)
         if number and int(number.group(1)) > 0:
             found.add(match.group(1))
     return found
