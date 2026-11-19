@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "audit_kind": "deterministic_full_tracked_tree",
-  "tracked_files_total": 38924,
-  "classified_files_total": 38919,
+  "tracked_files_total": 38925,
+  "classified_files_total": 38920,
   "docs_content_inspected": 167,
   "large_docs_skipped": 1,
   "excluded_reports": 5,
@@ -19,17 +19,17 @@
     "simulation_input": 2683,
     "simulation_log": 3155,
     "simulation_output": 32613,
-    "source": 91,
+    "source": 92,
     "test": 35,
     "web_ui": 1,
     "workflow": 19
   },
   "finding_counts": {
-    "POTENTIAL_UNLOGGED_CHANGES": 1
+    "POTENTIAL_UNLOGGED_CHANGES": 2
   },
-  "finding_total": 1,
-  "inventory_fingerprint": "bc663b98d7ed4fd96fb649cb95acd9ff4203391be997f635c22b002e4bf15a59",
-  "evidence_fingerprint": "fd7c96b7d5eebb48407b95004a3bbc6d0b17a4d52b114d52f9b826e30bbb35aa",
+  "finding_total": 2,
+  "inventory_fingerprint": "b1a1da5122d64d4f62c1e886f51af8599609b39af876bcfa080759d881f3c5d8",
+  "evidence_fingerprint": "ab9d65575365b9a6e5c582ca0909b2a53091951bcb0a27550ccc6b8f2aaff47d",
   "files": [
     {
       "path": ".github/agents/openfoam-solidification.agent.md",
@@ -1614,6 +1614,13 @@
       "blob": "2ca0b1ea43473fa9ef1ab20ed118f7d4684601a7"
     },
     {
+      "path": "cases_3d/C3D_04_rounded_multiblock_pilot/scripts/audit_v4_t02_face_identity.py",
+      "role": "source",
+      "purpose": "code/test implementation",
+      "certainty": "rule",
+      "blob": "6b1217bd53ef80be262b57b1b0097509b72603b5"
+    },
+    {
       "path": "cases_3d/C3D_04_rounded_multiblock_pilot/scripts/audit_v4_t02_nonorth.py",
       "role": "source",
       "purpose": "code/test implementation",
@@ -1625,7 +1632,7 @@
       "role": "source",
       "purpose": "code/test implementation",
       "certainty": "rule",
-      "blob": "8a520ef09be2efcd6a664424563ca67de2ca72d9"
+      "blob": "d4ae6e2ee4a958d3a33deafc4eb281f894056c71"
     },
     {
       "path": "cases_3d/C3D_04_rounded_multiblock_pilot/scripts/diagnose_existing_defects.py",
@@ -272467,11 +272474,20 @@
   ],
   "findings": [
     {
-      "id": "956952eebca39712",
+      "id": "809ca72975a4726a",
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_EN.md",
-      "observation": "42 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_03_doctor_multiblock_pilot/tests/test_native_multiblock_static.sh, cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V2_BASAL_QUALITY/tests/test_candidate_geometry.py, cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V3_BASAL_SWEEP/run_v3_sweep.sh, cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V3_BASAL_SWEEP/scripts/build_v3_dictionary.py, cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V3_BASAL_SWEEP/scripts/summarize_trial.py, cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V3_BASAL_SWEEP/tests/test_v3_diff.py",
+      "observation": "43 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_03_doctor_multiblock_pilot/tests/test_native_multiblock_static.sh, cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V2_BASAL_QUALITY/tests/test_candidate_geometry.py, cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V3_BASAL_SWEEP/run_v3_sweep.sh, cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V3_BASAL_SWEEP/scripts/build_v3_dictionary.py, cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V3_BASAL_SWEEP/scripts/summarize_trial.py, cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V3_BASAL_SWEEP/tests/test_v3_diff.py",
+      "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
+      "state": "REVIEW_REQUIRED"
+    },
+    {
+      "id": "0bcb40480fafe05a",
+      "code": "POTENTIAL_UNLOGGED_CHANGES",
+      "severity": "review",
+      "path": "PROJECT_AUDIT_LOG_ES.md",
+      "observation": "2 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_04_rounded_multiblock_pilot/scripts/audit_v4_t02_face_identity.py, cases_3d/C3D_04_rounded_multiblock_pilot/scripts/audit_v4_t02_vtk_faces.py",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     }
