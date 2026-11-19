@@ -28,8 +28,8 @@
     "POTENTIAL_UNLOGGED_CHANGES": 2
   },
   "finding_total": 2,
-  "inventory_fingerprint": "35383e90f5a95da9c48e9c689cf39c91bc7d15c4b5cf3d6a8801ed3496563b47",
-  "evidence_fingerprint": "ab8807d8dab66c4be017ea37c2ac3a70a710b9d77b7fa695004c9b6f8fb9ce66",
+  "inventory_fingerprint": "deb684b99c6a7bb93abe344a2e7ccdeb73990238ec4edb66d31432d7e94461de",
+  "evidence_fingerprint": "0335c637bfda3e4f0a9cb7393e74a8a946b92a9c3aac54d04d6a9e04c56ceae5",
   "files": [
     {
       "path": ".github/agents/openfoam-solidification.agent.md",
@@ -1968,7 +1968,7 @@
       "role": "test",
       "purpose": "code/test implementation",
       "certainty": "rule",
-      "blob": "6cd6409f7763c4197af73c2cd0f9cda89bd69195"
+      "blob": "c43d90d43ddaaf4d830d308e4523813039a46132"
     },
     {
       "path": "cases_3d/README.md",
@@ -272588,11 +272588,11 @@
       "state": "REVIEW_REQUIRED"
     },
     {
-      "id": "38ea4724cb32e7dd",
+      "id": "c5d91efa88d53a99",
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_ES.md",
-      "observation": "5 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_04_rounded_multiblock_pilot/scripts/audit_v4_t02_face_identity.py, cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/scripts/prepare_t0.py, cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/scripts/run_t0_materialize.sh, cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/scripts/run_t0_preflight.sh, cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/tests/test_prepare_t0.py",
+      "observation": "6 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_04_rounded_multiblock_pilot/scripts/audit_v4_t02_face_identity.py, cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/scripts/prepare_t0.py, cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/scripts/run_t0_materialize.sh, cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/scripts/run_t0_preflight.sh, cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/tests/test_prepare_t0.py, cases_3d/C3D_05_step_gmsh_conformal/tests/test_step_gmsh_static.sh",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     }
