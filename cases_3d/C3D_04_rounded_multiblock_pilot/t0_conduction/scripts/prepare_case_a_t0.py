@@ -13,6 +13,7 @@ It NEVER runs CFD, checkMesh or blockMesh. T0 is not solidification physics.
 from __future__ import annotations
 
 import argparse
+import csv
 import hashlib
 import os
 import json
@@ -280,6 +281,59 @@ def physical_patch_names(boundary_path: Path) -> set[str]:
     return found
 
 
+def read_preserved_mesh_volumes(source: Path) -> dict[str, float]:
+    """Read native V4/T02 reported volumes (NOT CAD volumes), never invent."""
+    tsv = source/"PILOT_MESH_REPORT.tsv"
+    if not tsv.is_file():
+        raise FileNotFoundError(f"V4/T02 saved native volume table missing: {tsv}")
+    with tsv.open(newline="", encoding="utf-8") as stream:
+        rows = list(csv.DictReader(stream, delimiter="\t"))
+    if len(rows) != 2:
+        raise ValueError("Expected exactly two native material volume rows")
+    answer = {}
+    expected_cells = {"metal": 8960, "mold": 12352}
+    for row in rows:
+        region = row.get("region")
+        if region not in expected_cells or region in answer:
+            raise ValueError(f"Unexpected or repeated volume region: {region}")
+        volume = float(row.get("volume_m3", "nan"))
+        if (not math.isfinite(volume) or volume <= 0
+            or int(row.get("cells", -1)) != expected_cells[region]
+            or row.get("mesh_ok") != "YES"):
+            raise ValueError(f"{region}: native cell count/volume/acceptance changed")
+        answer[region] = volume
+    if set(answer) != set(expected_cells):
+        raise ValueError("Saved native volume regions incomplete")
+    return answer
+
+
+def closed_t0_energy_target(cfg: dict, volumes: dict[str, float]) -> dict:
+    """Ideal insulated two-solid T0 equilibrium, NEVER a CFD result."""
+    capacity = {
+        reg: cfg[reg]["rho_kg_m3"] * cfg[reg]["Cv_J_kg_K"] * volumes[reg]
+        for reg in ("metal", "mold")
+    }
+    if not all(math.isfinite(v) and v > 0 for v in capacity.values()):
+        raise ValueError("T0 lumped heat capacity must be positive and finite")
+    total = sum(capacity.values())
+    eq = sum(
+        capacity[region] * cfg[region]["T_initial_K"]
+        for region in ("metal", "mold")
+    ) / total
+    if not math.isfinite(eq):
+        raise ValueError("T0 equilibrium-temperature calculation overflow")
+    return {
+        "model": "THEORETICAL_ADIABATIC_TWO_CONSTANT_CV_SOLIDS_ONLY",
+        "regional_heat_capacity_J_per_K": capacity,
+        "total_heat_capacity_J_per_K": total,
+        "ideal_equilibrium_K_no_heat_loss": eq,
+        "energy_residual_equation": (
+            "Cmetal*(Tmetal-Tmetal0)+Cmold*(Tmold-Tmold0)=0"
+        ),
+        "validation_status": "ANALYTICAL_TARGET_ONLY_NOT_CFD_OUTPUT",
+    }
+
+
 def native_case_gate(source: Path) -> dict:
     if not source.is_dir():
         raise FileNotFoundError(f"Preserved Case A V4/T02 missing: {source}")
@@ -309,8 +363,10 @@ def native_case_gate(source: Path) -> dict:
                 f"missing field BC={sorted(actual_nonempty - expected_nonempty)}, "
                 f"incorrectly assumed BC={sorted(expected_nonempty - actual_nonempty)}"
             )
+    saved_volumes = read_preserved_mesh_volumes(source)
     return {
         "source": str(source),
+        "native_volumes_m3_from_preserved_tsv": saved_volumes,
         "native_mesh_quality_and_contact_from_saved_evidence": True,
         "expected_regions": ["metal", "mold"],
         "expected_external_patch_names": EXTERIOR,
@@ -386,6 +442,9 @@ def materialize(source: Path, dest: Path, cfg: dict, input_file: Path,
             parsed.append(relative)
         record = {
             "status": "T0_FILESET_MATERIALIZED_NATIVE_DICTIONARIES_PARSED_NOT_SOLVED",
+            "idealized_closed_energy_preflight": closed_t0_energy_target(
+                cfg, evidence["native_volumes_m3_from_preserved_tsv"]
+            ),
             "not_validated_physics": True,
             "not_CFD_executed": True,
             "source_case_preserved": str(source),
@@ -458,7 +517,11 @@ def self_test():
     cfg["mold"]["kappa_W_m_K"] = 4.
     cfg["simulation"]["nNonOrthogonalCorrectors"] = -1
     assert any("nNonOrthogonalCorrectors" in e for e in validate(cfg))
-    print("STATIC_INTEGRATED_T0_PASS: null data blocked; 10 files incl global PIMPLE; all native patch names; provenance; rejection regressions")
+    target = closed_t0_energy_target(
+        synthetic_fixture(), {"metal": 1.0, "mold": 1.0}
+    )
+    assert abs(target["ideal_equilibrium_K_no_heat_loss"] - 6.5) < 1e-12
+    print("STATIC_INTEGRATED_T0_PASS: null data blocked; 10 files incl global PIMPLE; all native patch names; energy target; provenance; rejection regressions")
     print("STATIC_ONLY: no OpenFOAM, CFD or thermal case creation.")
 
 
@@ -489,8 +552,14 @@ def main() -> int:
         print("No physical parameters invented. No materialization. No CFD.")
         return 3 if args.materialize else 0
     files = generate(cfg)
+    energy = closed_t0_energy_target(
+        cfg, evidence["native_volumes_m3_from_preserved_tsv"]
+    )
     if not args.materialize:
         print(f"CASE_A_T0_CONFIG_AND_SOURCE_PRECHECK_OK: {len(files)} files renderable")
+        print("IDEALIZED_T0_CLOSED_EQUILIBRIUM_K:",
+              energy["ideal_equilibrium_K_no_heat_loss"],
+              "| theoretical constant-Cv and adiabatic only, NOT CFD")
         print("No files written. No CFD. Native Foundation14 dictionary parse remains pending.")
         return 0
     materialize(source, dest, cfg, input_file, files, evidence)
