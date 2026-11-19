@@ -53,9 +53,17 @@ def main() -> None:
     ap.add_argument("--mesh-size-mm", type=float, default=1.8)
     ap.add_argument("--algorithm-3d", type=int, choices=(1, 4, 10), default=1,
                     help="Gmsh 3D algorithm: 1=Delaunay baseline, 4=Frontal, 10=HXT")
+    ap.add_argument("--subdivide-to-hex", action="store_true",
+                    help="After tetrahedral generation, subdivide all tetra into 8-node hexes")
+    ap.add_argument("--max-base-tets", type=int, default=200000,
+                    help="Abort BEFORE hex conversion if tetra count exceeds this safety limit")
     args = ap.parse_args()
     if not (0.5 <= args.mesh_size_mm <= 5.0):
         ap.error("--mesh-size-mm must be between 0.5 and 5 mm for the topology pilot")
+    if args.max_base_tets < 1 or args.max_base_tets > 200000:
+        ap.error("--max-base-tets must be in the range 1..200000 (resource safety)")
+    if args.subdivide_to_hex and args.algorithm_3d != 1:
+        ap.error("Hex-subdivision topology pilot must start from Delaunay algorithm 1")
 
     metal_path, mold_path = args.metal.resolve(), args.mold.resolve()
     if not metal_path.is_file() or not mold_path.is_file():
@@ -175,6 +183,8 @@ def main() -> None:
             "mesh_size_mm": args.mesh_size_mm,
             "algorithm_3d": args.algorithm_3d,
             "algorithm_label": {1: "Delaunay", 4: "Frontal", 10: "HXT"}[args.algorithm_3d],
+            "subdivide_to_hex": args.subdivide_to_hex,
+            "max_base_tets": args.max_base_tets,
             "physics_status": "NO_CFD_NO_BCS",
         }
         with report_path.open("x", encoding="utf-8") as f:
@@ -188,6 +198,44 @@ def main() -> None:
         gmsh.option.setNumber("Mesh.Binary", 0)
         gmsh.option.setNumber("Mesh.ScalingFactor", 0.001)
         gmsh.model.mesh.generate(3)
+        if args.subdivide_to_hex:
+            initial_types, initial_tags, _ = gmsh.model.mesh.getElements(3)
+            initial_count = sum(len(tags) for tags in initial_tags)
+            if set(map(int, initial_types)) != {4}:
+                raise ValueError(
+                    f"Expected exclusively 4-node tetrahedra before hex subdivision, "
+                    f"got element types {list(initial_types)}"
+                )
+            report["pre_subdivision_tet_count"] = initial_count
+            if initial_count > args.max_base_tets:
+                raise ValueError(
+                    f"RESOURCE_GATE: would subdivide {initial_count} tetrahedra "
+                    f"(limit {args.max_base_tets}); no MSH written. Increase size "
+                    "only in a NEW separate pilot; do not bypass memory gate."
+                )
+            # Gmsh documented subdivision algorithm 2 converts a 3D tet mesh
+            # to all hexahedral elements; invoke refine() explicitly AFTER
+            # generating tetrahedra, never once more accidentally.
+            gmsh.option.setNumber("Mesh.SubdivisionAlgorithm", 2)
+            gmsh.model.mesh.refine()
+            volume_types, volume_tags, _ = gmsh.model.mesh.getElements(3)
+            final_count = sum(len(tags) for tags in volume_tags)
+            surface_types = {int(t) for t in gmsh.model.mesh.getElementTypes(2)}
+            if set(map(int, volume_types)) != {5} or surface_types != {3}:
+                raise ValueError(
+                    f"SUBDIVISION_INCOMPLETE: expected MSH hex type 5 and "
+                    f"quad type 3, got volumes {list(volume_types)} and "
+                    f"surface types {sorted(surface_types)}. No MSH exported."
+                )
+            if final_count < initial_count:
+                raise ValueError("Subdivision unexpectedly reduced 3D cell count")
+            report["mesh_element_topology"] = "HEX8_QUAD4_ONLY"
+            report["post_subdivision_hex_count"] = final_count
+            report["post_subdivision_surface_types"] = sorted(surface_types)
+            print(f"HEX_SUBDIVISION: {initial_count} tetra -> {final_count} "
+                  f"hexahedra; all surface facets quadrangular", flush=True)
+        else:
+            report["mesh_element_topology"] = "TET4"
         gmsh.write(str(mesh_path))
         report["status"] = "GMSH_MSH2_WRITTEN_OPENFOAM_NOT_YET_VERIFIED"
         report["mesh_file"] = str(mesh_path)
