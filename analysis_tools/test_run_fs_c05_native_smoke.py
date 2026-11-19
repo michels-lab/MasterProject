@@ -1,6 +1,7 @@
 """FS-C05 two-step real CFD startup runner, all tests SYNTHETIC/no OpenFOAM."""
 from __future__ import annotations
 import json
+import hashlib
 import os
 from pathlib import Path
 import subprocess
@@ -18,10 +19,10 @@ def success_output()->str:
     return (
         "Create time\n"
         "Starting time loop\n"
-        "Time = 1e-07\n"
+        "Time = 1e-07s\n"
         "fluid: Courant Number mean: 0.01 max: 0.05\n"
         "mold: Solving for e\n"
-        "Time = 2e-07\n"
+        "Time = 2e-07s\n"
         "fluid: Courant Number mean: 0.02 max: 0.06\n"
         "mold: Solving for e\n"
         "End\n"
@@ -70,6 +71,9 @@ class CHTNativeSmokeTests(unittest.TestCase):
             status=run(self.source,self.output,native=False)
         process.assert_not_called()
         self.assertEqual(status["status"],"NATIVE_TWO_STEP_CH_T_STAGED_NO_SOLVER")
+        self.assertEqual(status["rhoPhi_turbulence_schemes_added_in_COPY_only"],[])
+        self.assertIn("div(rhoPhi,epsilon)",
+                      (self.output/"system/fluid/fvSchemes").read_text())
         self.assertFalse(status["solver_ran"])
         self.assertFalse(status["heat_flux_balance_verified"])
         self.assertFalse(status["energy_balance_verified"])
@@ -77,6 +81,39 @@ class CHTNativeSmokeTests(unittest.TestCase):
         self.assertEqual((self.source/"system/controlDict").read_bytes(),initial)
         self.assertTrue((self.output/"FS_C05_NATIVE_SMOKE_REPORT.json").exists())
         self.assertFalse((self.source/"FS_C05_NATIVE_SMOKE_REPORT.json").exists())
+
+    def test_previous_FS_C05_candidate_is_repaired_only_in_new_clone(self):
+        # The actual field failure was on the previous generated candidate,
+        # which has div(phi,epsilon) but no compressible div(rhoPhi,epsilon).
+        source_schemes=self.source/"system/fluid/fvSchemes"
+        old=source_schemes.read_text()
+        self.assertIn("div(rhoPhi,epsilon)",old)
+        legacy=old.replace(
+            "    div(rhoPhi,k)    $turbulence;","").replace(
+            "    div(rhoPhi,epsilon)    $turbulence;","")
+        self.assertNotIn("div(rhoPhi,epsilon)",legacy)
+        self.assertNotEqual(old,legacy)
+        source_schemes.write_text(legacy)
+        manifest=self.source/"FS_C05_PHYSICS_CANDIDATE.json"
+        record=json.loads(manifest.read_text())
+        record["written_files_sha256"]["system/fluid/fvSchemes"]=(
+            hashlib.sha256(legacy.encode()).hexdigest())
+        manifest.write_text(json.dumps(record))
+        proof=preflight(self.source)
+        self.assertEqual(proof["mesh_contact_faces"],3136)
+        result=run(self.source,self.output,native=False)
+        self.assertEqual(result["rhoPhi_turbulence_schemes_added_in_COPY_only"],
+                         ["k","epsilon"])
+        cloned=(self.output/"system/fluid/fvSchemes").read_text()
+        self.assertIn("div(rhoPhi,k)",cloned)
+        self.assertIn("div(rhoPhi,epsilon)",cloned)
+        self.assertEqual(source_schemes.read_text(),legacy)
+        self.assertFalse(result["solver_ran"])
+
+    def test_native_time_parser_accepts_foundation14_seconds_suffix(self):
+        metrics=validate_run_log(success_output())
+        self.assertEqual(metrics["completed_time_steps"],2)
+        self.assertAlmostEqual(metrics["last_time_s"],STOP_TIME)
 
     def test_native_two_steps_success_only_marks_startup_not_cht_validation(self):
         def run_foam(args,**kwargs):
