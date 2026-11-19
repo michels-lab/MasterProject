@@ -5,7 +5,7 @@ ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 REPO="$(cd "$ROOT/../../../.." && pwd)"
 V2="$REPO/cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V2_BASAL_QUALITY/system/blockMeshDict"
 [[ -s "$V2" && -s "$ROOT/Allmesh" && -s "$ROOT/run_v3_sweep.sh" ]]
-bash -n "$ROOT/Allmesh" "$ROOT/run_v3_sweep.sh"
+for shell in "$ROOT/Allmesh" "$ROOT/run_v3_sweep.sh"; do bash -n "$shell"; done
 python3 - "$ROOT" <<'PY'
 import ast
 from pathlib import Path
