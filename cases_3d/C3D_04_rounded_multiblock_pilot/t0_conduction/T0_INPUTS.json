@@ -1,0 +1,46 @@
+{
+  "schema": "C3D04_A_T0_1",
+  "purpose": "TRANSIENT_TWO_SOLID_CONDUCTION_NUMERICAL_CHECK_ONLY_NOT_CAST_IRON_SOLIDIFICATION",
+  "material_model": "constIsoSolid_rhoConst_eConst_sensibleInternalEnergy",
+  "thermal_BC_hypothesis": "ADIA_BC_EXTERNAL_PERFECT_THERMAL_CONTACT_UNVALIDATED_QUICKCUP",
+  "acknowledgement": "T0_NUMERICAL_CHECK_ONLY_NOT_EXPERIMENTAL_VALIDATION",
+  "metal": {
+    "rho_kg_m3": null,
+    "Cv_J_kg_K": null,
+    "kappa_W_m_K": null,
+    "molWeight_g_mol": null,
+    "T_initial_K": null,
+    "source_rho": null,
+    "source_Cv": null,
+    "source_kappa": null,
+    "source_molWeight": null,
+    "source_T_initial": null
+  },
+  "mold": {
+    "rho_kg_m3": null,
+    "Cv_J_kg_K": null,
+    "kappa_W_m_K": null,
+    "molWeight_g_mol": null,
+    "T_initial_K": null,
+    "source_rho": null,
+    "source_Cv": null,
+    "source_kappa": null,
+    "source_molWeight": null,
+    "source_T_initial": null
+  },
+  "simulation": {
+    "deltaT_s": null,
+    "endTime_s": null,
+    "writeEverySteps": null,
+    "nNonOrthogonalCorrectors": null,
+    "source_time_choices": null,
+    "source_nonorth_choice": null
+  },
+  "physics_limitations": [
+    "T0 treats both phases as constant-property solids; liquid cast iron and latent heat deliberately absent",
+    "all external zeroGradient T walls are an isolated closed-energy benchmark, not measured QuickCup convection",
+    "perfect coupledTemperature interface has zero thermal contact resistance; experimental value not established",
+    "all material and numerical values require provenance and real measurements before materialization",
+    "no solver run or thermophysical/dictionary validation in actual Foundation14 at this point"
+  ]
+}
