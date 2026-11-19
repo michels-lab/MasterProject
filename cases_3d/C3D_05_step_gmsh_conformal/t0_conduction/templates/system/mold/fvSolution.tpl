@@ -1,33 +1,33 @@
-/* C3D-05 Caso B, T0 CONDUCTION ONLY; OpenFOAM Foundation 14.
- * TEMPLATE — never execute before vetted inputs and WSL checks. */
+/* C3D-05 B mold SOLID T0. From C14 system/mold/fvSolution.
+ * Uses C14 (h|e) PCG+DIC numerical settings for sensibleInternalEnergy e.
+ * C14 FLUID p_rgh, U, momentum controls are not applicable to T0 solids.
+ */
 FoamFile
 {
-    version     2.0;
-    format      ascii;
-    class       dictionary;
-    location    "system/mold";
-    object      fvSolution;
+    version 2.0;
+    format ascii;
+    class dictionary;
+    location "system/mold";
+    object fvSolution;
 }
-// -------------------------------------------------------------------------
-// T0 numerical choices are proposed; NOT validated on the QuickCup mesh.
 solvers
 {
     e
     {
-        solver          GAMG;
-        smoother        symGaussSeidel;
-        tolerance       1e-8;
-        relTol          0.05;
-        maxIter         200;
+        solver PCG;
+        preconditioner DIC;
+        tolerance 1e-6;
+        relTol 0.05;
     }
     eFinal
     {
         $e;
-        relTol          0;
+        relTol 0;
     }
 }
 PIMPLE
 {
-    // Baseline sensitivity hypothesis; compare 0, 1, 2+ correctors later.
-    nNonOrthogonalCorrectors 2;
+    nOuterCorrectors 1;
+    nCorrectors 2;
+    nNonOrthogonalCorrectors 0;
 }
