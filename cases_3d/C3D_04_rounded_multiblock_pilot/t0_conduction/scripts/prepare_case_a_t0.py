@@ -29,6 +29,7 @@ T0 = Path(__file__).resolve().parents[1]
 CASE_A = T0.parent
 sys.path.insert(0, str(CASE_A / "scripts"))
 from audit_v4_t02_nonorth import audit as audit_saved_native, patch_metadata
+from measure_interface_area import patch_area
 
 INPUTS = T0 / "T0_INPUTS.json"
 SOURCE = Path.home() / "OpenFOAM/C3D04_V4_TRANSITION_REPAIR_01/T02"
@@ -499,6 +500,93 @@ def c14_source_gate(cfg: dict) -> dict:
     }
 
 
+def thermal_network_budget(source: Path, cfg: dict,
+                           volumes: dict[str, float]) -> dict:
+    """Initial thermal power scales from original C14 BCs and native 3D areas.
+
+    This is an initial-surface-temperature *estimate*. It is NOT a
+    temperature time history, not an OpenFOAM heat-flux measurement,
+    and not a substitute for 3D solver energy conservation.
+    """
+    if set(volumes) != {"metal", "mold"}:
+        raise ValueError("Missing native metal/mold volumes")
+    bc = cfg["c14_boundary_reference"]
+    wall_area = {}
+    for region in ("metal", "mold"):
+        wall_area[region] = {}
+        for patch in EXTERIOR[region]:
+            area, count = patch_area(source, region, patch)
+            if not positive(area) or count < 1:
+                raise ValueError(f"Native exterior patch invalid: {region}/{patch}")
+            wall_area[region][patch] = area
+    contact_m, faces_m = patch_area(source, "metal", COUPLED["metal"])
+    contact_s, faces_s = patch_area(source, "mold", COUPLED["mold"])
+    if faces_m != faces_s or faces_m != 2496:
+        raise ValueError("Native interface patch faces must remain reciprocal 2496")
+    if (not positive(contact_m) or not positive(contact_s)
+        or abs(contact_m-contact_s)/max(contact_m, contact_s) > 1e-6):
+        raise ValueError("Native interface areas are not reciprocal within 1e-6")
+    contact = bc["metal_to_mold"]
+    g_contact = contact_m * contact["conductance_W_m2_K"]
+    top_metal_area = sum(wall_area["metal"].values())
+    outside_mold_area = sum(wall_area["mold"].values())
+    g_out_metal = top_metal_area * bc["metalTop"]["h_W_m2_K"]
+    g_out_mold = outside_mold_area * bc["moldExterior"]["h_W_m2_K"]
+    t_m = cfg["metal"]["T_initial_K"]
+    t_s = cfg["mold"]["T_initial_K"]
+    amb_m = bc["metalTop"]["Ta_K"]
+    amb_s = bc["moldExterior"]["Ta_K"]
+    c_m = cfg["metal"]["rho_kg_m3"] * cfg["metal"]["Cv_J_kg_K"] * volumes["metal"]
+    c_s = cfg["mold"]["rho_kg_m3"] * cfg["mold"]["Cv_J_kg_K"] * volumes["mold"]
+    if not all(positive(x) for x in (g_contact, c_m, c_s, g_out_metal, g_out_mold)):
+        raise ValueError("Thermal budget: nonpositive conductance or heat capacity")
+    p_contact = g_contact * (t_m-t_s)
+    p_ext_metal = g_out_metal * (t_m-amb_m)
+    p_ext_mold = g_out_mold * (t_s-amb_s)
+    # Optional Stefan-Boltzmann reference. emissivity on externalTemperature
+    # also radiates; this is an INITIAL UNIFORM-T bounding proxy only.
+    sigma = 5.670374419e-8
+    p_rad_metal = (
+        bc["metalTop"]["emissivity"] * sigma * top_metal_area
+        * (t_m**4-amb_m**4)
+    )
+    p_rad_mold = (
+        bc["moldExterior"]["emissivity"] * sigma * outside_mold_area
+        * (t_s**4-amb_s**4)
+    )
+    return {
+        "status": "INITIAL_C14_BC_GEOMETRIC_POWER_SCALE_NOT_CFD",
+        "native_external_patch_areas_m2": wall_area,
+        "native_contact_area_m2": contact_m,
+        "native_contact_faces_each_side": faces_m,
+        "heat_capacities_J_per_K": {"metal": c_m, "mold": c_s},
+        "conductance_W_per_K": {
+            "contact": g_contact,
+            "metal_outer": g_out_metal,
+            "mold_outer": g_out_mold,
+        },
+        "initial_uniform_temperature_power_W_positive_outward": {
+            "metal_to_mold_contact": p_contact,
+            "metal_to_ambient_convection": p_ext_metal,
+            "mold_to_ambient_convection": p_ext_mold,
+            "metal_to_ambient_radiation_estimate": p_rad_metal,
+            "mold_to_ambient_radiation_estimate": p_rad_mold,
+        },
+        "contact_only_lumped_time_scale_s": {
+            "metal": c_m/g_contact,
+            "mold": c_s/g_contact,
+        },
+        "limits": [
+            "All exterior/contact areas are real saved native polyMesh areas; thermal powers use C14 constants",
+            "Uniform initial wall temperatures assumed equal to the region initial fields; real near-wall gradients unknown",
+            "Contact series resistance also includes cell conduction; h_contact*A is NOT full interface effective conductance",
+            "Stefan-Boltzmann term is an indicative estimate, not native OpenFOAM radiative flux",
+            "Initial 1500K exceeds C14 liquidus 1473K, yet T0 intentionally neglects phase change and flow",
+            "This is not a temporal solution nor evidence of numerical stability, energy conservation or physical validation",
+        ],
+    }
+
+
 def native_case_gate(source: Path) -> dict:
     if not source.is_dir():
         raise FileNotFoundError(f"Preserved Case A V4/T02 missing: {source}")
@@ -607,6 +695,9 @@ def materialize(source: Path, dest: Path, cfg: dict, input_file: Path,
             parsed.append(relative)
         record = {
             "status": "T0_FILESET_MATERIALIZED_NATIVE_DICTIONARIES_PARSED_NOT_SOLVED",
+            "initial_C14_BC_thermal_budget": thermal_network_budget(
+                source, cfg, evidence["native_volumes_m3_from_preserved_tsv"]
+            ),
             "idealized_closed_energy_preflight": closed_t0_energy_target(
                 cfg, evidence["native_volumes_m3_from_preserved_tsv"]
             ),
@@ -731,11 +822,21 @@ def main() -> int:
     energy = closed_t0_energy_target(
         cfg, evidence["native_volumes_m3_from_preserved_tsv"]
     )
+    initial_budget = thermal_network_budget(
+        source, cfg, evidence["native_volumes_m3_from_preserved_tsv"]
+    )
     if not args.materialize:
         print(f"CASE_A_T0_CONFIG_AND_SOURCE_PRECHECK_OK: {len(files)} files renderable")
         print("COUNTERFACTUAL_INSULATED_EQUILIBRIUM_K_NOT_C14_BC:",
               energy["ideal_equilibrium_K_no_heat_loss"],
               "| theoretical constant-Cv and adiabatic only, NOT CFD")
+        print("C14_3D_MESH_INITIAL_CONTACT_POWER_W_ESTIMATE:",
+              initial_budget["initial_uniform_temperature_power_W_positive_outward"]
+              ["metal_to_mold_contact"])
+        print("C14_3D_MESH_INITIAL_METAL_OUTSIDE_CONVECTION_W_ESTIMATE:",
+              initial_budget["initial_uniform_temperature_power_W_positive_outward"]
+              ["metal_to_ambient_convection"])
+        print("C14_INITIAL_BUDGET_IS_NOT_CFD_OR_ENERGY_CONSERVATION.")
         print("No files written. No CFD. Native Foundation14 dictionary parse remains pending.")
         return 0
     materialize(source, dest, cfg, input_file, files, evidence)
