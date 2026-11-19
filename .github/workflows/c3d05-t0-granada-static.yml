@@ -1,0 +1,31 @@
+name: C3D-05 T0 Granada integrated static QA (no CFD)
+on:
+  pull_request:
+    paths:
+      - "cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/**"
+      - ".github/workflows/c3d05-t0-granada-static.yml"
+  push:
+    branches: [main]
+    paths:
+      - "cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/**"
+      - ".github/workflows/c3d05-t0-granada-static.yml"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  python-regressions-only:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run integrated tests including negative, idempotence, and synthetic materialization
+        run: python3 -B -m unittest discover -s cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/tests -p "test_*.py" -v
+      - name: Verify Python syntax without CFD
+        run: |
+          python3 - <<'PY'
+          import ast
+          from pathlib import Path
+          folder=Path("cases_3d/C3D_05_step_gmsh_conformal/t0_conduction")
+          for f in (folder/"scripts").glob("*.py"):
+              ast.parse(f.read_text(encoding="utf-8"), filename=str(f))
+          print("Python AST OK. No OpenFOAM/WSL runs.")
+          PY
