@@ -10,6 +10,21 @@ Un solo paquete para pasar del mallado aceptado preliminarmente a **un experimen
 Base de geometría (SOLO LECTURA): `~/OpenFOAM/C3D04_V4_TRANSITION_REPAIR_01/T02`.
 Referencia ya medida: 21,312 celdas (8,960 hierro + 12,352 arena), `Mesh OK` 3/3, contacto recíproco `mappedWall` 2,496 caras por lado, área 6,343.771874 mm². Distancia superficial STL–malla máxima **muestreada** 0.104973 mm, no Hausdorff certificado. No ortogonalidad >70°: 572 global, 276 hierro, 232 arena; diferencia 64/64 **identificada sobre interfaz**, investigación cerrada. Máximo global 82.92°; **no hay demostración de estabilidad o independencia de malla**.
 
+## Conservación energética T0 — objetivo analítico, no solver
+
+Para la **prueba idealizada adiabática y sin cambio de fase**, el preflight reutiliza únicamente el archivo nativo de V4/T02 `PILOT_MESH_REPORT.tsv`: exige las dos regiones (8,960 y 12,352 celdas), volúmenes positivos y sus `mesh_ok=YES`. Con densidad y capacidad calorífica constante **provenientes de entradas citadas** obtiene las capacidades térmicas `C_m = rho_m * Cv_m * V_m` y `C_s = rho_s * Cv_s * V_s` [J/K], y calcula como **objetivo ideal, no dato observado**:
+
+```text
+T_eq = (C_m * T_metal_initial + C_s * T_mold_initial) / (C_m + C_s)
+Delta_E_T0 = C_m * (T_metal - T_metal_initial)
+             + C_s * (T_mold - T_mold_initial)
+Expected isolated closed-system Delta_E_T0 ≈ 0, subject to numerical discretization error.
+```
+
+Este objetivo se incorpora al `T0_PREPARATION_REPORT.json` **solo al contar con parámetros trazables y al materializar un caso separado**. El código genera la misma referencia en un preflight de entrada completa, pero **no calcula energía física ahora**, porque `T0_INPUTS.json` mantiene los valores reales como `null`. Es una ecuación de conservación para un modelo 0D de capacidades térmicas; **no demuestra** acoplamiento de flujo de calor, estabilidad de `coupledTemperature`, convergencia 3D, pérdida real al ambiente, convección del hierro líquido o solidificación. El balance de caras y energía calculado por OpenFOAM sigue pendiente de simulación real.
+
+**Prevención de dos defectos anteriores**: el lector de `polyMesh/boundary` usa expresiones regulares correctamente escapadas y el test unitario exige que un `unexpectedFaces` de siete caras se detecte como pared física no cubierta; si tiene cero caras, no representa un BC activo. Los hashes de `polyMesh` copiados se comparan antes de publicar cualquier nuevo caso; ante un fallo nativo, la ruta final permanece ausente.
+
 ## Revisión integral de integridad técnica — 19-11-2026
 
 El código original omitía **`system/fvSolution` de la raíz**, necesario para configurar el PIMPLE multirregión de `foamMultiRun`. La referencia oficial Foundation 14 `tutorials/multiRegion/CHT/heatedDuct/system/fvSolution` tiene un bloque `PIMPLE` global separado de `system/metal/fvSolution`. Se añadió como **décimo archivo** y se exigió en `T0_INPUTS.json` un `nEnergyCorrectors` de procedencia/justificación explícita. **No se sustituyen valores físicos desconocidos con números de tutorial**.
@@ -37,7 +52,7 @@ Se reforzaron los **diez diccionarios** y el proceso **de materialización atóm
 
 **Arena:** `moldTop`, `moldExterior`, `moldBottom`, `moldRecessWall` y `moldRecessRoof` son paredes `zeroGradient` SOLO para el experimento cerrado de conservación. `mold_to_metal` tiene `coupledTemperature`. Los dos materiales se aproximan mediante `heSolidThermo / constIsoSolid / eConst / rhoConst / sensibleInternalEnergy`, con `rho`, `Cv`, `kappa`, `molWeight` y temperaturas iniciales trazables. El solver orientativo es `foamMultiRun` con dos regiones `solid`, discretización de difusión corregida y número configurable de correctores no ortogonales, pendiente de contraste con instalación real y prueba de sensibilidad. No hay resistencia térmica de interfaz en T0: acoplamiento idealizado, NO medición QuickCup.
 
-**Precaución crítica:** el estado `CODE_COMMITTED` **no demuestra** que Foundation14 haya parseado los nueve archivos ni que el solver arranque. Los requisitos reales de los módulos, diccionarios y estabilidad solo podrán validarse en el entorno WSL cuando existan entradas auténticas. No se debe hacer correr CFD con valores de prueba.
+**Precaución crítica:** el estado `CODE_COMMITTED` **no demuestra** que Foundation14 haya parseado los diez archivos ni que el solver arranque. Los requisitos reales de los módulos, diccionarios y estabilidad solo podrán validarse en el entorno WSL cuando existan entradas auténticas. No se debe hacer correr CFD con valores de prueba.
 
 ## Flujo único por hito, no por subpieza
 
