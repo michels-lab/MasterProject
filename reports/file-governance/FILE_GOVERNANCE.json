@@ -1,13 +1,13 @@
 {
   "schema_version": 1,
   "audit_kind": "deterministic_full_tracked_tree",
-  "tracked_files_total": 38971,
-  "classified_files_total": 38966,
+  "tracked_files_total": 38972,
+  "classified_files_total": 38967,
   "docs_content_inspected": 174,
   "large_docs_skipped": 1,
   "excluded_reports": 5,
   "roles": {
-    "agent": 8,
+    "agent": 9,
     "analysis_tool": 1,
     "bitacora": 5,
     "config": 13,
@@ -26,7 +26,7 @@
   },
   "finding_counts": {},
   "finding_total": 0,
-  "inventory_fingerprint": "4fff756c97b307fd71bd69b32820db6fb355cde9decbcf3bf9d1d2ce7f2f1d02",
+  "inventory_fingerprint": "d567afb757da99fb13b09a6fe32e09a161f2154abf43f792fb24af6c63387b74",
   "evidence_fingerprint": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
   "files": [
     {
@@ -230,7 +230,7 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "e1cfb79628ad4f6d33dc3c9325cd5da8a748ed1d"
+      "blob": "8109eed83c8ff202d88d83bd4524c8e6f14fad72"
     },
     {
       "path": ".michelslab/agents/file-steward.md",
@@ -1750,6 +1750,13 @@
       "purpose": "code/test implementation",
       "certainty": "rule",
       "blob": "13cfafec4057a155256dc2078f0e00434690e75e"
+    },
+    {
+      "path": "cases_3d/C3D_05_step_gmsh_conformal/AGENTS.md",
+      "role": "agent",
+      "purpose": "assistant role/instructions",
+      "certainty": "rule",
+      "blob": "153a36c09ce5a9b7d19dbb90c6a2e2523b8f70ab"
     },
     {
       "path": "cases_3d/C3D_05_step_gmsh_conformal/Allmesh",
