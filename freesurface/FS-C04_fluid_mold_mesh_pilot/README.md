@@ -287,3 +287,7 @@ python3 analysis_tools/stage_fs_c04_initial_temperature.py \
 ```
 
 Estado esperado, **NO CONFIRMADO LOCALMENTE**: `INITIAL_T_STAGED_READBACK_NO_NATIVE_OR_CHT`. Siguiente gate tras eso: `foamPostProcess` de T a `t=0` en otra copia, comprobando lectura de ambos `volScalarField` sin solver y cálculo ponderado por volumen. No confundir T inicial con predicción de enfriamiento o solidificación. La base del QuickCup y su abertura inferior siguen pendientes.
+
+## Resultado REAL del investigador: temperatura inicial de cribado preparada y releída
+
+El investigador ejecutó en Ubuntu el commit `32b049eaa` y aportó `Ran 12 tests in 0.263s / OK`, seguido de `FS-C04: INITIAL_T_STAGED_READBACK_NO_NATIVE_OR_CHT`. Carpeta NUEVA generada: `/home/michel/OpenFOAM/FS_C04_T_INITIAL_RUNS/FS_C04_T_INITIAL_STAGE_20261119T054751Z_b2a08cb7`. Condiciones iniciales **provisionales de cribado**: 2368 celdas de metal a **1500 K**, 32000 celdas de aire a **300 K** y 7680 de arena a **300 K**. Los archivos `0/fluid/T` y `0/mold/T` fueron escritos y releídos por las verificaciones de Python; los parches `calculated` son **solo marcadores de postprocesamiento, NO condiciones térmicas aptas para un solver**. No se ejecutó CFD, CHT, enfriamiento ni solidificación; **lectura nativa de T todavía no confirmada**. Malla, fracción de fase y casos anteriores permanecen sin modificación.
