@@ -1,0 +1,98 @@
+{
+  "schema": "C3D04_CASE_A_PROGRESS_V1",
+  "project": "MasterProject",
+  "scope": "CASE_A_C3D_04_V4_T02_ONLY",
+  "updated_local_date": "2026-11-19",
+  "source_of_truth": "AGENTS.md + cases_3d/C3D_04_rounded_multiblock_pilot/AGENTS.md",
+  "reference_mesh": "~/OpenFOAM/C3D04_V4_TRANSITION_REPAIR_01/T02",
+  "current_stage": "05_THERMAL_T0_DESIGN",
+  "current_stage_label": "Etapa 5/10 — diseño/preparación integral del modelo térmico T0 (sin CFD)",
+  "progress_definition": "10 hitos operativos de igual peso; un hito solo cuenta DONE con evidencia observada. No es porcentaje de validación física ni de trabajo restante en horas.",
+  "progress_count_done": 4,
+  "progress_count_total": 10,
+  "progress_percent": 40,
+  "numerical_accuracy_validated": false,
+  "physical_validation": false,
+  "grid_independence": false,
+  "CFD_run": false,
+  "completed_evidence": [
+    "3/3 logs native checkMesh accepted for parent/metal/mold",
+    "metal 8960 cells, mold 12352 cells, total 21312 cells",
+    "mappedWall reciprocal 2496 faces/side; contact 6343.771874 mm2",
+    "STL sampled bidirectional surface max 0.104973015 mm; NOT guaranteed Hausdorff",
+    "native severe nonorth >70deg: parent 572, metal 276, mold 232; maxima 82.920/77.930/82.058 degrees",
+    "64/64 extra parent severe faces individually matched to actual metal-mold interface; 0 outside",
+    "Reference V4/T02 preserved without CFD"
+  ],
+  "nonnegotiable_blockers": [
+    "Real metal and sand rho(T), cp/Cv(T), k(T), phase-change thermodynamics and provenance are NOT populated",
+    "Real QuickCup external thermal BCs, h/contact resistance, and experimental initial conditions are NOT established",
+    "Nonorthogonality risk numerical stability NOT demonstrated, despite Mesh OK",
+    "STL sample error not a rigorous CAD STEP Hausdorff bound",
+    "No T0 solver run, no T1 solidification run, no mesh independence or experimental validation"
+  ],
+  "milestones": [
+    {
+      "id": "01_GEOMETRY_MODEL",
+      "label": "Geometría curvilínea multibloque definida y cotejada con STL mediante distancias muestreadas",
+      "status": "DONE",
+      "evidence": "docs/C3D_04_VALIDACION_SUPERFICIE_T02_20261119_ES.md"
+    },
+    {
+      "id": "02_NATIVE_MESH",
+      "label": "Mesh OK padre/metal/arena con 21312 celdas y determinantes aceptados",
+      "status": "DONE",
+      "evidence": "docs/C3D_04_RESULTADO_PRIMER_MALLADO_20261118_ES.md"
+    },
+    {
+      "id": "03_CONTACT",
+      "label": "Interfaz mappedWall 2496 caras por lado, volumen y área recíproca verificados",
+      "status": "DONE",
+      "evidence": "docs/C3D_04_RESULTADO_PRIMER_MALLADO_20261118_ES.md"
+    },
+    {
+      "id": "04_QUALITY_DIAGNOSIS",
+      "label": "572/276/232 caras >70°; diferencia de 64 demostrada en la interfaz real",
+      "status": "DONE",
+      "evidence": "docs/C3D_04_NO_ORTHO_T02_20261119_ES.md"
+    },
+    {
+      "id": "05_THERMAL_T0_DESIGN",
+      "label": "Paquete integrado T0: esquema de conducción, propiedades con fuente, BC, estrategia numérica y pruebas estáticas",
+      "status": "IN_PROGRESS",
+      "evidence": "cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/README.md"
+    },
+    {
+      "id": "06_THERMAL_T0_PREFLIGHT_NATIVE",
+      "label": "Preflight con OpenFOAM Foundation14 y datos físicos auténticos completos; consistencia de diccionarios",
+      "status": "PENDING",
+      "evidence": null
+    },
+    {
+      "id": "07_THERMAL_T0_EXECUTION",
+      "label": "Ensayo real T0 de conducción y balance de energía; estabilidad y sensibilidad a nonOrthogonal correctors",
+      "status": "PENDING",
+      "evidence": null
+    },
+    {
+      "id": "08_SOLIDIFICATION_T1",
+      "label": "Modelo 3D de cambio de fase basado en calor latente/entalpía y propiedades dependientes de temperatura",
+      "status": "PENDING",
+      "evidence": null
+    },
+    {
+      "id": "09_VERIFICATION_AND_GRID",
+      "label": "Verificación de conservación, sensibilidad a discretización e independencia de malla",
+      "status": "PENDING",
+      "evidence": null
+    },
+    {
+      "id": "10_EXPERIMENTAL_VALIDATION",
+      "label": "Comparación cuantitativa con curvas QuickCup y cierre de tesis reproducible",
+      "status": "PENDING",
+      "evidence": null
+    }
+  ],
+  "response_rule": "Every update about this case must explicitly display: Etapa N/10; avance general completed/total (%) using this manifest, physical/CFD status, what changed, what remains; never imply false precision. Recompute on changes.",
+  "execution_rule": "Integrate validations into one cohesive milestone; no one-script-per-subproblem loops, no rerun already closed V4/T02 audits; one user command only at a meaningful end-to-end delivery; preserve case and audit evidence."
+}
