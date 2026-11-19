@@ -5,7 +5,7 @@ No file is auto-deleted or declared unused.
 
 ## Coverage
 
-Tracked: 38889; classified: 38884; readable documents: 157; above read cap: 0; findings: 2.
+Tracked: 38886; classified: 38881; readable documents: 157; above read cap: 0; findings: 2.
 
 ## File roles
 
@@ -19,7 +19,7 @@ Tracked: 38889; classified: 38884; readable documents: 157; above read cap: 0; f
 | document | 124 |
 | index | 28 |
 | license | 1 |
-| simulation_case_file | 108 |
+| simulation_case_file | 105 |
 | simulation_input | 2683 |
 | simulation_log | 3155 |
 | simulation_output | 32613 |
