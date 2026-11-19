@@ -412,6 +412,15 @@ def c14_source_gate(cfg: dict) -> dict:
         if not path.is_file():
             raise FileNotFoundError(f"Original C14 file missing: {path}")
         data = path.read_bytes()
+        git_blob = hashlib.sha1(
+            ("blob " + str(len(data)) + "\\0").encode("ascii") + data
+        ).hexdigest()
+        if git_blob != row["blob_sha"]:
+            raise ValueError(
+                "Original C14 source changed since baseline; "
+                f"{row['path']} expected git blob {row['blob_sha']}, got {git_blob}. "
+                "Review and update provenance BEFORE reusing parameters."
+            )
         source_hashes[row["path"]] = hashlib.sha256(data).hexdigest()
         # The original executable dictionary is before the appended
         # QUICKCUP DOCUMENTATION APPENDIX; never parse comment-only numbers.
