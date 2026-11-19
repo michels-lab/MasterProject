@@ -50,9 +50,16 @@ def validate(config: dict) -> list[str]:
             if (type(value) not in (float, int) or not math.isfinite(value)
                     or value <= 0):
                 errors.append(f"{region}.{field}: positive SI number required, got {value!r}")
-            evidence = group.get("source_" + field.split("_")[0])
+            evidence_key = {
+                "rho_kg_m3": "source_rho",
+                "Cv_J_kg_K": "source_Cv",
+                "kappa_W_m_K": "source_kappa",
+                "molWeight_g_mol": "source_molWeight",
+                "T_initial_K": "source_T_initial",
+            }[field]
+            evidence = group.get(evidence_key)
             if not isinstance(evidence, str) or len(evidence.strip()) < 8:
-                errors.append(f"{region}.source_{field.split('_')[0]}: cite provenance and model assumption")
+                errors.append(f"{region}.{evidence_key}: cite provenance and model assumption")
     sim = config.get("simulation")
     if not isinstance(sim, dict):
         errors.append("simulation: expected object")
