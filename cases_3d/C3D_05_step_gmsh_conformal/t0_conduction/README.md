@@ -1,3 +1,5 @@
+> **20-11-2026 | GRANADA_C3D05_F14_REAL_COMPILER_20261120:** extractor C++ `q()` del Caso B para 12,636 caras por lado **compiló, enlazó y arrancó en OpenFOAM Foundation14 real sobre Ubuntu24.04** ([wmake+ldd+-help CI PASS](https://github.com/michels-lab/MasterProject/actions/runs/44828749324)). Flujo de CSV bilateral y análisis ahora transaccional, con SHA y recuperaciones seguras ([QA sintética PASS](https://github.com/michels-lab/MasterProject/actions/runs/44828766415)). **No hubo compilación en WSL del investigador, ni corrida CFD o medición de energía/flujo**; G3/G4 abiertos. **Caso B etapa 3/7, 2/7 hitos = 29% técnico, NO tesis.** [Informe](https://github.com/michels-lab/MasterProject/blob/main/docs/granada/C3D05_F14_WMAKE_REAL_20261120_ES.md).
+
 # C3D-05 / Caso B — T0 térmico, Operación Granada
 
 **Estado al 20-11-2026:** **etapa 3/7; 2/7 hitos técnicos completos = 29%**. G1 geometría CAD/STEP/procedencia PASS; G2 malla HEX8 y contacto metal–arena aceptados con advertencia de no ortogonalidad. G3–G7 ABIERTOS. El 29% NO corresponde al avance global de la tesis, calidad CFD o validación física.
