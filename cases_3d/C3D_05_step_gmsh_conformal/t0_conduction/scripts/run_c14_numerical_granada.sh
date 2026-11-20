@@ -36,14 +36,14 @@ if [[ "${WM_PROJECT_VERSION:-}" != "14" ]] ||
     echo "BLOCKED: OpenFOAM Foundation14 must exist. No simulation or reference case created." >&2
     exit 4
 fi
-echo "=== 1/4: source C14 parameters by real source SHA and strict hypotheses ==="
+echo "=== 1/5: source C14 parameters by real source SHA and strict hypotheses ==="
 PYTHONDONTWRITEBYTECODE=1 python3 -B "$HERE/c14_numerical_reference.py" --out "$INPUTS"
 
-echo "=== 2/4: one-shot case materialization and ten native dictionary parses ==="
+echo "=== 2/5: one-shot case materialization and ten native dictionary parses ==="
 PYTHONDONTWRITEBYTECODE=1 python3 -B "$HERE/run_t0_granada.py" \
     --inputs "$INPUTS" --source "$NATIVE" --out "$OUTPUT"
 
-echo "=== 3/4: independent closed-energy equilibrium target from ORIGINAL checkMesh volumes ==="
+echo "=== 3/5: independent closed-energy equilibrium target from ORIGINAL checkMesh volumes ==="
 PYTHONDONTWRITEBYTECODE=1 python3 -B "$HERE/t0_energy_reference.py" \
     --inputs "$INPUTS" --source "$NATIVE" \
     --out "$OUTPUT/T0_CLOSED_ENERGY_REFERENCE.json"
@@ -78,10 +78,13 @@ else
         --inputs "$INPUTS" --log "$RUNLOG" --exit-code "$result" --out "$RUNREPORT"
 fi
 
-echo "=== 4/4: FOUNDATION14 native regional volAverage(T), volumetric energy and effective exchange ==="
+echo "=== 4/5: FOUNDATION14 native regional volAverage(T), volumetric energy and effective exchange ==="
 PYTHONDONTWRITEBYTECODE=1 python3 -B "$HERE/postprocess_t0_energy.py" \
     --case "$OUTPUT" --inputs "$INPUTS" \
     --reference "$OUTPUT/T0_CLOSED_ENERGY_REFERENCE.json" \
     --run-status "$RUNREPORT" --solver-log "$RUNLOG" \
     --out "$OUTPUT/T0_NATIVE_ENERGY_HISTORY.json" --native
-echo "NUMERICAL_ENERGY_METRICS_RECORDED: NO face-wise interface heat flux, grid/time convergence or experiment validation."
+echo "NUMERICAL_ENERGY_METRICS_RECORDED: native volumetric balance is observed, not physically accepted."
+echo "=== 5/5: native Foundation14 bilateral mappedWall q on ALL 12636 faces per side ==="
+bash "$HERE/run_native_t0_patch_flux.sh" "$OUTPUT" "$INPUTS" "$RUNLOG" "$RUNREPORT"
+echo "GRANADA_B_T0_NUMERICAL_DIAGNOSTICS_COMPLETE: NO mesh/time convergence or experimental validation."
