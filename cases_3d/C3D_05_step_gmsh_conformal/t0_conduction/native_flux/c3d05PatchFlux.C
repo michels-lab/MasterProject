@@ -9,7 +9,10 @@
  *
  * This tool does NOT solve CFD, change meshes or validate flux continuity.
  */
-#include "fvCFD.H"
+#include "fvMesh.H"
+#include "surfaceFields.H"
+#include "Time.H"
+#include "argList.H"
 #include "timeSelector.H"
 #include "solidThermo.H"
 #include "solidThermophysicalTransportModel.H"
