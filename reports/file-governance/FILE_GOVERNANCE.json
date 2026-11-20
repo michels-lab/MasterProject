@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
   "audit_kind": "deterministic_full_tracked_tree",
-  "tracked_files_total": 38974,
-  "classified_files_total": 38969,
-  "docs_content_inspected": 174,
+  "tracked_files_total": 38975,
+  "classified_files_total": 38970,
+  "docs_content_inspected": 175,
   "large_docs_skipped": 1,
   "excluded_reports": 5,
   "roles": {
@@ -12,7 +12,7 @@
     "bitacora": 5,
     "config": 13,
     "data": 31,
-    "document": 138,
+    "document": 139,
     "index": 32,
     "license": 1,
     "simulation_case_file": 115,
@@ -28,8 +28,8 @@
     "POTENTIAL_UNLOGGED_CHANGES": 2
   },
   "finding_total": 2,
-  "inventory_fingerprint": "f85d2d02905fdec909eba65bb03480bf94c20713735ef988724ba11367cf48a7",
-  "evidence_fingerprint": "c91998c6b89aa099d998c8843ab6cde467a4e2159f59573ff9acb54d90faebd0",
+  "inventory_fingerprint": "5e00898b53585938ef6ba212fd01384d728b27372053f1fade9ae52ce5fcfe26",
+  "evidence_fingerprint": "2044067e907959ca0da4d23c6d28db3b9a0ea72663cf8fed0f7ea04b804d63a1",
   "files": [
     {
       "path": ".github/agents/openfoam-solidification.agent.md",
@@ -1716,7 +1716,7 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "5289800d8c55dfdf410c81bd9b4243697e85a317"
+      "blob": "a0ddc8bc654dce105f10e37a2864a35ac44037df"
     },
     {
       "path": "cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/T0_INPUTS.json",
@@ -1737,14 +1737,14 @@
       "role": "source",
       "purpose": "code/test implementation",
       "certainty": "rule",
-      "blob": "ed490f4b1012b767778d30de83ed8c1d0101ea49"
+      "blob": "4799205cb47f0c64e076c849694e5dd10302eb6e"
     },
     {
       "path": "cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/tests/test_integrated_case_a.py",
       "role": "test",
       "purpose": "code/test implementation",
       "certainty": "rule",
-      "blob": "ab62862db4c37a6ba511d9ea4f43d9041b7bdb90"
+      "blob": "98f49b1b3a82ff7922effddc10ee06d7eea35012"
     },
     {
       "path": "cases_3d/C3D_04_rounded_multiblock_pilot/tests/test_rounded_multiblock_static.sh",
@@ -272115,6 +272115,13 @@
       "blob": "9a0ba97e45896ea2be364838c2ae669c0d7b2390"
     },
     {
+      "path": "docs/granada/C3D05_T0_BALANCE_ENERGETICO_NATIVO_20261120_ES.md",
+      "role": "document",
+      "purpose": "manual/decision/report/historical note",
+      "certainty": "inferred",
+      "blob": "035c246ba4f70ace4e981a09bb5f7041f5bf72aa"
+    },
+    {
       "path": "docs/granada/C3D05_T0_INTEGRATED_GRANADA_20261119_ES.md",
       "role": "document",
       "purpose": "manual/decision/report/historical note",
@@ -272817,20 +272824,20 @@
   ],
   "findings": [
     {
-      "id": "45ffb9c3e528d063",
+      "id": "6f6b59ac939dc86f",
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_EN.md",
-      "observation": "3 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/scripts/postprocess_t0_energy.py, cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/scripts/run_c14_numerical_granada.sh, cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/tests/test_postprocess_native_energy.py",
+      "observation": "5 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/scripts/prepare_case_a_t0.py, cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/tests/test_integrated_case_a.py, cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/scripts/postprocess_t0_energy.py, cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/scripts/run_c14_numerical_granada.sh, cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/tests/test_postprocess_native_energy.py",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     },
     {
-      "id": "a6a80619590ee255",
+      "id": "f1d5a4c67bac9e63",
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_ES.md",
-      "observation": "3 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/scripts/postprocess_t0_energy.py, cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/scripts/run_c14_numerical_granada.sh, cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/tests/test_postprocess_native_energy.py",
+      "observation": "5 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/scripts/prepare_case_a_t0.py, cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/tests/test_integrated_case_a.py, cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/scripts/postprocess_t0_energy.py, cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/scripts/run_c14_numerical_granada.sh, cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/tests/test_postprocess_native_energy.py",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     }
