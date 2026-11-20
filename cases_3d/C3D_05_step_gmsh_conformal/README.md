@@ -1,3 +1,5 @@
+> **20-11-2026 | GRANADA_C3D05_NATIVE_ENERGY_20261120:** en el mismo `run_c14_numerical_granada.sh --solve`, `foamPostProcess` obtiene promedios T metal/arena para calcular E sensible y discrepancia de energía con el tiempo; no sustituye flujo interfacial por caras. Reentrada verificada por SHA sin repetir solver. **NO WSL real; Caso B etapa 3/7, 2/7=29% técnico.** [Bitácora](../../docs/granada/C3D05_T0_BALANCE_ENERGETICO_NATIVO_20261120_ES.md).
+
 > **19-11-2026 | GRANADA_C3D05_C14_NUMERIC_SHK_20261119:** Granada T0 C14 numérico `--solve` integrado en una operación: entradas archivadas con SHA, copia separada malla aceptada, 10 diccionarios, equilibrio energético esperado desde `checkMesh` y auditoría de corrida, aún NO ejecutada en WSL. T0 físico/JMatPro sigue pendiente. **Etapa 3/7; 2/7 hitos=29% técnico.** [Bitácora](../../docs/granada/C3D05_C14_NUMERICAL_ONE_SHOT_20261119_ES.md).
 
 > **19-11-2026 — T0 fvSolution C14:** se reutilizan controles globales C14 y solver sólido C14 arena en ambas regiones T0; SHA verificado y regresiones. Ver [bitácora](../../docs/granada/C3D05_FVSOLUTION_C14_20261119_ES.md). **Etapa 3/7; avance 2/7 = 29% hitos, NO CFD.**
