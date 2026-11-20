@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "audit_kind": "deterministic_full_tracked_tree",
-  "tracked_files_total": 38997,
-  "classified_files_total": 38992,
+  "tracked_files_total": 38998,
+  "classified_files_total": 38993,
   "docs_content_inspected": 179,
   "large_docs_skipped": 1,
   "excluded_reports": 5,
@@ -20,7 +20,7 @@
     "simulation_log": 3155,
     "simulation_output": 32615,
     "source": 110,
-    "test": 47,
+    "test": 48,
     "web_ui": 1,
     "workflow": 25
   },
@@ -29,8 +29,8 @@
     "POTENTIAL_UNLOGGED_CHANGES": 2
   },
   "finding_total": 9,
-  "inventory_fingerprint": "a535c080b54ec72298f6c435043f6d2380576d34fcb161a838b1efdf31bda7b9",
-  "evidence_fingerprint": "1d68b7716a10b92b4a27405ab6a50c54dc3de128860d98a40a118667ea8b2cf7",
+  "inventory_fingerprint": "c2b6319244d28e3df0c59e9da06417e23fa418eb8b5fd4f9b2695a1b682aa78a",
+  "evidence_fingerprint": "68ecaf8a989d67fba4ce474c745770eed6e576c38b7cd74641ff3da6952e088e",
   "files": [
     {
       "path": ".github/agents/openfoam-solidification.agent.md",
@@ -2138,6 +2138,13 @@
       "purpose": "code/test implementation",
       "certainty": "rule",
       "blob": "7de4a011ffc163ddaa857e8bc41100ec725ab365"
+    },
+    {
+      "path": "cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/tests/smoke_native_foundation14_solver.py",
+      "role": "test",
+      "purpose": "code/test implementation",
+      "certainty": "rule",
+      "blob": "215e3bacc45b88b5ad19dd9ab90b5490cd303ca7"
     },
     {
       "path": "cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/tests/test_c14_fvsolution.py",
@@ -273042,20 +273049,20 @@
       "state": "REVIEW_REQUIRED"
     },
     {
-      "id": "29b1239b306df57d",
+      "id": "b05fb5b49acb4a51",
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_EN.md",
-      "observation": "1 implementation/config paths changed since this log's last commit; examples: docs/PROJECT_STAGE_STATUS.json",
+      "observation": "2 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/tests/smoke_native_foundation14_solver.py, docs/PROJECT_STAGE_STATUS.json",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     },
     {
-      "id": "b7e85c814cfe1fac",
+      "id": "d1e9ad817870485c",
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_ES.md",
-      "observation": "1 implementation/config paths changed since this log's last commit; examples: docs/PROJECT_STAGE_STATUS.json",
+      "observation": "2 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/tests/smoke_native_foundation14_solver.py, docs/PROJECT_STAGE_STATUS.json",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     }
