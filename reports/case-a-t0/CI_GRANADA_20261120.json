@@ -1,0 +1,60 @@
+{
+  "schema": "C3D04_A_T0_CI_EVIDENCE_V1",
+  "date_utc": "2026-11-20",
+  "scope": "CASE_A_C3D04_V4_T02_ONLY",
+  "stage": "05_THERMAL_T0_DESIGN",
+  "progress_hitos": "4/10",
+  "progress_percent": 40,
+  "pull_request_url": "https://github.com/michels-lab/MasterProject/pull/52",
+  "pull_request_number": 52,
+  "merged": true,
+  "merged_squash_sha": "78406c5bf17193b7807a3dc73e1d8ab3a4240ea4",
+  "tested_pr_head_sha": "6ce0dcebdbe0b67cf2b90b0fa19032b53d4eaa05",
+  "observed_workflow_runs": [
+    {
+      "name": "Case A C3D-04 integrated stage contract (static only)",
+      "run_id": 44796173057,
+      "conclusion": "success",
+      "job_id": 136496162119,
+      "tests": 14,
+      "test_result": "Ran 14 tests in 0.165s; OK"
+    },
+    {
+      "name": "MasterProject delivery contract - static only",
+      "run_id": 44796173127,
+      "conclusion": "success"
+    },
+    {
+      "name": "QuickCup Post-Push Scientific Audit",
+      "run_id": 44796173045,
+      "conclusion": "success"
+    }
+  ],
+  "first_fail_observed": {
+    "run_id": 44795711107,
+    "name": "Case A C3D-04 integrated stage contract (static only)",
+    "conclusion": "failure",
+    "root_cause": "Synthetic atomic staging test attempted to call patch_area() on intentionally fake OpenFOAM points. Materializer erroneously recalculated thermal budget already calculated during full preflight.",
+    "corrective_mechanism": "Compute thermal_network_budget() once and pass verified evidence to materialize(); block missing or invalid budget evidence before file operations; synthetic test provides explicit budget fixture, without pretending to be real polyMesh."
+  },
+  "preflight_bug": {
+    "original": "Invalid T0_INPUTS generated error text but preflight returned exit status 0 when --materialize not requested.",
+    "fixed": "Invalid T0 configuration returns code 3 before native source mesh read, and neither publishes outputs nor runs CFD.",
+    "integrated_tests": [
+      "test_056_integrated_preflight_never_reports_success_on_invalid_inputs",
+      "test_057_integrated_valid_C14_preflight_no_writes_or_CFD",
+      "test_055b_reject_missing_verified_thermal_budget_before_side_effects"
+    ]
+  },
+  "scientific_evidence_level": "STATIC_CI_EXECUTED_NOT_OPENFOAM_WSL",
+  "not_verified": [
+    "Foundation14 actual foamDictionary on researcher's WSL",
+    "foamMultiRun solver initialization and T0 energy-balance run",
+    "solidification phase change, native stability and mesh independence",
+    "experimental cooling-curve agreement"
+  ],
+  "reference_geometry_untouched": "~/OpenFOAM/C3D04_V4_TRANSITION_REPAIR_01/T02",
+  "reference_thermophysical_sources_untouched": "cases_controlled_buoyancy/C14_topFixedFlux_explicitRef",
+  "reference_case_a_status": "docs/C3D04_CASE_A_STATUS.json",
+  "notes": "GitHub Actions CI is static only. The provenance includes actual CI job logs and source-linked PR; no user terminal action required."
+}
