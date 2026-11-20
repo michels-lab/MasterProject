@@ -1,9 +1,13 @@
-/* C3D-05 B T0 diagnostic: EXACT Foundation14 isotropic solid transport q().
- * Original physics in OpenFOAM/OpenFOAM-14:
- * src/ThermophysicalTransportModels/solid/isotropic/isotropic.C:
- * q() = -fvc::interpolate(alpha*kappa)*fvc::snGrad(thermo.T())
- * Output each interface face with outward normal q [W/m2].
- * NOT a CFD run, NOT an experimental or flux-continuity PASS.
+/* C3D-05 B T0: direct face-wise heat-flux diagnostic in Foundation14.
+ * EXACT isotropic solid transport (OpenFOAM/OpenFOAM-14):
+ * src/ThermophysicalTransportModels/solid/isotropic/isotropic.C
+ * q() = -interpolate(kappa)*snGrad(T), oriented outward per patch.
+ *
+ * CRITICAL: both meshes and both thermos stay registered at the SAME instant.
+ * mappedWall/coupledTemperature may require neighbour region lookup during
+ * q()/boundary-field evaluation. Never run this on one region in isolation.
+ *
+ * This tool does NOT solve CFD, change meshes or validate flux continuity.
  */
 #include "fvCFD.H"
 #include "timeSelector.H"
@@ -14,125 +18,154 @@
 
 using namespace Foam;
 
+static label interfacePatch(const fvMesh& mesh, const word& patchName)
+{
+    const label patchi = mesh.boundaryMesh().findPatchID(patchName);
+    if (patchi < 0 || mesh.boundaryMesh()[patchi].size() != 12636)
+    {
+        FatalErrorInFunction
+            << "C3D05 accepted interface missing or count != 12636: "
+            << patchName << exit(FatalError);
+    }
+    return patchi;
+}
+
+static void writeFaceFlux
+(
+    FILE* fp,
+    const scalar t,
+    const fvMesh& mesh,
+    const label patchi,
+    const solidThermophysicalTransportModel& transport
+)
+{
+    // Use Foundation14's exact solid-isotropic flux, not wallHeatFlux.
+    const tmp<surfaceScalarField> qAll = transport.q();
+    const fvsPatchScalarField& q = qAll().boundaryField()[patchi];
+    const fvsPatchVectorField& faces = mesh.Sf().boundaryField()[patchi];
+    const fvsPatchVectorField& centers = mesh.Cf().boundaryField()[patchi];
+
+    if (q.size() != 12636 || faces.size() != q.size()
+        || centers.size() != q.size())
+    {
+        FatalErrorInFunction << "Native interface q/geometry shape mismatch"
+            << exit(FatalError);
+    }
+
+    forAll(q, facei)
+    {
+        const scalar area = mag(faces[facei]);
+        const vector n = faces[facei]/area;
+        const vector c = centers[facei];
+        const scalar heat = q[facei];
+        if (!(area > 0) || !std::isfinite(area) || !std::isfinite(heat)
+         || !std::isfinite(c.x()) || !std::isfinite(c.y())
+         || !std::isfinite(c.z()))
+        {
+            FatalErrorInFunction << "Nonfinite q/area/center in native patch"
+                << exit(FatalError);
+        }
+        if (std::fprintf(fp,
+              "%.17g,%lld,%.17g,%.17g,%.17g,%.17g,"
+              "%.17g,%.17g,%.17g,%.17g\n",
+              t, static_cast<long long>(facei),
+              c.x(), c.y(), c.z(), area,
+              n.x(), n.y(), n.z(), heat) < 0)
+        {
+            FatalErrorInFunction << "CSV write failed" << exit(FatalError);
+        }
+    }
+}
+
 int main(int argc, char *argv[])
 {
     timeSelector::addOptions();
-    argList::addOption("region", "region", "Solid region metal or mold");
-    argList::addOption("patch", "name", "Interface patch name");
-    argList::addOption("out", "path", "Exclusive CSV result path, no overwrite");
+    argList::addOption("outMetal", "path", "Exclusive metal face CSV");
+    argList::addOption("outMold", "path", "Exclusive mold face CSV");
     #include "setRootCaseNoFunctionObjects.H"
     #include "createTimeNoFunctionObjects.H"
-
-    word regionName;
-    word patchName;
-    fileName outputName;
-    if (!args.optionReadIfPresent("region", regionName)
-     || !args.optionReadIfPresent("patch", patchName)
-     || !args.optionReadIfPresent("out", outputName))
+    fileName outMetal;
+    fileName outMold;
+    if (!args.optionReadIfPresent("outMetal", outMetal)
+     || !args.optionReadIfPresent("outMold", outMold))
     {
-        FatalErrorInFunction << "Required -region -patch -out"
+        FatalErrorInFunction << "Required -outMetal and -outMold"
             << exit(FatalError);
     }
-    if (!((regionName == "metal" && patchName == "metal_to_mold")
-       || (regionName == "mold" && patchName == "mold_to_metal")))
+    if (outMetal == outMold)
     {
-        FatalErrorInFunction << "Refuse non-interface patch/region pair"
+        FatalErrorInFunction << "Cannot write both native regions into one file"
             << exit(FatalError);
     }
 
-    const instantList selectedTimes = timeSelector::select0(runTime, args);
-    if (selectedTimes.size() < 2)
+    const instantList timeDirs = timeSelector::select0(runTime, args);
+    if (timeDirs.size() < 2)
     {
-        FatalErrorInFunction << "No valid transient time series selected"
+        FatalErrorInFunction << "Missing transient time fields"
             << exit(FatalError);
     }
-
-    fvMesh mesh
+    fvMesh metal
     (
-        IOobject(regionName, runTime.name(), runTime, IOobject::MUST_READ)
+        IOobject("metal", runTime.name(), runTime, IOobject::MUST_READ)
     );
-    const label patchIndex = mesh.boundaryMesh().findPatchID(patchName);
-    if (patchIndex < 0)
-    {
-        FatalErrorInFunction << "Missing native interface patch " << patchName
-            << exit(FatalError);
-    }
-    if (mesh.boundaryMesh()[patchIndex].size() != 12636)
-    {
-        FatalErrorInFunction << "Unexpected C3D-05 accepted interface face count"
-            << exit(FatalError);
-    }
+    fvMesh mold
+    (
+        IOobject("mold", runTime.name(), runTime, IOobject::MUST_READ)
+    );
+    const label mp = interfacePatch(metal, "metal_to_mold");
+    const label dp = interfacePatch(mold, "mold_to_metal");
 
-    // C11 exclusive-mode "wx" on WSL/Linux prevents overwriting solver evidence.
-    FILE* fp = std::fopen(outputName.c_str(), "wx");
-    if (!fp)
+    // "wx" is Linux/WSL exclusive creation. No input or prior CSV overwrite.
+    FILE* fm = std::fopen(outMetal.c_str(), "wx");
+    if (!fm)
     {
-        FatalErrorInFunction << "Refusing existing or unwritable face CSV "
-            << outputName << exit(FatalError);
+        FatalErrorInFunction << "Cannot exclusively create " << outMetal
+            << exit(FatalError);
     }
-    std::fprintf(fp,
+    FILE* fd = std::fopen(outMold.c_str(), "wx");
+    if (!fd)
+    {
+        std::fclose(fm);
+        FatalErrorInFunction << "Cannot exclusively create " << outMold
+            << exit(FatalError);
+    }
+    const char* header =
         "time_s,face_local,center_x_m,center_y_m,center_z_m,area_m2,"
-        "normal_x,normal_y,normal_z,q_out_W_m2\n");
+        "normal_x,normal_y,normal_z,q_out_W_m2\n";
+    std::fputs(header, fm);
+    std::fputs(header, fd);
 
-    forAll(selectedTimes, timei)
+    forAll(timeDirs, timei)
     {
-        runTime.setTime(selectedTimes[timei], timei);
-        if (mesh.readUpdate() != polyMesh::UNCHANGED)
+        runTime.setTime(timeDirs[timei], timei);
+        if (metal.readUpdate() != polyMesh::UNCHANGED
+            || mold.readUpdate() != polyMesh::UNCHANGED)
         {
-            std::fclose(fp);
-            FatalErrorInFunction << "Mesh changed during T0: cannot pair faces"
+            std::fclose(fm);
+            std::fclose(fd);
+            FatalErrorInFunction << "Mesh changed during postrun, stop"
                 << exit(FatalError);
         }
+        // Instantiate BOTH regional thermos before evaluating EITHER q().
+        autoPtr<solidThermo> tm = solidThermo::New(metal);
+        autoPtr<solidThermo> td = solidThermo::New(mold);
+        autoPtr<solidThermophysicalTransportModel> cm =
+            solidThermophysicalTransportModel::New(tm());
+        autoPtr<solidThermophysicalTransportModel> cd =
+            solidThermophysicalTransportModel::New(td());
 
-        // Reconstruct the same Foundation14 solidThermo and solid transport
-        // model used by foamMultiRun, at the actual saved field time.
-        autoPtr<solidThermo> thermo = solidThermo::New(mesh);
-        autoPtr<solidThermophysicalTransportModel> transport =
-            solidThermophysicalTransportModel::New(thermo());
-
-        // Isotropic q is an actual native patch-normal field in [W/m2].
-        const tmp<surfaceScalarField> tq = transport->q();
-        const fvsPatchScalarField& qs = tq().boundaryField()[patchIndex];
-        const vectorField& cs = mesh.Cf().boundaryField()[patchIndex];
-        const vectorField& areas = mesh.Sf().boundaryField()[patchIndex];
-
-        if (qs.size() != mesh.boundaryMesh()[patchIndex].size())
-        {
-            std::fclose(fp);
-            FatalErrorInFunction << "q patch face count mismatch"
-                << exit(FatalError);
-        }
-
-        forAll(qs, facei)
-        {
-            const scalar a = mag(areas[facei]);
-            const vector n = areas[facei]/a;
-            const vector c = cs[facei];
-            const scalar q = qs[facei];
-            if (!(a > 0) || !std::isfinite(a) || !std::isfinite(q)
-             || !std::isfinite(c.x()) || !std::isfinite(c.y())
-             || !std::isfinite(c.z()))
-            {
-                std::fclose(fp);
-                FatalErrorInFunction << "Nonfinite native patch geometry or q"
-                    << exit(FatalError);
-            }
-            std::fprintf(fp,
-                "%.17g,%lld,%.17g,%.17g,%.17g,%.17g,"
-                "%.17g,%.17g,%.17g,%.17g\n",
-                runTime.value(), static_cast<long long>(facei),
-                c.x(), c.y(), c.z(), a,
-                n.x(), n.y(), n.z(), q);
-        }
-        Info<< "Extracted actual isotropic q on "
-            << regionName << " " << patchName << " time="
-            << runTime.value() << " faces=" << qs.size() << endl;
+        writeFaceFlux(fm, runTime.value(), metal, mp, cm());
+        writeFaceFlux(fd, runTime.value(), mold, dp, cd());
+        Info<< "C3D05 native bilateral q at t=" << runTime.value()
+            << " faces each=" << 12636 << endl;
     }
-    if (std::fclose(fp) != 0)
+    const int closeM = std::fclose(fm);
+    const int closeD = std::fclose(fd);
+    if (closeM != 0 || closeD != 0)
     {
-        FatalErrorInFunction << "Cannot finalize patch flux CSV"
+        FatalErrorInFunction << "Native q CSV flush/close failed"
             << exit(FatalError);
     }
-    Info<< "T0_NATIVE_FACE_FLUX_EXTRACTED_NOT_VALIDATED " << outputName << endl;
+    Info<< "NATIVE_BILATERAL_PATCH_FLUX_EXTRACTED_NOT_VALIDATED" << endl;
     return 0;
 }
