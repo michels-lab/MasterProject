@@ -29,8 +29,8 @@
     "POTENTIAL_UNLOGGED_CHANGES": 2
   },
   "finding_total": 9,
-  "inventory_fingerprint": "082a296aca7ed8d890b731b1695f6b5a223cc4634e1b60b72fb9af5e4d36da08",
-  "evidence_fingerprint": "7af8e79f567c36b8b4574265ac3e92267efbf9c3c99f8e8b957072ece224c98c",
+  "inventory_fingerprint": "c36d9d0c5448c2a41f991559a4e4cbe8df2005514ae500a4559cbc823918b089",
+  "evidence_fingerprint": "0d61b0d9f151924af2a601ff0776a016cac08a01b897d10e0d7d0bee59d1129c",
   "files": [
     {
       "path": ".github/agents/openfoam-solidification.agent.md",
@@ -345,14 +345,14 @@
       "role": "bitacora",
       "purpose": "technical/audit change history",
       "certainty": "rule",
-      "blob": "556ab762f3acca1e4b051e70a6d7635a573e1115"
+      "blob": "1db399d20975391e610d81f83171fed2d04a769a"
     },
     {
       "path": "README.md",
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "57da8a186c95deac507b6429a7ad01f6a6806238"
+      "blob": "cd2fa70381d2855a269a1b3883d0b893e585d12d"
     },
     {
       "path": "RUN_CASE_REGISTRY.csv",
@@ -366,7 +366,7 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "b8638949ce4e4addc20774c49b3d6d61d95d18bd"
+      "blob": "41717a410e7faa9700288b2a7b46a4739bf64984"
     },
     {
       "path": "VALIDATION_MATRIX.md",
@@ -1724,7 +1724,7 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "a275f9772ac430a55e32b9cc33a233fa64bb7446"
+      "blob": "f91e7df30a3d87b44ce530c0127384e199528ae5"
     },
     {
       "path": "cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/T0_INPUTS.json",
@@ -1752,14 +1752,14 @@
       "role": "source",
       "purpose": "code/test implementation",
       "certainty": "rule",
-      "blob": "4799205cb47f0c64e076c849694e5dd10302eb6e"
+      "blob": "4c786f3dcd3a31732b74900c50ac578edd7dc88b"
     },
     {
       "path": "cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/tests/test_integrated_case_a.py",
       "role": "test",
       "purpose": "code/test implementation",
       "certainty": "rule",
-      "blob": "84baf119f4b9ba44da26d679717e633bc453c929"
+      "blob": "4739517a7acf5e03223dfa0b2dfc6d7ec933836d"
     },
     {
       "path": "cases_3d/C3D_04_rounded_multiblock_pilot/tests/test_rounded_multiblock_static.sh",
@@ -272078,7 +272078,7 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "311753dc1b604c73768ef39388a03b5e686ae426"
+      "blob": "ce09a32fc44c645f7e56232ec3dea37b5d77483a"
     },
     {
       "path": "docs/DOCUMENT_SYNC_20261110_ES.md",
@@ -272979,20 +272979,20 @@
       "state": "REVIEW_REQUIRED"
     },
     {
-      "id": "ccca73deb839188e",
+      "id": "686313aea8087bc8",
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_EN.md",
-      "observation": "7 implementation/config paths changed since this log's last commit; examples: .github/workflows/case-a-t0-native-f14.yml, cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/run_integrated_milestone.sh, cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/scripts/native_f14_dictionary_smoke.py, cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/tests/test_integrated_case_a.py, docs/C3D04_CASE_A_STATUS.json, docs/PROJECT_STAGE_STATUS.json",
+      "observation": "8 implementation/config paths changed since this log's last commit; examples: .github/workflows/case-a-t0-native-f14.yml, cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/run_integrated_milestone.sh, cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/scripts/native_f14_dictionary_smoke.py, cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/scripts/prepare_case_a_t0.py, cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/tests/test_integrated_case_a.py, docs/C3D04_CASE_A_STATUS.json",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     },
     {
-      "id": "6ca2bae143c0b940",
+      "id": "928127a685e5b0ed",
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_ES.md",
-      "observation": "7 implementation/config paths changed since this log's last commit; examples: .github/workflows/case-a-t0-native-f14.yml, cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/run_integrated_milestone.sh, cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/scripts/native_f14_dictionary_smoke.py, cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/tests/test_integrated_case_a.py, docs/C3D04_CASE_A_STATUS.json, docs/PROJECT_STAGE_STATUS.json",
+      "observation": "2 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/scripts/prepare_case_a_t0.py, cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/tests/test_integrated_case_a.py",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     }
