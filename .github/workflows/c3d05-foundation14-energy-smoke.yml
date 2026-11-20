@@ -1,0 +1,34 @@
+name: C3D-05 Foundation14 native regional energy smoke (synthetic no CFD)
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/scripts/postprocess_t0_energy.py'
+      - 'cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/tests/smoke_native_foundation14_energy.py'
+      - '.github/workflows/c3d05-foundation14-energy-smoke.yml'
+  pull_request:
+    paths:
+      - 'cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/scripts/postprocess_t0_energy.py'
+      - 'cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/tests/smoke_native_foundation14_energy.py'
+      - '.github/workflows/c3d05-foundation14-energy-smoke.yml'
+permissions:
+  contents: read
+concurrency:
+  group: c3d05-foundation14-energy-smoke-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  native-two-region-smoke:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: gerlero/setup-openfoam@v1
+        with:
+          openfoam-version: 14
+      - name: Official F14 native blockMesh and foamPostProcess, two synthetic one-cell regions (NO CFD)
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          test "${WM_PROJECT_VERSION:-}" = "14"
+          PYTHONDONTWRITEBYTECODE=1 python3 -B cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/tests/smoke_native_foundation14_energy.py
