@@ -81,7 +81,7 @@ def sand_model(case:Path)->dict:
     }
 
 
-def solid_energy_steps(snapshots:list[dict],
+def sand_energy_steps(snapshots:list[dict],
                        wall:list[dict],rho:float,Cv:float)->dict:
     require(len(snapshots)==3 and len(wall)==2,
             "sand requires three T snapshots and two Q snapshots")
@@ -198,7 +198,7 @@ def audit(case:Path)->dict:
     case=case.expanduser().resolve()
     native=verify_native(case)
     solid=sand_model(case)
-    result=solid_energy_steps(
+    result=sand_energy_steps(
         native["fields"]["snapshots"],
         native["wall"]["snapshot_power_comparison"],
         solid["rho_kg_m3"],solid["Cv_J_kgK"],
