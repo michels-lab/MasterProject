@@ -22,6 +22,10 @@ En un directorio temporal de runner (NO geometría STEP ni copia aceptada), este
 
 **No se ejecuta CFD ni `foamMultiRun`**. El test exclusivamente comprueba la integración de utilidades postpro y gramática F14. La condición `coupledTemperature` de la interfaz 3D no es ejercitada por este test de dos cubos aislados; eso requiere la futura corrida numérica en WSL.
 
+### Error real descubierto en la primera ejecución de Foundation14
+
+La [primera CI nativa de postprocesamiento #44829892575](https://github.com/michels-lab/MasterProject/actions/runs/44829892575) llegó correctamente a `blockMesh` y a los diez diccionarios de producción, pero **falló** al construir `volFieldValue`. El error F14 fue `request for objectRegistry region0 ... available objects ... 1(metal)`: pasar `foamPostProcess -region metal` **no basta** para configurar el objeto de función en esta versión; éste debe incluir `region metal;` o `region mold;` dentro de su propio bloque. Se corrigió **en el generador original `functions_dict()`**, no con un cambio superficial de mensajes o una excepción ignorada. Se incorporó un test que exige explícitamente la región del objeto. La próxima CI nativa debe demostrar ambos volúmenes y temperaturas a partir de archivos OpenFOAM auténticos.
+
 ## Bloque 2. Comprobación estricta del estado inicial para el balance
 
 [`postprocess_t0_energy.py`](../../cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/scripts/postprocess_t0_energy.py) ahora requiere **`t=0` observado y al menos dos instantes de muestra en metal y molde**, además de constatar que `volAverage(T)` del primer instante corresponde a `T_initial_K` de ambas regiones (tolerancia solo de redondeo de salida numérica). Sin este control se podía calcular `ΔE(t)=E(t)-E_0` respecto a un estado inicial que jamás se había observado. Se agregaron regresiones de casos negativos en [`test_postprocess_native_energy.py`](../../cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/tests/test_postprocess_native_energy.py).
