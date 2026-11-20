@@ -125,5 +125,29 @@
       "No boundary thermophysical runtime initialization, no heat transfer or independent mesh convergence",
       "C14 Cp-as-Cv solid surrogate is explicitly not the original fluid-solidification model"
     ]
+  },
+  "stage06_preflight_integrity": {
+    "date": "2026-11-20",
+    "status": "CODE_MERGED_AND_CI_STATIC_16_OF_16_AND_FOUNDATION14_NATIVE_10_OF_10_PASS_NO_WSL_RUN",
+    "scope": "One integrated preflight WSL still required to complete stage06",
+    "PR": "https://github.com/michels-lab/MasterProject/pull/54",
+    "merge_commit": "fdae7d256002431f878a265fa637bc43183de750",
+    "evidence": "reports/case-a-t0/CI_STAGE06_VOLUME_FALLBACK_20261120.json",
+    "changes": [
+      "Optional original PILOT_MESH_REPORT.tsv no longer mandatory; if absent derive native volume from region boundary face orientations and neighbour internal-face count",
+      "Retain saved native checkMesh as accepted mesh gate and reject reversed/invalid volumes",
+      "Two synthetic polyMesh cubes of known volume and negative face orientation included in 16 integrated CI tests"
+    ],
+    "observed": [
+      "16/16 Case A regression tests passed in GitHub Actions",
+      "10/10 T0 dictionaries parsed by OpenFOAM Foundation14 native binary in CI",
+      "MasterProject delivery and QuickCup scientific audits passed"
+    ],
+    "not_observed": [
+      "Actual T0 materialization on researcher's WSL V4/T02 polyMesh",
+      "Thermal boundary field instantiation and foamMultiRun on actual mesh",
+      "Thermal energy conservation or numerical stability"
+    ],
+    "milestone06_closed": false
   }
 }
