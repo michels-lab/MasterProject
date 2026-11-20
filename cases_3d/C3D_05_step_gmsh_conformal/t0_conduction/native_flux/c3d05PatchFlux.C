@@ -23,8 +23,8 @@ using namespace Foam;
 
 static label interfacePatch(const fvMesh& mesh, const word& patchName)
 {
-    const label patchi = mesh.boundaryMesh().findPatchID(patchName);
-    if (patchi < 0 || mesh.boundaryMesh()[patchi].size() != 12636)
+    const label patchi = mesh.poly().boundary().findPatchID(patchName);
+    if (patchi < 0 || mesh.poly().boundary()[patchi].size() != 12636)
     {
         FatalErrorInFunction
             << "C3D05 accepted interface missing or count != 12636: "
@@ -141,8 +141,8 @@ int main(int argc, char *argv[])
     forAll(timeDirs, timei)
     {
         runTime.setTime(timeDirs[timei], timei);
-        if (metal.readUpdate() != polyMesh::UNCHANGED
-            || mold.readUpdate() != polyMesh::UNCHANGED)
+        if (metal.readUpdate() != fvMesh::UNCHANGED
+            || mold.readUpdate() != fvMesh::UNCHANGED)
         {
             std::fclose(fm);
             std::fclose(fd);
