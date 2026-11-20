@@ -408,12 +408,13 @@ class IntegratedCaseAT0(unittest.TestCase):
 
     def test_058_F14_native_smoke_orchestration_all_ten_and_bad_version(self):
         import types
-        good = types.SimpleNamespace(returncode=0, stdout="14\n", stderr="")
+        good = types.SimpleNamespace(returncode=0, stdout="", stderr="")
         called = []
         def fake_run(cmd, **kwargs):
             called.append(cmd)
             return good
-        with patch.object(native_f14.shutil, "which", side_effect=lambda x: "/mock/"+x), \
+        with patch.dict(native_f14.os.environ, {"WM_PROJECT_VERSION": "14"}), \
+             patch.object(native_f14.shutil, "which", side_effect=lambda x: "/mock/"+x), \
              patch.object(native_f14.subprocess, "run", side_effect=fake_run):
             report = native_f14.inspect()
         self.assertEqual(report["status"],
@@ -421,13 +422,15 @@ class IntegratedCaseAT0(unittest.TestCase):
         self.assertFalse(report["CFD_executed"])
         self.assertFalse(report["native_C3D04_V4_T02_mesh_present_in_CI"])
         self.assertEqual(len(report["dictionary_results"]), 10)
-        self.assertEqual(len(called), 11)  # 1 foamVersion + 10 foamDictionary
+        self.assertEqual(len(called), 10)
         self.assertTrue(all(row["parsed_with_Foundation14_foamDictionary"]
                             for row in report["dictionary_results"]))
-        wrong = types.SimpleNamespace(returncode=0, stdout="13\n", stderr="")
-        with patch.object(native_f14.shutil, "which", return_value="/mock/of"), \
-             patch.object(native_f14.subprocess, "run", return_value=wrong):
-            with self.assertRaisesRegex(RuntimeError, "Wrong OpenFOAM"):
+        with patch.dict(native_f14.os.environ, {"WM_PROJECT_VERSION": "13"}):
+            with self.assertRaisesRegex(RuntimeError, "Expected sourced Foundation14"):
+                native_f14.inspect()
+        with patch.dict(native_f14.os.environ, {"WM_PROJECT_VERSION": "14"}), \
+             patch.object(native_f14.shutil, "which", return_value=None):
+            with self.assertRaisesRegex(RuntimeError, "missing foamDictionary"):
                 native_f14.inspect()
 
     def test_06_no_CFD_or_remeshing_launched_by_integrated_runner(self):
