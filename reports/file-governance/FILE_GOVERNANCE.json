@@ -29,7 +29,7 @@
     "POTENTIAL_UNLOGGED_CHANGES": 2
   },
   "finding_total": 9,
-  "inventory_fingerprint": "51888d9288ae49130439515aa405b8fac70a2b8c7b3ce6c61b2f67b76e6e7fff",
+  "inventory_fingerprint": "c87c41611b8463cf14e069472391c9f5b2d1f1506d353584b3cfa32a12ca5bda",
   "evidence_fingerprint": "65832ff58db5582774acdcd776669c8b133742bd87296403e75de8041bbe48b3",
   "files": [
     {
@@ -79,7 +79,7 @@
       "role": "workflow",
       "purpose": "GitHub Actions automation",
       "certainty": "rule",
-      "blob": "1694957399256bacfb335a6846caa2d4c679afd0"
+      "blob": "288f0e06cda3453b8636ce02c29ce0e3f848338c"
     },
     {
       "path": ".github/workflows/c3d05-t0-granada-static.yml",
@@ -1969,7 +1969,7 @@
       "role": "source",
       "purpose": "code/test implementation",
       "certainty": "rule",
-      "blob": "968dc6c188375749ab63d505a6c3ff6a829077de"
+      "blob": "f7a9c20c04fa548549a3e32cc1f744a25e177d2d"
     },
     {
       "path": "cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/scripts/analyze_t0_patch_flux.py",
