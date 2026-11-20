@@ -23,7 +23,7 @@ using namespace Foam;
 
 static label interfacePatch(const fvMesh& mesh, const word& patchName)
 {
-    const label patchi = mesh.poly().boundary().findPatchID(patchName);
+    const label patchi = mesh.poly().boundary().findIndex(patchName);
     if (patchi < 0 || mesh.poly().boundary()[patchi].size() != 12636)
     {
         FatalErrorInFunction
