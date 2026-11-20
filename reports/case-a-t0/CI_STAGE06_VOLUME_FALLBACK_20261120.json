@@ -1,0 +1,53 @@
+{
+  "schema": "C3D04_A_STAGE06_NATIVE_VOLUME_FALLBACK_CI_V1",
+  "date_utc": "2026-11-20",
+  "project": "MasterProject",
+  "scope": "CASE_A_C3D04_V4_T02_ONLY",
+  "stage": "06_THERMAL_T0_PREFLIGHT_NATIVE",
+  "operational_progress_done": 5,
+  "operational_progress_total": 10,
+  "operational_progress_percent": 50,
+  "pr_number": 54,
+  "pr_url": "https://github.com/michels-lab/MasterProject/pull/54",
+  "pr_head_sha": "324e293d1402b87f329fdf47ae37406810613296",
+  "main_merge_sha": "fdae7d256002431f878a265fa637bc43183de750",
+  "merged": true,
+  "observed_ci": [
+    {
+      "run_id": 44826436332,
+      "name": "Case A C3D-04 integrated stage contract (static only)",
+      "result": "success",
+      "integrated_tests": 16,
+      "tests_passed": 16,
+      "additional_test": "test_046b_native_volume_without_optional_tsv_and_orientation_rejection"
+    },
+    {
+      "run_id": 44826436229,
+      "name": "Case A C3D-04 OpenFOAM Foundation14 native dictionary parsing",
+      "result": "success",
+      "dictionary_count": 10,
+      "actual_foundation14": true,
+      "artifact_id": 14673438862
+    },
+    {
+      "run_id": 44826436182,
+      "name": "MasterProject delivery contract - static only",
+      "result": "success"
+    },
+    {
+      "run_id": 44826436169,
+      "name": "QuickCup Post-Push Scientific Audit",
+      "result": "success"
+    }
+  ],
+  "root_cause": "A strict T0 preflight required PILOT_MESH_REPORT.tsv, an optional ancillary file not guaranteed to exist in preserved V4/T02 directories; missing auxiliary evidence could falsely block an otherwise accepted polyMesh.",
+  "correction": "When TSV exists, retain strict two-region native volume/cell/mesh_ok check; if absent, compute signed region volume via sum of oriented triangle fan tetrahedron volumes on real boundary faces from ASCII polyMesh points/faces, taking nInternalFaces from native neighbour count. Reject invalid or inverted closed boundary geometry.",
+  "science_gate": "Existing native checkMesh from saved original V4/T02 evidence remains the mesh acceptance gate, fallback is geometry volume computation only.",
+  "limitations": [
+    "CI uses synthetic owner-oriented closed cubes for geometry fallback and does NOT load the researcher's actual V4/T02 polyMesh.",
+    "Foundation14 CI parsed ten T0 dictionaries, but no foamMultiRun solver started or energy balance was measured.",
+    "This fix prepares stage06 only; milestone06 remains IN_PROGRESS and operational completion remains 50%.",
+    "Source geometry and original C14 material files were not modified."
+  ],
+  "next_gate": "One integrated WSL stage06 run on immutable V4/T02 native mesh using run_integrated_milestone.sh --materialize."
+}
