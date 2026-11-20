@@ -36,14 +36,14 @@ if [[ "${WM_PROJECT_VERSION:-}" != "14" ]] ||
     echo "BLOCKED: OpenFOAM Foundation14 must exist. No simulation or reference case created." >&2
     exit 4
 fi
-echo "=== 1/3: source C14 parameters by real source SHA and strict hypotheses ==="
+echo "=== 1/4: source C14 parameters by real source SHA and strict hypotheses ==="
 PYTHONDONTWRITEBYTECODE=1 python3 -B "$HERE/c14_numerical_reference.py" --out "$INPUTS"
 
-echo "=== 2/3: one-shot case materialization and ten native dictionary parses ==="
+echo "=== 2/4: one-shot case materialization and ten native dictionary parses ==="
 PYTHONDONTWRITEBYTECODE=1 python3 -B "$HERE/run_t0_granada.py" \
     --inputs "$INPUTS" --source "$NATIVE" --out "$OUTPUT"
 
-echo "=== 3/3: independent closed-energy equilibrium target from ORIGINAL checkMesh volumes ==="
+echo "=== 3/4: independent closed-energy equilibrium target from ORIGINAL checkMesh volumes ==="
 PYTHONDONTWRITEBYTECODE=1 python3 -B "$HERE/t0_energy_reference.py" \
     --inputs "$INPUTS" --source "$NATIVE" \
     --out "$OUTPUT/T0_CLOSED_ENERGY_REFERENCE.json"
@@ -56,15 +56,32 @@ fi
 # --solve is an explicit user-initiated numerical solver experiment.
 # One invocation performs both preparation and run, never returns success
 # merely because the executable exited with 0.
-if [[ -e "$RUNLOG" || -L "$RUNLOG" || -e "$RUNREPORT" || -L "$RUNREPORT" ]]; then
-    echo "BLOCKED: previous local numerical solver attempt/report exists; no rerun/overwrite." >&2
+# If a native run was ALREADY completed, resume its energy diagnostics
+# without rerunning the solver or overwriting its original evidence.
+if [[ -L "$RUNLOG" || -L "$RUNREPORT" ]]; then
+    echo "BLOCKED: native report/log symlink is not trusted." >&2
     exit 2
 fi
-echo "=== EXPLICIT --solve: executing isolated 100-step numerical shakedown ==="
-set +e
-foamMultiRun -case "$OUTPUT" > "$RUNLOG" 2>&1
-result=$?
-set -e
-PYTHONDONTWRITEBYTECODE=1 python3 -B "$HERE/audit_t0_numerical_run.py" \
-    --inputs "$INPUTS" --log "$RUNLOG" --exit-code "$result" --out "$RUNREPORT"
-echo "NUMERICAL_RUN_RECORDED: solver completion classified; energy/interface/experiment NOT validated."
+if [[ -e "$RUNLOG" || -e "$RUNREPORT" ]]; then
+    if [[ ! -f "$RUNLOG" || ! -f "$RUNREPORT" ]]; then
+        echo "BLOCKED: incomplete prior solver attempt preserved for forensic review; not restarted." >&2
+        exit 2
+    fi
+    echo "=== Reuse previous native solver evidence (SHA-verified below), NO rerun ==="
+else
+    echo "=== EXPLICIT --solve: executing isolated 100-step numerical shakedown ==="
+    set +e
+    foamMultiRun -case "$OUTPUT" > "$RUNLOG" 2>&1
+    result=$?
+    set -e
+    PYTHONDONTWRITEBYTECODE=1 python3 -B "$HERE/audit_t0_numerical_run.py" \
+        --inputs "$INPUTS" --log "$RUNLOG" --exit-code "$result" --out "$RUNREPORT"
+fi
+
+echo "=== 4/4: FOUNDATION14 native regional volAverage(T), volumetric energy and effective exchange ==="
+PYTHONDONTWRITEBYTECODE=1 python3 -B "$HERE/postprocess_t0_energy.py" \
+    --case "$OUTPUT" --inputs "$INPUTS" \
+    --reference "$OUTPUT/T0_CLOSED_ENERGY_REFERENCE.json" \
+    --run-status "$RUNREPORT" --solver-log "$RUNLOG" \
+    --out "$OUTPUT/T0_NATIVE_ENERGY_HISTORY.json" --native
+echo "NUMERICAL_ENERGY_METRICS_RECORDED: NO face-wise interface heat flux, grid/time convergence or experiment validation."
