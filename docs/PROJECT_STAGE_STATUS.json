@@ -77,7 +77,16 @@
     "native_regional_energy_observations_from_WSL": false,
     "direct_patch_flux_verification_completed": false,
     "native_regional_energy_postprocessor": "cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/scripts/postprocess_t0_energy.py",
-    "native_regional_energy_science_record": "docs/granada/C3D05_T0_BALANCE_ENERGETICO_NATIVO_20261120_ES.md"
+    "native_regional_energy_science_record": "docs/granada/C3D05_T0_BALANCE_ENERGETICO_NATIVO_20261120_ES.md",
+    "native_isotropic_two_region_patch_flux_extractor_source_committed": true,
+    "native_patch_flux_face_pairing_regressions_source_committed": true,
+    "native_patch_flux_native_wsl_compiled": false,
+    "native_patch_flux_native_wsl_executed": false,
+    "native_patch_flux_face_pair_diagnostics_observed": false,
+    "native_patch_flux_scientifically_accepted": false,
+    "native_patch_flux_number_of_faces_per_side_expected": 12636,
+    "native_patch_flux_integrated_handoff": "cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/scripts/run_native_t0_patch_flux.sh",
+    "native_patch_flux_technical_report": "docs/granada/C3D05_T0_FLUJO_INTERFAZ_12636_CARAS_20261120_ES.md"
   },
   "other_cases": [
     {
@@ -117,7 +126,7 @@
       "evidence": "docs/C3D_05_T0_CONDUCCION_MULTIRREGION_F14_20261119_ES.md"
     }
   ],
-  "blocker": "Aún sin corrida OpenFOAM 14 local ni campos nativos T metal/molde; balance energético observado pendiente. Falta flujo interfacial directo y propiedades experimentales/JMatPro del Caso B; no cerrar G3/G4 por CI.",
-  "next_integrated_delivery": "Una sola ejecución integrada numérica C14 en WSL (si se autoriza), con log SHA y temperaturas/energías regionales reales; después continuidad de flujo parche-cara y sensibilidad; luego propiedades físicas/experimento T0 sin repetir malla.",
+  "blocker": "No hay corrida de OpenFOAM14 local, ni compilación nativa de c3d05PatchFlux, ni CSV q metal/molde observados; flujo cara-cara, conservación energética y sensibilidad sin validar. G3 físico requiere entradas auténticas JMatPro/experimentales.",
+  "next_integrated_delivery": "Usar el único ejecutor WSL Caso B para reproducir diagnóstico C14 de referencia, obtener energía regional + 12636 pares de q nativos, evaluar errores locales/globales y fijar sensibilidad; después T0 experimental sin rehacer malla.",
   "science": "NO_CFD_3D_RUN_NO_PHYSICAL_VALIDATION"
 }
