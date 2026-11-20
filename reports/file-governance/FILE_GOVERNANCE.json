@@ -29,8 +29,8 @@
     "POTENTIAL_UNLOGGED_CHANGES": 2
   },
   "finding_total": 9,
-  "inventory_fingerprint": "17aa6c6081675da544d67c45402f27a25e8c41d220b1b6e363d5cd684c534f04",
-  "evidence_fingerprint": "1762f9a8c2171030291e47ce69f2154898636e0a0b6349097aabdec72920bc87",
+  "inventory_fingerprint": "2c10ada33726bda1aae83511f288fb350191c2fe37d2f65df89796b702bcb0af",
+  "evidence_fingerprint": "ed0450c67bf8be7eaaa5af84a7c4d04a5c42c34c237a9f103a34a12d2eb0ab91",
   "files": [
     {
       "path": ".github/agents/openfoam-solidification.agent.md",
@@ -2018,7 +2018,7 @@
       "role": "source",
       "purpose": "code/test implementation",
       "certainty": "rule",
-      "blob": "cef51c084f3581042b927121e0e0fe2c6eb02155"
+      "blob": "6bb47efc25f22682ad6efce83a6138401add05f9"
     },
     {
       "path": "cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/scripts/run_t0_granada.py",
@@ -272993,20 +272993,20 @@
       "state": "REVIEW_REQUIRED"
     },
     {
-      "id": "a2e4459ccd1733f6",
+      "id": "f8679aaedcc18cff",
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_EN.md",
-      "observation": "10 implementation/config paths changed since this log's last commit; examples: .github/workflows/c3d05-foundation14-native-build.yml, .github/workflows/case-a-t0-native-f14.yml, cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/run_integrated_milestone.sh, cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/scripts/native_f14_dictionary_smoke.py, cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/scripts/prepare_case_a_t0.py, cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/tests/test_integrated_case_a.py",
+      "observation": "11 implementation/config paths changed since this log's last commit; examples: .github/workflows/c3d05-foundation14-native-build.yml, .github/workflows/case-a-t0-native-f14.yml, cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/run_integrated_milestone.sh, cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/scripts/native_f14_dictionary_smoke.py, cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/scripts/prepare_case_a_t0.py, cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/tests/test_integrated_case_a.py",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     },
     {
-      "id": "d2c903506744baf9",
+      "id": "f465c32ad067acc9",
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_ES.md",
-      "observation": "2 implementation/config paths changed since this log's last commit; examples: .github/workflows/c3d05-foundation14-native-build.yml, docs/PROJECT_STAGE_STATUS.json",
+      "observation": "3 implementation/config paths changed since this log's last commit; examples: .github/workflows/c3d05-foundation14-native-build.yml, cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/scripts/run_native_t0_patch_flux.sh, docs/PROJECT_STAGE_STATUS.json",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     }
