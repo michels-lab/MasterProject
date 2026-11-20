@@ -1,0 +1,19 @@
+{
+  "schema": "masterproject-fs-c06-progress-20261120",
+  "stage": "FS-C06 native VOF solidification compatibility candidate",
+  "status": "CODE_PREPARED_NOT_NATIVE_VERIFIED",
+  "observed_earlier_fs_c05_native_run": "FS_C05_WALL_Q_PROBE_20261120T184118Z_47868ed1",
+  "observed_fs_c05_reciprocal_Q_W_approx": 16232,
+  "fs_c06_source_model": "Foundation14 VoFSolidificationMelting",
+  "fs_c06_git_code_only": true,
+  "solid_fraction_field_target": "alpha.metal.solid",
+  "alpha_metal_is_vof": true,
+  "alpha_metal_solid_is_distinct": true,
+  "c14_coefficients_screening_only": true,
+  "actual_fs_c06_native_solver_run": false,
+  "volumetric_shrinkage_enabled": false,
+  "feeding_enabled": false,
+  "global_mass_energy_verified": false,
+  "experimentally_validated": false,
+  "next_gate": "One end-to-end isolated WSL Foundation14 run to prove native field write; then physically backed rho(T,f_s), enthalpy/atmospheric fluxes and phase-resolved wall Q."
+}
