@@ -1,0 +1,96 @@
+# Copia histórica de README T0 — 20-11-2026
+
+Este documento preserva el estado del README de T0 **antes** de la consolidación de un único flujo de Granada. Contiene comandos antiguos T0a/T0b, referencias a nueve diccionarios y avisos añadidos cronológicamente. **NO es guía ejecutable vigente**. Referencia actual: [README T0](../../cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/README.md) e [informe energético nativo](C3D05_T0_BALANCE_ENERGETICO_NATIVO_20261120_ES.md).
+
+---
+
+> **20-11-2026 | GRANADA_C3D05_NATIVE_ENERGY_20261120 — FLUJO VIGENTE (antes que comandos históricos inferiores):** `scripts/run_c14_numerical_granada.sh --solve` une la preparación, solver de referencia C14 de 100 pasos y postpro nativo F14 de `volAverage(T)` para metal y arena con `T0_NATIVE_ENERGY_HISTORY.json` y errores globales `ΣρCvV⟨T⟩`. Admite reanudar una corrida SHA-verificada, sin repetir solver. **Aún NO ejecutado en WSL; conservación numérica, flujo interfacial directo y propiedades reales/JMatPro pendientes**. Caso B **etapa 3/7, 2/7 hitos=29% técnico**. [Informe](../../../docs/granada/C3D05_T0_BALANCE_ENERGETICO_NATIVO_20261120_ES.md).
+
+> **19-11-2026 | GRANADA_C3D05_C14_NUMERIC_SHK_20261119 — PUNTO DE ENTRADA VIGENTE:** `scripts/run_c14_numerical_granada.sh --solve` prepara y ejecuta (cuando se active localmente) una referencia exclusivamente NUMÉRICA de 100 pasos con C14 archivado, no valores JMatPro. Incluye SHA de 5 fuentes C14, 10 diccionarios, protección de salida, objetivo energético de volúmenes nativos, log auditado. **NO SE HA EJECUTADO EN WSL, NO HAY RESULTADOS CFD NI VALIDACIÓN EXPERIMENTAL**; `T0_INPUTS.json` físico sigue nulo. Los comandos T0a/T0b y frases “nueve diccionarios” inferiores son históricos y NO deben ser presentados como flujo actual. **Etapa 3/7, 2/7 hitos (29% técnico).** [Informe](../../../docs/granada/C3D05_C14_NUMERICAL_ONE_SHOT_20261119_ES.md).
+
+> **19-11-2026 — C14 fvSolution ADOPTADO:** tras indicación expresa del investigador, T0 usa global PIMPLE 3/2/1 y relajación e=1 de C14; dos regiones sólidas usan PCG+DIC 1e-6/0.05 del C14 arena, más energía 2 desde el C14 metal, sin campos fluidos p_rgh/U. Protección SHA Git de los tres archivos de origen y prueba de regresión automática. [Informe completo](../../../docs/granada/C3D05_FVSOLUTION_C14_20261119_ES.md). **Caso B etapa 3/7, avance 2/7 hitos = 29% técnico, NO tesis ni CFD.**
+
+> **19-11-2026 | GRANADA_C3D05_T0_INTEGRAL_20261119 — FLUJO PREFERIDO:** [`scripts/run_t0_granada.py`](scripts/run_t0_granada.py) integra en **una sola operación** validación total de insumos, reutilización del diagnóstico nativo guardado, copiado protegido, 9 `foamDictionary`, reporte e idempotencia. Es el ejecutor de producción de materialización T0; los antiguos preflight/materialize quedan como herramientas históricas, **no** como instrucciones para ejecutar varias rondas. Los insumos siguen nulos: **ETAPA 3/7; 2/7=29% hitos (NO física/tesis), NO CFD**. [Documento de paquete](../../../docs/granada/C3D05_T0_INTEGRATED_GRANADA_20261119_ES.md).
+
+> **19-11-2026 | PROJECT_PROGRESS_CONTRACT_20261119 — SIN RONDAS DE MICROPRUEBAS:** Caso B **etapa 3/7, 2/7=29% de hitos técnicos**; T0 es fuente preparada, NO caso materializado, no CFD. Los comandos T0a/T0b debajo se conservan como herramientas históricas internas, **no** como requisito de entregar dos tandas de trabajo al investigador. Próximo bloque único: fuentes de propiedades + configuración + diccionarios + energía para una sola intervención WSL cuando existan los datos. [Política](../../../docs/POLITICA_ENTREGA_INTEGRAL_Y_ESTADO_ES.md) · [Estado](../../../docs/PROJECT_STAGE_STATUS.json).
+
+# T0 — conduction-only two-solid QuickCup (CASE B C3D-05)
+
+**Status:** template + strict generator; **NO CFD executed, NOT yet a runnable physical case**. The exact accepted source is `~/OpenFOAM/C3D05_STEP_GMSH_HEX_SUBDIV_COARSE_02`. This tree **does not contain or modify** original meshes.
+
+## Equation and hypothesis
+In each region, a constant-property stationary solid:
+`rho * Cv * dT/dt = div(kappa * grad(T))` [W/m³].
+Metal and mold are modeled as **two solids** solely to check the numerical
+conduction coupling, with reciprocal **`coupledTemperature`** on preserved
+`mappedWall` patches and **adiabatic external** boundaries
+(`metalTop`, `moldOuterUnclassified`). No free-surface/air exchange,
+liquid flow, phase change, latent heat, shrinkage or experimental calibration.
+The closed-system energy reference is `hf = 0` by convention.
+
+Energy budget once solving is separately authorized:
+`E(t) = sum_region( integral_V rho Cv T dV )` (absolute offset cancels).
+For perfectly adiabatic exterior and ideal contact, `E(t)-E(0)` should
+be small relative to energy exchanged; define a numerical tolerance from
+grid/time convergence, not an invented universal limit.
+Verify coupled face flux continuity with native OpenFOAM output.
+
+## Structure
+- `T0_INPUTS.json` intentionally contains **null** physical inputs and sources.
+- `templates/constant/{metal,mold}/physicalProperties.tpl` uses Foundation
+  v14 `heSolidThermo/eConst/rhoConst/constIsoSolid`, **Cv not Cp**.
+- `templates/0/{metal,mold}/T.tpl` uses the actual patch names.
+- `templates/system/controlDict.tpl` uses `foamMultiRun` and `regionSolvers`.
+- `scripts/prepare_t0.py` validates the input and materializes in a
+  **new** WSL directory only after all values/sources are supplied.
+- `scripts/run_t0_preflight.sh`: **ONE COMMAND** preflight (never launches CFD).
+
+The output directory is `~/OpenFOAM/C3D05_T0_CONDUCTION_01` and is protected
+against overwrite. The accepted `C3D05_STEP_GMSH_HEX_SUBDIV_COARSE_02`
+remains immutable. The output uses copied `polyMesh` (not a symlink) so
+future thermal solver experiments cannot modify the accepted reference.
+
+**Material data are not yet established**. Filling inputs from the thesis
+database or a documented literature source is required. `molWeight`
+is a model-required species bookkeeping parameter, not a claim that the
+mold is a single chemical species; record its chosen model convention.
+
+Do NOT copy values from the official aluminium `heatedDuct` example
+as if they were measured QuickCup iron/sand parameters. The numerical
+scheme `corrected` and 2 nonorthogonal correctors are *proposals*, not
+proof of stability on this 76.8 degree maximum non-orthogonal mesh.
+
+## Basis verified from the official Foundation 14 tutorial
+- https://github.com/OpenFOAM/OpenFOAM-14/blob/master/tutorials/multiRegion/CHT/heatedDuct/0/metal/T
+- https://github.com/OpenFOAM/OpenFOAM-14/blob/master/tutorials/multiRegion/CHT/heatedDuct/constant/metal/physicalProperties
+- https://github.com/OpenFOAM/OpenFOAM-14/blob/master/tutorials/multiRegion/CHT/heatedDuct/system/metal/fvSchemes
+- https://github.com/OpenFOAM/OpenFOAM-14/blob/master/tutorials/multiRegion/CHT/heatedDuct/system/metal/fvSolution
+- https://github.com/OpenFOAM/OpenFOAM-14/blob/master/tutorials/multiRegion/CHT/heatedDuct/system/controlDict
+
+**Scope and gate order:** geometry/STEP/patches PASS already; T0 source/syntax
+preflight next; physical-parameter provenance next; materialize separate case;
+OpenFOAM dictionary/thermo compilation and *then* any deliberately authorized
+solver run. **No automatic CFD**, no claims of thermophysical validity.
+
+## ONE-COMMAND stages in Ubuntu WSL
+
+**T0a — preflight only, correct for the current missing inputs:**
+
+```bash
+cd ~/OpenFOAM/MasterProject && git pull --ff-only && bash cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/scripts/run_t0_preflight.sh
+```
+
+**T0b — guarded materialization, only AFTER T0_INPUTS.json is completed from evidence:**
+
+```bash
+cd ~/OpenFOAM/MasterProject && git pull --ff-only && bash cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/scripts/run_t0_materialize.sh
+```
+
+To store a parameter file **outside Git** and avoid changing tracked research input
+templates, set environment variable `C3D05_T0_INPUTS` to a complete JSON copy
+with exactly the same schema. Both scripts read it automatically. No physical
+property placeholders are accepted; missing fields produce a classified block.
+
+The guarded materializer, once authorized, creates **one fresh** thermal case,
+copies source polyMesh, generates T and physicalProperties, and parses all nine
+dictionaries with `foamDictionary`. It **never launches foamMultiRun**.
