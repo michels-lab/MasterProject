@@ -1,5 +1,16 @@
 # C3D-04 Caso A — T0 integrado con valores auténticos de C14
 
+## Granada de integridad del preflight — 20 de noviembre de 2026
+
+**Etapa Caso A 5/10 · avance de hitos 4/10 = 40%. No CFD.**
+
+La auditoría CI del paquete integral detectó un defecto de contrato: si las entradas T0 eran inválidas, `--preflight` devolvía **código 0**. Ahora **devuelve código 3**, antes de revisar la malla nativa y sin publicar nada. Los test negativos lo verifican; el preflight con parámetros rastreados a C14 conserva código 0 y no toca V4/T02.
+
+La misma CI expuso un defecto de integración en la prueba de **materialización atómica**: el test de malla simulada intentaba volver a leer `polyMesh/points` ficticio al recalcular por segunda vez las áreas térmicas. El flujo se corrigió en su **causa**: `thermal_network_budget` calcula áreas de paredes y contacto **una sola vez** sobre la fuente real como parte del preflight, deja la evidencia en `native_case_gate + c14_source_parity + initial_C14_BC_thermal_budget` y la materialización atómica **reutiliza esa misma evidencia**. No se vuelven a recorrer polígonos al publicar la carpeta. Se rechaza directamente un llamado de materialización que no lleve evidencia de presupuesto térmico validada. Así, pruebas de éxito y de fallo usan datos sintéticos coherentes, sin simular geometría nativa inexistente.
+
+No se incrementa el avance por estos arreglos: **la comprobación estática en CI no sustituye a `foamDictionary` real, el arranque de `foamMultiRun`, conservación de energía ni validación experimental**. La malla T02 y el C14 original siguen inmutables. Esta modificación se entrega como una única revisión/PR integral, en lugar de pedir múltiples órdenes WSL al investigador.
+
+
 **19-11-2026 · Etapa 5/10 · Avance 4/10 = 40 % de hitos operativos.**  
 **Estado: `C14_VALUES_PORTED / SOURCE_PARITY_GUARD_CODE_COMMITTED / CI_NOT_CONFIRMED / WSL_NOT_RUN / NO_CFD`.** Se trata de un paquete 3D de **verificación de conducción térmica entre dos sólidos**, no del modelo C14 original de metal líquido con solidificación. Malla de referencia **solo lectura**: `~/OpenFOAM/C3D04_V4_TRANSITION_REPAIR_01/T02`.
 
