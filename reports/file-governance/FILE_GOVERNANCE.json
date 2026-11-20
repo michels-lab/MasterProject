@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
   "audit_kind": "deterministic_full_tracked_tree",
-  "tracked_files_total": 38976,
-  "classified_files_total": 38971,
-  "docs_content_inspected": 175,
+  "tracked_files_total": 38977,
+  "classified_files_total": 38972,
+  "docs_content_inspected": 176,
   "large_docs_skipped": 1,
   "excluded_reports": 5,
   "roles": {
@@ -12,7 +12,7 @@
     "bitacora": 5,
     "config": 14,
     "data": 31,
-    "document": 139,
+    "document": 140,
     "index": 32,
     "license": 1,
     "simulation_case_file": 115,
@@ -24,10 +24,12 @@
     "web_ui": 1,
     "workflow": 22
   },
-  "finding_counts": {},
-  "finding_total": 0,
-  "inventory_fingerprint": "56f2032311c0003e04f74e824da06bdc04ffcc037d61d1f9be70ec3be37f951c",
-  "evidence_fingerprint": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+  "finding_counts": {
+    "BROKEN_RELATIVE_LINK": 7
+  },
+  "finding_total": 7,
+  "inventory_fingerprint": "8b70addc8a0d664f74b1f3b9a2150d2abb4638557604a90395adba15466b41d0",
+  "evidence_fingerprint": "a38cca05722cc62f2a19d8787a386e132771345cc8472199f5e39f915b2e8a45",
   "files": [
     {
       "path": ".github/agents/openfoam-solidification.agent.md",
@@ -272127,6 +272129,13 @@
       "blob": "d718f4e2abc0d6cb09c8d8214af5eca475f79fa1"
     },
     {
+      "path": "docs/granada/C3D05_T0_README_HISTORICAL_BEFORE_SINGLE_FLOW_20261120.md",
+      "role": "document",
+      "purpose": "manual/decision/report/historical note",
+      "certainty": "inferred",
+      "blob": "07fb631590e0d9b8828b5d67687309a5fb27dab0"
+    },
+    {
       "path": "docs/granada/ENERGY_PHASE_V14_V16_20261020.md",
       "role": "document",
       "purpose": "manual/decision/report/historical note",
@@ -272827,7 +272836,71 @@
       "blob": "0b65cc6aa3d29917f57a31a96fd5c3afeffb4ed4"
     }
   ],
-  "findings": [],
+  "findings": [
+    {
+      "id": "2fa56a22be90f045",
+      "code": "BROKEN_RELATIVE_LINK",
+      "severity": "confirmed",
+      "path": "docs/granada/C3D05_T0_README_HISTORICAL_BEFORE_SINGLE_FLOW_20261120.md",
+      "observation": "Missing: outside-repo",
+      "recommendation": "Fix link or restore target",
+      "state": "REVIEW_REQUIRED"
+    },
+    {
+      "id": "2fa56a22be90f045",
+      "code": "BROKEN_RELATIVE_LINK",
+      "severity": "confirmed",
+      "path": "docs/granada/C3D05_T0_README_HISTORICAL_BEFORE_SINGLE_FLOW_20261120.md",
+      "observation": "Missing: outside-repo",
+      "recommendation": "Fix link or restore target",
+      "state": "REVIEW_REQUIRED"
+    },
+    {
+      "id": "2fa56a22be90f045",
+      "code": "BROKEN_RELATIVE_LINK",
+      "severity": "confirmed",
+      "path": "docs/granada/C3D05_T0_README_HISTORICAL_BEFORE_SINGLE_FLOW_20261120.md",
+      "observation": "Missing: outside-repo",
+      "recommendation": "Fix link or restore target",
+      "state": "REVIEW_REQUIRED"
+    },
+    {
+      "id": "7d85a3c81dba8e2e",
+      "code": "BROKEN_RELATIVE_LINK",
+      "severity": "confirmed",
+      "path": "docs/granada/C3D05_T0_README_HISTORICAL_BEFORE_SINGLE_FLOW_20261120.md",
+      "observation": "Missing: docs/granada/scripts/run_t0_granada.py",
+      "recommendation": "Fix link or restore target",
+      "state": "REVIEW_REQUIRED"
+    },
+    {
+      "id": "2fa56a22be90f045",
+      "code": "BROKEN_RELATIVE_LINK",
+      "severity": "confirmed",
+      "path": "docs/granada/C3D05_T0_README_HISTORICAL_BEFORE_SINGLE_FLOW_20261120.md",
+      "observation": "Missing: outside-repo",
+      "recommendation": "Fix link or restore target",
+      "state": "REVIEW_REQUIRED"
+    },
+    {
+      "id": "2fa56a22be90f045",
+      "code": "BROKEN_RELATIVE_LINK",
+      "severity": "confirmed",
+      "path": "docs/granada/C3D05_T0_README_HISTORICAL_BEFORE_SINGLE_FLOW_20261120.md",
+      "observation": "Missing: outside-repo",
+      "recommendation": "Fix link or restore target",
+      "state": "REVIEW_REQUIRED"
+    },
+    {
+      "id": "2fa56a22be90f045",
+      "code": "BROKEN_RELATIVE_LINK",
+      "severity": "confirmed",
+      "path": "docs/granada/C3D05_T0_README_HISTORICAL_BEFORE_SINGLE_FLOW_20261120.md",
+      "observation": "Missing: outside-repo",
+      "recommendation": "Fix link or restore target",
+      "state": "REVIEW_REQUIRED"
+    }
+  ],
   "untracked_audited": false,
   "ignored_audited": false,
   "binary_contents_audited": false,

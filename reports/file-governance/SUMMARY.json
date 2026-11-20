@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
   "audit_kind": "deterministic_full_tracked_tree",
-  "tracked_files_total": 38976,
-  "classified_files_total": 38971,
-  "docs_content_inspected": 175,
+  "tracked_files_total": 38977,
+  "classified_files_total": 38972,
+  "docs_content_inspected": 176,
   "large_docs_skipped": 1,
   "excluded_reports": 5,
   "roles": {
@@ -12,7 +12,7 @@
     "bitacora": 5,
     "config": 14,
     "data": 31,
-    "document": 139,
+    "document": 140,
     "index": 32,
     "license": 1,
     "simulation_case_file": 115,
@@ -24,10 +24,12 @@
     "web_ui": 1,
     "workflow": 22
   },
-  "finding_counts": {},
-  "finding_total": 0,
-  "inventory_fingerprint": "56f2032311c0003e04f74e824da06bdc04ffcc037d61d1f9be70ec3be37f951c",
-  "evidence_fingerprint": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+  "finding_counts": {
+    "BROKEN_RELATIVE_LINK": 7
+  },
+  "finding_total": 7,
+  "inventory_fingerprint": "8b70addc8a0d664f74b1f3b9a2150d2abb4638557604a90395adba15466b41d0",
+  "evidence_fingerprint": "a38cca05722cc62f2a19d8787a386e132771345cc8472199f5e39f915b2e8a45",
   "untracked_audited": false,
   "ignored_audited": false,
   "binary_contents_audited": false,
