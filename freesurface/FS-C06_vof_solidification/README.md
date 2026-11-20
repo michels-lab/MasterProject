@@ -83,3 +83,26 @@ CI sintética, aun verde, NO acredita carga real de `fvModel`.
 
 **Estado canónico de FS-C06: CODE_PREPARED, NO_NATIVE_RUN, NO_SHRINKAGE,
 NO_FEEDING, NO_EXPERIMENTAL_VALIDATION.**
+
+## Auditoría geométrica añadida a FS-C06 (20-11-2026)
+
+Cuando una ejecución **nativa y aceptada** produzca los dos snapshots
+\`1e-7\` y \`2e-7\`, el mismo stager ahora calcula directamente desde
+\`constant/fluid/polyMesh\` los volúmenes *ponderados por volumen de celda*
+\`Σ(V_i·alpha.metal_i)\` (metal VOF),
+\`Σ(V_i·alpha.metal.solid_i)\` (metal sólido absoluto) y
+\`Σ[V_i·(alpha.metal_i-alpha.metal.solid_i)]\` (metal líquido).
+Incluye \`f_s=V_s/V_m\`, promedio de temperatura del metal, proporción de
+metal a T≤1473 K (referencia numérica C14), cambio relativo de volumen
+VOF contra t=0 y hashes de los campos realmente leídos. El campo
+\`alpha.metal.solid\` **no** se interpreta como contracción; fracción sólida
+volumétrica no equivale a pérdida de volumen.
+
+Estas mediciones requieren **campos reales escritos por Foundation14**.
+Las pruebas Python son puramente sintéticas: no demuestran que el
+modelo se cargue ni que haya pasado el liquidus. No se dispone todavía
+de densidades de sólido/líquido termodinámicamente sustentadas,
+flujos másicos por atmósfera ni balance global: \`mass_conservation_verified=false\`
+y \`volumetric_shrinkage_or_feeding_verified=false\` incluso si las
+mediciones geométricas son positivas. El estado canónico continúa
+siendo **CODE_PREPARED_NOT_NATIVE_VERIFIED**.

@@ -7,7 +7,7 @@ import unittest
 
 from stage_fs_c06_vof_solidification import (
     C14_FVMODELS, FLUID_CELLS, PREFIX, TIMES, MODEL_FIELD,
-    check_solid_fraction, model_text, read_c14_reference,
+    check_solid_fraction, model_text, read_c14_reference, phase_volume_metrics,
 )
 
 
@@ -71,6 +71,50 @@ class FS_C06Test(unittest.TestCase):
             path.write_text("type solidificationMeltingSource; Tsol 1423;")
             with self.assertRaises(ValueError):
                 read_c14_reference(Path(t))
+
+    def test_volume_weighted_phase_inventory_not_fraction_sum(self):
+        m = phase_volume_metrics(
+            [2., 3.], [0.5, 1.0], [0.2, 0.8],
+            [1440., 1410.], 1473.
+        )
+        self.assertAlmostEqual(m["metal_vof_volume_m3"], 4.)
+        self.assertAlmostEqual(m["metal_solid_volume_m3"], 2.8)
+        self.assertAlmostEqual(m["metal_liquid_volume_m3"], 1.2)
+        self.assertAlmostEqual(
+            m["metal_solid_fraction_conditional_volume_weighted"], .7
+        )
+        self.assertAlmostEqual(m["metal_T_mean_K_alpha_volume_weighted"], 1417.5)
+        self.assertEqual(m["metal_vof_fraction_below_C14_liquidus"], 1.)
+        self.assertFalse(m["metal_mass_conservation_verified"])
+        self.assertFalse(m["volumetric_shrinkage_or_feeding_verified"])
+
+    def test_all_liquid_above_liquidus_is_not_phase_change(self):
+        m = phase_volume_metrics([1., 2.], [1., .5], [0., 0.],
+                                 [1500., 1500.], 1473.)
+        self.assertEqual(m["metal_solid_volume_m3"], 0.)
+        self.assertEqual(m["metal_vof_fraction_below_C14_liquidus"], 0.)
+        self.assertFalse(m["rho_liquid_and_rho_solid_verified"])
+
+    def test_volume_metric_rejects_solid_larger_than_vof(self):
+        with self.assertRaises(ValueError):
+            phase_volume_metrics([1.], [.2], [.3], [1400.], 1473.)
+
+    def test_volume_metric_rejects_nonpositive_or_nan_inputs(self):
+        examples = [
+            ([0.], [1.], [0.], [1400.], 1473.),
+            ([1.], [1.], [0.], [math.nan], 1473.),
+            ([1.], [1.], [-.01], [1400.], 1473.),
+            ([1.], [0.], [0.], [1400.], 1473.),
+            ([1.], [1.], [0.], [1400.], math.inf),
+        ]
+        for args in examples:
+            with self.subTest(args=args), self.assertRaises(ValueError):
+                phase_volume_metrics(*args)
+
+    def test_volume_metric_rejects_numerically_negative_phase(self):
+        with self.assertRaises(ValueError):
+            phase_volume_metrics([1.], [.5], [.500000001],
+                                 [1450.], 1473.)
 
     def test_constants_and_outputs_distinct(self):
         self.assertEqual(TIMES, ("1e-07", "2e-07"))

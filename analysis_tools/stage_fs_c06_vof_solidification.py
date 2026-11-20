@@ -20,8 +20,8 @@ import sys
 import uuid
 
 from audit_fs_c03_exterior_mesh import require
-from audit_fs_c02_local import read_alpha
-from audit_fs_c04_split_cells import FLUID_CELLS
+from audit_fs_c02_local import read_alpha, read_temperature
+from audit_fs_c04_split_cells import FLUID_CELLS, read_mesh, cell_volume_m3
 from run_fs_c05_native_smoke import (
     preflight as preflight_c05,
     short_control, validate_run_log, MAX_NATIVE_SECONDS,
@@ -109,7 +109,72 @@ def check_solid_fraction(metal: list[float], solid: list[float]) -> dict:
             "mass_shrinkage_or_feeding_validated": False}
 
 
-def read_native_fraction(case: Path) -> dict:
+def phase_volume_metrics(
+    volumes: list[float],
+    metal: list[float],
+    solid: list[float],
+    temperature: list[float],
+    liquidus_K: float,
+) -> dict:
+    """Measure cell-volume-weighted *geometry*, not shrinkage or mass.
+
+    alpha.metal.solid is absolute solid metal per computational cell,
+    not the metal-conditional solid fraction. No rho_s/rho_l or boundary
+    flux is supplied, so mass conservation/feeding cannot be inferred.
+    """
+    require(len(volumes) == len(metal) == len(solid) == len(temperature)
+            and len(volumes) > 0, "phase-volume field lengths differ")
+    require(math.isfinite(liquidus_K) and liquidus_K > 0,
+            "invalid liquidus screening reference")
+    require(all(math.isfinite(v) and v > 0 for v in volumes),
+            "nonpositive native mesh cell volume")
+    require(all(math.isfinite(t) and t > 0 for t in temperature),
+            "invalid absolute temperature")
+    require(all(math.isfinite(a) and math.isfinite(s)
+                and -1e-8 <= a <= 1+1e-8
+                and -1e-8 <= s <= a+1e-8
+                for a, s in zip(metal, solid)),
+            "invalid VOF / absolute-solid phase allocation")
+    # The small tolerance is a numerical admission check, not a license to
+    # integrate negative phase volumes. Reject any physically negative
+    # un-clipped inventory instead of silently fabricating solid or liquid.
+    require(all(0 <= a <= 1 and 0 <= s <= a for a, s in zip(metal, solid)),
+            "phase-volume integration requires strict 0<=solid<=metal<=1")
+    V_metal = math.fsum(v*a for v, a in zip(volumes, metal))
+    V_solid = math.fsum(v*s for v, s in zip(volumes, solid))
+    V_liquid = math.fsum(v*(a-s)
+                         for v, a, s in zip(volumes, metal, solid))
+    require(V_metal > 0 and V_liquid >= 0 and V_solid >= 0,
+            "metallic phase volume absent or unphysical")
+    V_metal_below_liquidus = math.fsum(
+        v*a for v, a, t in zip(volumes, metal, temperature)
+        if t <= liquidus_K
+    )
+    return {
+        "metal_vof_volume_m3": V_metal,
+        "metal_solid_volume_m3": V_solid,
+        "metal_liquid_volume_m3": V_liquid,
+        "metal_solid_fraction_conditional_volume_weighted": V_solid/V_metal,
+        "metal_T_mean_K_alpha_volume_weighted": math.fsum(
+            v*a*t for v, a, t in zip(volumes, metal, temperature)
+        )/V_metal,
+        "metal_vof_volume_below_C14_liquidus_m3": V_metal_below_liquidus,
+        "metal_vof_fraction_below_C14_liquidus": V_metal_below_liquidus/V_metal,
+        "cell_volume_weighted_not_cell_sum": True,
+        "C14_temperature_is_screening_not_JMatPro_calibration": True,
+        "rho_liquid_and_rho_solid_verified": False,
+        "metal_mass_conservation_verified": False,
+        "open_boundary_mass_flux_verified": False,
+        "volumetric_shrinkage_or_feeding_verified": False,
+    }
+
+
+def read_native_fraction(case: Path, liquidus_K: float) -> dict:
+    mesh = read_mesh(case / "constant/fluid/polyMesh", FLUID_CELLS)
+    cell_volumes = [cell_volume_m3(mesh, i) for i in range(FLUID_CELLS)]
+    initial_alpha = read_alpha(case / "0/fluid/alpha.metal", expected_cells=FLUID_CELLS)
+    initial_vof_volume_m3 = math.fsum(v*a for v, a in zip(cell_volumes, initial_alpha))
+    require(initial_vof_volume_m3 > 0, "initial metal volume absent")
     snapshots = []
     for time in TIMES:
         fluid = case / time / "fluid"
@@ -121,11 +186,21 @@ def read_native_fraction(case: Path) -> dict:
             fluid = matches[0]
         metal = read_alpha(fluid / "alpha.metal", expected_cells=FLUID_CELLS)
         solid = read_alpha(fluid / MODEL_FIELD, expected_cells=FLUID_CELLS)
+        T = read_temperature(fluid / "T", expected_cells=FLUID_CELLS)
+        phase = phase_volume_metrics(cell_volumes, metal, solid, T, liquidus_K)
         snapshots.append({"time_s": float(time), **check_solid_fraction(metal, solid),
+                          **phase,
+                          "metal_vof_relative_volume_change_from_t0":
+                          (phase["metal_vof_volume_m3"]-initial_vof_volume_m3)/initial_vof_volume_m3,
                           "alpha_metal_sha256": digest(fluid / "alpha.metal"),
-                          "alpha_metal_solid_sha256": digest(fluid / MODEL_FIELD)})
+                          "alpha_metal_solid_sha256": digest(fluid / MODEL_FIELD),
+                          "temperature_sha256": digest(fluid / "T")})
     return {"snapshots": snapshots, "native_solid_fraction_observed": True,
-            "physical_solidification_validated": False}
+            "initial_metal_vof_volume_m3": initial_vof_volume_m3,
+            "volumes_from_native_fluid_mesh": True,
+            "physical_solidification_validated": False,
+            "metal_mass_balance_validated": False,
+            "shrinkage_or_feeding_validated": False}
 
 
 def _same_time(name: str, value: float) -> bool:
@@ -197,7 +272,7 @@ def stage(source: Path, dest: Path, project: Path, native: bool = False) -> dict
                        str(p.returncode) + "\n" + p.stdout + "\n" + p.stderr)
         require(p.returncode == 0, "native foamMultiRun failed")
         result["native_solver_log"] = validate_run_log(p.stdout + "\n" + p.stderr)
-        fraction = read_native_fraction(dest)
+        fraction = read_native_fraction(dest, reference["values"]["Tliq"])
         result["solid_fraction_fields_measured"] = True
         result["model_loaded_native"] = True
         result["native_fraction_diagnostics"] = fraction
