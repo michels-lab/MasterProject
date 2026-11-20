@@ -1,0 +1,38 @@
+name: C3D-05 Foundation14 coupled two-solid native solver smoke (synthetic no thesis CFD)
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/tests/smoke_native_foundation14_solver.py'
+      - 'cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/templates/**'
+      - 'cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/scripts/prepare_t0.py'
+      - 'cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/scripts/c14_numerical_reference.py'
+      - 'cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/scripts/postprocess_t0_energy.py'
+      - '.github/workflows/c3d05-foundation14-two-solid-solver-smoke.yml'
+  pull_request:
+    paths:
+      - 'cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/tests/smoke_native_foundation14_solver.py'
+      - 'cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/templates/**'
+      - 'cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/scripts/prepare_t0.py'
+      - '.github/workflows/c3d05-foundation14-two-solid-solver-smoke.yml'
+permissions:
+  contents: read
+concurrency:
+  group: c3d05-two-solid-F14-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  actual-F14-synthetic-solver:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: gerlero/setup-openfoam@v1
+        with:
+          openfoam-version: 14
+      - name: Native foamMultiRun 100-step coupledTemperature mappedWall T0 test on synthetic two-cell geometry
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          test "${WM_PROJECT_VERSION:-}" = "14"
+          PYTHONDONTWRITEBYTECODE=1 python3 -B cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/tests/smoke_native_foundation14_solver.py
