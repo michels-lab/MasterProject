@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
   "repository": "michels-lab/MasterProject",
-  "audited_head_sha": "6ee20f218e1f98ebae1c27002f730fca85432a87",
-  "inventory_fingerprint": "9eee2e4b7aa11c24154a30635d87638676994897545dfd532eca07cc451bf47c",
+  "audited_head_sha": "110c197128fef67d16c1ac3dae4a84a57ba44438",
+  "inventory_fingerprint": "9eca8659327f0140385c20b15ee629f835dfaa24ab7f71cd30a9469a7a9bf3be",
   "scan_stage": "FILE_STEWARD_SCAN_COMPLETED",
   "evidence_state": "ACTIONS_CLAIM_PENDING_EXTERNAL_VERIFICATION",
-  "recorded_at_utc": "2026-11-20T22:28:29.166009+00:00",
-  "workflow_run_id": 44829161673,
+  "recorded_at_utc": "2026-11-20T22:29:58.638636+00:00",
+  "workflow_run_id": 44829332348,
   "workflow_run_attempt": 1
 }
