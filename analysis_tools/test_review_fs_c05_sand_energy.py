@@ -124,8 +124,7 @@ class SandEulerAuditTests(unittest.TestCase):
                    return_value=native),\
              patch("review_fs_c05_sand_energy.sand_model",
                    return_value={"rho_kg_m3":1500.,"Cv_J_kgK":700.}),\
-             patch("review_fs_c05_sand_energy.subprocess.run",
-                   create=True) as forbidden:
+             patch("subprocess.run") as forbidden:
             x=audit(self.case)
         forbidden.assert_not_called()
         self.assertTrue(x["no_new_CFD_executed"])
