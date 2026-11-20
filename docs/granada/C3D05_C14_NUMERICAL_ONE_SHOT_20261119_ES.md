@@ -1,3 +1,5 @@
+> **ADENDA 20-11-2026 | GRANADA_C3D05_PATCH_Q_12636_20261120:** `--solve` agrega después de energía volumétrica un único `wmake` aislado (cuando se ejecute en WSL) y extracción bilateral nativa `q_n=-k snGrad(T)` de 12,636 caras por lado, sin suponer mismo orden. Se cuantifican balances locales y globales; **código fuente y QA, sin compilación ni corrida real todavía**. [Informe](C3D05_T0_FLUJO_INTERFAZ_12636_CARAS_20261120_ES.md). Etapa B 3/7, 2/7=29% técnico.
+
 > **ADENDA 20-11-2026 | GRANADA_C3D05_NATIVE_ENERGY_20261120:** el único ejecutor `--solve` de este informe incluye ahora `foamPostProcess` por metal/arena y `T0_NATIVE_ENERGY_HISTORY.json` con balance de energía observado si hay ejecución. Se reutiliza un log SHA-verificado sin relanzar `foamMultiRun`. **Sin corrida WSL todavía, sin validación CFD**. Caso B **3/7, 2/7=29% técnico**. [Informe nuevo](C3D05_T0_BALANCE_ENERGETICO_NATIVO_20261120_ES.md).
 
 # Caso B C3D-05 — Operación Granada: referencia numérica C14 de extremo a extremo
