@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
   "audit_kind": "deterministic_full_tracked_tree",
-  "tracked_files_total": 38982,
-  "classified_files_total": 38977,
-  "docs_content_inspected": 176,
+  "tracked_files_total": 38984,
+  "classified_files_total": 38979,
+  "docs_content_inspected": 177,
   "large_docs_skipped": 1,
   "excluded_reports": 5,
   "roles": {
@@ -12,14 +12,14 @@
     "bitacora": 5,
     "config": 14,
     "data": 31,
-    "document": 140,
+    "document": 141,
     "index": 32,
     "license": 1,
     "simulation_case_file": 117,
     "simulation_input": 2683,
     "simulation_log": 3155,
     "simulation_output": 32615,
-    "source": 107,
+    "source": 108,
     "test": 44,
     "web_ui": 1,
     "workflow": 22
@@ -29,8 +29,8 @@
     "POTENTIAL_UNLOGGED_CHANGES": 2
   },
   "finding_total": 9,
-  "inventory_fingerprint": "89c8010d4061a082cf9bf04f7b0dd81b769fd82270389646b37f6c06c57faefb",
-  "evidence_fingerprint": "e027f87f642511284ab3940f72f878bbe8699e23169e1e7bb5e377bbf6850975",
+  "inventory_fingerprint": "692284ff96db3462931d5bd50a1efe9b81e3263d76b6637f25864be4eebf0221",
+  "evidence_fingerprint": "8253a3056d13d900f58c687ed50e3dba1f0b5b9c3c97648eb00703f42db4af39",
   "files": [
     {
       "path": ".github/agents/openfoam-solidification.agent.md",
@@ -79,7 +79,7 @@
       "role": "workflow",
       "purpose": "GitHub Actions automation",
       "certainty": "rule",
-      "blob": "f0fb09d47089ec3a947bd636a83442b59ac0bb05"
+      "blob": "3ca3919344903ff4c06d7ec4e939332be02f6b82"
     },
     {
       "path": ".github/workflows/case-a-t0-stage-contract.yml",
@@ -1990,7 +1990,14 @@
       "role": "source",
       "purpose": "code/test implementation",
       "certainty": "rule",
-      "blob": "9d5e5150ed9877e3da4ff9da68ef3c2171b9de22"
+      "blob": "6a0a33293ab4874c9ac097a7412cc037fa6d3996"
+    },
+    {
+      "path": "cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/scripts/run_native_t0_patch_flux.sh",
+      "role": "source",
+      "purpose": "code/test implementation",
+      "certainty": "rule",
+      "blob": "cef51c084f3581042b927121e0e0fe2c6eb02155"
     },
     {
       "path": "cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/scripts/run_t0_granada.py",
@@ -272099,7 +272106,7 @@
       "role": "config",
       "purpose": "machine-readable configuration",
       "certainty": "rule",
-      "blob": "ba85e801ef23651ea0680abc8f6c583bf7ecbf14"
+      "blob": "bb92e801c4cf69dbfade577275297730980e0291"
     },
     {
       "path": "docs/REGLA_INSTRUCCIONES_UNIFICADAS_ES.md",
@@ -272156,6 +272163,13 @@
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
       "blob": "035c246ba4f70ace4e981a09bb5f7041f5bf72aa"
+    },
+    {
+      "path": "docs/granada/C3D05_T0_FLUJO_INTERFAZ_12636_CARAS_20261120_ES.md",
+      "role": "document",
+      "purpose": "manual/decision/report/historical note",
+      "certainty": "inferred",
+      "blob": "ae6750835315a4a3adf6bdf66e130785440c8b96"
     },
     {
       "path": "docs/granada/C3D05_T0_INTEGRATED_GRANADA_20261119_ES.md",
@@ -272937,20 +272951,20 @@
       "state": "REVIEW_REQUIRED"
     },
     {
-      "id": "a9cfa4657b48270f",
+      "id": "2dc8e194e6e51dbe",
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_EN.md",
-      "observation": "3 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/native_flux/c3d05PatchFlux.C, cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/scripts/analyze_t0_patch_flux.py, cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/tests/test_t0_patch_flux.py",
+      "observation": "7 implementation/config paths changed since this log's last commit; examples: .github/workflows/c3d05-t0-granada-static.yml, cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/native_flux/c3d05PatchFlux.C, cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/scripts/analyze_t0_patch_flux.py, cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/scripts/run_c14_numerical_granada.sh, cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/scripts/run_native_t0_patch_flux.sh, cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/tests/test_t0_patch_flux.py",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     },
     {
-      "id": "ea71d3d38a968962",
+      "id": "2fee470935c11130",
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_ES.md",
-      "observation": "3 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/native_flux/c3d05PatchFlux.C, cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/scripts/analyze_t0_patch_flux.py, cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/tests/test_t0_patch_flux.py",
+      "observation": "7 implementation/config paths changed since this log's last commit; examples: .github/workflows/c3d05-t0-granada-static.yml, cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/native_flux/c3d05PatchFlux.C, cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/scripts/analyze_t0_patch_flux.py, cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/scripts/run_c14_numerical_granada.sh, cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/scripts/run_native_t0_patch_flux.sh, cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/tests/test_t0_patch_flux.py",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     }
