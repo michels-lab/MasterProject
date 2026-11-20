@@ -317,3 +317,24 @@ NO global mass or enthalpy balance / NO solidification.
 Estos cálculos son una **aproximación de cierre del subdominio arena** basada en Cp/Cv constante, paredes inferiores `zeroGradient`, sin fuente, volumen fijo y la potencia reportada a final de paso. El balance es coherente con el esquema Euler del solver; NO valida entalpía metal-aire ni energía de gas abierto. La precisión extrema también puede reflejar que `wallHeatFlux` y `T_mold` derivan de la misma solución discreta, por lo que no es una validación independiente con termopares ni una prueba de fidelidad física.
 
 **Estado exacto:** `NATIVE_TWO_STEP_CH_T_RUN_AND_TWO_WALL_Q_MEASURED` con balance local de arena cuantificado analíticamente; `GLOBAL_MASS_AND_ENERGY_OPEN`, `NO_SOLIDIFICATION`, `NO_VALIDATED_CAD_SUPPORT`, `MATERIAL_SCREENING_ONLY`. No ejecutar nuevamente el CFD de 0.2 µs para repetir variables que ya fueron medidas. Construir un diagnóstico de reporte **solo lectura** para el cierre de arena y el inventario `rho` ya guardado.
+
+
+## 20-11-2026 — Auditoría retrospectiva de energía de arena y puerta hacia contracción
+
+Tras el experimento Granada **ya ejecutado** \`FS_C05_WALL_Q_PROBE_20261120T184118Z_47868ed1\`, se añadió el auditor **solo lectura** \`analysis_tools/review_fs_c05_sand_energy.py\` y ocho regresiones en \`analysis_tools/test_review_fs_c05_sand_energy.py\`, incorporadas a la CI de FS-C02/FS-C05. La herramienta comprueba la identidad de la corrida mediante logs, SHA, campos \`alpha.metal\`, \`T\`, \`rho\` y potencias \`wallHeatFlux\` guardados, y **NO vuelve a ejecutar OpenFOAM**. Su resultado principal calcula para cada paso Euler en arena \`Δ(ρ Cv VT) - Q_mold Δt\`, usando \`rho=1500 kg/m³\`, \`Cv=700 J/(kg K)\`, \`Δt=1e-7 s\`, contornos restantes adiabáticos y ausencia de fuente térmica.
+
+Con los **números nativos ya reportados por el investigador**, la discrepancia relativa local fue de \`2.649e-7\` y \`2.141e-7\` para los pasos primero y segundo respectivamente. Es una prueba interna del subdominio arena en este ensayo, NO validación experimental ni balance de energía/masa total. Las 3136 caras medidas incluyen contactos **hierro–arena y aire–arena**; \`Q_mold≈+16232 W\` NO debe atribuirse íntegramente al hierro. El calentamiento del aire (≈1.683 K en 0.2 µs) requiere diagnóstico físico separado.
+
+**Única operación de verificación nativa siguiente (sin nueva CFD):**
+
+\`\`\`bash
+cd ~/OpenFOAM/FS_C02_WORKTREE &&
+git fetch origin research/fs-c02-metal-air-vof-20261117 &&
+git switch --detach FETCH_HEAD &&
+python3 analysis_tools/review_fs_c05_sand_energy.py \
+  --case ~/OpenFOAM/FS_C05_GRANADA_RUNS/FS_C05_WALL_Q_PROBE_20261120T184118Z_47868ed1
+\`\`\`
+
+El reporte se escribe exclusivamente en un **directorio nuevo, hermano de la corrida**, bajo \`FS_C05_READ_ONLY_REVIEWS/\`. No pedir al investigador ejecutar las ocho pruebas sintéticas: se ejecutan en CI. El commit \`68793ed472\` corrigió el título del reporte para declarar explícitamente que el cierre es **Euler**, que era lo exigido por la regresión fallida en el commit anterior. No debe darse CI por verde sin consultar la ejecución de Actions de este SHA.
+
+**Próxima etapa científica — FS-C06, aún NO implementada:** distinguir estrictamente \`alpha.metal\` (fracción volumétrica VOF metal/aire) de \`f_s\` (fracción sólida del hierro), e integrar en el mismo solver una ley de solidificación con calor latente, densidad volumétrica dependiente del estado, y desplazamiento real de superficie libre por pérdida de volumen; permitir alimentación de metal líquido, verificar continuidad de masa con flujo por las fronteras abiertas y preservar la conservación de energía. El modelo \`solidificationMeltingSource\` de C14-2D es **referencia de física**, no prueba de compatibilidad automática con \`compressibleVoF\`. Antes de ampliar el transitorio o usarlo en tesis se requiere: pruebas de compatibilidad reales de Foundation14; Q separado por fase; transporte de masa/entalpía por atmósfera; propiedades metal/arena dependientes de T; soporte/cavidad inferior y fidelidad CAD; independencia temporal y de malla. No importar coeficientes ficticios ni modificar C14/B14 o los casos C3D-04/C3D-05.
