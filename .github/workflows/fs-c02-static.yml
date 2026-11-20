@@ -58,6 +58,8 @@ on:
       - 'analysis_tools/test_run_fs_c05_granada.py'
       - 'analysis_tools/audit_fs_c05_density_inventory.py'
       - 'analysis_tools/test_audit_fs_c05_density_inventory.py'
+      - 'analysis_tools/review_fs_c05_sand_energy.py'
+      - 'analysis_tools/test_review_fs_c05_sand_energy.py'
       - 'freesurface/FS-C04_fluid_mold_mesh_pilot/**'
       - 'analysis_tools/diagnose_fs_c02_courant.py'
       - 'analysis_tools/test_diagnose_fs_c02_courant.py'
@@ -146,6 +148,10 @@ jobs:
         run: python3 -m unittest discover -s analysis_tools -p test_audit_fs_c05_density_inventory.py -v
       - name: FS-C05 density/mass audit Python syntax check
         run: python3 -m py_compile analysis_tools/audit_fs_c05_density_inventory.py analysis_tools/test_audit_fs_c05_density_inventory.py
+      - name: FS-C05 actual Granada saved-case sand Euler energy closure review (no CFD)
+        run: python3 -m unittest discover -s analysis_tools -p test_review_fs_c05_sand_energy.py -v
+      - name: FS-C05 sand heat closure parser static syntax check
+        run: python3 -m py_compile analysis_tools/review_fs_c05_sand_energy.py analysis_tools/test_review_fs_c05_sand_energy.py
       - name: Stage reference iron-air case outside Git checkout
         run: |
           python3 analysis_tools/run_fs_c02_local.py \
