@@ -13,6 +13,12 @@ on:
       - ".github/workflows/case-a-t0-native-f14.yml"
   workflow_dispatch:
 
+# New commits supersede prior installer runs of the same PR: no parallel
+# expensive Foundation14 package installs for obsolete code.
+concurrency:
+  group: case-a-native-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 permissions:
   contents: read
 
