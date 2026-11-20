@@ -291,7 +291,12 @@ class IntegratedCaseAT0(unittest.TestCase):
                     engine.materialize(
                     src, output, cfg, cfg_path, items,
                     {"native_volumes_m3_from_preserved_tsv":
-                     {"metal": 1.0, "mold": 1.0}}
+                     {"metal": 1.0, "mold": 1.0},
+                     "initial_C14_BC_thermal_budget": {
+                         "status": "INITIAL_C14_BC_GEOMETRIC_POWER_SCALE_NOT_CFD",
+                         "native_contact_faces_each_side": 2496,
+                         "verified_fixture_only": True,
+                     }}
                 )
                 self.assertFalse(output.exists())
             self.assertFalse(list(root.glob(".prepared_T0.staging.*")))
@@ -303,7 +308,12 @@ class IntegratedCaseAT0(unittest.TestCase):
                 engine.materialize(
                     src, output, cfg, cfg_path, items,
                     {"native_volumes_m3_from_preserved_tsv":
-                     {"metal": 1.0, "mold": 1.0}}
+                     {"metal": 1.0, "mold": 1.0},
+                     "initial_C14_BC_thermal_budget": {
+                         "status": "INITIAL_C14_BC_GEOMETRIC_POWER_SCALE_NOT_CFD",
+                         "native_contact_faces_each_side": 2496,
+                         "verified_fixture_only": True,
+                     }}
                 )
                 self.assertEqual(call.call_count, 10)
             self.assertEqual((output/"system/fvSolution").is_file(), True)
@@ -311,6 +321,10 @@ class IntegratedCaseAT0(unittest.TestCase):
             self.assertEqual(report["status"],
                              "T0_FILESET_MATERIALIZED_NATIVE_DICTIONARIES_PARSED_NOT_SOLVED")
             self.assertTrue(report["no_solver_executed"])
+            self.assertEqual(
+                report["initial_C14_BC_thermal_budget"]
+                ["native_contact_faces_each_side"], 2496
+            )
             self.assertEqual(len(report["native_foundation14_parsed_files"]), 10)
             for region in ("metal", "mold"):
                 src_mesh = src/"constant"/region/"polyMesh"
@@ -320,6 +334,76 @@ class IntegratedCaseAT0(unittest.TestCase):
                                      (dst_mesh/filename).read_bytes())
             with self.assertRaises(FileExistsError):
                 engine.isolated_output(src, output)
+
+    def test_055b_reject_missing_verified_thermal_budget_before_side_effects(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root = pathlib.Path(folder)
+            source = root/"accepted"
+            source.mkdir()
+            destination = root/"refused_output"
+            with self.assertRaisesRegex(ValueError, "prior, successful integrated"):
+                engine.materialize(
+                    source, destination, engine.synthetic_fixture(),
+                    engine.INPUTS, {}, {"native_volumes_m3_from_preserved_tsv":
+                                       {"metal": 1.0, "mold": 1.0}}
+                )
+            self.assertFalse(destination.exists())
+
+    def test_056_integrated_preflight_never_reports_success_on_invalid_inputs(self):
+        with tempfile.TemporaryDirectory() as folder:
+            directory = pathlib.Path(folder)
+            config = json.loads(engine.INPUTS.read_text(encoding="utf-8"))
+            config["metal"]["rho_kg_m3"] = None
+            config_path = directory/"invalid_inputs.json"
+            config_path.write_text(json.dumps(config))
+            source = directory/"accepted_V4_T02"
+            source.mkdir()
+            out = directory/"never_created"
+            args = [
+                "prepare_case_a_t0.py", "--inputs", str(config_path),
+                "--source", str(source), "--out", str(out),
+            ]
+            with patch.object(engine.sys, "argv", args), \
+                 patch.object(engine, "native_case_gate", side_effect=AssertionError(
+                     "Invalid configuration must be rejected before touching native mesh"
+                 )), \
+                 patch.object(engine, "materialize", side_effect=AssertionError(
+                     "A failed preflight must never materialize a case"
+                 )):
+                self.assertEqual(engine.main(), 3)
+            self.assertFalse(out.exists())
+
+    def test_057_integrated_valid_C14_preflight_no_writes_or_CFD(self):
+        with tempfile.TemporaryDirectory() as folder:
+            directory = pathlib.Path(folder)
+            source = directory/"accepted_V4_T02"
+            source.mkdir()
+            out = directory/"never_created"
+            args = [
+                "prepare_case_a_t0.py",
+                "--inputs", str(engine.INPUTS),
+                "--source", str(source),
+                "--out", str(out),
+            ]
+            native = {
+                "native_volumes_m3_from_preserved_tsv": {
+                    "metal": 4.79e-5, "mold": 1.028e-4,
+                }
+            }
+            budget = {
+                "initial_uniform_temperature_power_W_positive_outward": {
+                    "metal_to_mold_contact": 3806.0,
+                    "metal_to_ambient_convection": 15.9,
+                }
+            }
+            with patch.object(engine.sys, "argv", args), \
+                 patch.object(engine, "native_case_gate", return_value=native), \
+                 patch.object(engine, "thermal_network_budget", return_value=budget), \
+                 patch.object(engine, "materialize", side_effect=AssertionError(
+                     "Preflight must never materialize a case"
+                 )):
+                self.assertEqual(engine.main(), 0)
+            self.assertFalse(out.exists())
 
     def test_06_no_CFD_or_remeshing_launched_by_integrated_runner(self):
         runner = (T0/"run_integrated_milestone.sh").read_text()
