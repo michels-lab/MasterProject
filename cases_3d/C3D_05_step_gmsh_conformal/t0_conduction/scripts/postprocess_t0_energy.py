@@ -221,6 +221,22 @@ def compute_energy_history(
     }
 
 
+def verify_solver_attempt(log: Path, status_file: Path, input_bytes: bytes):
+    """Resume ONLY a completed native run tied to exactly these log and input bytes."""
+    if log.is_symlink() or status_file.is_symlink():
+        raise ValueError("symlink run artifacts not accepted")
+    status = json.loads(status_file.read_text(encoding="utf-8"))
+    if status.get("numerical_run_completed") is not True:
+        raise ValueError("native solver run not verified complete")
+    if status.get("input_sha256") != hashlib.sha256(input_bytes).hexdigest():
+        raise ValueError("solver input checksum does not match current data")
+    if status.get("log_sha256") != hashlib.sha256(log.read_bytes()).hexdigest():
+        raise ValueError("solver log bytes differ from previous audited attempt")
+    if status.get("scope") != "C14_ARCHIVED_NUMERICAL_TWO_SOLID_T0_ONLY":
+        raise ValueError("wrong solver scientific scope")
+    return status
+
+
 def save_exclusive(path: Path, report: dict):
     data = json.dumps(report, indent=2, ensure_ascii=False, sort_keys=True) + "\n"
     if path.exists() or path.is_symlink():
@@ -239,15 +255,27 @@ def main() -> int:
     cli.add_argument("--reference", type=Path, required=True)
     cli.add_argument("--out", type=Path, required=True)
     cli.add_argument("--native", action="store_true", help="Invoke Foundation14 foamPostProcess for both regions")
+    cli.add_argument("--run-status", type=Path, required=True)
+    cli.add_argument("--solver-log", type=Path, required=True)
     args = cli.parse_args()
     source_case = args.case.expanduser().resolve()
     inputs = args.inputs.read_bytes()
     cfg = json.loads(inputs)
+    verify_solver_attempt(args.solver_log, args.run_status, inputs)
     reference = json.loads(args.reference.read_text(encoding="utf-8"))
     if hashlib.sha256(inputs).hexdigest() != reference["input_file_sha256"]:
         raise ValueError("Native energy analysis blocked: reference inputs SHA differs")
-    if cfg.get("reference_profile", "").startswith("C14_ARCHIVED") is False:
-        raise ValueError("This integration is ONLY for the archived numerical C14 reference")
+    # Exact documented archived case; arbitrary C14-looking labels are not enough.
+    import importlib.util
+    file = Path(__file__).with_name("c14_numerical_reference.py")
+    spec = importlib.util.spec_from_file_location("c3d05_c14_energy_ref", file)
+    if spec is None or spec.loader is None:
+        raise ValueError("C14 reference verifier missing")
+    bridge = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(bridge)
+    issues = bridge.validate_reference(cfg)
+    if issues:
+        raise ValueError("C14 numeric reference invalid: " + "; ".join(issues))
     fields = {}
     for region in REGIONS:
         file, entries = native_postprocess(source_case, region) if args.native else inspect_outputs(source_case, region)
