@@ -162,6 +162,21 @@ def compute_energy_history(
     if times_metal != times_mold:
         raise ValueError("metal and mold native write-time sets differ; refuse energy pairing")
     times = sorted(times_metal)
+    if len(times) < 2 or times[0] != 0:
+        raise ValueError("expected native time-zero and at least two temperature samples")
+    # Initial uniform scalar fields are explicitly prescribed for the C14
+    # diagnostic. Reject a wrong first saved state instead of interpreting
+    # subsequent drift against a reference that was never established.
+    for region in ("metal", "mold"):
+        expected_start = float(input_cfg[region]["T_initial_K"])
+        measured_start = by_region[region][times[0]]["T_volume_average_K"]
+        tolerance = max(1e-3, abs(expected_start)*1e-6)
+        if abs(measured_start-expected_start) > tolerance:
+            raise ValueError(
+                f"{region}: time-zero native T={measured_start:.9g} K does not "
+                f"match prescribed initial {expected_start:.9g} K "
+                f"(field write tolerance {tolerance:g} K)"
+            )
     initial = reference["total_initial_sensible_energy_relative_to_zero_K_J"]
     scale = reference["initial_hot_to_cold_energy_scale_J"]
     if scale <= 0 or not math.isfinite(scale):
