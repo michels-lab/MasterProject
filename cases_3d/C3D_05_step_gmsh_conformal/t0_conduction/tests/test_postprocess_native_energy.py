@@ -93,6 +93,20 @@ class NativeEnergyTrace(unittest.TestCase):
         with self.assertRaisesRegex(ValueError,"expected"):
             N.compute_energy_history(self.hot[:1],self.cold[:1],self.ref,self.cfg)
 
+    def test_missing_time_zero_or_wrong_initial_field_never_masquerades_as_closure(self):
+        with self.assertRaisesRegex(ValueError,"expected native time-zero"):
+            N.compute_energy_history(self.hot[1:],self.cold[1:],self.ref,self.cfg)
+        altered_hot=[sample("0",1,410),sample("0.1",1,380)]
+        with self.assertRaisesRegex(ValueError,"time-zero native T"):
+            N.compute_energy_history(altered_hot,self.cold,self.ref,self.cfg)
+        altered_mold=[sample("0",1,290),sample("0.1",1,310)]
+        with self.assertRaisesRegex(ValueError,"time-zero native T"):
+            N.compute_energy_history(self.hot,altered_mold,self.ref,self.cfg)
+        # Native writer may round the final displayed scalar; small
+        # representational differences are allowed without ignoring drift.
+        near=[sample("0",1,400.00001),sample("0.1",1,380)]
+        self.assertEqual(N.compute_energy_history(near,self.cold,self.ref,self.cfg)["samples"],2)
+
     def test_actual_solver_run_report_is_sha_bound_and_not_a_fake_exit_zero(self):
         with TemporaryDirectory() as tmp:
             folder=Path(tmp)
