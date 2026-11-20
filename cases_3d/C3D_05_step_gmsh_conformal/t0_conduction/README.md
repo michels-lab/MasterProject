@@ -24,7 +24,7 @@ Las tres plantillas `fvSolution` provienen explícitamente del Caso C14; [manifi
 
 ## Único punto de entrada (NUMÉRICO, NO CFD validado)
 
-**`GRANADA_C3D05_T0_INTEGRAL_20261119` + `GRANADA_C3D05_NATIVE_ENERGY_20261120`**
+**`GRANADA_C3D05_T0_INTEGRAL_20261119` + `GRANADA_C3D05_NATIVE_ENERGY_20261120` + `GRANADA_C3D05_PATCH_Q_12636_20261120`**
 
 El script [`scripts/run_c14_numerical_granada.sh`](scripts/run_c14_numerical_granada.sh) es el único flujo vigente del candidato numérico C14. Una vez que decidas ejecutar la prueba diagnóstica corta en tu WSL con Foundation14:
 
@@ -40,7 +40,8 @@ En una sola invocación:
 3. Calcula el equilibrio energético previo de dos sólidos desde los volúmenes registrados en `log.checkMesh.metal/mold`, sin inventar volúmenes.
 4. Con `--solve`, lanza un experimento de **100 pasos de `deltaT=0.001 s`**, audita el log `foamMultiRun` y sus SHA.
 5. Si el solver termina verificablemente, `foamPostProcess -region metal/mold` extrae `volAverage(T)` y volumen; calcula `E_r(t)=rho_r Cv_r V_r⟨T_r(t)⟩`, error de energía total relativo al intercambio inicial y pérdida metal/ganancia arena.
-6. Si existe una corrida completa con reporte y SHA concordantes, no vuelve a ejecutar el solver: retoma o compara el postprocesamiento. No sobreescribe entradas, meshes, logs ni reportes incompatibles.
+6. Después del balance volumétrico, compila un extractor **Foundation14 C++ en la carpeta aislada**: carga **ambas regiones simultáneamente** para respetar `mappedWall`, extrae `q_n=-k snGrad(T)` en **12,636 caras por lado** y empareja centros, áreas y normales sin asumir orden idéntico. Reporta residuos de flujo globales **y** por cara, comparados con variaciones de energía temporal. **Esta parte todavía no está compilada/ejecutada en la WSL real.**
+7. Si existe una corrida completa con reporte y SHA concordantes, no vuelve a ejecutar el solver: retoma o compara el postprocesamiento. No sobreescribe entradas, meshes, logs ni reportes incompatibles.
 
 ## Reportes esperados, no observados aún
 
@@ -48,13 +49,16 @@ En una sola invocación:
 - `T0_CLOSED_ENERGY_REFERENCE.json`: objetivo ideal anterior a una corrida.
 - `T0_NUMERICAL_RUN_STATUS.json`: clasificación del log nativo; sin aceptar energía por un mero `End`.
 - `T0_NATIVE_ENERGY_HISTORY.json`: datos reales de energía por región **solo después de una corrida válida y su postprocesamiento**.
+- `T0_FACE_FLUX_METAL.csv` y `T0_FACE_FLUX_MOLD.csv`: flujo normal nativo en 12,636 caras por región, pendiente de extracción WSL.
+- `T0_FACE_FLUX_BILATERAL_DIAGNOSTICS.json`: pares por centro/área/normal, desequilibrios locales/globales y contraste con energía; **no es aceptación física**.
 
-Las tasas energéticas obtenidas de los volúmenes NO son flujos normales medidos directamente en cada cara de la interfaz. **Continúan pendientes continuidad de flujo interfacial cara-cara, pruebas de sensibilidad `dt`/malla/correctores, propiedades físicas y validación QuickCup**. Ni el CI verde ni el equilibrio teórico cierran G3/G4.
+Las tasas energéticas obtenidas de los volúmenes NO son flujos normales directos: el nuevo extractor toma `q()` nativo de OpenFOAM para ello, cuando existan campos de una corrida. **Continúan pendientes la ejecución del extractor C++ en WSL, la evaluación científica real de continuidad cara-cara, pruebas de sensibilidad `dt`/malla/correctores, propiedades físicas y validación QuickCup**. Ni el CI verde ni el equilibrio teórico cierran G3/G4.
 
 ## Evidencia, pruebas y documentación
 
 - [Informe Granada C14](../../../docs/granada/C3D05_C14_NUMERICAL_ONE_SHOT_20261119_ES.md).
 - [Informe de energía real por campos F14](../../../docs/granada/C3D05_T0_BALANCE_ENERGETICO_NATIVO_20261120_ES.md).
+- [Diagnóstico de flujo nativo por 12,636 caras (código pendiente de verificación WSL)](../../../docs/granada/C3D05_T0_FLUJO_INTERFAZ_12636_CARAS_20261120_ES.md), [extractor C++](native_flux/c3d05PatchFlux.C) y [pruebas de mapeo](tests/test_t0_patch_flux.py).
 - [Regresiones sin CFD](tests/test_postprocess_native_energy.py) y [workflow CI](../../../.github/workflows/c3d05-t0-granada-static.yml).
 - [Configuración fuente oficial OpenFOAM14: `volFieldValue`](https://github.com/OpenFOAM/OpenFOAM-14/blob/master/src/functionObjects/field/fieldValues/volFieldValue/volFieldValue.H).
 
