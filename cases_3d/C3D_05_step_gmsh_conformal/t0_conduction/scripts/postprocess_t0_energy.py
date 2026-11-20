@@ -44,6 +44,7 @@ FoamFile
 {{
     type volFieldValue;
     libs ("libfieldFunctionObjects.so");
+    region {region};
     cellZone all;
     operation volAverage;
     writeVolume true;
