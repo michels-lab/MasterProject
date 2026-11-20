@@ -189,12 +189,12 @@ def stage(source: Path, dest: Path, project: Path, native: bool = False) -> dict
     cmd = ["foamMultiRun", "-case", str(dest)]
     log = dest / "log.FS_C06_foamMultiRun"
     try:
+        result["native_cfd_executed"] = True
         p = subprocess.run(cmd, capture_output=True, text=True,
                            errors="replace", check=False,
                            timeout=MAX_NATIVE_SECONDS)
         log.write_text("COMMAND: " + " ".join(cmd) + "\nEXIT: " +
                        str(p.returncode) + "\n" + p.stdout + "\n" + p.stderr)
-        result["native_cfd_executed"] = True
         require(p.returncode == 0, "native foamMultiRun failed")
         result["native_solver_log"] = validate_run_log(p.stdout + "\n" + p.stderr)
         fraction = read_native_fraction(dest)
@@ -231,7 +231,8 @@ def main(argv=None) -> int:
         print("ISOLATED CASE:", r["output"])
         print("NO PHYSICAL SHRINKAGE/FEEDING OR GLOBAL MASS/ENERGY CLOSURE.")
         return 0
-    except (OSError, ValueError, KeyError, TypeError) as exc:
+    except (OSError, ValueError, KeyError, TypeError,
+            subprocess.TimeoutExpired) as exc:
         print("FS-C06 BLOCKED:", exc, file=sys.stderr)
         print("ISOLATED EVIDENCE:", out, file=sys.stderr)
         return 2
