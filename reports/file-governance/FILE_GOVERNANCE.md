@@ -5,7 +5,7 @@ No file is auto-deleted or declared unused.
 
 ## Coverage
 
-Tracked: 38972; classified: 38967; readable documents: 174; above read cap: 1; findings: 0.
+Tracked: 38973; classified: 38968; readable documents: 174; above read cap: 1; findings: 2.
 
 ## File roles
 
@@ -23,13 +23,15 @@ Tracked: 38972; classified: 38967; readable documents: 174; above read cap: 1; f
 | simulation_input | 2683 |
 | simulation_log | 3155 |
 | simulation_output | 32615 |
-| source | 104 |
+| source | 105 |
 | test | 42 |
 | web_ui | 1 |
 | workflow | 22 |
 
 ## Findings (human review required)
 
+- **REVIEW / POTENTIAL_UNLOGGED_CHANGES** PROJECT_AUDIT_LOG_EN.md: 1 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/scripts/postprocess_t0_energy.py. Next: Inspect diffs and reconcile only meaningful decisions/results in the canonical log (ID 2edb590bee99ddd7)
+- **REVIEW / POTENTIAL_UNLOGGED_CHANGES** PROJECT_AUDIT_LOG_ES.md: 1 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/scripts/postprocess_t0_energy.py. Next: Inspect diffs and reconcile only meaningful decisions/results in the canonical log (ID c2f371e0b3bf508b)
 
 Complete path → purpose/role/certainty list lives in FILE_GOVERNANCE.json. SUMMARY.json has counts only for master polling.
 A dated file, duplicate, or suspicious name is an **investigation candidate**, not unwanted material.
