@@ -115,10 +115,10 @@
       "percent_hitos": 50,
       "percentage_scope": "SOLO_HITOS_OPERATIVOS_DEL_CASO_A_NO_TESIS_NO_CFD",
       "primary_contract": "cases_3d/C3D_04_rounded_multiblock_pilot/AGENTS.md",
-      "next_integrated_milestone": "Un solo preflight Foundation14 nativo y creación atómica del T0 en WSL con la malla real V4/T02; sin repetir pruebas sueltas, preservando fuente",
-      "blocker": "Falta comprobación integrada WSL de la malla V4/T02 y aceptación de BC/coupledTemperature en runtime del solver; CI sin malla real no lo demuestra",
-      "CI_status": "PR53_MERGED_NATIVE_FOUNDATION14_10_OF_10_AND_INTEGRATED_15_OF_15_PASS",
-      "CI_evidence": "reports/case-a-t0/CI_NATIVE_F14_20261120.json"
+      "next_integrated_milestone": "One WSL integrated native V4/T02 preflight and atomic T0 case materialization; optional saved volume TSV no longer a blocker",
+      "blocker": "Only actual native V4/T02 WSL field/mappedWall initialization remains unverified; source and mesh integrity must be preserved. No foamMultiRun/CFD",
+      "CI_status": "STAGE06_PREP_PR54_MERGED_16_OF_16_INTEGRATED_AND_F14_NATIVE_10_OF_10_PASS",
+      "CI_evidence": "reports/case-a-t0/CI_STAGE06_VOLUME_FALLBACK_20261120.json"
     },
     {
       "case_id": "C3D-05 Caso B",
