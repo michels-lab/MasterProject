@@ -11,6 +11,32 @@ INPUTS="${C3D04_T0_INPUTS:-$HERE/T0_INPUTS.json}"
 SOURCE="${C3D04_NATIVE_SOURCE:-$HOME/OpenFOAM/C3D04_V4_TRANSITION_REPAIR_01/T02}"
 OUTPUT="${C3D04_T0_OUT:-$HOME/OpenFOAM/C3D04_A_T0_CONDUCTION_01}"
 MODE="${1:---preflight}"
+# OpenFOAM Foundation documents an Ubuntu 26.04 pvdataserver hang
+# unless HWLOC_COMPONENTS=-gl is exported before sourcing its bashrc.
+# Source at most once; do not trigger an avoidable GUI/ParaView hang.
+load_openfoam14_once() {
+    if [[ "${WM_PROJECT_VERSION:-}" == "14" ]] &&
+       command -v foamDictionary >/dev/null 2>&1 &&
+       command -v foamMultiRun >/dev/null 2>&1; then
+        return 0
+    fi
+    if [[ ! -r /opt/openfoam14/etc/bashrc ]]; then
+        return 0
+    fi
+    local ubuntu_version=""
+    if [[ -r /etc/os-release ]]; then
+        ubuntu_version="$(. /etc/os-release; printf '%s' "${VERSION_ID:-}")"
+    fi
+    if [[ "$ubuntu_version" == "26.04" ]]; then
+        export HWLOC_COMPONENTS=-gl
+        echo "Ubuntu 26.04 Foundation14 HWLOC workaround active"
+    fi
+    set +u
+    source /opt/openfoam14/etc/bashrc
+    set -u
+}
+
+
 if [[ "$MODE" != "--preflight" && "$MODE" != "--materialize" ]]; then
     echo "Usage: bash $0 [--preflight | --materialize]" >&2
     exit 2
@@ -26,11 +52,7 @@ echo "=== C/4: native saved V4/T02 gates and thermal inputs ==="
 # Do not create even a separate materialized case if the real Foundation14
 # executable environment is absent. Pre-check this BEFORE any side effects.
 if [[ "$MODE" == "--materialize" ]]; then
-    if [[ -r /opt/openfoam14/etc/bashrc ]]; then
-        set +u
-        source /opt/openfoam14/etc/bashrc
-        set -u
-    fi
+    load_openfoam14_once
     if [[ "${WM_PROJECT_VERSION:-}" != "14" ]] ||
        ! command -v foamMultiRun >/dev/null 2>&1 ||
        ! command -v foamDictionary >/dev/null 2>&1; then
@@ -49,11 +71,7 @@ else
 fi
 
 echo "=== D/4: Foundation14 availability, without running solver ==="
-if [[ -r /opt/openfoam14/etc/bashrc ]]; then
-    set +u
-    source /opt/openfoam14/etc/bashrc
-    set -u
-fi
+load_openfoam14_once
 if [[ "${WM_PROJECT_VERSION:-}" == "14" ]] &&
    command -v foamMultiRun >/dev/null 2>&1 &&
    command -v foamDictionary >/dev/null 2>&1; then

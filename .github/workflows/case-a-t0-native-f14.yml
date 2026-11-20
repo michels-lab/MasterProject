@@ -1,0 +1,52 @@
+name: Case A C3D-04 - OpenFOAM Foundation14 native dictionaries (NO CFD)
+
+on:
+  push:
+    paths:
+      - "cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/**"
+      - "cases_controlled_buoyancy/C14_topFixedFlux_explicitRef/**"
+      - ".github/workflows/case-a-t0-native-f14.yml"
+  pull_request:
+    paths:
+      - "cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/**"
+      - "cases_controlled_buoyancy/C14_topFixedFlux_explicitRef/**"
+      - ".github/workflows/case-a-t0-native-f14.yml"
+  workflow_dispatch:
+
+# New commits supersede prior installer runs of the same PR: no parallel
+# expensive Foundation14 package installs for obsolete code.
+concurrency:
+  group: case-a-native-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  native-foundation14-parser:
+    name: F14 native foamDictionary all 10 T0 files
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - name: Checkout C14 and Case A source (NO CFD)
+        uses: actions/checkout@v4
+
+      - name: Install and activate real OpenFOAM Foundation 14
+        uses: gerlero/setup-openfoam@v1
+        with:
+          openfoam-version: 14
+
+      - name: Verify native 14 and all C14-derived T0 dictionaries
+        run: |
+          set -euo pipefail
+          python3 -B cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/scripts/native_f14_dictionary_smoke.py \
+            --out "$RUNNER_TEMP/case-a-t0-f14-native-dictionaries.json"
+
+      - name: Publish actual native parsing evidence, not a fabricated solver result
+        uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          name: c3d04-a-f14-dictionary-evidence
+          path: ${{ runner.temp }}/case-a-t0-f14-native-dictionaries.json
+          if-no-files-found: error
+          retention-days: 30

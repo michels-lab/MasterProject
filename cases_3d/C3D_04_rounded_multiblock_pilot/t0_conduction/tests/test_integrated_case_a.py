@@ -18,6 +18,7 @@ sys.path.insert(0, str(SCRIPTS))
 sys.path.insert(0, str(CASE_A / "scripts"))
 
 import prepare_case_a_t0 as engine
+import native_f14_dictionary_smoke as native_f14
 import report_case_a_progress as progress
 
 
@@ -405,6 +406,33 @@ class IntegratedCaseAT0(unittest.TestCase):
                 self.assertEqual(engine.main(), 0)
             self.assertFalse(out.exists())
 
+    def test_058_F14_native_smoke_orchestration_all_ten_and_bad_version(self):
+        import types
+        good = types.SimpleNamespace(returncode=0, stdout="", stderr="")
+        called = []
+        def fake_run(cmd, **kwargs):
+            called.append(cmd)
+            return good
+        with patch.dict(native_f14.os.environ, {"WM_PROJECT_VERSION": "14"}), \
+             patch.object(native_f14.shutil, "which", side_effect=lambda x: "/mock/"+x), \
+             patch.object(native_f14.subprocess, "run", side_effect=fake_run):
+            report = native_f14.inspect()
+        self.assertEqual(report["status"],
+                         "NATIVE_F14_DICTIONARY_SYNTAX_PASS_NOT_CFD")
+        self.assertFalse(report["CFD_executed"])
+        self.assertFalse(report["native_C3D04_V4_T02_mesh_present_in_CI"])
+        self.assertEqual(len(report["dictionary_results"]), 10)
+        self.assertEqual(len(called), 10)
+        self.assertTrue(all(row["parsed_with_Foundation14_foamDictionary"]
+                            for row in report["dictionary_results"]))
+        with patch.dict(native_f14.os.environ, {"WM_PROJECT_VERSION": "13"}):
+            with self.assertRaisesRegex(RuntimeError, "Expected sourced Foundation14"):
+                native_f14.inspect()
+        with patch.dict(native_f14.os.environ, {"WM_PROJECT_VERSION": "14"}), \
+             patch.object(native_f14.shutil, "which", return_value=None):
+            with self.assertRaisesRegex(RuntimeError, "missing foamDictionary"):
+                native_f14.inspect()
+
     def test_06_no_CFD_or_remeshing_launched_by_integrated_runner(self):
         runner = (T0/"run_integrated_milestone.sh").read_text()
         self.assertIn("report_case_a_progress.py", runner)
@@ -414,6 +442,10 @@ class IntegratedCaseAT0(unittest.TestCase):
         self.assertNotIn("foamMultiRun -case", runner)
         self.assertNotIn("rm -rf", runner)
         self.assertIn("--preflight", runner)
+        self.assertIn('HWLOC_COMPONENTS=-gl', runner)
+        self.assertIn('ubuntu_version" == "26.04"', runner)
+        self.assertEqual(runner.count("source /opt/openfoam14/etc/bashrc"), 1)
+        self.assertIn("load_openfoam14_once", runner)
 
 
 if __name__ == "__main__":
