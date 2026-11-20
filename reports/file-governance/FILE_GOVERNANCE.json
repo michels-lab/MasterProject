@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "audit_kind": "deterministic_full_tracked_tree",
-  "tracked_files_total": 38989,
-  "classified_files_total": 38984,
+  "tracked_files_total": 38990,
+  "classified_files_total": 38985,
   "docs_content_inspected": 177,
   "large_docs_skipped": 1,
   "excluded_reports": 5,
@@ -22,15 +22,15 @@
     "source": 109,
     "test": 44,
     "web_ui": 1,
-    "workflow": 23
+    "workflow": 24
   },
   "finding_counts": {
     "BROKEN_RELATIVE_LINK": 7,
     "POTENTIAL_UNLOGGED_CHANGES": 2
   },
   "finding_total": 9,
-  "inventory_fingerprint": "41a3624054ba781455cc90fb9cfd7115add896eb81dedb8723504a51bf2f1fd4",
-  "evidence_fingerprint": "fe6797094827af4072722c7a8cb5c07d73b7c13917abe351f37ad6d18e4f13ef",
+  "inventory_fingerprint": "17aa6c6081675da544d67c45402f27a25e8c41d220b1b6e363d5cd684c534f04",
+  "evidence_fingerprint": "1762f9a8c2171030291e47ce69f2154898636e0a0b6349097aabdec72920bc87",
   "files": [
     {
       "path": ".github/agents/openfoam-solidification.agent.md",
@@ -73,6 +73,13 @@
       "purpose": "GitHub Actions automation",
       "certainty": "rule",
       "blob": "0b7a9effb677940149772ded624881b508323877"
+    },
+    {
+      "path": ".github/workflows/c3d05-foundation14-native-build.yml",
+      "role": "workflow",
+      "purpose": "GitHub Actions automation",
+      "certainty": "rule",
+      "blob": "1694957399256bacfb335a6846caa2d4c679afd0"
     },
     {
       "path": ".github/workflows/c3d05-t0-granada-static.yml",
@@ -272986,20 +272993,20 @@
       "state": "REVIEW_REQUIRED"
     },
     {
-      "id": "cd9e4a5ba9c944b6",
+      "id": "a2e4459ccd1733f6",
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_EN.md",
-      "observation": "9 implementation/config paths changed since this log's last commit; examples: .github/workflows/case-a-t0-native-f14.yml, cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/run_integrated_milestone.sh, cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/scripts/native_f14_dictionary_smoke.py, cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/scripts/prepare_case_a_t0.py, cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/tests/test_integrated_case_a.py, docs/C3D04_CASE_A_STATUS.json",
+      "observation": "10 implementation/config paths changed since this log's last commit; examples: .github/workflows/c3d05-foundation14-native-build.yml, .github/workflows/case-a-t0-native-f14.yml, cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/run_integrated_milestone.sh, cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/scripts/native_f14_dictionary_smoke.py, cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/scripts/prepare_case_a_t0.py, cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/tests/test_integrated_case_a.py",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     },
     {
-      "id": "b7e85c814cfe1fac",
+      "id": "d2c903506744baf9",
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_ES.md",
-      "observation": "1 implementation/config paths changed since this log's last commit; examples: docs/PROJECT_STAGE_STATUS.json",
+      "observation": "2 implementation/config paths changed since this log's last commit; examples: .github/workflows/c3d05-foundation14-native-build.yml, docs/PROJECT_STAGE_STATUS.json",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     }
