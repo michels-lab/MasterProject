@@ -97,7 +97,7 @@
     },
     {
       "case_id": "C3D-04 Caso A",
-      "status": "V4/T02 native mesh/contact and 64/64 extra parent interface faces verified; T0_C14_INPUTS_IMPORTED_WITH_EXPLICIT_CP_CV_SURROGATE, 3D thermal BC from C14 h10 and finite 500 Wm2K contact, CI/WSL NOT verified, NO CFD",
+      "status": "V4/T02 quality/contact and 64/64 interface-face mapping verified; C14-sourced T0 two-solid surrogate prepared; PR52 merged and 14 T0 CI static tests plus two project workflows successful, NO F14 WSL parsing or CFD",
       "evidence": "docs/C3D04_CASE_A_STATUS.json",
       "progress_ref": "docs/C3D04_CASE_A_STATUS.json",
       "stage": "5/10 — Diseño/preparación integral T0",
@@ -106,8 +106,10 @@
       "percent_hitos": 40,
       "percentage_scope": "SOLO_HITOS_OPERATIVOS_DEL_CASO_A_NO_TESIS_NO_CFD",
       "primary_contract": "cases_3d/C3D_04_rounded_multiblock_pilot/AGENTS.md",
-      "next_integrated_milestone": "Bundled static CI and single native Foundation14 dictionary/coupling preflight; no further fragmented geometry testing",
-      "blocker": "Native F14 preflight and physical accuracy still unverified; T0 is 2-solid surrogate, not C14 fluid/solidification; no new 3D solver run"
+      "next_integrated_milestone": "Single native F14 preflight/materialization and meaningful first T0 run once package dependencies validated, never isolated microtests",
+      "blocker": "Foundation14 native dictionary and coupledTemperature initialization, energy conservation, numerical stability and C14 physical model equivalence NOT verified; CFD/solidification not run",
+      "CI_status": "VERIFIED_STATIC_PR52_THREE_WORKFLOWS_PASS_14_T0_TESTS",
+      "CI_evidence": "reports/case-a-t0/CI_GRANADA_20261120.json"
     },
     {
       "case_id": "C3D-05 Caso B",
