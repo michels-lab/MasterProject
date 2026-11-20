@@ -35,8 +35,9 @@ class NativeEnergyTrace(unittest.TestCase):
     def test_dict_is_official_volFieldValue_all_cells_and_distinct_regions(self):
         for region in ("metal", "mold"):
             text=N.functions_dict(region)
-            for fragment in ("type volFieldValue;", "cellZone all;", "operation volAverage;",
-                             "writeVolume true;", "fields (T);", N.NAME[region]):
+            for fragment in ("type volFieldValue;", f"region {region};", "cellZone all;",
+                             "operation volAverage;", "writeVolume true;", "fields (T);",
+                             N.NAME[region]):
                 self.assertIn(fragment, text)
         self.assertNotEqual(N.NAME["metal"],N.NAME["mold"])
 
