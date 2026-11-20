@@ -104,7 +104,11 @@
     "numerical_postrun_single_evidence_summary_source_committed": true,
     "numerical_postrun_single_evidence_summary_file": "T0_GRANADA_EVIDENCE_SUMMARY.json",
     "numerical_postrun_single_evidence_summary_generated_in_WSL": false,
-    "numerical_postrun_summary_scientific_scope": "SHA-verified supplied native artifacts only; no independent WSL origin attestation, no energy/flux acceptance"
+    "numerical_postrun_summary_scientific_scope": "SHA-verified supplied native artifacts only; no independent WSL origin attestation, no energy/flux acceptance",
+    "native_regional_energy_and_single_summary_integrated_static_tests_pass": true,
+    "native_regional_energy_and_single_summary_test_count": 53,
+    "native_regional_energy_and_single_summary_static_ci_url": "https://github.com/michels-lab/MasterProject/actions/runs/44830588956",
+    "native_regional_energy_and_single_summary_status": "Synthetic QA + shell AST PASS, native two-region F14 smoke PASS; accepted HEX8 CFD NOT RUN"
   },
   "other_cases": [
     {
