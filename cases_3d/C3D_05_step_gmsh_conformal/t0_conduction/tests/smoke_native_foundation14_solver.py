@@ -127,8 +127,11 @@ def main() -> int:
         # This is not just a parser check: actually construct two regional
         # thermos, initialise coupledTemperature and perform the time loop.
         out=exec_native(["foamMultiRun","-case",str(case)],case,timeout=90)
-        if re.search(r"FOAM FATAL|Floating point exception|nan",out,re.I):
-            raise AssertionError("Native solver log contains FATAL/FPE/NaN")
+        # Foundation14 normally prints "Enabling floating point exception
+        # trapping (FOAM_SIGFPE)" at startup; this is NOT an FPE.
+        # A nonzero exit is already rejected by exec_native().
+        if re.search(r"FOAM FATAL ERROR|\b(?:nan|inf)\b",out,re.I):
+            raise AssertionError("Native solver log contains fatal or nonfinite data")
         if "End" not in out:
             raise AssertionError("Native multi-region solver did not terminate")
         final=float(inputs["simulation"]["endTime_s"])
