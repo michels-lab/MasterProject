@@ -26,4 +26,4 @@ Se añadió [`test_native_flux_atomic_handoff.py`](../../cases_3d/C3D_05_step_gm
 
 ## Resultado de compilación
 
-Se deberá registrar aquí la primera ejecución **PASS** que demuestre `wmake`, `ldd` y `-help` con Foundation14. Hasta entonces la compilación es `EN_VERIFICACION`; que el código esté publicado no equivale a compilado.
+**PASS confirmado:** [GitHub Actions #44828749324](https://github.com/michels-lab/MasterProject/actions/runs/44828749324), ejecutada con el código corregido de Foundation14 (`mesh.poly().boundary().findIndex(...)`). El instalador cargó OpenFOAM Foundation14 real; `wmake` compiló y enlazó la aplicación `c3d05PatchFlux`, el examen de `ldd` no encontró bibliotecas faltantes y `c3d05PatchFlux -help` terminó exitosamente. **Evidencia de compilación/enlace/arranque, NO ejecución en la malla 3D aceptada ni validación térmica.** Los 12,636 pares reales aún deben evaluarse en la WSL del investigador.
