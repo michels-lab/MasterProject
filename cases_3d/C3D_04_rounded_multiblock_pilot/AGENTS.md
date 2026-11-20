@@ -10,7 +10,11 @@ Antes de trabajar consultar `docs/C3D04_CASE_A_STATUS.json`; no reemplazarlo por
 - **Avance operativo:** `D/10 = P %`, donde D= número de hitos `DONE`; `P=100*D/10`. Etiquetarlo avance de hitos, **no validación física** ni estimación temporal. Si un hito es parcial, NO contarlo completo.
 - **Evidencia nueva realmente obtenida y cambio realizado:** commit(s), casos nativos, pruebas propias ejecutadas o archivos, especificando si algo sigue preparado/no ejecutado.
 - **Siguiente trabajo agrupado**, pendientes indispensables, CFD/solidificación, independencia y validación.
-El estado actual es `ETAPA 5/10`, `4/10 hitos=40%` hasta que evidencias reales permitan actualizar el JSON. Al completar un hito se actualiza **en la misma entrega** el estado JSON, README, bitácora de proyecto, tracker CSV, y el reporte al usuario. Nunca incrementar el progreso por publicar un script sin ejecución/capacidad verificada.
+Al 20-11-2026, tras pruebas nativas Foundation14 en CI, el estado canónico es **ETAPA 6/10, AVANCE 5/10 = 50%**. Este número es una fotografía histórica: **el JSON siempre prevalece y debe recalcularse**, nunca congelar 50 % en futuras respuestas. Al completar un hito se actualiza **en la misma entrega** el estado JSON, README, bitácora de proyecto, tracker CSV, y el reporte al usuario. Nunca incrementar el progreso por publicar un script sin ejecución/capacidad verificada.
+
+## Etapa 5 completada: alcance exacto de la evidencia
+
+La [evidencia del 20-11-2026](../../reports/case-a-t0/CI_NATIVE_F14_20261120.json) registra **10/10 archivos T0 con parámetros C14 interpretados por `foamDictionary` REAL de Foundation14**, además de **15/15 pruebas estáticas** y dos workflows de gobierno y auditoría científica con éxito. Esta evidencia **CI_NATIVE_DICTIONARY_PASS** permite cerrar el hito de diseño T0 (05/10); **NO** equivale a `WSL_FULL_MESH_T0_PREPARED` o `T0_SOLVER_EXECUTED`. El hito activo ahora es 06/10: una sola verificación integrada **en el equipo donde existe el `polyMesh` V4/T02 original**. No volver a pedir al investigador que revise cada diccionario o cada propiedad C14 de forma independiente. En Ubuntu 26.04 la carga de F14 debe exportar `HWLOC_COMPONENTS=-gl` antes de cargar `/opt/openfoam14/etc/bashrc`; el runner integrado ya lo hace.
 
 ## 2. Prohibición de micropruebas y de pedir una orden por componente
 
