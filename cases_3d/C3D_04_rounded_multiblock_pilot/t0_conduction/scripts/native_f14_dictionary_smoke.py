@@ -11,6 +11,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import os
 import shutil
 import subprocess
 import sys
@@ -33,20 +34,20 @@ EXPECTED_FILES = {
 
 
 def inspect(environment_only: bool = False) -> dict:
-    version = shutil.which("foamVersion")
+    # The official Foundation14 environment provides WM_PROJECT_VERSION.
+    # foamVersion is NOT a guaranteed executable in the installed package.
+    detected = os.environ.get("WM_PROJECT_VERSION", "").strip()
+    if detected != "14":
+        raise RuntimeError(
+            f"Expected sourced Foundation14 WM_PROJECT_VERSION=14; observed {detected!r}"
+        )
     dictionary = shutil.which("foamDictionary")
     solver = shutil.which("foamMultiRun")
-    if not (version and dictionary and solver):
+    if not (dictionary and solver):
         raise RuntimeError(
-            "OpenFOAM Foundation14 executables missing: foamVersion, "
-            "foamDictionary and foamMultiRun required."
+            "Foundation14 configured but missing foamDictionary or foamMultiRun "
+            "on PATH; confirm that its etc/bashrc was sourced."
         )
-    v = subprocess.run(
-        [version], capture_output=True, text=True, timeout=15, check=True
-    )
-    detected = (v.stdout + v.stderr).strip()
-    if not detected.startswith("14") and "OpenFOAM-14" not in detected:
-        raise RuntimeError("Wrong OpenFOAM version: " + repr(detected))
     if environment_only:
         return {"status": "FOUNDATION14_NATIVE_EXECUTABLES_PRESENT",
                 "version": detected, "source_case_verified": False,
@@ -69,6 +70,8 @@ def inspect(environment_only: bool = False) -> dict:
         "created_utc": datetime.now(timezone.utc).isoformat(),
         "status": "NATIVE_F14_DICTIONARY_SYNTAX_PASS_NOT_CFD",
         "foam_version": detected,
+        "foamDictionary_executable": dictionary,
+        "foamMultiRun_executable_not_called": solver,
         "t0_sha256": hashlib.sha256(cfg_path.read_bytes()).hexdigest(),
         "archived_C14_source_sha256": source["source_file_sha256"],
         "source_parity_comparisons": source["verified_scalar_comparisons"],
