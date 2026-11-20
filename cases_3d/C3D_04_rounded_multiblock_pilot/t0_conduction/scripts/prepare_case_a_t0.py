@@ -29,7 +29,7 @@ T0 = Path(__file__).resolve().parents[1]
 CASE_A = T0.parent
 sys.path.insert(0, str(CASE_A / "scripts"))
 from audit_v4_t02_nonorth import audit as audit_saved_native, patch_metadata
-from measure_interface_area import patch_area
+from measure_interface_area import patch_area, load_points, load_faces, payload
 
 INPUTS = T0 / "T0_INPUTS.json"
 SOURCE = Path.home() / "OpenFOAM/C3D04_V4_TRANSITION_REPAIR_01/T02"
@@ -339,30 +339,86 @@ def physical_patch_names(boundary_path: Path) -> set[str]:
     return found
 
 
+def oriented_boundary_volume(
+    points: list[tuple[float, float, float]],
+    faces: list[list[int]],
+    n_internal: int,
+) -> float:
+    """Signed closed-mesh volume by boundary triangle divergence integral.
+
+    OpenFOAM owner-oriented boundary faces point OUTWARD. No cell data/CFD is
+    needed; unlike a nominal STL/CAD volume this comes from the actual
+    regional polyMesh. Triangular fan allows arbitrary polygon face shape.
+    """
+    if not 0 <= n_internal < len(faces):
+        raise ValueError("Invalid internal-face count for native polyMesh")
+    terms: list[float] = []
+    for face in faces[n_internal:]:
+        if len(face) < 3 or any(v < 0 or v >= len(points) for v in face):
+            raise ValueError("Invalid native boundary face")
+        a = points[face[0]]
+        for k in range(1, len(face)-1):
+            b, c = points[face[k]], points[face[k+1]]
+            # Signed tetrahedron (0,a,b,c), orientation from owner/patch.
+            terms.append((
+                a[0]*(b[1]*c[2]-b[2]*c[1])
+                + a[1]*(b[2]*c[0]-b[0]*c[2])
+                + a[2]*(b[0]*c[1]-b[1]*c[0])
+            )/6.0)
+    volume = math.fsum(terms)
+    if not math.isfinite(volume) or volume <= 0:
+        raise ValueError(
+            f"Native closed boundary surface volume must be positive; got {volume}"
+        )
+    return volume
+
+
+def native_region_volume(source: Path, region: str) -> float:
+    mesh = source/"constant"/region/"polyMesh"
+    points = load_points(mesh/"points")
+    faces = load_faces(mesh/"faces")
+    n_internal, _ = payload(mesh/"neighbour")
+    return oriented_boundary_volume(points, faces, n_internal)
+
+
 def read_preserved_mesh_volumes(source: Path) -> dict[str, float]:
-    """Read native V4/T02 reported volumes (NOT CAD volumes), never invent."""
+    """T02 volume from validated TSV if present, otherwise actual polyMesh.
+
+    A PILOT_MESH_REPORT.tsv is not guaranteed to exist in all preserved T02
+    runs. Do NOT block an otherwise accepted native mesh just because a
+    convenience report was absent. No CAD value, fluid density assumption or
+    fabricated input is substituted for an actual mesh-derived volume.
+    """
     tsv = source/"PILOT_MESH_REPORT.tsv"
-    if not tsv.is_file():
-        raise FileNotFoundError(f"V4/T02 saved native volume table missing: {tsv}")
-    with tsv.open(newline="", encoding="utf-8") as stream:
-        rows = list(csv.DictReader(stream, delimiter="\t"))
-    if len(rows) != 2:
-        raise ValueError("Expected exactly two native material volume rows")
-    answer = {}
     expected_cells = {"metal": 8960, "mold": 12352}
-    for row in rows:
-        region = row.get("region")
-        if region not in expected_cells or region in answer:
-            raise ValueError(f"Unexpected or repeated volume region: {region}")
-        volume = float(row.get("volume_m3", "nan"))
-        if (not math.isfinite(volume) or volume <= 0
-            or int(row.get("cells", -1)) != expected_cells[region]
-            or row.get("mesh_ok") != "YES"):
-            raise ValueError(f"{region}: native cell count/volume/acceptance changed")
-        answer[region] = volume
-    if set(answer) != set(expected_cells):
-        raise ValueError("Saved native volume regions incomplete")
-    return answer
+    if tsv.is_file():
+        with tsv.open(newline="", encoding="utf-8") as stream:
+            rows = list(csv.DictReader(stream, delimiter="\t"))
+        if len(rows) != 2:
+            raise ValueError("Expected exactly two saved native volume rows")
+        answer: dict[str,float] = {}
+        for row in rows:
+            region = row.get("region")
+            if region not in expected_cells or region in answer:
+                raise ValueError(f"Unexpected or duplicate volume region: {region}")
+            volume = float(row.get("volume_m3", "nan"))
+            if (
+                not math.isfinite(volume) or volume <= 0
+                or int(row.get("cells", -1)) != expected_cells[region]
+                or row.get("mesh_ok") != "YES"
+            ):
+                raise ValueError(f"{region}: saved native volume row invalid")
+            answer[region] = volume
+        if set(answer) != set(expected_cells):
+            raise ValueError("Saved native volume regions incomplete")
+        return answer
+
+    # No optional TSV: derive from the exact accepted native polyMesh
+    # boundary rather than asking the researcher for another micro-test.
+    return {
+        region: native_region_volume(source, region)
+        for region in expected_cells
+    }
 
 
 def closed_t0_energy_target(cfg: dict, volumes: dict[str, float]) -> dict:
