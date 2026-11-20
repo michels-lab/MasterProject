@@ -816,14 +816,16 @@ def main() -> int:
     dest = args.out.expanduser().resolve()
     if args.materialize:
         isolated_output(source, dest)
-    evidence = native_case_gate(source)
+    # Fail-fast before expensive native mesh reading; this still checks all
+    # original native gates on any valid candidate.
     errors = validate(cfg)
     if errors:
-        print("CASE_A_T0_CONFIG_INVALID_OR_UNSUPPORTED | native mesh/contact and patch names verified:")
+        print("CASE_A_T0_CONFIG_INVALID_OR_UNSUPPORTED:")
         for e in errors:
             print(" - " + e)
-        print("No physical parameters invented. No materialization. No CFD.")
-        return 3 if args.materialize else 0
+        print("No source mesh read, no output materialization, no CFD.")
+        return 3
+    evidence = native_case_gate(source)
     # Source parity only after full schema validation. Never treat
     # a C14-named citation string as proof of the actual archived values.
     evidence["c14_source_parity"] = c14_source_gate(cfg)
@@ -835,6 +837,7 @@ def main() -> int:
         source, cfg, evidence["native_volumes_m3_from_preserved_tsv"]
     )
     if not args.materialize:
+        print("C14_ARCHIVED_SOURCE_PARITY_OK: all source blob SHA-1 and scalar parameters verified")
         print(f"CASE_A_T0_CONFIG_AND_SOURCE_PRECHECK_OK: {len(files)} files renderable")
         print("COUNTERFACTUAL_INSULATED_EQUILIBRIUM_K_NOT_C14_BC:",
               energy["ideal_equilibrium_K_no_heat_loss"],
