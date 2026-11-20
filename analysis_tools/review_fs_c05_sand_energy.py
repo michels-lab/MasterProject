@@ -229,7 +229,7 @@ def audit(case:Path)->dict:
 def report_md(x:dict)->str:
     s=x["discrete_sand_energy"]
     lines=[
-        "# FS-C05 · Granada: energía de arena SIN volver a correr CFD",
+        "# FS-C05 · Granada: balance discreto Euler de energía de arena SIN volver a correr CFD",
         "",
         "Estado: "+s["status"],
         "",
