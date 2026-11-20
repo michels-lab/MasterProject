@@ -1,0 +1,71 @@
+{
+  "schema": "C3D04_CASE_A_T0_NATIVE_F14_MILESTONE_05_CLOSURE_V1",
+  "checked_date_utc": "2026-11-20",
+  "source_of_truth": "GitHub Actions completed PR checks and artifacts, not a user WSL solver run",
+  "pr_number": 53,
+  "pr_url": "https://github.com/michels-lab/MasterProject/pull/53",
+  "pr_head_sha": "474c0fd44c1ef7c4c4e9b465117d5c48b3efbc8c",
+  "merged_main_commit_sha": "718bb48167d58218b344cad6eb169fef198b8dbf",
+  "completed_milestone": "05_THERMAL_T0_DESIGN",
+  "next_stage": "06_THERMAL_T0_PREFLIGHT_NATIVE",
+  "operational_hitos_after_closure": "5/10",
+  "operational_percentage": 50,
+  "evidence": [
+    {
+      "name": "Actual OpenFOAM Foundation14 native syntax parse of ten generated C14-derived T0 files",
+      "run_id": 44825262805,
+      "job_id": 136596144314,
+      "status": "completed",
+      "conclusion": "success",
+      "native_parsed_files": 10,
+      "artifact_id": 14674730228,
+      "artifact_url": "https://github.com/michels-lab/MasterProject/actions/runs/44825262805/artifacts/14674730228"
+    },
+    {
+      "name": "Integrated Case A static source and negative regression suite",
+      "run_id": 44825262837,
+      "job_id": 136596143887,
+      "status": "completed",
+      "conclusion": "success",
+      "tests_run": 15,
+      "tests_passed": 15
+    },
+    {
+      "name": "MasterProject delivery and stage progress contract",
+      "run_id": 44825262666,
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "QuickCup Post-Push Scientific Audit",
+      "run_id": 44825262677,
+      "status": "completed",
+      "conclusion": "success"
+    }
+  ],
+  "supplied_material_source": "cases_controlled_buoyancy/C14_topFixedFlux_explicitRef",
+  "supplied_T0_model": "3D two-solid constant-property conduction SURROGATE with explicit Cp-as-Cv approximation for metal, not C14 original fluid/phase-change solver",
+  "generated_dictionary_paths": [
+    "0/metal/T",
+    "0/mold/T",
+    "constant/metal/physicalProperties",
+    "constant/mold/physicalProperties",
+    "system/controlDict",
+    "system/fvSolution",
+    "system/metal/fvSchemes",
+    "system/metal/fvSolution",
+    "system/mold/fvSchemes",
+    "system/mold/fvSolution"
+  ],
+  "ubuntu2604_workaround": "run_integrated_milestone.sh now sets HWLOC_COMPONENTS=-gl before sourcing /opt/openfoam14/etc/bashrc on Ubuntu26.04 and avoids duplicate sourcing",
+  "limitations": [
+    "CI runner does not contain the researcher's V4/T02 native polyMesh. Mesh/contact gate previously verified from WSL saved evidence, NOT on this F14 CI.",
+    "foamDictionary interprets dictionary syntax; it does not instantiate all boundary conditions or execute energy equations.",
+    "No foamMultiRun solver, no thermal field history or local WSL T0 runtime, no mesh/time independence and no comparison against experimental QuickCup curves.",
+    "Closing milestone 05 recognizes design/input/static and native dictionary syntax, not a validated CFD result."
+  ],
+  "no_CFD": true,
+  "no_source_mesh_modified": true,
+  "case_A_only": true,
+  "next_gate": "Run ONE integrated local WSL Foundation14 preflight and isolated T0 materialization with preserved V4/T02 reference; obtain native logs before declaring stage06 DONE."
+}
