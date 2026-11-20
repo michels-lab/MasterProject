@@ -25,11 +25,12 @@
     "workflow": 25
   },
   "finding_counts": {
-    "BROKEN_RELATIVE_LINK": 7
+    "BROKEN_RELATIVE_LINK": 7,
+    "POTENTIAL_UNLOGGED_CHANGES": 2
   },
-  "finding_total": 7,
-  "inventory_fingerprint": "725d5e0bfda1342c764a3c9834dadea871ceb434d7821a4825afa6b74e54e8fd",
-  "evidence_fingerprint": "a38cca05722cc62f2a19d8787a386e132771345cc8472199f5e39f915b2e8a45",
+  "finding_total": 9,
+  "inventory_fingerprint": "a535c080b54ec72298f6c435043f6d2380576d34fcb161a838b1efdf31bda7b9",
+  "evidence_fingerprint": "1d68b7716a10b92b4a27405ab6a50c54dc3de128860d98a40a118667ea8b2cf7",
   "files": [
     {
       "path": ".github/agents/openfoam-solidification.agent.md",
@@ -253,7 +254,7 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "554b14c5e1e2ac595e969023a077b35f98caec44"
+      "blob": "eca13df6cb0de8738001fcd7558944210e13da75"
     },
     {
       "path": ".michelslab/agents/file-steward.md",
@@ -295,7 +296,7 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "77ba071402c522778684f4b089e773c4766383e2"
+      "blob": "11112fe7790e64c0c97d9f639ba1611f46e05e97"
     },
     {
       "path": "JMATPRO_OPENFOAM_TRACEABILITY_ES.md",
@@ -309,7 +310,7 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "e5d20338e33455fb789bd97f5575860db9bb3ded"
+      "blob": "2227f9764dcaac8b720135cffe779897d9813dad"
     },
     {
       "path": "OPENFOAM_COMMAND_MANUAL.md",
@@ -372,14 +373,14 @@
       "role": "data",
       "purpose": "structured/research data (semantics not validated)",
       "certainty": "rule",
-      "blob": "07817508399cb2ad506e238132f13e170680b840"
+      "blob": "b748b88c4f8df968b040f6ee8a5e41c5650c3e4c"
     },
     {
       "path": "RUN_MASTER_PROTOCOL.md",
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "a96bc356d292a5c43a9bbb322065906fd7fa2559"
+      "blob": "413b4aef414ff676a72bc594aae8af45584ae113"
     },
     {
       "path": "VALIDATION_MATRIX.md",
@@ -272084,7 +272085,7 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "9e7a2b4262b1368d303bf3e917f96b5b1a1e523b"
+      "blob": "4c3ecbbe3995d5670701ef2a91832079d9cc7a53"
     },
     {
       "path": "docs/C3D_MESH_PROGRESS_20261118.csv",
@@ -272168,7 +272169,7 @@
       "role": "config",
       "purpose": "machine-readable configuration",
       "certainty": "rule",
-      "blob": "cb2b72c18f7da87f7146242a7ba367e4735a8599"
+      "blob": "98f76d0b17de6c91b4e430a12e1752445df0113f"
     },
     {
       "path": "docs/REGLA_INSTRUCCIONES_UNIFICADAS_ES.md",
@@ -272217,7 +272218,7 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "3937a4ef395fefefe5d0967852cddaa2fe351943"
+      "blob": "7a8a0f88a147dfea2b5ef4b85fcf3c399ae8a296"
     },
     {
       "path": "docs/granada/C3D05_F14_WMAKE_REAL_20261120_ES.md",
@@ -272238,7 +272239,7 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "559ef85fa412924ae4e283a4c0c5e439ecfd5495"
+      "blob": "7410fc8d35f17f88e4b3bd450c5c819bf35d399d"
     },
     {
       "path": "docs/granada/C3D05_T0_FLUJO_INTERFAZ_12636_CARAS_20261120_ES.md",
@@ -273038,6 +273039,24 @@
       "path": "docs/granada/C3D05_T0_README_HISTORICAL_BEFORE_SINGLE_FLOW_20261120.md",
       "observation": "Missing: outside-repo",
       "recommendation": "Fix link or restore target",
+      "state": "REVIEW_REQUIRED"
+    },
+    {
+      "id": "29b1239b306df57d",
+      "code": "POTENTIAL_UNLOGGED_CHANGES",
+      "severity": "review",
+      "path": "PROJECT_AUDIT_LOG_EN.md",
+      "observation": "1 implementation/config paths changed since this log's last commit; examples: docs/PROJECT_STAGE_STATUS.json",
+      "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
+      "state": "REVIEW_REQUIRED"
+    },
+    {
+      "id": "b7e85c814cfe1fac",
+      "code": "POTENTIAL_UNLOGGED_CHANGES",
+      "severity": "review",
+      "path": "PROJECT_AUDIT_LOG_ES.md",
+      "observation": "1 implementation/config paths changed since this log's last commit; examples: docs/PROJECT_STAGE_STATUS.json",
+      "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     }
   ],
