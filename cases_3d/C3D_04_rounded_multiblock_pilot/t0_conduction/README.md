@@ -1,5 +1,14 @@
 # C3D-04 Caso A — T0 integrado con valores auténticos de C14
 
+## GRANADA NATIVA 20NOV26 | ETAPA 6/10 · AVANCE 5/10 = 50 %
+
+**Estado VIGENTE al 20 de noviembre de 2026 (las notas posteriores de etapa 5/40 % documentan el estado histórico antes del cierre).** [**CI Foundation14 nativo: 10/10 archivos térmicos interpretados con `foamDictionary`**](../../../reports/case-a-t0/CI_NATIVE_F14_20261120.json), junto a **15/15 pruebas de integración**, contrato de entrega y auditoría científica completos. [PR #53 fusionada](https://github.com/michels-lab/MasterProject/pull/53), commit `718bb48167d58218b344cad6eb169fef198b8dbf`. Los diez archivos provienen de C14 original y la malla 3D V4/T02 no estuvo en el corredor CI, por lo que este resultado **cierra únicamente el hito 05 de diseño/preparación de diccionarios**, no el preflight del caso real ni la ejecución del solver.
+
+**Hito activo 06/10**: ejecutar solo cuando proceda **una única entrega integrada sobre V4/T02 original en WSL**, que incluye QA de estado, cotejo de entradas C14, comprobaciones de malla/contacto guardadas, áreas térmicas reales, creación atómica en carpeta distinta, control SHA de mallas copiadas y 10 lecturas de `foamDictionary` nativo. El runner `run_integrated_milestone.sh --materialize` carga OpenFOAM 14 una sola vez y en Ubuntu 26.04 exporta `HWLOC_COMPONENTS=-gl` antes de `/opt/openfoam14/etc/bashrc` para evitar bloqueo conocido de `pvdataserver`. **No invoca `foamMultiRun`: no se ha hecho CFD ni se ha probado la estabilidad de las condiciones de frontera al resolver**.
+
+Estado canónico actualizado: [`docs/C3D04_CASE_A_STATUS.json`](../../../docs/C3D04_CASE_A_STATUS.json) y [registro de hitos](../../../docs/C3D04_CASE_A_MILESTONE_TRACKER.csv).
+
+
 ## Granada de integridad del preflight — 20 de noviembre de 2026
 
 **Etapa Caso A 5/10 · avance de hitos 4/10 = 40%. No CFD.**
