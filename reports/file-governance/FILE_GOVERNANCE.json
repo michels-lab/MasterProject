@@ -24,12 +24,10 @@
     "web_ui": 1,
     "workflow": 22
   },
-  "finding_counts": {
-    "POTENTIAL_UNLOGGED_CHANGES": 2
-  },
-  "finding_total": 2,
-  "inventory_fingerprint": "b94d7f1768cf2d03ac93c619e31935fd6a41ab8d6093887441eb11bfb4a8567a",
-  "evidence_fingerprint": "b14d5d4b1643e71665524ea4b951ef6541e1309a642c179e109b6616cd1ac3bc",
+  "finding_counts": {},
+  "finding_total": 0,
+  "inventory_fingerprint": "0231f4dc0252ca89b2391558c12ceed84c674eac7b14dc63d83ccd83f1471db3",
+  "evidence_fingerprint": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
   "files": [
     {
       "path": ".github/agents/openfoam-solidification.agent.md",
@@ -288,7 +286,7 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "a26af799c6507332a53038e526a8724d5004c236"
+      "blob": "1b8b9fc8fa1baec2a3db0da60c378d643cfad731"
     },
     {
       "path": "OPENFOAM_COMMAND_MANUAL.md",
@@ -323,21 +321,21 @@
       "role": "bitacora",
       "purpose": "technical/audit change history",
       "certainty": "rule",
-      "blob": "f6a0aaf585b980a09f1b956adcb0720d347fa9d9"
+      "blob": "56ca029589f7f394bb975ee1f83c5b42f253a12b"
     },
     {
       "path": "PROJECT_AUDIT_LOG_EN.md",
       "role": "bitacora",
       "purpose": "technical/audit change history",
       "certainty": "rule",
-      "blob": "5a1262729e82bd75ab2cf57e395560808df44b13"
+      "blob": "43ad99efcefd647a6b6a4d1c5ab32b95a0850ba3"
     },
     {
       "path": "PROJECT_AUDIT_LOG_ES.md",
       "role": "bitacora",
       "purpose": "technical/audit change history",
       "certainty": "rule",
-      "blob": "066d111f1fb4b5dbe573bdd08b508e5c65c3168d"
+      "blob": "153dc5c074192b064b17751968a99a6aff6cee5b"
     },
     {
       "path": "README.md",
@@ -358,28 +356,28 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "ed4622b0d9abb7b742c921ab49abbe60907d08dd"
+      "blob": "d7d6ce0b7bf7b0aec152b9ffda9b0d3dbe5eefd7"
     },
     {
       "path": "VALIDATION_MATRIX.md",
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "cf6493f07ae02bcb0197ff299e1df33e2dadb288"
+      "blob": "da6608e7fbc00af92cd5731f9b6b00acd600ae57"
     },
     {
       "path": "VALIDATION_MATRIX_EN.md",
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "baad5ac8b08c2c665e09d588ad7bc199741901fd"
+      "blob": "42f978a2ee9327f6503eadedd136e3dcf952d9f6"
     },
     {
       "path": "VALIDATION_MATRIX_ES.md",
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "be3f4388f82a81cec3cc1785fe7601b7cf80c73e"
+      "blob": "04a7ff6965a6fbf63369e358ec1282efa1404832"
     },
     {
       "path": "analysis_results/c11_energy2_test/summary.md",
@@ -1499,7 +1497,7 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "36e40438c3867c3cc27e4c066d19cda04ef87733"
+      "blob": "392bd534bcc1cc517f6ddae15018a16bc71217a1"
     },
     {
       "path": "cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V2_BASAL_QUALITY/Allmesh",
@@ -272014,7 +272012,7 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "ed43da8a23cff19bae1be9b2311429490f5e7b34"
+      "blob": "848d049b68b544ab86c42439d64f770fd2851d19"
     },
     {
       "path": "docs/DOCUMENT_SYNC_20261110_ES.md",
@@ -272063,7 +272061,7 @@
       "role": "config",
       "purpose": "machine-readable configuration",
       "certainty": "rule",
-      "blob": "7127a677f79f186fdfd95210973ab62b9883cee3"
+      "blob": "ba85e801ef23651ea0680abc8f6c583bf7ecbf14"
     },
     {
       "path": "docs/REGLA_INSTRUCCIONES_UNIFICADAS_ES.md",
@@ -272829,26 +272827,7 @@
       "blob": "0b65cc6aa3d29917f57a31a96fd5c3afeffb4ed4"
     }
   ],
-  "findings": [
-    {
-      "id": "9b701d0654001b10",
-      "code": "POTENTIAL_UNLOGGED_CHANGES",
-      "severity": "review",
-      "path": "PROJECT_AUDIT_LOG_EN.md",
-      "observation": "7 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/scripts/prepare_case_a_t0.py, cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/tests/test_integrated_case_a.py, cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/scripts/postprocess_t0_energy.py, cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/scripts/run_c14_numerical_granada.sh, cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/tests/test_postprocess_native_energy.py, docs/C3D04_CASE_A_STATUS.json",
-      "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "769d6e921e7b980d",
-      "code": "POTENTIAL_UNLOGGED_CHANGES",
-      "severity": "review",
-      "path": "PROJECT_AUDIT_LOG_ES.md",
-      "observation": "7 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/scripts/prepare_case_a_t0.py, cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/tests/test_integrated_case_a.py, cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/scripts/postprocess_t0_energy.py, cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/scripts/run_c14_numerical_granada.sh, cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/tests/test_postprocess_native_energy.py, docs/C3D04_CASE_A_STATUS.json",
-      "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
-      "state": "REVIEW_REQUIRED"
-    }
-  ],
+  "findings": [],
   "untracked_audited": false,
   "ignored_audited": false,
   "binary_contents_audited": false,
