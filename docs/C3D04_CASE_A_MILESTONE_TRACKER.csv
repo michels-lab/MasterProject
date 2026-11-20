@@ -1,0 +1,11 @@
+number,id,stage_label,status,evidence,operational_progress_hitos,operational_progress_percent,CFD_executed
+1,01_GEOMETRY_MODEL,Geometría curvilínea multibloque definida y cotejada con STL mediante distancias muestreadas,DONE,docs/C3D_04_VALIDACION_SUPERFICIE_T02_20261119_ES.md,5/10,50,NO
+2,02_NATIVE_MESH,Mesh OK padre/metal/arena con 21312 celdas y determinantes aceptados,DONE,docs/C3D_04_RESULTADO_PRIMER_MALLADO_20261118_ES.md,5/10,50,NO
+3,03_CONTACT,"Interfaz mappedWall 2496 caras por lado, volumen y área recíproca verificados",DONE,docs/C3D_04_RESULTADO_PRIMER_MALLADO_20261118_ES.md,5/10,50,NO
+4,04_QUALITY_DIAGNOSIS,572/276/232 caras >70°; diferencia de 64 demostrada en la interfaz real,DONE,docs/C3D_04_NO_ORTHO_T02_20261119_ES.md,5/10,50,NO
+5,05_THERMAL_T0_DESIGN,"Paquete integrado T0: esquema de conducción, propiedades con fuente, BC, estrategia numérica y pruebas estáticas",DONE,reports/case-a-t0/CI_NATIVE_F14_20261120.json,5/10,50,NO
+6,06_THERMAL_T0_PREFLIGHT_NATIVE,Preflight con OpenFOAM Foundation14 y datos físicos auténticos completos; consistencia de diccionarios,IN_PROGRESS,,5/10,50,NO
+7,07_THERMAL_T0_EXECUTION,Ensayo real T0 de conducción y balance de energía; estabilidad y sensibilidad a nonOrthogonal correctors,PENDING,,5/10,50,NO
+8,08_SOLIDIFICATION_T1,Modelo 3D de cambio de fase basado en calor latente/entalpía y propiedades dependientes de temperatura,PENDING,,5/10,50,NO
+9,09_VERIFICATION_AND_GRID,"Verificación de conservación, sensibilidad a discretización e independencia de malla",PENDING,,5/10,50,NO
+10,10_EXPERIMENTAL_VALIDATION,Comparación cuantitativa con curvas QuickCup y cierre de tesis reproducible,PENDING,,5/10,50,NO
