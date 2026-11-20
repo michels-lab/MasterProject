@@ -1,3 +1,5 @@
+> **ADENDA 20-11-2026 | GRANADA_C3D05_PATCH_Q_12636_20261120:** después de `T0_NATIVE_ENERGY_HISTORY.json` el mismo `--solve` incorpora ahora código nativo para evaluar q() por ambas caras de los 12,636 contactos y emparejar por centro/normal/área; esto es distinto del intercambio energético volumétrico descrito aquí. **Extractor C++ no compilado/ejecutado en WSL, sin aceptación de continuidad ni física.** [Método y prueba sintética](C3D05_T0_FLUJO_INTERFAZ_12636_CARAS_20261120_ES.md). Caso B 3/7, 2/7=29% técnico.
+
 # Operación Granada C3D-05/B — balance energético **observado** de T0 desde campos nativos OpenFOAM 14
 
 **Fecha: 20-11-2026. Caso B etapa 3/7; 2/7 hitos cerrados = 29 % de hitos técnicos, no de tesis ni de CFD.** Estado actual: código y controles de lectura preparados; **no** se ha ejecutado la simulación térmica 3D en la WSL del investigador y no existen datos termofísicos JMatPro aquí que permitan cerrar el T0 experimental.
