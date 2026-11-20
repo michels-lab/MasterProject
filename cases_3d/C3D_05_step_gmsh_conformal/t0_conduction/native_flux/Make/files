@@ -1,0 +1,2 @@
+c3d05PatchFlux.C
+EXE = $(FOAM_USER_APPBIN)/c3d05PatchFlux
