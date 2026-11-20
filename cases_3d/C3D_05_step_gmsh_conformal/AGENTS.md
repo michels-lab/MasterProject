@@ -1,3 +1,5 @@
+> **20-11-2026 | GRANADA_C3D05_NATIVE_ENERGY_20261120 — NORMA PERMANENTE:** toda entrega indicará Caso B etapa 3/7, avance 2/7=29% hitos técnicos hasta evidencia G3/G4. `--solve` integra `foamPostProcess` metal/molde y serie `ΣρCvV⟨T⟩` con SHA; **CI sintética no acredita ejecución WSL, conservación ni flujo directo por interfaz**. Sin pruebas repetidas por pieza. [Análisis](../../docs/granada/C3D05_T0_BALANCE_ENERGETICO_NATIVO_20261120_ES.md).
+
 # Caso B C3D-05 — normas obligatorias de cualquier agente o nueva conversación
 
 **Última revisión: 2026-11-19.** Prioridad: [Política global de entregas integrales](../../docs/POLITICA_ENTREGA_INTEGRAL_Y_ESTADO_ES.md), [estado canónico del caso B](../../docs/PROJECT_STAGE_STATUS.json), [protocolo GRANADA](../../.michelslab/GRANADA.md).
