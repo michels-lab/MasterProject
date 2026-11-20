@@ -38,4 +38,11 @@ jobs:
           wmake "$BUILD/src" 2>&1 | tee "$BUILD/wmake.log"
           test -x "$FOAM_USER_APPBIN/c3d05PatchFlux"
           sha256sum "$FOAM_USER_APPBIN/c3d05PatchFlux"
-          echo "FOUNDATION14_NATIVE_COMPILE_SUCCESS__NOT_CFD_NOT_WSL"
+          ldd "$FOAM_USER_APPBIN/c3d05PatchFlux" | tee "$BUILD/linked-libraries.log"
+          if grep -q 'not found' "$BUILD/linked-libraries.log"; then
+            echo "FOUNDATION14_NATIVE_LINKAGE_MISSING_DEPENDENCY" >&2
+            exit 1
+          fi
+          "$FOAM_USER_APPBIN/c3d05PatchFlux" -help > "$BUILD/cli-help.log" 2>&1
+          grep -q 'c3d05PatchFlux' "$BUILD/cli-help.log"
+          echo "FOUNDATION14_NATIVE_COMPILE_AND_DYNAMIC_LINK_SUCCESS__NOT_CFD_NOT_WSL"
