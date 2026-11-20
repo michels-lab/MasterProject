@@ -1,6 +1,6 @@
 {
   "schema": "MASTERPROJECT_STAGE_PROGRESS_V1",
-  "date": "2026-11-19",
+  "date": "2026-11-20",
   "case": "C3D_05_step_gmsh_conformal",
   "stage": "3/7 — T0 acoplamiento térmico: preparación de parámetros",
   "completed": 2,
@@ -71,7 +71,13 @@
     "c14_energy_equilibrium_target_generated_in_local_WSL": false,
     "one_shot_local_handoff": "cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/scripts/run_c14_numerical_granada.sh",
     "numeric_reference_scope": "100-step archived-C14 two-solid conduction shakedown only, no JMatPro/experiment",
-    "handoff_report": "docs/granada/C3D05_C14_NUMERICAL_ONE_SHOT_20261119_ES.md"
+    "handoff_report": "docs/granada/C3D05_C14_NUMERICAL_ONE_SHOT_20261119_ES.md",
+    "native_regional_volAverage_T_postprocessor_code_committed": true,
+    "native_regional_energy_regression_CI_ready": true,
+    "native_regional_energy_observations_from_WSL": false,
+    "direct_patch_flux_verification_completed": false,
+    "native_regional_energy_postprocessor": "cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/scripts/postprocess_t0_energy.py",
+    "native_regional_energy_science_record": "docs/granada/C3D05_T0_BALANCE_ENERGETICO_NATIVO_20261120_ES.md"
   },
   "other_cases": [
     {
@@ -109,7 +115,7 @@
       "evidence": "docs/C3D_05_T0_CONDUCCION_MULTIRREGION_F14_20261119_ES.md"
     }
   ],
-  "blocker": "Sigue pendiente la ejecución real OpenFOAM Foundation14 en WSL, el balance de energía y flujo interfacial, y los datos termofísicos experimentales/JMatPro para G3 físico; no validar CFD por CI.",
-  "next_integrated_delivery": "Recibir una sola evidencia del ejecutor numérico C14 en WSL, auditar energía/interfaz sobre campos reales, después modelar T0 físico con propiedades documentadas sin repetir CAD/HEX8.",
+  "blocker": "Aún sin corrida OpenFOAM 14 local ni campos nativos T metal/molde; balance energético observado pendiente. Falta flujo interfacial directo y propiedades experimentales/JMatPro del Caso B; no cerrar G3/G4 por CI.",
+  "next_integrated_delivery": "Una sola ejecución integrada numérica C14 en WSL (si se autoriza), con log SHA y temperaturas/energías regionales reales; después continuidad de flujo parche-cara y sensibilidad; luego propiedades físicas/experimento T0 sin repetir malla.",
   "science": "NO_CFD_3D_RUN_NO_PHYSICAL_VALIDATION"
 }
