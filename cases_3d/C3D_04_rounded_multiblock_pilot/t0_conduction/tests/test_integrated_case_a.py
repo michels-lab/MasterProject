@@ -198,6 +198,51 @@ class IntegratedCaseAT0(unittest.TestCase):
             with self.assertRaises(ValueError):
                 engine.read_preserved_mesh_volumes(root)
 
+    def test_046b_native_volume_without_optional_tsv_and_orientation_rejection(self):
+        # Closed cube, all faces oriented outward as FOAM boundary owner faces.
+        vertices = [
+            (0,0,0), (1,0,0), (1,1,0), (0,1,0),
+            (0,0,1), (1,0,1), (1,1,1), (0,1,1),
+        ]
+        polygons = [
+            [0,3,2,1], [4,5,6,7],
+            [0,4,7,3], [1,2,6,5],
+            [0,1,5,4], [3,7,6,2],
+        ]
+        self.assertAlmostEqual(
+            engine.oriented_boundary_volume(vertices, polygons, 0), 1.0
+        )
+        with self.assertRaisesRegex(ValueError, "positive"):
+            engine.oriented_boundary_volume(
+                vertices, [list(reversed(f)) for f in polygons], 0
+            )
+        with tempfile.TemporaryDirectory() as directory:
+            root = pathlib.Path(directory)
+            # No PILOT_MESH_REPORT.tsv anywhere: exercise actual fallback.
+            for region, edge in (("metal", 1), ("mold", 2)):
+                mesh = root/"constant"/region/"polyMesh"
+                mesh.mkdir(parents=True)
+                coords = "\n".join(
+                    f"({edge*x} {edge*y} {edge*z})"
+                    for x,y,z in vertices
+                )
+                fs = "\n".join(
+                    str(len(face))+"("+" ".join(map(str, face))+")"
+                    for face in polygons
+                )
+                (mesh/"points").write_text(
+                    "FoamFile { class vectorField; }\n8\n(\n"+coords+"\n)\n"
+                )
+                (mesh/"faces").write_text(
+                    "FoamFile { class faceList; }\n6\n(\n"+fs+"\n)\n"
+                )
+                (mesh/"neighbour").write_text(
+                    "FoamFile { class labelList; }\n0\n(\n)\n"
+                )
+            found = engine.read_preserved_mesh_volumes(root)
+            self.assertAlmostEqual(found["metal"], 1.0)
+            self.assertAlmostEqual(found["mold"], 8.0)
+
     def test_047_C14_convection_and_contact_budget_on_native_area_fixture(self):
         cfg = json.loads(engine.INPUTS.read_text(encoding="utf-8"))
         self.assertEqual(engine.validate(cfg), [])
