@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "audit_kind": "deterministic_full_tracked_tree",
-  "tracked_files_total": 38977,
-  "classified_files_total": 38972,
+  "tracked_files_total": 38980,
+  "classified_files_total": 38975,
   "docs_content_inspected": 176,
   "large_docs_skipped": 1,
   "excluded_reports": 5,
@@ -15,21 +15,22 @@
     "document": 140,
     "index": 32,
     "license": 1,
-    "simulation_case_file": 115,
+    "simulation_case_file": 117,
     "simulation_input": 2683,
     "simulation_log": 3155,
     "simulation_output": 32615,
-    "source": 105,
+    "source": 106,
     "test": 43,
     "web_ui": 1,
     "workflow": 22
   },
   "finding_counts": {
-    "BROKEN_RELATIVE_LINK": 7
+    "BROKEN_RELATIVE_LINK": 7,
+    "POTENTIAL_UNLOGGED_CHANGES": 2
   },
-  "finding_total": 7,
-  "inventory_fingerprint": "76d50471d99dd135de4815b90f2fe24fbd806f47e4c05887201fde01191a134d",
-  "evidence_fingerprint": "a38cca05722cc62f2a19d8787a386e132771345cc8472199f5e39f915b2e8a45",
+  "finding_total": 9,
+  "inventory_fingerprint": "6666b32ded36f0a54d2fbb0b192b94443963190652d5677a7556b89780ba1f39",
+  "evidence_fingerprint": "a45752c6d871220b9017f942e5e4327e493319af7b1d8467e99e112112233ca5",
   "files": [
     {
       "path": ".github/agents/openfoam-solidification.agent.md",
@@ -1927,6 +1928,27 @@
       "purpose": "machine-readable configuration",
       "certainty": "rule",
       "blob": "d5897f503e392c1e67150fd264453ce0b976e680"
+    },
+    {
+      "path": "cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/native_flux/Make/files",
+      "role": "simulation_case_file",
+      "purpose": "OpenFOAM case-specific support artifact",
+      "certainty": "inferred",
+      "blob": "15b54a94e121b7a8caa2ef4a01bda7677fc0ebc1"
+    },
+    {
+      "path": "cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/native_flux/Make/options",
+      "role": "simulation_case_file",
+      "purpose": "OpenFOAM case-specific support artifact",
+      "certainty": "inferred",
+      "blob": "aee90aad2e6fa55612f82a0ce129f41abcde2627"
+    },
+    {
+      "path": "cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/native_flux/c3d05PatchFlux.C",
+      "role": "source",
+      "purpose": "code/test implementation",
+      "certainty": "rule",
+      "blob": "38906ed81fddee437f1aa818d0dd4353dfd24655"
     },
     {
       "path": "cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/scripts/audit_t0_numerical_run.py",
@@ -272898,6 +272920,24 @@
       "path": "docs/granada/C3D05_T0_README_HISTORICAL_BEFORE_SINGLE_FLOW_20261120.md",
       "observation": "Missing: outside-repo",
       "recommendation": "Fix link or restore target",
+      "state": "REVIEW_REQUIRED"
+    },
+    {
+      "id": "4afa2965e8dc5376",
+      "code": "POTENTIAL_UNLOGGED_CHANGES",
+      "severity": "review",
+      "path": "PROJECT_AUDIT_LOG_EN.md",
+      "observation": "1 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/native_flux/c3d05PatchFlux.C",
+      "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
+      "state": "REVIEW_REQUIRED"
+    },
+    {
+      "id": "5ee0c3f703f02a23",
+      "code": "POTENTIAL_UNLOGGED_CHANGES",
+      "severity": "review",
+      "path": "PROJECT_AUDIT_LOG_ES.md",
+      "observation": "1 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/native_flux/c3d05PatchFlux.C",
+      "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     }
   ],
