@@ -1,3 +1,5 @@
+> **20-11-2026 | GRANADA_C3D05_NATIVE_ENERGY_20261120:** Caso B ahora cuenta con lectura nativa de temperaturas por región y balance total de energía a partir de campos OpenFOAM14 cuando haya corrida `--solve`. Todavía no se ha ejecutado ni validado CFD. **Etapa B 3/7, 2/7 hitos=29% técnico.** [Informe](../docs/granada/C3D05_T0_BALANCE_ENERGETICO_NATIVO_20261120_ES.md).
+
 > **19-11-2026 | GRANADA_C3D05_C14_NUMERIC_SHK_20261119:** Caso B tiene ejecutor T0 numérico archivado C14 de un comando con fuente SHA, benchmark energético y auditoría de log; sin ejecución local ni validación física. Registro científico CI ahora busca los `THREE_D_*` explícitamente registrados en `cases_3d/`. **Etapa B 3/7, avance 2/7=29% técnico.** [Detalle](../docs/granada/C3D05_C14_NUMERICAL_ONE_SHOT_20261119_ES.md).
 
 > **19-11-2026 — Caso B C3D05 fvSolution C14:** plantilla T0 fuente global/metal/arena de C14 y SHA validada; 2 sólidos, PCG+DIC regional, sin CFD. [Bitácora](../docs/granada/C3D05_FVSOLUTION_C14_20261119_ES.md). **Etapa B 3/7, avance 2/7 hitos (29% técnico, NO tesis).**
