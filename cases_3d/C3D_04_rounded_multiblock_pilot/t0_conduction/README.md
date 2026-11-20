@@ -1,5 +1,11 @@
 # C3D-04 Caso A — T0 integrado con valores auténticos de C14
 
+## Resiliencia de volumen nativo (etapa 6/10, 50 %) — 20-11-2026
+
+El preflight original exigía `PILOT_MESH_REPORT.tsv` en V4/T02, aunque no está garantizado que todos los casos preservados contengan ese resumen auxiliar. **La falta del TSV no debe bloquear el cálculo real ni justificar pedir otra microprueba.** `read_preserved_mesh_volumes()` conserva su validación estricta si existe el archivo; si está ausente, calcula `V` directamente a partir de `polyMesh/points`, `faces` y la cuenta real de caras internas `neighbour`, integrando el **volumen orientado de las caras de frontera** (`sum dot(a, cross(b,c))/6` con triangulación de polígonos). Rechaza volúmenes nulos, negativos, NaN y geometría desorientada; es volumen de **malla nativa**, no STL o STEP.
+
+Se agregaron regresiones para dos cubos cerrados de volumen conocido, un ejemplo de caras invertidas que debe rechazarse y la ausencia deliberada del TSV. Continúa vigente la puerta previa `checkMesh` padre/metal/molde y contacto de V4/T02 guardados. Este fallback evita la dependencia de un reporte opcional, pero **no prueba por sí solo la capacidad de arrancar `foamMultiRun` ni la validez del Cp→Cv efectivo del metal**. No se modifica V4/T02.
+
 ## GRANADA NATIVA 20NOV26 | ETAPA 6/10 · AVANCE 5/10 = 50 %
 
 **Estado VIGENTE al 20 de noviembre de 2026 (las notas posteriores de etapa 5/40 % documentan el estado histórico antes del cierre).** [**CI Foundation14 nativo: 10/10 archivos térmicos interpretados con `foamDictionary`**](../../../reports/case-a-t0/CI_NATIVE_F14_20261120.json), junto a **15/15 pruebas de integración**, contrato de entrega y auditoría científica completos. [PR #53 fusionada](https://github.com/michels-lab/MasterProject/pull/53), commit `718bb48167d58218b344cad6eb169fef198b8dbf`. Los diez archivos provienen de C14 original y la malla 3D V4/T02 no estuvo en el corredor CI, por lo que este resultado **cierra únicamente el hito 05 de diseño/preparación de diccionarios**, no el preflight del caso real ni la ejecución del solver.
