@@ -1,3 +1,5 @@
+> **20-11-2026 | GRANADA_C3D05_F14_POSTPROCESS_REAL_20261120 — ACTUALIZACIÓN COMPROBADA:** `foamDictionary` **10/10** diccionarios productivos + `foamPostProcess/volFieldValue` de Foundation14 real sobre 2 regiones sintéticas (**metal 1 m³/400 K, arena 1 m³/300 K**) **PASS** [CI #44830571389](https://github.com/michels-lab/MasterProject/actions/runs/44830571389). Reparado error real `region0` usando `region metal/mold;` dentro de cada functionObject; ahora energía requiere `t=0` y temperatura inicial congruente. El único `--solve` termina con `T0_GRANADA_EVIDENCE_SUMMARY.json` (cadena SHA, energía, 12,636 pares de flujo), sin cerrar G3/G4 ni ejecutar el solver de la tesis. **Etapa 3/7; 2/7=29% técnico, NO tesis/CFD.** [Informe](../../../docs/granada/C3D05_F14_POSTPROCESS_SMOKE_Y_EVIDENCIA_UNICA_20261120_ES.md).
+
 > **20-11-2026 | GRANADA_C3D05_F14_REAL_COMPILER_20261120:** extractor C++ `q()` del Caso B para 12,636 caras por lado **compiló, enlazó y arrancó en OpenFOAM Foundation14 real sobre Ubuntu24.04** ([wmake+ldd+-help CI PASS](https://github.com/michels-lab/MasterProject/actions/runs/44828749324)). Flujo de CSV bilateral y análisis ahora transaccional, con SHA y recuperaciones seguras ([QA sintética PASS](https://github.com/michels-lab/MasterProject/actions/runs/44828766415)). **No hubo compilación en WSL del investigador, ni corrida CFD o medición de energía/flujo**; G3/G4 abiertos. **Caso B etapa 3/7, 2/7 hitos = 29% técnico, NO tesis.** [Informe](https://github.com/michels-lab/MasterProject/blob/main/docs/granada/C3D05_F14_WMAKE_REAL_20261120_ES.md).
 
 # C3D-05 / Caso B — T0 térmico, Operación Granada
@@ -44,6 +46,7 @@ En una sola invocación:
 5. Si el solver termina verificablemente, `foamPostProcess -region metal/mold` extrae `volAverage(T)` y volumen; calcula `E_r(t)=rho_r Cv_r V_r⟨T_r(t)⟩`, error de energía total relativo al intercambio inicial y pérdida metal/ganancia arena.
 6. Después del balance volumétrico, compila un extractor **Foundation14 C++ en la carpeta aislada**: carga **ambas regiones simultáneamente** para respetar `mappedWall`, extrae `q_n=-k snGrad(T)` en **12,636 caras por lado** y empareja centros, áreas y normales sin asumir orden idéntico. Reporta residuos de flujo globales **y** por cara, comparados con variaciones de energía temporal. **Esta parte todavía no está compilada/ejecutada en la WSL real.**
 7. Si existe una corrida completa con reporte y SHA concordantes, no vuelve a ejecutar el solver: retoma o compara el postprocesamiento. No sobreescribe entradas, meshes, logs ni reportes incompatibles.
+8. **Fase 6/6 del ejecutor:** `scripts/finalize_t0_granada.py` vuelve a comprobar la cadena SHA de entradas, log, volúmenes y flujo bilateral, y genera un solo `T0_GRANADA_EVIDENCE_SUMMARY.json` con métricas y el 29% técnico. Este resumen jamás marca energía, interfaz, independencia de malla o experimento como validados.
 
 ## Reportes esperados, no observados aún
 
@@ -54,6 +57,7 @@ En una sola invocación:
 - `T0_NATIVE_FACE_FLUX/metal.csv` y `T0_NATIVE_FACE_FLUX/mold.csv`: flujo normal nativo por cara en 12,636 caras por región, todavía pendiente de extracción WSL.
 - `T0_NATIVE_FACE_FLUX/bilateral_diagnostics.json`: pares por centro/área/normal, desequilibrios locales/globales y contraste con energía; **no es aceptación física**.
 - `T0_NATIVE_FACE_FLUX/manifest.sha256` y `log.c3d05PatchFlux`: integridad y procedencia del paquete. Los CSV se generan en una carpeta temporal y **solo se publica el directorio completo tras validar ambas regiones**; una extracción incompleta no puede aparentar evidencia válida.
+- `T0_GRANADA_EVIDENCE_SUMMARY.json`: expediente integral de preparación, solver, temperaturas, energía y 12,636 pares de flujo, con SHA y máximos errores observables; **solo existe tras una corrida y sus postprocesamientos completos, NO es validación física**.
 
 Las tasas energéticas obtenidas de los volúmenes NO son flujos normales directos: el nuevo extractor toma `q()` nativo de OpenFOAM para ello, cuando existan campos de una corrida. **Continúan pendientes la ejecución del extractor C++ en WSL, la evaluación científica real de continuidad cara-cara, pruebas de sensibilidad `dt`/malla/correctores, propiedades físicas y validación QuickCup**. Ni el CI verde ni el equilibrio teórico cierran G3/G4.
 
