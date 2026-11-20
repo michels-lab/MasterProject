@@ -655,6 +655,16 @@ def materialize(source: Path, dest: Path, cfg: dict, input_file: Path,
     Native geometry is copied verbatim, never moved from the accepted T02.
     """
     isolated_output(source, dest)
+    # One validated geometric budget shared by the single preflight and the
+    # atomic publisher; never parse eight heavy 3D patch areas a second time.
+    budget = evidence.get("initial_C14_BC_thermal_budget")
+    if not isinstance(budget, dict) or budget.get("status") != (
+        "INITIAL_C14_BC_GEOMETRIC_POWER_SCALE_NOT_CFD"
+    ):
+        raise ValueError(
+            "Materialization requires prior, successful integrated native-area "
+            "thermal budget evidence; rerunning patch_area here is forbidden"
+        )
     if os.environ.get("WM_PROJECT_VERSION") != "14":
         raise RuntimeError("Foundation 14 environment required BEFORE materialization")
     foam_dictionary = shutil.which("foamDictionary")
@@ -704,9 +714,7 @@ def materialize(source: Path, dest: Path, cfg: dict, input_file: Path,
             parsed.append(relative)
         record = {
             "status": "T0_FILESET_MATERIALIZED_NATIVE_DICTIONARIES_PARSED_NOT_SOLVED",
-            "initial_C14_BC_thermal_budget": thermal_network_budget(
-                source, cfg, evidence["native_volumes_m3_from_preserved_tsv"]
-            ),
+            "initial_C14_BC_thermal_budget": budget,
             "idealized_closed_energy_preflight": closed_t0_energy_target(
                 cfg, evidence["native_volumes_m3_from_preserved_tsv"]
             ),
@@ -836,6 +844,7 @@ def main() -> int:
     initial_budget = thermal_network_budget(
         source, cfg, evidence["native_volumes_m3_from_preserved_tsv"]
     )
+    evidence["initial_C14_BC_thermal_budget"] = initial_budget
     if not args.materialize:
         print("C14_ARCHIVED_SOURCE_PARITY_OK: all source blob SHA-1 and scalar parameters verified")
         print(f"CASE_A_T0_CONFIG_AND_SOURCE_PRECHECK_OK: {len(files)} files renderable")
