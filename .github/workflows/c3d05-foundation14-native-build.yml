@@ -1,0 +1,41 @@
+name: C3D-05 Foundation14 native bilateral patch q compile (no CFD)
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/native_flux/**'
+      - '.github/workflows/c3d05-foundation14-native-build.yml'
+  pull_request:
+    paths:
+      - 'cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/native_flux/**'
+      - '.github/workflows/c3d05-foundation14-native-build.yml'
+permissions:
+  contents: read
+concurrency:
+  group: c3d05-native-build-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  native-foundation14-wmake:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up actual OpenFOAM Foundation 14 on Ubuntu 24.04
+        uses: gerlero/setup-openfoam@v1
+        with:
+          openfoam-version: 14
+      - name: Compile Case B native two-region solid q extractor using real wmake
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          test "${WM_PROJECT_VERSION:-}" = "14"
+          command -v wmake
+          BUILD="$(mktemp -d -t c3d05-wmake-XXXXXXXX)"
+          mkdir -p "$BUILD/user-appbin"
+          cp -a cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/native_flux "$BUILD/src"
+          export FOAM_USER_APPBIN="$BUILD/user-appbin"
+          wmake "$BUILD/src" 2>&1 | tee "$BUILD/wmake.log"
+          test -x "$FOAM_USER_APPBIN/c3d05PatchFlux"
+          sha256sum "$FOAM_USER_APPBIN/c3d05PatchFlux"
+          echo "FOUNDATION14_NATIVE_COMPILE_SUCCESS__NOT_CFD_NOT_WSL"
