@@ -439,6 +439,10 @@ class IntegratedCaseAT0(unittest.TestCase):
         self.assertNotIn("foamMultiRun -case", runner)
         self.assertNotIn("rm -rf", runner)
         self.assertIn("--preflight", runner)
+        self.assertIn('HWLOC_COMPONENTS=-gl', runner)
+        self.assertIn('ubuntu_version" == "26.04"', runner)
+        self.assertEqual(runner.count("source /opt/openfoam14/etc/bashrc"), 1)
+        self.assertIn("load_openfoam14_once", runner)
 
 
 if __name__ == "__main__":
