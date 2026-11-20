@@ -49,8 +49,9 @@ En una sola invocación:
 - `T0_CLOSED_ENERGY_REFERENCE.json`: objetivo ideal anterior a una corrida.
 - `T0_NUMERICAL_RUN_STATUS.json`: clasificación del log nativo; sin aceptar energía por un mero `End`.
 - `T0_NATIVE_ENERGY_HISTORY.json`: datos reales de energía por región **solo después de una corrida válida y su postprocesamiento**.
-- `T0_FACE_FLUX_METAL.csv` y `T0_FACE_FLUX_MOLD.csv`: flujo normal nativo en 12,636 caras por región, pendiente de extracción WSL.
-- `T0_FACE_FLUX_BILATERAL_DIAGNOSTICS.json`: pares por centro/área/normal, desequilibrios locales/globales y contraste con energía; **no es aceptación física**.
+- `T0_NATIVE_FACE_FLUX/metal.csv` y `T0_NATIVE_FACE_FLUX/mold.csv`: flujo normal nativo por cara en 12,636 caras por región, todavía pendiente de extracción WSL.
+- `T0_NATIVE_FACE_FLUX/bilateral_diagnostics.json`: pares por centro/área/normal, desequilibrios locales/globales y contraste con energía; **no es aceptación física**.
+- `T0_NATIVE_FACE_FLUX/manifest.sha256` y `log.c3d05PatchFlux`: integridad y procedencia del paquete. Los CSV se generan en una carpeta temporal y **solo se publica el directorio completo tras validar ambas regiones**; una extracción incompleta no puede aparentar evidencia válida.
 
 Las tasas energéticas obtenidas de los volúmenes NO son flujos normales directos: el nuevo extractor toma `q()` nativo de OpenFOAM para ello, cuando existan campos de una corrida. **Continúan pendientes la ejecución del extractor C++ en WSL, la evaluación científica real de continuidad cara-cara, pruebas de sensibilidad `dt`/malla/correctores, propiedades físicas y validación QuickCup**. Ni el CI verde ni el equilibrio teórico cierran G3/G4.
 
