@@ -285,3 +285,35 @@ python3 analysis_tools/run_fs_c05_granada.py \
 ```
 
 **Lo que NO certifica:** Un inventario `∑rho V` constante no significa conservación de masa si el aire puede entrar o salir por `atmosphereTop/atmosphereSides/atmosphereLowerSides`. `Q_f+Q_s≈0` no es cierre de energía global sin entalpía transportada por el aire, términos de compresión, propiedades termodinámicas reales y condiciones de apoyo. No hay `rho(T),Cv(T),k(T)` validados por JMatPro ni solidificación/grafitización/contracción. Para avance hacia segundos reales, primero instrumentar conservación por fluxes en fronteras y entalpías verdaderas; no hacer mil ensayos manuales microscópicos.
+
+## 20-11-2026 — RESULTADO NATIVO REAL GRANADA: continuidad térmica fluido/arena y masa de mezcla medida
+
+El investigador ejecutó en su WSL OpenFOAM Foundation14 desde HEAD `a32a9d281` el **único comando** `python3 analysis_tools/run_fs_c05_granada.py --source FS_C05_VOF_CHT_SCREEN_20261119T063448Z_84d08b6e --native`. Confirmó que el proceso terminó y escribió **dos informes y logs reales**, en esta nueva carpeta aislada:
+
+```text
+FS-C05 GRANADA: FS_C05_GRANADA_INTEGRATED_MEASUREMENTS_WITH_WARNINGS
+Independent case: /home/michel/OpenFOAM/FS_C05_GRANADA_RUNS/FS_C05_WALL_Q_PROBE_20261120T184118Z_47868ed1
+VOF metal ΔV/V: 0.0
+Iron ΔT K: -0.0034359286803464784
+Air ΔT K: 1.6834298539722568
+Sand ΔT K: 2.996863412363382e-05
+Mixture density inventory: NATIVE_MIXTURE_RHO_INVENTORY_MEASURED_NO_MASS_CLOSURE
+Wall-power reciprocity:
+ t=1e-7: Q_fluid=-16232.10986685 W; Q_mold=+16232.15236226 W;
+          Q_sum=+0.04249540999990131 W; mismatch=2.6179775208803353e-06
+ t=2e-7: Q_fluid=-16232.10729669 W; Q_mold=+16232.15056037 W;
+          Q_sum=+0.043263680001473404 W; mismatch=2.6653079541474654e-06
+REPORT JSON: .../FS_C05_GRANADA_REPORT.json
+REPORT MD: .../FS_C05_GRANADA_REPORT.md
+NO global mass or enthalpy balance / NO solidification.
+```
+
+**Por primera vez se ha medido (Q) nativo a AMBAS caras de `fluid_to_mold`/ `mold_to_fluid` en los 3136 pares de caras térmicas**, con signos contrarios, diferencia relativa máxima de `2.6653e-6` (~0.0002665 %) y potencia de transferencia `~16.23 kW` total. **La cifra de 16.23 kW corresponde al área total de las 3136 caras**, metal–arena + aire–arena, NO exclusivamente al contacto hierro–arena (la parte metálica de contacto es 1248 caras, 0.0064837952138918934 m²). No convertirla en flujo único del metal ni en (h) efectivo sin separar fases de los flujos. La fracción metal VOF no presenta deriva volumétrica visible (`ΔV/V=0`) y el inventario de densidad de mezcla `rho` sí ha sido leído de archivos reales, aunque el resumen terminal NO incluye el valor numérico de masa/variación: habrá que tomarlo del JSON, NO inventarlo. La rápida subida de T del gas +1.68343 K en 0.2 µs requiere cierre energético y revisión de los contornos abiertos; no se ha validado masa o energía global.
+
+**Comprobación independiente de compatibilidad térmica arena, usando datos NATIVOS anteriores y actuales, sin volver a correr CFD:** `V_mold=0.030950742856 K·m³/300K=0.00010316914285333333 m³`, `rho_mold=1500 kg/m³`, `Cv_mold=700 J/(kg·K)`, por tanto `C_mold=108.327599996 J/K`; `T_mold(0)=300 K`, `T_mold(1e-7)=300.0000149843143 K`, `T_mold(2e-7)=300.0000299686341 K`. Para discretización Euler implícita, `ΔE_sand[n]=C_mold·(T[n]-T[n-1])` frente a `Q_mold[n]Δt`:
+- Paso 1: `ΔE=0.00162321480623675 J`, `Q·Δt=0.001623215236226 J`, `ΔE−QΔt=−4.30e-10 J`, diferencia relativa `2.649e-7`.
+- Paso 2: `ΔE=0.00162321540353473 J`, `Q·Δt=0.001623215056037 J`, `ΔE−QΔt=+3.47e-10 J`, diferencia relativa `2.141e-7`.
+
+Estos cálculos son una **aproximación de cierre del subdominio arena** basada en Cp/Cv constante, paredes inferiores `zeroGradient`, sin fuente, volumen fijo y la potencia reportada a final de paso. El balance es coherente con el esquema Euler del solver; NO valida entalpía metal-aire ni energía de gas abierto. La precisión extrema también puede reflejar que `wallHeatFlux` y `T_mold` derivan de la misma solución discreta, por lo que no es una validación independiente con termopares ni una prueba de fidelidad física.
+
+**Estado exacto:** `NATIVE_TWO_STEP_CH_T_RUN_AND_TWO_WALL_Q_MEASURED` con balance local de arena cuantificado analíticamente; `GLOBAL_MASS_AND_ENERGY_OPEN`, `NO_SOLIDIFICATION`, `NO_VALIDATED_CAD_SUPPORT`, `MATERIAL_SCREENING_ONLY`. No ejecutar nuevamente el CFD de 0.2 µs para repetir variables que ya fueron medidas. Construir un diagnóstico de reporte **solo lectura** para el cierre de arena y el inventario `rho` ya guardado.
