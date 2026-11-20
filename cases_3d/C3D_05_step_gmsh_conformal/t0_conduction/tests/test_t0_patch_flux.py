@@ -42,6 +42,11 @@ class FaceFluxQA(unittest.TestCase):
                       "metal_to_mold", "mold_to_metal", '"wx"', "writeFaceFlux(fm", "writeFaceFlux(fd"):
             self.assertIn(check,c)
         self.assertNotIn("wallHeatFlux::",c)
+        # Foundation14 upstream polyBoundaryMesh API; CI wmake enforces it.
+        self.assertIn("mesh.poly().boundary().findIndex(patchName)",c)
+        self.assertNotIn("findPatchID(",c)
+        self.assertNotIn('#include "fvCFD.H"',c)
+        self.assertIn("fvMesh::UNCHANGED",c)
         opt=(T0/"native_flux/Make/options").read_text()
         self.assertIn("-lsolidThermophysicalTransportModels",opt)
 
