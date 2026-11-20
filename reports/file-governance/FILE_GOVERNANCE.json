@@ -26,7 +26,7 @@
   },
   "finding_counts": {},
   "finding_total": 0,
-  "inventory_fingerprint": "5fe2d8c0b7df7ef75575244f17534bba02408f8787f4ba40bba84d0d3727e884",
+  "inventory_fingerprint": "56f2032311c0003e04f74e824da06bdc04ffcc037d61d1f9be70ec3be37f951c",
   "evidence_fingerprint": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
   "files": [
     {
@@ -230,7 +230,7 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "8109eed83c8ff202d88d83bd4524c8e6f14fad72"
+      "blob": "fc30014d8ba4265c761bfda609ef4588843e75bc"
     },
     {
       "path": ".michelslab/agents/file-steward.md",
@@ -272,7 +272,7 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "9694d38f7f1acaebc56ef81627df114af914036a"
+      "blob": "1888beb4043431d3245e28c4f20609e3e1232f53"
     },
     {
       "path": "JMATPRO_OPENFOAM_TRACEABILITY_ES.md",
@@ -1756,7 +1756,7 @@
       "role": "agent",
       "purpose": "assistant role/instructions",
       "certainty": "rule",
-      "blob": "153a36c09ce5a9b7d19dbb90c6a2e2523b8f70ab"
+      "blob": "6521ddc116b56ecad650136d23389fe548d6b446"
     },
     {
       "path": "cases_3d/C3D_05_step_gmsh_conformal/Allmesh",
@@ -1770,7 +1770,7 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "0f07bdf89889d950b783ddaf10217454c37623a5"
+      "blob": "18a4692cce977e00211d8c0cd284aca46c8f8a94"
     },
     {
       "path": "cases_3d/C3D_05_step_gmsh_conformal/constant/geometry/QuickCupmm.STEP",
@@ -1917,7 +1917,7 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "9086a627fcdd43a6a2a094592801f78f4797b489"
+      "blob": "860eec324506f8775db6667bdf24a7380e6b79f6"
     },
     {
       "path": "cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/T0_INPUTS.json",
@@ -2155,7 +2155,7 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "48925ce262e3fbc2fef9d0cbb1d624f6aeb7a0a8"
+      "blob": "e1b5e975632c2178348b8209ef4fa78ad91d0e3c"
     },
     {
       "path": "cases_3d/case3d-01/README.md",
@@ -271977,7 +271977,7 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "081205a4ddcf0f98dccac90b7d41064e75ce11bc"
+      "blob": "a18cf7a5a917ab4d3700d022974413b64311ded2"
     },
     {
       "path": "docs/C3D_MESH_PROGRESS_20261118.csv",
@@ -272012,7 +272012,7 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "848d049b68b544ab86c42439d64f770fd2851d19"
+      "blob": "31bfa7be3ad0ea1f00df115b24b3ef59b5c807b1"
     },
     {
       "path": "docs/DOCUMENT_SYNC_20261110_ES.md",
@@ -272047,7 +272047,7 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "b738ba6dfdb4e7e168afb2733b17bde5deeb50cf"
+      "blob": "7ac8691442c500b70a6da98a0ae7a102d5127a8c"
     },
     {
       "path": "docs/PRIMER_AVANCE_REQUISITOS_DIRECTOR_20261118_ES.md",
@@ -272103,7 +272103,7 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "bf1c8c675bb91e89650121c01b1eb258834e21be"
+      "blob": "05bfb315c361f5c16ce3410864ffcd37f667dc26"
     },
     {
       "path": "docs/granada/C3D05_FVSOLUTION_C14_20261119_ES.md",
