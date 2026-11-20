@@ -86,7 +86,15 @@
     "native_patch_flux_scientifically_accepted": false,
     "native_patch_flux_number_of_faces_per_side_expected": 12636,
     "native_patch_flux_integrated_handoff": "cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/scripts/run_native_t0_patch_flux.sh",
-    "native_patch_flux_technical_report": "docs/granada/C3D05_T0_FLUJO_INTERFAZ_12636_CARAS_20261120_ES.md"
+    "native_patch_flux_technical_report": "docs/granada/C3D05_T0_FLUJO_INTERFAZ_12636_CARAS_20261120_ES.md",
+    "native_foundation14_real_wmake_ci_compiled": true,
+    "native_foundation14_real_wmake_ci_dynamic_libraries_verified": true,
+    "native_foundation14_real_wmake_ci_binary_startup_verified": true,
+    "native_foundation14_real_wmake_ci_evidence": "https://github.com/michels-lab/MasterProject/actions/runs/44828749324",
+    "native_foundation14_real_wmake_ci_scope": "Ubuntu24.04 Foundation14 executable compile/link/-help only; not the user's WSL, no solver/field/q measured",
+    "native_flux_atomic_output_transaction_synthetic_CI_pass": true,
+    "native_flux_atomic_output_directory": "T0_NATIVE_FACE_FLUX",
+    "native_flux_atomic_output_test": "cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/tests/test_native_flux_atomic_handoff.py"
   },
   "other_cases": [
     {
@@ -126,7 +134,7 @@
       "evidence": "docs/C3D_05_T0_CONDUCCION_MULTIRREGION_F14_20261119_ES.md"
     }
   ],
-  "blocker": "No hay corrida de OpenFOAM14 local, ni compilación nativa de c3d05PatchFlux, ni CSV q metal/molde observados; flujo cara-cara, conservación energética y sensibilidad sin validar. G3 físico requiere entradas auténticas JMatPro/experimentales.",
-  "next_integrated_delivery": "Usar el único ejecutor WSL Caso B para reproducir diagnóstico C14 de referencia, obtener energía regional + 12636 pares de q nativos, evaluar errores locales/globales y fijar sensibilidad; después T0 experimental sin rehacer malla.",
+  "blocker": "Extractor C++ C3D-05/B SÍ compiló/enlazó/arrancó en CI Ubuntu24 OpenFOAM Foundation14 (#44828749324), pero NO se ha materializado ni corrido T0 en WSL; 12636 pares de q siguen sin medición en la malla real. G3 requiere entradas experimentales/JMatPro; G4 requiere flujo y energía observados/sensibilidad.",
+  "next_integrated_delivery": "Ejecutar único Granada --solve de C14 numérico en WSL: registrar foamMultiRun, balance regional, q() bilateral de 12636 pares y continuidad; luego T0 con datos físicos auténticos y sensibilidad sin rehacer STEP/HEX8.",
   "science": "NO_CFD_3D_RUN_NO_PHYSICAL_VALIDATION"
 }
