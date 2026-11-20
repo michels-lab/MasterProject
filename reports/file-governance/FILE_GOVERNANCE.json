@@ -29,7 +29,7 @@
     "POTENTIAL_UNLOGGED_CHANGES": 2
   },
   "finding_total": 9,
-  "inventory_fingerprint": "bd89076640f5bcacecf705d58e9125402d9f4788b67c114806d2b70fc08c7620",
+  "inventory_fingerprint": "9eee2e4b7aa11c24154a30635d87638676994897545dfd532eca07cc451bf47c",
   "evidence_fingerprint": "088cde33c74d027e90c40d66a870214ca9280b2dccd448438462924b686d126a",
   "files": [
     {
@@ -359,7 +359,7 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "774bea76b4f143f65fe7a6c06a7f2382f4cdc59c"
+      "blob": "6e9721e789c86857468cbe6829244dfcac3cc888"
     },
     {
       "path": "RUN_CASE_REGISTRY.csv",
@@ -1780,7 +1780,7 @@
       "role": "agent",
       "purpose": "assistant role/instructions",
       "certainty": "rule",
-      "blob": "6804fa05b816145b0f67f7a966d497376a02e994"
+      "blob": "493cb879be3e9a15541843b3e00b4e3b119350f9"
     },
     {
       "path": "cases_3d/C3D_05_step_gmsh_conformal/Allmesh",
@@ -1794,7 +1794,7 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "f07caad81941b3b320461da4786bfab1508bc22c"
+      "blob": "16c4578e632c81fc6d85f059bdfee07a6635ab91"
     },
     {
       "path": "cases_3d/C3D_05_step_gmsh_conformal/constant/geometry/QuickCupmm.STEP",
@@ -1941,7 +1941,7 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "1fce2eb08de043aacb6928d0036a5d1afb25146d"
+      "blob": "e42f0474cc3641efab8139dd0f8970db866a905a"
     },
     {
       "path": "cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/T0_INPUTS.json",
@@ -2228,7 +2228,7 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "c697f862225961507631a8ad9592b5662b95c3ad"
+      "blob": "f8d3a0b17312a08750b83fdcdb2c1622feb3a4cf"
     },
     {
       "path": "cases_3d/case3d-01/README.md",
@@ -272092,7 +272092,7 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "742ecbd620125a7ce4cea6deb740d4d198f2df5c"
+      "blob": "c9338b93fa279674e72ea496140bc2266d555c36"
     },
     {
       "path": "docs/DOCUMENT_SYNC_20261110_ES.md",
