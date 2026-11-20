@@ -35,9 +35,11 @@ def fixture(shift=0.):
 class FaceFluxQA(unittest.TestCase):
     def test_native_foundation14_solid_transport_used_not_wallHeatFlux_guess(self):
         c=(T0/"native_flux/c3d05PatchFlux.C").read_text(encoding="utf-8")
-        for check in ("solidThermo::New(mesh)", "solidThermophysicalTransportModel::New(thermo())",
-                      "transport->q()", "mesh.Cf()", "mesh.Sf()", "12636",
-                      "metal_to_mold", "mold_to_metal", '"wx"'):
+        for check in ("solidThermo::New(metal)", "solidThermo::New(mold)",
+                      "solidThermophysicalTransportModel::New(tm())",
+                      "solidThermophysicalTransportModel::New(td())",
+                      "transport.q()", "mesh.Cf()", "mesh.Sf()", "12636",
+                      "metal_to_mold", "mold_to_metal", '"wx"', "writeFaceFlux(fm", "writeFaceFlux(fd"):
             self.assertIn(check,c)
         self.assertNotIn("wallHeatFlux::",c)
         opt=(T0/"native_flux/Make/options").read_text()
