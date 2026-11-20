@@ -48,7 +48,7 @@ No se fija arbitrariamente un porcentaje aceptable de conservación. El balance 
 | Compilación `c3d05PatchFlux` en Foundation14 real, `wmake/ldd/-help` | PASS documentado, [CI 44828749324](https://github.com/michels-lab/MasterProject/actions/runs/44828749324) |
 | `foamDictionary` real sobre **10** diccionarios actuales de T0 | **PASS 10/10**, [CI real Foundation14 #44830571389 — PASS](https://github.com/michels-lab/MasterProject/actions/runs/44830571389) |
 | `blockMesh` y `foamPostProcess` Foundation14 sobre dos regiones sintéticas | **PASS**: metal 1 m³ / 400 K, arena 1 m³ / 300 K, y lectura nativa `volFieldValue.dat`, [CI real Foundation14 #44830571389 — PASS](https://github.com/michels-lab/MasterProject/actions/runs/44830571389) |
-| Validaciones negativas de estado inicial, cadena SHA y resumen numérico | Verificar CI integrada |
+| Validaciones negativas de estado inicial, cadena SHA y resumen numérico | **PASS: 53 tests** en CI estática [#44830345144](https://github.com/michels-lab/MasterProject/actions/runs/44830345144); no CFD |
 | CFD real de la malla 3D aceptada en WSL | **NO EJECUTADO** |
 | Conservación, continuidad de flujo real, sensibilidad no ortogonal, JMatPro/curvas QuickCup | **PENDIENTE** |
 
