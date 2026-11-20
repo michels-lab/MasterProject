@@ -28,7 +28,7 @@
     "BROKEN_RELATIVE_LINK": 7
   },
   "finding_total": 7,
-  "inventory_fingerprint": "8b70addc8a0d664f74b1f3b9a2150d2abb4638557604a90395adba15466b41d0",
+  "inventory_fingerprint": "76d50471d99dd135de4815b90f2fe24fbd806f47e4c05887201fde01191a134d",
   "evidence_fingerprint": "a38cca05722cc62f2a19d8787a386e132771345cc8472199f5e39f915b2e8a45",
   "files": [
     {
@@ -1919,7 +1919,7 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "860eec324506f8775db6667bdf24a7380e6b79f6"
+      "blob": "bef9edf4e8daa980f249936c95c9748e64ec22f0"
     },
     {
       "path": "cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/T0_INPUTS.json",
