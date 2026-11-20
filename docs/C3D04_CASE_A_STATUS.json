@@ -2,7 +2,7 @@
   "schema": "C3D04_CASE_A_PROGRESS_V1",
   "project": "MasterProject",
   "scope": "CASE_A_C3D_04_V4_T02_ONLY",
-  "updated_local_date": "2026-11-19",
+  "updated_local_date": "2026-11-20",
   "source_of_truth": "AGENTS.md + cases_3d/C3D_04_rounded_multiblock_pilot/AGENTS.md",
   "reference_mesh": "~/OpenFOAM/C3D04_V4_TRANSITION_REPAIR_01/T02",
   "current_stage": "05_THERMAL_T0_DESIGN",
@@ -28,11 +28,11 @@
     "C14 numeric metal/arena parameters and 2D boundary reference NOW sourced directly in T0; they are constant C14-model inputs, NOT independently measured T-dependent iron/sand functions.",
     "Metal C14 Cp=827 and heRhoThermo fluid enthalpy is NOT a measured Cv: 3D two-solid T0 explicitly uses Cp_as_effective_Cv approximation and derived k=mu*Cp/Pr; this must not be called physically identical to C14.",
     "C14 exterior h=10, Ta=300, emissivity and 500 W/(m2 K) contact transferred to T0; therefore theoretical adiabatic two-solid energy equilibrium is COUNTERFACTUAL, not an acceptance condition for this T0.",
-    "One integrated C14-source parity and native C3D04 boundary/mesh validation is CODE_COMMITTED but no successful WSL Foundation14 dictionary parse / source materials realization has been observed.",
     "Nonorthogonality solver stability has NOT been validated, despite passed V4/T02 native checkMesh and the closed 64-face interface identity investigation.",
     "T1 fluid-solid phase-change, temperature-dependent materials, actual casting cooling curves, mesh/time independence and experimental validation remain not executed.",
     "STL surface fit distances are sample-only, not rigorous Hausdorff to exact STEP.",
-    "F14 externalTemperature and coupledTemperature have been authored and crosschecked with official docs, but actual runtime initialization/energy equation integration in WSL remains unverified"
+    "F14 externalTemperature and coupledTemperature have been authored and crosschecked with official docs, but actual runtime initialization/energy equation integration in WSL remains unverified",
+    "Static integrated C14 source parity and thermal T0 tests passed 14/14 in CI; actual native OpenFOAM14 foamDictionary/coupledTemperature initialization in user WSL is STILL unverified"
   ],
   "milestones": [
     {
@@ -99,37 +99,28 @@
   "response_rule": "Every update about this case must explicitly display: Etapa N/10; avance general completed/total (%) using this manifest, physical/CFD status, what changed, what remains; never imply false precision. Recompute on changes.",
   "execution_rule": "Integrate validations into one cohesive milestone; no one-script-per-subproblem loops, no rerun already closed V4/T02 audits; one user command only at a meaningful end-to-end delivery; preserve case and audit evidence.",
   "last_integrated_delivery": {
-    "date": "2026-11-19",
+    "date": "2026-11-20",
     "stage": "05_THERMAL_T0_DESIGN",
-    "status": "CODE_COMMITTED_STATIC_TESTS_DEFINED_NATIVE_OF14_AND_CFD_NOT_CONFIRMED",
+    "status": "GITHUB_PR52_MERGED_THREE_CI_WORKFLOWS_GREEN_14_T0_INTEGRATED_TESTS_WSL_F14_AND_CFD_PENDING",
     "milestone_not_closed": true,
-    "scope": "CASE_A_C3D04_ONLY_T0_TWO_SOLIDS_USING_C14_REFERENCE",
-    "changes": [
-      "Official OpenFOAM Foundation14 thermal boundary docs used to migrate legacy C14 externalWallHeatFluxTemperature to externalTemperature with Ta constant 300, h constant 10, emissivity 0.3 metal/0.5 mold",
-      "Retained coupledTemperature interfacial resistance from C14 at 0.0002 m / 0.1 W(m K), equivalent to 500 W/(m2 K); regional material and time inputs sourced to original C14",
-      "Exact archived C14 Git blob SHA1 check (all eight baseline files) added in addition to numeric source parity of 27 parameter/layer readings; byte-tamper test included in integrated suite",
-      "Initial thermal scale from real native T02 polyMesh face areas including all external metal/mold patches and reciprocal 2496-face interface; G=h*A and initial power estimates, no heat flux from solver",
-      "Native parsing remains gated; no case source overwritten; 10 F14 dictionaries prepared atomically and CI source updated"
+    "PR": 52,
+    "merged_commit": "78406c5bf17193b7807a3dc73e1d8ab3a4240ea4",
+    "test_runs": [
+      "44796173057: Case A T0 integrated, 14 tests PASS",
+      "44796173127: MasterProject contract PASS",
+      "44796173045: QuickCup science audit PASS"
     ],
-    "not_observed": [
-      "GitHub Actions CI pass for newest commit",
-      "OpenFOAM Foundation14 native parsing in researcher's WSL",
-      "foamMultiRun thermal solution and energy-conservation results",
-      "Grid/time independence or physical QuickCup validation"
+    "evidence_report": "reports/case-a-t0/CI_GRANADA_20261120.json",
+    "integrated_corrections": [
+      "T0 invalid inputs now return non-zero status 3, before native polyMesh I/O or output generation",
+      "Read-only native 3D C14 heat budget is computed once per preflight and passed in evidence to atomic materializer",
+      "Atomic materialization refuses missing/invalid native-budget evidence before side effects",
+      "14 complete CI regression tests proved valid sourced C14 no-output preflight, invalid rejection, source SHA parity, full 10 dictionaries and atomic failure path"
     ],
-    "scientific_qualifiers": [
-      "C14 historical model is a 2D fluid+solid with phase change, T0 3D is an explicit two-solid conduction surrogate",
-      "C14 Cp 827 reused as effective solid Cv ONLY under stated numerical approximation, not physically measured Cv",
-      "Metal conductivity 32.4892857 W/(m K) derived from C14 mu*Cp/Pr, not a measured k(T)",
-      "Initial 1500 K metal is above original C14 liquidus 1473 K; T0 intentionally omits fluid flow and latent heat",
-      "Initial power-scale estimates use uniform wall T and do not equal actual local CFD heat-flux integrals",
-      "Exterior losses are nonzero, so adiabatic two-capacity equilibrium is a counterfactual reference, not T0 acceptance"
-    ],
-    "source_docs": [
-      "cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/README.md",
-      "cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/C14_PARAMETER_BASELINE.json",
-      "cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/T0_INPUTS.json",
-      "https://doc.cfd.direct/openfoam/user-guide-v14/thermal-boundary-conditions"
+    "limitations": [
+      "Successful static GitHub CI is not native OpenFOAM Foundation14 validation or CFD",
+      "No source files C14 or V4/T02 native mesh modified",
+      "T0 metal is an explicit numerical Cp-as-Cv two-solid surrogate, not original fluid metal nor real phase-change simulation"
     ]
   }
 }
