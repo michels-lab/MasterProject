@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "audit_kind": "deterministic_full_tracked_tree",
-  "tracked_files_total": 38980,
-  "classified_files_total": 38975,
+  "tracked_files_total": 38981,
+  "classified_files_total": 38976,
   "docs_content_inspected": 176,
   "large_docs_skipped": 1,
   "excluded_reports": 5,
@@ -19,7 +19,7 @@
     "simulation_input": 2683,
     "simulation_log": 3155,
     "simulation_output": 32615,
-    "source": 106,
+    "source": 107,
     "test": 43,
     "web_ui": 1,
     "workflow": 22
@@ -29,8 +29,8 @@
     "POTENTIAL_UNLOGGED_CHANGES": 2
   },
   "finding_total": 9,
-  "inventory_fingerprint": "6666b32ded36f0a54d2fbb0b192b94443963190652d5677a7556b89780ba1f39",
-  "evidence_fingerprint": "a45752c6d871220b9017f942e5e4327e493319af7b1d8467e99e112112233ca5",
+  "inventory_fingerprint": "da6666163f8d99aaf72192d00ccaa925a85d3e38e596b916ff618ef1d4492ccb",
+  "evidence_fingerprint": "5d70d2cdeca0dce8f461134a27be9740dcd426fcfe215204739d28752be29458",
   "files": [
     {
       "path": ".github/agents/openfoam-solidification.agent.md",
@@ -1949,6 +1949,13 @@
       "purpose": "code/test implementation",
       "certainty": "rule",
       "blob": "38906ed81fddee437f1aa818d0dd4353dfd24655"
+    },
+    {
+      "path": "cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/scripts/analyze_t0_patch_flux.py",
+      "role": "source",
+      "purpose": "code/test implementation",
+      "certainty": "rule",
+      "blob": "bddaa5080b9a6a8d6c2d136598c92b125634377e"
     },
     {
       "path": "cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/scripts/audit_t0_numerical_run.py",
@@ -272923,20 +272930,20 @@
       "state": "REVIEW_REQUIRED"
     },
     {
-      "id": "4afa2965e8dc5376",
+      "id": "6cea8941d760e785",
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_EN.md",
-      "observation": "1 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/native_flux/c3d05PatchFlux.C",
+      "observation": "2 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/native_flux/c3d05PatchFlux.C, cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/scripts/analyze_t0_patch_flux.py",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     },
     {
-      "id": "5ee0c3f703f02a23",
+      "id": "b08146fe2194fc51",
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_ES.md",
-      "observation": "1 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/native_flux/c3d05PatchFlux.C",
+      "observation": "2 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/native_flux/c3d05PatchFlux.C, cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/scripts/analyze_t0_patch_flux.py",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     }
