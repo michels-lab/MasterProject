@@ -24,7 +24,7 @@ En un directorio temporal de runner (NO geometría STEP ni copia aceptada), este
 
 ### Error real descubierto en la primera ejecución de Foundation14
 
-La [primera CI nativa de postprocesamiento #44829892575](https://github.com/michels-lab/MasterProject/actions/runs/44829892575) llegó correctamente a `blockMesh` y a los diez diccionarios de producción, pero **falló** al construir `volFieldValue`. El error F14 fue `request for objectRegistry region0 ... available objects ... 1(metal)`: pasar `foamPostProcess -region metal` **no basta** para configurar el objeto de función en esta versión; éste debe incluir `region metal;` o `region mold;` dentro de su propio bloque. Se corrigió **en el generador original `functions_dict()`**, no con un cambio superficial de mensajes o una excepción ignorada. Se incorporó un test que exige explícitamente la región del objeto. La próxima CI nativa debe demostrar ambos volúmenes y temperaturas a partir de archivos OpenFOAM auténticos.
+La [primera CI nativa de postprocesamiento #44829892575](https://github.com/michels-lab/MasterProject/actions/runs/44829892575) llegó correctamente a `blockMesh` y a los diez diccionarios de producción, pero **falló** al construir `volFieldValue`. El error F14 fue `request for objectRegistry region0 ... available objects ... 1(metal)`: pasar `foamPostProcess -region metal` **no basta** para configurar el objeto de función en esta versión; éste debe incluir `region metal;` o `region mold;` dentro de su propio bloque. Se corrigió **en el generador original `functions_dict()`**, no con un cambio superficial de mensajes o una excepción ignorada. Se incorporó un test que exige explícitamente la región del objeto. La repetición [CI real Foundation14 #44830571389 — PASS](https://github.com/michels-lab/MasterProject/actions/runs/44830571389) demostró **ambos volúmenes y temperaturas desde archivos OpenFOAM auténticos** y confirmó la corrección del problema `region0`. El hito 3D en la malla aceptada permanece pendiente.
 
 ## Bloque 2. Comprobación estricta del estado inicial para el balance
 
@@ -46,8 +46,8 @@ No se fija arbitrariamente un porcentaje aceptable de conservación. El balance 
 | Evidencia | Situación |
 |---|---|
 | Compilación `c3d05PatchFlux` en Foundation14 real, `wmake/ldd/-help` | PASS documentado, [CI 44828749324](https://github.com/michels-lab/MasterProject/actions/runs/44828749324) |
-| `foamDictionary` real sobre **10** diccionarios actuales de T0 | Verificar CI del nuevo smoke |
-| `blockMesh` y `foamPostProcess` Foundation14 sobre dos regiones sintéticas | Verificar CI del nuevo smoke |
+| `foamDictionary` real sobre **10** diccionarios actuales de T0 | **PASS 10/10**, [CI real Foundation14 #44830571389 — PASS](https://github.com/michels-lab/MasterProject/actions/runs/44830571389) |
+| `blockMesh` y `foamPostProcess` Foundation14 sobre dos regiones sintéticas | **PASS**: metal 1 m³ / 400 K, arena 1 m³ / 300 K, y lectura nativa `volFieldValue.dat`, [CI real Foundation14 #44830571389 — PASS](https://github.com/michels-lab/MasterProject/actions/runs/44830571389) |
 | Validaciones negativas de estado inicial, cadena SHA y resumen numérico | Verificar CI integrada |
 | CFD real de la malla 3D aceptada en WSL | **NO EJECUTADO** |
 | Conservación, continuidad de flujo real, sensibilidad no ortogonal, JMatPro/curvas QuickCup | **PENDIENTE** |
