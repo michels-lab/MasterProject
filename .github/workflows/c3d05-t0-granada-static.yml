@@ -19,8 +19,10 @@ jobs:
       - uses: actions/checkout@v4
       - name: Run integrated tests including negative, idempotence, and synthetic materialization
         run: python3 -B -m unittest discover -s cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/tests -p "test_*.py" -v
-      - name: Validate integrated WSL entrypoint shell syntax without running solver
-        run: bash -n cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/scripts/run_c14_numerical_granada.sh
+      - name: Validate both one-shot WSL entrypoints (NO native compiler or solver)
+        run: |
+          bash -n cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/scripts/run_c14_numerical_granada.sh
+          bash -n cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/scripts/run_native_t0_patch_flux.sh
       - name: Verify Python syntax without CFD
         run: |
           python3 - <<'PY'
