@@ -106,12 +106,37 @@ def run(cmd: list[str], cwd: Path):
     return res.stdout
 
 
+def verify_current_t0_templates_in_real_f14():
+    # Parse the EXACT 10 current B templates using archived C14 numeric
+    # reference values. This is F14 syntax QA only, NOT an accepted mesh run.
+    def load(name, path):
+        spec = importlib.util.spec_from_file_location(name, path)
+        obj = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(obj)
+        return obj
+    provenance = load("c3d05_C14_native_source", T0/"scripts/c14_numerical_reference.py")
+    preparer = load("c3d05_T0_native_dicts", T0/"scripts/prepare_t0.py")
+    config = provenance.build()
+    generated = preparer.file_map(config)
+    if len(generated) != 10:
+        raise AssertionError("Expected exactly 10 production T0 dictionaries")
+    with tempfile.TemporaryDirectory(prefix="c3d05_F14_native_dicts_") as tmp:
+        root = Path(tmp)
+        for rel, body in generated.items():
+            path = root / rel
+            path.parent.mkdir(parents=True,exist_ok=True)
+            path.write_text(body,encoding="utf-8")
+            run(["foamDictionary",str(path)],root)
+    print("FOUNDATION14_10_PRODUCTION_T0_DICTIONARIES_NATIVE_PARSE_PASS__NO_CFD",flush=True)
+
+
 def main() -> int:
     if os.environ.get("WM_PROJECT_VERSION") != "14":
         raise RuntimeError("Must source actual OpenFOAM Foundation14")
     for command in ("blockMesh","foamPostProcess","foamDictionary"):
         if shutil.which(command) is None:
             raise RuntimeError(f"Missing official F14 utility: {command}")
+    verify_current_t0_templates_in_real_f14()
     with tempfile.TemporaryDirectory(prefix="c3d05_F14_synthetic_energy_") as dirname:
         case = Path(dirname)
         (case / "system").mkdir()
