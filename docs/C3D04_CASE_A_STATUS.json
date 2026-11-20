@@ -5,12 +5,12 @@
   "updated_local_date": "2026-11-20",
   "source_of_truth": "AGENTS.md + cases_3d/C3D_04_rounded_multiblock_pilot/AGENTS.md",
   "reference_mesh": "~/OpenFOAM/C3D04_V4_TRANSITION_REPAIR_01/T02",
-  "current_stage": "05_THERMAL_T0_DESIGN",
-  "current_stage_label": "Etapa 5/10 — diseño/preparación integral del modelo térmico T0 (sin CFD)",
+  "current_stage": "06_THERMAL_T0_PREFLIGHT_NATIVE",
+  "current_stage_label": "Etapa 6/10 — preflight nativo Foundation14 sobre malla V4/T02, condiciones y acoplamiento (sin CFD)",
   "progress_definition": "10 hitos operativos de igual peso; un hito solo cuenta DONE con evidencia observada. No es porcentaje de validación física ni de trabajo restante en horas.",
-  "progress_count_done": 4,
+  "progress_count_done": 5,
   "progress_count_total": 10,
-  "progress_percent": 40,
+  "progress_percent": 50,
   "numerical_accuracy_validated": false,
   "physical_validation": false,
   "grid_independence": false,
@@ -22,7 +22,8 @@
     "STL sampled bidirectional surface max 0.104973015 mm; NOT guaranteed Hausdorff",
     "native severe nonorth >70deg: parent 572, metal 276, mold 232; maxima 82.920/77.930/82.058 degrees",
     "64/64 extra parent severe faces individually matched to actual metal-mold interface; 0 outside",
-    "Reference V4/T02 preserved without CFD"
+    "Reference V4/T02 preserved without CFD",
+    "T0 sourced from archived C14: 10 of 10 OpenFOAM Foundation14 dictionaries parsed on actual CI binary (GitHub Actions run 44825262805, artifact 14674730228); 15 of 15 integrated tests passed on run 44825262837"
   ],
   "nonnegotiable_blockers": [
     "C14 numeric metal/arena parameters and 2D boundary reference NOW sourced directly in T0; they are constant C14-model inputs, NOT independently measured T-dependent iron/sand functions.",
@@ -32,7 +33,7 @@
     "T1 fluid-solid phase-change, temperature-dependent materials, actual casting cooling curves, mesh/time independence and experimental validation remain not executed.",
     "STL surface fit distances are sample-only, not rigorous Hausdorff to exact STEP.",
     "F14 externalTemperature and coupledTemperature have been authored and crosschecked with official docs, but actual runtime initialization/energy equation integration in WSL remains unverified",
-    "Static integrated C14 source parity and thermal T0 tests passed 14/14 in CI; actual native OpenFOAM14 foamDictionary/coupledTemperature initialization in user WSL is STILL unverified"
+    "Stage 05 design closed via native Foundation14 CI dictionary parser (10/10) and 15/15 static integrated tests; actual user WSL V4/T02 mesh-based runtime remains unverified, current Stage 06"
   ],
   "milestones": [
     {
@@ -62,13 +63,13 @@
     {
       "id": "05_THERMAL_T0_DESIGN",
       "label": "Paquete integrado T0: esquema de conducción, propiedades con fuente, BC, estrategia numérica y pruebas estáticas",
-      "status": "IN_PROGRESS",
-      "evidence": "cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/README.md"
+      "status": "DONE",
+      "evidence": "reports/case-a-t0/CI_NATIVE_F14_20261120.json"
     },
     {
       "id": "06_THERMAL_T0_PREFLIGHT_NATIVE",
       "label": "Preflight con OpenFOAM Foundation14 y datos físicos auténticos completos; consistencia de diccionarios",
-      "status": "PENDING",
+      "status": "IN_PROGRESS",
       "evidence": null
     },
     {
@@ -100,27 +101,29 @@
   "execution_rule": "Integrate validations into one cohesive milestone; no one-script-per-subproblem loops, no rerun already closed V4/T02 audits; one user command only at a meaningful end-to-end delivery; preserve case and audit evidence.",
   "last_integrated_delivery": {
     "date": "2026-11-20",
-    "stage": "05_THERMAL_T0_DESIGN",
-    "status": "GITHUB_PR52_MERGED_THREE_CI_WORKFLOWS_GREEN_14_T0_INTEGRATED_TESTS_WSL_F14_AND_CFD_PENDING",
-    "milestone_not_closed": true,
-    "PR": 52,
-    "merged_commit": "78406c5bf17193b7807a3dc73e1d8ab3a4240ea4",
-    "test_runs": [
-      "44796173057: Case A T0 integrated, 14 tests PASS",
-      "44796173127: MasterProject contract PASS",
-      "44796173045: QuickCup science audit PASS"
+    "stage_completed": "05_THERMAL_T0_DESIGN",
+    "current_stage": "06_THERMAL_T0_PREFLIGHT_NATIVE",
+    "operational_completion": "5/10=50%",
+    "status": "GITHUB_ACTIONS_FOUNDATION14_NATIVE_DICTIONARY_10_OF_10_PASS_AND_STATIC_15_OF_15_PASS",
+    "evidence_report": "reports/case-a-t0/CI_NATIVE_F14_20261120.json",
+    "merged_pr": "https://github.com/michels-lab/MasterProject/pull/53",
+    "merged_commit": "718bb48167d58218b344cad6eb169fef198b8dbf",
+    "observed_workflows": [
+      "44825262805 Native F14 success",
+      "44825262837 Case A integrated 15/15 success",
+      "44825262666 MasterProject delivery contract success",
+      "44825262677 QuickCup scientific audit success"
     ],
-    "evidence_report": "reports/case-a-t0/CI_GRANADA_20261120.json",
-    "integrated_corrections": [
-      "T0 invalid inputs now return non-zero status 3, before native polyMesh I/O or output generation",
-      "Read-only native 3D C14 heat budget is computed once per preflight and passed in evidence to atomic materializer",
-      "Atomic materialization refuses missing/invalid native-budget evidence before side effects",
-      "14 complete CI regression tests proved valid sourced C14 no-output preflight, invalid rejection, source SHA parity, full 10 dictionaries and atomic failure path"
+    "improvements": [
+      "Actual OpenFOAM Foundation14 installed on GitHub Ubuntu24.04 and all ten C14-derived T0 files parsed with foamDictionary",
+      "Ubuntu26.04 WSL source guard HWLOC_COMPONENTS=-gl used to avoid official pvdataserver hang, sourced once",
+      "Native CI tests have run-state artifacts and workflow job IDs, no user microtests"
     ],
-    "limitations": [
-      "Successful static GitHub CI is not native OpenFOAM Foundation14 validation or CFD",
-      "No source files C14 or V4/T02 native mesh modified",
-      "T0 metal is an explicit numerical Cp-as-Cv two-solid surrogate, not original fluid metal nor real phase-change simulation"
+    "scientific_limits": [
+      "No foamMultiRun solver run",
+      "No actual user native V4/T02 mesh in CI",
+      "No boundary thermophysical runtime initialization, no heat transfer or independent mesh convergence",
+      "C14 Cp-as-Cv solid surrogate is explicitly not the original fluid-solidification model"
     ]
   }
 }
