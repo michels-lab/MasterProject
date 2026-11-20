@@ -106,19 +106,19 @@
     },
     {
       "case_id": "C3D-04 Caso A",
-      "status": "V4/T02 quality/contact and 64/64 interface-face mapping verified; C14-sourced T0 two-solid surrogate prepared; PR52 merged and 14 T0 CI static tests plus two project workflows successful, NO F14 WSL parsing or CFD",
+      "status": "Etapa05 de diseño T0 completada: C14 original verificado, OpenFOAM Foundation14 foamDictionary real acepta 10/10, CI integrada 15/15, QuickCup+contract CI PASS. Etapa06 prepara V4/T02 real; NO CFD ejecutado.",
       "evidence": "docs/C3D04_CASE_A_STATUS.json",
       "progress_ref": "docs/C3D04_CASE_A_STATUS.json",
-      "stage": "5/10 — Diseño/preparación integral T0",
-      "completed_hitos": 4,
+      "stage": "6/10 — Preflight real sobre malla V4/T02 en Foundation14",
+      "completed_hitos": 5,
       "total_hitos": 10,
-      "percent_hitos": 40,
+      "percent_hitos": 50,
       "percentage_scope": "SOLO_HITOS_OPERATIVOS_DEL_CASO_A_NO_TESIS_NO_CFD",
       "primary_contract": "cases_3d/C3D_04_rounded_multiblock_pilot/AGENTS.md",
-      "next_integrated_milestone": "Single native F14 preflight/materialization and meaningful first T0 run once package dependencies validated, never isolated microtests",
-      "blocker": "Foundation14 native dictionary and coupledTemperature initialization, energy conservation, numerical stability and C14 physical model equivalence NOT verified; CFD/solidification not run",
-      "CI_status": "VERIFIED_STATIC_PR52_THREE_WORKFLOWS_PASS_14_T0_TESTS",
-      "CI_evidence": "reports/case-a-t0/CI_GRANADA_20261120.json"
+      "next_integrated_milestone": "Un solo preflight Foundation14 nativo y creación atómica del T0 en WSL con la malla real V4/T02; sin repetir pruebas sueltas, preservando fuente",
+      "blocker": "Falta comprobación integrada WSL de la malla V4/T02 y aceptación de BC/coupledTemperature en runtime del solver; CI sin malla real no lo demuestra",
+      "CI_status": "PR53_MERGED_NATIVE_FOUNDATION14_10_OF_10_AND_INTEGRATED_15_OF_15_PASS",
+      "CI_evidence": "reports/case-a-t0/CI_NATIVE_F14_20261120.json"
     },
     {
       "case_id": "C3D-05 Caso B",
