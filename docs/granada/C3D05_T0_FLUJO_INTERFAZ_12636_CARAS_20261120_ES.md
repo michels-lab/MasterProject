@@ -46,9 +46,9 @@ cd ~/OpenFOAM/MasterProject && git pull --ff-only && bash cases_3d/C3D_05_step_g
 Dentro de esa única invocación el flujo **cuando se ejecute localmente** reúne lectura de C14 archivado con SHA, preparación de caso aislado, verificación de 10 diccionarios, referencia energética ideal, intento `foamMultiRun` de 100 pasos, lectura de temperaturas regionales nativas y, por último, compilación/extracción/diagnóstico de `q()` de **las dos caras de cada contacto**. Si la ejecución anterior ya terminó y su log mantiene SHA, no vuelve a llamar al solver. Se conservan evidencia e informes anteriores.
 
 Evidencias previstas **solo después de ejecución WSL real**:
-- `T0_FACE_FLUX_METAL.csv` y `T0_FACE_FLUX_MOLD.csv` — CSV por cara y tiempo.
-- `log.C3D05_native_bilateral_q` y `log.wmake.C3D05_T0_flux` — extracción/compilación.
-- `T0_FACE_FLUX_BILATERAL_DIAGNOSTICS.json` — comparación de caras y energía.
+- `T0_NATIVE_FACE_FLUX/metal.csv` y `T0_NATIVE_FACE_FLUX/mold.csv` — archivos completos por cara y tiempo.
+- `T0_NATIVE_FACE_FLUX/log.c3d05PatchFlux` y `log.wmake.C3D05_T0_flux` (en la carpeta del caso) — extracción y compilación, respectivamente.
+- `T0_NATIVE_FACE_FLUX/bilateral_diagnostics.json` y `T0_NATIVE_FACE_FLUX/manifest.sha256` — comparación de caras, energía y SHA de todos los artefactos. **La carpeta se publica mediante una única operación de renombrado solo si ambos CSV y el análisis están completos**; en caso contrario se conserva la carpeta temporal con la evidencia del error, sin declarar resultados.
 - `T0_NATIVE_ENERGY_HISTORY.json` — balance de energía volumétrico ya implementado.
 
 ## 4. Estado honesto de la validación
@@ -58,3 +58,9 @@ El **programa C++ nativo todavía NO está compilado ni ejecutado en la WSL del 
 Incluso con CSV reales, las tasas de flujo y la energía deben someterse a análisis de sensibilidad en tiempo/malla/no ortogonalidad, definición de tolerancias de aceptación científicamente defendibles y comparación con termopares/curvas QuickCup. La referencia C14 (`Cp≈Cv`, `k=Cp*mu/Pr`) sigue siendo **solo un banco de prueba numérico**, no datos experimentales de hierro hipoeutéctico.
 
 **Caso B permanece etapa 3/7, 2/7 hitos = 29% técnico**. Entrega de código con ensayos sintéticos, **no validación CFD ni cierre G3/G4**.
+
+## 5. Mejoras posteriores de integridad y compilación (20-11-2026)
+
+Se añadió [una CI de compilación **real** OpenFOAM Foundation14](../../.github/workflows/c3d05-foundation14-native-build.yml) en Ubuntu 24.04, además de la CI sintética existente. El compilador `wmake` encontró incompatibilidades de API no visibles en pruebas Python (se reemplazó el encabezado heredado `fvCFD.H` y el acceso `mesh.boundaryMesh()` por las interfaces reales Foundation14). Esta CI también debe comprobar dependencias dinámicas con `ldd` y arranque del binario con `-help`. **No documentar compilación verificada hasta obtener una ejecución PASS de esta CI**. El binario seguirá compilándose por separado en la WSL del investigador durante una ejecución numérica, no se distribuirá un binario fabricado por GitHub como si fuera resultado experimental.
+
+El ejecutor [`run_native_t0_patch_flux.sh`](../../cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/scripts/run_native_t0_patch_flux.sh) se hizo transaccional: todos los CSV, log y reporte se crean primero en una ubicación temporal `.T0_NATIVE_FACE_FLUX_STAGING.*` de la copia aislada y se publican en `T0_NATIVE_FACE_FLUX/` con un renombrado único, solo después de pasar el análisis bilateral. Al reentrar, verifica `manifest.sha256` y coincidencia de entradas/solver, reutilizando sin volver a calcular o sobrescribir. Las [regresiones de transacción](../../cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/tests/test_native_flux_atomic_handoff.py) generan datos **sintéticos** de 12,636 pares por lado y prueban publicación completa, fallos parciales y reutilización; no ejecutan CFD.
