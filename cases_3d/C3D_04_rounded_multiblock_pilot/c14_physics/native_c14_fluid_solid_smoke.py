@@ -39,14 +39,20 @@ def do_smoke(root: Path) -> dict:
     for region in ("metal","mold"):
         path=reference/"system"/region/"blockMeshDict"
         path.parent.mkdir(parents=True,exist_ok=True)
-        path.write_text(mesh_fixture.block_mesh_dict(region))
+        # Eight or more control volumes are required for the fluid-pressure
+        # equation; a one-cell cube has a zero pressure matrix diagonal.
+        block=mesh_fixture.block_mesh_dict(region)
+        marker="(1 1 1) simpleGrading"
+        assert block.count(marker)==1, "synthetic mesh blockMeshDict drift"
+        block=block.replace(marker,"(3 3 3) simpleGrading")
+        path.write_text(block)
         logs.append(native_case.native(
             ["blockMesh","-case",str(reference),"-region",region,
              "-dict",str(path)],reference,"log.blockMesh."+region,120))
-    n_metal=native_case.region_cells(reference,"metal",1)
-    n_mold=native_case.region_cells(reference,"mold",1)
+    n_metal=native_case.region_cells(reference,"metal",27)
+    n_mold=native_case.region_cells(reference,"mold",27)
     record=native_case.stage(reference,candidate,smoke=True,
-                             expected={"metal":1,"mold":1})
+                             expected={"metal":27,"mold":27})
     try:
         record=native_case.run_smoke(candidate,record)
     except Exception:
@@ -55,7 +61,7 @@ def do_smoke(root: Path) -> dict:
     assert record["status"]=="C3D04_A_C14_FLUID_SOLID_TWO_STEP_NATIVE_SMOKE_PASS"
     record["real_V4_T02_mesh_used"]=False
     record["full_10s_C14_case_executed"]=False
-    record["source_fixture"]="TWO_3D_ONE_CELL_SYNTHETIC_REGIONS_NOT_QUICKCUP"
+    record["source_fixture"]="TWO_3D_27_CELL_SYNTHETIC_REGIONS_NOT_QUICKCUP"
     record["blockMesh_native_logs"]=logs
     record["synthetic_cell_counts"]={"metal":n_metal,"mold":n_mold}
     (candidate/native_case.REPORT).write_text(
