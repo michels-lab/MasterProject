@@ -1,3 +1,15 @@
+## PRIORIDAD OBLIGATORIA: Proyecto CFD en OpenFOAM, no proyecto Python (20-11-2026)
+
+**Decisión expresa del investigador:** MasterProject, y en particular FS-C06 contracción, es un proyecto científico de **OpenFOAM Foundation 14**. Python y GitHub Actions son herramientas auxiliares de preparación, diagnóstico, automatización, auditoría y visualización; **nunca el producto físico principal**, ni un sustituto del solver, ni un criterio de avance de la física. No dedicar sucesivas Operaciones Granada a añadir pantallas de Python mientras las ecuaciones, campos, condiciones de frontera y soluciones nativas siguen pendientes.
+
+En cada Operación Granada de FS-C06 priorizar, en este orden:
+1. **Modelo en OpenFOAM:** revisar compatibilidad Foundation 14 de `compressibleVoF` + región sólida `solid` + `VoFSolidificationMelting`; implementar y versionar los diccionarios y modificaciones necesarias del caso nativo (`0/`, `constant/`, `system/`, `fvModels`, termofísica, regiones, malla, fronteras y control numérico). Si el solver estándar no permite una contracción conservativa con `rho_l(T)`/`rho_s(T,f_s)`, formular explícitamente la extensión C++/fvModel/solver requerida y demostrar conservación antes de afirmar contracción.
+2. **Física relevante:** solidificación/latente, densidad dependiente de estado, masa, cambio de volumen/superficie libre, alimentación, interacción metal–aire–arena y eventual expansión grafítica con propiedades trazables y validación QuickCup. Separar por etapas de evidencia, sin inventar resultados ni coeficientes.
+3. **Ejecución real:** una corrida aislada Foundation 14 en la laptop con un único comando, logs y campos nativos, seguida de evaluación física y energética. GitHub no ejecuta CFD.
+4. **Soporte:** Python solo si es imprescindible para generar el caso, instrumentarlo, interpretar campos OpenFOAM reales o proteger integridad; la CI es complementaria. No declarar progreso científico por más scripts, mocks, estadísticas sintéticas o CI verde.
+
+**Criterio de entrega:** reportar primero qué se cambió en el modelo/caso OpenFOAM y qué ecuación o acoplamiento habilita, luego evidencia de ejecución nativa y estado físico. Si solo se modificó Python o documentación, etiquetar el bloque como *infraestructura auxiliar* y decir explícitamente que el solver no avanzó. No afirmar que FS-C06 ya simula contracción cuando solo reporta `alpha.metal.solid` o hipótesis de densidad.
+
 ## Mandatory agent prevention — root-cause and evidence (2026-10-21)
 
 Owner instruction: do not merely correct a recurring mistake; improve the agent/process rule and add a regression/verification that catches the same failure again. Applicable to ALL assistance, maintenance, QA, audits and task-automation roles; an agent instruction is not evidence that a separate AI agent has executed. For shared software-source governance see https://github.com/michels-lab/Michel-Software-Standards/blob/main/standards/AGENT_RECURRENCE_PREVENTION_STANDARD.md. This repository remains its OWN source of truth; do not move sensitive or product-specific contents across repo boundaries.

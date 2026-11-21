@@ -212,3 +212,20 @@ convergencia, fase, cierre de masa ni validación experimental. El informe
 de pantalla se guarda **fuera del directorio de la corrida** (creación
 exclusiva, nunca sobrescritura). Las pruebas CI fabrican archivos
 sintéticos y verifican alteraciones de SHA o rutas, no corren CFD.
+
+## Política de desarrollo fijada por el investigador (20-11-2026)
+
+**Este es un proyecto OpenFOAM Foundation 14, NO un proyecto Python.**
+El entregable principal es un **caso CFD nativo funcional y científicamente
+defendible**: malla y regiones, diccionarios `0/constant/system`,
+`compressibleVoF` acoplado a arena, modelo de solidificación,
+termofísica de hierro y aire, conservación de masa, densidades, evolución
+física de superficie libre y, si el solver nativo no basta, extensión C++
+identificada y verificada. Los scripts Python existentes son auxiliares;
+una nueva pantalla o CI verde no equivale a avanzar el solver.
+
+**Próxima Operación Granada:** priorizar trabajo real de modelo y archivos
+OpenFOAM sobre nuevos auditores Python; documentar qué ecuaciones y fuentes
+físicas están implementadas, cuáles no, y mostrar evidencia de ejecución
+nativa solo cuando exista. El caso sigue sin contracción volumétrica
+implementada. No introducir densidades o expansión grafítica ficticias.

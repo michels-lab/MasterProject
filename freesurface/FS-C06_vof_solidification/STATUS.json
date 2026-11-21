@@ -30,5 +30,10 @@
   "density_coupled_to_solver": false,
   "constitutive_shrinkage_solver_implemented": false,
   "native_density_screen_run": false,
-  "open_boundary_metal_mass_flux_measured": false
+  "open_boundary_metal_mass_flux_measured": false,
+  "project_type": "OPENFOAM_FOUNDATION14_CFD_NOT_PYTHON",
+  "primary_deliverable": "Native OpenFOAM case and physically coupled shrinkage model, not Python screening",
+  "python_role": "Auxiliary case preparation, diagnostics, provenance and CI only",
+  "next_granada_priority": "Implement and audit native OpenFOAM physics/case (models, transport, boundaries, continuity, phase densities, interface) before adding Python-only QA",
+  "solver_shrinkage_native_implemented": false
 }
