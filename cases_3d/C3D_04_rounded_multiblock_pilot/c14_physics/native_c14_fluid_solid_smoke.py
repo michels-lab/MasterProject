@@ -84,7 +84,7 @@ def do_smoke(root: Path) -> dict:
     # If a refactor accidentally changes time, catch it as a native gate error.
     print("FULL_C14_ORIGINAL_10S_F14_DICTIONARIES_VERIFIED_NO_CFD",
           str(full_candidate/native_case.REPORT))
-        record=native_case.stage(reference,candidate,smoke=True,
+    record=native_case.stage(reference,candidate,smoke=True,
                              expected={"metal":27,"mold":27})
     try:
         record=native_case.run_smoke(candidate,record)
