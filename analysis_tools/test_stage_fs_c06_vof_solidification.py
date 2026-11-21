@@ -8,6 +8,7 @@ import unittest
 from stage_fs_c06_vof_solidification import (
     C14_FVMODELS, FLUID_CELLS, PREFIX, TIMES, MODEL_FIELD,
     check_solid_fraction, model_text, read_c14_reference, phase_volume_metrics,
+    read_native_solid_fraction,
 )
 
 
@@ -115,6 +116,58 @@ class FS_C06Test(unittest.TestCase):
         with self.assertRaises(ValueError):
             phase_volume_metrics([1.], [.5], [.500000001],
                                  [1450.], 1473.)
+
+    def _native_field(self, body, obj="alpha.metal.solid", fmt="ascii"):
+        return (
+            "FoamFile\n{\n"
+            "    version 2.0;\n"
+            f"    format {fmt};\n"
+            "    class volScalarField;\n"
+            f"    object {obj};\n"
+            "}\n"
+            f"internalField {body}\n"
+            "boundaryField {}\n"
+        )
+
+    def test_native_auto_write_solid_uniform_is_read(self):
+        with tempfile.TemporaryDirectory() as directory:
+            p = Path(directory) / MODEL_FIELD
+            p.write_text(self._native_field("uniform 0.25;"))
+            self.assertEqual(read_native_solid_fraction(p, 3), [.25]*3)
+
+    def test_native_auto_write_solid_nonuniform_is_read(self):
+        with tempfile.TemporaryDirectory() as directory:
+            p = Path(directory) / MODEL_FIELD
+            p.write_text(self._native_field(
+                "nonuniform List<scalar> 3\n(\n0.0\n0.125\n0.8\n);"))
+            self.assertEqual(read_native_solid_fraction(p, 3),
+                             [0., .125, .8])
+
+    def test_native_reader_never_misidentifies_alpha_metal(self):
+        with tempfile.TemporaryDirectory() as directory:
+            p = Path(directory) / MODEL_FIELD
+            p.write_text(self._native_field("uniform 0.1;",
+                                            obj="alpha.metal"))
+            with self.assertRaises(ValueError):
+                read_native_solid_fraction(p, 2)
+
+    def test_native_reader_fail_closed_bad_output(self):
+        with tempfile.TemporaryDirectory() as directory:
+            p = Path(directory) / MODEL_FIELD
+            examples = [
+                (self._native_field("nonuniform List<scalar> 2\n(0.1 0.2);"), 3),
+                (self._native_field("nonuniform List<scalar> 3\n(0.1 0.2);"), 3),
+                (self._native_field("uniform nan;"), 2),
+                (self._native_field("uniform 0.1;", fmt="binary"), 2),
+                (self._native_field("nonuniform List<vector> 2\n((0 0 0) (1 1 1));"), 2),
+            ]
+            for field, cells in examples:
+                with self.subTest(field=field[:80]), self.assertRaises(ValueError):
+                    p.write_text(field)
+                    read_native_solid_fraction(p, cells)
+            p.unlink()
+            with self.assertRaises(ValueError):
+                read_native_solid_fraction(p, 2)
 
     def test_constants_and_outputs_distinct(self):
         self.assertEqual(TIMES, ("1e-07", "2e-07"))
