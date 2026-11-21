@@ -180,14 +180,14 @@ def read_native_solid_fraction(path: Path, expected_cells: int = FLUID_CELLS) ->
     require(path.is_file() and not path.is_symlink(),
             "missing native alpha.metal.solid field")
     raw = path.read_text(encoding="utf-8", errors="strict")
-    require(re.search(r"\\bformat\\s+ascii\\s*;", raw[:1000]) is not None,
+    require(re.search(r"\bformat\s+ascii\s*;", raw[:1000]) is not None,
             "native alpha.metal.solid must be ASCII")
-    require(re.search(r"\\bclass\\s+volScalarField\\s*;", raw[:1000]) is not None
-            and re.search(r"\\bobject\\s+alpha\\.metal\\.solid\\s*;", raw[:1000]) is not None,
+    require(re.search(r"\bclass\s+volScalarField\s*;", raw[:1000]) is not None
+            and re.search(r"\bobject\s+alpha\.metal\.solid\s*;", raw[:1000]) is not None,
             "native field must be volScalarField object alpha.metal.solid")
     internal = raw.split("boundaryField", 1)[0]
     nonuniform = re.search(
-        r"internalField\\s+nonuniform\\s+List<scalar>\\s+(\\d+)\\s*\\((.*?)\\)\\s*;",
+        r"internalField\s+nonuniform\s+List<scalar>\s+(\d+)\s*\((.*?)\)\s*;",
         internal, re.S
     )
     if nonuniform:
@@ -201,7 +201,7 @@ def read_native_solid_fraction(path: Path, expected_cells: int = FLUID_CELLS) ->
                 "native solid field values disagree with declared count")
     else:
         uniform = re.search(
-            r"internalField\\s+uniform\\s+([-+0-9.eE]+)\\s*;", internal
+            r"internalField\s+uniform\s+([-+0-9.eE]+)\s*;", internal
         )
         require(uniform is not None,
                 "missing or unsupported native solid internalField")
