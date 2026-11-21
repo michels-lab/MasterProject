@@ -45,3 +45,55 @@ El arranque FS-C06 (configuración de solver) se considera **superado según sal
 5. Comparar contra curvas y datos QuickCup trazables; no cambiar C14, FS-C05 ni casos 3D-A/B.
 
 **Clasificación de esta etapa:** `FS_C06_NATIVE_GATE_PASS_USER_CONSOLE_ONLY__NO_SHRINKAGE`. No es un porcentaje del avance de la tesis.
+
+
+## 20-11-2026 — Lectura REAL del informe guardado y reparación de monitorización Foundation 14
+
+El investigador consultó directamente el `FS_C06_REPORT.json` de la corrida
+`FS_C06_VOF_SOLID_SMOKE_20261121T031743Z_200ccb63` (mismo caso y sin reejecutar CFD):
+
+| Tiempo (s) | VOF metal (m³) | V sólido (m³) | V líquido (m³) | fracción sólida | T.metal media (K) | ΔV metal/VOF |
+|---:|---:|---:|---:|---:|---:|---:|
+| 1e-7 | 4.801191628e-5 | 0 | 4.801191628e-5 | 0 | 1499.9970068022385 | 0 |
+| 2e-7 | 4.801191628e-5 | 0 | 4.801191628e-5 | 0 | 1499.9965640713197 | 0 |
+
+`V0=4.801191628e-5 m³` (48.01191628 cm³). El hierro se enfría
+`-0.00343592868 K` de 0 a 2e-7 s (media T.metal); permanece por encima
+del liquidus **en promedio** de cribado `1473 K`. No se observaron
+volúmenes sólidos en el informe, ni desplazamiento VOF. El informe no
+contiene extremos T.metal en todas las celdas, de modo que el promedio solo
+no excluye zonas locales bajo liquidus. Los ceros son **medidos** para estas
+instantáneas, no supuestos constitutivos.
+
+También consultó cuatro carpetas concretas bajo `postProcessing`:
+`FS_C06_atmosphereMassFlux`, `FS_C06_mixtureMass`,
+`FS_C06_wallHeatFluxFluid`, `FS_C06_wallHeatFluxMold`.
+El comando de lectura encontró **0 archivos `.dat` en cada una**.
+Ello NO prueba el fracaso del solver ni que otros monitores tampoco
+escribieran: solo que esas rutas no produjeron los archivos solicitados.
+
+**Causa de configuración corroborada por documentación oficial Foundation:**
+desde OpenFOAM 12, los functionObjects deben declararse en
+`system/functions`, y el código de Foundation14 los lee desde ese archivo:
+- https://openfoam.org/release/12/
+- https://cpp.openfoam.org/v14/namespaceFoam_1_1functionObjects.html
+- https://github.com/OpenFOAM/OpenFOAM-14/blob/master/tutorials/multiphaseEuler/boilingBed/system/functions
+
+La configuración original de FS-C06 había colocado los 10 monitores en
+`system/controlDict.functions` (formato histórico), sin archivo
+`system/functions` nativo. Se trasladaron los **mismos 3 volFieldValue,
+5 surfaceFieldValue y 2 wallHeatFlux** a
+`native/system/functions`, manteniendo el `controlDict` original de solver,
+sin alterar `fvModels`, termofísica, malla ni el caso exitoso original.
+El stager exige ahora un `system/functions` con cabecera Foundation14,
+copiado íntegramente y protegido con hash. El gate nativo exige los diez
+archivos de monitorización no vacíos antes de anunciar aprobación de
+instrumentación. Las pruebas estáticas CI se actualizan al esquema nativo.
+
+**Estado científico tras esta corrección en Git:** datos FS-C06 anteriores
+CONFIRMADOS = 0 sólido y 0 cambio VOF hasta 2e-7 s. Instrumentación
+CORREGIDA EN CÓDIGO, **todavía no reejecutada ni demostrada en WSL**.
+No declarar balances energéticos y de masa a partir de monitores aún
+inexistentes. Futuro: comprobar el nuevo esquema de funciones en una
+ejecución aislada, idealmente al integrar la siguiente física de transición;
+conservar copia del caso anterior sin cambios.
