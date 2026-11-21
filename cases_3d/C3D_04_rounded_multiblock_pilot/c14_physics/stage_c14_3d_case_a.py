@@ -150,23 +150,54 @@ def smoke_control(text: str) -> str:
     return text
 
 
+def enforce_C14_3D_only_delta(
+    files: dict[str,str], original: dict[str,str], n: int,
+    *, smoke: bool, existing_zone: bool,
+) -> None:
+    """Fail closed: C14 may change ONLY where its 2D mesh requires it.
+
+    For the full 10-second research input, the only alterations to the
+    ORIGINAL 14 C14 dictionaries are the mesh-indexed pressure reference
+    in system/metal/fvSolution; the other 13 remain byte-identical.
+    The 8 initial field files reflect the same C14 initial/boundary
+    values on real 3D patches. A new all-metal cellZone is mesh metadata.
+    A synthetic-only two-step smoke may shorten endTime/writeInterval,
+    but must NEVER be interpreted as the full C14 3D experiment.
+    """
+    additions=set() if existing_zone else {"constant/metal/polyMesh/cellZones"}
+    require(set(files)==set(original)|additions,
+            "unexpected file added/removed: only 3D mesh zone is allowed")
+    required_pressure=three_d_pressure_solution(
+        original["system/metal/fvSolution"],n)
+    for relative, historical in original.items():
+        actual=files[relative]
+        if relative=="system/metal/fvSolution":
+            require(actual==required_pressure,
+                    "only pRefPoint -> valid 3D pRefCell is allowed")
+        elif relative=="system/controlDict" and smoke:
+            require(actual==smoke_control(historical),
+                    "synthetic smoke may adjust ONLY horizon and writing")
+        else:
+            require(actual.encode("utf-8")==historical.encode("utf-8"),
+                    "C14 original values/models/dictionaries changed: "+relative)
+    if additions:
+        require(files["constant/metal/polyMesh/cellZones"]==whole_region_zone(n),
+                "metal zone must be exactly all native metal region cells")
+    require(files["system/controlDict"]==original["system/controlDict"] if not smoke else True,
+            "FULL 3D case must preserve C14 timing exactly")
+
+
 def input_files(n: int, *, smoke: bool, existing_zone: bool=False) -> dict[str,str]:
-    files = physics.assemble_unmaterialized_source_exact_fileset()
+    original=physics.assemble_unmaterialized_source_exact_fileset()
+    files=dict(original)
     files["system/metal/fvSolution"] = three_d_pressure_solution(
         files["system/metal/fvSolution"],n)
     if not existing_zone:
         files["constant/metal/polyMesh/cellZones"] = whole_region_zone(n)
     if smoke:
         files["system/controlDict"] = smoke_control(files["system/controlDict"])
-    for relative in ("constant/metal/materials/castIron",
-                     "constant/mold/materials/silica",
-                     "constant/metal/fvModels",
-                     "constant/metal/momentumTransport"):
-        require(files[relative]==physics.read_original(relative),
-                "physical C14 source altered "+relative)
-    require("metal       fluid;" in files["system/controlDict"]
-            and "mold        solid;" in files["system/controlDict"],
-            "C14 model cannot be replaced by two solids")
+    enforce_C14_3D_only_delta(
+        files,original,n,smoke=smoke,existing_zone=existing_zone)
     return files
 
 
