@@ -1,5 +1,8 @@
 # C3D-04 Caso A — T0 integrado con valores auténticos de C14
 
+> **20-11-2026 | Corrección preventiva de autotest F14 (hito 06 abierto, 5/10 = 50 %).** Se detectó una aserción obsoleta en `scripts/prepare_case_a_t0.py --self-test` que aún exigía `externalWallHeatFluxTemperature` después de adoptar `externalTemperature` en Foundation14. Corregida a cobertura por cantidad de parches exteriores (metal/arena), rechazo de la BC heredada y ejecución obligatoria del autotest desde la suite integrada. **El cambio no modifica diccionarios productivos, geometría V4/T02 ni ejecuta CFD**; la CI del PR y el preflight nativo real deben verificarse por separado.
+
+
 ## Resiliencia de volumen nativo (etapa 6/10, 50 %) — 20-11-2026
 
 El preflight original exigía `PILOT_MESH_REPORT.tsv` en V4/T02, aunque no está garantizado que todos los casos preservados contengan ese resumen auxiliar. **La falta del TSV no debe bloquear el cálculo real ni justificar pedir otra microprueba.** `read_preserved_mesh_volumes()` conserva su validación estricta si existe el archivo; si está ausente, calcula `V` directamente a partir de `polyMesh/points`, `faces` y la cuenta real de caras internas `neighbour`, integrando el **volumen orientado de las caras de frontera** (`sum dot(a, cross(b,c))/6` con triangulación de polígonos). Rechaza volúmenes nulos, negativos, NaN y geometría desorientada; es volumen de **malla nativa**, no STL o STEP.
