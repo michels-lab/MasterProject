@@ -53,13 +53,13 @@ def read_labels(path: Path) -> tuple[int, int]:
     """
     raw=path.read_text(encoding="utf-8")
     require("class       labelList;" in raw or
-            re.search(r"\\bclass\\s+labelList\\s*;",raw) is not None,
+            re.search(r"\bclass\s+labelList\s*;",raw) is not None,
             "expected native labelList in "+str(path))
     # Search the payload AFTER the complete FoamFile metadata dictionary.
-    head=re.search(r"\\bFoamFile\\s*\\{[^{}]*\\}",raw,re.S)
+    head=re.search(r"\bFoamFile\s*\{[^{}]*\}",raw,re.S)
     require(head is not None,"native FoamFile header missing in "+str(path))
     rest=raw[head.end():]
-    m=re.search(r"(?m)^\\s*(\\d+)\\s*(?:\\{\\s*(\\d+)\\s*\\}|\\(\\s*([\\d\\s]*)\\))",rest,re.S)
+    m=re.search(r"(?m)^\s*(\d+)\s*(?:\{\s*(\d+)\s*\}|\(\s*([\d\s]*)\))",rest,re.S)
     require(m is not None,"native labelList payload absent "+str(path))
     declared=int(m.group(1))
     require(declared>=0,"negative list length "+str(path))
