@@ -166,7 +166,7 @@
     "native_V4_T02_WSL_executed": false,
     "T0_case_A_CFD_executed": false,
     "physical_validation": false,
-    "test_evidence_state": "NATIVE_F14_SYNTHETIC_RUN_SUCCESS_SOURCE_SHA_e31824045; STILL_AWAITING_PR_HEAD_CHECKS",
+    "test_evidence_state": "PR57_ALL_6_OF_6_CHECKS_PASS_WITH_F14_SYNTHETIC_COUPLED_RUNTIME; STILL_NO_NATIVE_V4_T02_WSL",
     "progress_unchanged": "Etapa 6/10, 5/10=50% (native V4/T02 preflight remains open)",
     "failure_evidence": "https://github.com/michels-lab/MasterProject/actions/runs/44844797946",
     "native_failure_observed": "foamMultiRun initialized heSolidThermo and rejected generated metalTop externalTemperature: h constant 10; expected uniform or nonuniform",
@@ -189,6 +189,12 @@
         "mold_T_K": 300.0491112
       }
     ],
-    "native_runtime_proved": "Both synthetic 3D regions with production C14-derived 10 T0 files initialized externalTemperature h uniform, coupledTemperature and ran 2 foamMultiRun steps; saved T fields SHA"
+    "native_runtime_proved": "Both synthetic 3D regions with production C14-derived 10 T0 files initialized externalTemperature h uniform, coupledTemperature and ran 2 foamMultiRun steps; saved T fields SHA",
+    "PR_merged_commit": "86f06876e847032621169a465a4ca14920606239",
+    "PR_state": "MERGED_TO_MAIN",
+    "head_check_workflow_runs": [
+      "https://github.com/michels-lab/MasterProject/actions/runs/44845291366",
+      "https://github.com/michels-lab/MasterProject/actions/runs/44845281280"
+    ]
   }
 }
