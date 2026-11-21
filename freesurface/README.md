@@ -1,6 +1,10 @@
 # freesurface — Casos de prueba
 
 
+> **20-11-2026 — FS-C06 10/10 monitores NATIVOS confirmados:** en la segunda corrida real WSL (HEAD `608332778`), `foamMultiRun` y `checkMesh` de ambas regiones pasaron y se escribieron los diez archivos `.dat` de `system/functions`. Sigue pendiente verificar los valores de los archivos; **el modelo físico de contracción/alimentación no existe todavía**. [Evidencia precisa y ruta aislada](../docs/granada/FS_C06_GATE_NATIVO_WSL_20261120_ES.md).
+
+
+
 > **20-11-2026 FS-C06 DATOS NATIVOS:** se observaron `4.801191628e-5 m³` de metal VOF, **0 metal sólido** a `1e-7` y `2e-7 s`, temperatura final media `1499.996564 K`; sin contracción de volumen ni alimentación. Los monitores de masa/calor de Foundation14 estaban colocados en el `controlDict` legado y no generaron `.dat` en cuatro rutas consultadas; ahora residen en `system/functions`, con aceptación endurecida en Git **todavía pendiente de WSL**. [Bitácora](../docs/granada/FS_C06_GATE_NATIVO_WSL_20261120_ES.md). Entradas antiguas de «no ejecutado» son historia, no estado actual.
 
 
