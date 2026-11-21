@@ -199,3 +199,16 @@ metal/aire por contornos, sin balance global de entalpía y sin movimiento
 de superficie medido: `mass_conservation_verified=false`,
 `volumetric_shrinkage_verified=false`,
 `feeding_verified=false` obligatoriamente.
+
+### Integridad adicional del informe nativo (Granada)
+
+Antes de calcular hipótesis de densidad, la herramienta **vuelve a leer** en
+la carpeta original de ejecución aislada los campos `alpha.metal`,
+`alpha.metal.solid` y `T.metal` de ambos instantes; sus SHA-256 deben
+coincidir con `FS_C06_REPORT.json`. Un reporte JSON que se atribuya
+un resultado nativo pero no incluya esos archivos se rechaza. Esto
+verifica integridad de evidencia **guardada**, no demuestra de nuevo
+convergencia, fase, cierre de masa ni validación experimental. El informe
+de pantalla se guarda **fuera del directorio de la corrida** (creación
+exclusiva, nunca sobrescritura). Las pruebas CI fabrican archivos
+sintéticos y verifican alteraciones de SHA o rutas, no corren CFD.

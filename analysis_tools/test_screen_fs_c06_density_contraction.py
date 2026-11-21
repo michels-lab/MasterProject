@@ -7,7 +7,7 @@ import unittest
 
 from screen_fs_c06_density_contraction import (
     DENSITY_SCHEMA, NATIVE_STATUS, audit, check_native_report,
-    read_density_law, screen_inventories
+    read_density_law, screen_inventories, verify_saved_native_fields
 )
 
 
@@ -49,12 +49,25 @@ class DensityScreenTests(unittest.TestCase):
         self.tmp = tempfile.TemporaryDirectory()
         self.addCleanup(self.tmp.cleanup)
         base = Path(self.tmp.name)
-        self.report = base / "FS_C06_REPORT.json"
+        self.case = base / "FS_C06_VOF_SOLID_SMOKE_SYNTHETIC_TEST"
+        self.case.mkdir()
+        self.report = self.case / "FS_C06_REPORT.json"
         self.spec = base / "density.json"
         self.source = base / "original-jmatpro-export.txt"
         self.output = base / "separate-screen.json"
         self.source.write_text("SYNTHETIC ONLY: no material properties measured\n")
-        self.report.write_text(json.dumps(native_report()))
+        report = native_report()
+        for folder, snap in zip(("1e-07", "2e-07"),
+                                report["native_fraction_diagnostics"]["snapshots"]):
+            phase = self.case / folder / "fluid"
+            phase.mkdir(parents=True)
+            for filename, key in (("alpha.metal", "alpha_metal_sha256"),
+                                  ("alpha.metal.solid", "alpha_metal_solid_sha256"),
+                                  ("T.metal", "temperature_sha256")):
+                data = (filename + " synthetic field " + folder).encode()
+                (phase / filename).write_bytes(data)
+                snap[key] = hashlib.sha256(data).hexdigest()
+        self.report.write_text(json.dumps(report))
         self.law = {
             "schema": DENSITY_SCHEMA,
             "material_id": "test-cast-iron-not-calibrated",
@@ -146,6 +159,30 @@ class DensityScreenTests(unittest.TestCase):
             self.spec.write_text(json.dumps(spec))
             with self.subTest(key=key), self.assertRaises(ValueError):
                 read_density_law(self.spec, self.source)
+
+    def test_saved_native_fields_are_reverified_not_just_json_flags(self):
+        report = json.loads(self.report.read_text())
+        snapshots = report["native_fraction_diagnostics"]["snapshots"]
+        self.assertTrue(verify_saved_native_fields(
+            self.report, snapshots)["saved_fields_match_report"])
+        (self.case / "1e-07/fluid/alpha.metal.solid").write_text("TAMPERED")
+        with self.assertRaises(ValueError):
+            verify_saved_native_fields(self.report, snapshots)
+        with self.assertRaises(ValueError):
+            audit(self.report, self.spec, self.source, self.output)
+        self.assertFalse(self.output.exists())
+
+    def test_refuse_writing_results_into_original_cfd_case(self):
+        with self.assertRaises(ValueError):
+            audit(self.report, self.spec, self.source,
+                  self.case / "in-place-result.json")
+        self.assertFalse((self.case / "in-place-result.json").exists())
+
+    def test_reject_symlink_source_report_without_real_run(self):
+        alias = Path(self.tmp.name) / "linked-report.json"
+        alias.symlink_to(self.report)
+        with self.assertRaises(ValueError):
+            audit(alias, self.spec, self.source, self.output)
 
     def test_no_overwrite_and_no_cfd_invoked(self):
         self.output.write_text("sentinel")

@@ -140,6 +140,53 @@ def check_native_report(data: dict) -> tuple[float, list[dict]]:
     return v0, snapshots
 
 
+def verify_saved_native_fields(native_report: Path, snapshots: list[dict]) -> dict:
+    """Re-check field BYTES in the original isolated case; JSON flags alone fail.
+
+    This verifies provenance against the saved run. It does not independently
+    certify that a physical CFD run took place or solve conservation laws.
+    """
+    require(native_report.name == "FS_C06_REPORT.json",
+            "report must be the saved FS-C06 canonical run report")
+    case = native_report.parent
+    require(case.is_dir() and not case.is_symlink()
+            and case.name.startswith("FS_C06_VOF_SOLID_SMOKE_"),
+            "not an isolated FS-C06 run directory")
+    all_times = []
+    for child in case.iterdir():
+        if not child.is_dir() or child.is_symlink():
+            continue
+        try:
+            value = float(child.name)
+        except ValueError:
+            continue
+        if math.isfinite(value) and value > 0:
+            all_times.append((value, child))
+    fingerprint_map = {
+        "alpha.metal": "alpha_metal_sha256",
+        "alpha.metal.solid": "alpha_metal_solid_sha256",
+        "T.metal": "temperature_sha256",
+    }
+    checked = []
+    for snap in snapshots:
+        time = float(snap["time_s"])
+        matches = [folder for value, folder in all_times
+                   if math.isclose(value, time, rel_tol=1e-9, abs_tol=1e-16)]
+        require(len(matches) == 1,
+                "native physical time folder missing or ambiguous")
+        folder = matches[0] / "fluid"
+        hashes = {}
+        for filename, key in fingerprint_map.items():
+            field = folder / filename
+            actual = sha256(field)
+            require(actual == snap[key].lower(),
+                    "native field changed after report: " + filename)
+            hashes[filename] = actual
+        checked.append({"time_s": time, "field_sha256_verified": hashes})
+    return {"saved_fields_match_report": True, "times": checked,
+            "report_claims_solver_run_not_independently_reattested": True}
+
+
 def screen_inventories(initial_metal_volume_m3: float, snapshots: list[dict],
                        density: dict) -> list[dict]:
     v0 = finite_positive(initial_metal_volume_m3, "initial volume")
@@ -192,20 +239,28 @@ def screen_inventories(initial_metal_volume_m3: float, snapshots: list[dict],
 
 def audit(native_report: Path, density_json: Path, density_source: Path,
           out: Path) -> dict:
+    raw_paths = [p.expanduser() for p in
+                 (native_report, density_json, density_source, out)]
+    require(not any(p.is_symlink() for p in raw_paths),
+            "symlink input/output path forbidden")
     native_report, density_json, density_source, out = [
-        p.expanduser().resolve() for p in
-        (native_report, density_json, density_source, out)
+        p.resolve() for p in raw_paths
     ]
     require(out not in (native_report, density_json, density_source)
-            and not out.exists(), "refusing overwrite of source/report")
+            and not out.exists()
+            and native_report.parent not in out.parents
+            and out != native_report.parent,
+            "refusing overwrite or output inside original CFD case")
     case = read_json(native_report)
     v0, snaps = check_native_report(case)
+    native_fields = verify_saved_native_fields(native_report, snaps)
     density = read_density_law(density_json, density_source)
     results = screen_inventories(v0, snaps, density)
     output = {
         "schema": SCHEMA,
         "status": "CONDITIONAL_DENSITY_SCREEN_NOT_MASS_OR_SHRINKAGE_VALIDATION",
         "origin_fs_c06_report_sha256": sha256(native_report),
+        "saved_native_fields_reverified": native_fields,
         "initial_metal_vof_volume_m3": v0,
         "density_source": density,
         "snapshots": results,
