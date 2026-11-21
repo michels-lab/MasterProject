@@ -152,7 +152,7 @@ def verify() -> dict:
     require("nEnergyCorrectors" not in strip_comments(root_pimple),
             "C14 did not have root nEnergyCorrectors=2")
     require("slip;" in metalU and "noSlip;" in metalU, "C14 U patch types differ")
-    require(re.search(r"\\binternalField\\s+uniform\\s*\\(\\s*0\\s+0\\s+0\\s*\\)\\s*;", metalU) is not None,
+    require(re.search(r"\binternalField\s+uniform\s*\(\s*0\s+0\s+0\s*\)\s*;", metalU) is not None,
             "C14 U initial velocity must be the original zero vector")
     require(metalPRgh.count("fixedFluxPressure;") == 2,
             "C14 pressure BC differs")
