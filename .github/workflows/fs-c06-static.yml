@@ -30,6 +30,8 @@ jobs:
     timeout-minutes: 8
     steps:
       - uses: actions/checkout@v4
+      - name: FS-C06 native shell gate syntax (no solver)
+        run: bash -n freesurface/FS-C06_vof_solidification/run_native_gate.sh
       - name: FS-C06 compile (no solver)
         run: python3 -m py_compile analysis_tools/stage_fs_c06_vof_solidification.py analysis_tools/test_stage_fs_c06_vof_solidification.py analysis_tools/screen_fs_c06_density_contraction.py analysis_tools/test_screen_fs_c06_density_contraction.py
       - name: FS-C06 physics and isolation guards (no solver)
