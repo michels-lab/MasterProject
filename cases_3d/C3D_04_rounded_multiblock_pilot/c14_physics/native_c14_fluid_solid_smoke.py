@@ -51,7 +51,40 @@ def do_smoke(root: Path) -> dict:
              "-dict",str(path)],reference,"log.blockMesh."+region,120))
     n_metal=native_case.region_cells(reference,"metal",27)
     n_mold=native_case.region_cells(reference,"mold",27)
-    record=native_case.stage(reference,candidate,smoke=True,
+    # In addition to the TWO-STEP diagnostic, materialize and parse a
+    # SEPARATE full 10s research input candidate on the same synthetic mesh.
+    # This does NOT execute ten seconds of CFD, nor use actual V4/T02.
+    full_candidate=root/"C14_original_full_10s_INPUTS_ONLY"
+    full_record=native_case.stage(reference,full_candidate,smoke=False,
+                                  expected={"metal":27,"mold":27})
+    historical_control=(physics.C14/"system/controlDict").read_bytes()
+    if (full_candidate/"system/controlDict").read_bytes()!=historical_control:
+        raise RuntimeError("Full 10s candidate changed original C14 controlDict")
+    scientific=(
+        "constant/metal/materials/castIron",
+        "constant/mold/materials/silica",
+        "constant/metal/fvModels",
+        "constant/metal/momentumTransport",
+        "system/fvSolution",
+        "system/metal/fvSchemes",
+        "system/mold/fvSchemes",
+    )
+    for rel in scientific:
+        if (full_candidate/rel).read_bytes()!=(physics.C14/rel).read_bytes():
+            raise RuntimeError("Original C14 physical source modified: "+rel)
+    if full_record["native_solver_run"] or full_record["smoke_time_only_changes"]:
+        raise RuntimeError("Full-input-only gate must never execute CFD/smoke")
+    if full_record["files_count"]!=23 or len(full_record["parsed_dicts"])!=22:
+        raise RuntimeError("Full 10s candidate is incomplete")
+    for region in ("metal","mold"):
+        for field in native_case.MESH:
+            rel=Path("constant")/region/"polyMesh"/field
+            if (full_candidate/rel).read_bytes()!=(reference/rel).read_bytes():
+                raise RuntimeError("Synthetic source native mesh modified: "+str(rel))
+    # If a refactor accidentally changes time, catch it as a native gate error.
+    print("FULL_C14_ORIGINAL_10S_F14_DICTIONARIES_VERIFIED_NO_CFD",
+          str(full_candidate/native_case.REPORT))
+        record=native_case.stage(reference,candidate,smoke=True,
                              expected={"metal":27,"mold":27})
     try:
         record=native_case.run_smoke(candidate,record)
@@ -64,6 +97,16 @@ def do_smoke(root: Path) -> dict:
     record["source_fixture"]="TWO_3D_27_CELL_SYNTHETIC_REGIONS_NOT_QUICKCUP"
     record["blockMesh_native_logs"]=logs
     record["synthetic_cell_counts"]={"metal":n_metal,"mold":n_mold}
+    record["full_10s_research_inputs_synthetic_mesh_only"]={
+        "status":"C14_ORIGINAL_CONTROL_AND_SCIENCE_BYTE_IDENTICAL_F14_NATIVE_PARSER_PASS_NOT_CFD",
+        "source_mesh":"TWO_3D_27_CELL_SYNTHETIC_REGIONS",
+        "C14_original_10s_executed":False,
+        "V4_T02_real_mesh_used":False,
+        "full_10s_report":str(full_candidate/native_case.REPORT),
+        "files_count":full_record["files_count"],
+        "parsed_native_dictionaries":len(full_record["parsed_dicts"]),
+        "C14_original_controlDict_sha256":native_case.digest(full_candidate/"system/controlDict"),
+    }
     (candidate/native_case.REPORT).write_text(
         json.dumps(record,indent=2)+"\n",encoding="utf-8")
     return record
