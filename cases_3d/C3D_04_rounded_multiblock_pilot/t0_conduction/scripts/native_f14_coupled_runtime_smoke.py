@@ -66,9 +66,9 @@ def block_mesh_dict(region: str) -> str:
     entries = []
     for name, (kind, faces, neighbour) in PATCHES[region].items():
         mapping = (
-            f"        sampleRegion {'mold' if region == 'metal' else 'metal'};\n"
-            f"        samplePatch {neighbour};\n"
-            "        sampleMode nearestPatchFace;\n"
+            f"        neighbourRegion {'mold' if region == 'metal' else 'metal'};\n"
+            f"        neighbourPatch {neighbour};\n"
+            "        method matching;\n"
             if neighbour else ""
         )
         entries.append(
