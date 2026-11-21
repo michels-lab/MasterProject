@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "audit_kind": "deterministic_full_tracked_tree",
-  "tracked_files_total": 39005,
-  "classified_files_total": 39000,
+  "tracked_files_total": 39006,
+  "classified_files_total": 39001,
   "docs_content_inspected": 181,
   "large_docs_skipped": 1,
   "excluded_reports": 5,
@@ -19,7 +19,7 @@
     "simulation_input": 2683,
     "simulation_log": 3155,
     "simulation_output": 32615,
-    "source": 112,
+    "source": 113,
     "test": 48,
     "web_ui": 1,
     "workflow": 27
@@ -29,8 +29,8 @@
     "POTENTIAL_UNLOGGED_CHANGES": 2
   },
   "finding_total": 9,
-  "inventory_fingerprint": "d68a514ba4347f8800c5144f1a5e17c262708a26e89f5abd303033441eb49974",
-  "evidence_fingerprint": "2111836267508660f39cac4ab9f817e5e16b3e3a7bc596e521185df1efb57d07",
+  "inventory_fingerprint": "4953faf8553d2d7037a3fbf6a181cd982d1f7c2cdc8c57feb231feffc2874980",
+  "evidence_fingerprint": "5f2e8d8b784be7af3ba43883c0b1665875a21513cdbb6c8c81c5868873d45b9f",
   "files": [
     {
       "path": ".github/agents/openfoam-solidification.agent.md",
@@ -2032,7 +2032,7 @@
       "role": "source",
       "purpose": "code/test implementation",
       "certainty": "rule",
-      "blob": "63c490b01618b7734ed7411a5befe80a6421df21"
+      "blob": "333ecd8c696aa2e1384c23e16f655c61e2476447"
     },
     {
       "path": "cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/scripts/c14_numerical_reference.py",
@@ -2046,7 +2046,7 @@
       "role": "source",
       "purpose": "code/test implementation",
       "certainty": "rule",
-      "blob": "4dbd5b8db5c1f1c843a86f1375c08d2fc9859cc9"
+      "blob": "d6fc34907319ce21ec1825362ed61e0fbc132853"
     },
     {
       "path": "cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/scripts/postprocess_t0_energy.py",
@@ -2063,11 +2063,18 @@
       "blob": "d386757277fa3589f4b6e8f76b3251313cafeb57"
     },
     {
+      "path": "cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/scripts/review_preserved_t0_run.py",
+      "role": "source",
+      "purpose": "code/test implementation",
+      "certainty": "rule",
+      "blob": "25f15303a4e29e62e06c5f37642489f3c5eadc02"
+    },
+    {
       "path": "cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/scripts/run_c14_numerical_granada.sh",
       "role": "source",
       "purpose": "code/test implementation",
       "certainty": "rule",
-      "blob": "b9c581cf0e631c216017ff7f959a8188502b4fc2"
+      "blob": "841f0a52aeaeb7a3f75e2c2485a1747f692afdd2"
     },
     {
       "path": "cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/scripts/run_native_t0_patch_flux.sh",
@@ -2207,7 +2214,7 @@
       "role": "test",
       "purpose": "code/test implementation",
       "certainty": "rule",
-      "blob": "32bfe889ed452d4bff38d998c9392e5169ee49c1"
+      "blob": "cd8bbead065a17923b1ab3e776da9a30535dfd5e"
     },
     {
       "path": "cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/tests/test_native_flux_atomic_handoff.py",
@@ -2235,7 +2242,7 @@
       "role": "test",
       "purpose": "code/test implementation",
       "certainty": "rule",
-      "blob": "e4c6cb25979efadaf1bd471cfdf83621854fdfc4"
+      "blob": "6a4b40ce97c413b27ce1874c85c6979dc948c26e"
     },
     {
       "path": "cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/tests/test_t0_granada.py",
@@ -273098,20 +273105,20 @@
       "state": "REVIEW_REQUIRED"
     },
     {
-      "id": "4fa0fc6a6597d1e6",
+      "id": "23587d8ea138208f",
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_EN.md",
-      "observation": "9 implementation/config paths changed since this log's last commit; examples: .github/workflows/c3d04-a-c14-physics-fidelity.yml, .github/workflows/case-a-t0-native-f14.yml, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/C14_3D_PHYSICS_CONTRACT.json, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/c14_source_fidelity.py, cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/scripts/native_f14_coupled_runtime_smoke.py, cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/scripts/prepare_case_a_t0.py",
+      "observation": "14 implementation/config paths changed since this log's last commit; examples: .github/workflows/c3d04-a-c14-physics-fidelity.yml, .github/workflows/case-a-t0-native-f14.yml, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/C14_3D_PHYSICS_CONTRACT.json, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/c14_source_fidelity.py, cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/scripts/native_f14_coupled_runtime_smoke.py, cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/scripts/prepare_case_a_t0.py",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     },
     {
-      "id": "58a5822bf9cdf2bb",
+      "id": "121beb16bb129b5d",
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_ES.md",
-      "observation": "9 implementation/config paths changed since this log's last commit; examples: .github/workflows/c3d04-a-c14-physics-fidelity.yml, .github/workflows/case-a-t0-native-f14.yml, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/C14_3D_PHYSICS_CONTRACT.json, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/c14_source_fidelity.py, cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/scripts/native_f14_coupled_runtime_smoke.py, cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/scripts/prepare_case_a_t0.py",
+      "observation": "14 implementation/config paths changed since this log's last commit; examples: .github/workflows/c3d04-a-c14-physics-fidelity.yml, .github/workflows/case-a-t0-native-f14.yml, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/C14_3D_PHYSICS_CONTRACT.json, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/c14_source_fidelity.py, cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/scripts/native_f14_coupled_runtime_smoke.py, cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/scripts/prepare_case_a_t0.py",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     }
