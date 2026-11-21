@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
   "audit_kind": "deterministic_full_tracked_tree",
-  "tracked_files_total": 38998,
-  "classified_files_total": 38993,
-  "docs_content_inspected": 179,
+  "tracked_files_total": 39000,
+  "classified_files_total": 38995,
+  "docs_content_inspected": 180,
   "large_docs_skipped": 1,
   "excluded_reports": 5,
   "roles": {
@@ -12,7 +12,7 @@
     "bitacora": 5,
     "config": 16,
     "data": 32,
-    "document": 143,
+    "document": 144,
     "index": 32,
     "license": 1,
     "simulation_case_file": 117,
@@ -22,15 +22,15 @@
     "source": 110,
     "test": 48,
     "web_ui": 1,
-    "workflow": 25
+    "workflow": 26
   },
   "finding_counts": {
     "BROKEN_RELATIVE_LINK": 7,
     "POTENTIAL_UNLOGGED_CHANGES": 2
   },
   "finding_total": 9,
-  "inventory_fingerprint": "c2b6319244d28e3df0c59e9da06417e23fa418eb8b5fd4f9b2695a1b682aa78a",
-  "evidence_fingerprint": "68ecaf8a989d67fba4ce474c745770eed6e576c38b7cd74641ff3da6952e088e",
+  "inventory_fingerprint": "731817cff8ebfd43259fb18ac24efa70e559ab8bf3245d3a8136ec23e0689392",
+  "evidence_fingerprint": "1b50beda0e4d95af95b70ff595df84c206a1f47da70063745dd8330993a92708",
   "files": [
     {
       "path": ".github/agents/openfoam-solidification.agent.md",
@@ -87,6 +87,13 @@
       "purpose": "GitHub Actions automation",
       "certainty": "rule",
       "blob": "288f0e06cda3453b8636ce02c29ce0e3f848338c"
+    },
+    {
+      "path": ".github/workflows/c3d05-foundation14-two-solid-solver-smoke.yml",
+      "role": "workflow",
+      "purpose": "GitHub Actions automation",
+      "certainty": "rule",
+      "blob": "e2baa9e99921d4a5e6d010994b2b8a7ad688363d"
     },
     {
       "path": ".github/workflows/c3d05-t0-granada-static.yml",
@@ -2144,7 +2151,7 @@
       "role": "test",
       "purpose": "code/test implementation",
       "certainty": "rule",
-      "blob": "215e3bacc45b88b5ad19dd9ab90b5490cd303ca7"
+      "blob": "db5e6e81597ed3072dacd6f2a05db261e97b419c"
     },
     {
       "path": "cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/tests/test_c14_fvsolution.py",
@@ -272221,6 +272228,13 @@
       "blob": "c83a2b965a54c12647369179893ad118209e346d"
     },
     {
+      "path": "docs/granada/C3D05_F14_CHT_DOS_SOLIDOS_SMOKE_20261120_ES.md",
+      "role": "document",
+      "purpose": "manual/decision/report/historical note",
+      "certainty": "inferred",
+      "blob": "2b48a02075beb3338ecafa7146d5cf234f7625fb"
+    },
+    {
       "path": "docs/granada/C3D05_F14_POSTPROCESS_SMOKE_Y_EVIDENCIA_UNICA_20261120_ES.md",
       "role": "document",
       "purpose": "manual/decision/report/historical note",
@@ -273049,20 +273063,20 @@
       "state": "REVIEW_REQUIRED"
     },
     {
-      "id": "b05fb5b49acb4a51",
+      "id": "c2bc4f99ef99c712",
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_EN.md",
-      "observation": "2 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/tests/smoke_native_foundation14_solver.py, docs/PROJECT_STAGE_STATUS.json",
+      "observation": "3 implementation/config paths changed since this log's last commit; examples: .github/workflows/c3d05-foundation14-two-solid-solver-smoke.yml, cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/tests/smoke_native_foundation14_solver.py, docs/PROJECT_STAGE_STATUS.json",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     },
     {
-      "id": "d1e9ad817870485c",
+      "id": "474bab33bb103b64",
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_ES.md",
-      "observation": "2 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/tests/smoke_native_foundation14_solver.py, docs/PROJECT_STAGE_STATUS.json",
+      "observation": "3 implementation/config paths changed since this log's last commit; examples: .github/workflows/c3d05-foundation14-two-solid-solver-smoke.yml, cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/tests/smoke_native_foundation14_solver.py, docs/PROJECT_STAGE_STATUS.json",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     }
