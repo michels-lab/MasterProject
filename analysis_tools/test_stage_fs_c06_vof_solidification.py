@@ -13,6 +13,14 @@ from stage_fs_c06_vof_solidification import (
 
 
 class FS_C06Test(unittest.TestCase):
+    @staticmethod
+    def _inherited_c05_models() -> str:
+        # Exactly the FS-C01 fvModel installed by the FS-C05 native stager.
+        project = Path(__file__).resolve().parents[1]
+        return (project / "freesurface/FS-C01/constant/fvModels").read_text().replace(
+            'location    "constant";', 'location    "constant/fluid";'
+        )
+
     def test_c14_traceable_real_coefficients(self):
         project = Path(__file__).resolve().parents[1]
         data = read_c14_reference(project)
@@ -28,7 +36,7 @@ class FS_C06Test(unittest.TestCase):
 
     def test_vof_native_model_format_and_limits(self):
         project = Path(__file__).resolve().parents[1]
-        text = model_text(read_c14_reference(project))
+        text = model_text(read_c14_reference(project), self._inherited_c05_models())
         for x in ("type VoFSolidificationMelting;", "cellZone all;",
                   "(1423 1)", "(1473 0)", "L 228600;",
                   "relax 0.1;", "Cu 100000;", "q 0.001;",
@@ -36,6 +44,39 @@ class FS_C06Test(unittest.TestCase):
             self.assertIn(x, text)
         self.assertNotIn("solidificationMeltingSource;", text)
         self.assertNotIn("alpha1e", text)
+
+    def test_native_fvmodels_composition_preserves_C05_turbulence_source(self):
+        # Regression: old FS-C06 replaced the entire fvModels dictionary,
+        # losing the C05 compressible VOF turbulence damping and its delta.
+        project = Path(__file__).resolve().parents[1]
+        old = self._inherited_c05_models()
+        merged = model_text(read_c14_reference(project), old)
+        self.assertTrue(merged.startswith(old.rstrip("\n")))
+        self.assertEqual(merged.count("FoamFile"), 1)
+        self.assertEqual(merged.count("type            compressible::VoFTurbulenceDamping;"), 1)
+        self.assertEqual(merged.count("delta           1e-4;"), 1)
+        self.assertEqual(merged.count("type VoFSolidificationMelting;"), 1)
+        self.assertEqual(merged.count("FS_C06_vof_phase_change\n{"), 1)
+        self.assertEqual(merged.count("cellZone all;"), 1)
+        self.assertIn("(1423 1)\n", merged)
+        self.assertIn("(1473 0)\n", merged)
+
+    def test_native_fvmodels_rejects_missing_or_duplicate_C05_sources(self):
+        project = Path(__file__).resolve().parents[1]
+        reference = read_c14_reference(project)
+        original = self._inherited_c05_models()
+        invalid = [
+            original.replace("compressible::VoFTurbulenceDamping", "unusedModel"),
+            original.replace("turbulenceDamping", "renamedDamping"),
+            original + "\nturbulenceDamping\n{ type compressible::VoFTurbulenceDamping; }\n",
+            original.replace('"constant/fluid"', '"constant/other"'),
+            original.replace("object      fvModels;", "object      somethingElse;"),
+            original + "\nFS_C06_duplicate\n{ type VoFSolidificationMelting; }\n",
+        ]
+        for text in invalid:
+            with self.subTest(source=text[-70:]):
+                with self.assertRaises(ValueError):
+                    model_text(reference, text)
 
     def test_no_false_solid_mass(self):
         alpha = [0.0] * FLUID_CELLS
