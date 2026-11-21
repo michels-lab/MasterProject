@@ -15,14 +15,14 @@
   "feeding_enabled": false,
   "global_mass_energy_verified": false,
   "experimentally_validated": false,
-  "next_gate": "Review all 10 native .dat time series and solver log from second isolated run without rerunning CFD. Then implement a physically traceable phase-density/continuity coupling and a liquidus-crossing thermal transient. No invented JMatPro values.",
+  "next_gate": "Read the already-completed FS-C06 run via read_native_monitors.sh using the gate-identical recursive lookup. Inspect actual numeric rows and field semantics; no CFD rerun. Do not infer energy/mass closure or phase-volume change from presence of files.",
   "native_solid_object_reader": "alpha.metal.solid",
   "native_metal_phase_temperature_reader": "T.metal",
   "mixture_temperature_T_substituted_for_T_metal": false,
   "field_parser_regression_tests_added": true,
   "field_parser_native_openfoam14_verified": true,
   "pending_CI_for_new_field_parser": false,
-  "last_repository_update_purpose": "Accept second real WSL gate with native 10/10 monitor files while withholding any mass/energy/shrinkage claim pending numeric audit.",
+  "last_repository_update_purpose": "Correct mistaken shell postProcessing path assumption; add read-only recursive reader preserving prior 10/10 native PASS without claiming numerical validation.",
   "density_screen": "CODE_ONLY_WITH_NATIVE_REPORT_AND_USER_SUPPLIED_HASHED_DENSITIES",
   "density_screen_script": "analysis_tools/screen_fs_c06_density_contraction.py",
   "density_reference_values_in_repo": false,
@@ -160,5 +160,11 @@
     "physical_shrinkage_verified": false,
     "feeding_verified": false
   },
-  "native_openfoam_case_overlay_openfoam14_executed": true
+  "native_openfoam_case_overlay_openfoam14_executed": true,
+  "native_monitor_direct_folder_lookup_reported_missing": true,
+  "native_monitor_direct_folder_lookup_explanation": "User's shell looked only for postProcessing/FS_C06_<name> direct folders; accepted gate recursively matched */FS_C06_<name>/*.dat and passed; nested region-specific paths are likely, actual paths not yet inspected.",
+  "native_monitor_resolver_script": "freesurface/FS-C06_vof_solidification/read_native_monitors.sh",
+  "native_monitor_resolver_git_integrated": true,
+  "native_monitor_resolver_WSL_executed": false,
+  "native_monitor_resolver_local_mock_tested": true
 }
