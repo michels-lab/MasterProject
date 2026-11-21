@@ -74,14 +74,14 @@
     "handoff_report": "docs/granada/C3D05_C14_NUMERICAL_ONE_SHOT_20261119_ES.md",
     "native_regional_volAverage_T_postprocessor_code_committed": true,
     "native_regional_energy_regression_CI_ready": true,
-    "native_regional_energy_observations_from_WSL": false,
+    "native_regional_energy_observations_from_WSL": true,
     "direct_patch_flux_verification_completed": false,
     "native_regional_energy_postprocessor": "cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/scripts/postprocess_t0_energy.py",
     "native_regional_energy_science_record": "docs/granada/C3D05_T0_BALANCE_ENERGETICO_NATIVO_20261120_ES.md",
     "native_isotropic_two_region_patch_flux_extractor_source_committed": true,
     "native_patch_flux_face_pairing_regressions_source_committed": true,
-    "native_patch_flux_native_wsl_compiled": false,
-    "native_patch_flux_native_wsl_executed": false,
+    "native_patch_flux_native_wsl_compiled": true,
+    "native_patch_flux_native_wsl_executed": true,
     "native_patch_flux_face_pair_diagnostics_observed": false,
     "native_patch_flux_scientifically_accepted": false,
     "native_patch_flux_number_of_faces_per_side_expected": 12636,
@@ -108,7 +108,7 @@
     "native_regional_energy_and_single_summary_integrated_static_tests_pass": true,
     "native_regional_energy_and_single_summary_test_count": 53,
     "native_regional_energy_and_single_summary_static_ci_url": "https://github.com/michels-lab/MasterProject/actions/runs/44830588956",
-    "native_regional_energy_and_single_summary_status": "Synthetic QA + shell AST PASS, native two-region F14 smoke PASS; accepted HEX8 CFD NOT RUN",
+    "native_regional_energy_and_single_summary_status": "WSL native two-region six-time T and energy observed; C++ q extracted into unverified staging; final 12636 pair q comparison and summary NOT YET ACCEPTED",
     "actual_accepted_C3D05_3d_mesh_identity_required_before_solver": true,
     "actual_accepted_C3D05_mesh_cells_expected": 270788,
     "actual_accepted_metal_cells_expected": 92200,
@@ -140,16 +140,36 @@
     "foundation14_real_two_solid_smoke_source": "cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/tests/smoke_native_foundation14_solver.py",
     "foundation14_real_two_solid_smoke_workflow": ".github/workflows/c3d05-foundation14-two-solid-solver-smoke.yml",
     "native_hex8_270788_solver_executed_evidence_level": "Investigator-supplied WSL console excerpt shows native Time=0.1s, DICPCG e solves, End; full original log/SHA not independently verified here.",
-    "native_hex8_270788_solver_auditor_current_result": "SECOND_WSL_REVIEW_FAILED_WITH_OLD_F14_SIGFPE_BANNER_MATCH; source-corrected on main, not yet exercised against original full WSL log",
+    "native_hex8_270788_solver_auditor_current_result": "RECOVERED_PRESERVED_SOLVER_RUN_COMPLETE_NO_RERUN with SHA-bound reviewed report; user-supplied terminal 2026-11-20",
     "native_hex8_270788_immutable_review_code_committed": true,
     "native_hex8_270788_immutable_review_file_expected": "T0_NUMERICAL_RUN_STATUS_REVIEWED.json",
     "native_hex8_270788_original_solver_log_preservation_required": true,
     "native_hex8_270788_native_energy_q_summary_pending": true,
     "native_hex8_270788_test_report": "docs/granada/C3D05_WSL_T0_270788_AUDITOR_RECOVERY_20261120_ES.md",
     "native_hex8_270788_second_reentry_no_solver_rerun_observed": true,
-    "native_hex8_270788_second_reentry_exits_before_energy_postprocessing": true,
+    "native_hex8_270788_second_reentry_exits_before_energy_postprocessing": false,
     "native_hex8_270788_recovery_root_cause_addendum": "Official F14 sigFpe : Enabling floating point exception trapping (FOAM_SIGFPE). had a prefix and terminal dot missing in previous benign-banner regex.",
-    "native_hex8_270788_audit_failure_reasons_diagnostic_source_committed": true
+    "native_hex8_270788_audit_failure_reasons_diagnostic_source_committed": true,
+    "native_hex8_270788_immutable_review_observed_in_WSL": true,
+    "native_hex8_270788_energy_history_samples_from_WSL": 6,
+    "native_hex8_270788_energy_max_abs_closure_over_initial_exchange_observed": 4.320292500161304e-8,
+    "native_hex8_270788_energy_report_evidence": "User-supplied WSL terminal: six foamPostProcess volume averages metal/mold, native volumes and energy report; independently inspected source only, not raw local evidence files.",
+    "native_hex8_270788_mean_metal_temperature_K": {
+      "t0": 1500,
+      "t0_1": 1490.2409
+    },
+    "native_hex8_270788_mean_mold_temperature_K": {
+      "t0": 300,
+      "t0_1": 324.45414
+    },
+    "native_hex8_270788_patch_flux_extractor_wmake_wsl": true,
+    "native_hex8_270788_patch_flux_cpp_complete_in_WSL": true,
+    "native_hex8_270788_patch_flux_staging_folder_exists_in_WSL": true,
+    "native_hex8_270788_patch_flux_comparison_complete": false,
+    "native_hex8_270788_patch_flux_time_alignment_source_repaired": true,
+    "native_hex8_270788_patch_flux_time_alignment_tested_on_real_WSL_csv": false,
+    "native_hex8_270788_patch_flux_stage_reuse_without_extractor_rerun_source_committed": true,
+    "native_hex8_270788_latest_report": "docs/granada/C3D05_WSL_T0_ENERGIA_REAL_Y_TIEMPOS_Q_20261120_ES.md"
   },
   "other_cases": [
     {
@@ -185,11 +205,11 @@
     },
     {
       "case_id": "C3D-05 Caso B",
-      "status": "Malla HEX8 aceptada; investigador mostró consola WSL con ejecución numérica C14 al t=0.1s y End, pero auditor legado rechazó; energía/q/validación aún pendientes",
-      "evidence": "docs/granada/C3D05_WSL_T0_270788_AUDITOR_RECOVERY_20261120_ES.md"
+      "status": "WSL ejecutó C14 numérico en 270788 HEX8: solver recuperado por SHA, T volumétrica real 6 tiempos, desbalance 4.3202925e-8; extractor q nativo terminó pero comparación de tiempos bloqueó análisis de pares, corregido en código; G3/G4 abiertos.",
+      "evidence": "docs/granada/C3D05_WSL_T0_ENERGIA_REAL_Y_TIEMPOS_Q_20261120_ES.md"
     }
   ],
-  "blocker": "Second WSL reentry reused prior native solver artifacts; reviewer still rejected due to likely missed native F14 informational 'sigFpe : ... (FOAM_SIGFPE).' header. Parser now updated to official exact format and failure-reason diagnostics, but original complete WSL log has not yet been reaudited successfully. Metal/mold temperatures, energy and 12636 flux pairs remain unverified. G3/G4 open.",
-  "next_integrated_delivery": "Use single idempotent --solve command after git pull; NEVER rerun foamMultiRun or accepted mesh: re-audit preserved log against official F14 sigFpe banner, then postprocess temperatures, energy, 12636 bilateral q pairs and final SHA manifest. Remaining true failures now produce explicit reasons. Afterwards JMatPro/QuickCup physics.",
-  "science": "USER_SUPPLIED_WSL_C14_NUMERICAL_RUN_END_OBSERVED_NO_ENERGY_FLUX_OR_PHYSICAL_VALIDATION"
+  "blocker": "Primer T0 numérico C14 de 270788 HEX8 en WSL recuperado SIN solver rerun, seis T promedio volumétricas por región y desbalance relativo 4.320292500161304e-8 observados. Extractor C++ wmake/q de 12636 caras/lado ejecutó y dejó CSV temporales, pero auditor Python rechazó sincronía exacta de decimales de 17 dígitos frente a JSON de energía. Código reparado con emparejamiento biyectivo estrecho y reutilización del staging; WSL reentrada y análisis q aún pendientes. G3/G4 científicos abiertos; sin JMatPro/QuickCup.",
+  "next_integrated_delivery": "Un git pull + único --solve idempotente sobre caso NUMÉRICO C14 preservado: NO foamMultiRun/malla, reutilizar dos CSV completos del staging si únicos, auditar q de 12636 pares geometría/sincronía, confirmar energía/flujo y publicar SHA + resumen + ParaView si pasa. Luego propiedades JMatPro/QuickCup y sensibilidad.",
+  "science": "REAL_C14_WSL_270788_HEX8_SOLVER_AND_VOLUME_ENERGY_OBSERVED_Q_EXTRACTED_NOT_YET_PAIRWISE_VERIFIED_NO_PHYSICAL_VALIDATION"
 }
