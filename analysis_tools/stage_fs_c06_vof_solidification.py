@@ -326,10 +326,30 @@ def stage(source: Path, dest: Path, project: Path, native: bool = False) -> dict
         require(re.search(r"\bfields\s*\(\s*" + re.escape(field) + r"\s*\)\s*;",
                           native_control_text) is not None,
                 "native OpenFOAM volume monitor absent: " + field)
-    require(native_control_text.count("type          volFieldValue;") == 2
-            and native_control_text.count("region        fluid;") == 2
-            and native_control_text.count("writeFields   false;") == 2,
-            "FS-C06 native volFieldValue monitor dictionary changed")
+    require(native_control_text.count("type          volFieldValue;") == 3
+            and native_control_text.count("type          surfaceFieldValue;") == 5
+            and native_control_text.count("region        fluid;") == 8
+            and native_control_text.count("writeFields   false;") == 8,
+            "FS-C06 native function-object inventory changed")
+    require(re.search(
+        r"FS_C06_mixtureMass\s*\{[^{}]*\bfields\s*\(rho\)\s*;",
+        native_control_text, re.S) is not None,
+        "native mixture mass inventory is missing")
+    for name, selection in (
+        ("FS_C06_atmosphereMassFlux", r"patches\s*\(atmosphereTop\s+atmosphereSides\s+atmosphereLowerSides\)"),
+        ("FS_C06_atmosphereTopMassFlux", r"patch\s+atmosphereTop"),
+        ("FS_C06_atmosphereSidesMassFlux", r"patch\s+atmosphereSides"),
+        ("FS_C06_atmosphereLowerSidesMassFlux", r"patch\s+atmosphereLowerSides"),
+        ("FS_C06_fluidToMoldMassFlux", r"patch\s+fluid_to_mold"),
+    ):
+        block = re.search(r"\b" + re.escape(name) +
+                          r"\s*\{([^{}]*)\}", native_control_text, re.S)
+        require(block is not None
+                and re.search(r"\b" + selection + r"\s*;", block.group(1)) is not None
+                and re.search(r"\boperation\s+sum\s*;", block.group(1)) is not None
+                and re.search(r"\bfields\s*\(alphaRhoPhi\.metal\s+alphaRhoPhi\.air\s+rhoPhi\)\s*;",
+                              block.group(1)) is not None,
+                "missing or incorrectly configured native phase mass flux: " + name)
     control.write_text(native_control_text, encoding="utf-8")
     schemes = dest / "system/fluid/fvSchemes"
     modified, added = ensure_compressible_kepsilon_divergence(schemes.read_text())
@@ -361,6 +381,18 @@ def stage(source: Path, dest: Path, project: Path, native: bool = False) -> dict
         "native_openfoam_phase_volume_monitors": [
             "FS_C06_metalVoFVolume", "FS_C06_solidMetalVolume"
         ],
+        "native_openfoam_mass_inventory_monitor": "FS_C06_mixtureMass",
+        "native_openfoam_phase_boundary_mass_flux_monitors": [
+            "FS_C06_atmosphereMassFlux",
+            "FS_C06_atmosphereTopMassFlux",
+            "FS_C06_atmosphereSidesMassFlux",
+            "FS_C06_atmosphereLowerSidesMassFlux",
+            "FS_C06_fluidToMoldMassFlux",
+        ],
+        "phase_mass_flux_fields": [
+            "alphaRhoPhi.metal", "alphaRhoPhi.air", "rhoPhi"
+        ],
+        "open_boundary_mass_balance_verified": False,
         "native_fvModels_source": str(NATIVE_FVMODELS),
         "native_fvModels_source_sha256": digest(native_path),
         "native_fvModels_copied_verbatim": True,

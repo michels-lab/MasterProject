@@ -282,3 +282,34 @@ que atraviese el liquidus; solo luego continuidad con `rho_l(T)`,
 `rho_s(T,f_s)`, flujo de masa por la atmósfera, desplazamiento de la
 superficie y curva QuickCup real. No introducir coeficientes
 inventados ni reivindicar una contracción sin un modelo conservativo.
+
+## 20-11-2026 — Instrumentación de flujos MÁSICOS nativos del solver
+
+Se amplió el `native/system/controlDict` **ejecutable por OpenFOAM 14**
+con **cinco `surfaceFieldValue`**, además de los anteriores `volFieldValue`.
+El cambio es en el caso OpenFOAM; no se creó un analizador Python nuevo.
+Las superficies de aire incluyen `atmosphereTop`, `atmosphereSides`,
+`atmosphereLowerSides` y se mide también `fluid_to_mold` para
+detectar un flujo espurio a través de la interfaz térmica impermeable.
+
+Cada monitor escribe `sum(alphaRhoPhi.metal)`,
+`sum(alphaRhoPhi.air)` y `sum(rhoPhi)`, en kg/s según el modelo de
+flujo compresible. Las dos primeras son los **flujos transportados de
+masa por cada fase**, que Foundation 14 construye y actualiza en
+`compressibleVoF.C` (`alphaRhoPhi1`, `alphaRhoPhi2`); no son
+aproximaciones `alpha.metal*rhoPhi` inventadas. La suma firmada
+en las fronteras es la base para el futuro balance de conservación
+por fase. Se añadió un monitor `volIntegrate(rho)` para el
+**inventario de masa de mezcla gas+metal** en la región fluida.
+
+Estos monitores no atribuyen pérdida de volumen a solidificación:
+`rhoPhi` y la masa de mezcla no distinguen sólido/líquido del metal,
+y `alphaRhoPhi.metal` no contiene una ley `rho_s(T,f_s)`.
+El sello `open_boundary_mass_balance_verified` permanece falso
+hasta comparar **series NATIVAS reales** de inventario, flujo y
+términos fuente. El test de 2×1e-7 s tampoco demuestra enfriamiento
+a través del liquidus, contracción o alimentación.
+
+Fuentes OpenFOAM Foundation 14:
+- https://raw.githubusercontent.com/OpenFOAM/OpenFOAM-14/master/applications/modules/compressibleVoF/compressibleVoF.C
+- https://cpp.openfoam.org/v14/classFoam_1_1functionObjects_1_1fieldValues_1_1surfaceFieldValue.html

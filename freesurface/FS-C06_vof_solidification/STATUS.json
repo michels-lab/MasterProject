@@ -22,7 +22,7 @@
   "field_parser_regression_tests_added": true,
   "field_parser_native_openfoam14_verified": false,
   "pending_CI_for_new_field_parser": false,
-  "last_repository_update_purpose": "Version native Foundation14 fvModels and controlDict as executable OpenFOAM case overlay; no solver run or shrinkage verified",
+  "last_repository_update_purpose": "OpenFOAM14 native phase-resolved boundary flux + mixture mass inventory in controlDict; CI static only, no CFD",
   "density_screen": "CODE_ONLY_WITH_NATIVE_REPORT_AND_USER_SUPPLIED_HASHED_DENSITIES",
   "density_screen_script": "analysis_tools/screen_fs_c06_density_contraction.py",
   "density_reference_values_in_repo": false,
@@ -54,5 +54,20 @@
   "native_case_overlay_copied_in_stage": true,
   "python_generates_executable_fvModels_or_controlDict": false,
   "native_case_overlay_openfoam14_executed": false,
-  "model_ready_for_shrinkage": false
+  "model_ready_for_shrinkage": false,
+  "native_surface_mass_flux_monitors_prepared": [
+    "FS_C06_atmosphereMassFlux",
+    "FS_C06_atmosphereTopMassFlux",
+    "FS_C06_atmosphereSidesMassFlux",
+    "FS_C06_atmosphereLowerSidesMassFlux",
+    "FS_C06_fluidToMoldMassFlux"
+  ],
+  "native_mass_inventory_mixture": "FS_C06_mixtureMass",
+  "phase_flux_field_names": [
+    "alphaRhoPhi.metal",
+    "alphaRhoPhi.air",
+    "rhoPhi"
+  ],
+  "open_boundary_phase_flux_native_verified": false,
+  "native_mixture_mass_inventory_native_verified": false
 }

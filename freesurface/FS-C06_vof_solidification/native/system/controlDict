@@ -92,4 +92,92 @@ functions
         operation     volIntegrate;
         fields        (alpha.metal.solid);
     }
+
+    // Foundation14 phase-1 and phase-2 transported MASS fluxes:
+    // alphaRhoPhi.metal, alphaRhoPhi.air, and their mixture sum rhoPhi.
+    // Sum is outward-normal signed on boundary patches, in kg/s.
+    // Atmosphere flux alone does NOT prove closed metal mass balance.
+    FS_C06_mixtureMass
+    {
+        type          volFieldValue;
+        libs          ("libfieldFunctionObjects.so");
+        region        fluid;
+        log           true;
+        writeControl  timeStep;
+        writeInterval 1;
+        writeFields   false;
+        cellZone      all;
+        operation     volIntegrate;
+        fields        (rho);
+    }
+
+    FS_C06_atmosphereMassFlux
+    {
+        type          surfaceFieldValue;
+        libs          ("libfieldFunctionObjects.so");
+        region        fluid;
+        log           true;
+        writeControl  timeStep;
+        writeInterval 1;
+        writeFields   false;
+        patches       (atmosphereTop atmosphereSides atmosphereLowerSides);
+        operation     sum;
+        fields        (alphaRhoPhi.metal alphaRhoPhi.air rhoPhi);
+    }
+
+    FS_C06_atmosphereTopMassFlux
+    {
+        type          surfaceFieldValue;
+        libs          ("libfieldFunctionObjects.so");
+        region        fluid;
+        log           true;
+        writeControl  timeStep;
+        writeInterval 1;
+        writeFields   false;
+        patch         atmosphereTop;
+        operation     sum;
+        fields        (alphaRhoPhi.metal alphaRhoPhi.air rhoPhi);
+    }
+
+    FS_C06_atmosphereSidesMassFlux
+    {
+        type          surfaceFieldValue;
+        libs          ("libfieldFunctionObjects.so");
+        region        fluid;
+        log           true;
+        writeControl  timeStep;
+        writeInterval 1;
+        writeFields   false;
+        patch         atmosphereSides;
+        operation     sum;
+        fields        (alphaRhoPhi.metal alphaRhoPhi.air rhoPhi);
+    }
+
+    FS_C06_atmosphereLowerSidesMassFlux
+    {
+        type          surfaceFieldValue;
+        libs          ("libfieldFunctionObjects.so");
+        region        fluid;
+        log           true;
+        writeControl  timeStep;
+        writeInterval 1;
+        writeFields   false;
+        patch         atmosphereLowerSides;
+        operation     sum;
+        fields        (alphaRhoPhi.metal alphaRhoPhi.air rhoPhi);
+    }
+
+    FS_C06_fluidToMoldMassFlux
+    {
+        type          surfaceFieldValue;
+        libs          ("libfieldFunctionObjects.so");
+        region        fluid;
+        log           true;
+        writeControl  timeStep;
+        writeInterval 1;
+        writeFields   false;
+        patch         fluid_to_mold;
+        operation     sum;
+        fields        (alphaRhoPhi.metal alphaRhoPhi.air rhoPhi);
+    }
 }

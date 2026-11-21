@@ -64,11 +64,23 @@ class FS_C06Test(unittest.TestCase):
         self.assertIn("mold            solid;", src)
         self.assertIn("deltaT          1e-07;", src)
         self.assertIn("endTime         2e-07;", src)
-        self.assertEqual(src.count("type          volFieldValue;"), 2)
-        self.assertEqual(src.count("region        fluid;"), 2)
-        self.assertEqual(src.count("writeFields   false;"), 2)
+        self.assertEqual(src.count("type          volFieldValue;"), 3)
+        self.assertEqual(src.count("type          surfaceFieldValue;"), 5)
+        self.assertEqual(src.count("region        fluid;"), 8)
+        self.assertEqual(src.count("writeFields   false;"), 8)
         self.assertIn("fields        (alpha.metal);", src)
         self.assertIn("fields        (alpha.metal.solid);", src)
+        self.assertIn("fields        (rho);", src)
+        for name in ("FS_C06_atmosphereMassFlux",
+                     "FS_C06_atmosphereTopMassFlux",
+                     "FS_C06_atmosphereSidesMassFlux",
+                     "FS_C06_atmosphereLowerSidesMassFlux",
+                     "FS_C06_fluidToMoldMassFlux"):
+            self.assertEqual(src.count(name + "\n    {"), 1)
+        self.assertEqual(src.count(
+            "fields        (alphaRhoPhi.metal alphaRhoPhi.air rhoPhi);"), 5)
+        self.assertIn("patches       (atmosphereTop atmosphereSides atmosphereLowerSides);", src)
+        self.assertIn("patch         fluid_to_mold;", src)
 
     def test_native_fvmodels_composition_preserves_C05_turbulence_source(self):
         # Regression: old FS-C06 replaced the entire fvModels dictionary,
