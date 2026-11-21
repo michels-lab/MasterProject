@@ -22,7 +22,7 @@
   "field_parser_regression_tests_added": true,
   "field_parser_native_openfoam14_verified": false,
   "pending_CI_for_new_field_parser": true,
-  "last_repository_update_purpose": "Fix phase field identification and thermal metric provenance; no new native solver evidence",
+  "last_repository_update_purpose": "Correct native FS-C06 fvModels composition: keep FS-C05 VoFTurbulenceDamping and append one VoFSolidificationMelting; no OpenFOAM execution or contraction enabled",
   "density_screen": "CODE_ONLY_WITH_NATIVE_REPORT_AND_USER_SUPPLIED_HASHED_DENSITIES",
   "density_screen_script": "analysis_tools/screen_fs_c06_density_contraction.py",
   "density_reference_values_in_repo": false,
@@ -35,5 +35,13 @@
   "primary_deliverable": "Native OpenFOAM case and physically coupled shrinkage model, not Python screening",
   "python_role": "Auxiliary case preparation, diagnostics, provenance and CI only",
   "next_granada_priority": "Implement and audit native OpenFOAM physics/case (models, transport, boundaries, continuity, phase densities, interface) before adding Python-only QA",
-  "solver_shrinkage_native_implemented": false
+  "solver_shrinkage_native_implemented": false,
+  "native_fvModels_required": [
+    "turbulenceDamping (compressible::VoFTurbulenceDamping)",
+    "FS_C06_vof_phase_change (VoFSolidificationMelting)"
+  ],
+  "native_fvModels_c05_turbulence_source_preserved_in_generator": true,
+  "native_fvModels_duplicate_sources_fail_closed": true,
+  "native_fvModels_both_loaded_in_WSL": false,
+  "native_fvModels_ci_composition_regression": "PENDING_CI_AT_NEW_HEAD"
 }
