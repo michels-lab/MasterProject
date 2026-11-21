@@ -273,5 +273,27 @@
     "PR_checks": "6_OF_6_SUCCESS_ON_HEAD_including_actual_F14_C14_fluid_solid_27_PLUS_27_synthetic_native_smoke",
     "native_current_latest_workflow": "https://github.com/michels-lab/MasterProject/actions/runs/44859764142",
     "status": "NATIVE_F14_C14_FLUID_SOLID_3D_SYNTHETIC_VERIFIED__V4_T02_WSL_PENDING"
+  },
+  "original_C14_full_10s_3D_gate": {
+    "source_C14": "cases_controlled_buoyancy/C14_topFixedFlux_explicitRef",
+    "final_merge_PR": "https://github.com/michels-lab/MasterProject/pull/60",
+    "merged_commit": "d3b1f865076f2527976ae0db481bc6a5aaec5bbd",
+    "CI_native_run_full_staging": "https://github.com/michels-lab/MasterProject/actions/runs/44860515973",
+    "CI_verified": "Original C14 10-second inputs on isolated synthetic two-region 3D mesh native foamDictionary 22/22; separately original C14 two-step fluid-solid phase-change solver PASS",
+    "real_V4_T02_used_in_CI": false,
+    "WSL_accepted_real_mesh_materialized": false,
+    "WSL_native_10_second_CFD_executed": false,
+    "physical_validation": false,
+    "all_C14_scientific_parameters_unchanged": true,
+    "full_10s_controlDict_byte_identical_original": true,
+    "full_run_entrypoint": "cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/run_c14_native_milestone.sh --run-full",
+    "source_mesh_expected": "~/OpenFOAM/C3D04_V4_TRANSITION_REPAIR_01/T02",
+    "isolated_full_output_default": "~/OpenFOAM/C3D04_A_C14_FLUID_SOLID_FULL_10S_RUN_01",
+    "scientific_milestone_unchanged": "Stage 6/10 IN_PROGRESS, 5/10 completed = 50% operational",
+    "remaining": [
+      "Run integrated native preflight/full CFD on verified WSL V4/T02 once",
+      "Read genuine solver log and fields; evaluate heat energy and phase evolution",
+      "Then assess stability / mesh dependence and QuickCup validation"
+    ]
   }
 }
