@@ -25,12 +25,11 @@
     "workflow": 26
   },
   "finding_counts": {
-    "BROKEN_RELATIVE_LINK": 7,
-    "POTENTIAL_UNLOGGED_CHANGES": 2
+    "BROKEN_RELATIVE_LINK": 7
   },
-  "finding_total": 9,
-  "inventory_fingerprint": "e18ca9d77b7c36c03e4c4277cfcb4ebf10e3d4d6eecd2771e394c5a4a941e02f",
-  "evidence_fingerprint": "4aa13690d42526c9223793ce9fb9701d14f0a2cb7f32fb5d58ce72e1bc4745c1",
+  "finding_total": 7,
+  "inventory_fingerprint": "75e95c586b679fa2d96742557050f5c97b04002fc5a7b887538e7e9c278fc486",
+  "evidence_fingerprint": "a38cca05722cc62f2a19d8787a386e132771345cc8472199f5e39f915b2e8a45",
   "files": [
     {
       "path": ".github/agents/openfoam-solidification.agent.md",
@@ -261,7 +260,7 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "eca13df6cb0de8738001fcd7558944210e13da75"
+      "blob": "a5437572866ccd6bc169591860fd504a23803b87"
     },
     {
       "path": ".michelslab/agents/file-steward.md",
@@ -352,35 +351,35 @@
       "role": "bitacora",
       "purpose": "technical/audit change history",
       "certainty": "rule",
-      "blob": "becc72a44369d6476c92fdd570242026c98827fb"
+      "blob": "b1a90bc55f1e95500c0b058b81274b9011735158"
     },
     {
       "path": "PROJECT_AUDIT_LOG_EN.md",
       "role": "bitacora",
       "purpose": "technical/audit change history",
       "certainty": "rule",
-      "blob": "62200fc2f6a46471dc22d7fc359d816e6e8abaa6"
+      "blob": "e1888c1c08ab5c389407ed2e6eb390048ead6e8b"
     },
     {
       "path": "PROJECT_AUDIT_LOG_ES.md",
       "role": "bitacora",
       "purpose": "technical/audit change history",
       "certainty": "rule",
-      "blob": "08c0c1f8717bf339833a3a9bf6dc76ca910474d5"
+      "blob": "aaa3b8e1dcf2b9d5136de2c5e24b0503d2044928"
     },
     {
       "path": "README.md",
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "43af74c5f48ac286652e2cb16dda9f5086162c84"
+      "blob": "825b7504582128114cb0f6b3df34a417039b5582"
     },
     {
       "path": "RUN_CASE_REGISTRY.csv",
       "role": "data",
       "purpose": "structured/research data (semantics not validated)",
       "certainty": "rule",
-      "blob": "b748b88c4f8df968b040f6ee8a5e41c5650c3e4c"
+      "blob": "06bbba26ad8c20bf4fbb2b8480f40a6d059223f9"
     },
     {
       "path": "RUN_MASTER_PROTOCOL.md",
@@ -394,21 +393,21 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "dab0fb001d7f9a04bf752c22b3754f92d639bba8"
+      "blob": "fc1588e022ea47f39491931d5f178994e7ad349e"
     },
     {
       "path": "VALIDATION_MATRIX_EN.md",
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "24ac8bfbbd7fd3cda4b1e72e3271c66226c5100b"
+      "blob": "4f1205a2d7bcbebe6a0e2517c86c4ef386f73d2c"
     },
     {
       "path": "VALIDATION_MATRIX_ES.md",
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "9fb56a3336c4b9b1b515f93733c41b2ce2b4d381"
+      "blob": "3f2c942be4815ffd883587ac3a5dfb06d8cac367"
     },
     {
       "path": "analysis_results/c11_energy2_test/summary.md",
@@ -1794,7 +1793,7 @@
       "role": "agent",
       "purpose": "assistant role/instructions",
       "certainty": "rule",
-      "blob": "e51173d0b6619cec0e8d388f7ffd9afcfdacc38f"
+      "blob": "e616abfda7b8ea01dfb7e3e4eb0952f6dfda953b"
     },
     {
       "path": "cases_3d/C3D_05_step_gmsh_conformal/Allmesh",
@@ -1808,7 +1807,7 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "18aef6659f06dbcebb9f550e63dc5931b4079bda"
+      "blob": "fd75319f6dcde8570539a216ef8eac1bfe89293e"
     },
     {
       "path": "cases_3d/C3D_05_step_gmsh_conformal/constant/geometry/QuickCupmm.STEP",
@@ -1955,7 +1954,7 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "6c1f9a39c5363f57152b18c2253b31f539477119"
+      "blob": "6f13dc39c86319a9604aef53874e27b17481dea1"
     },
     {
       "path": "cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/T0_INPUTS.json",
@@ -2270,7 +2269,7 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "c7bc91be1acecf089528a2e5e7e00c83f72be7d5"
+      "blob": "945ab10a7bf376f66c8297ed9baaea8f759a02b7"
     },
     {
       "path": "cases_3d/case3d-01/README.md",
@@ -272134,7 +272133,7 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "c61946b4942dc4fe491a634f8e0c30861ba14f5d"
+      "blob": "e9f472001d9c75125e5ea0910133d82951eb0e4f"
     },
     {
       "path": "docs/DOCUMENT_SYNC_20261110_ES.md",
@@ -272169,7 +272168,7 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "8304bb936598b75fe5f3c4cd2f7abb85a2065df0"
+      "blob": "06ce137991716740eb1cb53f61dc76d836cfd875"
     },
     {
       "path": "docs/PRIMER_AVANCE_REQUISITOS_DIRECTOR_20261118_ES.md",
@@ -272183,7 +272182,7 @@
       "role": "config",
       "purpose": "machine-readable configuration",
       "certainty": "rule",
-      "blob": "6350c96dcf6299cebdef9df49e41f074aa5c86cd"
+      "blob": "540f5800e96873b4aacdf42ba477aae4349b2cba"
     },
     {
       "path": "docs/REGLA_INSTRUCCIONES_UNIFICADAS_ES.md",
@@ -272232,7 +272231,7 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "1543a2bd8c6dc5fc83bb542d32f73ef606fbffb7"
+      "blob": "728af868f365e6148b00a0238a24ab23102738f1"
     },
     {
       "path": "docs/granada/C3D05_F14_POSTPROCESS_SMOKE_Y_EVIDENCIA_UNICA_20261120_ES.md",
@@ -273060,24 +273059,6 @@
       "path": "docs/granada/C3D05_T0_README_HISTORICAL_BEFORE_SINGLE_FLOW_20261120.md",
       "observation": "Missing: outside-repo",
       "recommendation": "Fix link or restore target",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "2e973cb6a1545aa3",
-      "code": "POTENTIAL_UNLOGGED_CHANGES",
-      "severity": "review",
-      "path": "PROJECT_AUDIT_LOG_EN.md",
-      "observation": "8 implementation/config paths changed since this log's last commit; examples: .github/workflows/c3d05-foundation14-two-solid-solver-smoke.yml, cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/scripts/audit_t0_numerical_run.py, cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/scripts/run_c14_numerical_granada.sh, cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/scripts/run_t0_granada.py, cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/tests/smoke_native_foundation14_solver.py, cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/tests/test_t0_energy_forensics.py",
-      "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "f9ac0385d089c016",
-      "code": "POTENTIAL_UNLOGGED_CHANGES",
-      "severity": "review",
-      "path": "PROJECT_AUDIT_LOG_ES.md",
-      "observation": "8 implementation/config paths changed since this log's last commit; examples: .github/workflows/c3d05-foundation14-two-solid-solver-smoke.yml, cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/scripts/audit_t0_numerical_run.py, cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/scripts/run_c14_numerical_granada.sh, cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/scripts/run_t0_granada.py, cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/tests/smoke_native_foundation14_solver.py, cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/tests/test_t0_energy_forensics.py",
-      "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     }
   ],
