@@ -1,5 +1,9 @@
 # freesurface — Casos de prueba
 
+
+> **20-11-2026 — FS-C06, primera aceptación nativa WSL Foundation14:** dos pasos `foamMultiRun`, campo `alpha.metal.solid` y `checkMesh` de `fluid/mold` reportados PASS en consola del investigador; datos crudos pendientes de revisión. No equivale a contracción física ni alimentación. [Bitácora FS-C06](../docs/granada/FS_C06_GATE_NATIVO_WSL_20261120_ES.md). Los bloques antiguos que declaran FS-C06 no ejecutado son históricos.
+
+
 El caso **[FS-C01](FS-C01/)** es el primer banco de referencia de superficie libre de la ruta científica B-FS-01. Usa **agua–aire**, no hierro fundido; su estado es **PREPARED_NOT_MESHED_OR_RUN**, por lo que todavía no hay resultados CFD ni evidencia de contracción.
 
 Consulte el [registro del caso](FS-C01/CASE_NOTES.md) y la [bitácora técnica B-FS-01](../docs/granada/B_FS_01_VOF_HYDRO_ANALOGUE_20261020.md). El manifiesto de FS-C01 contiene los SHA-256 de los 20 archivos de entrada.
