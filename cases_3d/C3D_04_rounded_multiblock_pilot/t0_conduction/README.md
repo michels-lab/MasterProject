@@ -1,5 +1,16 @@
 # C3D-04 Caso A — T0 integrado con valores auténticos de C14
 
+
+## 20-11-2026 — Puerta de inicialización F14 con solver REAL (malla sintética, NO V4/T02)
+
+[PR #57](https://github.com/michels-lab/MasterProject/pull/57) añade a la **misma instalación Foundation14** de la CI una comprobación posterior al análisis nativo de los diez diccionarios T0. En una carpeta descartable del corredor, el script native_f14_coupled_runtime_smoke.py crea por blockMesh **dos cubos 3D independientes de una celda** con un único mappedWall recíproco, cinco paredes externas del molde y metalTop. Inserta **los diez archivos generados por el mismo productor de Caso A** y realiza dos pasos térmicos a deltaT=0.001 s con foamMultiRun para comprobar carga del solver real, externalTemperature, coupledTemperature, termofísica y escritura nativa de T en ambas regiones. En la copia sintética y solo en ella reduce endTime a 0.002 s y writeInterval a 1.
+
+Los resultados se guardan en el artifact del workflow con logs de blockMesh de las dos regiones, diez logs de foamDictionary, el log de foamMultiRun, los campos escritos y C3D04_A_SYNTHETIC_NATIVE_REPORT.json con sus SHA-256. Un log fallido preserva evidencia y **NO autoriza** declarar prueba completa; hasta que CI termine no debe llamarse PASS.
+
+**Evidencia que esta puerta NO proporciona**: no es la malla V4/T02 de 21,312 celdas, no reproduce sus 2,496 pares mappedWall, no prueba estabilidad ante >70 grados de no ortogonalidad, no mide balance de energía sobre las superficies reales y no simula enfriamiento experimental ni solidificación. **Etapa 6/10, avance operativo 5/10=50 %, sin CFD real del Caso A.** El único siguiente trabajo nativo sobre V4/T02 continúa siendo el hito 06 integrado en WSL; está prohibido confundir un ensayo en cubos con ese gate.
+
+
+
 > **20-11-2026 | Corrección preventiva de autotest F14 (hito 06 abierto, 5/10 = 50 %).** Se detectó una aserción obsoleta en `scripts/prepare_case_a_t0.py --self-test` que aún exigía `externalWallHeatFluxTemperature` después de adoptar `externalTemperature` en Foundation14. Corregida a cobertura por cantidad de parches exteriores (metal/arena), rechazo de la BC heredada y ejecución obligatoria del autotest desde la suite integrada. **El cambio no modifica diccionarios productivos, geometría V4/T02 ni ejecuta CFD**; la CI del PR y el preflight nativo real deben verificarse por separado.
 
 
