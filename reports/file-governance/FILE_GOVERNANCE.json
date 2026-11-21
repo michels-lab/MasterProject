@@ -25,11 +25,12 @@
     "workflow": 26
   },
   "finding_counts": {
-    "BROKEN_RELATIVE_LINK": 7
+    "BROKEN_RELATIVE_LINK": 7,
+    "POTENTIAL_UNLOGGED_CHANGES": 2
   },
-  "finding_total": 7,
-  "inventory_fingerprint": "75e95c586b679fa2d96742557050f5c97b04002fc5a7b887538e7e9c278fc486",
-  "evidence_fingerprint": "a38cca05722cc62f2a19d8787a386e132771345cc8472199f5e39f915b2e8a45",
+  "finding_total": 9,
+  "inventory_fingerprint": "7672327db3cc548d5207fb698bee3fcc048516c078260fefa3f877c40d6498fb",
+  "evidence_fingerprint": "9fdf331b0d0287591e43431598e70ce74d8c0519e7f015c2907eea67124dcfdf",
   "files": [
     {
       "path": ".github/agents/openfoam-solidification.agent.md",
@@ -302,7 +303,7 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "11112fe7790e64c0c97d9f639ba1611f46e05e97"
+      "blob": "477778af8a5d1e8360b5efc06b0e457dfc7a64aa"
     },
     {
       "path": "JMATPRO_OPENFOAM_TRACEABILITY_ES.md",
@@ -316,7 +317,7 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "2227f9764dcaac8b720135cffe779897d9813dad"
+      "blob": "e188ddbb11b282e7a9506300d94bd868e8166381"
     },
     {
       "path": "OPENFOAM_COMMAND_MANUAL.md",
@@ -386,7 +387,7 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "413b4aef414ff676a72bc594aae8af45584ae113"
+      "blob": "2c3b68ebf207b8de9f65c3bb221c97c075a3981e"
     },
     {
       "path": "VALIDATION_MATRIX.md",
@@ -1744,7 +1745,7 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "f91e7df30a3d87b44ce530c0127384e199528ae5"
+      "blob": "b248e3ec91d1a99dd97fecf5f1743526460f213c"
     },
     {
       "path": "cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/T0_INPUTS.json",
@@ -1772,14 +1773,14 @@
       "role": "source",
       "purpose": "code/test implementation",
       "certainty": "rule",
-      "blob": "4c786f3dcd3a31732b74900c50ac578edd7dc88b"
+      "blob": "10c6aaaa83d8967d21de38e5dcc10decc11a917c"
     },
     {
       "path": "cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/tests/test_integrated_case_a.py",
       "role": "test",
       "purpose": "code/test implementation",
       "certainty": "rule",
-      "blob": "4739517a7acf5e03223dfa0b2dfc6d7ec933836d"
+      "blob": "322ac49a14ac917b6ed9e56629c9237c76d42e64"
     },
     {
       "path": "cases_3d/C3D_04_rounded_multiblock_pilot/tests/test_rounded_multiblock_static.sh",
@@ -272098,7 +272099,7 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "4c3ecbbe3995d5670701ef2a91832079d9cc7a53"
+      "blob": "3e623be804470514c8fd934bb33cb37c447f7d6d"
     },
     {
       "path": "docs/C3D_MESH_PROGRESS_20261118.csv",
@@ -272238,7 +272239,7 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "7a8a0f88a147dfea2b5ef4b85fcf3c399ae8a296"
+      "blob": "e5dfd7458b8cee904ffc60658c13fbeaa88aa974"
     },
     {
       "path": "docs/granada/C3D05_F14_WMAKE_REAL_20261120_ES.md",
@@ -273059,6 +273060,24 @@
       "path": "docs/granada/C3D05_T0_README_HISTORICAL_BEFORE_SINGLE_FLOW_20261120.md",
       "observation": "Missing: outside-repo",
       "recommendation": "Fix link or restore target",
+      "state": "REVIEW_REQUIRED"
+    },
+    {
+      "id": "3dec5c582fdaa987",
+      "code": "POTENTIAL_UNLOGGED_CHANGES",
+      "severity": "review",
+      "path": "PROJECT_AUDIT_LOG_EN.md",
+      "observation": "2 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/scripts/prepare_case_a_t0.py, cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/tests/test_integrated_case_a.py",
+      "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
+      "state": "REVIEW_REQUIRED"
+    },
+    {
+      "id": "928127a685e5b0ed",
+      "code": "POTENTIAL_UNLOGGED_CHANGES",
+      "severity": "review",
+      "path": "PROJECT_AUDIT_LOG_ES.md",
+      "observation": "2 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/scripts/prepare_case_a_t0.py, cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/tests/test_integrated_case_a.py",
+      "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     }
   ],
