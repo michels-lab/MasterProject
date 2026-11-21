@@ -139,7 +139,7 @@
     "foundation14_real_two_solid_debugged_false_SIGFPE_detection": true,
     "foundation14_real_two_solid_smoke_source": "cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/tests/smoke_native_foundation14_solver.py",
     "foundation14_real_two_solid_smoke_workflow": ".github/workflows/c3d05-foundation14-two-solid-solver-smoke.yml",
-    "native_hex8_270788_solver_executed_evidence_level": "Investigator-supplied WSL console excerpt shows native Time=0.1s, DICPCG e solves, End; full original log/SHA not independently verified here.",
+    "native_hex8_270788_solver_executed_evidence_level": "Investigator-supplied native F14 WSL logs and SHA-bound reviewed report show C14 numerical solver ran to 0.1s on accepted 270788 HEX8; source evidence not independently mounted from WSL.",
     "native_hex8_270788_solver_auditor_current_result": "RECOVERED_PRESERVED_SOLVER_RUN_COMPLETE_NO_RERUN with SHA-bound reviewed report; user-supplied terminal 2026-11-20",
     "native_hex8_270788_immutable_review_code_committed": true,
     "native_hex8_270788_immutable_review_file_expected": "T0_NUMERICAL_RUN_STATUS_REVIEWED.json",
@@ -147,7 +147,7 @@
     "native_hex8_270788_native_energy_q_summary_pending": true,
     "native_hex8_270788_test_report": "docs/granada/C3D05_WSL_T0_270788_AUDITOR_RECOVERY_20261120_ES.md",
     "native_hex8_270788_second_reentry_no_solver_rerun_observed": true,
-    "native_hex8_270788_second_reentry_exits_before_energy_postprocessing": false,
+    "native_hex8_270788_second_reentry_exits_before_energy_postprocessing": true,
     "native_hex8_270788_recovery_root_cause_addendum": "Official F14 sigFpe : Enabling floating point exception trapping (FOAM_SIGFPE). had a prefix and terminal dot missing in previous benign-banner regex.",
     "native_hex8_270788_audit_failure_reasons_diagnostic_source_committed": true,
     "native_hex8_270788_immutable_review_observed_in_WSL": true,
@@ -169,7 +169,10 @@
     "native_hex8_270788_patch_flux_time_alignment_source_repaired": true,
     "native_hex8_270788_patch_flux_time_alignment_tested_on_real_WSL_csv": false,
     "native_hex8_270788_patch_flux_stage_reuse_without_extractor_rerun_source_committed": true,
-    "native_hex8_270788_latest_report": "docs/granada/C3D05_WSL_T0_ENERGIA_REAL_Y_TIEMPOS_Q_20261120_ES.md"
+    "native_hex8_270788_latest_report": "docs/granada/C3D05_WSL_T0_ENERGIA_REAL_Y_TIEMPOS_Q_20261120_ES.md",
+    "native_hex8_270788_third_reentry_reviewed_solver_and_energy_complete": true,
+    "physical_T0_solver_executed": false,
+    "native_hex8_270788_patch_flux_time_alignment_diagnosis_confidence": "Source-level deterministic binary64 %.17g versus short JSON float mismatch, compatible with native traceback; exact WSL raw CSV time strings not independently supplied."
   },
   "other_cases": [
     {
