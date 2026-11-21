@@ -196,5 +196,26 @@
       "https://github.com/michels-lab/MasterProject/actions/runs/44845291366",
       "https://github.com/michels-lab/MasterProject/actions/runs/44845281280"
     ]
+  },
+  "required_research_physics_C14_3D": {
+    "decision_date": "2026-11-20",
+    "source": "cases_controlled_buoyancy/C14_topFixedFlux_explicitRef",
+    "contract": "cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/C14_3D_PHYSICS_CONTRACT.json",
+    "validator": "cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/c14_source_fidelity.py",
+    "model": "C14 original metal=fluid (heRhoThermo,hConst,Cp,enthalpy,U,p,p_rgh), mold=solid (heSolidThermo,eConst,Cv), solidificationMeltingSource",
+    "required_phase_parameters": "Tsol,Tliq,L,alpha1e,beta,rhoRef,relax,Cu,q",
+    "source_faithful_files_in_memory": 22,
+    "original_files_verbatim": 14,
+    "original_variable_3D_fields": 8,
+    "T0_two_solids_research_model": false,
+    "metal_Cp_as_Cv_allowed": false,
+    "native_required": [
+      "verified metal pRefPoint on V4/T02",
+      "verified phase-change metal cellZone on V4/T02",
+      "complete native C14 fluid-solid runtime"
+    ],
+    "status": "PREPARED_NOT_MATERIALIZED_NOT_NATIVE_VERIFIED",
+    "CFD_run": false,
+    "original_progress_unchanged": "Etapa 6/10, 5/10 hitos, 50% operativa (not physical validation)"
   }
 }
