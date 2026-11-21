@@ -98,6 +98,30 @@ class EvidenceSummary(unittest.TestCase):
             with self.assertRaises(FileExistsError):
                 F.exclusive(filename,{"status":"tampered"})
 
+    def test_immutable_false_negative_recovery_is_explicitly_sha_bound(self):
+        with TemporaryDirectory() as tmp:
+            case, inp = synthetic_run(Path(tmp))
+            original = case / "T0_NUMERICAL_RUN_STATUS.json"
+            old = json.loads(original.read_text())
+            old["numerical_run_completed"] = False
+            old["status"] = "NUMERICAL_ONLY_SOLVER_NOT_VERIFIED_COMPLETE"
+            put(original, old)
+            reviewed = case / "T0_NUMERICAL_RUN_STATUS_REVIEWED.json"
+            verified = dict(old)
+            verified["numerical_run_completed"] = True
+            verified["original_legacy_status_sha256"] = sha(original)
+            verified["recovered_without_solver_rerun"] = True
+            put(reviewed, verified)
+            with self.assertRaisesRegex(ValueError, "Native solver report"):
+                F.summarize(case, inp)
+            summary = F.summarize(case, inp, reviewed)
+            self.assertEqual(summary["evidence_sha256"]["active_solver_status"], sha(reviewed))
+            self.assertEqual(summary["evidence_sha256"]["original_solver_status"], sha(original))
+            old["changed_after_review"] = True
+            put(original, old)
+            with self.assertRaisesRegex(ValueError, "SHA-bound"):
+                F.summarize(case, inp, reviewed)
+
     def test_corrupted_native_region_or_manifest_blocks_all_claims(self):
         with TemporaryDirectory() as tmp:
             case,inp=synthetic_run(Path(tmp))
