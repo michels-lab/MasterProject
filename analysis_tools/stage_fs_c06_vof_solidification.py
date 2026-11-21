@@ -31,6 +31,8 @@ from stage_fs_c04_initial_alpha import digest
 
 PREFIX = "FS_C06_VOF_SOLID_SMOKE_"
 C14_FVMODELS = Path("cases_controlled_buoyancy/C14_topFixedFlux_explicitRef/constant/metal/fvModels")
+NATIVE_FVMODELS = Path("freesurface/FS-C06_vof_solidification/native/constant/fluid/fvModels")
+NATIVE_CONTROL = Path("freesurface/FS-C06_vof_solidification/native/system/controlDict")
 MODEL_FIELD = "alpha.metal.solid"
 TIMES = ("1e-07", "2e-07")
 
@@ -308,13 +310,41 @@ def stage(source: Path, dest: Path, project: Path, native: bool = False) -> dict
     dest.parent.mkdir(parents=True, exist_ok=True)
     shutil.copytree(source, dest, symlinks=False)
     control = dest / "system/controlDict"
-    control.write_text(short_control(control.read_text()))
+    original_short_control = short_control(control.read_text())
+    # OPENFOAM NATIVE DICTIONARY owns solver selection and volume monitors.
+    native_control_path = project / NATIVE_CONTROL
+    require(native_control_path.is_file() and not native_control_path.is_symlink(),
+            "tracked Foundation14 controlDict missing")
+    native_control_text = native_control_path.read_text(encoding="utf-8")
+    marker = "// FS-C06_NATIVE_VOF_PHASE_MONITORS"
+    require(native_control_text.count(marker) == 1,
+            "native volume monitor source missing or duplicated")
+    require(native_control_text.split(marker)[0].strip()
+            == original_short_control.strip(),
+            "native OpenFOAM controlDict drifted from FS-C05 accepted solver setup")
+    for field in ("alpha.metal", "alpha.metal.solid"):
+        require(re.search(r"\bfields\s*\(\s*" + re.escape(field) + r"\s*\)\s*;",
+                          native_control_text) is not None,
+                "native OpenFOAM volume monitor absent: " + field)
+    require(native_control_text.count("type          volFieldValue;") == 2
+            and native_control_text.count("region        fluid;") == 2
+            and native_control_text.count("writeFields   false;") == 2,
+            "FS-C06 native volFieldValue monitor dictionary changed")
+    control.write_text(native_control_text, encoding="utf-8")
     schemes = dest / "system/fluid/fvSchemes"
     modified, added = ensure_compressible_kepsilon_divergence(schemes.read_text())
     schemes.write_text(modified)
     candidate = dest / "constant/fluid/fvModels"
     original_models_text = original_models.read_text()
-    candidate.write_text(model_text(reference, original_models_text))
+    # OPENFOAM NATIVE DICTIONARY IS THE SINGLE SOURCE OF EXECUTABLE PHYSICS.
+    # Python only checks its provenance and copies it to the isolated case.
+    native_path = project / NATIVE_FVMODELS
+    require(native_path.is_file() and not native_path.is_symlink(),
+            "tracked Foundation14 fvModels dictionary missing")
+    native_text = native_path.read_text(encoding="utf-8")
+    require(native_text == model_text(reference, original_models_text),
+            "native OpenFOAM fvModels drifted from C14 or inherited FS-C05 sources")
+    candidate.write_text(native_text, encoding="utf-8")
     result = {
         "schema": "masterproject-fs-c06-vof-phase-change-smoke-v1",
         "status": "FS_C06_STAGED_NO_CFD",
@@ -325,6 +355,15 @@ def stage(source: Path, dest: Path, project: Path, native: bool = False) -> dict
         "control_sha256": digest(control),
         "fvSchemes_sha256": digest(schemes),
         "fvModels_sha256": digest(candidate),
+        "native_controlDict_source": str(NATIVE_CONTROL),
+        "native_controlDict_source_sha256": digest(native_control_path),
+        "native_controlDict_copied_verbatim": True,
+        "native_openfoam_phase_volume_monitors": [
+            "FS_C06_metalVoFVolume", "FS_C06_solidMetalVolume"
+        ],
+        "native_fvModels_source": str(NATIVE_FVMODELS),
+        "native_fvModels_source_sha256": digest(native_path),
+        "native_fvModels_copied_verbatim": True,
         "inherited_fvModels_sha256": digest(original_models),
         "inherited_VoFTurbulenceDamping_preserved": True,
         "native_fvModels_entries": [

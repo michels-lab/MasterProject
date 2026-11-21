@@ -1,0 +1,95 @@
+/* FS-C05 5us feasibility smoke, RAS screening, no solidification. */
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  14
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    format      ascii;
+    class       dictionary;
+    location    "system";
+    object      controlDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+regionSolvers
+{
+    fluid           compressibleVoF;
+    mold            solid;
+}
+
+startFrom       startTime;
+
+startTime       0;
+
+stopAt          endTime;
+
+endTime         2e-07;
+
+deltaT          1e-07;
+
+writeControl    timeStep;
+
+writeInterval   1;
+
+purgeWrite      0;
+
+writeFormat     ascii;
+
+writePrecision  12;
+
+writeCompression off;
+
+timeFormat      general;
+
+timePrecision   6;
+
+runTimeModifiable false;
+
+adjustTimeStep  yes;
+
+maxCo           0.1;
+
+maxAlphaCo      0.1;
+
+maxDeltaT       1e-07;
+
+// ************************************************************************* //
+
+
+// FS-C06_NATIVE_VOF_PHASE_MONITORS
+// These are native OpenFOAM function objects; they do not infer mass or shrinkage.
+// The phase-change fvModel must register alpha.metal.solid before writing.
+functions
+{
+    FS_C06_metalVoFVolume
+    {
+        type          volFieldValue;
+        libs          ("libfieldFunctionObjects.so");
+        region        fluid;
+        log           true;
+        writeControl  timeStep;
+        writeInterval 1;
+        writeFields   false;
+        cellZone      all;
+        operation     volIntegrate;
+        fields        (alpha.metal);
+    }
+
+    FS_C06_solidMetalVolume
+    {
+        type          volFieldValue;
+        libs          ("libfieldFunctionObjects.so");
+        region        fluid;
+        log           true;
+        writeControl  timeStep;
+        writeInterval 1;
+        writeFields   false;
+        cellZone      all;
+        operation     volIntegrate;
+        fields        (alpha.metal.solid);
+    }
+}

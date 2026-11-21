@@ -1,0 +1,47 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  14
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    format      ascii;
+    class       dictionary;
+    location    "constant/fluid";
+    object      fvModels;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+turbulenceDamping
+{
+    type            compressible::VoFTurbulenceDamping;
+
+    delta           1e-4;
+}
+
+
+// ************************************************************************* //
+
+/* FS-C06 numerical Foundation14 COMPATIBILITY candidate only.
+ * Retain inherited compressible::VoFTurbulenceDamping / kEpsilon.
+ * alpha.metal = VoF metal/air fraction.
+ * alpha.metal.solid = absolute solid-metal fraction (0 <= solid <= metal).
+ * THIS MODEL DOES NOT CREATE SHRINKAGE OR FEEDING.
+ * C14 coefficients are numerical references, not measured material data.
+ */
+FS_C06_vof_phase_change
+{
+    type VoFSolidificationMelting;
+    cellZone all;
+    alphaSolidT table
+    (
+        (1423 1)
+        (1473 0)
+    );
+    L 228600;
+    relax 0.1;
+    Cu 100000;
+    q 0.001;
+}

@@ -240,3 +240,45 @@ OpenFOAM sobre nuevos auditores Python; documentar qué ecuaciones y fuentes
 físicas están implementadas, cuáles no, y mostrar evidencia de ejecución
 nativa solo cuando exista. El caso sigue sin contracción volumétrica
 implementada. No introducir densidades o expansión grafítica ficticias.
+
+## FS-C06: diccionarios ejecutables nativos Foundation 14 (Granada P, 20-11-2026)
+
+La autoridad de la **configuración que OpenFOAM leerá** ya es un par de
+diccionarios versionados y visibles, no un bloque de texto generado por Python:
+
+- [`native/constant/fluid/fvModels`](native/constant/fluid/fvModels): conserva
+  `compressible::VoFTurbulenceDamping` del FS-C05 y activa
+  `VoFSolidificationMelting` en `cellZone all`, con coeficientes **de
+  cribado numérico C14**, no termofísica calibrada. Dos modelos fv registrados;
+  no se sobrescribe el amortiguamiento turbulento existente.
+- [`native/system/controlDict`](native/system/controlDict): conserva los
+  solvers `compressibleVoF` en `fluid` y `solid` en `mold`, ejecución
+  corta aislada y escritura cada paso. Incluye **dos `volFieldValue` de OpenFOAM**
+  para medir directamente `volIntegrate(alpha.metal)` y
+  `volIntegrate(alpha.metal.solid)` sobre toda la región fluid, sin usar
+  Python para efectuar estas integrales. `writeFields false` evita duplicar
+  campos de la malla; el modelo escribe `alpha.metal.solid` automáticamente.
+
+El orquestador **solo copia fielmente** los diccionarios nativos a una
+copia nueva ya mallada del FS-C05 y verifica que no se aparten de las
+fuentes C14/FS-C05. **No se ejecutan OpenFOAM o CFD en CI.** Se mantiene
+el único comando de aceptación WSL indicado arriba; sus archivos
+`constant/fluid/fvModels` y `system/controlDict` son copias exactas
+de las fuentes nativas versionadas. Esto no altera ningún FS-C05 existente.
+
+**Ecuaciones y alcance de esta etapa:** Foundation 14 añade al balance
+de energía el término de calor latente mediante
+`L*fvc::ddt(rho, alphaSolid)` y al momento una resistencia Darcy
+regulada por `Cu`, `q` y fracción sólida. `alpha.metal.solid` se
+actualiza desde `T.metal` multiplicando por `alpha.metal`. **Nada de
+esto cambia por sí solo la ley de densidad de metal en la ecuación
+de continuidad ni demuestra contracción o alimentación**.
+
+**Condición inicial:** hierro a 1500 K (> liquidus de cribado 1473 K).
+Dos pasos de 1e-7 s son un **test de carga/escritura**, no un transitorio
+físico de solidificación. Siguiente ruta: una ejecución nativa aislada
+confirmando los dos fvModels y los monitores, después un ensayo térmico
+que atraviese el liquidus; solo luego continuidad con `rho_l(T)`,
+`rho_s(T,f_s)`, flujo de masa por la atmósfera, desplazamiento de la
+superficie y curva QuickCup real. No introducir coeficientes
+inventados ni reivindicar una contracción sin un modelo conservativo.

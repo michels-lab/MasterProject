@@ -9,6 +9,7 @@ from stage_fs_c06_vof_solidification import (
     C14_FVMODELS, FLUID_CELLS, PREFIX, TIMES, MODEL_FIELD,
     check_solid_fraction, model_text, read_c14_reference, phase_volume_metrics,
     read_native_solid_fraction, read_native_metal_temperature,
+    NATIVE_FVMODELS, NATIVE_CONTROL,
 )
 
 
@@ -44,6 +45,30 @@ class FS_C06Test(unittest.TestCase):
             self.assertIn(x, text)
         self.assertNotIn("solidificationMeltingSource;", text)
         self.assertNotIn("alpha1e", text)
+
+    def test_native_openfoam_fvmodels_is_the_executable_source_of_truth(self):
+        project = Path(__file__).resolve().parents[1]
+        native = project / NATIVE_FVMODELS
+        self.assertTrue(native.is_file())
+        expected = model_text(read_c14_reference(project),
+                              self._inherited_c05_models())
+        self.assertEqual(native.read_text(), expected)
+        self.assertIn("type VoFSolidificationMelting;", native.read_text())
+        self.assertIn("compressible::VoFTurbulenceDamping", native.read_text())
+        self.assertNotIn("solidificationMeltingSource;", native.read_text())
+
+    def test_native_controlDict_runs_two_regions_and_writes_vof_volumes(self):
+        project = Path(__file__).resolve().parents[1]
+        src = (project / NATIVE_CONTROL).read_text()
+        self.assertIn("fluid           compressibleVoF;", src)
+        self.assertIn("mold            solid;", src)
+        self.assertIn("deltaT          1e-07;", src)
+        self.assertIn("endTime         2e-07;", src)
+        self.assertEqual(src.count("type          volFieldValue;"), 2)
+        self.assertEqual(src.count("region        fluid;"), 2)
+        self.assertEqual(src.count("writeFields   false;"), 2)
+        self.assertIn("fields        (alpha.metal);", src)
+        self.assertIn("fields        (alpha.metal.solid);", src)
 
     def test_native_fvmodels_composition_preserves_C05_turbulence_source(self):
         # Regression: old FS-C06 replaced the entire fvModels dictionary,

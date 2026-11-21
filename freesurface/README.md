@@ -29,3 +29,7 @@ Nuevo candidato [FS-C06](FS-C06_vof_solidification/README.md), aislado de FS-C05
 ## FS-C06 (20-11-2026) — pantalla de densidades sin resultados CFD nuevos
 
 Se preparó la herramienta de solo lectura [screen_fs_c06_density_contraction.py](../analysis_tools/screen_fs_c06_density_contraction.py), que exige informe FS-C06 de ejecución nativa **y** densidades trazables con fuente original y SHA verificable; compara una hipótesis de volumen a masa fija sin alimentar con los volúmenes VOF medidos. No hay material JMatPro calibrado versionado, no se ejecutó FS-C06 y no se añadió contracción al solver. Consulte [FS-C06](FS-C06_vof_solidification/README.md).
+
+## Granada P — FS-C06 OpenFOAM native input overlay
+
+Se añadieron diccionarios ejecutables propios de Foundation14 en [FS-C06/native](FS-C06_vof_solidification/native): `fvModels` con modelo VOF de solidificación más el amortiguamiento turbulento conservado, y `controlDict` multirregión con mediciones `volFieldValue` nativas para metal total y sólido. El stager auxiliar copia los archivos OpenFOAM; ninguna CI corre CFD. FS-C06 todavía no ha ejecutado el solver ni simula contracción conservativa.
