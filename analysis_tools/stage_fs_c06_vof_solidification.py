@@ -169,6 +169,48 @@ def phase_volume_metrics(
     }
 
 
+def read_native_solid_fraction(path: Path, expected_cells: int = FLUID_CELLS) -> list[float]:
+    """Read a real, ASCII OpenFOAM alpha.metal.solid field, without renaming it.
+
+    The older read_alpha() deliberately accepts ONLY object alpha.metal.
+    Reusing it here would reject the correct AUTO_WRITE field from Foundation14.
+    Keep that older reader strict: this parser is specific to the new field.
+    """
+    require(expected_cells > 0, "invalid native solid field cell count")
+    require(path.is_file() and not path.is_symlink(),
+            "missing native alpha.metal.solid field")
+    raw = path.read_text(encoding="utf-8", errors="strict")
+    require(re.search(r"\\bformat\\s+ascii\\s*;", raw[:1000]) is not None,
+            "native alpha.metal.solid must be ASCII")
+    require(re.search(r"\\bclass\\s+volScalarField\\s*;", raw[:1000]) is not None
+            and re.search(r"\\bobject\\s+alpha\\.metal\\.solid\\s*;", raw[:1000]) is not None,
+            "native field must be volScalarField object alpha.metal.solid")
+    internal = raw.split("boundaryField", 1)[0]
+    nonuniform = re.search(
+        r"internalField\\s+nonuniform\\s+List<scalar>\\s+(\\d+)\\s*\\((.*?)\\)\\s*;",
+        internal, re.S
+    )
+    if nonuniform:
+        require(int(nonuniform.group(1)) == expected_cells,
+                "native solid field cell count does not match fluid mesh")
+        try:
+            values = [float(x) for x in nonuniform.group(2).split()]
+        except ValueError as exc:
+            raise ValueError("FS-C06: malformed native solid values") from exc
+        require(len(values) == expected_cells,
+                "native solid field values disagree with declared count")
+    else:
+        uniform = re.search(
+            r"internalField\\s+uniform\\s+([-+0-9.eE]+)\\s*;", internal
+        )
+        require(uniform is not None,
+                "missing or unsupported native solid internalField")
+        values = [float(uniform.group(1))] * expected_cells
+    require(all(math.isfinite(x) for x in values),
+            "nonfinite native solid fraction")
+    return values
+
+
 def read_native_fraction(case: Path, liquidus_K: float) -> dict:
     mesh = read_mesh(case / "constant/fluid/polyMesh", FLUID_CELLS)
     cell_volumes = [cell_volume_m3(mesh, i) for i in range(FLUID_CELLS)]
@@ -185,7 +227,7 @@ def read_native_fraction(case: Path, liquidus_K: float) -> dict:
             require(len(matches) == 1, "native time folder missing or ambiguous " + time)
             fluid = matches[0]
         metal = read_alpha(fluid / "alpha.metal", expected_cells=FLUID_CELLS)
-        solid = read_alpha(fluid / MODEL_FIELD, expected_cells=FLUID_CELLS)
+        solid = read_native_solid_fraction(fluid / MODEL_FIELD, expected_cells=FLUID_CELLS)
         T = read_temperature(fluid / "T", expected_cells=FLUID_CELLS)
         phase = phase_volume_metrics(cell_volumes, metal, solid, T, liquidus_K)
         snapshots.append({"time_s": float(time), **check_solid_fraction(metal, solid),
