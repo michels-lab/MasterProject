@@ -846,7 +846,8 @@ def self_test():
         for patch in EXTERIOR[region] + (COUPLED[region],):
             assert patch in field
         assert "type coupledTemperature;" in field
-        assert "type externalWallHeatFluxTemperature;" in field
+        assert field.count("type externalTemperature;") == len(EXTERIOR[region])
+        assert "type externalWallHeatFluxTemperature;" not in field
         assert "constIsoSolid" in files[f"constant/{region}/physicalProperties"]
         assert "nNonOrthogonalCorrectors 2;" in files[f"system/{region}/fvSolution"]
     cfg["mold"]["kappa_W_m_K"] = None
