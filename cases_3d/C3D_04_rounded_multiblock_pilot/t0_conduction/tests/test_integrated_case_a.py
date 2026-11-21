@@ -20,6 +20,8 @@ sys.path.insert(0, str(CASE_A / "scripts"))
 import prepare_case_a_t0 as engine
 import native_f14_dictionary_smoke as native_f14
 import native_f14_coupled_runtime_smoke as native_runtime
+sys.path.insert(0, str(CASE_A / "c14_physics"))
+import c14_source_fidelity as c14_exact
 import report_case_a_progress as progress
 
 
@@ -549,6 +551,53 @@ class IntegratedCaseAT0(unittest.TestCase):
             target.mkdir()
             with self.assertRaises(FileExistsError):
                 native_runtime.run(target)
+
+    def test_060_case_a_C14_metal_fluid_enthalpy_all_original_values(self):
+        # Critical regression: a two-solid T0 is NOT the C14 research model.
+        report = c14_exact.verify()
+        self.assertEqual(report["regionSolvers"], {"metal": "fluid", "mold": "solid"})
+        self.assertTrue(report["C14_momentum_and_energy_retained"])
+        self.assertFalse(report["3D_solver_executed"])
+        fields = c14_exact.generate_3d_initial_fields()
+        self.assertEqual(len(fields), 8)
+        self.assertIn("type externalTemperature;", fields["0/metal/T"])
+        self.assertIn("h uniform 10;", fields["0/metal/T"])
+        self.assertIn("Ta constant 300;", fields["0/metal/T"])
+        self.assertIn("type coupledTemperature;", fields["0/mold/T"])
+        self.assertIn("type slip;", fields["0/metal/U"])
+        self.assertIn("type noSlip;", fields["0/metal/U"])
+        self.assertIn("type fixedFluxPressure;", fields["0/metal/p_rgh"])
+        self.assertIn("internalField uniform 228600;", fields["0/metal/latentHeat"])
+        self.assertTrue(all("frontAndBack" not in body for body in fields.values()))
+        for value in ("alpha1e", "beta", "Tsol", "Tliq", "rhoRef", "Cu", "relax"):
+            self.assertIn(value, c14_exact.read_original("constant/metal/fvModels"))
+        contract = json.loads(c14_exact.CONTRACT.read_text())
+        self.assertEqual(contract["non_negotiable"]["metal_energy"],
+                         "sensibleEnthalpy")
+        self.assertTrue(contract["non_negotiable"]["forbid_metal_Cp_as_Cv"])
+        self.assertEqual(contract["C14_exact_values"]["numerics"]
+                         ["metal_region_nEnergyCorrectors_effective"], 1)
+
+    def test_061_case_a_C14_source_parity_rejects_silent_material_mutations(self):
+        original = c14_exact.read_original
+        variants = (
+            ("constant/metal/materials/castIron", "Cp          827;", "Cp          900;"),
+            ("constant/mold/materials/silica", "Cv      700;", "Cv      900;"),
+            ("constant/metal/fvModels", "alpha1e         0.8;", "alpha1e         0.9;"),
+            ("constant/metal/momentumTransport", "simulationType laminar;", "simulationType RAS;"),
+            ("constant/metal/g", "value           (0 -9.81 0);", "value           (0 0 -9.81);"),
+            ("system/controlDict", "metal       fluid;", "metal       solid;"),
+        )
+        for relative, old, replacement in variants:
+            with self.subTest(relative=relative):
+                raw = original(relative)
+                self.assertIn(old, raw)
+                def contaminated(path, relative=relative, old=old, replacement=replacement):
+                    text = original(path)
+                    return text.replace(old, replacement) if path == relative else text
+                with patch.object(c14_exact, "read_original", side_effect=contaminated):
+                    with self.assertRaisesRegex(ValueError, "C14_SOURCE_FIDELITY_BLOCKED"):
+                        c14_exact.verify()
 
     def test_06_no_CFD_or_remeshing_launched_by_integrated_runner(self):
         runner = (T0/"run_integrated_milestone.sh").read_text()
