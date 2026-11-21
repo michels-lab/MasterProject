@@ -1,3 +1,15 @@
+## 20-11-2026 — FOUNDATION14: CFD nativo real del C14 original PASÓ en malla sintética 3D
+
+[**GitHub Actions run #44859479359, SUCCESS**](https://github.com/michels-lab/MasterProject/actions/runs/44859479359) y [**artifact original #14689152079**](https://github.com/michels-lab/MasterProject/actions/runs/44859479359/artifacts/14689152079). Se ejecutaron **dos pasos nativos foamMultiRun a 0.001 y 0.002 s** de las regiones sintéticas **metal fluido de 27 celdas y arena sólida de 27 celdas**, con los archivos fuente C14 intactos. El log demuestra explícitamente:
+
+- `Selecting solver fluid` (metal), `Selecting solver solid` (mold) y **`Selecting solidificationMeltingSource with name phaseChangeSource`**. No se sustituyó `heRhoThermo/Cp/sensibleEnthalpy` por `heSolidThermo/Cv`.
+- Se resolvieron `h` en el metal, `e` en la arena y **`p_rgh` con GAMG**; se escribieron `U,T,p,p_rgh,rho,phi,phaseChangeSource:alpha1`.
+- A 0.002 s, `T.metal` cubrió **1499.92–1499.98 K**, `T.mold` **300–300.238 K**, `p_rgh` aproximadamente **100000–100002 Pa**. `alpha1` seguía en **1**, coherente con T inicial 1500 K > liquidus 1473 K. **No demuestra evolución de sólido ni liberación de calor latente**.
+- El archivo de evidencia se preservó **dentro de un ZIP nativo** porque el proveedor GitHub Actions no permite subir directamente nombres que incluyen dos puntos, como `phaseChangeSource:alpha1`. Las condiciones originales y nombres de campo sí están intactos dentro del ZIP.
+- El primer ensayo de una celda por región falló por diagonal de presión cero en un dominio sintético degenerado. Se sustituyó **sólo la discretización del fixture sintético** por 3×3×3 celdas y se mantuvieron todos los parámetros físicos y numéricos de C14.
+
+**Límite científico estricto:** el pase de CI es un **CFD de un caso sintético aislado**, NO el CFD sobre la V4/T02 de 8960+12352 celdas en la laptop del investigador. Esa corrida, la conservación de energía 3D, la independencia de malla, el inicio de solidificación y QuickCup están pendientes. **Etapa 06/10, 5/10 hitos=50% operativa.** El bloque siguiente consiste en una **sola ejecución WSL** del [runner C14 nativo](run_c14_native_milestone.sh) contra la malla preservada.
+
 ## 20-11-2026 — Preparador nativo para V4/T02 (modelo FÍSICO C14, hierro fluido)
 
 El bloque `stage_c14_3d_case_a.py` materializa por primera vez el **modelo completo del C14 fluido–sólido** sobre la malla aceptada V4/T02 sin tocar el original: copia la geometría de las regiones verificadas, comprueba SHA-256 de los cinco archivos de malla por región, conserva los 14 diccionarios heredados del C14 salvo una adaptación geométrica necesaria en `fvSolution`, genera los ocho campos 3D desde parámetros C14 y añade exclusivamente la zona de celdas `metal` a la **copia** de `polyMesh` cuando la malla fuente no contiene ya una zona completa verificable. Si existe una zona `metal` original que no selecciona todas las celdas, se detiene en lugar de reemplazarla silenciosamente.
