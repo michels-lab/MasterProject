@@ -9,6 +9,7 @@ from datetime import datetime, timezone
 import hashlib
 import importlib.util
 import json
+import math
 import os
 from pathlib import Path
 import re
@@ -75,7 +76,46 @@ def source_review(source: Path):
     result = reviewer.assess(source)  # SAVED evidence only; no checkMesh or remeshing
     if result.get("geometry_topology_gate_passed") is not True:
         raise RuntimeError("Previously accepted native CAD/HEX8/contact evidence has changed or failed")
+    # This is NOT a toy mesh or a re-mesh: the exact already-accepted
+    # C3D-05 geometry is a mandatory, scientific run-time prerequisite.
+    verify_accepted_real_hex8(result)
     return result
+
+
+def verify_accepted_real_hex8(report: dict) -> None:
+    """Reject a different mesh before any thermal case is materialized."""
+    # Actual preserved native checkMesh output, 19 Nov 2026; NOT a model
+    # assumption. Never substitute 1-cell or 1-m3 synthetic CI cases.
+    expected_cells = {"parent": 270788, "metal": 92200, "mold": 178588}
+    expected_volumes = {"metal": 4.79754032229e-05, "mold": 1.02843380345e-04}
+    expected_nonorth = {"parent": 1826, "metal": 595, "mold": 1231}
+    quality = report.get("quality")
+    if not isinstance(quality, dict):
+        raise RuntimeError("Missing native accepted HEX8 quality evidence")
+    for region, expected in expected_cells.items():
+        values = quality.get(region)
+        if not isinstance(values, dict) or values.get("cells") != expected:
+            raise RuntimeError(f"WRONG_3D_MESH: {region} requires exactly {expected} native HEX8")
+        if values.get("severely_nonorthogonal_faces_above_70deg") != expected_nonorth[region]:
+            raise RuntimeError(f"WRONG_3D_MESH: {region} accepted nonorthogonal face count changed")
+    for region, expected in expected_volumes.items():
+        observed = quality[region].get("volume_m3")
+        if type(observed) not in (int, float) or not math.isfinite(observed):
+            raise RuntimeError(f"WRONG_3D_MESH: {region} no native checkMesh volume")
+        if abs(observed / expected - 1.0) > 0.001:
+            raise RuntimeError(f"WRONG_3D_MESH: {region} volume not authentic accepted STEP/HEX8")
+    if report.get("contact_faces_per_side") != 12636:
+        raise RuntimeError("WRONG_3D_MESH: requires 12636 reciprocal metal/mold contact faces")
+    contact_area = report.get("contact_area_mm2_per_side")
+    if (type(contact_area) not in (int, float) or not math.isfinite(contact_area)
+            or abs(contact_area/6349.07567760369 - 1.0) > 0.001):
+        raise RuntimeError("WRONG_3D_MESH: accepted reciprocal contact area changed")
+    print("REAL_ACCEPTED_3D_HEX8_NATIVE_EVIDENCE: "
+          "270788 cells (metal 92200 / mold 178588), "
+          "12636 coupled faces per side, true CAD volumes "
+          f"{quality['metal']['volume_m3']:.12g} + {quality['mold']['volume_m3']:.12g} m3, "
+          "1826 severe nonorth faces (WARNING, not solved)")
+
 
 
 def check_environment():
