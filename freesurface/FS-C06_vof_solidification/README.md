@@ -329,3 +329,36 @@ reciprocidad térmica de FS-C06 ni conservación de masa. La validación
 energética global requiere términos de entalpía, presión y atmósfera;
 la implementación de densidad y contracción está pendiente. No
 confundir la reciprocidad FS-C05 histórica con un resultado FS-C06.
+
+
+## 20-11-2026 — Puerta GRANADA de aceptación nativa integrada en la rama activa
+
+Se incorporó [`run_native_gate.sh`](run_native_gate.sh) a la rama de trabajo
+`research/fs-c02-metal-air-vof-20261117` desde su desarrollo aislado, sin
+modificar FS-C05 ni los casos C3D. Es un **único comando**, no una colección de
+micropruebas manuales. Exige el entorno Foundation14, ejecuta el stager de
+FS-C06 en una **copia nueva**, comprueba los dos modelos de `fvModels`,
+que `system/controlDict` y `fvModels` son idénticos a los diccionarios nativos
+versionados, que `foamMultiRun` finaliza dos pasos, y realiza `checkMesh
+-allGeometry -allTopology` en **fluid y mold**. Conserva los logs y
+`FS_C06_REPORT.json` en la copia independiente.
+
+Desde Ubuntu/WSL con OpenFOAM Foundation 14 cargado:
+
+```bash
+cd ~/OpenFOAM/FS_C02_WORKTREE && \
+git fetch origin research/fs-c02-metal-air-vof-20261117 && \
+git switch --detach FETCH_HEAD && \
+bash freesurface/FS-C06_vof_solidification/run_native_gate.sh \
+  ~/OpenFOAM/FS_C05_VOF_CHT_RUNS/FS_C05_VOF_CHT_SCREEN_20261119T063448Z_84d08b6e
+```
+
+Esta integración en Git **NO constituye una corrida FS-C06 efectuada**. El
+`PASS` de esta puerta, cuando ocurra en WSL, solo acredita lectura del caso,
+mallado y escritura nativa de `alpha.metal.solid`; no demuestra reducción
+física de volumen, alimentación, conservación global o validación QuickCup.
+Los primeros 2 × 1e-7 s, con T inicial de metal 1500 K, tampoco atraviesan
+necesariamente el liquidus de referencia 1473 K. Siguiente bloque de física:
+propiedades trazables `rho_l(T)` y `rho_s(T,f_s)`, modificación consistente
+de la ecuación conservativa de masa, superficie libre y un transitorio que
+realmente solidifique. No introducir densidades ficticias.
