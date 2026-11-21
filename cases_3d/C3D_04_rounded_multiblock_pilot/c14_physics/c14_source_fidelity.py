@@ -291,12 +291,91 @@ def generate_3d_initial_fields() -> dict[str,str]:
     return fluid
 
 
+
+def assemble_unmaterialized_source_exact_fileset() -> dict[str, str]:
+    """Assemble original C14 solver/model dictionaries plus 3D-ready fields.
+
+    This is not a runnable case until BOTH region mesh-derived mappings for
+    pRefPoint and cellZone are validated on actual V4/T02 polyMesh in WSL.
+    Importing the old C14 2D point unmodified would be physically incorrect.
+    """
+    files = generate_3d_initial_fields()
+    original = (
+        "system/controlDict",
+        "system/fvSolution",
+        "system/metal/fvSchemes",
+        "system/metal/fvSolution",
+        "system/mold/fvSchemes",
+        "system/mold/fvSolution",
+        "constant/metal/physicalProperties",
+        "constant/metal/materials/castIron",
+        "constant/metal/fvModels",
+        "constant/metal/momentumTransport",
+        "constant/metal/g",
+        "constant/metal/pRef",
+        "constant/mold/physicalProperties",
+        "constant/mold/materials/silica",
+    )
+    for relative in original:
+        require(relative not in files, "duplicate C14 source path")
+        files[relative] = read_original(relative)
+    require("metal       fluid;" in files["system/controlDict"],
+            "fluid phase omitted from native setup")
+    require("mold        solid;" in files["system/controlDict"],
+            "solid mold omitted from native setup")
+    require("solidificationMeltingSource;" in files["constant/metal/fvModels"],
+            "C14 latent heat source replaced")
+    require("alpha1e         0.8;" in files["constant/metal/fvModels"],
+            "C14 eutectic fraction omitted")
+    require("type            heRhoThermo;" in files["constant/metal/materials/castIron"],
+            "C14 fluid enthalpy material replaced")
+    require("type            heSolidThermo;" in files["constant/mold/materials/silica"],
+            "C14 mold material replaced")
+    require("pRefPoint" in files["system/metal/fvSolution"],
+            "3D reference point needs documented mesh-only adaptation")
+    require(len(files) == 22, "C14 3D source-complete candidate expected 22 files")
+    return files
+
+
+def sources_manifest() -> dict:
+    files = assemble_unmaterialized_source_exact_fileset()
+    originals = set([
+        "system/controlDict", "system/fvSolution",
+        "system/metal/fvSchemes", "system/metal/fvSolution",
+        "system/mold/fvSchemes", "system/mold/fvSolution",
+        "constant/metal/physicalProperties",
+        "constant/metal/materials/castIron",
+        "constant/metal/fvModels", "constant/metal/momentumTransport",
+        "constant/metal/g", "constant/metal/pRef",
+        "constant/mold/physicalProperties",
+        "constant/mold/materials/silica",
+    ])
+    return {
+        "status": "C14_3D_FLUID_SOLID_NATIVE_FILESET_RENDERED_IN_MEMORY_ONLY",
+        "files": [{
+            "path": key,
+            "source": "C14_ORIGINAL_BYTE_FOR_BYTE" if key in originals
+                      else "C14_VALUES_3D_PATCH_ADAPTATION",
+            "sha256": hashlib.sha256(payload.encode("utf-8")).hexdigest(),
+        } for key, payload in sorted(files.items())],
+        "files_total": len(files),
+        "C14_metal_fluid": True,
+        "C14_mold_solid": True,
+        "C14_latentHeat_alpha1e_Cu_beta_kept": True,
+        "Cp_to_Cv_substitution": False,
+        "native_mesh_V4_T02_present": False,
+        "native_pressure_reference_point_mapped": False,
+        "native_phaseChange_metal_cellZone_mapped": False,
+        "native_solver_run": False,
+    }
+
+
 def main() -> int:
     report = verify()
-    generated = generate_3d_initial_fields()
+    fileset = sources_manifest()
     print(json.dumps({
         **report,
-        "rendered_native_3D_initial_field_names": sorted(generated),
+        **fileset,
         "3D_C14_fluid_model_materialized": False,
         "case_A_stage_completion_unchanged": True,
     }, indent=2, ensure_ascii=False))
