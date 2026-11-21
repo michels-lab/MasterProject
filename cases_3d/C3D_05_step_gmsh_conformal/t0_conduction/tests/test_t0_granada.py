@@ -56,6 +56,39 @@ class T0GranadaIntegration(TestCase):
         for file in ("log.checkMesh.parent", "log.checkMesh.metal", "log.checkMesh.mold"):
             (self.source / file).write_text("SYNTHETIC LOG ONLY", encoding="utf-8")
 
+    def test_real_accepted_C3D05_mesh_identity_is_not_optional(self):
+        # Numbers are from accepted 19 Nov native WSL checkMesh + contact
+        # reports, not invented toy geometry for the solver.
+        real = {
+            "quality": {
+                "parent": {"cells": 270788, "severely_nonorthogonal_faces_above_70deg": 1826},
+                "metal": {"cells": 92200, "volume_m3": 4.79754032229e-5,
+                          "severely_nonorthogonal_faces_above_70deg": 595},
+                "mold": {"cells": 178588, "volume_m3": 1.02843380345e-4,
+                         "severely_nonorthogonal_faces_above_70deg": 1231}
+            },
+            "contact_faces_per_side": 12636,
+            "contact_area_mm2_per_side": 6349.07567760369
+        }
+        target.verify_accepted_real_hex8(real)
+        import copy
+        wrong = copy.deepcopy(real)
+        wrong["quality"]["metal"]["cells"] = 1
+        with self.assertRaisesRegex(RuntimeError, "WRONG_3D_MESH"):
+            target.verify_accepted_real_hex8(wrong)
+        wrong = copy.deepcopy(real)
+        wrong["quality"]["metal"]["volume_m3"] = 1.0
+        with self.assertRaisesRegex(RuntimeError, "WRONG_3D_MESH"):
+            target.verify_accepted_real_hex8(wrong)
+        wrong = copy.deepcopy(real)
+        wrong["contact_faces_per_side"] = 12
+        with self.assertRaisesRegex(RuntimeError, "12636"):
+            target.verify_accepted_real_hex8(wrong)
+        wrong = copy.deepcopy(real)
+        wrong["quality"]["mold"]["severely_nonorthogonal_faces_above_70deg"] = 0
+        with self.assertRaisesRegex(RuntimeError, "WRONG_3D_MESH"):
+            target.verify_accepted_real_hex8(wrong)
+
     def test_missing_physical_inputs_fail_before_mesh_or_wsl(self):
         self.write_inputs(json.loads((T0 / "T0_INPUTS.json").read_text()))
         with mock.patch.object(target, "source_review", side_effect=AssertionError("must not assess mesh")):
