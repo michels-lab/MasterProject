@@ -1,0 +1,164 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  14
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    format      ascii;
+    class       dictionary;
+    location    "system";
+    object      functions;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+// FS-C06_FOUNDATION14_FUNCTION_OBJECTS
+// Native function objects are read from system/functions (Foundation 12+).
+// Not system/controlDict/functions. All measured diagnostics are solver-owned.
+// Two time steps are model/monitor smoke only, NOT shrinkage.
+    FS_C06_metalVoFVolume
+    {
+        type          volFieldValue;
+        libs          ("libfieldFunctionObjects.so");
+        region        fluid;
+        log           true;
+        writeControl  timeStep;
+        writeInterval 1;
+        writeFields   false;
+        cellZone      all;
+        operation     volIntegrate;
+        fields        (alpha.metal);
+    }
+
+    FS_C06_solidMetalVolume
+    {
+        type          volFieldValue;
+        libs          ("libfieldFunctionObjects.so");
+        region        fluid;
+        log           true;
+        writeControl  timeStep;
+        writeInterval 1;
+        writeFields   false;
+        cellZone      all;
+        operation     volIntegrate;
+        fields        (alpha.metal.solid);
+    }
+
+    // Foundation14 phase-1 and phase-2 transported MASS fluxes:
+    // alphaRhoPhi.metal, alphaRhoPhi.air, and their mixture sum rhoPhi.
+    // Sum is outward-normal signed on boundary patches, in kg/s.
+    // Atmosphere flux alone does NOT prove closed metal mass balance.
+    FS_C06_mixtureMass
+    {
+        type          volFieldValue;
+        libs          ("libfieldFunctionObjects.so");
+        region        fluid;
+        log           true;
+        writeControl  timeStep;
+        writeInterval 1;
+        writeFields   false;
+        cellZone      all;
+        operation     volIntegrate;
+        fields        (rho);
+    }
+
+    FS_C06_atmosphereMassFlux
+    {
+        type          surfaceFieldValue;
+        libs          ("libfieldFunctionObjects.so");
+        region        fluid;
+        log           true;
+        writeControl  timeStep;
+        writeInterval 1;
+        writeFields   false;
+        patches       (atmosphereTop atmosphereSides atmosphereLowerSides);
+        operation     sum;
+        fields        (alphaRhoPhi.metal alphaRhoPhi.air rhoPhi);
+    }
+
+    FS_C06_atmosphereTopMassFlux
+    {
+        type          surfaceFieldValue;
+        libs          ("libfieldFunctionObjects.so");
+        region        fluid;
+        log           true;
+        writeControl  timeStep;
+        writeInterval 1;
+        writeFields   false;
+        patch         atmosphereTop;
+        operation     sum;
+        fields        (alphaRhoPhi.metal alphaRhoPhi.air rhoPhi);
+    }
+
+    FS_C06_atmosphereSidesMassFlux
+    {
+        type          surfaceFieldValue;
+        libs          ("libfieldFunctionObjects.so");
+        region        fluid;
+        log           true;
+        writeControl  timeStep;
+        writeInterval 1;
+        writeFields   false;
+        patch         atmosphereSides;
+        operation     sum;
+        fields        (alphaRhoPhi.metal alphaRhoPhi.air rhoPhi);
+    }
+
+    FS_C06_atmosphereLowerSidesMassFlux
+    {
+        type          surfaceFieldValue;
+        libs          ("libfieldFunctionObjects.so");
+        region        fluid;
+        log           true;
+        writeControl  timeStep;
+        writeInterval 1;
+        writeFields   false;
+        patch         atmosphereLowerSides;
+        operation     sum;
+        fields        (alphaRhoPhi.metal alphaRhoPhi.air rhoPhi);
+    }
+
+    FS_C06_fluidToMoldMassFlux
+    {
+        type          surfaceFieldValue;
+        libs          ("libfieldFunctionObjects.so");
+        region        fluid;
+        log           true;
+        writeControl  timeStep;
+        writeInterval 1;
+        writeFields   false;
+        patch         fluid_to_mold;
+        operation     sum;
+        fields        (alphaRhoPhi.metal alphaRhoPhi.air rhoPhi);
+    }
+
+    // Foundation14 native conjugate wall heat-flux probes, same grammar
+    // as the prior FS-C05 accepted instrumented probe. Signed Q in W.
+    FS_C06_wallHeatFluxFluid
+    {
+        type          wallHeatFlux;
+        libs          ("libfieldFunctionObjects.so");
+        region        fluid;
+        patches       (fluid_to_mold);
+        executeControl timeStep;
+        executeInterval 1;
+        writeControl  timeStep;
+        writeInterval 1;
+        log           true;
+    }
+
+    FS_C06_wallHeatFluxMold
+    {
+        type          wallHeatFlux;
+        libs          ("libfieldFunctionObjects.so");
+        region        mold;
+        patches       (mold_to_fluid);
+        executeControl timeStep;
+        executeInterval 1;
+        writeControl  timeStep;
+        writeInterval 1;
+        log           true;
+    }
+// ************************************************************************* //
