@@ -138,3 +138,41 @@ de `volIntegrate(rho)` entre instantes. Solo después estudiar propiedades
 `rho_l(T)`, `rho_s(T,f_s)`, continuidad conservativa y transición térmica
 que atraviese el liquidus. Ninguna de estas tareas justifica afirmar
 contracción física hasta que esté acoplada a las ecuaciones.
+
+
+## 20-11-2026 — Corrección del comando de lectura de monitores: rutas de postProcessing
+
+Tras el `PASS 10/10` de la segunda corrida, el comando sugerido de lectura
+buscó cada monitor únicamente en `postProcessing/FS_C06_<nombre>`.
+El investigador obtuvo `find: No such file or directory` para las diez rutas
+directas. **Esto es un error de suposición de rutas en el comando entregado,
+no evidencia de que el solver perdiera los outputs.**
+
+La puerta exitosa (código nativo `run_native_gate.sh`) realmente comprobó
+cada monitor con
+`find "$case/postProcessing" -type f -path "*/$name/*" -name '*.dat' -size +0c`.
+Por tanto, las rutas encontradas por el gate tienen algún componente de
+directorio antes del nombre del monitor, compatible con el layout multirregión
+(p. ej., `postProcessing/fluid/FS_C06_metalVoFVolume/...` o
+`postProcessing/mold/FS_C06_wallHeatFluxMold/...`), pero su ruta precisa
+**aún no se ha listado ni leído** en la evidencia de esta conversación.
+
+Se incorporó el nuevo lector **de solo lectura**:
+`freesurface/FS-C06_vof_solidification/read_native_monitors.sh`, que exige
+`FS_C06_REPORT.json` y emplea **exactamente el mismo glob recursivo que el gate**;
+imprime para cada `.dat` ruta verdadera, SHA-256, cabeceras originales y hasta
+cuatro filas finales. Nunca ejecuta el solver, nunca altera los casos ni simula
+conservación. El script superó `bash -n` y una prueba local de rutas
+multirregión sintéticas, **no ha sido ejecutado aún sobre WSL**.
+
+Para leer la segunda corrida existente:
+```bash
+cd ~/OpenFOAM/FS_C02_WORKTREE
+git fetch origin research/fs-c02-metal-air-vof-20261117
+git switch --detach FETCH_HEAD
+bash freesurface/FS-C06_vof_solidification/read_native_monitors.sh   ~/OpenFOAM/FS_C06_RUNS/FS_C06_VOF_SOLID_SMOKE_20261121T032645Z_064d3091
+```
+
+Estado: `FS-C06 Gate PASS 10/10 native files` conserva su alcance.
+`FS-C06 real values / mass & energy balance` continúa pendiente de lectura
+y auditoría. No se repite `foamMultiRun`.
