@@ -45,11 +45,33 @@ def digest(path: Path) -> str:
 
 
 def read_labels(path: Path) -> tuple[int, int]:
-    declared, body = gate.payload(path)
-    labels = [int(x) for x in body.split()]
-    require(declared == len(labels) and all(n >= 0 for n in labels),
-            "polyMesh ASCII labels invalid: "+str(path))
-    return declared, max(labels, default=-1)
+    """OpenFOAM Foundation14 labelList: n(...), n{uniformLabel} or 0().
+
+    Source-verified 2026-11-20: native blockMesh writes compact 6{0} in
+    owner and 0() in neighbour; assuming n/(...)/ only is incorrect.
+    Never infer cell counts from arbitrary text/comments.
+    """
+    raw=path.read_text(encoding="utf-8")
+    require("class       labelList;" in raw or
+            re.search(r"\\bclass\\s+labelList\\s*;",raw) is not None,
+            "expected native labelList in "+str(path))
+    # Search the payload AFTER the complete FoamFile metadata dictionary.
+    head=re.search(r"\\bFoamFile\\s*\\{[^{}]*\\}",raw,re.S)
+    require(head is not None,"native FoamFile header missing in "+str(path))
+    rest=raw[head.end():]
+    m=re.search(r"(?m)^\\s*(\\d+)\\s*(?:\\{\\s*(\\d+)\\s*\\}|\\(\\s*([\\d\\s]*)\\))",rest,re.S)
+    require(m is not None,"native labelList payload absent "+str(path))
+    declared=int(m.group(1))
+    require(declared>=0,"negative list length "+str(path))
+    if m.group(2) is not None:
+        # Foam::UList compressed uniform form, e.g. 6{0}.
+        value=int(m.group(2))
+        require(value>=0,"negative compressed cell label")
+        return declared, value if declared else -1
+    values=[int(x) for x in (m.group(3) or "").split()]
+    require(len(values)==declared and all(x>=0 for x in values),
+            "polyMesh expanded list length/labels invalid "+str(path))
+    return declared, max(values,default=-1)
 
 
 def region_cells(case: Path, region: str, expected: int | None) -> dict:
