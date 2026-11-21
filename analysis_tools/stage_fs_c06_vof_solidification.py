@@ -321,7 +321,7 @@ def stage(source: Path, dest: Path, project: Path, native: bool = False) -> dict
     # not from an old functions sub-dictionary in controlDict.
     require(native_control_text.strip() == original_short_control.strip(),
             "native OpenFOAM controlDict drifted from accepted FS-C05 solver setup")
-    require(re.search(r"(?m)^\\s*functions\\s*$", native_control_text) is None,
+    require(re.search(r"(?m)^\s*functions\s*$", native_control_text) is None,
             "legacy functions subdictionary in controlDict is not supported")
     native_functions_path = project / NATIVE_FUNCTIONS
     require(native_functions_path.is_file() and not native_functions_path.is_symlink(),
@@ -330,7 +330,7 @@ def stage(source: Path, dest: Path, project: Path, native: bool = False) -> dict
     require("object      functions;" in native_functions_text
             and 'location    "system";' in native_functions_text
             and native_functions_text.count("// FS-C06_FOUNDATION14_FUNCTION_OBJECTS") == 1
-            and not re.search(r"(?m)^\\s*functions\\s*\\{", native_functions_text),
+            and not re.search(r"(?m)^\s*functions\s*\{", native_functions_text),
             "native OpenFOAM system/functions header/body invalid")
     for field in ("alpha.metal", "alpha.metal.solid"):
         require(re.search(r"\bfields\s*\(\s*" + re.escape(field) + r"\s*\)\s*;",
