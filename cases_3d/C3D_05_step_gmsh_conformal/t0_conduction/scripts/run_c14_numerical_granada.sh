@@ -15,6 +15,37 @@ NATIVE="${C3D05_ACCEPTED_NATIVE:-$HOME/OpenFOAM/C3D05_STEP_GMSH_HEX_SUBDIV_COARS
 RUNLOG="$OUTPUT/log.foamMultiRun.C14_NUMERICAL_T0"
 RUNREPORT="$OUTPUT/T0_NUMERICAL_RUN_STATUS.json"
 
+# Real 270788-HEX8 OpenFOAM failures must be visible after ONE command.
+# Printing original logs is not executing/checking an artificial mesh.
+show_real_foam_failure() {
+    local code="$?"
+    if (( code != 0 )); then
+        echo "CASE_B_REAL_3D_OPENFOAM_RUN_FAILED: exit=$code; original evidence preserved." >&2
+        local file
+        for file in \
+            "$RUNLOG" \
+            "$OUTPUT/log.foamPostProcess.T0_metal" \
+            "$OUTPUT/log.foamPostProcess.T0_mold" \
+            "$OUTPUT/log.wmake.C3D05_T0_flux"; do
+            if [[ -f "$file" && ! -L "$file" ]]; then
+                echo "=== NATIVE LOG TAIL: $file ===" >&2
+                tail -n 75 "$file" >&2 || true
+            fi
+        done
+        # A failed face extractor preserves its in-progress directory.
+        if [[ -d "$OUTPUT" ]]; then
+            local fluxlog
+            fluxlog="$(find "$OUTPUT" -maxdepth 2 -type f -name log.c3d05PatchFlux -print -quit 2>/dev/null || true)"
+            if [[ -n "$fluxlog" && -f "$fluxlog" && ! -L "$fluxlog" ]]; then
+                echo "=== NATIVE PATCH q LOG: $fluxlog ===" >&2
+                tail -n 75 "$fluxlog" >&2 || true
+            fi
+        fi
+        echo "UPLOAD ONE ORIGINAL RUN LOG / OUTPUT IF HELP IS NEEDED; NO REMESH OR MICROTESTS." >&2
+    fi
+}
+trap show_real_foam_failure EXIT
+
 echo "=== MASTERPROJECT B C3D-05 | ETAPA 3/7 | 2/7=29% technical gates (NO thesis) ==="
 echo "=== C14-ARCHIVED two-SOLID numerical shakedown, NOT real QuickCup parameters ==="
 python3 -B "$REPO/tools/check_project_delivery_contract.py" --status
