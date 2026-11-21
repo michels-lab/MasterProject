@@ -1,3 +1,32 @@
+## 20-11-2026 — FOUNDATION14: CFD nativo real del C14 original PASÓ en malla sintética 3D
+
+[**GitHub Actions run #44859479359, SUCCESS**](https://github.com/michels-lab/MasterProject/actions/runs/44859479359) y [**artifact original #14689152079**](https://github.com/michels-lab/MasterProject/actions/runs/44859479359/artifacts/14689152079). Se ejecutaron **dos pasos nativos foamMultiRun a 0.001 y 0.002 s** de las regiones sintéticas **metal fluido de 27 celdas y arena sólida de 27 celdas**, con los archivos fuente C14 intactos. El log demuestra explícitamente:
+
+- `Selecting solver fluid` (metal), `Selecting solver solid` (mold) y **`Selecting solidificationMeltingSource with name phaseChangeSource`**. No se sustituyó `heRhoThermo/Cp/sensibleEnthalpy` por `heSolidThermo/Cv`.
+- Se resolvieron `h` en el metal, `e` en la arena y **`p_rgh` con GAMG**; se escribieron `U,T,p,p_rgh,rho,phi,phaseChangeSource:alpha1`.
+- A 0.002 s, `T.metal` cubrió **1499.92–1499.98 K**, `T.mold` **300–300.238 K**, `p_rgh` aproximadamente **100000–100002 Pa**. `alpha1` seguía en **1**, coherente con T inicial 1500 K > liquidus 1473 K. **No demuestra evolución de sólido ni liberación de calor latente**.
+- El archivo de evidencia se preservó **dentro de un ZIP nativo** porque el proveedor GitHub Actions no permite subir directamente nombres que incluyen dos puntos, como `phaseChangeSource:alpha1`. Las condiciones originales y nombres de campo sí están intactos dentro del ZIP.
+- El primer ensayo de una celda por región falló por diagonal de presión cero en un dominio sintético degenerado. Se sustituyó **sólo la discretización del fixture sintético** por 3×3×3 celdas y se mantuvieron todos los parámetros físicos y numéricos de C14.
+
+**Límite científico estricto:** el pase de CI es un **CFD de un caso sintético aislado**, NO el CFD sobre la V4/T02 de 8960+12352 celdas en la laptop del investigador. Esa corrida, la conservación de energía 3D, la independencia de malla, el inicio de solidificación y QuickCup están pendientes. **Etapa 06/10, 5/10 hitos=50% operativa.** El bloque siguiente consiste en una **sola ejecución WSL** del [runner C14 nativo](run_c14_native_milestone.sh) contra la malla preservada.
+
+## 20-11-2026 — Preparador nativo para V4/T02 (modelo FÍSICO C14, hierro fluido)
+
+El bloque `stage_c14_3d_case_a.py` materializa por primera vez el **modelo completo del C14 fluido–sólido** sobre la malla aceptada V4/T02 sin tocar el original: copia la geometría de las regiones verificadas, comprueba SHA-256 de los cinco archivos de malla por región, conserva los 14 diccionarios heredados del C14 salvo una adaptación geométrica necesaria en `fvSolution`, genera los ocho campos 3D desde parámetros C14 y añade exclusivamente la zona de celdas `metal` a la **copia** de `polyMesh` cuando la malla fuente no contiene ya una zona completa verificable. Si existe una zona `metal` original que no selecciona todas las celdas, se detiene en lugar de reemplazarla silenciosamente.
+
+La geometría real tiene **8960 celdas metálicas y 12352 celdas de arena** según los logs nativos previamente aprobados; el nuevo script exige contarlas **de nuevo de las listas de etiquetas originales owner/neighbour**, para que no haya un número de zona inventado. El antiguo `pRefPoint (0.02 0.04 0.005)` de C14 es una coordenada 2D que no sirve para la zona geométrica 3D, por lo que se transforma en **`pRefCell 0`**, un índice que pertenece al rango real de celdas verificado. Se conserva **`pRefValue 1e5`**, como en C14. Cambiar la ubicación del dato de presión sin cambiar su magnitud es una adaptación numérica/de referencia, no una nueva propiedad de material; su efecto sobre el resultado deberá comprobarse. El código fuente oficial de Foundation 14 valida que `pRefCell` esté dentro de [0,nCells): https://raw.githubusercontent.com/OpenFOAM/OpenFOAM-14/master/src/finiteVolume/cfdTools/general/findRefCell/findRefCell.C
+
+**No se alteran** el modelo `heRhoThermo` con entalpía h y Cp, la arena `heSolidThermo` con energía e y Cv, los parámetros `Tsol,Tliq,L,alpha1e,beta,rhoRef,relax,Cu,q`, la gravedad y ecuaciones de presión-momento, las condiciones térmicas y sus valores, ni el C14 archivado. Las BC 3D sustituyen la condición `empty` exclusiva del 2D. Para reproducir fielmente la fuente se mantiene el tiempo base **0–10 s con deltaT 0.001 s** en `--materialize`; sólo el ensayo `--smoke` en su carpeta nueva modifica **endTime 0.002 s y writeInterval 1** para registrar dos pasos nativos, conservando el mismo deltaT.
+
+**ÚNICA orden de trabajo WSL cuando CI esté verde** (desde un worktree de MasterProject con estos cambios):
+```bash
+bash cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/run_c14_native_milestone.sh --smoke
+```
+El runner comprueba identidad de fuentes y propiedades originales, configura Foundation14 una sola vez, aplica las puertas de malla V4/T02 aceptada y copia en forma aislada a `~/OpenFOAM/C3D04_A_C14_FLUID_SOLID_SMOKE_01`. Si un diccionario se rechaza **antes** de finalizar la publicación, no deja salida final incompleta. Si el solver falla después de comenzar, conserva los registros originales para el diagnóstico. Nunca lanzar `blockMesh` o `checkMesh` sobre el T02 aceptado. Para preparar la versión completa de 10 s **sin ejecutar CFD**, el mismo runner acepta `--materialize` y crea un segundo directorio separado.
+
+**CI [workflow C14 nativo](../../../.github/workflows/c3d04-a-c14-native-fluid-solid.yml)**: prueba dos cubos 3D de una celda con hierro `fluid`, arena `solid` y **solidificationMeltingSource original**, verificando lectura del modelo, no resolución térmica/metalúrgica en la geometría auténtica. Esta prueba por sí sola nunca cierra la etapa 06 ni demuestra latencia/solidificación (T0=1500 K > Tliq=1473 K). El Caso A de investigación **sigue pendiente de su primera corrida nativa en V4/T02**, verificación de conservación e independencia de malla. Etapa 6/10, 5/10 hitos operativos = 50 %, sin cierre científico.
+
+
 # Caso 3D-A C3D-04 — física fuente exacta de C14
 
 **Decisión del investigador (20 de noviembre de 2026):** el Caso A debe usar **las variables, el modelo termofísico, la formulación del solver y el cambio de fase del C14 2D original**, ajustando sólo la dimensionalidad/topología y la sintaxis mínima que requiere OpenFOAM Foundation 14. **No** sustituir el hierro fluido por dos sólidos, añadir constantes escogidas sin fuente, copiar física VOF de FS-C06, o atribuir validación al T0 auxiliar.
