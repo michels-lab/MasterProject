@@ -1,5 +1,9 @@
 # FS-C06 — VOF + cambio de fase, sin contracción todavía
 
+
+> **20-11-2026 | GATE NATIVO WSL SUPERADO (salida de consola del investigador):** `foamMultiRun` completó dos pasos Foundation14; `run_native_gate.sh` anunció `FS_C06_NATIVE_TWO_STEP_MODEL_FIELD_OBSERVED_NOT_SHRINKAGE` y `checkMesh` aprobó `fluid` y `mold`. Copia aislada `FS_C06_VOF_SOLID_SMOKE_20261121T031743Z_200ccb63` (ejecución HEAD `99dfe9cc1`). **No se han recuperado los archivos originales para verificar métricas/hashes; no se acreditan contracción, alimentación, solidificación positiva ni balances de masa/energía.** [Bitácora y siguiente fase](../../docs/granada/FS_C06_GATE_NATIVO_WSL_20261120_ES.md). Los apartados históricos que dicen «no ejecutado» describen estados anteriores y quedan reemplazados por esta actualización.
+
+
 ## 20-11-2026 — Corrección de dos `fvModels` nativos en Foundation 14
 
 La revisión de la transición FS-C05→FS-C06 encontró un defecto del caso **OpenFOAM**: el generador original reescribía completamente `constant/fluid/fvModels` con una única fuente `VoFSolidificationMelting`, eliminando el modelo de amortiguamiento `compressible::VoFTurbulenceDamping` que FS-C05 usaba junto a `RAS kEpsilon`. El efecto era **cambiar silenciosamente las ecuaciones turbulentas de la superficie libre**, incluso si se lograban escribir campos `alpha.metal.solid`.
