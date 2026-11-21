@@ -1,3 +1,5 @@
+> **20-11-2026 — FS-C06: primer gate WSL Foundation14 reportado PASS:** [bitácora de ejecución nativa y límites físicos](granada/FS_C06_GATE_NATIVO_WSL_20261120_ES.md). `foamMultiRun` 2 pasos, campo `alpha.metal.solid` y `checkMesh fluid/mold` aprobados según consola del investigador; no hay evidencia revisada de contracción real, balance global o curva QuickCup. Los informes anteriores de «código no ejecutado» son históricos.
+
 > **15-11-2026 — C3D-02 extracción validada por volumen, calidad fallida:** [bitácora de `moldVolume` (274,788 celdas, 103.409 cm³, outerBox=0)](C3D_02_DOS_MALLAS_20261112_ES.md), 22,737 cóncavas + un determinante bajo; [script de diagnóstico de defectos en copias](../cases_3d/C3D_02_metal_sand_clean/scripts/inspect_extracted_mesh_quality.sh). Aún no hay interfaz CHT ni CFD.
 
 > **15-11-2026, C3D-02:** [medición local de moldVolume 103.409 cm³ y protocolo de extracción en copia](C3D_02_DOS_MALLAS_20261112_ES.md). Nuevo `scripts/extract_mold_zone_copy.sh` usa `subsetMesh -cellZone moldVolume -noFields` exclusivamente en carpeta nueva. Pendientes fronteras/convexidad, no CFD.
