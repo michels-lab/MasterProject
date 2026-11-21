@@ -478,6 +478,22 @@ class IntegratedCaseAT0(unittest.TestCase):
             with self.assertRaisesRegex(RuntimeError, "missing foamDictionary"):
                 native_f14.inspect()
 
+    def test_059_builtin_selftest_is_exercised_by_integrated_CI(self):
+        # Prevent legacy F13 temperature BC assertions from silently
+        # drifting after edits to the Foundation14 T0 dictionary generator.
+        import contextlib
+        import io
+        with contextlib.redirect_stdout(io.StringIO()) as output:
+            engine.self_test()
+        self.assertIn("STATIC_INTEGRATED_T0_PASS", output.getvalue())
+        cfg = engine.synthetic_fixture()
+        files = engine.generate(cfg)
+        for region in ("metal", "mold"):
+            field = files[f"0/{region}/T"]
+            self.assertEqual(field.count("type externalTemperature;"),
+                             len(engine.EXTERIOR[region]))
+            self.assertNotIn("externalWallHeatFluxTemperature", field)
+
     def test_06_no_CFD_or_remeshing_launched_by_integrated_runner(self):
         runner = (T0/"run_integrated_milestone.sh").read_text()
         self.assertIn("report_case_a_progress.py", runner)
