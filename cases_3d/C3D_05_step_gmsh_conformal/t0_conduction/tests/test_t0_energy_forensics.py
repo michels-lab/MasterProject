@@ -140,9 +140,9 @@ class NumericalEnergy(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "SHA-256"):
             R.recover(old_bytes, log_bytes + b"CHANGED", input_bytes)
         with self.assertRaisesRegex(ValueError, "STILL fails"):
-            R.recover(old_bytes, log_bytes.replace(b"End\n", b"FOAM FATAL ERROR\nEnd\n"), input_bytes) if False else R.recover(
-                json.dumps({**legacy, "log_sha256": hashlib.sha256(log_bytes + b"FOAM FATAL ERROR\n").hexdigest()}).encode(),
-                log_bytes + b"FOAM FATAL ERROR\n", input_bytes)
+            corrupted_log = log_bytes + b"FOAM FATAL ERROR\n"
+            corrupted_legacy = {**legacy, "log_sha256": hashlib.sha256(corrupted_log).hexdigest()}
+            R.recover(json.dumps(corrupted_legacy).encode(), corrupted_log, input_bytes)
         bad = dict(legacy, exit_code=1)
         with self.assertRaisesRegex(ValueError, "zero-exit"):
             R.recover(json.dumps(bad).encode(), log_bytes, input_bytes)
