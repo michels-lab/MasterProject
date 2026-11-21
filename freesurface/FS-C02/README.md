@@ -1,0 +1,477 @@
+# FS-C02 — hierro fundido–aire (continuación de la familia B)
+
+Caso correcto: **FS-C02 / B-FS-02**. Independiente de **FS-C01** (agua–aire), **B14** (hierro–molde original) y **C3D-02** (malla 3D activa).
+
+Estado: **STAGING IMPLEMENTADO; SIN CFD Y SIN VALIDACIÓN FÍSICA**. El script analysis_tools/run_fs_c02_local.py convierte una COPIA de las entradas congeladas de FS-C01 (probadas con Foundation v14) en un banco VOF metal–aire. Consulta de solo lectura el archivo de material del caso B14 original. Nunca cambia las entradas originales.
+
+## Física y propiedades provisionales
+
+| Aspecto | Valor de prueba | Procedencia/limitación |
+| --- | --- | --- |
+| Fases | metal y air | VOF, sin fracción sólida |
+| Solver | compressibleVoF Foundation 14 | Base FS-C01 |
+| Dominio | 40 × 60 × 10 mm; 80 × 120 × 1 | Geometría de FS-C01, NO B14 |
+| Metal inicialmente ocupado | 40 mm de altura | V inicial = 1.6e-5 m3 |
+| Densidad metal | rhoConst = 6820 kg/m3 | rho0 de B14, NO rho(T,f_s) |
+| Calor específico de prueba | eConst Cv = 827 J/(kg K) | Aproxima Cp de B14, NO termodinámica validada |
+| Viscosidad metal | 0.0055 Pa s | B14 |
+| Pr metal | 0.14 | B14 |
+| T inicial | metal 1500 K, aire 300 K | Campo T zonal, sin acoplamiento con arena |
+| Tensión superficial | 1.0 N/m | PROVISIONAL SIN VALIDACIÓN |
+| Aire | modelo original FS-C01 | Sin alimentación, cavidad, ni gas de molde |
+| Modelo de turbulencia | RAS kEpsilon y damping de FS-C01 | No calibrado para hierro |
+| Horizonte temporal | 0–0.1 s | Smoke test, no solidificación |
+
+Masa metálica esperada de la configuración: 1.6e-5 m3 × 6820 kg/m3 = **0.10912 kg**. Todavía NO medida desde solución CFD.
+
+**Ausentes intencionalmente:** cambio de fase, calor latente, molde 3D/CHT, contracción, alimentación, microporosidad, recalescencia. No asumir que compressibleVoF junto con B14 implica shrinkage. El modelo térmico eConst utiliza Cv estimado desde Cp a modo de prueba y requerirá termodinámica/JMatPro trazable; la expansión por grafitización del hierro tampoco está representada.
+
+## Procedimiento aislado en Ubuntu/WSL
+
+Abrir otra terminal, no cerrar ni cambiar la rama del checkout ~/OpenFOAM/MasterProject usado por C3D-02. Tampoco reutilizar ~/OpenFOAM/FS_C01_WORKTREE.
+
+    cd ~/OpenFOAM/MasterProject
+    git fetch origin research/fs-c02-metal-air-vof-20261117
+    git worktree add --detach ~/OpenFOAM/FS_C02_WORKTREE FETCH_HEAD
+    cd ~/OpenFOAM/FS_C02_WORKTREE
+
+Asegurar que la variable WM_PROJECT_VERSION sea 14. Si no lo es, activar Foundation 14 desde /opt/openfoam14/etc/bashrc (o la ubicación local real).
+
+Primero preparar únicamente inputs; esto NO ejecuta CFD:
+
+    python3 analysis_tools/run_fs_c02_local.py --stage-only
+
+Para ejecutar smoke test en carpeta NUEVA, sin reciclar ni sobrescribir salidas anteriores:
+
+    python3 analysis_tools/run_fs_c02_local.py
+
+El ejecutor crea ~/OpenFOAM/FS_C02_RUNS/FS-C02_<UTC>_<id>/FS-C02 y logs FS-C02_blockMesh.log, FS-C02_checkMesh.log, FS-C02_foamRun.log; también FS-C02_RUN_STATUS.json. No ejecuta Allclean, ni modifica B14, FS-C01 o C3D-02.
+
+Si falla la lectura de termodinámica o una BC, leer el log FS-C02_foamRun.log de ESA ejecución e identificar la causa; NO parchear los resultados ni afirmar un solver validado.
+
+## Siguientes verificaciones científicas (NO realizadas)
+
+1. Arranque de compressibleVoF con fluidos metal/aire y ecuaciones térmicas.
+2. alpha.metal en [0,1], volumen en el tiempo, cambios de interfaz, campos rho/T/U/p_rgh.
+3. Balance real de masa de metal por dominio y contornos. La integral de alpha.metal NO es masa.
+4. Balance térmico y transferencia con molde en un siguiente caso, verificando compatibilidad con foamMultiRun + solid.
+5. Modelo VoFSolidificationMelting y ley fracción sólida vs T validada, sin suponer implementación automática de shrinkage.
+6. Introducir densidades por fase o volumen específico dependiente de T y f_s, cerrar masa y seguir eventual expansión por grafitización.
+7. Porosidad y feeding son física adicional y requieren validación independiente.
+
+Los tests del repositorio son solo sintéticos; NO ejecutan OpenFOAM ni prueban estos criterios físicos.
+
+
+## Primera ejecución real FS-C02: 2026-11-17 (hora local), 2026-11-18 (UTC)
+
+Salida textual comunicada por el investigador, con el **código fuente en commit f226913da** y **OpenFOAM 14**:
+
+    /home/michel/OpenFOAM/FS_C02_RUNS/FS-C02_20261118T005412Z_c04dfcf6
+
+Dentro de esa carpeta, el ejecutor FS-C02 imprimió la creación de un caso independiente y registró ejecución de `blockMesh`, `checkMesh`, `foamRun`, finalizando con:
+
+    FS-C02 foamRun completed. MASS, INTERFACE, THERMAL PHYSICS, SHRINKAGE UNVERIFIED.
+
+Los gates del ejecutor exigen salida de proceso 0 y ausencia de error de mallado / marcador final de solver. **Estado documentado: LOCAL_FOAMRUN_COMPLETED_REPORTED; NO análisis de campos ni validación física todavía**. No se dispone aquí de los logs o campos numéricos completos de la laptop; no afirmar valor real de volumen, alpha o Courant.
+
+La corrida se hizo en `~/OpenFOAM/FS_C02_WORKTREE`; **FS-C01, B14 y C3D-02 permanecen separados**. La rama experimentó solo el cambio programático, no el solver local.
+
+## Auditar la corrida FS-C02 existente, sin relanzar CFD
+
+Obtener la última versión de **esta rama** en el worktree FS-C02 existente (no en `~/OpenFOAM/MasterProject`). Confirmar antes que no haya archivos modificados que necesiten conservarse:
+
+    cd ~/OpenFOAM/FS_C02_WORKTREE
+    git status --short
+    git fetch origin research/fs-c02-metal-air-vof-20261117
+    git switch --detach FETCH_HEAD
+
+Leer el caso original y escribir un informe en un directorio completamente separado:
+
+    python3 analysis_tools/audit_fs_c02_local.py       --run ~/OpenFOAM/FS_C02_RUNS/FS-C02_20261118T005412Z_c04dfcf6       --out ~/OpenFOAM/FS_C02_AUDITS/FS-C02_20261118T005412Z_c04dfcf6_screen1
+
+**No repite blockMesh, checkMesh ni foamRun. No escribe dentro de la carpeta de corrida.** El reporte `FS-C02_NUMERICAL_SCREEN.json` contiene: 0–0.1 s del volumen integrado, máxima deriva, alfa mínimo/máximo en campo final y número de celdas, integral espacial de alpha en el mallado uniforme, masa derivada (rhoConst × V), Courant máximo del log completo, checksums de procedencia, alertas y límites científicos. Falla si faltan entradas/campos originales, identidad del caso o manifiesto SHA-256, o si alguna prueba supera tolerancia. Nunca interpreta una superficie equivalente como altura real ni declara shrinkage/mass real, porque no hay fracción sólida ni rho(T,f_s).
+
+Este audit de Python tiene pruebas sintéticas pero requiere el archivo original `0.1/alpha.metal`; si la versión real de OpenFOAM lo representa de un modo distinto, fallará de manera segura y habrá que estudiar el formato sin inventar datos. Guardar resultados completos para revisión de malla, energía y las siguientes etapas B-FS/B-SH.
+
+## 2026-11-17 (hora local) — Primera auditoría numérica real FS-C02: REVIEW por pico de Courant
+
+El investigador compartió el **JSON íntegro** de `FS-C02_20261118T005412Z_c04dfcf6_screen1/FS-C02_NUMERICAL_SCREEN.json`, obtenido de la corrida local `FS-C02_20261118T005412Z_c04dfcf6`. El auditor pudo leer el volumen, un campo final alpha.metal y el log del solver. Estado **REVIEW** (NO `NUMERICAL_SCREEN_PASSED`).
+
+**Resultados aportados**:
+- 11 mediciones de volumen entre t=0 y t=0.1 s: V0 = `1.6e-5 m3`; Vf = `1.599999e-5 m3`; deriva máxima relativa `6.25000000043722e-7` (~0.0000625 %), frente al umbral numérico `0.005` (0.5 %).
+- Integral independiente del campo alpha.metal al tiempo final `1.5999991405848604e-5 m3`; discrepancia relativa contra salida volFieldValue `8.786553786224931e-8`.
+- alpha.metal mínimo `-1.29497e-31` (redondeo cercano a 0) y máximo `1.0`, 9600 celdas, 3208 con `0<alpha<1`. El recuento estricto incluye fracciones arbitrariamente cercanas a 0/1 y **NO demuestra un espesor de interfaz físico**.
+- rhoConst 6820 kg/m³: masa nominal `0.10912000000000002 kg`, masa final **derivada** `0.10911993179999999 kg`. NO es balance independiente de masa.
+- 5383 observaciones de Courant. **Máximo global `9.41807`**, considerablemente superior al límite `maxCo 0.25`, aunque el último registro máximo sea `0.246551`. Courant máximo de interfaz en toda la ejecución `0.00941131`, último `0.00028081`.
+- La única alerta del auditor es `Courant max exceeds configured maxCo .25`. El cribado de volumen **no autoriza** declarar estabilidad ni validez de la interfaz o energía/solidificación.
+
+**Decisión:** preservar esta corrida; buscar en `logs/FS-C02_foamRun.log` el instante, deltaT y contexto numérico del pico 9.41807, y comparar con evolución de Courant/alpha/velocidad antes de alterar `maxCo`, parámetros termodinámicos o esquema numérico. No aumentar `maxCo` para silenciar la alerta. No avanzar todavía a introducir solidificación o shrinkage. B14, FS-C01 y C3D-02 se mantienen intactos.
+
+### Diagnóstico nuevo, sin volver a correr CFD
+
+El script `analysis_tools/diagnose_fs_c02_courant.py` fue añadido para localizar la observación del máximo global de Courant, el número de registros que exceden `maxCo=0.25`, la línea exacta del log, los `Time =` antes/después y el `deltaT` registrado cerca del pico. Los valores de `Time` indican **marcadores que rodean la línea**, no se deben asignar automáticamente como instante físico exacto de ese Courant.
+
+Desde `~/OpenFOAM/FS_C02_WORKTREE` actualizado con la rama FS-C02 correcta, ejecutar:
+
+    python3 analysis_tools/diagnose_fs_c02_courant.py --run ~/OpenFOAM/FS_C02_RUNS/FS-C02_20261118T005412Z_c04dfcf6 --limit 3 --context 8
+
+El diagnóstico solamente **lee el log original FS-C02** y muestra los mayores picos y líneas circundantes. No reescribe el reporte `screen1`, no relanza `foamRun`, no toca B14/FS-C01/C3D-02. Se exige investigar primero el origen del `Co=9.41807`; no subir artificialmente `maxCo` para que pase.
+
+## 2026-11-17 — Diagnóstico localizado del pico de Co (laptop del investigador)
+
+El script `diagnose_fs_c02_courant.py` aplicado a `FS-C02_20261118T005412Z_c04dfcf6` devolvió 5383 observaciones, **1347 valores Co_max >0.25** y **un solo pico Co_max >1**. Pico absoluto `Co_max=9.41807`, `Co_mean=2.19469`, línea 100 del archivo `logs/FS-C02_foamRun.log`; `deltaT` registrado antes `1.19048e-4 s`, después `3.15988e-6 s`. Segundo mayor pico 0.376259 cerca de `Time=0.000126083s`, siguiente salto 0.342451 cerca de `Time=0.00112245s`; último Co_max=0.246551. El Courant de interfaz de estas primeras líneas es cero, sin probar por sí mismo dinámica de interfaz. **El solver terminó pero la auditoría permanece REVIEW.**
+
+Se identificó un bug del diagnóstico, no del CFD: `Time = 0.000122208s` de Foundation 14 se descartaba por el sufijo `s`; los tiempos anteriores/posteriores se mostraban `null`. Corregido el parser y probada la regresión con segundos adjuntos. Los tiempos son **marcadores cercanos**, no asignación causal de un instante exacto.
+
+**Hipótesis:** primer paso relativamente amplio, velocidades iniciales elevadas inducidas por las condiciones de arranque y limitación de paso temporal que reacciona con retraso. Esto es consistente con `setDeltaT.C` de OpenFOAM Foundation 14, pero **NO identifica todavía la causa física** (puede involucrar presión hidrostática inicial, salto térmico metal–aire, tensión superficial, tratamiento de fronteras y turbulencia). Tampoco se deben atribuir los 1347 excedentes moderados al mismo mecanismo sin estudiar su distribución temporal.
+
+### Siguiente prueba confinada: --startup-probe (NO cambia el expediente original)
+
+En un worktree FS_C02_WORKTREE limpio, actualizado a la rama `research/fs-c02-metal-air-vof-20261117`, activar Foundation 14 y ejecutar:
+
+    python3 analysis_tools/run_fs_c02_local.py --startup-probe
+
+El comando prepara una **tercera carpeta aislada nueva**, con prefijo `FS-C02_STARTUP_`, ejecuta `blockMesh`, `checkMesh`, `foamRun` **solo entre 0 y 0.002 s**, con `deltaT inicial=1e-7 s`, `maxDeltaT=1e-6 s`, `maxCo=maxAlphaCo=0.20`, escritura cada `0.0002 s` y `adjustTimeStep on`. Todos los parámetros se guardan en el manifiesto y en el estado. La salida calcula **máximo Courant en todo el log**, su recuento de excedencias y tres picos principales; condición `PROBE_COURANT_SCREEN_PASSED` solo si ninguno supera 0.20. Si sigue alto, `PROBE_REVIEW_COURANT` y exit code 1, SIN afirmar que el solver no terminó ni tratar de elevar el límite. No se usa el auditor completo FS-C02 de 0.1 s sobre esta prueba parcial de 0.002 s.
+
+Se eligió un límite de paso temporal menor al registrado después del pico, como experimento conservador; **no es una prueba científica de que se hayan eliminado todas las inestabilidades**, requiere correr en la laptop y verificar el resultado. No se modifican parámetros térmicos/metalúrgicos de la corrida anterior, ni B14, FS-C01 o C3D-02.
+
+Fuente específica: [OpenFOAM-14 foamRun setDeltaT.C](https://github.com/OpenFOAM/OpenFOAM-14/blob/master/applications/solvers/foamRun/setDeltaT.C), que ajusta el paso basado en `solver.maxDeltaT()` en un proceso transitorio. El valor `maxCo` controla el tamaño de paso de forma adaptativa, pero no es prueba automática de que todos los pasos hayan permanecido por debajo del objetivo.
+
+## 2026-11-17 hora local / 2026-11-18 UTC — Primer experimento aislado de arranque corto
+
+**Evidencia comunicada por el investigador**, Foundation 14, commit `992b97e9d` y directorio exacto de salida:
+
+    /home/michel/OpenFOAM/FS_C02_RUNS/FS-C02_STARTUP_20261118T034734Z_75a1f5f9
+
+La opción `python3 analysis_tools/run_fs_c02_local.py --startup-probe` ejecutó `blockMesh`, `checkMesh`, `foamRun` y el cribado automático del **máximo global de Courant**. Salida literal:
+
+    FS-C02 STARTUP PROBE: PROBE_REVIEW_COURANT; max Co=0.212768; over .20=45
+    NO solidification or shrinkage. C3D-02 and B14 never touched.
+
+Comparación **no equivalente en duración** con el benchmark FS-C02 inicial: la corrida original de 0.1 s tuvo Co máximo 9.41807 con paso temporal inicial 1e-4 s; esta prueba restringida de 0.002 s (deltaT inicial 1e-7 s; maxDeltaT 1e-6 s; maxCo objetivo 0.20) tuvo Co máximo 0.212768. La magnitud del pico bajó en la ventana de arranque, pero la prueba **sigue en REVIEW**: 45 observaciones superaron 0.20 (~6.38 % de excedencia relativa en el pico). Que el solver haya terminado y el pico sea moderado no prueba convergencia, conservación física, estabilidad del caso completo de 0.1 s, ni comportamiento de la interfaz.
+
+**Decisión:** no editar la corrida `FS-C02_STARTUP_20261118T034734Z_75a1f5f9`, no relanzar automáticamente y no elevar el umbral para declarar PASS. En primer lugar consultar, mediante `analysis_tools/diagnose_fs_c02_courant.py` con `--maxCo 0.20`, los mayores picos y su distribución temporal; después comparar los límites del controlador temporal y revisar inicialización de presión, `U`, `T`, contacto y condición de fase antes de elegir un experimento de duración mayor. B14, FS-C01 y C3D-02 no fueron modificados.
+
+Comando de lectura, desde `~/OpenFOAM/FS_C02_WORKTREE`:
+
+    python3 analysis_tools/diagnose_fs_c02_courant.py --run ~/OpenFOAM/FS_C02_RUNS/FS-C02_STARTUP_20261118T034734Z_75a1f5f9 --maxCo 0.20 --limit 5 --context 5
+
+**Nota científica:** `rhoConst=6820 kg/m3`, `Cv=827` y `sigma=1` continúan como hipótesis provisionales de la prueba hierro–aire; ni solidificación ni contracción han sido modeladas.
+
+## 2026-11-18 11:37 CST — Evaluación detallada de FS-C02_STARTUP (0–0.002 s)
+
+El investigador compartió el diagnóstico leído directamente de `FS-C02_STARTUP_20261118T034734Z_75a1f5f9`, de OpenFOAM Foundation 14:
+- `courant_observations=2072`; `courant_global_max=0.212768`; `courant_last_max=0.010811`.
+- **45 de 2072** observaciones superaron el objetivo 0.20 (2.17 %); ninguna superó 1 ni 5. Excedencia máxima relativa al objetivo: (0.212768/0.20−1)≈6.38 %.
+- Los cinco registros con los mayores Courant están en líneas 1396–1468 del log y se sitúan alrededor de 4.55123e−05 a 4.91430e−05 s (marcadores cercanos, no tiempos exactos de evaluación de Co).
+- El pico `Co_max=0.212768` (media `0.0227473`) está en línea 1414, entre marcadores `Time=4.63254e−05s` y `Time=4.70862e−05s`; `deltaT` antes `8.13093e−07 s` y después `7.60765e−07 s`.
+- `Interface Courant Number mean: 0 max: 0` para esos máximos no verifica por sí mismo movimiento de interfaz.
+
+**Interpretación limitada:** la reducción de deltaT y el comportamiento al final sugieren que la corrección temporal mejora sustancialmente respecto al primer arranque, pero no se ha demostrado estabilidad física del modelo ni la distribución temporal de todas las 45 excedencias. El control adaptativo no constituye una restricción dura del Courant en todas las iteraciones. No afirmar `NUMERICAL_SCREEN_PASSED` ni siquiera para el experimento corto.
+
+**Decisión experimental siguiente:** implementar un ensayo NUEVO de 0.01 s (cinco veces la duración del startup probe), `maxCo`/ `maxAlphaCo` de control **0.15**, sin mover el umbral de aceptación del auditor `Co_max <= 0.20`, y limitar `maxDeltaT=1e−6`. Esta propuesta es una prueba de sensibilidad temporal, NO calibración o prueba de las propiedades metalúrgicas (rhoConst, Cv, sigma siguen provisionales). Conservar el experimento fallido/REVIEW y no modificar B14, FS-C01 ni C3D-02. La corrida extendida solo podrá declararse ejecutada tras recibir salida real de Ubuntu.
+
+### 2026-11-18 — Implementación del siguiente experimento (NO EJECUTADO)
+
+Se añade `--extended-probe` al ejecutor `analysis_tools/run_fs_c02_local.py`. Produce una copia nueva aislada bajo `~/OpenFOAM/FS_C02_RUNS/FS-C02_EXTENDED_<UTC>_<id>/` y un manifiesto de 20 entradas SHA-256, sin modificar las dos corridas anteriores ni otros casos. Ejecuta `blockMesh`, `checkMesh -allGeometry -allTopology` y `foamRun` entre **0 y 0.01 s**, con `deltaT=1e-7 s` inicial, `maxDeltaT=1e-6 s`, `maxCo=maxAlphaCo=0.15`, `writeInterval=0.001 s`, `adjustTimeStep on`. Se prepara un **objetivo** más conservador que el perfil startup (0.20); el **umbral de aceptación** del cribado Courant **NO cambia: 0.20**. El cribado revisa todo el log y registra `max Co`, número de valores por encima de 0.20 y picos. La posibilidad de exceder 0.20 sigue abierta; si ocurre se informa `PROBE_REVIEW_COURANT`, no se simula aceptación.
+
+Procedimiento desde `~/OpenFOAM/FS_C02_WORKTREE` con rama FS-C02 actualizada, sin tocar `~/OpenFOAM/MasterProject` de C3D-02:
+
+    python3 analysis_tools/run_fs_c02_local.py --extended-probe
+
+Esta es una prueba nueva **de diez milisegundos**, no de 0.1 s, diseñada para caracterizar el comportamiento posterior al arranque. No es aún una validación de campos de temperatura, masa, interfaz ni propiedades metalúrgicas; no contiene solidificación, contracción ni molde. Solo se podrá cerrar el umbral tras recibir la salida de Ubuntu y leer los campos de la nueva carpeta.
+
+## 2026-11-18 — Corrida real FS-C02 extendida: gate Courant PASSED (según salida del investigador)
+
+**Evidencia textual de Ubuntu OpenFOAM Foundation 14, commit f3ab50a7b:** `FS-C02_EXTENDED_20261118T181711Z_d6b6ab92`, ruta `/home/michel/OpenFOAM/FS_C02_RUNS/FS-C02_EXTENDED_20261118T181711Z_d6b6ab92`. Se ejecutaron `blockMesh`, `checkMesh` y `foamRun`. El ejecutor reportó literalmente:
+
+    FS-C02 EXTENDED PROBE: PROBE_COURANT_SCREEN_PASSED; max Co=0.163617; over 0.2=0; configured maxCo target=0.15
+    NO solidification or shrinkage. C3D-02 and B14 never touched.
+
+Se trata de **0–0.01 s**, cinco veces la prueba startup y una décima parte de la corrida original 0–0.1 s. El objetivo adaptativo fue `maxCo=0.15`; el **límite de aceptación separado** fue 0.20. El pico `0.163617` excede el objetivo adaptativo 0.15 pero **ninguna observación** excedió 0.20. El gate del **log completo de Courant** está aprobado para esta corrida concreta.
+
+Esto NO verifica deriva de volumen, `alpha.metal`, temperatura/energía, masa física, solidificación ni shrinkage. No promover aún el caso a benchmark físico ni comparar predicciones termodinámicas con B14. Los resultados permanecen en la laptop, no en GitHub; la corrida pasada y el historial REVIEW quedan preservados. Próxima puerta: auditoría cuantitativa de la **misma carpeta**, sin ejecutar otro `foamRun`.
+
+## 2026-11-18 — Auditoría de los resultados reales de FS-C02 extendido
+
+Se amplía `analysis_tools/audit_fs_c02_local.py` para reconocer el perfil `EXTENDED_PROBE_0_01S_TIGHTER_CO` y distinguir claramente:
+- `maxCo=0.15` como **objetivo del controlador**;
+- `acceptance_maxCo=0.20` como **límite numérico de cribado**;
+- tiempo final esperado **0.01 s**, en vez de 0.1 s del caso original.
+
+La auditoría lee **sin modificar la corrida** los 20 hashes de input, `FS-C02_RUN_STATUS.json`, integral temporal de volumen `volIntegrate(alpha.metal)`, campo final espacial `alpha.metal`, los Courant máximo/interfaz del log completo y el campo final **`T`**. Reporta deriva de volumen, límites `alpha`, discrepancia entre integral espacial y volumen archivado, `min/max T` y medias ponderadas por fracción de metal/aire, además de **masa derivada de rhoConst**, no un balance conservativo independiente ni energía validada. La falta de `T` en el ensayo extendido genera `REVIEW`; variaciones temporales/celdas incoherentes o manipulación de manifiestos hacen fallar el auditor. Un cribado `NUMERICAL_SCREEN_PASSED` **no significa validación física**, ni demuestra movimiento adecuado de interfaz, cambio de fase, acoplamiento de molde o contracción.
+
+Comando de lectura desde `~/OpenFOAM/FS_C02_WORKTREE` actualizado (sin modificar ninguna corrida):
+
+    python3 analysis_tools/audit_fs_c02_local.py \
+      --run ~/OpenFOAM/FS_C02_RUNS/FS-C02_EXTENDED_20261118T181711Z_d6b6ab92 \
+      --out ~/OpenFOAM/FS_C02_AUDITS/FS-C02_EXTENDED_20261118T181711Z_d6b6ab92_screen1
+
+La carpeta `--out` debe ser nueva; el auditor jamás reemplaza reportes previos ni ejecuta `foamRun`. El resultado de este **nuevo análisis** queda pendiente de ejecutar en la laptop del investigador.
+
+## 2026-11-18 — Auditoría local real de FS-C02_EXTENDED: NUMERICAL_SCREEN_PASSED
+
+**Evidencia completa aportada en el chat por el investigador** desde OpenFOAM 14, sobre la corrida real `FS-C02_EXTENDED_20261118T181711Z_d6b6ab92` (hasta t=0.01 s), analizada con commit `aa358ea67`. El informe declara `NUMERICAL_SCREEN_PASSED` y `alerts=[]`.
+
+| Indicador observado | Resultado |
+| --- | --- |
+| Muestras del volumen | 11, t=0 a 0.01 s |
+| V inicial/final de metal | 1.6e-05 / 1.6e-05 m³ |
+| Máxima deriva relativa de volumen almacenado | 0.0 a precisión de salida (NO exactitud analítica) |
+| Volumen calculado desde campo alpha final | 1.600000078683636e-05 m³ |
+| Diferencia relativa campo vs función | 4.9177272632783605e-08 |
+| alpha.metal mínima/máxima | 8.83813e-27 / 1.0 |
+| Celdas | 9600, de las cuales 3240 satisfacen 0<alpha<1 **estrictamente**; esto incluye colas numéricas diminutas y no mide espesor de interfaz |
+| Masa inicial y final DERIVADA de rhoConst=6820 | ~0.10912 kg; NO balance de masa independiente |
+| 10200 observaciones de Courant | Co máximo histórico 0.163617, último 0.00119836; límite de aceptación 0.20 |
+| Courant de interfaz máximo | 0.00272587, último 4.01924e-05 |
+| Campo T final mínimo/máximo | 303.835 K / 1500 K |
+| Promedio T ponderado por alpha.metal | 1499.9373581645336 K |
+| Promedio T ponderado por (1-alpha.metal) | 757.0212621642578 K; requiere evaluación de gas puro vs zona mixta |
+| Alertas | ninguna |
+
+**Alcance:** el cribado numérico de esta corrida 0.01 s sí PASÓ. La media ponderada por gas `sum((1-alpha)*T)/sum(1-alpha)` de ~757 K **NO** representa necesariamente solo el gas puro; cada celda parcialmente ocupada contribuye. Verificar T espacial de gas casi puro y zona interfacial y su evolución temporal antes de asociar 757 K a calentamiento gaseoso físicamente válido. Las condiciones termofísicas siguen siendo provisionales y no hay validación de conservación de energía, flujos de contorno, temperatura por termopar, curva de solidificación, fracción sólida, cambio de volumen/contracción, feeding, grafitización ni CHT metal–molde. No atribuir éxito metalúrgico ni afirmar que `alpha.metal` equivale a fracción sólida.
+
+**Decisión:** usar los campos ya guardados de la misma corrida para comprobar temperaturas y clasificación gas/interfaz/metal; no repetir `foamRun` automáticamente ni modificar fuentes de B14, FS-C01 o C3D-02.
+
+## 2026-11-18 — Diagnóstico espacial de temperatura/interfaz sin volver a correr CFD
+
+Para investigar `T_gas_weighted≈757.02 K` del cribado extendido y evitar confundir la media ponderada de la fase con una temperatura experimental del gas, se añade `analysis_tools/inspect_fs_c02_thermal.py`. Este **lee únicamente** `alpha.metal` y `T` de cada carpeta de tiempo guardada de la corrida 0.01 s, valida los 20 hashes de entradas congeladas y confirma estado `PROBE_COURANT_SCREEN_PASSED`.
+
+Estadísticas por tiempo, por regiones **numéricas, no fases sólidas**:
+- gas semejante: `alpha.metal <= 0.01`
+- zona mixta/interfacial: `0.01 < alpha.metal < 0.99`
+- metal semejante: `alpha.metal >= 0.99`.
+
+Se informan conteos de celdas, media/mínimo/máximo/mediana térmicos, celdas por encima de 500/1000 K, media por ponderación VOF y volumen `sum(alpha.metal)*V_celda`. Se separan las colas diminutas de `alpha`, que en el auditor previo daban 3240 celdas formalmente estrictas `0 < alpha < 1` **sin que todas constituyan un frente interfacial físicamente resuelto**. El campo T es **único por celda de mezcla**: ninguna clasificación representa por sí misma dos temperaturas independientes de metal y aire ni un balance de energía.
+
+Comando desde `~/OpenFOAM/FS_C02_WORKTREE`, tras actualizar solamente este worktree a `research/fs-c02-metal-air-vof-20261117`:
+
+    python3 analysis_tools/inspect_fs_c02_thermal.py \
+      --run ~/OpenFOAM/FS_C02_RUNS/FS-C02_EXTENDED_20261118T181711Z_d6b6ab92
+
+El programa imprime un JSON y **no escribe informes ni modifica archivos**, ni vuelve a correr `blockMesh`, `checkMesh` o `foamRun`. El análisis numérico de interfaz/temperatura debe revisarse antes de avanzar al acoplamiento metal–molde y `VoFSolidificationMelting`. No inferir solidificación, contracción ni alimentación de un caso que no los representa.
+
+**Salida condensada recomendada para compartir:** agregar `--brief` al comando anterior. Así se imprimen tres tiempos representativos (primero, intermedio y final) con el número de celdas y temperaturas de los tres grupos. Sin `--brief` se imprimen todos los tiempos guardados. Ambos modos son de solo lectura y nunca ejecutan CFD.
+
+## 2026-11-18 12:45 CST — Evidencia térmica espacial FS-C02 extendido (corrida real)
+
+El investigador ejecutó `inspect_fs_c02_thermal.py --brief` con commit `9ff0865ec` sobre `FS-C02_EXTENDED_20261118T181711Z_d6b6ab92`. Resultado `DIAGNOSTIC_RECORDED_PHYSICS_UNVERIFIED`: 10 tiempos guardados entre 0.001 s y 0.01 s.
+
+| Región de celdas por alpha.metal | 0.001 s | 0.006 s | 0.010 s |
+| --- | ---: | ---: | ---: |
+| Temperatura media gas-like, alpha<=0.01 (K) | 645.329873 | 734.694219 | **747.629612** |
+| Celdas gas-like | 3165 | 3158 | 3160 |
+| Celdas gas-like T>500 K | 2038 | 2488 | **2520** |
+| Celdas gas-like T>1000 K | 366 | 545 | **577** |
+| Temperatura media mezcla, 0.01<alpha<0.99 (K) | 1497.984426 | 1498.87425 | **1499.040128** |
+| Celdas mixtas significativas | 61 | 80 | **78** |
+| Temperatura media metal-like, alpha>=0.99 (K) | 1499.95575 | 1499.945058 | **1499.94226** |
+| Celdas metal-like | 6374 | 6362 | **6362** |
+| T ponderada por gas VOF (K) | 654.651284 | 744.722664 | **757.021262** |
+
+El área gas-like no es exclusivamente una cola en las celdas mixtas: a t=0.01 s **2520/3160 ≈79.7 %** del gas-like supera 500 K, y **577/3160 ≈18.3 %** supera 1000 K. Mediana de gas-like a t=0.01 s = **700.884 K**, mínimo 303.835 K y máximo 1499.29 K. Metal-like permanece a 1499.94 K de media. Esto merece investigación de **presión, densidad, velocidad, transferencia de calor y condiciones de contorno** antes de afirmar validez térmica. NO basta con atribuir la media gas ponderada de 757 K a la interfaz, porque la mayor parte de las celdas clasificadas como gas-like también están calientes. Tampoco es legítimo afirmar aún que es un error numérico: el modelo tiene volumen pequeño de gas, fluido compresible, pared sin molde y una sola T por celda. Falta presupuesto completo de energía y comparación con solución de referencia.
+
+### Nuevo chequeo de gas p/rho/U (solo lectura, NO corrido aquí)
+
+Se añade `analysis_tools/inspect_fs_c02_gas_state.py` para inspeccionar en tres tiempos (primer tiempo guardado, intermedio y final) los campos originales **p, rho, U, T y alpha.metal**. Clasifica gas-like y aire casi puro (`alpha<=1e-6`) y reporta temperaturas, presiones absolutas, densidades de mezcla, módulos de velocidad y una **comparación diagnóstica** `p/(rho*R_air*T)` en gas casi puro, con `R_air=8314.462618/28.9 J/(kg K)`. No interpreta `rho` de mezcla como densidad de fase gas en celdas con metal. Esta razón ideal-gas **NO** es un balance de energía, ni prueba validez física. No modifica ningún expediente, ni vuelve a ejecutar CFD.
+
+Desde `~/OpenFOAM/FS_C02_WORKTREE` actualizado a la rama FS-C02:
+
+    python3 analysis_tools/inspect_fs_c02_gas_state.py \
+      --run ~/OpenFOAM/FS_C02_RUNS/FS-C02_EXTENDED_20261118T181711Z_d6b6ab92
+
+Si `p`, `rho` o `U` no están guardados en los tiempos, el script lo indica y se revisará el archivo concreto; jamás inventa campos ni dispara solver. **No añadir solidificación ni contracción** sobre el caso actual hasta resolver suficientemente las limitaciones termofísicas y el acoplamiento molde.
+
+Para contexto de implementación: OpenFOAM Foundation 14 usa **un único campo T para ambas fases** y el solver `compressibleVoF` resuelve su ecuación de energía con términos de capacidad calorífica, advección, conducción, presión y energía cinética. Fuentes exactas:
+- [OpenFOAM-14 thermophysicalPredictor.C](https://github.com/OpenFOAM/OpenFOAM-14/blob/master/applications/modules/compressibleVoF/thermophysicalPredictor.C)
+- [OpenFOAM-14 compressibleTwoPhaseVoFMixture.C](https://github.com/OpenFOAM/OpenFOAM-14/blob/master/applications/modules/compressibleVoF/compressibleTwoPhaseVoFMixture/compressibleTwoPhaseVoFMixture.C).
+
+Estos archivos de software confirman la formulación implementada, **no** validan por sí solos el caso con hierro líquido.
+
+## 2026-11-18 — Auditoría real gas p/rho/U en FS-C02_EXTENDED, térmica aún NO VALIDADA
+
+**Salida numérica proporcionada directamente por investigador** desde `inspect_fs_c02_gas_state.py` sobre `FS-C02_EXTENDED_20261118T181711Z_d6b6ab92` (10 snapshots disponibles, se muestrearon 0.001, 0.006, 0.01 s). Estado `GAS_STATE_DESCRIPTIVE_NOT_PHYSICALLY_VALIDATED`. Se clasificó aire casi puro por `alpha.metal<=1e-6`:
+
+| Indicador aire casi puro | t=0.001 s | t=0.006 s | t=0.01 s |
+|---|---:|---:|---:|
+| Celdas | 3131 | 3124 | 3150 |
+| T media (K) | 636.0759 | 726.3782 | **745.2444** |
+| Presión media (Pa) | 108125.5 | 99949.19 | **99946.84** |
+| rho mezcla media (kg/m³) | 0.67404 | 0.544764 | **0.533752** |
+| Módulo velocidad media (m/s) | 6.91142 | 0.894256 | **0.085125** |
+| Celdas T>1000 K | 332 | 511 | **567** |
+| Media p/(rho R_air T) | 0.99999485 | 0.99999403 | **0.99999633** |
+
+Al final, la media T del gas casi puro permanece `~745 K`, con `p~100 kPa` y `U~0.085 m/s` (en las 567 celdas con gas casi puro más caliente de 1000 K, `U~0.0155 m/s`). Esto no concuerda con la interpretación simplista de que el gas sigue caliente **porque permanece comprimido a presión muy alta**. El cociente p/(rho RT) cercano a uno **es esperado por definición de gas ideal y no constituye validación independiente** de conservación de energía, física de gas o propiedades metalúrgicas. El mecanismo del calentamiento todavía es desconocido: mezcla numérica, difusión turbulenta, transporte/BC, presión y configuración de gas deben analizarse.
+
+**Inspección de los diccionarios fuente del caso generado:** `constant/momentumTransport` se heredó desde FS-C01 agua–aire con `simulationType RAS`, `model kEpsilon`, `turbulence on`; `0/k` tiene `k=0.1 m2/s2`, `0/epsilon` tiene `epsilon=0.1 m2/s3`. La estimación de orden de magnitud `nut≈Cmu*k²/epsilon=0.09*0.1²/0.1=0.009 m²/s` es muchísimo mayor que la viscosidad cinemática molecular inicial del aire ~1.6e-5 m²/s. **Es estimación inicial, NO medición del campo nut, NO validación de su evolución ni causalidad del calentamiento**. Además FS-C01 incluye `compressible::VoFTurbulenceDamping`, fuente de amortiguamiento en ecuaciones epsilon/omega que puede alterar nut cerca de la interfaz. Este conjunto heredado de agua **no se ha calibrado** para la geometría hierro–aire.
+
+**Referencia inspeccionada del código Foundation14:**
+- [compressibleVoF thermophysicalPredictor.C](https://github.com/OpenFOAM/OpenFOAM-14/blob/master/applications/modules/compressibleVoF/thermophysicalPredictor.C) resuelve una T compartida por las fases con transporte de calor;
+- [VoFTurbulenceDamping.C](https://github.com/OpenFOAM/OpenFOAM-14/blob/master/applications/modules/compressibleVoF/fvModels/VoFTurbulenceDamping/VoFTurbulenceDamping.C) actúa sobre epsilon/omega;
+- [laminarModel.C](https://github.com/OpenFOAM/OpenFOAM-14/blob/master/src/MomentumTransportModels/momentumTransportModels/laminar/laminarModel/laminarModel.C) implementa modelo laminar.
+
+### A/B controlado siguiente: aislamiento de RAS vs laminar (NO EJECUTADO)
+
+Se añadió `analysis_tools/run_fs_c02_laminar_control.py`. Crea exclusivamente una carpeta externa nueva bajo `~/OpenFOAM/FS_C02_LAMINAR_RUNS/FS-C02_LAMINAR_<UTC>_<id>/`. Parte de **copia del perfil FS-C02_EXTENDED** y cambia exactamente DOS archivos fuente:
+1. `constant/momentumTransport`: `RAS kEpsilon` a `simulationType laminar`;
+2. `constant/fvModels`: deshabilita la fuente de damping que dependía de epsilon/omega.
+
+Retiene los archivos originales `0/k`, `0/epsilon` y `fvSolution` en el manifiesto de 20 inputs, pero el solver en modo laminar **no debe resolver** las ecuaciones turbulentas. Los hashes de los demás 18 inputs, incluyendo termofísica, presión, `T`, geometría, BC, dt y `Co`, se preservan con relación a una copia FS-C02_EXTENDED de referencia. El estudio A/B elimina **RAS más su fuente asociada** como paquete; no separa sus efectos individuales.
+
+Primero verificar `--stage-only` para inspección, sin CFD. Para ejecutar una **nueva simulación de 0.01 s** Foundation14 en el worktree FS_C02_WORKTREE actualizado:
+
+    python3 analysis_tools/run_fs_c02_laminar_control.py
+
+El ejecutor invoca `blockMesh/checkMesh/foamRun` en la carpeta completamente NUEVA y prepara un resumen `FS-C02_LAMINAR_THERMAL_SCREEN.json` con el volumen integrado y T media de celdas casi puras gas, y un gate del Co máximo a 0.20. **Todavía no se ha corrido.** Si OpenFOAM laminar es incompatible con alguna configuración heredada, la prueba quedará bloqueada con logs y se estudiará el error; NO se reemplazarán ni modificarán las corridas originales y NO se desactivará artificialmente un criterio de validación.
+
+Objetivo falsable: si laminar reduce sustancialmente calentamiento del gas versus referencia RAS (~745.24 K a 0.01 s), la difusión turbulenta adquiere peso como explicación; si no, habrá que estudiar conducción/energía/presión/BC y posiblemente el modelo termo-convectivo. Incluso una reducción considerable no valida en sí misma el gas, el metal, la transferencia térmica al molde o solidificación/contracción.
+
+## 2026-11-18 — Resultado real de FS-C02_LAMINAR: efecto térmico del paquete turbulento
+
+**Ejecución reportada por el investigador en Ubuntu OpenFOAM Foundation 14**, desde commit `562bb4624`, nueva carpeta independiente:
+`/home/michel/OpenFOAM/FS_C02_LAMINAR_RUNS/FS-C02_LAMINAR_20261118T190459Z_469e798a`.
+
+Salida textual (sin modificar B14, FS-C01, C3D-02 ni FS-C02_EXTENDED):
+```
+FS-C02 [blockMesh] .../FS-C02_blockMesh.log
+FS-C02 [checkMesh] .../FS-C02_checkMesh.log
+FS-C02 [foamRun] .../FS-C02_foamRun.log
+FS-C02 EXTENDED PROBE: PROBE_COURANT_SCREEN_PASSED; max Co=0.152533; over 0.2=0; configured maxCo target=0.15
+FS-C02 LAMINAR Co gate: PROBE_COURANT_SCREEN_PASSED
+FS-C02 LAMINAR Co peak: 0.152533
+FS-C02 LAMINAR near-pure air T mean K: 390.37208687500004
+FS-C02 LAMINAR near-pure air >1000K cells: 160
+FS-C02 LAMINAR max relative volume drift: 0.0
+No energy, phase mass, solidification, mold or shrinkage verification.
+```
+
+**Comparación a t = 0.01 s (evidencia de salidas reales, comparación final aún por verificar automáticamente):**
+
+| Indicador | Referencia RAS kEpsilon + VoFTurbulenceDamping | Laminar sin damping |
+| --- | ---: | ---: |
+| Tiempo simulado | 0.01 s | 0.01 s |
+| Courant máximo de log | 0.163617 | **0.152533** |
+| Co > 0.20 | 0 | 0 |
+| Temperatura media aire casi puro `alpha.metal<=1e-6` (K) | **745.2444079365079** | **390.37208687500004** |
+| Incremento de T por encima de 300 K (K) | 445.2444 | 90.3721 |
+| Diferencia media RAS menos laminar (K) | | **354.8723** |
+| Celdas aire casi puro sobre 1000 K | **567** | **160** |
+| Deriva relativa de volumen *reportada* | 0.0 | 0.0 |
+
+Por lo tanto, **desactivar conjuntamente el modelo RAS kEpsilon y su fuente de damping reduce mucho la temperatura del aire casi puro calculada**: ~79.7% menos calentamiento neto sobre los 300 K iniciales, o ~47.6% menos temperatura absoluta media a 0.01 s. Hay 407 celdas menos por encima de 1000 K, pero la cantidad y posición de celdas gas casi puro no tienen por qué ser iguales en ambas corridas; estos conteos NO identifican trayectorias de partículas. Las cifras de deriva cero están limitadas por precisión de almacenamiento, no confirman conservación exacta ni masa física.
+
+**Conclusión causal limitada:** existe fuerte evidencia de dependencia de resultados térmicos respecto al **paquete turbulento heredado** (RAS kEpsilon MÁS amortiguamiento VoF). Esta ablation A/B de dos ficheros **no** puede aislar el efecto de kEpsilon del de VoFTurbulenceDamping, ni probar que todo el calentamiento RAS sea numéricamente espurio; no existe validación experimental de las propiedades de aire/metal, interfaz o transferencia de calor. El caso laminar sigue teniendo 160 celdas gas casi puro >1000 K y T media ~390 K en 0.01 s; es un candidato para continuar el diagnóstico, NO un modelo final ya validado para el QuickCup.
+
+Se implementó `analysis_tools/compare_fs_c02_ras_laminar.py`, auditor de solo lectura de **AMBAS carpetas existentes** para cruzar toda la serie de campos guardados `alpha.metal`, `T`, los logs de Courant, las series integradas de volumen y sus manifiestos SHA-256. Rechaza resultados no alineados en tiempo, entradas cambiadas fuera de `constant/momentumTransport` y `constant/fvModels`, o fallos de gates del solver. No ejecuta CFD, no escribe archivos, no modifica ninguna carpeta. Ejemplo:
+
+```bash
+cd ~/OpenFOAM/FS_C02_WORKTREE
+python3 analysis_tools/compare_fs_c02_ras_laminar.py \
+  --ras ~/OpenFOAM/FS_C02_RUNS/FS-C02_EXTENDED_20261118T181711Z_d6b6ab92 \
+  --laminar ~/OpenFOAM/FS_C02_LAMINAR_RUNS/FS-C02_LAMINAR_20261118T190459Z_469e798a \
+  --brief
+```
+
+**Próximo criterio científico:** evaluar diferencia temporal y energía/contornos, comprobar presión y condiciones térmicas del gas laminar y una futura comparación de propiedades/Prandtl turbulento adecuadamente justificada antes de modificar la formulación de solidificación. No hacer otro experimento CFD simplemente para obtener un Courant que pase: ambos ya aprobaron Co < 0.20. Los reportes de prueba deben distinguir `NUMERICAL_SCREEN_PASSED` de validación física/metalúrgica.
+
+## 2026-11-18 — Auditoría A/B completa, 10 instantes reales alineados
+
+El investigador ejecutó `compare_fs_c02_ras_laminar.py --brief` en OpenFOAM Foundation 14 con las carpetas RAS `FS-C02_EXTENDED_20261118T181711Z_d6b6ab92` y laminar `FS-C02_LAMINAR_20261118T190459Z_469e798a`. **Salida real**:
+
+- Estado `PAIRED_NUMERICAL_COMPARISON_NO_THERMAL_VALIDATION`; diez tiempos guardados alineados a t=0.001 ... 0.01 s; `18` archivos de entrada idénticos por SHA256; solo `constant/momentumTransport` y `constant/fvModels` modificados en laminar.
+- Co máximo RAS `0.163617`, laminar `0.152533` (ambos por debajo del límite de auditoría `0.20`); deriva relativa de volumen registrada `0.0` a precisión de salida en ambos.
+- A t=0.001 s, T media de aire casi puro `alpha.metal<=1e-6`: RAS `636.07591153 K` vs laminar `353.39612719 K`. Celdas aire casi puro: RAS 3131, laminar 3200; celdas >1000 K: 332 vs 80.
+- A t=0.006 s: RAS `726.37824072 K` vs laminar `378.17406594 K`. Celdas aire casi puro: RAS 3124, laminar 3200; celdas >1000 K: 511 vs 160.
+- A t=0.010 s: RAS `745.24440794 K` vs laminar `390.37208688 K` (diferencia **354.872321 K**, reducción relativa de ~**79.7028%** del incremento medio aparente desde 300 K). Celdas de aire casi puro: RAS **3150**, laminar **3200**; >1000 K: **567** vs **160**. Celdas metal-like `alpha.metal>=0.99`: RAS **6362**, laminar **6400**.
+- El par no comparte exactamente las mismas máscaras de celdas aire casi puro, por lo que las diferencias de las medias de cada población incluyen diferencias de **selección de celda**, además de efectos de transporte térmico. Esto NO prueba atribución individual a `kEpsilon` ni a `VoFTurbulenceDamping`.
+
+**Hipótesis crítica nueva:** en laminar, el volumen de metal según el campo es exactamente `1.6e-05 m3` en los tres tiempos muestreados, y se siguen clasificando 6400 celdas casi puramente metal + 3200 casi puramente aire, mientras que RAS cambia la clasificación y genera celdas de interfaz. Esto podría indicar **alpha.metal prácticamente inmóvil** en laminar. Pero los conteos agregados **no prueban** que las fracciones no cambien de posición ni que la velocidad sea cero. Hay que comparar valores **celda a celda** entre todos los archivos guardados y no confundir `alpha.metal` (VOF metal/aire) con fracción sólida.
+
+Para separar efectos de selección de máscara, se agregó `analysis_tools/audit_fs_c02_shared_cells.py`. Lee **únicamente** las dos corridas existentes, reutiliza el auditor A/B estricto con 18 hashes idénticos y 10 tiempos coincidentes, calcula la diferencia de temperaturas **exactamente en las celdas con `alpha.metal<=1e-6` en ambos casos**, y cuantifica `sum(|alpha(t)-alpha(t_first_saved)|)*V_celda` para cada modelo, con tiempos de referencia **0.001 s**, NO t=0. También cuenta interfaces significativas `0.01<alpha.metal<0.99`. Es un diagnóstico de desplazamiento de fracciones VOF, NO mide altura de superficie libre física ni balance de masa. Si laminar muestra alpha invariante, **no declararlo apto para simulación física de superficie libre dinámica** antes de entender si se espera o no movimiento para las condiciones de arranque.
+
+Solo lectura; desde FS_C02_WORKTREE limpio y actualizado:
+
+```bash
+python3 analysis_tools/audit_fs_c02_shared_cells.py \
+  --ras ~/OpenFOAM/FS_C02_RUNS/FS-C02_EXTENDED_20261118T181711Z_d6b6ab92 \
+  --laminar ~/OpenFOAM/FS_C02_LAMINAR_RUNS/FS-C02_LAMINAR_20261118T190459Z_469e798a \
+  --brief
+```
+
+Próximas verificaciones físicas: evaluar velocidades guardadas del laminar, evolución real del frente y posible gradiente hidrostático y transporte de energía. Ningún caso representa todavía mold-CHT, fracción sólida, entalpía de fusión o shrinkage.
+
+## Decisión del investigador — 2026-11-18: retirar el caso laminar de la ruta principal
+
+**Instrucción explícita:** el investigador considera que el ensayo laminar no representa adecuadamente su escenario de interés y solicita **dejar de perseguirlo como caso representativo de tesis**. En adelante, la configuración laminar de 0.01 s se archiva exclusivamente como **experimento de sensibilidad/ablación**, no como modelo candidato recomendado, plantilla base, ni prioridad para nuevas corridas. No borrar sus resultados ni los de la referencia; conservar SHA-256 y auditorías por reproducibilidad, sin pedir más ejecuciones o análisis laminares salvo nueva instrucción.
+
+**Distinción científica obligatoria:** descartar laminar como enfoque de tesis **no valida automáticamente** el modelo RAS `kEpsilon` heredado del agua. La auditoría A/B solo demostró sensibilidad a desactivar conjuntamente RAS y `VoFTurbulenceDamping`, no cuál formulación predice el comportamiento real del hierro fundido. Los valores iniciales heredados `k=0.1 m²/s²`, `epsilon=0.1 m²/s³`, y `delta=1e-4 m` carecen de calibración específica del hierro/flujo/QuickCup.
+
+**Prioridad siguiente**: continuar la línea **turbulenta** de FS-C02; investigar condiciones iniciales/fuentes de turbulencia y `nut`/difusividad térmica turbulenta, validar respuesta de la superficie libre (`alpha.metal`, velocidades, altura) y presupuesto térmico/energético antes de incorporar CHT metal–molde, cambio de fase y shrinkage. No usar el criterio Courant aprobado como evidencia de validez física. Mantener B14, FS-C01, C3D-02 y carpetas ya corridas sin modificar.
+
+## 2026-11-18 — Requisito explícito: aire exterior adicional SOBRE abertura del molde, SIN techo falso
+
+**Instrucciones del investigador:** el aire caliente debe poder abandonar el cuadro al alcanzar la parte superior; el dominio debe contener **más espacio de aire exterior por encima de la abertura del molde**, y el límite superior nunca puede ser una pared cerrada ficticia. No se debe aumentar artificialmente la altura de la cavidad metálica ni introducir un techo. La observación se refiere a geometría/contornos del caso hierro–aire turbulento, NO a retomar el caso laminar (archivado).
+
+**Situación encontrada en las fuentes ya usadas:** FS-C02 inicial y extendido reproducen el dominio 2D de FS-C01 con `0<=y<=0.06 m`; la columna metal inicial ocupa `0<=y<=0.04 m`. El espacio libre de aire es **0.020 m**. El límite `atmosphere` ya era un `patch` no una `wall`; sus BC `U=pressureInletOutletVelocity`, `p_rgh=prghTotalPressure`, `T=inletOutlet` (reentrada 300 K), `alpha.metal=inletOutlet` (reentrada metal=0) permiten salida y reentrada. `p` inicial es 100 kPa y `g=(0,-9.81,0)`. Una condición de salida abierta **no prueba que haya flujo de aire positivo**, ni confirma que el contorno esté lo bastante lejos del metal.
+
+**Variante nueva de sensibilidad geométrica** `analysis_tools/run_fs_c02_high_headspace.py`: crea otra carpeta independiente en `~/OpenFOAM/FS_C02_HIGH_AIR_RUNS/FS-C02_HIGH_AIR_<UTC>_<id>/`, sin tocar FS-C02 RAS existente, FS-C01, B14, C3D-02 o el caso laminar archivado. Parte exactamente de la copia del perfil RAS `EXTENDED_PROBE_0_01S_TIGHTER_CO` y mantiene **los mismos 18 archivos de entrada**. Cambian solo:
+1. `system/blockMeshDict`: mover la frontera `atmosphere` desde y=0.060 hasta **y=0.120 m**, añadir región de aire exterior y=0.060–0.120 m; conservar `metalColumn` y `T` del metal y=0–0.040 m; malla uniforme **80×240×1 = 19 200 celdas** frente a 80×120×1=9600, con el mismo `dx=dy=0.5 mm`. El aire inicial total desde el metal hasta el parche crece **0.020→0.080 m** (factor 4). No hay sólido de molde en FS-C02: la distinción "aire exterior encima del molde" es geométrica/conceptual hasta integrar el molde.
+2. `system/controlDict`: añade el objeto `atmosphereFlux` (`surfaceFieldValue`, `patch atmosphere`, `operation sum`, `fields (phi)`), que registra flujo firmado neto de la **mezcla** por la abertura. Se mantienen `maxCo=0.15`, aceptación `Co<=0.20`, `maxDeltaT=1e-6 s`, duración 0.01 s y escritura cada 0.001 s; mantiene RAS `kEpsilon` + `VoFTurbulenceDamping`.
+
+El objeto `surfaceFieldValue` y la sintaxis `patch atmosphere; operation sum; fields (phi);` provienen de los ejemplos oficiales Foundation 14 `etc/caseDicts/functions/surfaceFieldValue/patchFlowRate` y `surfaceValue.cfg`. Un flujo firmado neto positivo indica flujo volumétrico neto hacia fuera de la **mezcla**, no demuestra flujo másico de aire puro, ni un balance de energía ni un caudal unilateral: puede haber salidas/entradas locales simultáneas. No se debe llamar `flujo másico de aire` sin separar fases; tampoco inferir que el gas ya salió si el valor resulta cero. El caso instrumentado aún **NO ha sido ejecutado** en Ubuntu.
+
+**Línea base experimental** para comparar con FS-C02 turbulento original: a t=0.01 s, `T_air casi puro≈745.2444 K`, `Co max=0.163617`, volumen metálico `1.6e-5 m3`; no es un modelo físicamente validado. El caso ampliado permitirá estudiar sensibilidad de la temperatura y recirculación al límite superior; **no garantiza** que el gas se enfríe al ampliarlo.
+
+**Comando para Ubuntu Foundation 14** desde worktree FS-C02 actualizado a la rama correspondiente (NO dentro de `~/OpenFOAM/MasterProject`, donde corre C3D-02):
+
+```bash
+cd ~/OpenFOAM/FS_C02_WORKTREE
+python3 analysis_tools/run_fs_c02_high_headspace.py
+```
+
+Alternativa para validar geometría y manifiesto **sin ejecutar CFD**:
+
+```bash
+python3 analysis_tools/run_fs_c02_high_headspace.py --stage-only
+```
+
+La nueva herramienta genera un resumen de T/alpha/volumen a t=0.01 s para la malla **19200 celdas**, verifica que el parche superior sigue abierto y registra los datos de flujo `phi` si se producen. Si el flujo superior no se ha grabado, **no se declara validación de evacuación**. La cota superior 0.12 m es **hipótesis de sensibilidad**, no dimensión real suministrada por el investigador ni definición final de un dominio abierto; se debe estudiar sensibilidad al alejamiento del contorno y al futuro diseño real del molde.
+
+## CORRECCIÓN DE DISEÑO PRIORITARIA, 2026-11-18 — Aire TAMBIÉN sobre arena (prevalece sobre la propuesta vertical anterior)
+
+El investigador precisó que **el volumen gaseoso debe extenderse también sobre la cara superior de la arena**; no basta con aumentar de 60 a 120 mm la altura de una columna estrecha sobre el metal. Esta decisión es físicamente coherente con el CAD original QuickCup de tres zonas: hierro x/z aprox. 7.65–44.15 mm, arena x/z 0–51.8 mm, ambos con borde superior y=0. El aire exterior debe cubrir **el conjunto de metal + arena** y extenderse lateralmente **más allá** del molde, con fronteras abiertas alejadas y sin pared ficticia en la parte superior.
+
+**Cambio operativo:** `run_fs_c02_high_headspace.py` queda **SOLO PARA `--stage-only`** como artefacto de geometría/ensayo incompleto; la ejecución CFD de esa variante está bloqueada deliberadamente (no representa aire sobre la arena ni contiene arena sólida). La instrucción previa de ejecutarla sin flags está **revocada**. No intentar ese CFD para el QuickCup. Su único propósito era evaluar una distancia al techo y ahora no satisface los requisitos físicos del investigador. Las corridas reales previas FS-C02 quedan intactas y reproducibles.
+
+**Especificación 3D completa en:** [FS_C02_DOMINIO_AIRE_SOBRE_ARENA_20261118_ES.md](../../docs/FS_C02_DOMINIO_AIRE_SOBRE_ARENA_20261118_ES.md).
+
+**Próximo trabajo aprobado como diseño, no como resultado obtenido:** piloto de mallado **metal + arena sólida + aire exterior** con aire continuo por encima de ambos y extendido en X/Z; verificar malla y superficies/BC térmicas antes de activar acoplamiento VOF + CHT y solidificación. No modificar la rama principal activa de C3D-02 ni el baseline B14; no considerar la caja auxiliar de `blockMesh` de C3D-02 como dominio físico real. No confundir el experimento FS-C02 2D con la geometría CAD final.
+
+## REQUISITO DEFINITIVO DEL INVESTIGADOR — atmósfera exterior también alrededor de las paredes de arena (18-11-2026)
+
+La envolvente de aire no solo cubre la boca de metal y la superficie superior del molde: **debe rodear también las cuatro paredes laterales exteriores de arena**. Todo ese aire se modela como región gaseosa 3D conectada con la atmósfera superior; no como un conducto estrecho delimitado por paredes virtuales. La arena es un sólido que conduce calor y sus paredes exteriores intercambian energía con el aire por **interfaz térmica sólido–fluido sin penetración**, no por condición `atmosphere` impuesta directamente a la arena. Las fronteras atmosféricas abiertas van en el **límite lejano del aire**, por arriba y, según la sensibilidad, lateralmente. Hay que decidir aparte la base: apoyo térmico, aire externo y/o hueco inferior real según geometría y montaje, sin suponer exposición universal.
+
+Por ello el piloto `run_fs_c02_high_headspace.py` sigue **bloqueado para ejecutar CFD** y únicamente permite `--stage-only`: carece del molde sólido y del volumen de gas a sus cuatro lados. **NO ejecutar el comando CFD anterior ni reutilizarlo para el molde real.** Documento de diseño 3D actualizado: [FS_C02_DOMINIO_AIRE_SOBRE_ARENA_20261118_ES.md](../../docs/FS_C02_DOMINIO_AIRE_SOBRE_ARENA_20261118_ES.md). Aún falta construir una malla multirregión fiel al CAD y auditar sus interfaces antes de simular fluidos/CHT. Las corridas históricas, B14 y C3D-02 no se tocan.
+
+## CONTINUACIÓN IMPLEMENTADA — FS-C03 piloto de malla 3D con aire sobre y alrededor de la arena (18-11-2026)
+
+Se creó el caso independiente **[FS-C03 exterior-air](../FS-C03_exterior_air_pilot/README.md)** basado en los bloques originales de C3D-03. La malla **teórica y no ejecutada en Foundation 14** posee 53 bloques y 42,048 celdas previstas: 2,368 metal, 7,680 arena, **32,000 aire**. La superficie superior del metal, la parte superior de la arena y los cuatro costados de la arena están en contacto con una región de aire **conectada**. El aire termina en fronteras externas `atmosphereTop`, `atmosphereSides`, `atmosphereLowerSides` tipo `patch` lejos del molde; no hay techo artificial en y=0.
+
+El piloto incluye un comprobador de caras y conectividad (sin OpenFOAM), pruebas automatizadas y ejecutor nativo **exclusivamente de malla**. La forma multibloque proviene de la **aproximación geométrica** C3D-03, NO de una malla exacta de los STL de SolidWorks. **`checkMesh`, calidad de celda, áreas y interfaces nativas pendientes hasta ejecutarse en Ubuntu**; el sólido de la arena y el aire inferior/hueco de apoyo no tienen tratamiento físico completo. Los materiales divididos en tres `cellZones` y tres regiones de diagnóstico NO son todavía la partición VOF+CHT apta para CFD: **metal+aire deben compartir una región fluida** para que evolucione `alpha.metal`, mientras que arena debe ser región térmica sólida separada.
+
+Para generar solo una carpeta nueva del caso (sin malla nativa):
+```bash
+cd ~/OpenFOAM/FS_C02_WORKTREE
+python3 analysis_tools/run_fs_c03_mesh.py
+```
+
+Para verificar malla con Foundation 14 (SIN solver ni CFD):
+```bash
+python3 analysis_tools/run_fs_c03_mesh.py --native
+```
+
+No correr estos comandos en `~/OpenFOAM/MasterProject` activo; el ejecutor escribe exclusivamente a un directorio de salida único en `~/OpenFOAM/FS_C03_AIR_TOPOLOGY_<UTC>_<id>`. No repetir intentos rechazados ni suprimir `checkMesh`; conservar logs de fracaso.
+
+**La variante 40mm-wide `FS-C02_HIGH_AIR` sigue BLOQUEADA para CFD** y la corrida laminar permanece archivada como sensibilidad. Se prioriza el modelo turbulento sujeto a verificación, sin cambiar B14, C3D-02 o experimentos ya terminados.

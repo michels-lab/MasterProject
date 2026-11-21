@@ -1,0 +1,199 @@
+/* Frozen READ-ONLY reference from main: cases_3d/C3D_03_doctor_multiblock_pilot/system/blockMeshDict
+ * Git blob a3ffe1f0920071b6e5f940d4e453bda7c785509c. The 24 base blocks are used solely for topology comparison.
+ * Never use this file to overwrite the source project. */
+/* C3D-03: 3D topology pilot inspired by doctor_original/cht, OpenFOAM Foundation 14.
+ * Verified source outlines: QuickCup STL v2, 18 Nov 2026 (see README).
+ * INDEPENDENT COARSE APPROXIMATION: tapered SQUARE cross sections; not final CAD-fitted.
+ * Includes rectangular bottom mold recess 22.5 x 27.5 mm, open y=-65.5..-56 mm.
+ * All blocks share vertices and faces. Core zone changes mold->metal at y=-40 mm.
+ * No snappyHexMesh, no air cellZone, no physical fields, NO CFD, no verified run.
+ * Reference CAD volumes: metal 47987.697 mm3, mold 102843.333 mm3.
+ * Analytic pilot target (not OpenFOAM-measured): metal 48011.916 mm3, mold 103169.142 mm3.
+ */
+FoamFile
+{
+    version 2.0;
+    format ascii;
+    class dictionary;
+    object blockMeshDict;
+}
+units [mm];
+
+vertices
+(
+    (14.65 -65.5 10.86) // 0 inner level y=-65.5
+    (14.65 -65.5 38.36) // 1 inner level y=-65.5
+    (37.15 -65.5 38.36) // 2 inner level y=-65.5
+    (37.15 -65.5 10.86) // 3 inner level y=-65.5
+    (2.86 -65.5 2.86) // 4 outer level y=-65.5
+    (2.86 -65.5 48.94) // 5 outer level y=-65.5
+    (48.94 -65.5 48.94) // 6 outer level y=-65.5
+    (48.94 -65.5 2.86) // 7 outer level y=-65.5
+    (14.65 -56 10.86) // 8 inner level y=-56
+    (14.65 -56 38.36) // 9 inner level y=-56
+    (37.15 -56 38.36) // 10 inner level y=-56
+    (37.15 -56 10.86) // 11 inner level y=-56
+    (2.445191 -56 2.445191) // 12 outer level y=-56
+    (2.445191 -56 49.354809) // 13 outer level y=-56
+    (49.354809 -56 49.354809) // 14 outer level y=-56
+    (49.354809 -56 2.445191) // 15 outer level y=-56
+    (11.76 -40 11.76) // 16 inner level y=-40
+    (11.76 -40 40.04) // 17 inner level y=-40
+    (40.04 -40 40.04) // 18 inner level y=-40
+    (40.04 -40 11.76) // 19 inner level y=-40
+    (1.746565 -40 1.746565) // 20 outer level y=-40
+    (1.746565 -40 50.053435) // 21 outer level y=-40
+    (50.053435 -40 50.053435) // 22 outer level y=-40
+    (50.053435 -40 1.746565) // 23 outer level y=-40
+    (9.342 -38 9.342) // 24 inner level y=-38
+    (9.342 -38 42.458) // 25 inner level y=-38
+    (42.458 -38 42.458) // 26 inner level y=-38
+    (42.458 -38 9.342) // 27 inner level y=-38
+    (1.659237 -38 1.659237) // 28 outer level y=-38
+    (1.659237 -38 50.140763) // 29 outer level y=-38
+    (50.140763 -38 50.140763) // 30 outer level y=-38
+    (50.140763 -38 1.659237) // 31 outer level y=-38
+    (8.523 -20 8.523) // 32 inner level y=-20
+    (8.523 -20 43.277) // 33 inner level y=-20
+    (43.277 -20 43.277) // 34 inner level y=-20
+    (43.277 -20 8.523) // 35 inner level y=-20
+    (0.873282 -20 0.873282) // 36 outer level y=-20
+    (0.873282 -20 50.926718) // 37 outer level y=-20
+    (50.926718 -20 50.926718) // 38 outer level y=-20
+    (50.926718 -20 0.873282) // 39 outer level y=-20
+    (7.65 0 7.65) // 40 inner level y=0
+    (7.65 0 44.15) // 41 inner level y=0
+    (44.15 0 44.15) // 42 inner level y=0
+    (44.15 0 7.65) // 43 inner level y=0
+    (0 0 0) // 44 outer level y=0
+    (0 0 51.8) // 45 outer level y=0
+    (51.8 0 51.8) // 46 outer level y=0
+    (51.8 0 0) // 47 outer level y=0
+);
+
+blocks
+(
+    hex (0 4 5 1 8 12 13 9) mold (4 8 8) simpleGrading (1 1 1) // slab 0 ring side0
+    hex (1 5 6 2 9 13 14 10) mold (4 8 8) simpleGrading (1 1 1) // slab 0 ring side1
+    hex (2 6 7 3 10 14 15 11) mold (4 8 8) simpleGrading (1 1 1) // slab 0 ring side2
+    hex (3 7 4 0 11 15 12 8) mold (4 8 8) simpleGrading (1 1 1) // slab 0 ring side3
+    hex (8 9 10 11 16 17 18 19) mold (8 8 10) simpleGrading (1 1 1) // slab 1 core
+    hex (8 12 13 9 16 20 21 17) mold (4 8 10) simpleGrading (1 1 1) // slab 1 ring side0
+    hex (9 13 14 10 17 21 22 18) mold (4 8 10) simpleGrading (1 1 1) // slab 1 ring side1
+    hex (10 14 15 11 18 22 23 19) mold (4 8 10) simpleGrading (1 1 1) // slab 1 ring side2
+    hex (11 15 12 8 19 23 20 16) mold (4 8 10) simpleGrading (1 1 1) // slab 1 ring side3
+    hex (16 17 18 19 24 25 26 27) metal (8 8 2) simpleGrading (1 1 1) // slab 2 core
+    hex (16 20 21 17 24 28 29 25) mold (4 8 2) simpleGrading (1 1 1) // slab 2 ring side0
+    hex (17 21 22 18 25 29 30 26) mold (4 8 2) simpleGrading (1 1 1) // slab 2 ring side1
+    hex (18 22 23 19 26 30 31 27) mold (4 8 2) simpleGrading (1 1 1) // slab 2 ring side2
+    hex (19 23 20 16 27 31 28 24) mold (4 8 2) simpleGrading (1 1 1) // slab 2 ring side3
+    hex (24 25 26 27 32 33 34 35) metal (8 8 15) simpleGrading (1 1 1) // slab 3 core
+    hex (24 28 29 25 32 36 37 33) mold (4 8 15) simpleGrading (1 1 1) // slab 3 ring side0
+    hex (25 29 30 26 33 37 38 34) mold (4 8 15) simpleGrading (1 1 1) // slab 3 ring side1
+    hex (26 30 31 27 34 38 39 35) mold (4 8 15) simpleGrading (1 1 1) // slab 3 ring side2
+    hex (27 31 28 24 35 39 36 32) mold (4 8 15) simpleGrading (1 1 1) // slab 3 ring side3
+    hex (32 33 34 35 40 41 42 43) metal (8 8 20) simpleGrading (1 1 1) // slab 4 core
+    hex (32 36 37 33 40 44 45 41) mold (4 8 20) simpleGrading (1 1 1) // slab 4 ring side0
+    hex (33 37 38 34 41 45 46 42) mold (4 8 20) simpleGrading (1 1 1) // slab 4 ring side1
+    hex (34 38 39 35 42 46 47 43) mold (4 8 20) simpleGrading (1 1 1) // slab 4 ring side2
+    hex (35 39 36 32 43 47 44 40) mold (4 8 20) simpleGrading (1 1 1) // slab 4 ring side3
+);
+
+edges
+(
+);
+
+boundary
+(
+    metalTop
+    {
+        type wall;
+        faces
+        (
+            (40 41 42 43)
+        );
+    }
+
+    moldTop
+    {
+        type wall;
+        faces
+        (
+            (40 44 45 41)
+            (41 45 46 42)
+            (42 46 47 43)
+            (43 47 44 40)
+        );
+    }
+
+    moldExterior
+    {
+        type wall;
+        faces
+        (
+            (4 5 13 12)
+            (5 6 14 13)
+            (6 7 15 14)
+            (7 4 12 15)
+            (12 13 21 20)
+            (13 14 22 21)
+            (14 15 23 22)
+            (15 12 20 23)
+            (20 21 29 28)
+            (21 22 30 29)
+            (22 23 31 30)
+            (23 20 28 31)
+            (28 29 37 36)
+            (29 30 38 37)
+            (30 31 39 38)
+            (31 28 36 39)
+            (36 37 45 44)
+            (37 38 46 45)
+            (38 39 47 46)
+            (39 36 44 47)
+        );
+    }
+
+    moldBottom
+    {
+        type wall;
+        faces
+        (
+            (0 1 5 4)
+            (1 2 6 5)
+            (2 3 7 6)
+            (3 0 4 7)
+        );
+    }
+
+    moldRecessWall
+    {
+        type wall;
+        faces
+        (
+            (1 0 8 9)
+            (2 1 9 10)
+            (3 2 10 11)
+            (0 3 11 8)
+        );
+    }
+
+    moldRecessRoof
+    {
+        type wall;
+        faces
+        (
+            (8 11 10 9)
+        );
+    }
+);
+
+defaultPatch
+{
+    name unexpectedFaces;
+    type wall;
+}
+
+mergePatchPairs
+(
+);

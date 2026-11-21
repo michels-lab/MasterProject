@@ -1,0 +1,172 @@
+name: FS-C02 metal-air VOF staging and isolation (NO CFD)
+
+on:
+  pull_request:
+    paths:
+      - 'analysis_tools/run_fs_c02_local.py'
+      - 'analysis_tools/test_run_fs_c02_local.py'
+      - 'analysis_tools/audit_fs_c02_local.py'
+      - 'analysis_tools/test_audit_fs_c02_local.py'
+      - 'analysis_tools/inspect_fs_c02_thermal.py'
+      - 'analysis_tools/test_inspect_fs_c02_thermal.py'
+      - 'analysis_tools/inspect_fs_c02_gas_state.py'
+      - 'analysis_tools/test_inspect_fs_c02_gas_state.py'
+      - 'analysis_tools/run_fs_c02_laminar_control.py'
+      - 'analysis_tools/test_run_fs_c02_laminar_control.py'
+      - 'analysis_tools/compare_fs_c02_ras_laminar.py'
+      - 'analysis_tools/test_compare_fs_c02_ras_laminar.py'
+      - 'analysis_tools/audit_fs_c02_shared_cells.py'
+      - 'analysis_tools/test_audit_fs_c02_shared_cells.py'
+      - 'analysis_tools/audit_fs_c02_open_top.py'
+      - 'analysis_tools/test_audit_fs_c02_open_top.py'
+      - 'analysis_tools/run_fs_c02_high_headspace.py'
+      - 'analysis_tools/test_run_fs_c02_high_headspace.py'
+      - 'analysis_tools/audit_fs_c03_exterior_mesh.py'
+      - 'analysis_tools/test_audit_fs_c03_exterior_mesh.py'
+      - 'analysis_tools/run_fs_c03_mesh.py'
+      - 'analysis_tools/test_run_fs_c03_mesh.py'
+      - 'freesurface/FS-C03_exterior_air_pilot/**'
+      - 'analysis_tools/audit_fs_c04_fluid_mold.py'
+      - 'analysis_tools/test_audit_fs_c04_fluid_mold.py'
+      - 'analysis_tools/run_fs_c04_mesh.py'
+      - 'analysis_tools/test_run_fs_c04_mesh.py'
+      - 'analysis_tools/audit_fs_c04_metal_seed.py'
+      - 'analysis_tools/test_audit_fs_c04_metal_seed.py'
+      - 'analysis_tools/audit_fs_c04_native_metal_mapping.py'
+      - 'analysis_tools/test_audit_fs_c04_native_metal_mapping.py'
+      - 'analysis_tools/audit_fs_c04_split_cells.py'
+      - 'analysis_tools/test_audit_fs_c04_split_cells.py'
+      - 'analysis_tools/stage_fs_c04_initial_alpha.py'
+      - 'analysis_tools/test_stage_fs_c04_initial_alpha.py'
+      - 'analysis_tools/verify_fs_c04_native_alpha.py'
+      - 'analysis_tools/test_verify_fs_c04_native_alpha.py'
+      - 'analysis_tools/audit_fs_c04_thermal_interfaces.py'
+      - 'analysis_tools/test_audit_fs_c04_thermal_interfaces.py'
+      - 'analysis_tools/stage_fs_c04_initial_temperature.py'
+      - 'analysis_tools/test_stage_fs_c04_initial_temperature.py'
+      - 'analysis_tools/verify_fs_c04_native_temperature.py'
+      - 'analysis_tools/test_verify_fs_c04_native_temperature.py'
+      - 'analysis_tools/stage_fs_c05_vof_cht.py'
+      - 'analysis_tools/test_stage_fs_c05_vof_cht.py'
+      - 'analysis_tools/run_fs_c05_native_smoke.py'
+      - 'analysis_tools/test_run_fs_c05_native_smoke.py'
+      - 'analysis_tools/audit_fs_c05_postrun_fields.py'
+      - 'analysis_tools/test_audit_fs_c05_postrun_fields.py'
+      - 'analysis_tools/run_fs_c05_wall_heat_flux.py'
+      - 'analysis_tools/test_run_fs_c05_wall_heat_flux.py'
+      - 'analysis_tools/run_fs_c05_granada.py'
+      - 'analysis_tools/test_run_fs_c05_granada.py'
+      - 'analysis_tools/audit_fs_c05_density_inventory.py'
+      - 'analysis_tools/test_audit_fs_c05_density_inventory.py'
+      - 'analysis_tools/review_fs_c05_sand_energy.py'
+      - 'analysis_tools/test_review_fs_c05_sand_energy.py'
+      - 'freesurface/FS-C04_fluid_mold_mesh_pilot/**'
+      - 'analysis_tools/diagnose_fs_c02_courant.py'
+      - 'analysis_tools/test_diagnose_fs_c02_courant.py'
+      - 'freesurface/FS-C02/**'
+      - '.github/workflows/fs-c02-static.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  fs-c02-static:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Compile FS-C02 staging and tests (Python only)
+        run: python3 -m py_compile analysis_tools/run_fs_c02_local.py analysis_tools/test_run_fs_c02_local.py
+      - name: FS-C02 isolated synthetic source tests (NO OpenFOAM)
+        run: python3 -m unittest discover -s analysis_tools -p test_run_fs_c02_local.py -v
+      - name: Synthetic postrun FS-C02 mass, alpha, volume and Courant audit regressions (NO CFD)
+        run: python3 -m unittest discover -s analysis_tools -p test_audit_fs_c02_local.py -v
+      - name: Courant spike chronology and case-id isolation tests (NO CFD)
+        run: python3 -m unittest discover -s analysis_tools -p test_diagnose_fs_c02_courant.py -v
+      - name: Read-only 0.01s metal-air thermal-interface grouping regression (NO CFD)
+        run: python3 -m unittest discover -s analysis_tools -p test_inspect_fs_c02_thermal.py -v
+      - name: Read-only gas p/rho/U field consistency and negative regressions (NO CFD)
+        run: python3 -m unittest discover -s analysis_tools -p test_inspect_fs_c02_gas_state.py -v
+      - name: Stage isolated laminar A/B and validate exact two-file input ablation (NO CFD)
+        run: python3 -m unittest discover -s analysis_tools -p test_run_fs_c02_laminar_control.py -v
+      - name: Strict paired RAS-laminar thermal fields and input-hash comparison (NO CFD)
+        run: python3 -m unittest discover -s analysis_tools -p test_compare_fs_c02_ras_laminar.py -v
+      - name: Exact shared-gas-cell and alpha-motion paired diagnostics (NO CFD)
+        run: python3 -m unittest discover -s analysis_tools -p test_audit_fs_c02_shared_cells.py -v
+      - name: Verify TOP is atmospheric open patch and never roof wall (NO CFD)
+        run: python3 -m unittest discover -s analysis_tools -p test_audit_fs_c02_open_top.py -v
+      - name: Stage 120mm high-air RAS case and verify open patch flux/mesh size (NO CFD)
+        run: python3 -m unittest discover -s analysis_tools -p test_run_fs_c02_high_headspace.py -v
+      - name: FS-C03 3D metal-sand-air exact face ownership and air-connectivity audit (NO CFD)
+        run: python3 -m unittest discover -s analysis_tools -p test_audit_fs_c03_exterior_mesh.py -v
+      - name: FS-C03 native mesh-only stage isolation and fail-closed regression (NO CFD)
+        run: python3 -m unittest discover -s analysis_tools -p test_run_fs_c03_mesh.py -v
+      - name: FS-C04 unified metal-air fluid vs solid sand provenance and connectivity (NO CFD)
+        run: python3 -m unittest discover -s analysis_tools -p test_audit_fs_c04_fluid_mold.py -v
+      - name: FS-C04 two-region native preparation isolation, zero CFD (NO OpenFOAM)
+        run: python3 -m unittest discover -s analysis_tools -p test_run_fs_c04_mesh.py -v
+      - name: FS-C04 2368-cell metal-phase seed plan, analytic volume and CAD difference (NO CFD)
+        run: python3 -m unittest discover -s analysis_tools -p test_audit_fs_c04_metal_seed.py -v
+      - name: FS-C04 native parent metal/air cell identity, 42048-label synthetic security gates (NO CFD)
+        run: python3 -m unittest discover -s analysis_tools -p test_audit_fs_c04_native_metal_mapping.py -v
+      - name: FS-C04 split fluid cell ID reconstruction and exact hexa volume tests (NO CFD)
+        run: python3 -m unittest discover -s analysis_tools -p test_audit_fs_c04_split_cells.py -v
+      - name: FS-C04 initial alpha only in an isolated copy, exact 2368 cell mask, guard no CFD
+        run: python3 -m unittest discover -s analysis_tools -p test_stage_fs_c04_initial_alpha.py -v
+      - name: FS-C04 native alpha field volume integration fail-closed isolation tests (NO OpenFOAM)
+        run: python3 -m unittest discover -s analysis_tools -p test_verify_fs_c04_native_alpha.py -v
+      - name: FS-C04 thermal surface interface geometry, 3136 reciprocal metal-air/sand faces (NO CFD)
+        run: python3 -m unittest discover -s analysis_tools -p test_audit_fs_c04_thermal_interfaces.py -v
+      - name: FS-C04 isolated 1500K metal, 300K air/sand initial T with non-solving BCs (NO CFD)
+        run: python3 -m unittest discover -s analysis_tools -p test_stage_fs_c04_initial_temperature.py -v
+      - name: FS-C04 two-region native-T postProcess preparation, synthetic parser and no-CFD gates
+        run: python3 -m unittest discover -s analysis_tools -p test_verify_fs_c04_native_temperature.py -v
+      - name: FS-C05 provisional real compressibleVoF+solid CHT solver inputs from official v14 tutorial (NO CFD)
+        run: python3 -m unittest discover -s analysis_tools -p test_stage_fs_c05_vof_cht.py -v
+      - name: FS-C05 candidate Python syntax (NO CFD)
+        run: python3 -m py_compile analysis_tools/stage_fs_c05_vof_cht.py analysis_tools/test_stage_fs_c05_vof_cht.py
+      - name: FS-C05 two-step native VOF+CHT startup 11 synthetic tests, no CFD in CI
+        run: python3 -m unittest discover -s analysis_tools -p test_run_fs_c05_native_smoke.py -v
+      - name: FS-C05 native smoke runner syntax only
+        run: python3 -m py_compile analysis_tools/run_fs_c05_native_smoke.py analysis_tools/test_run_fs_c05_native_smoke.py
+      - name: FS-C05 real saved alpha and two-region T postrun diagnostics (synthetic; NO CFD)
+        run: python3 -m unittest discover -s analysis_tools -p test_audit_fs_c05_postrun_fields.py -v
+      - name: FS-C05 postrun Python syntax check
+        run: python3 -m py_compile analysis_tools/audit_fs_c05_postrun_fields.py analysis_tools/test_audit_fs_c05_postrun_fields.py
+      - name: FS-C05 two-region native wall heat-flux probe diagnostic, synthetic no-CFD gates
+        run: python3 -m unittest discover -s analysis_tools -p test_run_fs_c05_wall_heat_flux.py -v
+      - name: FS-C05 wall heat-flux runner Python syntax only
+        run: python3 -m py_compile analysis_tools/run_fs_c05_wall_heat_flux.py analysis_tools/test_run_fs_c05_wall_heat_flux.py
+      - name: FS-C05 Granada one-shot CFD wall-Q alpha and T integrated diagnostics (synthetic/no CFD)
+        run: python3 -m unittest discover -s analysis_tools -p test_run_fs_c05_granada.py -v
+      - name: FS-C05 Granada Python syntax and modules
+        run: python3 -m py_compile analysis_tools/run_fs_c05_granada.py analysis_tools/test_run_fs_c05_granada.py
+      - name: FS-C05 native phase density mass inventory and missing-rho safety gates (synthetic only)
+        run: python3 -m unittest discover -s analysis_tools -p test_audit_fs_c05_density_inventory.py -v
+      - name: FS-C05 density/mass audit Python syntax check
+        run: python3 -m py_compile analysis_tools/audit_fs_c05_density_inventory.py analysis_tools/test_audit_fs_c05_density_inventory.py
+      - name: FS-C05 actual Granada saved-case sand Euler energy closure review (no CFD)
+        run: python3 -m unittest discover -s analysis_tools -p test_review_fs_c05_sand_energy.py -v
+      - name: FS-C05 sand heat closure parser static syntax check
+        run: python3 -m py_compile analysis_tools/review_fs_c05_sand_energy.py analysis_tools/test_review_fs_c05_sand_energy.py
+      - name: Stage reference iron-air case outside Git checkout
+        run: |
+          python3 analysis_tools/run_fs_c02_local.py \
+            --stage-only --out /tmp/FS-C02_static_1
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          x=Path("/tmp/FS-C02_static_1")
+          m=json.loads((x/"FS-C02"/"FS-C02_MANIFEST.json").read_text())
+          assert m["case_id"]=="FS-C02"
+          assert m["status"]=="PREPARED_NOT_MESHED_OR_RUN"
+          assert m["physical_assumptions"]["contraction"] is False
+          assert m["physical_assumptions"]["solidification"] is False
+          assert len(m["generated_input_sha256"])==20
+          assert not (x/"FS-C02"/"constant"/"polyMesh").exists()
+          assert not (x/"FS-C02"/"postProcessing").exists()
+          print("FS-C02 staged only, no blockMesh/foamRun or physical verification claimed")
+          PY

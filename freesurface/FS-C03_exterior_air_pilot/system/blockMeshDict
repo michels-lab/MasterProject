@@ -1,0 +1,272 @@
+/* FS-C03: STANDALONE OPENFOAM 14 3D TOPOLOGY PILOT; NO CFD.
+ * Based on C3D-03 coarse blockMesh pilot from main, Git blob a3ffe1f0920071b6e5f940d4e453bda7c785509c.
+ * 24 original blocks unchanged, 29 new exterior gas blocks.
+ * Materials: metal, mold, air.
+ * Air covers metal and sand top and ALL four sides; side air extends down
+ * to y=-65.5mm. Atmospheric far outer faces, top y=+80mm, side bottom.
+ * Metal 47987.697mm3 and mold 102843.333mm3 are CAD comparators ONLY.
+ * Polygonal multiblock shapes approximate CAD; NOT an STL-conforming mesh.
+ * Base/recess floor support unresolved; lower mold patches are walls pending
+ * physical mounting details. No molten metal physics, CHT or solidification.
+ */
+FoamFile
+{
+    version 2.0;
+    format ascii;
+    class dictionary;
+    object blockMeshDict;
+}
+units [mm];
+
+vertices
+(
+    (14.65 -65.5 10.86) // 0 C3D03
+    (14.65 -65.5 38.36) // 1 C3D03
+    (37.15 -65.5 38.36) // 2 C3D03
+    (37.15 -65.5 10.86) // 3 C3D03
+    (2.86 -65.5 2.86) // 4 C3D03
+    (2.86 -65.5 48.94) // 5 C3D03
+    (48.94 -65.5 48.94) // 6 C3D03
+    (48.94 -65.5 2.86) // 7 C3D03
+    (14.65 -56 10.86) // 8 C3D03
+    (14.65 -56 38.36) // 9 C3D03
+    (37.15 -56 38.36) // 10 C3D03
+    (37.15 -56 10.86) // 11 C3D03
+    (2.445191 -56 2.445191) // 12 C3D03
+    (2.445191 -56 49.354809) // 13 C3D03
+    (49.354809 -56 49.354809) // 14 C3D03
+    (49.354809 -56 2.445191) // 15 C3D03
+    (11.76 -40 11.76) // 16 C3D03
+    (11.76 -40 40.04) // 17 C3D03
+    (40.04 -40 40.04) // 18 C3D03
+    (40.04 -40 11.76) // 19 C3D03
+    (1.746565 -40 1.746565) // 20 C3D03
+    (1.746565 -40 50.053435) // 21 C3D03
+    (50.053435 -40 50.053435) // 22 C3D03
+    (50.053435 -40 1.746565) // 23 C3D03
+    (9.342 -38 9.342) // 24 C3D03
+    (9.342 -38 42.458) // 25 C3D03
+    (42.458 -38 42.458) // 26 C3D03
+    (42.458 -38 9.342) // 27 C3D03
+    (1.659237 -38 1.659237) // 28 C3D03
+    (1.659237 -38 50.140763) // 29 C3D03
+    (50.140763 -38 50.140763) // 30 C3D03
+    (50.140763 -38 1.659237) // 31 C3D03
+    (8.523 -20 8.523) // 32 C3D03
+    (8.523 -20 43.277) // 33 C3D03
+    (43.277 -20 43.277) // 34 C3D03
+    (43.277 -20 8.523) // 35 C3D03
+    (0.873282 -20 0.873282) // 36 C3D03
+    (0.873282 -20 50.926718) // 37 C3D03
+    (50.926718 -20 50.926718) // 38 C3D03
+    (50.926718 -20 0.873282) // 39 C3D03
+    (7.65 0 7.65) // 40 C3D03
+    (7.65 0 44.15) // 41 C3D03
+    (44.15 0 44.15) // 42 C3D03
+    (44.15 0 7.65) // 43 C3D03
+    (0 0 0) // 44 C3D03
+    (0 0 51.8) // 45 C3D03
+    (51.8 0 51.8) // 46 C3D03
+    (51.8 0 0) // 47 C3D03
+    (-30 -65.5 -30) // 48 new air
+    (-30 -65.5 81.8) // 49 new air
+    (81.8 -65.5 81.8) // 50 new air
+    (81.8 -65.5 -30) // 51 new air
+    (-30 -56 -30) // 52 new air
+    (-30 -56 81.8) // 53 new air
+    (81.8 -56 81.8) // 54 new air
+    (81.8 -56 -30) // 55 new air
+    (-30 -40 -30) // 56 new air
+    (-30 -40 81.8) // 57 new air
+    (81.8 -40 81.8) // 58 new air
+    (81.8 -40 -30) // 59 new air
+    (-30 -38 -30) // 60 new air
+    (-30 -38 81.8) // 61 new air
+    (81.8 -38 81.8) // 62 new air
+    (81.8 -38 -30) // 63 new air
+    (-30 -20 -30) // 64 new air
+    (-30 -20 81.8) // 65 new air
+    (81.8 -20 81.8) // 66 new air
+    (81.8 -20 -30) // 67 new air
+    (-30 0 -30) // 68 new air
+    (-30 0 81.8) // 69 new air
+    (81.8 0 81.8) // 70 new air
+    (81.8 0 -30) // 71 new air
+    (7.65 80 7.65) // 72 new air
+    (7.65 80 44.15) // 73 new air
+    (44.15 80 44.15) // 74 new air
+    (44.15 80 7.65) // 75 new air
+    (0 80 0) // 76 new air
+    (0 80 51.8) // 77 new air
+    (51.8 80 51.8) // 78 new air
+    (51.8 80 0) // 79 new air
+    (-30 80 -30) // 80 new air
+    (-30 80 81.8) // 81 new air
+    (81.8 80 81.8) // 82 new air
+    (81.8 80 -30) // 83 new air
+);
+
+blocks
+(
+    hex (0 4 5 1 8 12 13 9) mold (4 8 8) simpleGrading (1 1 1) // unchanged C3D-03
+    hex (1 5 6 2 9 13 14 10) mold (4 8 8) simpleGrading (1 1 1) // unchanged C3D-03
+    hex (2 6 7 3 10 14 15 11) mold (4 8 8) simpleGrading (1 1 1) // unchanged C3D-03
+    hex (3 7 4 0 11 15 12 8) mold (4 8 8) simpleGrading (1 1 1) // unchanged C3D-03
+    hex (8 9 10 11 16 17 18 19) mold (8 8 10) simpleGrading (1 1 1) // unchanged C3D-03
+    hex (8 12 13 9 16 20 21 17) mold (4 8 10) simpleGrading (1 1 1) // unchanged C3D-03
+    hex (9 13 14 10 17 21 22 18) mold (4 8 10) simpleGrading (1 1 1) // unchanged C3D-03
+    hex (10 14 15 11 18 22 23 19) mold (4 8 10) simpleGrading (1 1 1) // unchanged C3D-03
+    hex (11 15 12 8 19 23 20 16) mold (4 8 10) simpleGrading (1 1 1) // unchanged C3D-03
+    hex (16 17 18 19 24 25 26 27) metal (8 8 2) simpleGrading (1 1 1) // unchanged C3D-03
+    hex (16 20 21 17 24 28 29 25) mold (4 8 2) simpleGrading (1 1 1) // unchanged C3D-03
+    hex (17 21 22 18 25 29 30 26) mold (4 8 2) simpleGrading (1 1 1) // unchanged C3D-03
+    hex (18 22 23 19 26 30 31 27) mold (4 8 2) simpleGrading (1 1 1) // unchanged C3D-03
+    hex (19 23 20 16 27 31 28 24) mold (4 8 2) simpleGrading (1 1 1) // unchanged C3D-03
+    hex (24 25 26 27 32 33 34 35) metal (8 8 15) simpleGrading (1 1 1) // unchanged C3D-03
+    hex (24 28 29 25 32 36 37 33) mold (4 8 15) simpleGrading (1 1 1) // unchanged C3D-03
+    hex (25 29 30 26 33 37 38 34) mold (4 8 15) simpleGrading (1 1 1) // unchanged C3D-03
+    hex (26 30 31 27 34 38 39 35) mold (4 8 15) simpleGrading (1 1 1) // unchanged C3D-03
+    hex (27 31 28 24 35 39 36 32) mold (4 8 15) simpleGrading (1 1 1) // unchanged C3D-03
+    hex (32 33 34 35 40 41 42 43) metal (8 8 20) simpleGrading (1 1 1) // unchanged C3D-03
+    hex (32 36 37 33 40 44 45 41) mold (4 8 20) simpleGrading (1 1 1) // unchanged C3D-03
+    hex (33 37 38 34 41 45 46 42) mold (4 8 20) simpleGrading (1 1 1) // unchanged C3D-03
+    hex (34 38 39 35 42 46 47 43) mold (4 8 20) simpleGrading (1 1 1) // unchanged C3D-03
+    hex (35 39 36 32 43 47 44 40) mold (4 8 20) simpleGrading (1 1 1) // unchanged C3D-03
+    hex (4 48 49 5 12 52 53 13) air (8 8 8) simpleGrading (1 1 1) // exterior side air slab 0, face 0
+    hex (5 49 50 6 13 53 54 14) air (8 8 8) simpleGrading (1 1 1) // exterior side air slab 0, face 1
+    hex (6 50 51 7 14 54 55 15) air (8 8 8) simpleGrading (1 1 1) // exterior side air slab 0, face 2
+    hex (7 51 48 4 15 55 52 12) air (8 8 8) simpleGrading (1 1 1) // exterior side air slab 0, face 3
+    hex (12 52 53 13 20 56 57 21) air (8 8 10) simpleGrading (1 1 1) // exterior side air slab 1, face 0
+    hex (13 53 54 14 21 57 58 22) air (8 8 10) simpleGrading (1 1 1) // exterior side air slab 1, face 1
+    hex (14 54 55 15 22 58 59 23) air (8 8 10) simpleGrading (1 1 1) // exterior side air slab 1, face 2
+    hex (15 55 52 12 23 59 56 20) air (8 8 10) simpleGrading (1 1 1) // exterior side air slab 1, face 3
+    hex (20 56 57 21 28 60 61 29) air (8 8 2) simpleGrading (1 1 1) // exterior side air slab 2, face 0
+    hex (21 57 58 22 29 61 62 30) air (8 8 2) simpleGrading (1 1 1) // exterior side air slab 2, face 1
+    hex (22 58 59 23 30 62 63 31) air (8 8 2) simpleGrading (1 1 1) // exterior side air slab 2, face 2
+    hex (23 59 56 20 31 63 60 28) air (8 8 2) simpleGrading (1 1 1) // exterior side air slab 2, face 3
+    hex (28 60 61 29 36 64 65 37) air (8 8 15) simpleGrading (1 1 1) // exterior side air slab 3, face 0
+    hex (29 61 62 30 37 65 66 38) air (8 8 15) simpleGrading (1 1 1) // exterior side air slab 3, face 1
+    hex (30 62 63 31 38 66 67 39) air (8 8 15) simpleGrading (1 1 1) // exterior side air slab 3, face 2
+    hex (31 63 60 28 39 67 64 36) air (8 8 15) simpleGrading (1 1 1) // exterior side air slab 3, face 3
+    hex (36 64 65 37 44 68 69 45) air (8 8 20) simpleGrading (1 1 1) // exterior side air slab 4, face 0
+    hex (37 65 66 38 45 69 70 46) air (8 8 20) simpleGrading (1 1 1) // exterior side air slab 4, face 1
+    hex (38 66 67 39 46 70 71 47) air (8 8 20) simpleGrading (1 1 1) // exterior side air slab 4, face 2
+    hex (39 67 64 36 47 71 68 44) air (8 8 20) simpleGrading (1 1 1) // exterior side air slab 4, face 3
+    hex (40 41 42 43 72 73 74 75) air (8 8 40) simpleGrading (1 1 1) // exterior air above liquid metal top
+    hex (40 44 45 41 72 76 77 73) air (4 8 40) simpleGrading (1 1 1) // exterior air above sand top ring 0
+    hex (44 68 69 45 76 80 81 77) air (8 8 40) simpleGrading (1 1 1) // exterior air outer ring above sand 0
+    hex (41 45 46 42 73 77 78 74) air (4 8 40) simpleGrading (1 1 1) // exterior air above sand top ring 1
+    hex (45 69 70 46 77 81 82 78) air (8 8 40) simpleGrading (1 1 1) // exterior air outer ring above sand 1
+    hex (42 46 47 43 74 78 79 75) air (4 8 40) simpleGrading (1 1 1) // exterior air above sand top ring 2
+    hex (46 70 71 47 78 82 83 79) air (8 8 40) simpleGrading (1 1 1) // exterior air outer ring above sand 2
+    hex (43 47 44 40 75 79 76 72) air (4 8 40) simpleGrading (1 1 1) // exterior air above sand top ring 3
+    hex (47 71 68 44 79 83 80 76) air (8 8 40) simpleGrading (1 1 1) // exterior air outer ring above sand 3
+);
+
+edges
+(
+);
+
+boundary
+(
+    moldBottom
+    {
+        type wall;
+        faces
+        (
+            (0 1 5 4)
+            (1 2 6 5)
+            (2 3 7 6)
+            (3 0 4 7)
+        );
+    }
+
+    moldRecessWall
+    {
+        type wall;
+        faces
+        (
+            (1 0 8 9)
+            (2 1 9 10)
+            (3 2 10 11)
+            (0 3 11 8)
+        );
+    }
+
+    moldRecessRoof
+    {
+        type wall;
+        faces
+        (
+            (8 11 10 9)
+        );
+    }
+
+    atmosphereSides
+    {
+        type patch;
+        faces
+        (
+            (48 49 53 52)
+            (49 50 54 53)
+            (50 51 55 54)
+            (51 48 52 55)
+            (52 53 57 56)
+            (53 54 58 57)
+            (54 55 59 58)
+            (55 52 56 59)
+            (56 57 61 60)
+            (57 58 62 61)
+            (58 59 63 62)
+            (59 56 60 63)
+            (60 61 65 64)
+            (61 62 66 65)
+            (62 63 67 66)
+            (63 60 64 67)
+            (64 65 69 68)
+            (65 66 70 69)
+            (66 67 71 70)
+            (67 64 68 71)
+            (68 69 81 80)
+            (69 70 82 81)
+            (70 71 83 82)
+            (71 68 80 83)
+        );
+    }
+
+    atmosphereTop
+    {
+        type patch;
+        faces
+        (
+            (72 73 74 75)
+            (72 76 77 73)
+            (76 80 81 77)
+            (73 77 78 74)
+            (77 81 82 78)
+            (74 78 79 75)
+            (78 82 83 79)
+            (75 79 76 72)
+            (79 83 80 76)
+        );
+    }
+
+    atmosphereLowerSides
+    {
+        type patch;
+        faces
+        (
+            (4 48 49 5)
+            (5 49 50 6)
+            (6 50 51 7)
+            (7 51 48 4)
+        );
+    }
+);
+
+defaultPatch
+{
+    name unexpectedFaces;
+    type wall;
+}
+mergePatchPairs ();
