@@ -34,6 +34,7 @@ def load(name: str, file: Path):
 C14 = load("c3d05_native_c14_solver", T0/"scripts/c14_numerical_reference.py")
 PREP = load("c3d05_native_prepare_solver", T0/"scripts/prepare_t0.py")
 ENERGY = load("c3d05_native_energy_solver", T0/"scripts/postprocess_t0_energy.py")
+E_TARGET = load("c3d05_native_closed_energy_target", T0/"scripts/t0_energy_reference.py")
 
 def block_mesh(region: str) -> str:
     if region not in ("metal","mold"):
@@ -139,6 +140,7 @@ def main() -> int:
         # Foundation14 writes time dirs as 0.02,0.04,... in both regions.
         if not ((last/"metal"/"T").is_file() and (last/"mold"/"T").is_file()):
             raise AssertionError(f"Native solver did not write final T for BOTH solids at {last}")
+        rows_by_region={}
         for region in ("metal","mold"):
             dict_path=case/"system"/f"T0_energy_{region}"
             dict_path.write_text(ENERGY.functions_dict(region),encoding="utf-8")
@@ -160,6 +162,30 @@ def main() -> int:
                   f"samples={len(rows)} volume={VOLUME:g}m3 "
                   f"T0={t0:g}K Tend={rows[-1]['T_volume_average_K']:g}K",
                   flush=True)
+            rows_by_region[region]=rows
+        # A successful time loop with no physical exchange is NOT sufficient
+        # to pass a coupledTemperature test. Check directional change using
+        # real native T fields, not the solver's startup or residual strings.
+        metal_start=rows_by_region["metal"][0]["T_volume_average_K"]
+        metal_end=rows_by_region["metal"][-1]["T_volume_average_K"]
+        mold_start=rows_by_region["mold"][0]["T_volume_average_K"]
+        mold_end=rows_by_region["mold"][-1]["T_volume_average_K"]
+        if not (metal_start-metal_end>1e-4 and mold_end-mold_start>1e-4
+                and metal_end>mold_end):
+            raise AssertionError("NO REAL CROSS-REGION HEAT EXCHANGE in Foundation14 synthetic two-solid solver")
+        expected=E_TARGET.energy_target(inputs,{"metal":VOLUME,"mold":VOLUME})
+        metrics=ENERGY.compute_energy_history(
+            rows_by_region["metal"], rows_by_region["mold"], expected, inputs
+        )
+        if metrics["samples"]!=len(rows_by_region["metal"]):
+            raise AssertionError("Native energy report sample count mismatch")
+        print("FOUNDATION14_TWO_SOLID_NATIVE_HEAT_TRANSFER_OBSERVED: "
+              f"metal_dT_K={metal_end-metal_start:.9g}, "
+              f"mold_dT_K={mold_end-mold_start:.9g}, "
+              f"max_abs_closure_over_initial_exchange="
+              f"{metrics['max_abs_energy_closure_relative_to_initial_exchange']:.9g}; "
+              "NUMERICAL_SMOKE_ONLY_NOT_SCIENTIFIC_ACCEPTANCE",
+              flush=True)
         print("C3D05_F14_REAL_TWO_SOLID_COUPLED_TEMPERATURE_SOLVER_SMOKE_PASS_"
               "SYNTHETIC_MESH_NOT_ACCEPTED_QUICKCUP",flush=True)
     return 0
