@@ -66,9 +66,9 @@
     "physical_parameters_complete": false,
     "c14_numerical_reference_code_committed": true,
     "c14_numerical_reference_source_sha_verified_in_static_CI": true,
-    "c14_numerical_reference_local_case_prepared": false,
-    "c14_numerical_reference_local_solver_run": false,
-    "c14_energy_equilibrium_target_generated_in_local_WSL": false,
+    "c14_numerical_reference_local_case_prepared": true,
+    "c14_numerical_reference_local_solver_run": true,
+    "c14_energy_equilibrium_target_generated_in_local_WSL": true,
     "one_shot_local_handoff": "cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/scripts/run_c14_numerical_granada.sh",
     "numeric_reference_scope": "100-step archived-C14 two-solid conduction shakedown only, no JMatPro/experiment",
     "handoff_report": "docs/granada/C3D05_C14_NUMERICAL_ONE_SHOT_20261119_ES.md",
@@ -118,7 +118,7 @@
     "native_solver_requires_observed_energy_e_linear_solves": true,
     "paraview_3d_fields_marker_on_success": "C3D05_T0_REAL_ACCEPTED_HEX8.foam",
     "new_synthetic_mesh_as_substitute_for_case_B_prohibited": true,
-    "native_hex8_270788_solver_executed": false,
+    "native_hex8_270788_solver_executed": true,
     "actual_case_3d_C14_numerical_model_ready_for_WSL_execution": true,
     "foundation14_real_two_solid_coupled_temperature_smoke_pass": true,
     "foundation14_real_two_solid_coupled_temperature_smoke_final_ci": "https://github.com/michels-lab/MasterProject/actions/runs/44841034109",
@@ -138,7 +138,14 @@
     "foundation14_real_two_solid_mappedWall_heat_exchange_direction_observed": true,
     "foundation14_real_two_solid_debugged_false_SIGFPE_detection": true,
     "foundation14_real_two_solid_smoke_source": "cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/tests/smoke_native_foundation14_solver.py",
-    "foundation14_real_two_solid_smoke_workflow": ".github/workflows/c3d05-foundation14-two-solid-solver-smoke.yml"
+    "foundation14_real_two_solid_smoke_workflow": ".github/workflows/c3d05-foundation14-two-solid-solver-smoke.yml",
+    "native_hex8_270788_solver_executed_evidence_level": "Investigator-supplied WSL console excerpt shows native Time=0.1s, DICPCG e solves, End; full original log/SHA not independently verified here.",
+    "native_hex8_270788_solver_auditor_current_result": "FALSE_NEGATIVE_FROM_LEGACY_AUDITOR_EXIT6; corrected re-audit not yet run on preserved WSL log",
+    "native_hex8_270788_immutable_review_code_committed": true,
+    "native_hex8_270788_immutable_review_file_expected": "T0_NUMERICAL_RUN_STATUS_REVIEWED.json",
+    "native_hex8_270788_original_solver_log_preservation_required": true,
+    "native_hex8_270788_native_energy_q_summary_pending": true,
+    "native_hex8_270788_test_report": "docs/granada/C3D05_WSL_T0_270788_AUDITOR_RECOVERY_20261120_ES.md"
   },
   "other_cases": [
     {
@@ -174,11 +181,11 @@
     },
     {
       "case_id": "C3D-05 Caso B",
-      "status": "HEX8 aceptada con 1826 nonorth severas, T0 no materializado",
-      "evidence": "docs/C3D_05_T0_CONDUCCION_MULTIRREGION_F14_20261119_ES.md"
+      "status": "Malla HEX8 aceptada; investigador mostró consola WSL con ejecución numérica C14 al t=0.1s y End, pero auditor legado rechazó; energía/q/validación aún pendientes",
+      "evidence": "docs/granada/C3D05_WSL_T0_270788_AUDITOR_RECOVERY_20261120_ES.md"
     }
   ],
-  "blocker": "F14 real CI sí ejecutó 100 pasos foamMultiRun con mappedWall/coupledTemperature entre dos celdas sintéticas y observó intercambio T: metal 1500→1499.2K, molde 300→304.29709K; desbalance energético relativo máximo 2.63e-7 sobre intercambio inicial (CI #44841034109). Aún NO hay CFD en WSL sobre 270788 HEX8 originales/12636 contactos ni se documentaron JMatPro, sensibilidad ni QuickCup: G3/G4 abiertos.",
-  "next_integrated_delivery": "La infraestructura del solver/regiones/postpro está verificada en F14 con dos celdas CI; el siguiente hito debe ejecutar una única vez el ya preparado caso numérico C14 de 270788 celdas en la WSL local aceptada mediante run_c14_numerical_granada.sh --solve; extraer T/energía/q bilateral y expediente SHA, evaluar no-ortogonalidad sin reconstruir STEP o malla; luego entradas experimentales/JMatPro.",
-  "science": "NO_CFD_3D_RUN_NO_PHYSICAL_VALIDATION"
+  "blocker": "Primera corrida numérica C14 sobre 270788 HEX8 reportada por consola WSL con Time=0.1s, solves e y End; el auditor rechazó por parser de sufijo 's' y banner informativo FOAM_SIGFPE (exit 6 del auditor). Pendiente recuperación SHA de log completo, temperaturas metal/molde, energía y q bilateral de 12636 pares; sin propiedades físicas JMatPro/QuickCup ni sensibilidad.",
+  "next_integrated_delivery": "Reanudar de forma idempotente la misma corrida WSL (sin repetir foamMultiRun/malla) tras git pull: revisar log original SHA en nuevo T0_NUMERICAL_RUN_STATUS_REVIEWED.json, postprocesar T/energía/q bilateral, consolidar expediente. Luego condiciones físicas JMatPro y QuickCup.",
+  "science": "USER_SUPPLIED_WSL_C14_NUMERICAL_RUN_END_OBSERVED_NO_ENERGY_FLUX_OR_PHYSICAL_VALIDATION"
 }
