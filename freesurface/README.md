@@ -1,6 +1,10 @@
 # freesurface — Casos de prueba
 
 
+> **20-11-2026 — FS-C06 monitorización cuantificada:** segunda corrida real WSL Foundation14 con 10/10 archivos de monitor leídos: VOF metal estable 48.01191628 cm³, metal sólido 0 cm³, reciprocidad de Q interfacial ≈0.0433 W frente a 16.2 kW a 2e-7 s, inventario de mezcla ΔM=5.2e-12 kg. **NO** se ha validado balance global/contracción. [Auditoría de los datos y SHA-256](../docs/granada/FS_C06_AUDITORIA_MONITORES_20261120_ES.md).
+
+
+
 > **20-11-2026 — FS-C06 10/10 monitores NATIVOS confirmados:** en la segunda corrida real WSL (HEAD `608332778`), `foamMultiRun` y `checkMesh` de ambas regiones pasaron y se escribieron los diez archivos `.dat` de `system/functions`. Sigue pendiente verificar los valores de los archivos; **el modelo físico de contracción/alimentación no existe todavía**. [Evidencia precisa y ruta aislada](../docs/granada/FS_C06_GATE_NATIVO_WSL_20261120_ES.md).
 
 
