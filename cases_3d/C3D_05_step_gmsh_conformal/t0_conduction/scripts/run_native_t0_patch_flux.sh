@@ -105,13 +105,35 @@ else
     sha256sum "$BIN" > "$BIN_SHA"
 fi
 
-# Write EVERYTHING into a private stage. Failed native extraction or malformed
-# data leave prior accepted evidence intact; partial CSV never becomes canonical.
-STAGE="$(mktemp -d "$CASE/.T0_NATIVE_FACE_FLUX_STAGING.XXXXXXXX")"
-echo "=== Native bilateral mappedWall flux 12,636 faces per region ==="
-echo "STAGE=$STAGE"
-"$BIN" -case "$CASE" -outMetal "$STAGE/metal.csv" -outMold "$STAGE/mold.csv" -time '0:' \
-    > "$STAGE/log.c3d05PatchFlux" 2>&1
+# The first WSL extractor completed but its Python analyzer rejected
+# "0.040000000000000001" vs "0.04". Reuse an already extracted *complete*
+# private stage whenever it is UNIQUE, to avoid another large native extraction.
+# A staged CSV is still UNTRUSTED until full parse, face pairing, energy and
+# cryptographic manifest checks below pass; never reuse partial/unlinked output.
+STAGE=""
+CANDIDATES=()
+while IFS= read -r -d '' candidate; do
+    CANDIDATES+=("$candidate")
+done < <(find "$CASE" -maxdepth 1 -mindepth 1 -type d -name '.T0_NATIVE_FACE_FLUX_STAGING.*' -print0)
+if (( ${#CANDIDATES[@]} == 1 )); then
+    candidate="${CANDIDATES[0]}"
+    if [[ ! -L "$candidate" && -f "$candidate/metal.csv" && ! -L "$candidate/metal.csv" \
+       && -f "$candidate/mold.csv" && ! -L "$candidate/mold.csv" \
+       && -f "$candidate/log.c3d05PatchFlux" && ! -L "$candidate/log.c3d05PatchFlux" ]] \
+       && grep -Fxq 'NATIVE_BILATERAL_PATCH_FLUX_EXTRACTED_NOT_VALIDATED' "$candidate/log.c3d05PatchFlux"; then
+        STAGE="$candidate"
+        echo "REUSE_COMPLETE_NATIVE_PATCH_EXTRACTION_STAGE_UNVERIFIED: $STAGE"
+        echo "No C++ extractor rerun; full native CSV/mapping/SHA validation follows."
+    fi
+fi
+if [[ -z "$STAGE" ]]; then
+    # Preserve all existing aborted stages; never overwrite their evidence.
+    STAGE="$(mktemp -d "$CASE/.T0_NATIVE_FACE_FLUX_STAGING.XXXXXXXX")"
+    echo "=== Native bilateral mappedWall flux 12,636 faces per region ==="
+    echo "STAGE=$STAGE"
+    "$BIN" -case "$CASE" -outMetal "$STAGE/metal.csv" -outMold "$STAGE/mold.csv" -time '0:' \
+        > "$STAGE/log.c3d05PatchFlux" 2>&1
+fi
 
 echo "=== Validate native CSV coverage, paired geometry and signed heat transfer ==="
 PYTHONDONTWRITEBYTECODE=1 python3 -B "$HERE/analyze_t0_patch_flux.py" \
