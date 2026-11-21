@@ -108,7 +108,18 @@
     "native_regional_energy_and_single_summary_integrated_static_tests_pass": true,
     "native_regional_energy_and_single_summary_test_count": 53,
     "native_regional_energy_and_single_summary_static_ci_url": "https://github.com/michels-lab/MasterProject/actions/runs/44830588956",
-    "native_regional_energy_and_single_summary_status": "Synthetic QA + shell AST PASS, native two-region F14 smoke PASS; accepted HEX8 CFD NOT RUN"
+    "native_regional_energy_and_single_summary_status": "Synthetic QA + shell AST PASS, native two-region F14 smoke PASS; accepted HEX8 CFD NOT RUN",
+    "actual_accepted_C3D05_3d_mesh_identity_required_before_solver": true,
+    "actual_accepted_C3D05_mesh_cells_expected": 270788,
+    "actual_accepted_metal_cells_expected": 92200,
+    "actual_accepted_mold_cells_expected": 178588,
+    "actual_accepted_interface_faces_each_expected": 12636,
+    "actual_mesh_volumes_gate_from_accepted_WSL_checkMesh": true,
+    "native_solver_requires_observed_energy_e_linear_solves": true,
+    "paraview_3d_fields_marker_on_success": "C3D05_T0_REAL_ACCEPTED_HEX8.foam",
+    "new_synthetic_mesh_as_substitute_for_case_B_prohibited": true,
+    "native_hex8_270788_solver_executed": false,
+    "actual_case_3d_C14_numerical_model_ready_for_WSL_execution": true
   },
   "other_cases": [
     {
@@ -148,7 +159,7 @@
       "evidence": "docs/C3D_05_T0_CONDUCCION_MULTIRREGION_F14_20261119_ES.md"
     }
   ],
-  "blocker": "F14 nativo CI verificó 10/10 diccionarios, blockMesh y foamPostProcess en dos cubos sintéticos (CI #44830571389); compilador C++ de q bilateral ya PASS (#44828749324). Falta la verdadera corrida numérica en la malla HEX8 aceptada y sus temperaturas/12,636 flujos en WSL, sensibilidad y datos físicos/JMatPro. G3/G4 siguen abiertos.",
-  "next_integrated_delivery": "Única corrida C14 numérica corta en WSL mediante run_c14_numerical_granada.sh --solve: crear caso aislado, campos T reales, cierre energético, q bilateral y T0_GRANADA_EVIDENCE_SUMMARY.json; sin repetir CAD/Gmsh/HEX8. Después validación experimental/JMatPro.",
+  "blocker": "El CFD térmico 3D sobre la malla HEX8 aceptada de 270788 celdas NO se ha ejecutado en WSL; la malla solo está allí, no en GitHub. El ejecutor exige ahora la identidad real del Caso B (92200 metal/178588 molde, contacto 12636 por lado) y logs de solución e, y prepara vista ParaView tras éxito. El T0 físico aún exige propiedades/temperaturas respaldadas: T0_INPUTS.json permanece nulo, no hay JMatPro autenticado.",
+  "next_integrated_delivery": "EJECUCIÓN NATIVA EN WSL: un solo run_c14_numerical_granada.sh --solve sobre el caso real C3D05_STEP_GMSH_HEX_SUBDIV_COARSE_02; obtener logs foamMultiRun/e, temperaturas T de metal/molde, energía, q bilateral, vista 3D para ParaView. Referencia C14 = solo diagnóstico corto de geometría real, NO material físico validado. Luego propiedades respaldadas y T1 solidificación.",
   "science": "NO_CFD_3D_RUN_NO_PHYSICAL_VALIDATION"
 }
