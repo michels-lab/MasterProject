@@ -15,5 +15,12 @@
   "feeding_enabled": false,
   "global_mass_energy_verified": false,
   "experimentally_validated": false,
-  "next_gate": "One end-to-end isolated WSL Foundation14 run to prove native field write; then physically backed rho(T,f_s), enthalpy/atmospheric fluxes and phase-resolved wall Q."
+  "next_gate": "One end-to-end isolated WSL Foundation14 run to prove native field write; then physically backed rho(T,f_s), enthalpy/atmospheric fluxes and phase-resolved wall Q.",
+  "native_solid_object_reader": "alpha.metal.solid",
+  "native_metal_phase_temperature_reader": "T.metal",
+  "mixture_temperature_T_substituted_for_T_metal": false,
+  "field_parser_regression_tests_added": true,
+  "field_parser_native_openfoam14_verified": false,
+  "pending_CI_for_new_field_parser": true,
+  "last_repository_update_purpose": "Fix phase field identification and thermal metric provenance; no new native solver evidence"
 }
