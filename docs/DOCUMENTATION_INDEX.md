@@ -1,3 +1,5 @@
+- [**Caso B C3D-05: Granada C14 numérica T0 COMPLETADA en WSL sobre 270,788 HEX8** — 6 tiempos T metal/molde, error energético 4.3202925×10⁻⁸, 12,636 pares q/lado con desajuste 1.8239734×10⁻¹⁶, CSV, SHA y ParaView; **G3/G4 físicos abiertos, 3/7 y 2/7=29 % hitos técnicos**](granada/C3D05_WSL_T0_NUMERICO_COMPLETO_270788_HEX8_20261120_ES.md).
+
 - [Caso B C3D-05 — T0 numérico real en WSL: seis temperaturas metal/molde, balance 4.32×10⁻⁸, extracción q de 12,636 caras por región y corrección de tiempos CSV de 17 dígitos](granada/C3D05_WSL_T0_ENERGIA_REAL_Y_TIEMPOS_Q_20261120_ES.md) — **etapa 3/7; 2/7=29 % técnico, sin aprobación física ni aún análisis q bilateral completo**.
 
 - [Caso B C3D-05 — primera corrida WSL real (270,788 HEX8), falso negativo de auditor y recuperación SHA sin repetir solver (20-11-2026)](granada/C3D05_WSL_T0_270788_AUDITOR_RECOVERY_20261120_ES.md). **Etapa 3/7, 2/7=29 % técnico; G3/G4 abiertos, T/energía/q y JMatPro/QuickCup pendientes.**
