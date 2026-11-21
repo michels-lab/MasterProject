@@ -33,6 +33,7 @@ PREFIX = "FS_C06_VOF_SOLID_SMOKE_"
 C14_FVMODELS = Path("cases_controlled_buoyancy/C14_topFixedFlux_explicitRef/constant/metal/fvModels")
 NATIVE_FVMODELS = Path("freesurface/FS-C06_vof_solidification/native/constant/fluid/fvModels")
 NATIVE_CONTROL = Path("freesurface/FS-C06_vof_solidification/native/system/controlDict")
+NATIVE_FUNCTIONS = Path("freesurface/FS-C06_vof_solidification/native/system/functions")
 MODEL_FIELD = "alpha.metal.solid"
 TIMES = ("1e-07", "2e-07")
 
@@ -316,26 +317,35 @@ def stage(source: Path, dest: Path, project: Path, native: bool = False) -> dict
     require(native_control_path.is_file() and not native_control_path.is_symlink(),
             "tracked Foundation14 controlDict missing")
     native_control_text = native_control_path.read_text(encoding="utf-8")
-    marker = "// FS-C06_NATIVE_VOF_PHASE_MONITORS"
-    require(native_control_text.count(marker) == 1,
-            "native volume monitor source missing or duplicated")
-    require(native_control_text.split(marker)[0].strip()
-            == original_short_control.strip(),
-            "native OpenFOAM controlDict drifted from FS-C05 accepted solver setup")
+    # OpenFOAM Foundation14 reads function objects from system/functions,
+    # not from an old functions sub-dictionary in controlDict.
+    require(native_control_text.strip() == original_short_control.strip(),
+            "native OpenFOAM controlDict drifted from accepted FS-C05 solver setup")
+    require(re.search(r"(?m)^\\s*functions\\s*$", native_control_text) is None,
+            "legacy functions subdictionary in controlDict is not supported")
+    native_functions_path = project / NATIVE_FUNCTIONS
+    require(native_functions_path.is_file() and not native_functions_path.is_symlink(),
+            "Foundation14 system/functions source absent")
+    native_functions_text = native_functions_path.read_text(encoding="utf-8")
+    require("object      functions;" in native_functions_text
+            and 'location    "system";' in native_functions_text
+            and native_functions_text.count("// FS-C06_FOUNDATION14_FUNCTION_OBJECTS") == 1
+            and not re.search(r"(?m)^\\s*functions\\s*\\{", native_functions_text),
+            "native OpenFOAM system/functions header/body invalid")
     for field in ("alpha.metal", "alpha.metal.solid"):
         require(re.search(r"\bfields\s*\(\s*" + re.escape(field) + r"\s*\)\s*;",
-                          native_control_text) is not None,
+                          native_functions_text) is not None,
                 "native OpenFOAM volume monitor absent: " + field)
-    require(native_control_text.count("type          volFieldValue;") == 3
-            and native_control_text.count("type          surfaceFieldValue;") == 5
-            and native_control_text.count("type          wallHeatFlux;") == 2
-            and native_control_text.count("region        fluid;") == 9
-            and native_control_text.count("region        mold;") == 1
-            and native_control_text.count("writeFields   false;") == 8,
+    require(native_functions_text.count("type          volFieldValue;") == 3
+            and native_functions_text.count("type          surfaceFieldValue;") == 5
+            and native_functions_text.count("type          wallHeatFlux;") == 2
+            and native_functions_text.count("region        fluid;") == 9
+            and native_functions_text.count("region        mold;") == 1
+            and native_functions_text.count("writeFields   false;") == 8,
             "FS-C06 native function-object inventory changed")
     require(re.search(
         r"FS_C06_mixtureMass\s*\{[^{}]*\bfields\s*\(rho\)\s*;",
-        native_control_text, re.S) is not None,
+        native_functions_text, re.S) is not None,
         "native mixture mass inventory is missing")
     for name, selection in (
         ("FS_C06_atmosphereMassFlux", r"patches\s*\(atmosphereTop\s+atmosphereSides\s+atmosphereLowerSides\)"),
@@ -345,7 +355,7 @@ def stage(source: Path, dest: Path, project: Path, native: bool = False) -> dict
         ("FS_C06_fluidToMoldMassFlux", r"patch\s+fluid_to_mold"),
     ):
         block = re.search(r"\b" + re.escape(name) +
-                          r"\s*\{([^{}]*)\}", native_control_text, re.S)
+                          r"\s*\{([^{}]*)\}", native_functions_text, re.S)
         require(block is not None
                 and re.search(r"\b" + selection + r"\s*;", block.group(1)) is not None
                 and re.search(r"\boperation\s+sum\s*;", block.group(1)) is not None
@@ -357,13 +367,19 @@ def stage(source: Path, dest: Path, project: Path, native: bool = False) -> dict
         ("FS_C06_wallHeatFluxMold", "mold", "mold_to_fluid"),
     ):
         block = re.search(r"\b" + re.escape(name) +
-                          r"\s*\{([^{}]*)\}", native_control_text, re.S)
+                          r"\s*\{([^{}]*)\}", native_functions_text, re.S)
         require(block is not None
                 and re.search(r"\btype\s+wallHeatFlux\s*;", block.group(1)) is not None
                 and re.search(r"\bregion\s+" + region + r"\s*;", block.group(1)) is not None
                 and re.search(r"\bpatches\s*\(" + patch + r"\)\s*;", block.group(1)) is not None,
                 "missing conjugate heat flux native monitor: " + name)
     control.write_text(native_control_text, encoding="utf-8")
+    native_functions_dest = dest / "system/functions"
+    require(not native_functions_dest.is_symlink(),
+            "inherited system/functions symlink not allowed")
+    inherited_functions_sha = (digest(native_functions_dest)
+        if native_functions_dest.is_file() else None)
+    native_functions_dest.write_text(native_functions_text, encoding="utf-8")
     schemes = dest / "system/fluid/fvSchemes"
     modified, added = ensure_compressible_kepsilon_divergence(schemes.read_text())
     schemes.write_text(modified)
@@ -386,6 +402,11 @@ def stage(source: Path, dest: Path, project: Path, native: bool = False) -> dict
         "model_field_expected": MODEL_FIELD,
         "C14_numerical_reference_NOT_physical_calibration": reference,
         "control_sha256": digest(control),
+        "native_functions_sha256": digest(native_functions_dest),
+        "native_functions_source": str(NATIVE_FUNCTIONS),
+        "native_functions_source_sha256": digest(native_functions_path),
+        "native_functions_copied_verbatim": True,
+        "inherited_functions_sha256": inherited_functions_sha,
         "fvSchemes_sha256": digest(schemes),
         "fvModels_sha256": digest(candidate),
         "native_controlDict_source": str(NATIVE_CONTROL),
