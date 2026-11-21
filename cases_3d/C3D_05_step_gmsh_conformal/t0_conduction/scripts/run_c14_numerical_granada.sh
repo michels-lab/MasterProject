@@ -14,6 +14,7 @@ OUTPUT="${C3D05_C14_NUMERICAL_OUT:-$HOME/OpenFOAM/C3D05_T0_C14_SHK_01}"
 NATIVE="${C3D05_ACCEPTED_NATIVE:-$HOME/OpenFOAM/C3D05_STEP_GMSH_HEX_SUBDIV_COARSE_02}"
 RUNLOG="$OUTPUT/log.foamMultiRun.C14_NUMERICAL_T0"
 RUNREPORT="$OUTPUT/T0_NUMERICAL_RUN_STATUS.json"
+REVIEWED="$OUTPUT/T0_NUMERICAL_RUN_STATUS_REVIEWED.json"
 
 # Real 270788-HEX8 OpenFOAM failures must be visible after ONE command.
 # Printing original logs is not executing/checking an artificial mesh.
@@ -89,7 +90,7 @@ fi
 # merely because the executable exited with 0.
 # If a native run was ALREADY completed, resume its energy diagnostics
 # without rerunning the solver or overwriting its original evidence.
-if [[ -L "$RUNLOG" || -L "$RUNREPORT" ]]; then
+if [[ -L "$RUNLOG" || -L "$RUNREPORT" || -L "$REVIEWED" ]]; then
     echo "BLOCKED: native report/log symlink is not trusted." >&2
     exit 2
 fi
@@ -109,18 +110,33 @@ else
         --inputs "$INPUTS" --log "$RUNLOG" --exit-code "$result" --out "$RUNREPORT"
 fi
 
+# The ORIGINAL OpenFOAM run must never be repeated merely because the prior
+# auditor misread native 'Time = 0.1s' or the informational FOAM_SIGFPE banner.
+# Preserve the first failed report byte-for-byte; review its SHA-bound original
+# log in a second report, and carry that review through energy + facewise q.
+ACTIVE_RUNREPORT="$RUNREPORT"
+if python3 -B -c 'import json,sys; d=json.load(open(sys.argv[1],encoding="utf-8")); sys.exit(0 if d.get("numerical_run_completed") is False else 1)' "$RUNREPORT"; then
+    echo "=== 3b/6: forensic review of preserved native log; NO foamMultiRun rerun ==="
+    PYTHONDONTWRITEBYTECODE=1 python3 -B "$HERE/review_preserved_t0_run.py" \
+        --legacy "$RUNREPORT" --inputs "$INPUTS" --log "$RUNLOG" --out "$REVIEWED"
+    ACTIVE_RUNREPORT="$REVIEWED"
+elif [[ -e "$REVIEWED" ]]; then
+    echo "BLOCKED_REVIEWED_EVIDENCE: unexpected reviewed report with already completed original; preserved." >&2
+    exit 2
+fi
+
 echo "=== 4/6: FOUNDATION14 native regional volAverage(T), volumetric energy and effective exchange ==="
 PYTHONDONTWRITEBYTECODE=1 python3 -B "$HERE/postprocess_t0_energy.py" \
     --case "$OUTPUT" --inputs "$INPUTS" \
     --reference "$OUTPUT/T0_CLOSED_ENERGY_REFERENCE.json" \
-    --run-status "$RUNREPORT" --solver-log "$RUNLOG" \
+    --run-status "$ACTIVE_RUNREPORT" --solver-log "$RUNLOG" \
     --out "$OUTPUT/T0_NATIVE_ENERGY_HISTORY.json" --native
 echo "NUMERICAL_ENERGY_METRICS_RECORDED: native volumetric balance is observed, not physically accepted."
 echo "=== 5/6: native Foundation14 bilateral mappedWall q on ALL 12636 faces per side ==="
-bash "$HERE/run_native_t0_patch_flux.sh" "$OUTPUT" "$INPUTS" "$RUNLOG" "$RUNREPORT"
+bash "$HERE/run_native_t0_patch_flux.sh" "$OUTPUT" "$INPUTS" "$RUNLOG" "$ACTIVE_RUNREPORT"
 echo "=== 6/6: consolidate hashed regional T energy + 12636 native face pairs into ONE readable result ==="
 PYTHONDONTWRITEBYTECODE=1 python3 -B "$HERE/finalize_t0_granada.py" \
-    --case "$OUTPUT" --inputs "$INPUTS"
+    --case "$OUTPUT" --inputs "$INPUTS" --run-status "$ACTIVE_RUNREPORT"
 # Expose the ACTUAL, accepted 270788-cell OpenFOAM multiregion data to
 # ParaView. This is a marker only, NOT a fabricated result or mesh export.
 VIEW="$OUTPUT/C3D05_T0_REAL_ACCEPTED_HEX8.foam"
