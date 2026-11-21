@@ -35,7 +35,7 @@ def recover(legacy_bytes: bytes, log_bytes: bytes, input_bytes: bytes) -> dict:
         raise ValueError("legacy report and original input/log SHA-256 differ")
     text = log_bytes.decode("utf-8", errors="replace")
     banner = bool(re.search(
-        r"(?im)^\s*Enabling floating point exception trapping \(FOAM_SIGFPE\)\s*$",
+        r"(?im)^[ \t]*(?:sigFpe[ \t]*:[ \t]*)?Enabling[ \t]+floating[ \t]+point[ \t]+exception[ \t]+trapping[ \t]*\(FOAM_SIGFPE\)\.?[ \t]*$",
         text
     ))
     unit_time = bool(re.search(r"(?m)^\s*Time\s*=\s*[0-9.]+\s*s\s*$", text))
@@ -49,7 +49,19 @@ def recover(legacy_bytes: bytes, log_bytes: bytes, input_bytes: bytes) -> dict:
     spec.loader.exec_module(module)
     current = module.audit(text, previous["exit_code"], json.loads(input_bytes))
     if current["numerical_run_completed"] is not True:
-        raise ValueError("original native run STILL fails corrected auditor; no recovery permitted")
+        raise ValueError(
+            "original native run STILL fails corrected auditor; no recovery permitted; "
+            "failure_conditions=" + ",".join(current.get("audit_failure_reasons", ["UNKNOWN"]))
+            + "; diagnostics=" + json.dumps({
+                "observed_times": current["times_observed"],
+                "last_time_s": current["final_time_observed_s"],
+                "expected_end_s": current["configured_end_time_s"],
+                "energy_solves": current["native_energy_equation_linear_solves_observed"],
+                "end_marker": current["end_marker_observed"],
+                "sigfpe_informational_lines_ignored": current["informational_sigfpe_banner_lines_ignored"],
+                "fatal_pattern_remaining": current["fatal_openfoam_pattern"],
+            }, sort_keys=True)
+        )
     current["input_sha256"] = sha(input_bytes)
     current["log_sha256"] = sha(log_bytes)
     current["original_legacy_status_sha256"] = sha(legacy_bytes)
