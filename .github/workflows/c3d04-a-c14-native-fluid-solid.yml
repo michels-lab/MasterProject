@@ -31,6 +31,15 @@ jobs:
           PYTHONDONTWRITEBYTECODE=1 python3 -B -m unittest discover \
             -s cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/tests \
             -p 'test_stage_c14_fluid_solid.py' -v
+      - name: Fail fast on Python syntax before installing native Foundation14
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          root = Path("cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics")
+          for path in sorted(root.glob("*.py")):
+              compile(path.read_bytes(), str(path), "exec")
+              print("SOURCE_SYNTAX_PASS", path)
+          PY
       - name: Install real OpenFOAM Foundation 14
         uses: gerlero/setup-openfoam@v1
         with:
