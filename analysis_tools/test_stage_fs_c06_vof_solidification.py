@@ -8,7 +8,7 @@ import unittest
 from stage_fs_c06_vof_solidification import (
     C14_FVMODELS, FLUID_CELLS, PREFIX, TIMES, MODEL_FIELD,
     check_solid_fraction, model_text, read_c14_reference, phase_volume_metrics,
-    read_native_solid_fraction,
+    read_native_solid_fraction, read_native_metal_temperature,
 )
 
 
@@ -169,6 +169,24 @@ class FS_C06Test(unittest.TestCase):
             with self.assertRaises(ValueError):
                 read_native_solid_fraction(p, 2)
 
+    def test_metal_phase_temperature_not_mixture_temperature(self):
+        with tempfile.TemporaryDirectory() as directory:
+            p = Path(directory) / 'T.metal'
+            p.write_text(self._native_field('uniform 1462;', obj='T.metal'))
+            self.assertEqual(read_native_metal_temperature(p, 3), [1462.]*3)
+            p.write_text(self._native_field('uniform 1462;', obj='T'))
+            with self.assertRaises(ValueError):
+                read_native_metal_temperature(p, 3)
+            p.write_text(self._native_field('uniform -1;', obj='T.metal'))
+            with self.assertRaises(ValueError):
+                read_native_metal_temperature(p, 3)
+
+    def test_solid_and_metal_temperature_readers_are_not_interchangeable(self):
+        with tempfile.TemporaryDirectory() as directory:
+            p = Path(directory) / 'T.metal'
+            p.write_text(self._native_field('uniform 1500;', obj='T.metal'))
+            with self.assertRaises(ValueError):
+                read_native_solid_fraction(p, 2)
     def test_constants_and_outputs_distinct(self):
         self.assertEqual(TIMES, ("1e-07", "2e-07"))
         self.assertEqual(MODEL_FIELD, "alpha.metal.solid")
