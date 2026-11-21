@@ -40,11 +40,30 @@ jobs:
           set -euo pipefail
           python3 -B cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/native_c14_fluid_solid_smoke.py \
             --out "$RUNNER_TEMP/C3D04_A_C14_ORIGINAL_FLUID_SOLID_SYNTHETIC"
-      - name: Preserve ALL F14 logs, source/region mesh and phase-change fields even if failed
+      - name: ZIP logs including original colon-bearing phaseChangeSource fields (even on failure)
+        if: always()
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          from zipfile import ZipFile, ZIP_DEFLATED
+          import os
+          target = Path(os.environ["RUNNER_TEMP"])
+          base = target/"C3D04_A_C14_ORIGINAL_FLUID_SOLID_SYNTHETIC"
+          archive = target/"C3D04_A_C14_ORIGINAL_FLUID_SOLID_SYNTHETIC_EVIDENCE.zip"
+          if base.is_dir():
+              with ZipFile(archive,"w",compression=ZIP_DEFLATED) as z:
+                  for f in sorted(base.rglob("*")):
+                      if f.is_file():
+                          z.write(f,f.relative_to(base))
+              print("Preserved native F14 evidence:",archive)
+          else:
+              print("No native run directory exists; earlier step blocked.")
+          PY
+      - name: Preserve entire native output as single ZIP, including colon field names
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: c3d04-a-original-c14-3d-fluid-solid-native-logs
-          path: ${{ runner.temp }}/C3D04_A_C14_ORIGINAL_FLUID_SOLID_SYNTHETIC/
+          path: ${{ runner.temp }}/C3D04_A_C14_ORIGINAL_FLUID_SOLID_SYNTHETIC_EVIDENCE.zip
           if-no-files-found: warn
           retention-days: 30
