@@ -9,7 +9,7 @@ from stage_fs_c06_vof_solidification import (
     C14_FVMODELS, FLUID_CELLS, PREFIX, TIMES, MODEL_FIELD,
     check_solid_fraction, model_text, read_c14_reference, phase_volume_metrics,
     read_native_solid_fraction, read_native_metal_temperature,
-    NATIVE_FVMODELS, NATIVE_CONTROL,
+    NATIVE_FVMODELS, NATIVE_CONTROL, NATIVE_FUNCTIONS,
 )
 
 
@@ -59,11 +59,15 @@ class FS_C06Test(unittest.TestCase):
 
     def test_native_controlDict_runs_two_regions_and_writes_vof_volumes(self):
         project = Path(__file__).resolve().parents[1]
-        src = (project / NATIVE_CONTROL).read_text()
-        self.assertIn("fluid           compressibleVoF;", src)
-        self.assertIn("mold            solid;", src)
-        self.assertIn("deltaT          1e-07;", src)
-        self.assertIn("endTime         2e-07;", src)
+        control = (project / NATIVE_CONTROL).read_text()
+        src = (project / NATIVE_FUNCTIONS).read_text()
+        self.assertIn("fluid           compressibleVoF;", control)
+        self.assertIn("mold            solid;", control)
+        self.assertIn("deltaT          1e-07;", control)
+        self.assertIn("endTime         2e-07;", control)
+        self.assertNotIn("functions\n{", control)
+        self.assertIn("object      functions;", src)
+        self.assertIn("FS-C06_FOUNDATION14_FUNCTION_OBJECTS", src)
         self.assertEqual(src.count("type          volFieldValue;"), 3)
         self.assertEqual(src.count("type          surfaceFieldValue;"), 5)
         self.assertEqual(src.count("type          wallHeatFlux;"), 2)
