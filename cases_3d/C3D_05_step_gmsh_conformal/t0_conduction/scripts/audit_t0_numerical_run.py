@@ -31,8 +31,11 @@ def audit(text: str, return_code: int, config: dict) -> dict:
     # HEALTHY run; it is not evidence of a floating point exception:
     # "Enabling floating point exception trapping (FOAM_SIGFPE)".
     # Strip only that precise banner, never actual fatal diagnostics.
+    informational_sigfpe = re.findall(
+        r"(?im)^[ \t]*(?:sigFpe[ \t]*:[ \t]*)?Enabling[ \t]+floating[ \t]+point[ \t]+exception[ \t]+trapping[ \t]*\(FOAM_SIGFPE\)\.?[ \t]*$", text
+    )
     without_sigfpe_banner = re.sub(
-        r"(?im)^\s*Enabling floating point exception trapping \(FOAM_SIGFPE\)\s*$",
+        r"(?im)^[ \t]*(?:sigFpe[ \t]*:[ \t]*)?Enabling[ \t]+floating[ \t]+point[ \t]+exception[ \t]+trapping[ \t]*\(FOAM_SIGFPE\)\.?[ \t]*$",
         "", text
     )
     fatal = bool(re.search(
@@ -55,10 +58,23 @@ def audit(text: str, return_code: int, config: dict) -> dict:
     )
     end_marker = bool(re.search(r"(?m)^\s*End\s*$", text))
     last = observed[-1] if observed else None
-    completed = (return_code == 0 and not fatal and not residual_invalid
-                 and finite_e_residuals
-                 and end_marker and len(observed) > 1 and strictly_monotonic
-                 and last is not None and abs(last - expected) <= max(1e-10, abs(expected)*1e-7))
+    final_time_ok = last is not None and abs(last - expected) <= max(1e-10, abs(expected)*1e-7)
+    failure_reasons = []
+    if return_code != 0:
+        failure_reasons.append("NATIVE_SOLVER_NONZERO_EXIT")
+    if fatal:
+        failure_reasons.append("OPENFOAM_FATAL_OR_SIGNAL_DIAGNOSTIC")
+    if residual_invalid or not finite_e_residuals:
+        failure_reasons.append("ENERGY_RESIDUALS_MISSING_OR_INVALID")
+    if not end_marker:
+        failure_reasons.append("OPENFOAM_END_MARKER_MISSING")
+    if len(observed) <= 1:
+        failure_reasons.append("INSUFFICIENT_NATIVE_TIME_RECORDS")
+    if not strictly_monotonic:
+        failure_reasons.append("NON_MONOTONIC_NATIVE_TIMES")
+    if not final_time_ok:
+        failure_reasons.append("FINAL_TIME_DOES_NOT_MATCH_INPUTS")
+    completed = not failure_reasons
     return {
         "status": "NUMERICAL_ONLY_SOLVER_COMPLETED_NEEDS_ENERGY_VERIFICATION" if completed
                   else "NUMERICAL_ONLY_SOLVER_NOT_VERIFIED_COMPLETE",
@@ -69,6 +85,8 @@ def audit(text: str, return_code: int, config: dict) -> dict:
         "strictly_monotonic_times": strictly_monotonic,
         "end_marker_observed": end_marker,
         "fatal_openfoam_pattern": fatal,
+        "informational_sigfpe_banner_lines_ignored": len(informational_sigfpe),
+        "audit_failure_reasons": failure_reasons,
         "invalid_residual_pattern": residual_invalid,
         "native_energy_equation_linear_solves_observed": len(energy_solves),
         "native_energy_residuals_all_finite": finite_e_residuals,
