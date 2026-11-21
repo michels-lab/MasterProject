@@ -1,6 +1,10 @@
 # FS-C06 — VOF + cambio de fase, sin contracción todavía
 
 
+> **20-11-2026 — AUDITORÍA NUMÉRICA REAL COMPLETADA:** se leyeron los 10 archivos nativos del **segundo** caso `...032645Z_064d3091`. `V_metal=48.01191628 cm³` estable y `V_sólido=0` en los 3 tiempos. Reciprocidad `Q_fluid+Q_mold=+0.04326368 W` a `2e-7 s` frente a `~16,232 W` por lado (0.0002665 %), pero a `t=0` había fuerte desajuste de inicialización. Masa de mezcla `0.3293664140972→0.3293664141024 kg` (Δ=5.2e-12 kg); no equivale a cierre global. El flujo de metal en atmósfera/molde fue 0. [Informe completo con diez SHA-256 y reglas de aceptación](../../docs/granada/FS_C06_AUDITORIA_MONITORES_20261120_ES.md). **Cerrada la puerta de compatibilidad numérica FS-C06, abierta la física de solidificación positiva, contracción, alimentación y validación experimental.**
+
+
+
 > **20-11-2026 — Lector de monitores corregido:** tras el PASS nativo `10/10`, el comando manual de inspección buscó erróneamente carpetas directas `postProcessing/FS_C06_* ` que no existen en el caso; el gate sí había localizado diez `.dat` con búsqueda recursiva. Use [`read_native_monitors.sh`](read_native_monitors.sh) para leer **la segunda corrida ya guardada** sin reejecutar CFD, imprimir rutas reales/cabeceras/filas y hashes. `bash .../read_native_monitors.sh ~/OpenFOAM/FS_C06_RUNS/FS_C06_VOF_SOLID_SMOKE_20261121T032645Z_064d3091`. Archivo probado sintéticamente, **sin resultados físicos adicionales todavía**.
 
 
