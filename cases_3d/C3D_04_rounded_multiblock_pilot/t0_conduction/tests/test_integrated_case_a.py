@@ -562,6 +562,14 @@ class IntegratedCaseAT0(unittest.TestCase):
         manifest = c14_exact.sources_manifest()
         self.assertEqual(len(fileset), 22)
         self.assertEqual(manifest["files_total"], 22)
+        for item in manifest["files"]:
+            if item["source"] == "C14_ORIGINAL_BYTE_FOR_BYTE":
+                rel = item["path"]
+                self.assertEqual(
+                    fileset[rel].encode("utf-8"),
+                    (c14_exact.C14 / rel).read_bytes(),
+                    "The C14 original must be preserved byte-for-byte: " + rel
+                )
         self.assertFalse(manifest["native_solver_run"])
         self.assertFalse(manifest["native_pressure_reference_point_mapped"])
         self.assertFalse(manifest["native_phaseChange_metal_cellZone_mapped"])
