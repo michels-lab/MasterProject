@@ -149,5 +149,24 @@
       "Thermal energy conservation or numerical stability"
     ],
     "milestone06_closed": false
+  },
+  "stage06_synthetic_f14_runtime_gate": {
+    "date": "2026-11-20",
+    "PR": "https://github.com/michels-lab/MasterProject/pull/57",
+    "current_status": "CODE_COMMITTED_NATIVE_CI_PENDING",
+    "stage_06_completed": false,
+    "source_generation": "10 actual C14-derived two-solid Case A dictionaries",
+    "synthetic_geometry": "Two one-cell 3D cubes with reciprocal mappedWall; not V4/T02",
+    "native_actions_planned": [
+      "Foundation14 blockMesh for synthetic metal and mold",
+      "foamDictionary native parse of all 10 files",
+      "foamMultiRun two time steps using generated externalTemperature and coupledTemperature",
+      "Read native region T at 0.001s and 0.002s, preserve logs and SHA-256"
+    ],
+    "native_V4_T02_WSL_executed": false,
+    "T0_case_A_CFD_executed": false,
+    "physical_validation": false,
+    "test_evidence_state": "PENDING_CI_AT_PR_HEAD; do not claim successful runtime",
+    "progress_unchanged": "5/10=50% (stage06 IN_PROGRESS)"
   }
 }
