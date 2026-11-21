@@ -65,6 +65,10 @@ class NumericalEnergy(unittest.TestCase):
              "Time = 0.05\nTime = 0.1\nExecutionTime = 12 s\nEnd\n")
         result=A.audit(log,0,cfg)
         self.assertTrue(result["numerical_run_completed"])
+        self.assertEqual(result["native_energy_equation_linear_solves_observed"], 1)
+        self.assertTrue(result["native_energy_residuals_all_finite"])
+        self.assertAlmostEqual(result["maximum_initial_energy_residual"], 0.02)
+        self.assertAlmostEqual(result["last_final_energy_residual"], 1e-7)
         self.assertFalse(result["energy_conservation_verified"])
         self.assertFalse(result["physical_properties_jmatpro_verified"])
         self.assertIn("NUMERICAL_ONLY",result["status"])
@@ -77,6 +81,11 @@ class NumericalEnergy(unittest.TestCase):
         self.assertFalse(A.audit("Time = 0.001\nTime = 0.1\nSolving for e, Initial residual = nan\nEnd\n",0,cfg)["numerical_run_completed"])
         self.assertFalse(A.audit("Time = 0.05\nTime = 0.01\nEnd\n",0,cfg)["numerical_run_completed"])
         self.assertFalse(A.audit("End\n",0,cfg)["numerical_run_completed"])
+        # A log which only claims time progress and End is not evidence that
+        # the 270788-cell solid energy equations were actually solved.
+        faked = "Time = 0.001\nTime = 0.1\nEnd\n"
+        self.assertFalse(A.audit(faked, 0, cfg)["numerical_run_completed"])
+        self.assertEqual(A.audit(faked, 0, cfg)["native_energy_equation_linear_solves_observed"], 0)
 
     def test_run_log_report_preservation(self):
         with TemporaryDirectory() as folder:
