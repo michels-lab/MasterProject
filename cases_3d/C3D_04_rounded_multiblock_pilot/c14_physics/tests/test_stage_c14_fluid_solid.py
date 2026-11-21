@@ -51,6 +51,48 @@ class CaseAOriginalC14PhysicsTest(unittest.TestCase):
         self.assertIn("endTime         10;",files["system/controlDict"])
         self.assertIn("deltaT          0.001;",files["system/controlDict"])
 
+    def test_C14_3D_only_physical_invariant_and_fail_closed(self):
+        original=c14.assemble_unmaterialized_source_exact_fileset()
+        full=stage.input_files(8960,smoke=False)
+        self.assertEqual(full["system/controlDict"],original["system/controlDict"])
+        self.assertEqual(full["constant/metal/fvModels"],
+                         original["constant/metal/fvModels"])
+        self.assertEqual(full["constant/metal/materials/castIron"],
+                         original["constant/metal/materials/castIron"])
+        self.assertEqual(full["constant/mold/materials/silica"],
+                         original["constant/mold/materials/silica"])
+        self.assertEqual(set(full)-set(original),
+                         {"constant/metal/polyMesh/cellZones"})
+        self.assertEqual(
+            {key for key in original if full[key]!=original[key]},
+            {"system/metal/fvSolution"})
+        for relative, alteration in (
+            ("constant/metal/materials/castIron", ("827","900")),
+            ("constant/metal/fvModels", ("alpha1e         0.8;","alpha1e 0.9;")),
+            ("system/controlDict", ("deltaT          0.001;","deltaT 0.002;")),
+            ("0/metal/T", ("h uniform 10;","h uniform 25;")),
+            ("system/mold/fvSchemes", ("FoamFile","WrongFoamFile")),
+        ):
+            with self.subTest(relative=relative):
+                bad=dict(full)
+                previous,new=alteration
+                self.assertIn(previous,bad[relative])
+                bad[relative]=bad[relative].replace(previous,new,1)
+                with self.assertRaisesRegex(ValueError,
+                                            "C3D04_A_C14_NATIVE_GATE_BLOCKED"):
+                    stage.enforce_C14_3D_only_delta(
+                        bad,original,8960,smoke=False,existing_zone=False)
+        bad=dict(full)
+        bad["constant/metal/polyMesh/cellZones"]=stage.whole_region_zone(8959)
+        with self.assertRaisesRegex(ValueError,"metal zone"):
+            stage.enforce_C14_3D_only_delta(
+                bad,original,8960,smoke=False,existing_zone=False)
+        bad=dict(full)
+        bad["constant/metal/fvModels.newArbitraryPhysics"]="true"
+        with self.assertRaisesRegex(ValueError,"unexpected file"):
+            stage.enforce_C14_3D_only_delta(
+                bad,original,8960,smoke=False,existing_zone=False)
+
     def test_all_zone_labels_without_duplicates_or_omissions(self):
         for n in (1,4,8960):
             zone=stage.whole_region_zone(n)
