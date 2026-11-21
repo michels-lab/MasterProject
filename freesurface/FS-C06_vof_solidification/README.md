@@ -1,6 +1,10 @@
 # FS-C06 — VOF + cambio de fase, sin contracción todavía
 
 
+> **20-11-2026 — Lector de monitores corregido:** tras el PASS nativo `10/10`, el comando manual de inspección buscó erróneamente carpetas directas `postProcessing/FS_C06_* ` que no existen en el caso; el gate sí había localizado diez `.dat` con búsqueda recursiva. Use [`read_native_monitors.sh`](read_native_monitors.sh) para leer **la segunda corrida ya guardada** sin reejecutar CFD, imprimir rutas reales/cabeceras/filas y hashes. `bash .../read_native_monitors.sh ~/OpenFOAM/FS_C06_RUNS/FS_C06_VOF_SOLID_SMOKE_20261121T032645Z_064d3091`. Archivo probado sintéticamente, **sin resultados físicos adicionales todavía**.
+
+
+
 > **20-11-2026 — Segunda corrida real (HEAD `608332778`):** `foamMultiRun` y `checkMesh fluid/mold` PASS; ahora **10/10 `.dat`** de los function objects de Foundation14 detectados en nueva copia `FS_C06_VOF_SOLID_SMOKE_20261121T032645Z_064d3091`. El traslado a `system/functions` quedó **verificado en WSL para escritura de archivos**, no sus contenidos numéricos. Falta leer las series originales antes de certificar flujos de masa/calor; las métricas `f_s=0` descritas más abajo pertenecen a la **primera** corrida. **SIN contracción ni alimentación implementadas.** [Bitácora de ambas corridas](../../docs/granada/FS_C06_GATE_NATIVO_WSL_20261120_ES.md).
 
 
