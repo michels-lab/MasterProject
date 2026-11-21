@@ -1,3 +1,21 @@
+## 20-11-2026 — C14 original 10 s nativo en 3D: CI verificada y ejecutor protegido
+
+[PR #60 integrado](https://github.com/michels-lab/MasterProject/pull/60) mediante [commit d3b1f86](https://github.com/michels-lab/MasterProject/commit/d3b1f865076f2527976ae0db481bc6a5aaec5bbd). En [CI Foundation14 #44860515973](https://github.com/michels-lab/MasterProject/actions/runs/44860515973) se prepararon **DOS candidatos independientes de la misma geometría sintética 3D** (27 metal + 27 arena):
+
+- **Modelo de investigación preparado, NO ejecutado:** `endTime=10 s`, `deltaT=0.001 s`, `writeInterval=100`; el `system/controlDict` mantiene **identidad byte por byte** con C14, así como los archivos termofísicos, `fvModels`, `fvSchemes` y `momentumTransport`. Los **22 diccionarios** se analizaron con `foamDictionary` de OpenFOAM Foundation 14, con copia completa de malla verificada por SHA. Esta evidencia **NO** significa CFD de 10 segundos.
+- **Ensayo separado SÍ ejecutado:** `endTime=0.002 s` en carpeta diagnóstica y sin alterar material ni modelo; dos pasos reales `foamMultiRun` con `metal=fluid`, `mold=solid`, `h/e/U/p_rgh` y `solidificationMeltingSource`. NO es V4/T02, y el inicio de solidificación no se observó.
+
+Para ejecutar una **única corrida nativa completa de los 10 s originales** sobre una **copia aislada de V4/T02** en WSL, desde la raíz de un `MasterProject` actualizado:
+
+```bash
+bash cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/run_c14_native_milestone.sh --run-full
+```
+
+El script utiliza la malla aceptada **solo en lectura** bajo `~/OpenFOAM/C3D04_V4_TRANSITION_REPAIR_01/T02`; verifica evidencia, regiones, parches, celdas metálicas, `cellZone` y referencia numérica de presión; crea el caso **solo si el destino está vacío** en `~/OpenFOAM/C3D04_A_C14_FLUID_SOLID_FULL_10S_RUN_01`, y confirma antes de lanzar `foamMultiRun` que el `controlDict` se conserva *exactamente* como en C14. Si el solver falla, quedan los logs y el informe del directorio aislado. Si termina, requiere `End`, tiempo 10 s, selección del solver, resolución de `h/e/p_rgh` y campos finales nativos. Una ejecución completa todavía requiere comprobar **conservación, estabilidad, evolución de fracción líquida, independencia de malla y QuickCup** antes de declarar validez física.
+
+**No se ha ejecutado todavía esta orden en WSL/V4-T02.** El estado permanece **etapa 6/10, 5/10 hitos completados = 50 % operativo**; el estado histórico no cuenta como validación física y el ensayo sintético no cierra el hito 06.
+
+
 ## 20-11-2026 — FOUNDATION14: CFD nativo real del C14 original PASÓ en malla sintética 3D
 
 [**GitHub Actions run #44859479359, SUCCESS**](https://github.com/michels-lab/MasterProject/actions/runs/44859479359) y [**artifact original #14689152079**](https://github.com/michels-lab/MasterProject/actions/runs/44859479359/artifacts/14689152079). Se ejecutaron **dos pasos nativos foamMultiRun a 0.001 y 0.002 s** de las regiones sintéticas **metal fluido de 27 celdas y arena sólida de 27 celdas**, con los archivos fuente C14 intactos. El log demuestra explícitamente:
