@@ -25,12 +25,11 @@
     "workflow": 28
   },
   "finding_counts": {
-    "BROKEN_RELATIVE_LINK": 7,
-    "POTENTIAL_UNLOGGED_CHANGES": 2
+    "BROKEN_RELATIVE_LINK": 7
   },
-  "finding_total": 9,
-  "inventory_fingerprint": "ac3aee2dbcdbf8ad423383a4f11b1ee478d1268854e209e61537604a0b263474",
-  "evidence_fingerprint": "c8e803341715a2d9eea01f201c87825c0775bb5361b6bac60b4a8630c1bd8327",
+  "finding_total": 7,
+  "inventory_fingerprint": "194b371e5eac520fc0cffc31496731e708c7dfc6eeaee0fdca46483075091d41",
+  "evidence_fingerprint": "a38cca05722cc62f2a19d8787a386e132771345cc8472199f5e39f915b2e8a45",
   "files": [
     {
       "path": ".github/agents/openfoam-solidification.agent.md",
@@ -317,7 +316,7 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "be471655705cd8008fa905520ad3fcead4e5e254"
+      "blob": "74d4c6bf59d9fa73fa6a4e427ed79bcfa52df8cd"
     },
     {
       "path": "JMATPRO_OPENFOAM_TRACEABILITY_ES.md",
@@ -331,7 +330,7 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "0a929410bc76c4496a95f4048500b20c5eda403a"
+      "blob": "8b2c9c641dbcacf66d9e9a380ee5ae9e1cd490bb"
     },
     {
       "path": "OPENFOAM_COMMAND_MANUAL.md",
@@ -366,28 +365,28 @@
       "role": "bitacora",
       "purpose": "technical/audit change history",
       "certainty": "rule",
-      "blob": "72a9e368ead51ab93a3b47bbb671498fd9887433"
+      "blob": "e3ae189f1c62e8303b0d020a67fdaeddbf58ebfc"
     },
     {
       "path": "PROJECT_AUDIT_LOG_EN.md",
       "role": "bitacora",
       "purpose": "technical/audit change history",
       "certainty": "rule",
-      "blob": "b095e68cc460de1f3ce0294b2562c416d1c5fbae"
+      "blob": "2d090a4f562371359633ff2913ba21f5b5234cf0"
     },
     {
       "path": "PROJECT_AUDIT_LOG_ES.md",
       "role": "bitacora",
       "purpose": "technical/audit change history",
       "certainty": "rule",
-      "blob": "6cb4954c5c1b9cb0c309b1a3aadf1d0c89edbb94"
+      "blob": "f8c4fe316c31f53435271bd044ea8b6b2c75f7e0"
     },
     {
       "path": "README.md",
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "fad03c335eec54be3c9c0e9641b3f24ce5b8e192"
+      "blob": "00ef91410e70a13f4c47dd8ad01bc24b1cbbf035"
     },
     {
       "path": "RUN_CASE_REGISTRY.csv",
@@ -401,28 +400,28 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "0b4085a72e8901e51b65df92da4e67db5a4948f8"
+      "blob": "a7865987432f7ae7aca0e20b1ce6740bbe396d8d"
     },
     {
       "path": "VALIDATION_MATRIX.md",
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "fc9f736c8beff208369b372e5c3b58fae5afa040"
+      "blob": "af9b66b5f0e159f001cb9a50e17c965c37746502"
     },
     {
       "path": "VALIDATION_MATRIX_EN.md",
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "25607764bccc5b9f047667ba5dba963a80ed3395"
+      "blob": "110328333a99fcb60e643e1941079d05dc86ed8e"
     },
     {
       "path": "VALIDATION_MATRIX_ES.md",
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "266ac82c102cedcaab0e75f7bd2b499bcf07b467"
+      "blob": "0bca9d9d58b67ae844a78a72369e60b248d89b55"
     },
     {
       "path": "analysis_results/c11_energy2_test/summary.md",
@@ -1864,7 +1863,7 @@
       "role": "agent",
       "purpose": "assistant role/instructions",
       "certainty": "rule",
-      "blob": "adf20a865d801c89b706f0b561de1d7a55afd691"
+      "blob": "efbb8eeb76789d6c27c60a659886ca7bdb64ab27"
     },
     {
       "path": "cases_3d/C3D_05_step_gmsh_conformal/Allmesh",
@@ -1878,7 +1877,7 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "f0105e1f90db558f7e36e3a7b4a685a8b9d83812"
+      "blob": "1ac0399bca8304c9ff308f83eb37f69b9db16ea9"
     },
     {
       "path": "cases_3d/C3D_05_step_gmsh_conformal/constant/geometry/QuickCupmm.STEP",
@@ -2025,7 +2024,7 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "6f20598cc601346918a92318c800369cd41c3884"
+      "blob": "39248fd7ea823b5b2a90b0c2ec58cde0c7de1c68"
     },
     {
       "path": "cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/T0_INPUTS.json",
@@ -272211,7 +272210,7 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "a83bf733de162ede91d2ed9e795260b60806616f"
+      "blob": "95c62b385b1bd9fe5a824d30d2ea6928d09ea5de"
     },
     {
       "path": "docs/DOCUMENT_SYNC_20261110_ES.md",
@@ -272260,7 +272259,7 @@
       "role": "config",
       "purpose": "machine-readable configuration",
       "certainty": "rule",
-      "blob": "4257e8f11d3fad1ecb68be551def21a333196d47"
+      "blob": "cae1d64fbea919062fb7a8eda805e08285c7c767"
     },
     {
       "path": "docs/REGLA_INSTRUCCIONES_UNIFICADAS_ES.md",
@@ -273151,24 +273150,6 @@
       "path": "docs/granada/C3D05_T0_README_HISTORICAL_BEFORE_SINGLE_FLOW_20261120.md",
       "observation": "Missing: outside-repo",
       "recommendation": "Fix link or restore target",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "5eef6c83323e38b3",
-      "code": "POTENTIAL_UNLOGGED_CHANGES",
-      "severity": "review",
-      "path": "PROJECT_AUDIT_LOG_EN.md",
-      "observation": "10 implementation/config paths changed since this log's last commit; examples: .github/workflows/c3d04-a-c14-native-fluid-solid.yml, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/native_c14_fluid_solid_smoke.py, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/run_c14_native_milestone.sh, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/stage_c14_3d_case_a.py, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/tests/test_stage_c14_fluid_solid.py, cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/scripts/analyze_t0_patch_flux.py",
-      "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "632a9906776b3513",
-      "code": "POTENTIAL_UNLOGGED_CHANGES",
-      "severity": "review",
-      "path": "PROJECT_AUDIT_LOG_ES.md",
-      "observation": "10 implementation/config paths changed since this log's last commit; examples: .github/workflows/c3d04-a-c14-native-fluid-solid.yml, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/native_c14_fluid_solid_smoke.py, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/run_c14_native_milestone.sh, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/stage_c14_3d_case_a.py, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/tests/test_stage_c14_fluid_solid.py, cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/scripts/analyze_t0_patch_flux.py",
-      "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     }
   ],
