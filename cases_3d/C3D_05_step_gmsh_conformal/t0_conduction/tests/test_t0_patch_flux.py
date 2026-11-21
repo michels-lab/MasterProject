@@ -97,6 +97,51 @@ class FaceFluxQA(unittest.TestCase):
         with self.assertRaisesRegex(ValueError,"do not match"):
             F.compare(m,d,e,0.1,expected_faces=3)
 
+    def test_foundation14_17digit_times_align_bijectively_without_resampling(self):
+        # Native C++ writes runTime.value() using "%.17g", e.g. 0.04
+        # becomes 0.040000000000000001; JSON energy uses short decimals.
+        times=(0.,0.02,0.04,0.06,0.08,0.1)
+        metal0,mold0,_=fixture()
+        metal={Decimal(format(t, ".17g")):metal0[Decimal("0")] for t in times}
+        mold={Decimal(format(t, ".17g")):mold0[Decimal("0")] for t in times}
+        energy={"history":[
+            {"time_s":t, "metal_sensible_energy_J":800.-20.*t,
+             "mold_sensible_energy_J":1200.+20.*t}
+            for t in times
+        ]}
+        native, max_delta, allowed = F.align_native_energy_times(set(metal), energy["history"])
+        self.assertEqual(len(native), 6)
+        self.assertGreater(max_delta, Decimal("0"))
+        self.assertLess(max_delta, allowed)
+        out=F.compare(metal,mold,energy,0.1,expected_faces=3)
+        self.assertEqual(len(out["history"]),6)
+        self.assertGreater(out["max_time_roundtrip_difference_s"],0.)
+        self.assertLess(out["max_time_roundtrip_difference_s"],1e-12)
+        self.assertIn("NO interpolation",out["time_alignment_method"])
+        self.assertEqual(out["history"][-1]["time_s"],0.1)
+
+    def test_time_alignment_rejects_missing_extra_shifted_or_ambiguous_samples(self):
+        m,d,e=fixture()
+        # A deleted energy time must never be silently interpolated.
+        with self.assertRaisesRegex(ValueError, "times do not match"):
+            F.align_native_energy_times(set(m),e["history"][:1])
+        # An extra time value is likewise not permitted.
+        with self.assertRaisesRegex(ValueError, "times do not match"):
+            F.align_native_energy_times(set(m),e["history"]+[dict(e["history"][1],time_s=0.05)])
+        # A meaningful physical time mismatch (not binary64 formatting) fails.
+        with self.assertRaisesRegex(ValueError, "no interpolation or time substitution"):
+            F.align_native_energy_times(set(m),[
+                e["history"][0],dict(e["history"][1],time_s=0.099)
+            ])
+        # Duplicated nominal time, including JSON repeats, is rejected.
+        with self.assertRaisesRegex(ValueError, "Duplicate energy time"):
+            F.align_native_energy_times(set(m),e["history"]+[dict(e["history"][1])])
+        # Closely spaced times cannot be collapsed by the numerical tolerance.
+        close={Decimal("0"),Decimal("0.000000000000001"),Decimal("0.1")}
+        close_e=[{"time_s":0.}, {"time_s":1.6e-15}, {"time_s":0.1}]
+        with self.assertRaisesRegex(ValueError, "times do not match"):
+            F.align_native_energy_times(close,close_e)
+
     def test_native_csv_count_duplicates_nan_missing_header_and_time_zero(self):
         with tempfile.TemporaryDirectory() as tmp:
             path=Path(tmp)/"flux.csv"
