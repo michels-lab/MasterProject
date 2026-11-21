@@ -68,20 +68,20 @@ def model_text(reference: dict, inherited_models: str) -> str:
     Keep the original dictionary intact and append exactly one new fvModel.
     """
     require(isinstance(inherited_models, str)
-            and len(re.findall(r"(?m)^\\s*FoamFile\\s*$", inherited_models)) == 1
-            and re.search(r"\\bobject\\s+fvModels\\s*;", inherited_models)
-            and re.search(r'\\blocation\\s+"constant/fluid"\\s*;',
+            and len(re.findall(r"(?m)^\s*FoamFile\s*$", inherited_models)) == 1
+            and re.search(r"\bobject\s+fvModels\s*;", inherited_models)
+            and re.search(r'\blocation\s+"constant/fluid"\s*;',
                           inherited_models),
             "FS-C05 inherited fvModels header/region is invalid")
-    require(len(re.findall(r"(?m)^\\s*turbulenceDamping\\s*$",
+    require(len(re.findall(r"(?m)^\s*turbulenceDamping\s*$",
                            inherited_models)) == 1
             and re.search(
-                r"\\bturbulenceDamping\\s*\\{[^{}]*"
-                r"\\btype\\s+compressible::VoFTurbulenceDamping\\s*;[^{}]*\\}",
+                r"\bturbulenceDamping\s*\{[^{}]*"
+                r"\btype\s+compressible::VoFTurbulenceDamping\s*;[^{}]*\}",
                 inherited_models, re.S),
             "FS-C05 VoF turbulence damping must remain active")
     require(not re.search(
-        r"\\b(?:VoFSolidificationMelting|solidificationMeltingSource|FS_C06_vof_phase_change)\\b",
+        r"\b(?:VoFSolidificationMelting|solidificationMeltingSource|FS_C06_vof_phase_change)\b",
         inherited_models),
         "FS-C05 already has a phase-change model; refusing duplicate sources")
     v = reference["values"]
@@ -101,15 +101,15 @@ FS_C06_vof_phase_change
     alphaSolidT table
     (
 """
-            + "        (" + number(v["Tsol"]) + " 1)\\n"
-            + "        (" + number(v["Tliq"]) + " 0)\\n"
-            + "    );\\n"
-            + "    L " + number(v["L"]) + ";\\n"
-            + "    relax " + number(v["relax"]) + ";\\n"
-            + "    Cu " + number(v["Cu"]) + ";\\n"
-            + "    q " + number(v["q"]) + ";\\n"
-            + "}\\n")
-    return inherited_models.rstrip("\\n") + "\\n\\n" + added
+            + "        (" + number(v["Tsol"]) + " 1)\n"
+            + "        (" + number(v["Tliq"]) + " 0)\n"
+            + "    );\n"
+            + "    L " + number(v["L"]) + ";\n"
+            + "    relax " + number(v["relax"]) + ";\n"
+            + "    Cu " + number(v["Cu"]) + ";\n"
+            + "    q " + number(v["q"]) + ";\n"
+            + "}\n")
+    return inherited_models.rstrip("\n") + "\n\n" + added
 
 
 def check_solid_fraction(metal: list[float], solid: list[float]) -> dict:
