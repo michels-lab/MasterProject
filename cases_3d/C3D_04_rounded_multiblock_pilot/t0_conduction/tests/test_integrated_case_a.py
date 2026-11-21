@@ -19,6 +19,7 @@ sys.path.insert(0, str(CASE_A / "scripts"))
 
 import prepare_case_a_t0 as engine
 import native_f14_dictionary_smoke as native_f14
+import native_f14_coupled_runtime_smoke as native_runtime
 import report_case_a_progress as progress
 
 
@@ -114,7 +115,9 @@ class IntegratedCaseAT0(unittest.TestCase):
             self.assertNotIn("externalWallHeatFluxTemperature", field)
             self.assertNotIn("kappaMethod solidThermo", field)
             self.assertNotIn("mode coefficient", field)
-            self.assertIn("h constant 10;", field)
+            self.assertIn("h uniform 10;", field)
+            # Native Foundation14 reads h as a patch field, Ta as a Function1.
+            self.assertNotIn("h constant ", field)
             self.assertIn("Ta constant 300;", field)
         self.assertIn("thicknessLayers (0.0002);", items["0/metal/T"])
         self.assertIn("kappaLayers (0.1);", items["0/metal/T"])
@@ -493,6 +496,59 @@ class IntegratedCaseAT0(unittest.TestCase):
             self.assertEqual(field.count("type externalTemperature;"),
                              len(engine.EXTERIOR[region]))
             self.assertNotIn("externalWallHeatFluxTemperature", field)
+
+    def test_059b_native_f14_two_cube_case_a_runtime_contract(self):
+        # This is the only synthetic mesh; production V4/T02 remains untouched.
+        metal = native_runtime.block_mesh_dict("metal")
+        mold = native_runtime.block_mesh_dict("mold")
+        self.assertIn("type mappedWall;", metal)
+        self.assertIn("type mappedWall;", mold)
+        self.assertIn("neighbourRegion mold;", metal)
+        self.assertIn("neighbourRegion metal;", mold)
+        self.assertIn("neighbourPatch mold_to_metal;", metal)
+        self.assertIn("neighbourPatch metal_to_mold;", mold)
+        self.assertIn("method matching;", metal)
+        self.assertIn("method matching;", mold)
+        self.assertNotIn("sampleMode nearestPatchFace;", metal + mold)
+        self.assertNotIn("sampleRegion", metal + mold)
+        self.assertEqual(metal.count("type mappedWall;"), 1)
+        self.assertEqual(mold.count("type mappedWall;"), 1)
+        self.assertEqual(metal.count("type wall;"), 1)
+        self.assertEqual(mold.count("type wall;"), 5)
+        self.assertIn("scale 0.01;", metal)
+        self.assertIn("scale 0.01;", mold)
+        # All six faces per region, and a single mirrored interface.
+        self.assertEqual(sum(metal.count(face) for face in native_runtime.FACES.values()), 6)
+        self.assertEqual(sum(mold.count(face) for face in native_runtime.FACES.values()), 6)
+        for patch in engine.EXTERIOR["mold"]:
+            self.assertIn(patch + "\n", mold)
+        with self.assertRaises(ValueError):
+            native_runtime.block_mesh_dict("Case_B")
+
+        real = json.loads(engine.INPUTS.read_text(encoding="utf-8"))
+        source = engine.generate(real)["system/controlDict"]
+        short = native_runtime.shorten_for_runtime(source)
+        self.assertIn("endTime 0.002;", short)
+        self.assertIn("writeInterval 1;", short)
+        self.assertIn("deltaT 0.001;", short)
+        self.assertIn("regionSolvers", short)
+        self.assertIn("endTime 10;", source)
+        with self.assertRaises(ValueError):
+            native_runtime.shorten_for_runtime(short)
+
+    def test_059c_synthetic_native_smoke_fail_closed_without_f14(self):
+        with patch.dict(native_runtime.os.environ, {"WM_PROJECT_VERSION": "13"}), \
+             patch.object(native_runtime.shutil, "which", return_value=None):
+            with tempfile.TemporaryDirectory() as directory:
+                out = pathlib.Path(directory)/"never_created"
+                with self.assertRaises(RuntimeError):
+                    native_runtime.run(out)
+                self.assertFalse(out.exists())
+        with tempfile.TemporaryDirectory() as directory:
+            target = pathlib.Path(directory)/"already_present"
+            target.mkdir()
+            with self.assertRaises(FileExistsError):
+                native_runtime.run(target)
 
     def test_06_no_CFD_or_remeshing_launched_by_integrated_runner(self):
         runner = (T0/"run_integrated_milestone.sh").read_text()

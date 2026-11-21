@@ -195,7 +195,7 @@ def temperature(region: str, initial_K, bc: dict) -> str:
             f"    {patch}", "    {",
             "        type externalTemperature;",
             f"        Ta constant {fmt(exterior['Ta_K'])};",
-            f"        h constant {fmt(exterior['h_W_m2_K'])};",
+            f"        h uniform {fmt(exterior['h_W_m2_K'])};",
             f"        emissivity {fmt(exterior['emissivity'])};",
             "        value $internalField;",
             "    }",
@@ -848,6 +848,9 @@ def self_test():
         assert "type coupledTemperature;" in field
         assert field.count("type externalTemperature;") == len(EXTERIOR[region])
         assert "type externalWallHeatFluxTemperature;" not in field
+        assert field.count("Ta constant ") == len(EXTERIOR[region])
+        assert field.count("h uniform ") == len(EXTERIOR[region])
+        assert "h constant " not in field
         assert "constIsoSolid" in files[f"constant/{region}/physicalProperties"]
         assert "nNonOrthogonalCorrectors 2;" in files[f"system/{region}/fvSolution"]
     cfg["mold"]["kappa_W_m_K"] = None

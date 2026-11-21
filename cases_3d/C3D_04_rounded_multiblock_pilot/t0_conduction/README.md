@@ -1,5 +1,34 @@
 # C3D-04 Caso A — T0 integrado con valores auténticos de C14
 
+
+## 20-11-2026 — Primer foamMultiRun F14 con ambos módulos sólidos: PASS sintético, NO V4/T02
+
+**Evidencia nativa de CI [run #44845073894](https://github.com/michels-lab/MasterProject/actions/runs/44845073894)**, commit fuente `e31824045f67e49ae20548ad22324080da8d4358`. Luego de corregir tanto el mapeo sintético `mappedWall` a `neighbourRegion/neighbourPatch/method matching` como el **generador productivo F14 `externalTemperature h uniform`**, la instalación Foundation14 completó ambos `blockMesh`, parseó los diez diccionarios con `foamDictionary` y ejecutó **dos pasos reales `foamMultiRun`** hasta 0.002 s. Se conservaron logs y los campos T nativos de metal y arena en [artifact #14681863740](https://github.com/michels-lab/MasterProject/actions/runs/44845073894/artifacts/14681863740).
+
+| Tiempo (s) | Metal T (K) | Arena T (K) |
+|---:|---:|---:|
+| 0 (entrada) | 1500 | 300 |
+| 0.001 | 1499.987047 | 300.0245561 |
+| 0.002 | 1499.974095 | 300.0491112 |
+
+**Significado demostrado:** los módulos nativos `solid` de ambas regiones inicializan termofísica `heSolidThermo`, aceptan `externalTemperature` y `coupledTemperature`, realizan transferencia térmica y guardan campos auténticos. **Esto es un banco sintético de dos celdas, no un caso CFD ejecutado en la malla de investigación V4/T02.** No permite concluir conservación energética, convergencia espacial, estabilidad ante >70° de no ortogonalidad, ni validación QuickCup o solidificación. La **etapa 06/10 sigue IN_PROGRESS** y el avance de hitos del Caso A queda **5/10=50 %**. Siguiente gate: una única materialización/preflight integral sobre la V4/T02 preservada del investigador en WSL; luego corresponde T0 solver y balances como hito 07.
+
+## 20-11-2026 — Corrección del error REAL de inicialización F14: h uniform
+
+La CI nativa de [PR #57](https://github.com/michels-lab/MasterProject/pull/57) logró ejecutar `blockMesh` para ambas regiones y `foamDictionary` para los 10 diccionarios, pero `foamMultiRun` falló al inicializar `metalTop` con: **“expected keyword 'uniform' or 'nonuniform', found constant”**. Se comprobó el contrato real en la fuente Foundation14 de `externalTemperatureFvPatchScalarField.H`: **`Ta` es `Function1` y usa `Ta constant 300;`; `h` es `FunctionalDimensionedField` y usa `h uniform 10;`**. Referencia: https://cpp.openfoam.org/v14/externalTemperatureFvPatchScalarField_8H_source.html. El parser `foamDictionary` no detecta necesariamente incompatibilidades de tipos en tiempo de inicialización.
+
+Se corrigió **el generador T0 de producción**, no únicamente el banco sintético: ahora todas las paredes externas de metal y molde utilizan `h uniform`. Se conservan exactamente h=10 W/(m² K), Ta=300 K, emisividades y contacto C14, los diez diccionarios, geometría, y los originales archivados. La regresión integrada rechaza `h constant` y conserva `Ta constant`. **La prueba nativa posterior todavía debe aprobarse** y el ensayo sintético no cierra el preflight WSL V4/T02. Etapa 6/10, 5/10=50%, sin CFD nativo del Caso A sobre malla real.
+
+## 20-11-2026 — Puerta de inicialización F14 con solver REAL (malla sintética, NO V4/T02)
+
+[PR #57](https://github.com/michels-lab/MasterProject/pull/57) añade a la **misma instalación Foundation14** de la CI una comprobación posterior al análisis nativo de los diez diccionarios T0. En una carpeta descartable del corredor, el script native_f14_coupled_runtime_smoke.py crea por blockMesh **dos cubos 3D independientes de una celda** con un único mappedWall recíproco, cinco paredes externas del molde y metalTop. Inserta **los diez archivos generados por el mismo productor de Caso A** y realiza dos pasos térmicos a deltaT=0.001 s con foamMultiRun para comprobar carga del solver real, externalTemperature, coupledTemperature, termofísica y escritura nativa de T en ambas regiones. En la copia sintética y solo en ella reduce endTime a 0.002 s y writeInterval a 1.
+
+Los resultados se guardan en el artifact del workflow con logs de blockMesh de las dos regiones, diez logs de foamDictionary, el log de foamMultiRun, los campos escritos y C3D04_A_SYNTHETIC_NATIVE_REPORT.json con sus SHA-256. Un log fallido preserva evidencia y **NO autoriza** declarar prueba completa; hasta que CI termine no debe llamarse PASS.
+
+**Evidencia que esta puerta NO proporciona**: no es la malla V4/T02 de 21,312 celdas, no reproduce sus 2,496 pares mappedWall, no prueba estabilidad ante >70 grados de no ortogonalidad, no mide balance de energía sobre las superficies reales y no simula enfriamiento experimental ni solidificación. **Etapa 6/10, avance operativo 5/10=50 %, sin CFD real del Caso A.** El único siguiente trabajo nativo sobre V4/T02 continúa siendo el hito 06 integrado en WSL; está prohibido confundir un ensayo en cubos con ese gate.
+
+
+
 > **20-11-2026 | Corrección preventiva de autotest F14 (hito 06 abierto, 5/10 = 50 %).** Se detectó una aserción obsoleta en `scripts/prepare_case_a_t0.py --self-test` que aún exigía `externalWallHeatFluxTemperature` después de adoptar `externalTemperature` en Foundation14. Corregida a cobertura por cantidad de parches exteriores (metal/arena), rechazo de la BC heredada y ejecución obligatoria del autotest desde la suite integrada. **El cambio no modifica diccionarios productivos, geometría V4/T02 ni ejecuta CFD**; la CI del PR y el preflight nativo real deben verificarse por separado.
 
 
@@ -34,7 +63,7 @@ No se incrementa el avance por estos arreglos: **la comprobación estática en C
 
 ## Operación Granada: compatibilidad Foundation14, auditoría térmica e integridad C14
 
-**Corrección preventiva validada contra documentación oficial Foundation 14:** el `0/T` de C14 histórico utilizaba `externalWallHeatFluxTemperature`, sintaxis heredada que **no se debe copiar tal cual a Foundation 14**. El nuevo generador de C3D-04 conserva los valores **h=10, Ta=300 K y emisividad hierro 0.3/arena 0.5**, pero utiliza la condición Foundation14 **`externalTemperature`** con `h constant 10;`, `Ta constant 300;`, `emissivity 0.3/0.5;` y `value $internalField;` para las seis paredes físicas no vacías de V4/T02. Se elimina de la configuración generada el modo legado `mode coefficient` y `kappaMethod solidThermo`. El contacto `coupledTemperature` con el modelo `wallLayersHeatTransferCoefficient` de 0.2 mm y 0.1 W/(m K) permanece correcto para F14. Fuente oficial: https://doc.cfd.direct/openfoam/user-guide-v14/thermal-boundary-conditions.
+**Corrección preventiva validada contra documentación oficial Foundation 14:** el `0/T` de C14 histórico utilizaba `externalWallHeatFluxTemperature`, sintaxis heredada que **no se debe copiar tal cual a Foundation 14**. El nuevo generador de C3D-04 conserva los valores **h=10, Ta=300 K y emisividad hierro 0.3/arena 0.5**, pero utiliza la condición Foundation14 **`externalTemperature`** con `h uniform 10;`, `Ta constant 300;`, `emissivity 0.3/0.5;` y `value $internalField;` para las seis paredes físicas no vacías de V4/T02. Se elimina de la configuración generada el modo legado `mode coefficient` y `kappaMethod solidThermo`. El contacto `coupledTemperature` con el modelo `wallLayersHeatTransferCoefficient` de 0.2 mm y 0.1 W/(m K) permanece correcto para F14. Fuente oficial: https://doc.cfd.direct/openfoam/user-guide-v14/thermal-boundary-conditions.
 
 **Protección C14 estricta:** el preflight coteja cada archivo ejecutable original C14 con su **Git blob SHA-1** guardado en `C14_PARAMETER_BASELINE.json`, además de cotejar por contenido cada parámetro numérico con `T0_INPUTS.json`. Si cambia cualquiera de los archivos originales, el paquete se **detiene**: no interpreta como verificada una simulación alterada ni reescribe C14. La suite única de regresión incluye perturbación positiva/negativa de parámetros y modificación de bytes del C14 para probar el rechazo.
 

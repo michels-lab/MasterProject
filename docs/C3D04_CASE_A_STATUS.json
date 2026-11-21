@@ -149,5 +149,46 @@
       "Thermal energy conservation or numerical stability"
     ],
     "milestone06_closed": false
+  },
+  "stage06_synthetic_f14_runtime_gate": {
+    "date": "2026-11-20",
+    "PR": "https://github.com/michels-lab/MasterProject/pull/57",
+    "current_status": "NATIVE_FOUNDATION14_SYNTHETIC_TWO_SOLID_RUN_PASS_NOT_V4_T02",
+    "stage_06_completed": false,
+    "source_generation": "10 actual C14-derived two-solid Case A dictionaries",
+    "synthetic_geometry": "Two one-cell 3D cubes with reciprocal mappedWall; not V4/T02",
+    "native_actions_planned": [
+      "Foundation14 blockMesh for synthetic metal and mold",
+      "foamDictionary native parse of all 10 files",
+      "foamMultiRun two time steps using generated externalTemperature and coupledTemperature",
+      "Read native region T at 0.001s and 0.002s, preserve logs and SHA-256"
+    ],
+    "native_V4_T02_WSL_executed": false,
+    "T0_case_A_CFD_executed": false,
+    "physical_validation": false,
+    "test_evidence_state": "NATIVE_F14_SYNTHETIC_RUN_SUCCESS_SOURCE_SHA_e31824045; STILL_AWAITING_PR_HEAD_CHECKS",
+    "progress_unchanged": "Etapa 6/10, 5/10=50% (native V4/T02 preflight remains open)",
+    "failure_evidence": "https://github.com/michels-lab/MasterProject/actions/runs/44844797946",
+    "native_failure_observed": "foamMultiRun initialized heSolidThermo and rejected generated metalTop externalTemperature: h constant 10; expected uniform or nonuniform",
+    "production_fix": "Set h uniform 10 on all exterior F14 externalTemperature patch fields; keep Ta constant 300 Function1, emissivities, C14 sources unchanged",
+    "authoritative_F14_source": "https://cpp.openfoam.org/v14/externalTemperatureFvPatchScalarField_8H_source.html",
+    "native_foundation14_synthetic_CFD_ran": true,
+    "native_evidence_run": "https://github.com/michels-lab/MasterProject/actions/runs/44845073894",
+    "native_evidence_source_sha": "e31824045f67e49ae20548ad22324080da8d4358",
+    "native_smoke_artifact": "https://github.com/michels-lab/MasterProject/actions/runs/44845073894/artifacts/14681863740",
+    "native_result": "NATIVE_F14_TWO_SOLID_SYNTHETIC_RUNTIME_PASS_NOT_V4_T02",
+    "native_results_two_one_cell_regions": [
+      {
+        "time_s": 0.001,
+        "metal_T_K": 1499.987047,
+        "mold_T_K": 300.0245561
+      },
+      {
+        "time_s": 0.002,
+        "metal_T_K": 1499.974095,
+        "mold_T_K": 300.0491112
+      }
+    ],
+    "native_runtime_proved": "Both synthetic 3D regions with production C14-derived 10 T0 files initialized externalTemperature h uniform, coupledTemperature and ran 2 foamMultiRun steps; saved T fields SHA"
   }
 }
