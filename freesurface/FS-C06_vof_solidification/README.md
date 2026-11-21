@@ -106,3 +106,23 @@ flujos másicos por atmósfera ni balance global: `mass_conservation_verified=fa
 y `volumetric_shrinkage_or_feeding_verified=false` incluso si las
 mediciones geométricas son positivas. El estado canónico continúa
 siendo **CODE_PREPARED_NOT_NATIVE_VERIFIED**.
+
+## Correccion del lector nativo de FS-C06 (20-11-2026)
+
+El postproceso presentaba un bloqueo: intentaba leer el campo `alpha.metal.solid` con
+`read_alpha()`, una funcion que solo acepta el objeto `alpha.metal`.
+Por tanto, un campo nativo valido se habria rechazado aunque OpenFOAM 14 lo escribiera.
+
+Se incorporo `read_native_solid_fraction()` con identificacion estricta de
+`volScalarField`, `object alpha.metal.solid`, formato ASCII, campo interno
+uniforme/no uniforme, cantidad de celdas y comprobacion de valores finitos.
+El lector original de `alpha.metal` permanece intacto.
+Pruebas nuevas cubren casos validos, objeto equivocado, conteos inconsistentes,
+datos truncados, binarios, no finitos y campo ausente.
+
+La correccion no constituye una corrida nativa ni demuestra solidificacion o
+contraccion volumetrica. FS-C06 sigue `CODE_PREPARED_NOT_NATIVE_VERIFIED`.
+El siguiente paso sigue siendo la ejecucion aislada en WSL Foundation 14
+para comprobar los archivos `alpha.metal.solid` y la carga del fvModel.
+El ensayo de dos pasos parte de 1500 K, sobre el liquidus numerico C14:
+NO se deben presentar dos campos escritos como evidencia de cambio de fase real.
