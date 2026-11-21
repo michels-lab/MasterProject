@@ -215,7 +215,7 @@
       "verified phase-change metal cellZone on V4/T02",
       "complete native C14 fluid-solid runtime"
     ],
-    "status": "NATIVE_F14_27_PLUS_27_CELL_SYNTHETIC_FLUID_SOLID_SMOKE_SUCCESS; V4_T02_WSL_NOT_RUN",
+    "status": "MERGED_TO_MAIN_SYNTHETIC_NATIVE_F14_C14_PASS_V4_T02_WSL_STILL_NOT_RUN",
     "CFD_run": false,
     "original_progress_unchanged": "Etapa 6/10, 5/10 hitos, 50% operativa (not physical validation)",
     "instruction_2026_11_20": "Conservar TODO el caso 2D C14; solo cambia la geometría/dimensionalidad a la malla V4/T02 3D. Prohibido modificar propiedades, coeficientes, ecuaciones, condiciones físicas y parámetros numéricos.",
@@ -234,7 +234,7 @@
   },
   "original_C14_fluid_solid_native_gate": {
     "date": "2026-11-20",
-    "PR_status": "IN_PROGRESS_AWAIT_INTEGRATION",
+    "PR_status": "MERGED_TO_MAIN",
     "native_synthetic_run": "https://github.com/michels-lab/MasterProject/actions/runs/44859479359",
     "artifact_original_fields_and_logs": "https://github.com/michels-lab/MasterProject/actions/runs/44859479359/artifacts/14689152079",
     "real_OpenFOAM_Foundation14": true,
@@ -267,6 +267,11 @@
     "grid_independence": false,
     "staged_source": "cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/stage_c14_3d_case_a.py",
     "one_shot_WSL_runner": "cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/run_c14_native_milestone.sh",
-    "operational_progress_unchanged": "5/10 milestones = 50% (stage 06 IN_PROGRESS)"
+    "operational_progress_unchanged": "5/10 milestones = 50% (stage 06 IN_PROGRESS)",
+    "PR": "https://github.com/michels-lab/MasterProject/pull/59",
+    "merged_commit": "68d984a69316be8d2b0cbc1ccac855bd248962b7",
+    "PR_checks": "6_OF_6_SUCCESS_ON_HEAD_including_actual_F14_C14_fluid_solid_27_PLUS_27_synthetic_native_smoke",
+    "native_current_latest_workflow": "https://github.com/michels-lab/MasterProject/actions/runs/44859764142",
+    "status": "NATIVE_F14_C14_FLUID_SOLID_3D_SYNTHETIC_VERIFIED__V4_T02_WSL_PENDING"
   }
 }
