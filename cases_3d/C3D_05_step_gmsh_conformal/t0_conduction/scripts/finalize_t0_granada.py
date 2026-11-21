@@ -66,7 +66,7 @@ def require_finite_metric(value, label):
     return float(value)
 
 
-def summarize(case: Path, inputs: Path) -> dict:
+def summarize(case: Path, inputs: Path, run_status: Path | None = None) -> dict:
     data = inputs.read_bytes()
     config = json.loads(data)
     identity = hashlib.sha256(data).hexdigest()
@@ -80,7 +80,22 @@ def summarize(case: Path, inputs: Path) -> dict:
     if ref.get("input_file_sha256") != identity:
         raise ValueError("Closed-system theoretical energy uses different inputs")
     runlog = case / "log.foamMultiRun.C14_NUMERICAL_T0"
-    status = load(case / "T0_NUMERICAL_RUN_STATUS.json")
+    # The reviewed status is a separately published SHA-attested re-audit of
+    # an immutable false-negative report. Never silently substitute reports.
+    original_status_file = case / "T0_NUMERICAL_RUN_STATUS.json"
+    reviewed_status_file = case / "T0_NUMERICAL_RUN_STATUS_REVIEWED.json"
+    status_file = run_status if run_status is not None else original_status_file
+    if status_file not in (original_status_file, reviewed_status_file):
+        raise ValueError("Solver status must be the original or its documented case-local review")
+    status = load(status_file)
+    if status_file == reviewed_status_file:
+        old = load(original_status_file)
+        if (status.get("original_legacy_status_sha256") != sha(original_status_file)
+                or status.get("recovered_without_solver_rerun") is not True
+                or old.get("numerical_run_completed") is not False
+                or old.get("input_sha256") != identity
+                or old.get("log_sha256") != sha(runlog)):
+            raise ValueError("Reviewed solver status is not SHA-bound to original preserved failure")
     if (status.get("numerical_run_completed") is not True
             or status.get("input_sha256") != identity
             or status.get("log_sha256") != sha(runlog)
@@ -152,6 +167,8 @@ def summarize(case: Path, inputs: Path) -> dict:
         "evidence_sha256": {
             "C14_reference_inputs": identity,
             "original_solver_log": sha(runlog),
+            "active_solver_status": sha(status_file),
+            "original_solver_status": sha(original_status_file),
             "native_energy": sha(energy_file),
             "closed_energy_target": sha(reference_path),
             "face_diagnostics": digest["bilateral_diagnostics.json"],
@@ -181,9 +198,10 @@ def main() -> int:
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument("--case", type=Path, required=True)
     p.add_argument("--inputs", type=Path, required=True)
+    p.add_argument("--run-status", type=Path, default=None)
     args = p.parse_args()
     case = args.case.expanduser().resolve()
-    summary = summarize(case, args.inputs.expanduser().resolve())
+    summary = summarize(case, args.inputs.expanduser().resolve(), args.run_status)
     status = exclusive(case / "T0_GRANADA_EVIDENCE_SUMMARY.json", summary)
     print(status)
     print("Native numerical metrics: peak energy discrepancy / Qref =",
