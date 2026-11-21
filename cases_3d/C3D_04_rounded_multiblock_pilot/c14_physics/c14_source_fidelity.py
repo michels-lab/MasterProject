@@ -152,12 +152,14 @@ def verify() -> dict:
     require("nEnergyCorrectors" not in strip_comments(root_pimple),
             "C14 did not have root nEnergyCorrectors=2")
     require("slip;" in metalU and "noSlip;" in metalU, "C14 U patch types differ")
+    require(re.search(r"\\binternalField\\s+uniform\\s*\\(\\s*0\\s+0\\s+0\\s*\\)\\s*;", metalU) is not None,
+            "C14 U initial velocity must be the original zero vector")
     require(metalPRgh.count("fixedFluxPressure;") == 2,
             "C14 pressure BC differs")
-    assert_eq(number(gravity, "value") if False else -9.81,
-              c["metal"]["gravity_m_s2"][1], "C14 gravity reference")
-    require(re.search(r"\bvalue\s*\(\s*0\s+-9\.81\s+0\s*\)\s*;", gravity) is not None,
-            "C14 actual gravity vector differs")
+    g_match = re.search(r"\bvalue\s*\(\s*("+FLOAT+r")\s+("+FLOAT+r")\s+("+FLOAT+r")\s*\)\s*;", gravity)
+    require(g_match is not None, "C14 actual gravity vector missing")
+    for coordinate, expected in zip(map(float, g_match.groups()), c["metal"]["gravity_m_s2"]):
+        assert_eq(coordinate, expected, "C14 gravity vector component")
     assert_eq(number(pressure_reference, "value"), c["metal"]["pRefValue_Pa"],
               "C14 pRefValue")
     for text, expected in ((metalT,c["metal"]["T_initial_K"]),
@@ -179,10 +181,12 @@ def verify() -> dict:
               "C14 metal emissivity")
     assert_eq(number(moldT, "emissivity"), c["mold"]["exterior_emissivity"],
               "C14 mold emissivity")
-    assert_eq(number(metalT, "thicknessLayers") if False else c["metal"]["contact_thickness_m"],
-              c["metal"]["contact_thickness_m"], "C14 contact thickness")
-    require("thicknessLayers   (2e-4);" in metalT and "kappaLayers       (1e-1);" in metalT,
-            "C14 layer thickness/kappa syntax drift")
+    for source_name, contract_name in (("thicknessLayers", "contact_thickness_m"),
+                                      ("kappaLayers", "contact_kappa_W_mK")):
+        match = re.search(r"\b"+source_name+r"\s*\(\s*("+FLOAT+r")\s*\)\s*;", metalT)
+        require(match is not None, "C14 contact model missing "+source_name)
+        assert_eq(float(match.group(1)), c["metal"][contract_name],
+                  "C14 contact "+source_name)
     assert_eq(number(regional, "pRefValue"), c["metal"]["pRefValue_Pa"],
               "C14 point pressure reference value")
     require(re.search(r"\bpRefPoint\s+\(\s*0\.02\s+0\.04\s+0\.005\s*\)\s*;",regional),
