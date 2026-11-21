@@ -313,3 +313,19 @@ a través del liquidus, contracción o alimentación.
 Fuentes OpenFOAM Foundation 14:
 - https://raw.githubusercontent.com/OpenFOAM/OpenFOAM-14/master/applications/modules/compressibleVoF/compressibleVoF.C
 - https://cpp.openfoam.org/v14/classFoam_1_1functionObjects_1_1fieldValues_1_1surfaceFieldValue.html
+
+## FS-C06 — flujos térmicos conjugados en el MISMO caso nativo (20-11-2026)
+
+El `system/controlDict` de FS-C06 contiene ahora **dos objetos OpenFOAM
+`wallHeatFlux`**: `FS_C06_wallHeatFluxFluid` (`fluid_to_mold`) y
+`FS_C06_wallHeatFluxMold` (`mold_to_fluid`), usando la sintaxis
+Foundation14 probada previamente en el instrumento FS-C05. Los registros
+de `Q` en W de ambas caras serán generados **por OpenFOAM** en la
+misma única corrida FS-C06, junto con los integrales volumétricos de
+VOF y masa y los flujos por fase en las tres fronteras atmosféricas.
+
+**No se ha ejecutado FS-C06 nuevo**, y no se ha comprobado ni
+reciprocidad térmica de FS-C06 ni conservación de masa. La validación
+energética global requiere términos de entalpía, presión y atmósfera;
+la implementación de densidad y contracción está pendiente. No
+confundir la reciprocidad FS-C05 histórica con un resultado FS-C06.

@@ -180,4 +180,32 @@ functions
         operation     sum;
         fields        (alphaRhoPhi.metal alphaRhoPhi.air rhoPhi);
     }
+
+    // Foundation14 native conjugate wall heat-flux probes, same grammar
+    // as the prior FS-C05 accepted instrumented probe. Signed Q in W.
+    FS_C06_wallHeatFluxFluid
+    {
+        type          wallHeatFlux;
+        libs          ("libfieldFunctionObjects.so");
+        region        fluid;
+        patches       (fluid_to_mold);
+        executeControl timeStep;
+        executeInterval 1;
+        writeControl  timeStep;
+        writeInterval 1;
+        log           true;
+    }
+
+    FS_C06_wallHeatFluxMold
+    {
+        type          wallHeatFlux;
+        libs          ("libfieldFunctionObjects.so");
+        region        mold;
+        patches       (mold_to_fluid);
+        executeControl timeStep;
+        executeInterval 1;
+        writeControl  timeStep;
+        writeInterval 1;
+        log           true;
+    }
 }

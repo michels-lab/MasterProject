@@ -22,7 +22,7 @@
   "field_parser_regression_tests_added": true,
   "field_parser_native_openfoam14_verified": false,
   "pending_CI_for_new_field_parser": false,
-  "last_repository_update_purpose": "OpenFOAM14 native phase-resolved boundary flux + mixture mass inventory in controlDict; CI static only, no CFD",
+  "last_repository_update_purpose": "OpenFOAM14 native volumetric+phase flux+conjugate heat FO in one controlDict; no Python-only delivery, native pending",
   "density_screen": "CODE_ONLY_WITH_NATIVE_REPORT_AND_USER_SUPPLIED_HASHED_DENSITIES",
   "density_screen_script": "analysis_tools/screen_fs_c06_density_contraction.py",
   "density_reference_values_in_repo": false,
@@ -69,5 +69,10 @@
     "rhoPhi"
   ],
   "open_boundary_phase_flux_native_verified": false,
-  "native_mixture_mass_inventory_native_verified": false
+  "native_mixture_mass_inventory_native_verified": false,
+  "native_conjugate_wall_heat_flux_monitors_prepared": [
+    "FS_C06_wallHeatFluxFluid",
+    "FS_C06_wallHeatFluxMold"
+  ],
+  "native_conjugate_wall_heat_flux_FS_C06_verified": false
 }

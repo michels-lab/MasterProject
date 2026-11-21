@@ -328,7 +328,9 @@ def stage(source: Path, dest: Path, project: Path, native: bool = False) -> dict
                 "native OpenFOAM volume monitor absent: " + field)
     require(native_control_text.count("type          volFieldValue;") == 3
             and native_control_text.count("type          surfaceFieldValue;") == 5
-            and native_control_text.count("region        fluid;") == 8
+            and native_control_text.count("type          wallHeatFlux;") == 2
+            and native_control_text.count("region        fluid;") == 9
+            and native_control_text.count("region        mold;") == 1
             and native_control_text.count("writeFields   false;") == 8,
             "FS-C06 native function-object inventory changed")
     require(re.search(
@@ -350,6 +352,17 @@ def stage(source: Path, dest: Path, project: Path, native: bool = False) -> dict
                 and re.search(r"\bfields\s*\(alphaRhoPhi\.metal\s+alphaRhoPhi\.air\s+rhoPhi\)\s*;",
                               block.group(1)) is not None,
                 "missing or incorrectly configured native phase mass flux: " + name)
+    for name, region, patch in (
+        ("FS_C06_wallHeatFluxFluid", "fluid", "fluid_to_mold"),
+        ("FS_C06_wallHeatFluxMold", "mold", "mold_to_fluid"),
+    ):
+        block = re.search(r"\b" + re.escape(name) +
+                          r"\s*\{([^{}]*)\}", native_control_text, re.S)
+        require(block is not None
+                and re.search(r"\btype\s+wallHeatFlux\s*;", block.group(1)) is not None
+                and re.search(r"\bregion\s+" + region + r"\s*;", block.group(1)) is not None
+                and re.search(r"\bpatches\s*\(" + patch + r"\)\s*;", block.group(1)) is not None,
+                "missing conjugate heat flux native monitor: " + name)
     control.write_text(native_control_text, encoding="utf-8")
     schemes = dest / "system/fluid/fvSchemes"
     modified, added = ensure_compressible_kepsilon_divergence(schemes.read_text())
@@ -380,6 +393,9 @@ def stage(source: Path, dest: Path, project: Path, native: bool = False) -> dict
         "native_controlDict_copied_verbatim": True,
         "native_openfoam_phase_volume_monitors": [
             "FS_C06_metalVoFVolume", "FS_C06_solidMetalVolume"
+        ],
+        "native_openfoam_conjugate_wall_heat_flux_monitors": [
+            "FS_C06_wallHeatFluxFluid", "FS_C06_wallHeatFluxMold",
         ],
         "native_openfoam_mass_inventory_monitor": "FS_C06_mixtureMass",
         "native_openfoam_phase_boundary_mass_flux_monitors": [
