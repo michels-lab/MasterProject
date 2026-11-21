@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "audit_kind": "deterministic_full_tracked_tree",
-  "tracked_files_total": 39007,
-  "classified_files_total": 39002,
+  "tracked_files_total": 39012,
+  "classified_files_total": 39007,
   "docs_content_inspected": 182,
   "large_docs_skipped": 1,
   "excluded_reports": 5,
@@ -19,17 +19,18 @@
     "simulation_input": 2683,
     "simulation_log": 3155,
     "simulation_output": 32615,
-    "source": 113,
-    "test": 48,
+    "source": 116,
+    "test": 49,
     "web_ui": 1,
-    "workflow": 27
+    "workflow": 28
   },
   "finding_counts": {
-    "BROKEN_RELATIVE_LINK": 7
+    "BROKEN_RELATIVE_LINK": 7,
+    "POTENTIAL_UNLOGGED_CHANGES": 2
   },
-  "finding_total": 7,
-  "inventory_fingerprint": "d48e684735c6836571691eb1343804f5483caeed9012d70cad12460f9d9a0783",
-  "evidence_fingerprint": "a38cca05722cc62f2a19d8787a386e132771345cc8472199f5e39f915b2e8a45",
+  "finding_total": 9,
+  "inventory_fingerprint": "2888ca3597c22f30e09ba7eaa20dfa5d3fe5224a097054fd22861420e2bb5afd",
+  "evidence_fingerprint": "a8f080ed44456c9a93086badcf30a0b5bd4c2062784a5a6b443cd473f428d11c",
   "files": [
     {
       "path": ".github/agents/openfoam-solidification.agent.md",
@@ -72,6 +73,13 @@
       "purpose": "GitHub Actions automation",
       "certainty": "rule",
       "blob": "0b7a9effb677940149772ded624881b508323877"
+    },
+    {
+      "path": ".github/workflows/c3d04-a-c14-native-fluid-solid.yml",
+      "role": "workflow",
+      "purpose": "GitHub Actions automation",
+      "certainty": "rule",
+      "blob": "29f538a7eb1d95aec64cd2a049cd902bb53de4a3"
     },
     {
       "path": ".github/workflows/c3d04-a-c14-physics-fidelity.yml",
@@ -1520,7 +1528,7 @@
       "role": "agent",
       "purpose": "assistant role/instructions",
       "certainty": "rule",
-      "blob": "3aaf768a1f9f4de2317fafbd4cac21e4e51f9d66"
+      "blob": "954cc1ed4f42d2f881acf3cc09f7b2467ef95d3d"
     },
     {
       "path": "cases_3d/C3D_04_rounded_multiblock_pilot/Allmesh",
@@ -1548,7 +1556,7 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "f0d459b01ccc6690a5438bcf0f28f8d40b4673b7"
+      "blob": "61584c291420c30439696faf36e63f36ef845bb5"
     },
     {
       "path": "cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/c14_source_fidelity.py",
@@ -1556,6 +1564,34 @@
       "purpose": "code/test implementation",
       "certainty": "rule",
       "blob": "28220cd8ff07b54e56bb56a27ade1672e614c29d"
+    },
+    {
+      "path": "cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/native_c14_fluid_solid_smoke.py",
+      "role": "source",
+      "purpose": "code/test implementation",
+      "certainty": "rule",
+      "blob": "d521542b38dc17eaa75ff4e1ff825dd46142092a"
+    },
+    {
+      "path": "cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/run_c14_native_milestone.sh",
+      "role": "source",
+      "purpose": "code/test implementation",
+      "certainty": "rule",
+      "blob": "46220f264c52f3bb4fc09e2d3764ceee2c609b3d"
+    },
+    {
+      "path": "cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/stage_c14_3d_case_a.py",
+      "role": "source",
+      "purpose": "code/test implementation",
+      "certainty": "rule",
+      "blob": "98a8f40c1095c75dbe4fef356b426ac0fd562067"
+    },
+    {
+      "path": "cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/tests/test_stage_c14_fluid_solid.py",
+      "role": "test",
+      "purpose": "code/test implementation",
+      "certainty": "rule",
+      "blob": "b5c39cc7b8598f37592c65b1edbe61c589e368f0"
     },
     {
       "path": "cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V2_BASAL_QUALITY/Allmesh",
@@ -271958,7 +271994,7 @@
       "role": "config",
       "purpose": "machine-readable configuration",
       "certainty": "rule",
-      "blob": "914c9d79cdfef79e0a58b00225c63e3095c9c474"
+      "blob": "c82c5106d032fcf87ec328496b863db72c7e39e1"
     },
     {
       "path": "docs/C3D_01_ESTADO_REAL_20261110_ES.md",
@@ -272175,7 +272211,7 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "e9f472001d9c75125e5ea0910133d82951eb0e4f"
+      "blob": "a83bf733de162ede91d2ed9e795260b60806616f"
     },
     {
       "path": "docs/DOCUMENT_SYNC_20261110_ES.md",
@@ -273108,6 +273144,24 @@
       "path": "docs/granada/C3D05_T0_README_HISTORICAL_BEFORE_SINGLE_FLOW_20261120.md",
       "observation": "Missing: outside-repo",
       "recommendation": "Fix link or restore target",
+      "state": "REVIEW_REQUIRED"
+    },
+    {
+      "id": "9802adc9c712b52c",
+      "code": "POTENTIAL_UNLOGGED_CHANGES",
+      "severity": "review",
+      "path": "PROJECT_AUDIT_LOG_EN.md",
+      "observation": "6 implementation/config paths changed since this log's last commit; examples: .github/workflows/c3d04-a-c14-native-fluid-solid.yml, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/native_c14_fluid_solid_smoke.py, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/run_c14_native_milestone.sh, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/stage_c14_3d_case_a.py, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/tests/test_stage_c14_fluid_solid.py, docs/C3D04_CASE_A_STATUS.json",
+      "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
+      "state": "REVIEW_REQUIRED"
+    },
+    {
+      "id": "59edcd4953f6d3e2",
+      "code": "POTENTIAL_UNLOGGED_CHANGES",
+      "severity": "review",
+      "path": "PROJECT_AUDIT_LOG_ES.md",
+      "observation": "6 implementation/config paths changed since this log's last commit; examples: .github/workflows/c3d04-a-c14-native-fluid-solid.yml, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/native_c14_fluid_solid_smoke.py, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/run_c14_native_milestone.sh, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/stage_c14_3d_case_a.py, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/tests/test_stage_c14_fluid_solid.py, docs/C3D04_CASE_A_STATUS.json",
+      "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     }
   ],
