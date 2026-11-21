@@ -31,7 +31,20 @@ case_dir="$(printf '%s\n' "$output" | sed -n 's/^ISOLATED CASE: //p' | tail -n 1
 [[ -f "$case_dir/FS_C06_REPORT.json" ]] || die "Native report missing"
 [[ -f "$case_dir/log.FS_C06_foamMultiRun" ]] || die "Native solver log missing"
 cmp -s "$repo/freesurface/FS-C06_vof_solidification/native/system/controlDict" "$case_dir/system/controlDict" || die "Native controlDict changed during stage/run"
+cmp -s "$repo/freesurface/FS-C06_vof_solidification/native/system/functions" "$case_dir/system/functions" || die "Foundation14 native system/functions missing or altered"
 cmp -s "$repo/freesurface/FS-C06_vof_solidification/native/constant/fluid/fvModels" "$case_dir/constant/fluid/fvModels" || die "Native fvModels changed during stage/run"
+
+# An ordinary solver PASS without native postProcessing data is NOT acceptance.
+# Foundation 14 reads system/functions independently of controlDict.
+[[ -d "$case_dir/postProcessing" ]] || die "No postProcessing outputs: functions may not have been loaded"
+for name in FS_C06_metalVoFVolume FS_C06_solidMetalVolume FS_C06_mixtureMass \
+            FS_C06_atmosphereMassFlux FS_C06_atmosphereTopMassFlux \
+            FS_C06_atmosphereSidesMassFlux FS_C06_atmosphereLowerSidesMassFlux \
+            FS_C06_fluidToMoldMassFlux FS_C06_wallHeatFluxFluid FS_C06_wallHeatFluxMold; do
+    data="$(find "$case_dir/postProcessing" -type f -path "*/$name/*" -name '*.dat' -size +0c -print -quit)"
+    [[ -n "$data" ]] || die "Missing native monitor .dat ($name). Solver passed but diagnostic gate FAILS."
+done
+printf '%s\n' 'FS-C06 FUNCTION OBJECTS: 10/10 native monitor files observed (values not yet validated)'
 
 # The source runner already checks native phase fields; additionally require
 # *native* mesh geometry/topology acceptance for BOTH regions.
