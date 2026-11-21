@@ -558,6 +558,23 @@ class IntegratedCaseAT0(unittest.TestCase):
         self.assertEqual(report["regionSolvers"], {"metal": "fluid", "mold": "solid"})
         self.assertTrue(report["C14_momentum_and_energy_retained"])
         self.assertFalse(report["3D_solver_executed"])
+        fileset = c14_exact.assemble_unmaterialized_source_exact_fileset()
+        manifest = c14_exact.sources_manifest()
+        self.assertEqual(len(fileset), 22)
+        self.assertEqual(manifest["files_total"], 22)
+        self.assertFalse(manifest["native_solver_run"])
+        self.assertFalse(manifest["native_pressure_reference_point_mapped"])
+        self.assertFalse(manifest["native_phaseChange_metal_cellZone_mapped"])
+        self.assertIn("metal       fluid;", fileset["system/controlDict"])
+        self.assertIn("mold        solid;", fileset["system/controlDict"])
+        self.assertIn("solidificationMeltingSource;",
+                      fileset["constant/metal/fvModels"])
+        self.assertIn("alpha1e         0.8;",
+                      fileset["constant/metal/fvModels"])
+        self.assertIn("heRhoThermo;",
+                      fileset["constant/metal/materials/castIron"])
+        self.assertIn("sensibleEnthalpy;",
+                      fileset["constant/metal/materials/castIron"])
         fields = c14_exact.generate_3d_initial_fields()
         self.assertEqual(len(fields), 8)
         self.assertIn("type externalTemperature;", fields["0/metal/T"])
