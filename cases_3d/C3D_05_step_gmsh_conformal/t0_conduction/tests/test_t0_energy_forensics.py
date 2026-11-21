@@ -91,7 +91,7 @@ class NumericalEnergy(unittest.TestCase):
     def test_native_f14_seconds_and_sigfpe_banner_are_not_fatal(self):
         cfg = REF.build()
         log = (
-            "Enabling floating point exception trapping (FOAM_SIGFPE)\n"
+            "sigFpe : Enabling floating point exception trapping (FOAM_SIGFPE).\n"
             "Time = 0.001s\n"
             "metal DICPCG: Solving for e, Initial residual = 0.01, Final residual = 1e-7, No Iterations 1\n"
             "mold  DICPCG: Solving for e, Initial residual = 0.003, Final residual = 1e-8, No Iterations 1\n"
@@ -103,6 +103,15 @@ class NumericalEnergy(unittest.TestCase):
         self.assertTrue(accepted["numerical_run_completed"])
         self.assertEqual(accepted["times_observed"], 2)
         self.assertFalse(accepted["fatal_openfoam_pattern"])
+        self.assertEqual(accepted["informational_sigfpe_banner_lines_ignored"], 1)
+        self.assertEqual(accepted["audit_failure_reasons"], [])
+        no_prefix = log.replace("sigFpe : Enabling floating point exception trapping (FOAM_SIGFPE).",
+                                "Enabling floating point exception trapping (FOAM_SIGFPE)")
+        self.assertTrue(A.audit(no_prefix, 0, cfg)["numerical_run_completed"])
+        genuine_signal = log + "sigFpe : Floating point exception\n"
+        self.assertEqual(A.audit(genuine_signal, 0, cfg)["audit_failure_reasons"],
+                         ["OPENFOAM_FATAL_OR_SIGNAL_DIAGNOSTIC"])
+
         self.assertEqual(accepted["final_time_observed_s"], 0.1)
         self.assertFalse(A.audit(log + "Floating point exception (core dumped)\n", 0, cfg)["numerical_run_completed"])
         self.assertFalse(A.audit(log + "FOAM FATAL IO ERROR\n", 0, cfg)["numerical_run_completed"])
@@ -114,7 +123,7 @@ class NumericalEnergy(unittest.TestCase):
         cfg = REF.build()
         input_bytes = json.dumps(cfg).encode()
         log_bytes = (
-            "Enabling floating point exception trapping (FOAM_SIGFPE)\n"
+            "sigFpe : Enabling floating point exception trapping (FOAM_SIGFPE).\n"
             "Time = 0.001s\n"
             "metal DICPCG: Solving for e, Initial residual = 0.01, Final residual = 1e-7\n"
             "Time = 0.1s\n"
