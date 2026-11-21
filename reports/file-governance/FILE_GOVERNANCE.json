@@ -29,8 +29,8 @@
     "POTENTIAL_UNLOGGED_CHANGES": 2
   },
   "finding_total": 9,
-  "inventory_fingerprint": "731817cff8ebfd43259fb18ac24efa70e559ab8bf3245d3a8136ec23e0689392",
-  "evidence_fingerprint": "1b50beda0e4d95af95b70ff595df84c206a1f47da70063745dd8330993a92708",
+  "inventory_fingerprint": "e18ca9d77b7c36c03e4c4277cfcb4ebf10e3d4d6eecd2771e394c5a4a941e02f",
+  "evidence_fingerprint": "4aa13690d42526c9223793ce9fb9701d14f0a2cb7f32fb5d58ce72e1bc4745c1",
   "files": [
     {
       "path": ".github/agents/openfoam-solidification.agent.md",
@@ -1794,7 +1794,7 @@
       "role": "agent",
       "purpose": "assistant role/instructions",
       "certainty": "rule",
-      "blob": "4ad6a22b32ea74a0ff0318864c0f777015cc5077"
+      "blob": "e51173d0b6619cec0e8d388f7ffd9afcfdacc38f"
     },
     {
       "path": "cases_3d/C3D_05_step_gmsh_conformal/Allmesh",
@@ -1955,7 +1955,7 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "fcd0e5f9d2aa83ef911116f6d78159fd199c0b69"
+      "blob": "6c1f9a39c5363f57152b18c2253b31f539477119"
     },
     {
       "path": "cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/T0_INPUTS.json",
@@ -1997,7 +1997,7 @@
       "role": "source",
       "purpose": "code/test implementation",
       "certainty": "rule",
-      "blob": "a397e8557cbcfc1503e43bd23a4088ce5bbda3bd"
+      "blob": "dbf53052e656fbb8949cab0fa10c53e268a7ba7b"
     },
     {
       "path": "cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/scripts/c14_numerical_reference.py",
@@ -2032,7 +2032,7 @@
       "role": "source",
       "purpose": "code/test implementation",
       "certainty": "rule",
-      "blob": "939f468cea611c5f5598b5510d55d372a8f2fece"
+      "blob": "b9c581cf0e631c216017ff7f959a8188502b4fc2"
     },
     {
       "path": "cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/scripts/run_native_t0_patch_flux.sh",
@@ -2046,7 +2046,7 @@
       "role": "source",
       "purpose": "code/test implementation",
       "certainty": "rule",
-      "blob": "00da5c4a58861c326290de3a5a4b668c6a46bbef"
+      "blob": "7b1f355fae256748fac7ce9ba60b0331260e3c6e"
     },
     {
       "path": "cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/scripts/run_t0_materialize.sh",
@@ -2151,7 +2151,7 @@
       "role": "test",
       "purpose": "code/test implementation",
       "certainty": "rule",
-      "blob": "db5e6e81597ed3072dacd6f2a05db261e97b419c"
+      "blob": "b21aa790034e9584f9261b4f33c380f41a86dd87"
     },
     {
       "path": "cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/tests/test_c14_fvsolution.py",
@@ -2200,14 +2200,14 @@
       "role": "test",
       "purpose": "code/test implementation",
       "certainty": "rule",
-      "blob": "e95f7b6c7ca8ce2df411f931707aaad5d7a9c3c8"
+      "blob": "e4c6cb25979efadaf1bd471cfdf83621854fdfc4"
     },
     {
       "path": "cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/tests/test_t0_granada.py",
       "role": "test",
       "purpose": "code/test implementation",
       "certainty": "rule",
-      "blob": "a3367d535f6b55411ec9ecd67851a1a490d54f0e"
+      "blob": "ba2bbd7e762e45d40aed50baaeb1d226b0dd5bda"
     },
     {
       "path": "cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/tests/test_t0_patch_flux.py",
@@ -272183,7 +272183,7 @@
       "role": "config",
       "purpose": "machine-readable configuration",
       "certainty": "rule",
-      "blob": "98f76d0b17de6c91b4e430a12e1752445df0113f"
+      "blob": "6350c96dcf6299cebdef9df49e41f074aa5c86cd"
     },
     {
       "path": "docs/REGLA_INSTRUCCIONES_UNIFICADAS_ES.md",
@@ -272232,7 +272232,7 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "2b48a02075beb3338ecafa7146d5cf234f7625fb"
+      "blob": "1543a2bd8c6dc5fc83bb542d32f73ef606fbffb7"
     },
     {
       "path": "docs/granada/C3D05_F14_POSTPROCESS_SMOKE_Y_EVIDENCIA_UNICA_20261120_ES.md",
@@ -273063,20 +273063,20 @@
       "state": "REVIEW_REQUIRED"
     },
     {
-      "id": "c2bc4f99ef99c712",
+      "id": "2e973cb6a1545aa3",
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_EN.md",
-      "observation": "3 implementation/config paths changed since this log's last commit; examples: .github/workflows/c3d05-foundation14-two-solid-solver-smoke.yml, cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/tests/smoke_native_foundation14_solver.py, docs/PROJECT_STAGE_STATUS.json",
+      "observation": "8 implementation/config paths changed since this log's last commit; examples: .github/workflows/c3d05-foundation14-two-solid-solver-smoke.yml, cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/scripts/audit_t0_numerical_run.py, cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/scripts/run_c14_numerical_granada.sh, cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/scripts/run_t0_granada.py, cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/tests/smoke_native_foundation14_solver.py, cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/tests/test_t0_energy_forensics.py",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     },
     {
-      "id": "474bab33bb103b64",
+      "id": "f9ac0385d089c016",
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_ES.md",
-      "observation": "3 implementation/config paths changed since this log's last commit; examples: .github/workflows/c3d05-foundation14-two-solid-solver-smoke.yml, cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/tests/smoke_native_foundation14_solver.py, docs/PROJECT_STAGE_STATUS.json",
+      "observation": "8 implementation/config paths changed since this log's last commit; examples: .github/workflows/c3d05-foundation14-two-solid-solver-smoke.yml, cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/scripts/audit_t0_numerical_run.py, cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/scripts/run_c14_numerical_granada.sh, cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/scripts/run_t0_granada.py, cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/tests/smoke_native_foundation14_solver.py, cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/tests/test_t0_energy_forensics.py",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     }
