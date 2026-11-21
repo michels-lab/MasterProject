@@ -42,7 +42,7 @@ for path,side in ((metal,1),(mold,-1)):
         for time in (0,0.1):
             for i in range(12636):
                 xyz_id=i if side==1 else 12635-i
-                wr.writerow([time,i,0.,xyz_id*0.0001,0.,1e-5,
+                wr.writerow([format(float(time), ".17g"),i,0.,xyz_id*0.0001,0.,1e-5,
                              side,0.,0.,10*side])
     if os.getenv("C3D05_SYNTHETIC_BROKEN") == "1":
         sys.exit(8)  # Simulate a native binary crashing after one CSV.
@@ -118,6 +118,34 @@ class NativeFluxAtomicShell(unittest.TestCase):
         self.assertIn("NATIVE_FACE_FLUX_VERIFIED_REUSED",second.stdout)
         self.assertEqual(first_csv_hash,hashlib.sha256((dest/"metal.csv").read_bytes()).hexdigest())
         self.assertEqual(first_json_hash,hashlib.sha256((dest/"bilateral_diagnostics.json").read_bytes()).hexdigest())
+
+    def test_reuse_complete_native_stage_without_rerunning_cpp_extractor(self):
+        # Model real WSL situation: genuine two-sided extraction finished,
+        # older Python analyzer failed before publishing diagnostics.
+        stage=self.case/".T0_NATIVE_FACE_FLUX_STAGING.preserved"
+        stage.mkdir()
+        native=subprocess.run(
+            [str(self.bin),"-case",str(self.case),
+             "-outMetal",str(stage/"metal.csv"),
+             "-outMold",str(stage/"mold.csv"),"-time","0:"],
+            capture_output=True,text=True,check=False,timeout=90
+        )
+        self.assertEqual(native.returncode,0,native.stdout+native.stderr)
+        (stage/"log.c3d05PatchFlux").write_text(
+            "NATIVE_BILATERAL_PATCH_FLUX_EXTRACTED_NOT_VALIDATED\n"
+        )
+        # If shell calls the extractor again, deliberately fail the new run.
+        result=self.run_shell(broken=True)
+        self.assertEqual(result.returncode,0,result.stdout[-3500:])
+        self.assertIn("REUSE_COMPLETE_NATIVE_PATCH_EXTRACTION_STAGE_UNVERIFIED",result.stdout)
+        self.assertFalse(stage.exists())
+        final=self.case/"T0_NATIVE_FACE_FLUX"
+        self.assertTrue((final/"manifest.sha256").is_file())
+        self.assertEqual(json.loads((final/"bilateral_diagnostics.json").read_text())
+                         ["faces_paired_per_side"],12636)
+        replay=self.run_shell(broken=True)
+        self.assertEqual(replay.returncode,0,replay.stdout[-3500:])
+        self.assertIn("NATIVE_FACE_FLUX_VERIFIED_REUSED",replay.stdout)
 
     def test_synthetic_partial_native_extraction_never_published(self):
         result=self.run_shell(broken=True)
