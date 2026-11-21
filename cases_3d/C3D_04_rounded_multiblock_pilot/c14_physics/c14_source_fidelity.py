@@ -105,6 +105,9 @@ def verify() -> dict:
     metalU = read_original("0/metal/U")
     metalP = read_original("0/metal/p")
     metalPRgh = read_original("0/metal/p_rgh")
+    metalAlpha = read_original("0/metal/phaseChangeSource:alpha1")
+    metalLatent = read_original("0/metal/latentHeat")
+    moldRegionSolution = read_original("system/mold/fvSolution")
     gravity = read_original("constant/metal/g")
     pressure_reference = read_original("constant/metal/pRef")
 
@@ -151,11 +154,32 @@ def verify() -> dict:
               "C14 regional nEnergyCorrectors")
     require("nEnergyCorrectors" not in strip_comments(root_pimple),
             "C14 did not have root nEnergyCorrectors=2")
-    require("slip;" in metalU and "noSlip;" in metalU, "C14 U patch types differ")
-    require(re.search(r"\binternalField\s+uniform\s*\(\s*0\s+0\s+0\s*\)\s*;", metalU) is not None,
-            "C14 U initial velocity must be the original zero vector")
-    require(metalPRgh.count("fixedFluxPressure;") == 2,
+    require(c["metal"]["top_U_BC"] == "slip"
+            and c["metal"]["metal_mold_U_BC"] == "noSlip"
+            and "slip;" in metalU and "noSlip;" in metalU,
+            "C14 U patch types differ")
+    u_match = re.search(
+        r"\binternalField\s+uniform\s*\(\s*("+FLOAT+r")\s+("+FLOAT+r")\s+("+FLOAT+r")\s*\)\s*;",
+        metalU)
+    require(u_match is not None, "C14 U initial vector missing")
+    for actual, expected in zip(map(float, u_match.groups()), c["metal"]["U_initial_m_s"]):
+        assert_eq(actual, expected, "C14 initial U component")
+    require(c["metal"]["p_rgh_BC"] == "fixedFluxPressure"
+            and metalPRgh.count("fixedFluxPressure;") == 2,
             "C14 pressure BC differs")
+    assert_eq(number(moldRegionSolution, "nNonOrthogonalCorrectors"),
+              c["numerics"]["original_2D_mold_region_nNonOrthogonalCorrectors"],
+              "C14 original mold nonorthogonal correction")
+    original_alpha_match = re.search(
+        r"\binternalField\s+uniform\s+("+FLOAT+r")\s*;", metalAlpha)
+    require(original_alpha_match is not None, "C14 initial alpha field missing")
+    assert_eq(float(original_alpha_match.group(1)), 1.0,
+              "C14 initially all liquid phase fraction")
+    original_latent_match = re.search(
+        r"\binternalField\s+uniform\s+("+FLOAT+r")\s*;", metalLatent)
+    require(original_latent_match is not None, "C14 latentHeat field missing")
+    assert_eq(float(original_latent_match.group(1)), c["solidification"]["L_J_kg"],
+              "C14 original latentHeat field")
     g_match = re.search(r"\bvalue\s*\(\s*("+FLOAT+r")\s+("+FLOAT+r")\s+("+FLOAT+r")\s*\)\s*;", gravity)
     require(g_match is not None, "C14 actual gravity vector missing")
     for coordinate, expected in zip(map(float, g_match.groups()), c["metal"]["gravity_m_s2"]):
@@ -169,14 +193,20 @@ def verify() -> dict:
         match = re.search(r"\binternalField\s+uniform\s+("+FLOAT+r")\s*;", text)
         require(match is not None, "C14 initial field missing")
         assert_eq(float(match.group(1)), expected, "C14 original field initial")
-    original_model_top = strip_comments(metalT)
-    original_model_mold = strip_comments(moldT)
-    require("h               uniform 10;" in original_model_top
-            and "Ta              constant 300;" in original_model_top,
-            "C14 metalTop convection original changed")
-    require(re.search(r"\bh\s+uniform\s+10\s*;", original_model_mold)
-            and re.search(r"\bTa\s+constant\s+300\s*;", original_model_mold),
-            "C14 mold exterior original changed")
+    for original, material, h_key, Ta_key in (
+        (metalT, c["metal"], "top_h_W_m2K", "top_Ta_K"),
+        (moldT, c["mold"], "exterior_h_W_m2K", "exterior_Ta_K")
+    ):
+        executable = strip_comments(original)
+        for field_name, mode, key in (("h", "uniform", h_key),
+                                      ("Ta", "constant", Ta_key)):
+            match = re.search(
+                r"\b" + field_name + r"\s+" + mode + r"\s+("+FLOAT+r")\s*;",
+                executable)
+            require(match is not None,
+                    f"C14 exterior {field_name} {mode} field missing")
+            assert_eq(float(match.group(1)), material[key],
+                      f"C14 original exterior {field_name}")
     assert_eq(number(metalT, "emissivity"), c["metal"]["top_emissivity"],
               "C14 metal emissivity")
     assert_eq(number(moldT, "emissivity"), c["mold"]["exterior_emissivity"],
@@ -189,8 +219,14 @@ def verify() -> dict:
                   "C14 contact "+source_name)
     assert_eq(number(regional, "pRefValue"), c["metal"]["pRefValue_Pa"],
               "C14 point pressure reference value")
-    require(re.search(r"\bpRefPoint\s+\(\s*0\.02\s+0\.04\s+0\.005\s*\)\s*;",regional),
-            "original C14 pRefPoint changed; geometry mapping required")
+    pref_match = re.search(
+        r"\bpRefPoint\s+\(\s*("+FLOAT+r")\s+("+FLOAT+r")\s+("+FLOAT+r")\s*\)\s*;",
+        regional)
+    require(pref_match is not None,
+            "original C14 pRefPoint missing; 3D geometry mapping required")
+    for actual, expected in zip(map(float, pref_match.groups()),
+                                c["metal"]["original_2D_pRefPoint_m"]):
+        assert_eq(actual, expected, "C14 original 2D pressure reference point")
 
     # No inferred thermo or ad-hoc missing data.
     require(hard["forbid_metal_Cp_as_Cv"] and hard["forbid_two_solid_solver_for_C14_3D"],
