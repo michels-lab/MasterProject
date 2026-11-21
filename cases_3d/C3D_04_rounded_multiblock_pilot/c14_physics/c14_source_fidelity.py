@@ -41,7 +41,9 @@ def read_original(relative: str) -> str:
             "unsafe original C14 path")
     path = C14 / relative
     require(path.is_file() and not path.is_symlink(), "missing original " + relative)
-    return path.read_text(encoding="utf-8")
+    # Decode original bytes directly: Path.read_text normalizes CRLF on some
+    # systems; exact C14 source copies must preserve original line endings.
+    return path.read_bytes().decode("utf-8")
 
 
 def git_blob_sha1(content: bytes) -> str:
