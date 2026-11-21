@@ -29,8 +29,8 @@
     "POTENTIAL_UNLOGGED_CHANGES": 2
   },
   "finding_total": 9,
-  "inventory_fingerprint": "8a92b6d79cad7e55cab837ee7ad1bba57eda3b92d738d0a66d3a1b3b96b985d0",
-  "evidence_fingerprint": "f8eb425c6588656fe6830c01fc481f8f41be57d1318b652fc990ebea57a92096",
+  "inventory_fingerprint": "d68a514ba4347f8800c5144f1a5e17c262708a26e89f5abd303033441eb49974",
+  "evidence_fingerprint": "2111836267508660f39cac4ab9f817e5e16b3e3a7bc596e521185df1efb57d07",
   "files": [
     {
       "path": ".github/agents/openfoam-solidification.agent.md",
@@ -2032,7 +2032,7 @@
       "role": "source",
       "purpose": "code/test implementation",
       "certainty": "rule",
-      "blob": "dbf53052e656fbb8949cab0fa10c53e268a7ba7b"
+      "blob": "63c490b01618b7734ed7411a5befe80a6421df21"
     },
     {
       "path": "cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/scripts/c14_numerical_reference.py",
@@ -273098,20 +273098,20 @@
       "state": "REVIEW_REQUIRED"
     },
     {
-      "id": "e5d4c9f5650bd274",
+      "id": "4fa0fc6a6597d1e6",
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_EN.md",
-      "observation": "8 implementation/config paths changed since this log's last commit; examples: .github/workflows/c3d04-a-c14-physics-fidelity.yml, .github/workflows/case-a-t0-native-f14.yml, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/C14_3D_PHYSICS_CONTRACT.json, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/c14_source_fidelity.py, cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/scripts/native_f14_coupled_runtime_smoke.py, cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/scripts/prepare_case_a_t0.py",
+      "observation": "9 implementation/config paths changed since this log's last commit; examples: .github/workflows/c3d04-a-c14-physics-fidelity.yml, .github/workflows/case-a-t0-native-f14.yml, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/C14_3D_PHYSICS_CONTRACT.json, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/c14_source_fidelity.py, cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/scripts/native_f14_coupled_runtime_smoke.py, cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/scripts/prepare_case_a_t0.py",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     },
     {
-      "id": "d7ab4ca1df9738db",
+      "id": "58a5822bf9cdf2bb",
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_ES.md",
-      "observation": "8 implementation/config paths changed since this log's last commit; examples: .github/workflows/c3d04-a-c14-physics-fidelity.yml, .github/workflows/case-a-t0-native-f14.yml, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/C14_3D_PHYSICS_CONTRACT.json, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/c14_source_fidelity.py, cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/scripts/native_f14_coupled_runtime_smoke.py, cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/scripts/prepare_case_a_t0.py",
+      "observation": "9 implementation/config paths changed since this log's last commit; examples: .github/workflows/c3d04-a-c14-physics-fidelity.yml, .github/workflows/case-a-t0-native-f14.yml, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/C14_3D_PHYSICS_CONTRACT.json, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/c14_source_fidelity.py, cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/scripts/native_f14_coupled_runtime_smoke.py, cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/scripts/prepare_case_a_t0.py",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     }
