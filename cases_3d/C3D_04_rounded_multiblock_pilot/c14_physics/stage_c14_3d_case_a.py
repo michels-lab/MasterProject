@@ -374,9 +374,9 @@ def run_full_C14_original_10s(output: Path, info: dict) -> dict:
         result=native([environment()["foamMultiRun"],"-case",str(output)],
                       output,"log.foamMultiRun",None)
         full_log=(output/"log.foamMultiRun").read_text(encoding="utf-8")
-        require(re.search(r"(?m)^\\s*End\\s*$",full_log) is not None,
+        require(re.search(r"(?m)^\s*End\s*$",full_log) is not None,
                 "full C14 native solver did not terminate with End")
-        require(re.search(r"(?m)^\\s*Time\\s*=\\s*10(?:\\.0+)?s\\s*$",full_log) is not None,
+        require(re.search(r"(?m)^\s*Time\s*=\s*10(?:\.0+)?s\s*$",full_log) is not None,
                 "full C14 native solver did not reach exactly 10 seconds")
         for marker in (
             "Selecting solver fluid",
@@ -407,7 +407,7 @@ def run_full_C14_original_10s(output: Path, info: dict) -> dict:
         raise
     finally:
         (output/REPORT).write_text(
-            json.dumps(info,ensure_ascii=False,indent=2)+"\\n",encoding="utf-8")
+            json.dumps(info,ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
     return info
 
 
