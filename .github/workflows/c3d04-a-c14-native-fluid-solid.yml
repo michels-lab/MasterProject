@@ -1,0 +1,50 @@
+name: Case A C3D-04 - original C14 fluid + mold + phase-change native F14
+
+on:
+  push:
+    paths:
+      - "cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/**"
+      - ".github/workflows/c3d04-a-c14-native-fluid-solid.yml"
+  pull_request:
+    paths:
+      - "cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/**"
+      - ".github/workflows/c3d04-a-c14-native-fluid-solid.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: c3d04-a-c14-native-physical-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  c14-fluid-solid-phase-source:
+    name: F14 C14 original fluid/solid phase-change actual 3D synthetic solver (NOT V4/T02)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - name: Original C14 source and 3D mesh mapping positive and negative regressions
+        run: |
+          set -euo pipefail
+          PYTHONDONTWRITEBYTECODE=1 python3 -B -m unittest discover \
+            -s cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/tests \
+            -p 'test_stage_c14_fluid_solid.py' -v
+      - name: Install real OpenFOAM Foundation 14
+        uses: gerlero/setup-openfoam@v1
+        with:
+          openfoam-version: 14
+      - name: Execute two steps of ORIGINAL C14 metal=fluid + mold=solid on disposable 3D mesh
+        run: |
+          set -euo pipefail
+          python3 -B cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/native_c14_fluid_solid_smoke.py \
+            --out "$RUNNER_TEMP/C3D04_A_C14_ORIGINAL_FLUID_SOLID_SYNTHETIC"
+      - name: Preserve ALL F14 logs, source/region mesh and phase-change fields even if failed
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: c3d04-a-original-c14-3d-fluid-solid-native-logs
+          path: ${{ runner.temp }}/C3D04_A_C14_ORIGINAL_FLUID_SOLID_SYNTHETIC/
+          if-no-files-found: warn
+          retention-days: 30
