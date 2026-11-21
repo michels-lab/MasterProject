@@ -1,3 +1,11 @@
+## Regla científica prioritaria del investigador — C14 original (20-11-2026)
+
+**La física del Caso 3D-A debe conservar el modelo realmente utilizado en el caso 2D C14**: hierro `fluid` (`heRhoThermo/hConst/sensibleEnthalpy`, `U`, `p`, `p_rgh`), arena `solid` (`heSolidThermo/eConst`), `solidificationMeltingSource` con `Tsol/Tliq/L/alpha1e/beta/rhoRef/relax/Cu/q`, gravedad, flujos de frontera y parámetros numéricos de C14. **Está prohibido sustituirlo silenciosamente por el T0 auxiliar de dos sólidos o convertir Cp de hierro en Cv.** Leer las fuentes originales de C14 y el [contrato de fidelidad del Caso A](c14_physics/README.md) antes de editar diccionarios.
+
+El T0 anterior es únicamente una prueba de conducción y arranque de módulos, **no** el solver de tesis ni equivalente al C14. Cualquier transición 2D→3D debe limitarse a cambios acreditados por la geometría V4/T02 real (parches `empty`→paredes 3D, referencia de presión, `cellZone`) y sintaxis Foundation14, conservando valores físicos idénticos y documentando cada transformación. El ejemplo ya probado de sintaxis F14 `externalTemperature` usa `h uniform 10` y `Ta constant 300`, no modifica los valores. Si un mapeo no está verificado, bloquear materialización y solver; nunca introducir constantes inventadas ni copiar una rama de contracción/VOF/Caso B.
+
+**El 50 % operativo histórico (5/10 hitos, etapa 6/10) no es el progreso de implementación de física C14 en 3D.** No subir el porcentaje por inventario, diccionario o CI de dos celdas. El preflight WSL y un futuro CFD del modelo C14 aún requieren evidencia nueva.
+
 # Contrato operativo persistente — Caso A / C3D-04 (OpenFOAM 3D)
 
 **Vigente desde 2026-11-19. Autoridad: instrucción expresa del investigador.**

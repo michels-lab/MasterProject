@@ -1,0 +1,52 @@
+name: Case A C3D-04 - exact C14 fluid-solid scientific source fidelity (NO CFD)
+
+on:
+  push:
+    paths:
+      - "cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/**"
+      - "cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/tests/test_integrated_case_a.py"
+      - "cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/C14_PARAMETER_BASELINE.json"
+      - "cases_controlled_buoyancy/C14_topFixedFlux_explicitRef/**"
+      - ".github/workflows/c3d04-a-c14-physics-fidelity.yml"
+  pull_request:
+    paths:
+      - "cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/**"
+      - "cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/tests/test_integrated_case_a.py"
+      - "cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/C14_PARAMETER_BASELINE.json"
+      - "cases_controlled_buoyancy/C14_topFixedFlux_explicitRef/**"
+      - ".github/workflows/c3d04-a-c14-physics-fidelity.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: c3d04-a-c14-fidelity-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  c14-original-physics-lock:
+    name: C14 authentic fluid enthalpy + solidification source integrity (NO CFD)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify ORIGINAL C14 material, phase-change, momentum, BC and 22-file candidate source parity
+        run: |
+          set -euo pipefail
+          PYTHONDONTWRITEBYTECODE=1 python3 -B \
+            cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/c14_source_fidelity.py \
+            > "$RUNNER_TEMP/C3D04_A_C14_ORIGINAL_SOURCE_PARITY_NO_CFD.json"
+          cat "$RUNNER_TEMP/C3D04_A_C14_ORIGINAL_SOURCE_PARITY_NO_CFD.json"
+      - name: Integrated regression with negative physics mutations
+        run: |
+          PYTHONDONTWRITEBYTECODE=1 python3 -B -m unittest discover \
+            -s cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/tests \
+            -p test_integrated_case_a.py -v
+      - name: Archive source evidence separately from native CFD
+        uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          name: c3d04-a-c14-original-fluid-solid-fidelity-no-cfd
+          path: ${{ runner.temp }}/C3D04_A_C14_ORIGINAL_SOURCE_PARITY_NO_CFD.json
+          if-no-files-found: error
+          retention-days: 30
