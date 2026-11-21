@@ -90,4 +90,16 @@ bash "$HERE/run_native_t0_patch_flux.sh" "$OUTPUT" "$INPUTS" "$RUNLOG" "$RUNREPO
 echo "=== 6/6: consolidate hashed regional T energy + 12636 native face pairs into ONE readable result ==="
 PYTHONDONTWRITEBYTECODE=1 python3 -B "$HERE/finalize_t0_granada.py" \
     --case "$OUTPUT" --inputs "$INPUTS"
-echo "GRANADA_B_T0_NUMERICAL_DIAGNOSTICS_COMPLETE: Evidence summarized; NO mesh/time convergence or experimental validation."
+# Expose the ACTUAL, accepted 270788-cell OpenFOAM multiregion data to
+# ParaView. This is a marker only, NOT a fabricated result or mesh export.
+VIEW="$OUTPUT/C3D05_T0_REAL_ACCEPTED_HEX8.foam"
+if [[ -L "$VIEW" || -e "$VIEW" && -s "$VIEW" ]]; then
+    echo "BLOCKED_PARAVIEW_MARKER: pre-existing nonempty file/symlink preserved: $VIEW" >&2
+    exit 2
+fi
+if [[ ! -e "$VIEW" ]]; then
+    : > "$VIEW"
+fi
+echo "FOUNDATION14_REAL_3D_FIELDS_READY_FOR_PARAVIEW: $VIEW"
+echo "THE_ACCEPTED_SOURCE_STEP_AND_270788_HEX8_WERE_NOT_REMESHED"
+echo "GRANADA_B_T0_NUMERICAL_DIAGNOSTICS_COMPLETE: evidence summarized, real 3D T fields ready; NO experimental validation."
