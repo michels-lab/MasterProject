@@ -29,8 +29,8 @@
     "POTENTIAL_UNLOGGED_CHANGES": 2
   },
   "finding_total": 9,
-  "inventory_fingerprint": "2888ca3597c22f30e09ba7eaa20dfa5d3fe5224a097054fd22861420e2bb5afd",
-  "evidence_fingerprint": "a8f080ed44456c9a93086badcf30a0b5bd4c2062784a5a6b443cd473f428d11c",
+  "inventory_fingerprint": "11936c3e6ab1814d089d726e6593e07d48f885602bb17e500870ec3bf377866f",
+  "evidence_fingerprint": "18e8330852a52a5c9931cd897c1b0cd0ac3a32fd9c8b124287e90a44b04c027b",
   "files": [
     {
       "path": ".github/agents/openfoam-solidification.agent.md",
@@ -2067,7 +2067,7 @@
       "role": "source",
       "purpose": "code/test implementation",
       "certainty": "rule",
-      "blob": "333ecd8c696aa2e1384c23e16f655c61e2476447"
+      "blob": "f924b4990ccbd876c9a052fb8b05d00ff2d04994"
     },
     {
       "path": "cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/scripts/c14_numerical_reference.py",
@@ -271994,7 +271994,7 @@
       "role": "config",
       "purpose": "machine-readable configuration",
       "certainty": "rule",
-      "blob": "c82c5106d032fcf87ec328496b863db72c7e39e1"
+      "blob": "c3c284b34eeca0ad4b8270e56a1eebf6d85bfad3"
     },
     {
       "path": "docs/C3D_01_ESTADO_REAL_20261110_ES.md",
@@ -273147,20 +273147,20 @@
       "state": "REVIEW_REQUIRED"
     },
     {
-      "id": "9802adc9c712b52c",
+      "id": "f2804e48a92fea0c",
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_EN.md",
-      "observation": "6 implementation/config paths changed since this log's last commit; examples: .github/workflows/c3d04-a-c14-native-fluid-solid.yml, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/native_c14_fluid_solid_smoke.py, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/run_c14_native_milestone.sh, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/stage_c14_3d_case_a.py, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/tests/test_stage_c14_fluid_solid.py, docs/C3D04_CASE_A_STATUS.json",
+      "observation": "7 implementation/config paths changed since this log's last commit; examples: .github/workflows/c3d04-a-c14-native-fluid-solid.yml, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/native_c14_fluid_solid_smoke.py, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/run_c14_native_milestone.sh, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/stage_c14_3d_case_a.py, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/tests/test_stage_c14_fluid_solid.py, cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/scripts/audit_t0_numerical_run.py",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     },
     {
-      "id": "59edcd4953f6d3e2",
+      "id": "09bca309c87216cc",
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_ES.md",
-      "observation": "6 implementation/config paths changed since this log's last commit; examples: .github/workflows/c3d04-a-c14-native-fluid-solid.yml, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/native_c14_fluid_solid_smoke.py, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/run_c14_native_milestone.sh, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/stage_c14_3d_case_a.py, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/tests/test_stage_c14_fluid_solid.py, docs/C3D04_CASE_A_STATUS.json",
+      "observation": "7 implementation/config paths changed since this log's last commit; examples: .github/workflows/c3d04-a-c14-native-fluid-solid.yml, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/native_c14_fluid_solid_smoke.py, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/run_c14_native_milestone.sh, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/stage_c14_3d_case_a.py, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/tests/test_stage_c14_fluid_solid.py, cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/scripts/audit_t0_numerical_run.py",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     }
