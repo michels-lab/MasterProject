@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
   "audit_kind": "deterministic_full_tracked_tree",
-  "tracked_files_total": 39013,
-  "classified_files_total": 39008,
-  "docs_content_inspected": 183,
+  "tracked_files_total": 39014,
+  "classified_files_total": 39009,
+  "docs_content_inspected": 184,
   "large_docs_skipped": 1,
   "excluded_reports": 5,
   "roles": {
@@ -12,7 +12,7 @@
     "bitacora": 5,
     "config": 17,
     "data": 32,
-    "document": 146,
+    "document": 147,
     "index": 33,
     "license": 1,
     "simulation_case_file": 117,
@@ -25,11 +25,12 @@
     "workflow": 28
   },
   "finding_counts": {
-    "BROKEN_RELATIVE_LINK": 7
+    "BROKEN_RELATIVE_LINK": 7,
+    "POTENTIAL_UNLOGGED_CHANGES": 2
   },
-  "finding_total": 7,
-  "inventory_fingerprint": "194b371e5eac520fc0cffc31496731e708c7dfc6eeaee0fdca46483075091d41",
-  "evidence_fingerprint": "a38cca05722cc62f2a19d8787a386e132771345cc8472199f5e39f915b2e8a45",
+  "finding_total": 9,
+  "inventory_fingerprint": "c91d8b52a92ac11a86824c134e85fe1de3d159b34f3d72ccf7f62eb7f0524623",
+  "evidence_fingerprint": "1d68b7716a10b92b4a27405ab6a50c54dc3de128860d98a40a118667ea8b2cf7",
   "files": [
     {
       "path": ".github/agents/openfoam-solidification.agent.md",
@@ -272259,7 +272260,7 @@
       "role": "config",
       "purpose": "machine-readable configuration",
       "certainty": "rule",
-      "blob": "cae1d64fbea919062fb7a8eda805e08285c7c767"
+      "blob": "2ec575ae3bd86f6e58b22dead4f8b126e8403e5c"
     },
     {
       "path": "docs/REGLA_INSTRUCCIONES_UNIFICADAS_ES.md",
@@ -272372,6 +272373,13 @@
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
       "blob": "84e7200ff368afebef1e409b325d3b64959740d0"
+    },
+    {
+      "path": "docs/granada/C3D05_WSL_T0_NUMERICO_COMPLETO_270788_HEX8_20261120_ES.md",
+      "role": "document",
+      "purpose": "manual/decision/report/historical note",
+      "certainty": "inferred",
+      "blob": "8845824bfa0fe570dfd4c9960c7cd1ccd59789f9"
     },
     {
       "path": "docs/granada/ENERGY_PHASE_V14_V16_20261020.md",
@@ -273150,6 +273158,24 @@
       "path": "docs/granada/C3D05_T0_README_HISTORICAL_BEFORE_SINGLE_FLOW_20261120.md",
       "observation": "Missing: outside-repo",
       "recommendation": "Fix link or restore target",
+      "state": "REVIEW_REQUIRED"
+    },
+    {
+      "id": "29b1239b306df57d",
+      "code": "POTENTIAL_UNLOGGED_CHANGES",
+      "severity": "review",
+      "path": "PROJECT_AUDIT_LOG_EN.md",
+      "observation": "1 implementation/config paths changed since this log's last commit; examples: docs/PROJECT_STAGE_STATUS.json",
+      "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
+      "state": "REVIEW_REQUIRED"
+    },
+    {
+      "id": "b7e85c814cfe1fac",
+      "code": "POTENTIAL_UNLOGGED_CHANGES",
+      "severity": "review",
+      "path": "PROJECT_AUDIT_LOG_ES.md",
+      "observation": "1 implementation/config paths changed since this log's last commit; examples: docs/PROJECT_STAGE_STATUS.json",
+      "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     }
   ],
