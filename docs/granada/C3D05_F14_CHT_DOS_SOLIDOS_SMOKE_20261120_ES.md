@@ -38,4 +38,15 @@ El primer intento [#44840441535](https://github.com/michels-lab/MasterProject/ac
 
 **Interpretación estricta:** se observó una **transferencia térmica direccional numérica** en una geometría mínima, no convergencia de la malla real. La entrada C14 no describe propiedades físicas medidas ni existen datos experimentales QuickCup validados. No se ha corrido la malla grande del investigador y **G3/G4 siguen abiertos, 2/7 hitos=29% técnico**.
 
-Se endureció posteriormente la CI para **exigir explícitamente** que `T_metal` disminuya y `T_mold` aumente; también cuantifica el error energético global por `t=0` usando la misma herramienta de energía productiva. Ese nuevo paso debe verificarse por su propia ejecución nativa: no se deduce automáticamente del PASS anterior.
+### Segundo ensayo nativo reforzado: PASS
+
+[**GitHub Actions #44841034109 — PASS**](https://github.com/michels-lab/MasterProject/actions/runs/44841034109) verificó explícitamente que el acoplamiento produjo transferencia de calor (no solo un `End`). Utilizó el **solver real `foamMultiRun` de Foundation14**, 100 pasos de `0.001 s`, dos regiones sólidas con `mappedWall`/ `coupledTemperature`, y leyó **6 estados por región** mediante `foamPostProcess` nativo.
+
+- Metal sólido sintético: de **1500 K** a **1499.2 K**, `ΔT_metal = -0.8 K`.
+- Molde/arena sólido sintético: de **300 K** a **304.29709 K**, `ΔT_mold = +4.29709 K`.
+- Volúmenes reales calculados por `blockMesh`: **1×10^-6 m³ en cada región**.
+- El mismo código productivo `t0_energy_reference.energy_target()` + `postprocess_t0_energy.compute_energy_history()` calculó `max |E_total(t)-E_initial|/Q_ref = 2.63001153×10^-7` sobre la historia de 6 instantes. Se mantiene el campo de aceptación científica en **FALSE**, porque es un experimento computacional mínimo, no un estudio de convergencia.
+
+**Resultado:** están comprobados de manera independiente con Foundation14 real el contrato de diez diccionarios, la construcción del solver de dos sólidos, la condición térmica mapeada, el avance temporal, la escritura `T` de ambas regiones, la lectura nativa de volumen y temperatura, y el cálculo cuantitativo de energía. **No está probada la estabilidad de la malla 3D real, ni el flujo local 12,636 caras, ni la independencia de malla/paso, ni la física JMatPro/QuickCup.** Estado del Caso B: **etapa 3/7; 2/7=29% técnico**.
+
+El primer ensayo [#44840441535](https://github.com/michels-lab/MasterProject/actions/runs/44840441535) generó un falso negativo del harness de diagnóstico por la frase estándar de activación de `FOAM_SIGFPE`; se corrigió la causa del falso error sin alterar el diccionario del solver.
