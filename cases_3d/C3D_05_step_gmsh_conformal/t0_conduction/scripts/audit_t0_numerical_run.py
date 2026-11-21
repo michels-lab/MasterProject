@@ -32,7 +32,7 @@ def audit(text: str, return_code: int, config: dict) -> dict:
     # "Enabling floating point exception trapping (FOAM_SIGFPE)".
     # Strip only that precise banner, never actual fatal diagnostics.
     without_sigfpe_banner = re.sub(
-        r"(?im)^\\s*Enabling floating point exception trapping \\(FOAM_SIGFPE\\)\\s*$",
+        r"(?im)^\s*Enabling floating point exception trapping \(FOAM_SIGFPE\)\s*$",
         "", text
     )
     fatal = bool(re.search(
