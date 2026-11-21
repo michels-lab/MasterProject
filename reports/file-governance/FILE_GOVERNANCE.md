@@ -5,7 +5,7 @@ No file is auto-deleted or declared unused.
 
 ## Coverage
 
-Tracked: 39012; classified: 39007; readable documents: 182; above read cap: 1; findings: 9.
+Tracked: 39013; classified: 39008; readable documents: 183; above read cap: 1; findings: 9.
 
 ## File roles
 
@@ -16,7 +16,7 @@ Tracked: 39012; classified: 39007; readable documents: 182; above read cap: 1; f
 | bitacora | 5 |
 | config | 17 |
 | data | 32 |
-| document | 145 |
+| document | 146 |
 | index | 33 |
 | license | 1 |
 | simulation_case_file | 117 |
@@ -37,8 +37,8 @@ Tracked: 39012; classified: 39007; readable documents: 182; above read cap: 1; f
 - **CONFIRMED / BROKEN_RELATIVE_LINK** docs/granada/C3D05_T0_README_HISTORICAL_BEFORE_SINGLE_FLOW_20261120.md: Missing: outside-repo. Next: Fix link or restore target (ID 2fa56a22be90f045)
 - **CONFIRMED / BROKEN_RELATIVE_LINK** docs/granada/C3D05_T0_README_HISTORICAL_BEFORE_SINGLE_FLOW_20261120.md: Missing: outside-repo. Next: Fix link or restore target (ID 2fa56a22be90f045)
 - **CONFIRMED / BROKEN_RELATIVE_LINK** docs/granada/C3D05_T0_README_HISTORICAL_BEFORE_SINGLE_FLOW_20261120.md: Missing: outside-repo. Next: Fix link or restore target (ID 2fa56a22be90f045)
-- **REVIEW / POTENTIAL_UNLOGGED_CHANGES** PROJECT_AUDIT_LOG_EN.md: 7 implementation/config paths changed since this log's last commit; examples: .github/workflows/c3d04-a-c14-native-fluid-solid.yml, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/native_c14_fluid_solid_smoke.py, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/run_c14_native_milestone.sh, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/stage_c14_3d_case_a.py, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/tests/test_stage_c14_fluid_solid.py, cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/scripts/analyze_t0_patch_flux.py. Next: Inspect diffs and reconcile only meaningful decisions/results in the canonical log (ID 6e168cffbc48010c)
-- **REVIEW / POTENTIAL_UNLOGGED_CHANGES** PROJECT_AUDIT_LOG_ES.md: 7 implementation/config paths changed since this log's last commit; examples: .github/workflows/c3d04-a-c14-native-fluid-solid.yml, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/native_c14_fluid_solid_smoke.py, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/run_c14_native_milestone.sh, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/stage_c14_3d_case_a.py, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/tests/test_stage_c14_fluid_solid.py, cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/scripts/analyze_t0_patch_flux.py. Next: Inspect diffs and reconcile only meaningful decisions/results in the canonical log (ID 01580a144dabc230)
+- **REVIEW / POTENTIAL_UNLOGGED_CHANGES** PROJECT_AUDIT_LOG_EN.md: 10 implementation/config paths changed since this log's last commit; examples: .github/workflows/c3d04-a-c14-native-fluid-solid.yml, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/native_c14_fluid_solid_smoke.py, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/run_c14_native_milestone.sh, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/stage_c14_3d_case_a.py, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/tests/test_stage_c14_fluid_solid.py, cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/scripts/analyze_t0_patch_flux.py. Next: Inspect diffs and reconcile only meaningful decisions/results in the canonical log (ID 5eef6c83323e38b3)
+- **REVIEW / POTENTIAL_UNLOGGED_CHANGES** PROJECT_AUDIT_LOG_ES.md: 10 implementation/config paths changed since this log's last commit; examples: .github/workflows/c3d04-a-c14-native-fluid-solid.yml, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/native_c14_fluid_solid_smoke.py, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/run_c14_native_milestone.sh, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/stage_c14_3d_case_a.py, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/tests/test_stage_c14_fluid_solid.py, cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/scripts/analyze_t0_patch_flux.py. Next: Inspect diffs and reconcile only meaningful decisions/results in the canonical log (ID 632a9906776b3513)
 
 Complete path → purpose/role/certainty list lives in FILE_GOVERNANCE.json. SUMMARY.json has counts only for master polling.
 A dated file, duplicate, or suspicious name is an **investigation candidate**, not unwanted material.
