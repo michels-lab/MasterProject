@@ -1,6 +1,18 @@
 # C3D-04 Caso A — T0 integrado con valores auténticos de C14
 
 
+## 20-11-2026 — Primer foamMultiRun F14 con ambos módulos sólidos: PASS sintético, NO V4/T02
+
+**Evidencia nativa de CI [run #44845073894](https://github.com/michels-lab/MasterProject/actions/runs/44845073894)**, commit fuente `e31824045f67e49ae20548ad22324080da8d4358`. Luego de corregir tanto el mapeo sintético `mappedWall` a `neighbourRegion/neighbourPatch/method matching` como el **generador productivo F14 `externalTemperature h uniform`**, la instalación Foundation14 completó ambos `blockMesh`, parseó los diez diccionarios con `foamDictionary` y ejecutó **dos pasos reales `foamMultiRun`** hasta 0.002 s. Se conservaron logs y los campos T nativos de metal y arena en [artifact #14681863740](https://github.com/michels-lab/MasterProject/actions/runs/44845073894/artifacts/14681863740).
+
+| Tiempo (s) | Metal T (K) | Arena T (K) |
+|---:|---:|---:|
+| 0 (entrada) | 1500 | 300 |
+| 0.001 | 1499.987047 | 300.0245561 |
+| 0.002 | 1499.974095 | 300.0491112 |
+
+**Significado demostrado:** los módulos nativos `solid` de ambas regiones inicializan termofísica `heSolidThermo`, aceptan `externalTemperature` y `coupledTemperature`, realizan transferencia térmica y guardan campos auténticos. **Esto es un banco sintético de dos celdas, no un caso CFD ejecutado en la malla de investigación V4/T02.** No permite concluir conservación energética, convergencia espacial, estabilidad ante >70° de no ortogonalidad, ni validación QuickCup o solidificación. La **etapa 06/10 sigue IN_PROGRESS** y el avance de hitos del Caso A queda **5/10=50 %**. Siguiente gate: una única materialización/preflight integral sobre la V4/T02 preservada del investigador en WSL; luego corresponde T0 solver y balances como hito 07.
+
 ## 20-11-2026 — Corrección del error REAL de inicialización F14: h uniform
 
 La CI nativa de [PR #57](https://github.com/michels-lab/MasterProject/pull/57) logró ejecutar `blockMesh` para ambas regiones y `foamDictionary` para los 10 diccionarios, pero `foamMultiRun` falló al inicializar `metalTop` con: **“expected keyword 'uniform' or 'nonuniform', found constant”**. Se comprobó el contrato real en la fuente Foundation14 de `externalTemperatureFvPatchScalarField.H`: **`Ta` es `Function1` y usa `Ta constant 300;`; `h` es `FunctionalDimensionedField` y usa `h uniform 10;`**. Referencia: https://cpp.openfoam.org/v14/externalTemperatureFvPatchScalarField_8H_source.html. El parser `foamDictionary` no detecta necesariamente incompatibilidades de tipos en tiempo de inicialización.
