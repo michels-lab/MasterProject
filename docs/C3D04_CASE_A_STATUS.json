@@ -153,7 +153,7 @@
   "stage06_synthetic_f14_runtime_gate": {
     "date": "2026-11-20",
     "PR": "https://github.com/michels-lab/MasterProject/pull/57",
-    "current_status": "CODE_COMMITTED_NATIVE_CI_PENDING",
+    "current_status": "PRODUCTION_T0_F14_h_UNIFORM_FIX_COMMITTED_AWAIT_NATIVE_RERUN",
     "stage_06_completed": false,
     "source_generation": "10 actual C14-derived two-solid Case A dictionaries",
     "synthetic_geometry": "Two one-cell 3D cubes with reciprocal mappedWall; not V4/T02",
@@ -166,7 +166,11 @@
     "native_V4_T02_WSL_executed": false,
     "T0_case_A_CFD_executed": false,
     "physical_validation": false,
-    "test_evidence_state": "PENDING_CI_AT_PR_HEAD; do not claim successful runtime",
-    "progress_unchanged": "5/10=50% (stage06 IN_PROGRESS)"
+    "test_evidence_state": "RETEST_PENDING; native F14 runtime initialization not yet verified after correction",
+    "progress_unchanged": "5/10=50% (stage06 IN_PROGRESS)",
+    "failure_evidence": "https://github.com/michels-lab/MasterProject/actions/runs/44844797946",
+    "native_failure_observed": "foamMultiRun initialized heSolidThermo and rejected generated metalTop externalTemperature: h constant 10; expected uniform or nonuniform",
+    "production_fix": "Set h uniform 10 on all exterior F14 externalTemperature patch fields; keep Ta constant 300 Function1, emissivities, C14 sources unchanged",
+    "authoritative_F14_source": "https://cpp.openfoam.org/v14/externalTemperatureFvPatchScalarField_8H_source.html"
   }
 }
