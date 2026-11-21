@@ -15,14 +15,14 @@
   "feeding_enabled": false,
   "global_mass_energy_verified": false,
   "experimentally_validated": false,
-  "next_gate": "Single WSL foamMultiRun FS-C06 native startup using tracked OpenFOAM dictionaries, then positive phase transition and conservative density-continuity formulation.",
+  "next_gate": "Execute run_native_gate.sh once in researcher WSL Foundation14 and inspect original report/logs; only after real native pass, proceed to thermophysical rho_l(T), rho_s(T,fs) and conservative interface/feeding model.",
   "native_solid_object_reader": "alpha.metal.solid",
   "native_metal_phase_temperature_reader": "T.metal",
   "mixture_temperature_T_substituted_for_T_metal": false,
   "field_parser_regression_tests_added": true,
   "field_parser_native_openfoam14_verified": false,
   "pending_CI_for_new_field_parser": false,
-  "last_repository_update_purpose": "OpenFOAM14 native volumetric+phase flux+conjugate heat FO in one controlDict; no Python-only delivery, native pending",
+  "last_repository_update_purpose": "Single-command native Foundation14 acceptance gate consolidated in research branch with reporting and mesh validation, without fabricating CFD or shrinkage.",
   "density_screen": "CODE_ONLY_WITH_NATIVE_REPORT_AND_USER_SUPPLIED_HASHED_DENSITIES",
   "density_screen_script": "analysis_tools/screen_fs_c06_density_contraction.py",
   "density_reference_values_in_repo": false,
@@ -74,5 +74,18 @@
     "FS_C06_wallHeatFluxFluid",
     "FS_C06_wallHeatFluxMold"
   ],
-  "native_conjugate_wall_heat_flux_FS_C06_verified": false
+  "native_conjugate_wall_heat_flux_FS_C06_verified": false,
+  "native_gate_script": "freesurface/FS-C06_vof_solidification/run_native_gate.sh",
+  "native_gate_committed_in_active_branch": true,
+  "native_gate_integrated_commit": "406cb9acce509d9df8d198c7c4206877a3a831dc",
+  "native_gate_acceptance_checks": [
+    "Foundation14/foamMultiRun prerequisites",
+    "new isolated FS-C06 copy from traceable FS-C05",
+    "versioned native controlDict and fvModels unchanged",
+    "two-step solver and native alpha.metal.solid observation",
+    "checkMesh fluid and mold allGeometry/allTopology"
+  ],
+  "native_gate_WSL_executed": false,
+  "native_gate_passed": false,
+  "current_phase": "FS-C06 native setup/acceptance gate prepared; physical shrinkage not implemented"
 }
