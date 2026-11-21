@@ -24,3 +24,18 @@ Se agregó [`smoke_native_foundation14_solver.py`](../../cases_3d/C3D_05_step_gm
 **Evidencia científica:** aun cuando el smoke sea verde, **no constituye validación física**. Los dos cubos no replican la geometría, la severa no ortogonalidad (1,826 caras >70°) ni el comportamiento térmico/metalúrgico de la fundición QuickCup. Quedan pendientes la ejecución nativa **en la WSL del usuario**, verificación energética e interfacial real, sensibilidad de tamaño de paso y malla, propiedades JMatPro y validación experimental.
 
 **Estado de esta entrega:** consultar [Actions](https://github.com/michels-lab/MasterProject/actions/workflows/c3d05-foundation14-two-solid-solver-smoke.yml) para verificar el resultado final; código y workflow se publicaron. No inferir PASS de que exista este documento.
+
+## Resultado nativo observado (CI)
+
+En [GitHub Actions #44840743988 — PASS](https://github.com/michels-lab/MasterProject/actions/runs/44840743988), **OpenFOAM Foundation14 auténtico** ejecutó `foamMultiRun` hasta `End` en `t=0.1 s` después de 100 pasos `deltaT=0.001 s`. Las dos mallas 1-celda se crearon con `blockMesh`, las temperaturas proceden de `foamPostProcess` real y se registraron **6 muestras por región**, con volumen **1×10^-6 m³** en cada una:
+
+| Región | T inicial | T final nativa a 0.1s |
+|---|---:|---:|
+| Metal sólido simulado | 1500 K | **1499.2 K** |
+| Arena/molde sólido simulado | 300 K | **304.297 K** |
+
+El primer intento [#44840441535](https://github.com/michels-lab/MasterProject/actions/runs/44840441535) alcanzó correctamente el `End` del solver, pero el *harness* lo marcó rojo porque confundía la frase normal `Enabling floating point exception trapping (FOAM_SIGFPE)` con una excepción ocurrida. Se corrigió la expresión del detector: la advertencia de **activar detección** no es un `Floating point exception`. El rerun nativo completo PASS es evidencia superior a esa falsa alarma.
+
+**Interpretación estricta:** se observó una **transferencia térmica direccional numérica** en una geometría mínima, no convergencia de la malla real. La entrada C14 no describe propiedades físicas medidas ni existen datos experimentales QuickCup validados. No se ha corrido la malla grande del investigador y **G3/G4 siguen abiertos, 2/7 hitos=29% técnico**.
+
+Se endureció posteriormente la CI para **exigir explícitamente** que `T_metal` disminuya y `T_mold` aumente; también cuantifica el error energético global por `t=0` usando la misma herramienta de energía productiva. Ese nuevo paso debe verificarse por su propia ejecución nativa: no se deduce automáticamente del PASS anterior.
