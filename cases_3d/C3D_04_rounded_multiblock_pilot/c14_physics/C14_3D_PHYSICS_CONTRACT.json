@@ -1,0 +1,108 @@
+{
+  "schema": "C3D04_A_C14_FLUID_SOLID_SOURCE_CONTRACT_V1",
+  "scope": "CASE_A_C3D_04_V4_T02_METAL_FLUID_MOLD_SOLID_ONLY",
+  "date": "2026-11-20",
+  "canonical_C14": "cases_controlled_buoyancy/C14_topFixedFlux_explicitRef",
+  "original_C14_baseline": "cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/C14_PARAMETER_BASELINE.json",
+  "scientific_model": "C14_NATIVE_FLUID_SOLID_MOMENTUM_ENTHALPY_PHASE_CHANGE_NOT_T0",
+  "non_negotiable": {
+    "metal_solver": "fluid",
+    "mold_solver": "solid",
+    "metal_thermoType": "heRhoThermo",
+    "metal_transport": "const",
+    "metal_thermo": "hConst",
+    "metal_energy": "sensibleEnthalpy",
+    "mold_thermoType": "heSolidThermo",
+    "mold_transport": "constIsoSolid",
+    "mold_thermo": "eConst",
+    "mold_energy": "sensibleInternalEnergy",
+    "phase_change_type": "solidificationMeltingSource",
+    "phase_change_energy": "h",
+    "momentum": "laminar",
+    "no_effective_nEnergyCorrectors_two_assumption": true,
+    "forbid_metal_Cp_as_Cv": true,
+    "forbid_two_solid_solver_for_C14_3D": true,
+    "forbid_VOF_or_air_region_from_other_case": true,
+    "forbid_random_assumed_material_properties": true
+  },
+  "C14_exact_values": {
+    "metal": {
+      "rho_kg_m3": 6820,
+      "Cp_J_kgK": 827,
+      "mu_Pas": 0.0055,
+      "Pr": 0.14,
+      "molWeight_kg_kmol": 56,
+      "T_initial_K": 1500,
+      "U_initial_m_s": [
+        0,
+        0,
+        0
+      ],
+      "p_initial_Pa": 100000,
+      "p_rgh_initial_Pa": 100000,
+      "gravity_m_s2": [
+        0,
+        -9.81,
+        0
+      ],
+      "pRefValue_Pa": 100000,
+      "original_2D_pRefPoint_m": [
+        0.02,
+        0.04,
+        0.005
+      ],
+      "top_U_BC": "slip",
+      "metal_mold_U_BC": "noSlip",
+      "p_rgh_BC": "fixedFluxPressure",
+      "top_h_W_m2K": 10,
+      "top_Ta_K": 300,
+      "top_emissivity": 0.3,
+      "contact_thickness_m": 0.0002,
+      "contact_kappa_W_mK": 0.1
+    },
+    "mold": {
+      "rho_kg_m3": 1500,
+      "Cv_J_kgK": 700,
+      "kappa_W_mK": 2,
+      "molWeight_kg_kmol": 28,
+      "T_initial_K": 300,
+      "exterior_h_W_m2K": 10,
+      "exterior_Ta_K": 300,
+      "exterior_emissivity": 0.5
+    },
+    "solidification": {
+      "Tsol_K": 1423,
+      "Tliq_K": 1473,
+      "L_J_kg": 228600,
+      "alpha1e": 0.8,
+      "beta_1_K": 0.000113,
+      "rhoRef_kg_m3": 6820,
+      "relax": 0.1,
+      "Cu": 100000,
+      "q": 0.001
+    },
+    "numerics": {
+      "deltaT_s": 0.001,
+      "endTime_s": 10,
+      "writeInterval_steps": 100,
+      "adjustTimeStep": false,
+      "maxCo_configured": 0.25,
+      "PIMPLE_root_nOuterCorrectors": 3,
+      "PIMPLE_root_nCorrectors": 2,
+      "PIMPLE_root_nNonOrthogonalCorrectors": 1,
+      "metal_region_nEnergyCorrectors_written": 2,
+      "metal_region_nEnergyCorrectors_effective": 1,
+      "original_2D_mold_region_nNonOrthogonalCorrectors": 0
+    }
+  },
+  "required_3D_adaptations_not_new_physics": [
+    "3D boundary patches from verified V4/T02 polyMesh; remove C14 2D frontAndBack empty.",
+    "Preserve C14 source and material fields; adapt only OpenFOAM14 dictionary syntax where native runtime requires it (h uniform 10).",
+    "C14 pRefPoint [0.02 0.04 0.005] lies outside the accepted C3D04 metal 3D Y extent and MUST be recomputed from a verified internal metal cell; keep pRefValue=1e5.",
+    "C14 phase-change cellZone metal must be mapped to all 8960 regional metal cells using verified native polyMesh labels or STOP; do not silently drop alpha1e/beta/latent heat.",
+    "No V4/T02 solver, energy or physical validation may be claimed until a separate native run passes."
+  ],
+  "T0_two_solid_disposition": "AUXILIARY_SOLVER_INITIALIZATION_ONLY_NOT_C14_PHYSICAL_MODEL",
+  "prior_T0_50_percent_roadmap": "5/10_T0_OPERATIVE_MILESTONES_NOT_C14_FLUID_SOLID_VALIDATION",
+  "research_CFD_run": false
+}
