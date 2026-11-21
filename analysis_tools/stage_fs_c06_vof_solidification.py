@@ -169,21 +169,23 @@ def phase_volume_metrics(
     }
 
 
-def read_native_solid_fraction(path: Path, expected_cells: int = FLUID_CELLS) -> list[float]:
-    """Read a real, ASCII OpenFOAM alpha.metal.solid field, without renaming it.
+def read_native_phase_scalar(path: Path, field_name: str,
+                             expected_cells: int = FLUID_CELLS) -> list[float]:
+    """Strictly decode native metal-phase scalar data, without object renaming.
 
-    The older read_alpha() deliberately accepts ONLY object alpha.metal.
-    Reusing it here would reject the correct AUTO_WRITE field from Foundation14.
-    Keep that older reader strict: this parser is specific to the new field.
+    The legacy read_alpha() and read_temperature() validate different names.
+    Foundation14 writes alpha.metal.solid and T.metal as distinct objects.
     """
+    require(field_name in (MODEL_FIELD, "T.metal"),
+            "unsupported metal-phase object name")
     require(expected_cells > 0, "invalid native solid field cell count")
     require(path.is_file() and not path.is_symlink(),
-            "missing native alpha.metal.solid field")
+            "missing native phase scalar field")
     raw = path.read_text(encoding="utf-8", errors="strict")
     require(re.search(r"\bformat\s+ascii\s*;", raw[:1000]) is not None,
-            "native alpha.metal.solid must be ASCII")
+            "native phase scalar must be ASCII")
     require(re.search(r"\bclass\s+volScalarField\s*;", raw[:1000]) is not None
-            and re.search(r"\bobject\s+alpha\.metal\.solid\s*;", raw[:1000]) is not None,
+            and re.search(r"\bobject\s+" + re.escape(field_name) + r"\s*;", raw[:1000]) is not None,
             "native field must be volScalarField object alpha.metal.solid")
     internal = raw.split("boundaryField", 1)[0]
     nonuniform = re.search(
@@ -211,6 +213,20 @@ def read_native_solid_fraction(path: Path, expected_cells: int = FLUID_CELLS) ->
     return values
 
 
+
+def read_native_solid_fraction(path: Path, expected_cells: int = FLUID_CELLS) -> list[float]:
+    """Read the separate AUTO_WRITE alpha.metal.solid object from Foundation14."""
+    return read_native_phase_scalar(path, MODEL_FIELD, expected_cells)
+
+
+def read_native_metal_temperature(path: Path,
+                                  expected_cells: int = FLUID_CELLS) -> list[float]:
+    """Metal phase temperature actually used by VoFSolidificationMelting::correct."""
+    values = read_native_phase_scalar(path, "T.metal", expected_cells)
+    require(all(t > 0 for t in values), "metal phase temperature is not Kelvin")
+    return values
+
+
 def read_native_fraction(case: Path, liquidus_K: float) -> dict:
     mesh = read_mesh(case / "constant/fluid/polyMesh", FLUID_CELLS)
     cell_volumes = [cell_volume_m3(mesh, i) for i in range(FLUID_CELLS)]
@@ -228,7 +244,7 @@ def read_native_fraction(case: Path, liquidus_K: float) -> dict:
             fluid = matches[0]
         metal = read_alpha(fluid / "alpha.metal", expected_cells=FLUID_CELLS)
         solid = read_native_solid_fraction(fluid / MODEL_FIELD, expected_cells=FLUID_CELLS)
-        T = read_temperature(fluid / "T", expected_cells=FLUID_CELLS)
+        T = read_native_metal_temperature(fluid / "T.metal", expected_cells=FLUID_CELLS)
         phase = phase_volume_metrics(cell_volumes, metal, solid, T, liquidus_K)
         snapshots.append({"time_s": float(time), **check_solid_fraction(metal, solid),
                           **phase,
@@ -236,7 +252,8 @@ def read_native_fraction(case: Path, liquidus_K: float) -> dict:
                           (phase["metal_vof_volume_m3"]-initial_vof_volume_m3)/initial_vof_volume_m3,
                           "alpha_metal_sha256": digest(fluid / "alpha.metal"),
                           "alpha_metal_solid_sha256": digest(fluid / MODEL_FIELD),
-                          "temperature_sha256": digest(fluid / "T")})
+                          "temperature_sha256": digest(fluid / "T.metal"),
+                           "temperature_field_for_solidification": "T.metal"})
     return {"snapshots": snapshots, "native_solid_fraction_observed": True,
             "initial_metal_vof_volume_m3": initial_vof_volume_m3,
             "volumes_from_native_fluid_mesh": True,
