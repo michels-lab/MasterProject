@@ -1,6 +1,10 @@
 # freesurface — Casos de prueba
 
 
+> **20-11-2026 FS-C06 DATOS NATIVOS:** se observaron `4.801191628e-5 m³` de metal VOF, **0 metal sólido** a `1e-7` y `2e-7 s`, temperatura final media `1499.996564 K`; sin contracción de volumen ni alimentación. Los monitores de masa/calor de Foundation14 estaban colocados en el `controlDict` legado y no generaron `.dat` en cuatro rutas consultadas; ahora residen en `system/functions`, con aceptación endurecida en Git **todavía pendiente de WSL**. [Bitácora](../docs/granada/FS_C06_GATE_NATIVO_WSL_20261120_ES.md). Entradas antiguas de «no ejecutado» son historia, no estado actual.
+
+
+
 > **20-11-2026 — FS-C06, primera aceptación nativa WSL Foundation14:** dos pasos `foamMultiRun`, campo `alpha.metal.solid` y `checkMesh` de `fluid/mold` reportados PASS en consola del investigador; datos crudos pendientes de revisión. No equivale a contracción física ni alimentación. [Bitácora FS-C06](../docs/granada/FS_C06_GATE_NATIVO_WSL_20261120_ES.md). Los bloques antiguos que declaran FS-C06 no ejecutado son históricos.
 
 
