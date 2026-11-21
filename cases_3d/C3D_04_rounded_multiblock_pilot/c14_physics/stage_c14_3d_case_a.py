@@ -313,9 +313,33 @@ def run_smoke(output: Path, info: dict) -> dict:
         log=(output/"log.foamMultiRun").read_text(encoding="utf-8")
         require(re.search(r"(?m)^\s*End\s*$",log) is not None,
                 "two-step native foamMultiRun did not terminate normally")
-        for reg in ("metal","mold"):
-            require((output/"0.002"/reg/"T").is_file(),
-                    "missing native final region field T: "+reg)
+        # The original physics is active ONLY if native Foundation14 loaded
+        # phase-change and solved metal enthalpy, mold energy and pressure.
+        for marker in (
+            "Selecting solver fluid",
+            "Selecting solver solid",
+            "Selecting solidificationMeltingSource with name phaseChangeSource",
+            "Solving for h",
+            "Solving for e",
+            "Solving for p_rgh",
+            "Time = 0.001s",
+            "Time = 0.002s",
+        ):
+            require(marker in log,"missing C14 solver evidence: "+marker)
+        fields=(
+            "0.002/metal/T","0.002/metal/U","0.002/metal/p_rgh",
+            "0.002/metal/phaseChangeSource:alpha1","0.002/mold/T"
+        )
+        sha={}
+        for relative in fields:
+            path=output/relative
+            require(path.is_file(),"missing C14 native field "+relative)
+            sha[relative]=digest(path)
+        info["native_phase_change_model_selected"]=True
+        info["native_metal_enthalpy_and_mold_internal_energy_solved"]=True
+        info["native_pressure_equations_solved"]=True
+        info["native_fields_sha256"]=sha
+        info["native_solidification_onset_demonstrated"]=False
         info["status"]="C3D04_A_C14_FLUID_SOLID_TWO_STEP_NATIVE_SMOKE_PASS"
         info["native_solver_run"]=True
         info["foamMultiRun_log"]=result
