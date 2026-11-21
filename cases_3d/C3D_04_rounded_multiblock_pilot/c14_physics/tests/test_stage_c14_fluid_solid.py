@@ -165,6 +165,58 @@ class CaseAOriginalC14PhysicsTest(unittest.TestCase):
                 with self.assertRaisesRegex(ValueError,"length"):
                     stage.region_cells(root,region,1)
 
+    def test_full_C14_10s_runner_rejects_smoke_and_preserves_original_controls(self):
+        # A mocked solver tests only the evidence gate; it DOES NOT run CFD.
+        with tempfile.TemporaryDirectory() as folder:
+            root=Path(folder)
+            (root/"system").mkdir()
+            control=root/"system"/"controlDict"
+            original=(c14.C14/"system/controlDict").read_bytes()
+            control.write_bytes(original)
+            info={
+                "smoke_time_only_changes":False,
+                "native_solver_run":False,
+                "physical_validation":False,
+            }
+            final_files=(
+                "10/metal/T","10/metal/U","10/metal/p","10/metal/p_rgh",
+                "10/metal/phaseChangeSource:alpha1","10/mold/T",
+            )
+            for rel in final_files:
+                path=root/rel
+                path.parent.mkdir(parents=True,exist_ok=True)
+                path.write_text("SYNTHETIC_TEST_FIELD",encoding="utf-8")
+            def mock_solver(args, directory, log_name, timeout):
+                self.assertIsNone(timeout)
+                self.assertIn("foamMultiRun",args[0])
+                (directory/log_name).write_text(
+                    "Selecting solver fluid\n"
+                    "Selecting solver solid\n"
+                    "Selecting solidificationMeltingSource with name phaseChangeSource\n"
+                    "Solving for h\nSolving for e\nSolving for p_rgh\n"
+                    "Time = 10s\nEnd\n",encoding="utf-8")
+                return {"rc":0,"log":log_name}
+            with patch.object(stage,"environment",return_value={
+                "foamMultiRun":"/mock/foamMultiRun"
+            }), patch.object(stage,"native",side_effect=mock_solver):
+                result=stage.run_full_C14_original_10s(root,dict(info))
+            self.assertTrue(result["native_solver_run"])
+            self.assertFalse(result["physical_validation"])
+            self.assertEqual(result["full_10s_fields_sha256"].keys(),
+                             set(final_files))
+            self.assertTrue(result["full_10s_original_controlDict_unchanged"])
+            self.assertEqual(control.read_bytes(),original)
+            self.assertEqual(json.loads((root/stage.REPORT).read_text())["native_solver_run"],True)
+            with patch.object(stage,"environment",return_value={
+                "foamMultiRun":"/mock/foamMultiRun"
+            }),patch.object(stage,"native",side_effect=mock_solver):
+                with self.assertRaisesRegex(ValueError,"shortened smoke"):
+                    stage.run_full_C14_original_10s(
+                        root,{"smoke_time_only_changes":True,"native_solver_run":False})
+                control.write_text("endTime 0.002;")
+                with self.assertRaisesRegex(ValueError,"BYTE-IDENTICAL"):
+                    stage.run_full_C14_original_10s(root,dict(info))
+
     def test_real_polyMesh_owner_neighbour_count_read_and_nondestructive_copy(self):
         with tempfile.TemporaryDirectory() as folder:
             root=Path(folder)

@@ -353,6 +353,64 @@ def run_smoke(output: Path, info: dict) -> dict:
     return info
 
 
+def run_full_C14_original_10s(output: Path, info: dict) -> dict:
+    """Execute EXACT historical C14 10-second horizon on an isolated 3D mesh.
+
+    No time/model/property/solver modification. A successful native solver run
+    is NOT automatically a physically validated cooling/solidification curve.
+    """
+    original_control=(physics.C14/"system/controlDict").read_bytes()
+    require((output/"system/controlDict").read_bytes()==original_control,
+            "full 10s execution requires BYTE-IDENTICAL C14 controlDict")
+    require(not info.get("smoke_time_only_changes",True),
+            "full original C14 solver cannot run shortened smoke inputs")
+    require(not info.get("native_solver_run",False),
+            "full original case must be an unexecuted staged candidate")
+    fields=(
+        "10/metal/T","10/metal/U","10/metal/p","10/metal/p_rgh",
+        "10/metal/phaseChangeSource:alpha1","10/mold/T",
+    )
+    try:
+        result=native([environment()["foamMultiRun"],"-case",str(output)],
+                      output,"log.foamMultiRun",None)
+        full_log=(output/"log.foamMultiRun").read_text(encoding="utf-8")
+        require(re.search(r"(?m)^\s*End\s*$",full_log) is not None,
+                "full C14 native solver did not terminate with End")
+        require(re.search(r"(?m)^\s*Time\s*=\s*10(?:\.0+)?s\s*$",full_log) is not None,
+                "full C14 native solver did not reach exactly 10 seconds")
+        for marker in (
+            "Selecting solver fluid",
+            "Selecting solver solid",
+            "Selecting solidificationMeltingSource with name phaseChangeSource",
+            "Solving for h","Solving for e","Solving for p_rgh",
+        ):
+            require(marker in full_log,
+                    "full C14 solver omitted essential original physics "+marker)
+        field_hashes={}
+        for relative in fields:
+            file=output/relative
+            require(file.is_file() and file.stat().st_size>0,
+                    "10s output missing/empty physically required field "+relative)
+            field_hashes[relative]=digest(file)
+        info["status"]="C3D04_A_C14_ORIGINAL_FULL_10S_NATIVE_EXECUTED_NOT_PHYSICALLY_VALIDATED"
+        info["native_solver_run"]=True
+        info["full_10s_original_controlDict_unchanged"]=True
+        info["full_10s_fluid_solid_phase_model_selected"]=True
+        info["full_10s_fields_sha256"]=field_hashes
+        info["full_10s_solver_log"]=result
+        info["native_solidification_onset_demonstrated"]=False
+        info["energy_balance_or_numerical_independence_validated"]=False
+    except Exception as exc:
+        info["status"]="C3D04_A_C14_FULL_10S_NATIVE_FAILED_LOG_PRESERVED"
+        info["native_solver_run"]=False
+        info["error"]=str(exc)
+        raise
+    finally:
+        (output/REPORT).write_text(
+            json.dumps(info,ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
+    return info
+
+
 def main()->int:
     p=argparse.ArgumentParser(description=__doc__)
     p.add_argument("--source",type=Path,default=SOURCE)
@@ -361,6 +419,7 @@ def main()->int:
     choice.add_argument("--preflight",action="store_true")
     choice.add_argument("--materialize",action="store_true")
     choice.add_argument("--smoke",action="store_true")
+    choice.add_argument("--run-full",action="store_true")
     args=p.parse_args()
     try:
         if args.preflight:
@@ -370,8 +429,12 @@ def main()->int:
             result=stage(args.source,args.out,smoke=args.smoke)
             if args.smoke:
                 result=run_smoke(args.out.expanduser().absolute(),result)
+            elif args.run_full:
+                result=run_full_C14_original_10s(
+                    args.out.expanduser().absolute(),result)
             print(json.dumps({"status":result["status"],
-                              "full_10s_C14_3D_validated":False,
+                              "full_10s_C14_3D_executed":bool(args.run_full and result.get("native_solver_run")),
+                              "full_10s_C14_3D_physically_validated":False,
                               "report":str(args.out/REPORT)},indent=2))
         return 0
     except (OSError,ValueError,RuntimeError,subprocess.TimeoutExpired) as exc:
