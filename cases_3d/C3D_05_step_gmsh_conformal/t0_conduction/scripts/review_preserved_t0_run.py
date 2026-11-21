@@ -60,6 +60,7 @@ def recover(legacy_bytes: bytes, log_bytes: bytes, input_bytes: bytes) -> dict:
                 "end_marker": current["end_marker_observed"],
                 "sigfpe_informational_lines_ignored": current["informational_sigfpe_banner_lines_ignored"],
                 "fatal_pattern_remaining": current["fatal_openfoam_pattern"],
+                "fatal_diagnostic_lines": current.get("fatal_diagnostic_lines", []),
             }, sort_keys=True)
         )
     current["input_sha256"] = sha(input_bytes)
