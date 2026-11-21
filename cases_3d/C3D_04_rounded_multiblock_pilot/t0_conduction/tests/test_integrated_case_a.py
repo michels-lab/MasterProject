@@ -115,7 +115,9 @@ class IntegratedCaseAT0(unittest.TestCase):
             self.assertNotIn("externalWallHeatFluxTemperature", field)
             self.assertNotIn("kappaMethod solidThermo", field)
             self.assertNotIn("mode coefficient", field)
-            self.assertIn("h constant 10;", field)
+            self.assertIn("h uniform 10;", field)
+            # Native Foundation14 reads h as a patch field, Ta as a Function1.
+            self.assertNotIn("h constant ", field)
             self.assertIn("Ta constant 300;", field)
         self.assertIn("thicknessLayers (0.0002);", items["0/metal/T"])
         self.assertIn("kappaLayers (0.1);", items["0/metal/T"])
