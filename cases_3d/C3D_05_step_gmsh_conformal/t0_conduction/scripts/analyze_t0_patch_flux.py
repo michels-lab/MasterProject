@@ -24,6 +24,58 @@ CENTER_TOL_M = 1e-7   # GEOMETRIC MATCH TOLERANCE ONLY; NOT THERMAL ACCURACY
 AREA_REL_TOL = 0.001  # GEOMETRIC CONSISTENCY ONLY
 NORMAL_DOT_MAX = -0.995  # outward face normals must be opposed
 
+# Native F14 extractor prints "%.17g" (binary64 round-trip); the volume
+# energy postprocessor serializes numeric times as short JSON floats.
+# Only reconcile FLOAT REPRESENTATION noise. No missing/extra times and no
+# interpolation, resampling or physical time-grid tolerance is permitted.
+TIME_ROUNDTRIP_MAX_ABS_TOL_S = Decimal("1e-12")
+
+
+def align_native_energy_times(flux_times: set, energy_history: list[dict]) -> tuple[dict, Decimal, Decimal]:
+    """Strict one-to-one sorted time match under bounded binary64 formatting noise."""
+    if not isinstance(energy_history, list):
+        raise ValueError("Native volume-energy history missing")
+    energy_rows = {}
+    for row in energy_history:
+        if not isinstance(row, dict) or type(row.get("time_s")) not in (int, float):
+            raise ValueError("Invalid native volume-energy time entry")
+        numeric = row["time_s"]
+        if not math.isfinite(numeric):
+            raise ValueError("Nonfinite native volume-energy time entry")
+        t = Decimal(str(numeric))
+        if t in energy_rows:
+            raise ValueError("Duplicate energy time: cannot pair native flux")
+        energy_rows[t] = row
+    ft, et = sorted(flux_times), sorted(energy_rows)
+    if len(ft) != len(et) or len(ft) < 2:
+        raise ValueError(
+            f"Native face flux times do not match volumetric energy times: "
+            f"flux_samples={len(ft)} energy_samples={len(et)}"
+        )
+    if any(not t.is_finite() for t in ft):
+        raise ValueError("Nonfinite native flux time")
+    # A narrower bound relative to the minimum recorded sample interval
+    # prevents the tolerance from merging distinct very close time steps.
+    gaps = [b-a for times in (ft, et) for a, b in zip(times, times[1:])]
+    if not gaps or min(gaps) <= 0:
+        raise ValueError("Native time samples not strictly increasing")
+    tolerance = min(TIME_ROUNDTRIP_MAX_ABS_TOL_S, min(gaps)/Decimal(10))
+    aligned = {}
+    max_delta = Decimal(0)
+    for flux_time, energy_time in zip(ft, et):
+        delta = abs(flux_time-energy_time)
+        if delta > tolerance:
+            raise ValueError(
+                "Native face flux times do not match volumetric energy times: "
+                f"flux_t={flux_time} energy_t={energy_time} "
+                f"delta_s={delta} permissible_roundtrip_s={tolerance}; "
+                "no interpolation or time substitution"
+            )
+        aligned[flux_time] = energy_rows[energy_time]
+        max_delta = max(max_delta, delta)
+    return aligned, max_delta, tolerance
+
+
 
 def parse_csv(path: Path, expected_faces: int = FACES_PER_PATCH):
     if not path.is_file() or path.is_symlink():
@@ -121,11 +173,12 @@ def compare(metal, mold, energy: dict, end_time: float, expected_faces: int=FACE
     pairs=face_pairs(metal[first],mold[first])
     if len(pairs)!=expected_faces:
         raise ValueError("Native paired face count mismatch")
-    energy_rows={Decimal(str(r["time_s"])):r for r in energy["history"]}
-    if set(energy_rows)!=tm:
-        raise ValueError("Native face flux times do not match volumetric energy times")
+    energy_rows, max_roundtrip_delta_s, time_roundtrip_bound_s = align_native_energy_times(
+        tm, energy["history"]
+    )
     series=[]
     old=None
+    old_native_time=None
     for t in sorted(tm):
         mr=metal[t];dr=mold[t]
         gross=0.;signed_m=0.;signed_d=0.;abs_pair_mismatch=0.
@@ -158,8 +211,8 @@ def compare(metal, mold, energy: dict, end_time: float, expected_faces: int=FACE
             if dt<=0:raise ValueError("nonmonotonic native face time")
             # Discrete written-time trapezoidal patch-energy integral is a
             # diagnostic approximation, not an exact finite-volume time integral.
-            dm=energy_rows[t]["metal_sensible_energy_J"]-energy_rows[Decimal(str(old["time_s"]))]["metal_sensible_energy_J"]
-            dd=energy_rows[t]["mold_sensible_energy_J"]-energy_rows[Decimal(str(old["time_s"]))]["mold_sensible_energy_J"]
+            dm=energy_rows[t]["metal_sensible_energy_J"]-energy_rows[old_native_time]["metal_sensible_energy_J"]
+            dd=energy_rows[t]["mold_sensible_energy_J"]-energy_rows[old_native_time]["mold_sensible_energy_J"]
             trapez_m=0.5*(signed_m+old["metal_total_outward_W"])*dt
             trapez_d=0.5*(signed_d+old["mold_total_outward_W"])*dt
             row["metal_energy_change_plus_patch_flux_trapezoid_J"]=dm+trapez_m
@@ -167,6 +220,7 @@ def compare(metal, mold, energy: dict, end_time: float, expected_faces: int=FACE
             row["interface_flux_integral_sum_trapezoid_J"]=trapez_m+trapez_d
         series.append(row)
         old=row
+        old_native_time=t
     return {
         "status":"NATIVE_PATCH_Q_FACE_PAIR_DIAGNOSTICS_NO_ACCEPTANCE_THRESHOLD",
         "patch_names":{"metal":"metal_to_mold","mold":"mold_to_metal"},
@@ -175,6 +229,9 @@ def compare(metal, mold, energy: dict, end_time: float, expected_faces: int=FACE
         "geometric_match_tolerance_m":CENTER_TOL_M,
         "geometric_area_relative_tolerance":AREA_REL_TOL,
         "geometry_reciprocity_checked":True,
+        "time_alignment_method":"one-to-one chronological native flux/volume-energy match; binary64 decimal round-trip only; NO interpolation",
+        "max_time_roundtrip_difference_s":float(max_roundtrip_delta_s),
+        "max_permitted_time_roundtrip_difference_s":float(time_roundtrip_bound_s),
         "direct_patch_normal_heat_flux_observed":True,
         "patch_flux_continuity_numerically_accepted":False,
         "experimental_validation":False,
