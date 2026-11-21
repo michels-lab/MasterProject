@@ -17,6 +17,7 @@ def load(name, path):
 E = load("case_b_energy", T0 / "scripts/t0_energy_reference.py")
 A = load("case_b_solver_audit", T0 / "scripts/audit_t0_numerical_run.py")
 REF = load("case_b_c14_reference", T0 / "scripts/c14_numerical_reference.py")
+R = load("case_b_preserved_run_review", T0 / "scripts/review_preserved_t0_run.py")
 
 
 class NumericalEnergy(unittest.TestCase):
@@ -86,6 +87,65 @@ class NumericalEnergy(unittest.TestCase):
         faked = "Time = 0.001\nTime = 0.1\nEnd\n"
         self.assertFalse(A.audit(faked, 0, cfg)["numerical_run_completed"])
         self.assertEqual(A.audit(faked, 0, cfg)["native_energy_equation_linear_solves_observed"], 0)
+
+    def test_native_f14_seconds_and_sigfpe_banner_are_not_fatal(self):
+        cfg = REF.build()
+        log = (
+            "Enabling floating point exception trapping (FOAM_SIGFPE)\n"
+            "Time = 0.001s\n"
+            "metal DICPCG: Solving for e, Initial residual = 0.01, Final residual = 1e-7, No Iterations 1\n"
+            "mold  DICPCG: Solving for e, Initial residual = 0.003, Final residual = 1e-8, No Iterations 1\n"
+            "Time = 0.1s\n"
+            "metal DICPCG: Solving for e, Initial residual = 0.001, Final residual = 1e-8, No Iterations 1\n"
+            "End\n"
+        )
+        accepted = A.audit(log, 0, cfg)
+        self.assertTrue(accepted["numerical_run_completed"])
+        self.assertEqual(accepted["times_observed"], 2)
+        self.assertFalse(accepted["fatal_openfoam_pattern"])
+        self.assertEqual(accepted["final_time_observed_s"], 0.1)
+        self.assertFalse(A.audit(log + "Floating point exception (core dumped)\n", 0, cfg)["numerical_run_completed"])
+        self.assertFalse(A.audit(log + "FOAM FATAL IO ERROR\n", 0, cfg)["numerical_run_completed"])
+        self.assertFalse(A.audit(log.replace("Time = 0.1s", "Time = 0.09s"), 0, cfg)["numerical_run_completed"])
+        self.assertFalse(A.audit(log, 1, cfg)["numerical_run_completed"])
+
+    def test_recover_old_false_negative_with_original_hashes_unchanged(self):
+        import hashlib
+        cfg = REF.build()
+        input_bytes = json.dumps(cfg).encode()
+        log_bytes = (
+            "Enabling floating point exception trapping (FOAM_SIGFPE)\n"
+            "Time = 0.001s\n"
+            "metal DICPCG: Solving for e, Initial residual = 0.01, Final residual = 1e-7\n"
+            "Time = 0.1s\n"
+            "mold DICPCG: Solving for e, Initial residual = 0.001, Final residual = 1e-8\n"
+            "End\n"
+        ).encode()
+        legacy = A.audit(log_bytes.decode(), 0, cfg)
+        legacy.update({
+            "numerical_run_completed": False,
+            "status": "NUMERICAL_ONLY_SOLVER_NOT_VERIFIED_COMPLETE",
+            "fatal_openfoam_pattern": True,
+            "times_observed": 0,
+            "exit_code": 0,
+            "input_sha256": hashlib.sha256(input_bytes).hexdigest(),
+            "log_sha256": hashlib.sha256(log_bytes).hexdigest(),
+        })
+        old_bytes = json.dumps(legacy).encode()
+        recovered = R.recover(old_bytes, log_bytes, input_bytes)
+        self.assertTrue(recovered["numerical_run_completed"])
+        self.assertEqual(recovered["original_legacy_status_sha256"], hashlib.sha256(old_bytes).hexdigest())
+        self.assertTrue(recovered["recovered_without_solver_rerun"])
+        self.assertFalse(recovered["energy_conservation_verified"])
+        with self.assertRaisesRegex(ValueError, "SHA-256"):
+            R.recover(old_bytes, log_bytes + b"CHANGED", input_bytes)
+        with self.assertRaisesRegex(ValueError, "STILL fails"):
+            R.recover(old_bytes, log_bytes.replace(b"End\n", b"FOAM FATAL ERROR\nEnd\n"), input_bytes) if False else R.recover(
+                json.dumps({**legacy, "log_sha256": hashlib.sha256(log_bytes + b"FOAM FATAL ERROR\n").hexdigest()}).encode(),
+                log_bytes + b"FOAM FATAL ERROR\n", input_bytes)
+        bad = dict(legacy, exit_code=1)
+        with self.assertRaisesRegex(ValueError, "zero-exit"):
+            R.recover(json.dumps(bad).encode(), log_bytes, input_bytes)
 
     def test_run_log_report_preservation(self):
         with TemporaryDirectory() as folder:
