@@ -126,3 +126,19 @@ El siguiente paso sigue siendo la ejecucion aislada en WSL Foundation 14
 para comprobar los archivos `alpha.metal.solid` y la carga del fvModel.
 El ensayo de dos pasos parte de 1500 K, sobre el liquidus numerico C14:
 NO se deben presentar dos campos escritos como evidencia de cambio de fase real.
+
+### Campo de temperatura correcto del modelo nativo
+
+El metodo `VoFSolidificationMelting::correct()` de Foundation 14
+evalua `thermo1().T()` para la curva `alphaSolidT`.
+En este caso la fase 1 es `metal`: el dato que debe auditarse es
+el campo nativo `T.metal`, **no** el campo de mezcla `T`.
+El lector FS-C06 ahora valida por separado ambos objetos nativos
+`alpha.metal.solid` y `T.metal` sin cambiar los lectores historicos.
+Todos los promedios termicos y la fraccion metal por debajo del
+liquidus C14 en el reporte FS-C06 provienen de `T.metal`.
+Se registran los SHA-256 de ambos archivos observados.
+El uso de `T.metal` tampoco acredita, por si mismo, solidificacion:
+la prueba nativa debe mostrar descenso de temperatura y solidificacion
+durante una corrida fisicamente suficiente.
+Referencia oficial: https://cpp.openfoam.org/v14/VoFSolidificationMelting_8C_source.html
