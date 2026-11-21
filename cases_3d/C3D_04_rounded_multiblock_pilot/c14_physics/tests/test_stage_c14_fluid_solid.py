@@ -101,6 +101,28 @@ class CaseAOriginalC14PhysicsTest(unittest.TestCase):
         with self.assertRaisesRegex(ValueError,"endTime"):
             stage.smoke_control(c)
 
+    def test_F14_native_compact_owner_and_empty_neighbour_real_blockMesh_format(self):
+        # Native Foundation14 artifact 14688837569 writes 6{0} and 0(),
+        # NOT the multi-line numeric list accepted by the legacy T0 helper.
+        with tempfile.TemporaryDirectory() as folder:
+            root=Path(folder)
+            for region in ("metal","mold"):
+                mesh=root/"constant"/region/"polyMesh"
+                mesh.mkdir(parents=True)
+                h=('FoamFile\n{\n    format ascii;\n    class labelList;\n'
+                   '    note "nCells: 1 nFaces: 6 nInternalFaces: 0";\n'
+                   '    object owner;\n}\n')
+                (mesh/"owner").write_text(h+"\n6{0}\n")
+                (mesh/"neighbour").write_text(h+"\n0()\n")
+                for name in ("points","faces","boundary"):
+                    (mesh/name).write_text("STATIC_F14_NATIVE_FIXTURE")
+                self.assertEqual(stage.read_labels(mesh/"owner"),(6,0))
+                self.assertEqual(stage.read_labels(mesh/"neighbour"),(0,-1))
+                self.assertEqual(stage.region_cells(root,region,1)["nCells"],1)
+                (mesh/"owner").write_text(h+"\n6(0 0 0 0 0)\n")
+                with self.assertRaisesRegex(ValueError,"length"):
+                    stage.region_cells(root,region,1)
+
     def test_real_polyMesh_owner_neighbour_count_read_and_nondestructive_copy(self):
         with tempfile.TemporaryDirectory() as folder:
             root=Path(folder)
