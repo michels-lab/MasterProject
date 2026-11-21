@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # ONE native integrated milestone command for ORIGINAL C14 physics on V4/T02.
-# --preflight read only / --materialize full 10s inputs only / --smoke 2 CFD steps.
+# --preflight read-only / --materialize original 10s inputs only
+# --smoke diagnostic 2 native steps / --run-full original 10s C14 native CFD.
 # Original accepted mesh is immutable. Never overwrite a previous output.
 set -Eeuo pipefail
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -9,12 +10,15 @@ MODE="${1:---smoke}"
 SOURCE="${C3D04_NATIVE_SOURCE:-$HOME/OpenFOAM/C3D04_V4_TRANSITION_REPAIR_01/T02}"
 OUTPUT="${C3D04_C14_NATIVE_OUT:-$HOME/OpenFOAM/C3D04_A_C14_FLUID_SOLID_SMOKE_01}"
 
-if [[ "$MODE" != "--smoke" && "$MODE" != "--materialize" && "$MODE" != "--preflight" ]]; then
-    printf 'Usage: bash %s [--preflight|--materialize|--smoke]\n' "$0" >&2
+if [[ "$MODE" != "--smoke" && "$MODE" != "--materialize" && "$MODE" != "--preflight" && "$MODE" != "--run-full" ]]; then
+    printf 'Usage: bash %s [--preflight|--materialize|--smoke|--run-full]\n' "$0" >&2
     exit 2
 fi
 if [[ "$MODE" == "--materialize" && -z "${C3D04_C14_NATIVE_OUT:-}" ]]; then
     OUTPUT="$HOME/OpenFOAM/C3D04_A_C14_FLUID_SOLID_FULL_INPUTS_01"
+fi
+if [[ "$MODE" == "--run-full" && -z "${C3D04_C14_NATIVE_OUT:-}" ]]; then
+    OUTPUT="$HOME/OpenFOAM/C3D04_A_C14_FLUID_SOLID_FULL_10S_RUN_01"
 fi
 if [[ -z "${WM_PROJECT_VERSION:-}" || "${WM_PROJECT_VERSION:-}" != "14" ]]; then
     if [[ ! -r /opt/openfoam14/etc/bashrc ]]; then
