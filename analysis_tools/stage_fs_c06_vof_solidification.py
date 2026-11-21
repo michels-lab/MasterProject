@@ -60,24 +60,40 @@ def read_c14_reference(project: Path) -> dict:
             "physical_calibration_validated": False}
 
 
-def model_text(reference: dict) -> str:
+def model_text(reference: dict, inherited_models: str) -> str:
+    """Add the native phase-change model without deleting FS-C05 physics.
+
+    The accepted C05 case has compressible::VoFTurbulenceDamping under RAS
+    kEpsilon. Replacing the whole fvModels file silently disabled that source.
+    Keep the original dictionary intact and append exactly one new fvModel.
+    """
+    require(isinstance(inherited_models, str)
+            and len(re.findall(r"(?m)^\\s*FoamFile\\s*$", inherited_models)) == 1
+            and re.search(r"\\bobject\\s+fvModels\\s*;", inherited_models)
+            and re.search(r'\\blocation\\s+"constant/fluid"\\s*;',
+                          inherited_models),
+            "FS-C05 inherited fvModels header/region is invalid")
+    require(len(re.findall(r"(?m)^\\s*turbulenceDamping\\s*$",
+                           inherited_models)) == 1
+            and re.search(
+                r"\\bturbulenceDamping\\s*\\{[^{}]*"
+                r"\\btype\\s+compressible::VoFTurbulenceDamping\\s*;[^{}]*\\}",
+                inherited_models, re.S),
+            "FS-C05 VoF turbulence damping must remain active")
+    require(not re.search(
+        r"\\b(?:VoFSolidificationMelting|solidificationMeltingSource|FS_C06_vof_phase_change)\\b",
+        inherited_models),
+        "FS-C05 already has a phase-change model; refusing duplicate sources")
     v = reference["values"]
     def number(x: float) -> str:
         return format(x, ".12g")
-    return ("""/* FS-C06 numerical Foundation14 COMPATIBILITY candidate only.
+    added = ("""/* FS-C06 numerical Foundation14 COMPATIBILITY candidate only.
+ * Retain inherited compressible::VoFTurbulenceDamping / kEpsilon.
  * alpha.metal = VoF metal/air fraction.
  * alpha.metal.solid = absolute solid-metal fraction (0 <= solid <= metal).
  * THIS MODEL DOES NOT CREATE SHRINKAGE OR FEEDING.
  * C14 coefficients are numerical references, not measured material data.
  */
-FoamFile
-{
-    version 2.0;
-    format ascii;
-    class dictionary;
-    location "constant/fluid";
-    object fvModels;
-}
 FS_C06_vof_phase_change
 {
     type VoFSolidificationMelting;
@@ -85,14 +101,15 @@ FS_C06_vof_phase_change
     alphaSolidT table
     (
 """
-            + "        (" + number(v["Tsol"]) + " 1)\n"
-            + "        (" + number(v["Tliq"]) + " 0)\n"
-            + "    );\n"
-            + "    L " + number(v["L"]) + ";\n"
-            + "    relax " + number(v["relax"]) + ";\n"
-            + "    Cu " + number(v["Cu"]) + ";\n"
-            + "    q " + number(v["q"]) + ";\n"
-            + "}\n")
+            + "        (" + number(v["Tsol"]) + " 1)\\n"
+            + "        (" + number(v["Tliq"]) + " 0)\\n"
+            + "    );\\n"
+            + "    L " + number(v["L"]) + ";\\n"
+            + "    relax " + number(v["relax"]) + ";\\n"
+            + "    Cu " + number(v["Cu"]) + ";\\n"
+            + "    q " + number(v["q"]) + ";\\n"
+            + "}\\n")
+    return inherited_models.rstrip("\\n") + "\\n\\n" + added
 
 
 def check_solid_fraction(metal: list[float], solid: list[float]) -> dict:
@@ -296,7 +313,8 @@ def stage(source: Path, dest: Path, project: Path, native: bool = False) -> dict
     modified, added = ensure_compressible_kepsilon_divergence(schemes.read_text())
     schemes.write_text(modified)
     candidate = dest / "constant/fluid/fvModels"
-    candidate.write_text(model_text(reference))
+    original_models_text = original_models.read_text()
+    candidate.write_text(model_text(reference, original_models_text))
     result = {
         "schema": "masterproject-fs-c06-vof-phase-change-smoke-v1",
         "status": "FS_C06_STAGED_NO_CFD",
@@ -307,6 +325,11 @@ def stage(source: Path, dest: Path, project: Path, native: bool = False) -> dict
         "control_sha256": digest(control),
         "fvSchemes_sha256": digest(schemes),
         "fvModels_sha256": digest(candidate),
+        "inherited_fvModels_sha256": digest(original_models),
+        "inherited_VoFTurbulenceDamping_preserved": True,
+        "native_fvModels_entries": [
+            "turbulenceDamping", "FS_C06_vof_phase_change"
+        ],
         "rhoPhi_schemes_added_in_copy": added,
         "native_cfd_executed": False,
         "model_loaded_native": False,
