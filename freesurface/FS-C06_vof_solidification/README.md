@@ -1,5 +1,16 @@
 # FS-C06 — VOF + cambio de fase, sin contracción todavía
 
+## 20-11-2026 — Corrección de dos `fvModels` nativos en Foundation 14
+
+La revisión de la transición FS-C05→FS-C06 encontró un defecto del caso **OpenFOAM**: el generador original reescribía completamente `constant/fluid/fvModels` con una única fuente `VoFSolidificationMelting`, eliminando el modelo de amortiguamiento `compressible::VoFTurbulenceDamping` que FS-C05 usaba junto a `RAS kEpsilon`. El efecto era **cambiar silenciosamente las ecuaciones turbulentas de la superficie libre**, incluso si se lograban escribir campos `alpha.metal.solid`.
+
+Se corrigió la composición del **diccionario nativo**, no sus valores de materiales: ahora se conserva textualmente el `fvModels` heredado de FS-C05 (incluidos `turbulenceDamping`, `delta 1e-4` y cabecera `constant/fluid`) y se agrega **una sola vez** el bloque nuevo `FS_C06_vof_phase_change` de tipo `VoFSolidificationMelting`. El generador rechaza el modelo ausente, duplicado, una cabecera/región incorrecta o una fuente de cambio de fase preexistente. La trazabilidad del reporte incluye SHA-256 de la fuente heredada y del archivo generado. Las regresiones en `test_stage_fs_c06_vof_solidification.py` cubren preservación, presencia de ambos términos y contraejemplos negativos.
+
+Evidencia: se trata de **configuración de solver corregida en Git, pendiente de ejecución nativa**. CI sintética verifica la composición de los dos modelos; solo un **ensayo aislado real Foundation 14 con `foamMultiRun`** puede verificar su carga efectiva y escritura `alpha.metal.solid`. Todavía **no se ha implementado** `rho_l(T)`, `rho_s(T,f_s)`, contracción por continuidad, alimentación ni validación QuickCup. No modificar ni reutilizar resultados viejos FS-C05 como si se hubieran ejecutado con los dos modelos nuevos.
+
+Fuente oficial de tipos Foundation14: https://cpp.openfoam.org/v14/classFoam_1_1fv_1_1compressible_1_1VoFTurbulenceDamping.html y https://cpp.openfoam.org/v14/classFoam_1_1fv_1_1VoFSolidificationMelting.html.
+
+
 **20-11-2026 | Candidato de compatibilidad Foundation 14.** Se desarrolló un
 stager independiente para activar el modelo real
 `Foam::fv::VoFSolidificationMelting` sobre una copia nueva del caso **FS-C05**
