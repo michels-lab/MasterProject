@@ -22,5 +22,13 @@
   "field_parser_regression_tests_added": true,
   "field_parser_native_openfoam14_verified": false,
   "pending_CI_for_new_field_parser": true,
-  "last_repository_update_purpose": "Fix phase field identification and thermal metric provenance; no new native solver evidence"
+  "last_repository_update_purpose": "Fix phase field identification and thermal metric provenance; no new native solver evidence",
+  "density_screen": "CODE_ONLY_WITH_NATIVE_REPORT_AND_USER_SUPPLIED_HASHED_DENSITIES",
+  "density_screen_script": "analysis_tools/screen_fs_c06_density_contraction.py",
+  "density_reference_values_in_repo": false,
+  "density_screen_tests_in_CI": true,
+  "density_coupled_to_solver": false,
+  "constitutive_shrinkage_solver_implemented": false,
+  "native_density_screen_run": false,
+  "open_boundary_metal_mass_flux_measured": false
 }

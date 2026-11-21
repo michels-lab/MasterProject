@@ -142,3 +142,60 @@ El uso de `T.metal` tampoco acredita, por si mismo, solidificacion:
 la prueba nativa debe mostrar descenso de temperatura y solidificacion
 durante una corrida fisicamente suficiente.
 Referencia oficial: https://cpp.openfoam.org/v14/VoFSolidificationMelting_8C_source.html
+
+## Pantalla de densidades trazables (FS-C06 — Operación Granada)
+
+Se añadió `analysis_tools/screen_fs_c06_density_contraction.py` junto con
+regresiones numéricas. **No es un solver de contracción**: lee exclusivamente un
+informe nativo aceptado `FS_C06_REPORT.json`, calcula una hipótesis de masa
+inicial fija con densidades constantes expresamente proporcionadas por el
+investigador, y escribe un resultado separado. No toca el caso, ni ejecuta
+OpenFOAM, ni se habilita por sí solo en las simulaciones.
+
+Entrada material obligatoria (JSON externo, NO se inventa ni versiona ninguna
+densidad de hierro real):
+
+```json
+{
+  "schema": "masterproject-fs-c06-density-input-v1",
+  "material_id": "composicion-y-condicion-metalurgica-verificada",
+  "source_kind": "jmatpro_export",
+  "source_reference": "identificador-de-la-fuente",
+  "source_file_sha256": "SHA256_DE_64_HEX_DIGITOS_DEL_ARCHIVO_ORIGINAL",
+  "rho_liquid_kg_m3": 0,
+  "rho_solid_kg_m3": 0,
+  "density_reference_temperature_K": 0,
+  "graphitization_handling": "not_modelled"
+}
+```
+
+**Los ceros del ejemplo son marcadores deliberadamente inválidos**, no datos
+para usar. Deben sustituirse por valores físicos trazables y comprobar el
+SHA-256 del archivo original de JMatPro/medición. Para un ensayo posterior
+al nativo (no ejecutar mientras no haya densidades), el comando es:
+
+```bash
+python3 analysis_tools/screen_fs_c06_density_contraction.py \
+  --native-report /ruta/FS_C06_REPORT.json \
+  --density-json /ruta/density.json \
+  --density-source /ruta/exportacion_original \
+  --out /ruta/NUEVA_FS_C06_DENSITY_SCREEN.json
+```
+
+Para cada instantánea calcula `M*=rho_s*V_s+rho_l*V_l` y
+`V_cerrado*=M0/[rho_s*f_s,vol+rho_l*(1-f_s,vol)]`, donde
+`M0=rho_l*V_metal(t0)`. El término `f_s,vol=V_s/V_metal` es **fracción
+sólida volumétrica**, no másica. Un cambio de `V_cerrado*` con densidades
+introducidas es solo **escenario hipotético de masa fija y sin alimentación**.
+No debe confundirse con `alpha.metal` desplazándose en el solver real.
+Densidades constantes no sustituyen `rho_l(T)`, `rho_s(T,f_s)` ni
+expansión grafítica; si cambia su signo puede resultar expansión en vez de
+contracción, sin que esto valide la grafitización.
+
+El script bloquea archivos de salida preexistentes y reportes sin evidencia
+nativa. Rechaza inventarios incompatibles o falta de huellas de campos
+`alpha.metal`, `alpha.metal.solid`, `T.metal`. Sin flujo másico
+metal/aire por contornos, sin balance global de entalpía y sin movimiento
+de superficie medido: `mass_conservation_verified=false`,
+`volumetric_shrinkage_verified=false`,
+`feeding_verified=false` obligatoriamente.
