@@ -207,6 +207,53 @@ class CaseAOriginalC14PhysicsTest(unittest.TestCase):
                 import shutil
                 shutil.rmtree(dst)
 
+    def test_smoke_success_gate_requires_actual_C14_fvModels_and_U_p_rgh(self):
+        # Negative: an End marker and two temperatures alone are NOT proof of
+        # the original C14 fluid + solidification physical model.
+        with tempfile.TemporaryDirectory() as d:
+            root=Path(d)
+            def native_without_models(_cmd,_cwd,_log,_limit):
+                (root/"log.foamMultiRun").write_text(
+                    "Selecting solver solid\n"
+                    "Solving for e\n"
+                    "Time = 0.001s\nTime = 0.002s\nEnd\n")
+                return {"rc":0}
+            info={"native_solver_run":False}
+            with patch.object(stage,"environment",return_value={"foamMultiRun":"/mock/foamMultiRun"}), \
+                 patch.object(stage,"native",side_effect=native_without_models):
+                with self.assertRaisesRegex(ValueError,"Selecting solver fluid"):
+                    stage.run_smoke(root,info)
+            evidence=json.loads((root/stage.REPORT).read_text())
+            self.assertFalse(evidence["native_solver_run"])
+            self.assertIn("FAILED_LOG_PRESERVED",evidence["status"])
+
+            for name in (
+                "0.002/metal/T", "0.002/metal/U",
+                "0.002/metal/p_rgh", "0.002/metal/phaseChangeSource:alpha1",
+                "0.002/mold/T",
+            ):
+                path=root/name
+                path.parent.mkdir(parents=True,exist_ok=True)
+                path.write_text("Genuine fields are separately gated by the native run")
+            def native_complete(_cmd,_cwd,_log,_limit):
+                markers=[
+                    "Selecting solver fluid",
+                    "Selecting solver solid",
+                    "Selecting solidificationMeltingSource with name phaseChangeSource",
+                    "Solving for h", "Solving for e", "Solving for p_rgh",
+                    "Time = 0.001s","Time = 0.002s", "End",
+                ]
+                (root/"log.foamMultiRun").write_text("\n".join(markers)+"\n")
+                return {"rc":0,"sha256":"unit-test"}
+            with patch.object(stage,"environment",return_value={"foamMultiRun":"/mock/foamMultiRun"}), \
+                 patch.object(stage,"native",side_effect=native_complete):
+                good=stage.run_smoke(root,{"native_solver_run":False})
+            self.assertTrue(good["native_phase_change_model_selected"])
+            self.assertTrue(good["native_pressure_equations_solved"])
+            self.assertTrue(good["native_solver_run"])
+            self.assertEqual(len(good["native_fields_sha256"]),5)
+            self.assertFalse(good["native_solidification_onset_demonstrated"])
+
     def test_existing_real_zone_reject_if_not_all_cells(self):
         with tempfile.TemporaryDirectory() as folder:
             path=Path(folder)/"cellZones"
