@@ -6,7 +6,7 @@
   "source_of_truth": "AGENTS.md + cases_3d/C3D_04_rounded_multiblock_pilot/AGENTS.md",
   "reference_mesh": "~/OpenFOAM/C3D04_V4_TRANSITION_REPAIR_01/T02",
   "current_stage": "06_THERMAL_T0_PREFLIGHT_NATIVE",
-  "current_stage_label": "Etapa 6/10 — preflight nativo Foundation14 sobre malla V4/T02, condiciones y acoplamiento (sin CFD)",
+  "current_stage_label": "Etapa 6/10 — preflight nativo del modelo C14 ORIGINAL metal fluido + arena sólida en V4/T02; T0 dos-sólidos es auxiliar",
   "progress_definition": "10 hitos operativos de igual peso; un hito solo cuenta DONE con evidencia observada. No es porcentaje de validación física ni de trabajo restante en horas.",
   "progress_count_done": 5,
   "progress_count_total": 10,
@@ -33,7 +33,8 @@
     "T1 fluid-solid phase-change, temperature-dependent materials, actual casting cooling curves, mesh/time independence and experimental validation remain not executed.",
     "STL surface fit distances are sample-only, not rigorous Hausdorff to exact STEP.",
     "F14 externalTemperature and coupledTemperature have been authored and crosschecked with official docs, but actual runtime initialization/energy equation integration in WSL remains unverified",
-    "Stage 05 design closed via native Foundation14 CI dictionary parser (10/10) and 15/15 static integrated tests; actual user WSL V4/T02 mesh-based runtime remains unverified, current Stage 06"
+    "Stage 05 design closed via native Foundation14 CI dictionary parser (10/10) and 15/15 static integrated tests; actual user WSL V4/T02 mesh-based runtime remains unverified, current Stage 06",
+    "El Caso A de TESIS debe tener metal=fluid heRhoThermo/Cp/enthalpy + solidificationMeltingSource del C14 original; T0 dos sólidos es sólo ensayo auxiliar. El sintético nativo F14 de 27 celdas por región PASÓ pero NO es el CFD V4/T02 y no confirma onset ni conservación."
   ],
   "milestones": [
     {
@@ -62,25 +63,25 @@
     },
     {
       "id": "05_THERMAL_T0_DESIGN",
-      "label": "Paquete integrado T0: esquema de conducción, propiedades con fuente, BC, estrategia numérica y pruebas estáticas",
+      "label": "Diseño del ensayo T0 auxiliar de dos sólidos con parámetros trazados de C14 (NO reproduce física de hierro fluido)",
       "status": "DONE",
       "evidence": "reports/case-a-t0/CI_NATIVE_F14_20261120.json"
     },
     {
       "id": "06_THERMAL_T0_PREFLIGHT_NATIVE",
-      "label": "Preflight con OpenFOAM Foundation14 y datos físicos auténticos completos; consistencia de diccionarios",
+      "label": "Preflight nativo integral del modelo ORIGINAL C14 fluido-sólido y cellZone metal sobre V4/T02, sin alterar la malla",
       "status": "IN_PROGRESS",
       "evidence": null
     },
     {
       "id": "07_THERMAL_T0_EXECUTION",
-      "label": "Ensayo real T0 de conducción y balance de energía; estabilidad y sensibilidad a nonOrthogonal correctors",
+      "label": "Primera corrida C14 fluido-sólido sobre V4/T02 con U/p_rgh/h/e y balances, incluyendo estabilidad numérica; ID histórico retenido",
       "status": "PENDING",
       "evidence": null
     },
     {
       "id": "08_SOLIDIFICATION_T1",
-      "label": "Modelo 3D de cambio de fase basado en calor latente/entalpía y propiedades dependientes de temperatura",
+      "label": "Demostrar y analizar evolución real de solidificación C14 en 3D (alpha1e, Tsol/Tliq, calor latente, Darcy), no sólo carga del fvModel",
       "status": "PENDING",
       "evidence": null
     },
@@ -214,7 +215,7 @@
       "verified phase-change metal cellZone on V4/T02",
       "complete native C14 fluid-solid runtime"
     ],
-    "status": "PREPARED_NOT_MATERIALIZED_NOT_NATIVE_VERIFIED",
+    "status": "NATIVE_F14_27_PLUS_27_CELL_SYNTHETIC_FLUID_SOLID_SMOKE_SUCCESS; V4_T02_WSL_NOT_RUN",
     "CFD_run": false,
     "original_progress_unchanged": "Etapa 6/10, 5/10 hitos, 50% operativa (not physical validation)",
     "instruction_2026_11_20": "Conservar TODO el caso 2D C14; solo cambia la geometría/dimensionalidad a la malla V4/T02 3D. Prohibido modificar propiedades, coeficientes, ecuaciones, condiciones físicas y parámetros numéricos.",
@@ -230,5 +231,42 @@
     "actual_V4_T02_C14_fluid_solid_CFD_run": false,
     "source_fidelity_native_synthetic_smoke_url": "https://github.com/michels-lab/MasterProject/actions/runs/44859479359",
     "milestone_progress_unchanged": "06/10, 5/10 done = 50% operational, no mesh-based physical validation"
+  },
+  "original_C14_fluid_solid_native_gate": {
+    "date": "2026-11-20",
+    "PR_status": "IN_PROGRESS_AWAIT_INTEGRATION",
+    "native_synthetic_run": "https://github.com/michels-lab/MasterProject/actions/runs/44859479359",
+    "artifact_original_fields_and_logs": "https://github.com/michels-lab/MasterProject/actions/runs/44859479359/artifacts/14689152079",
+    "real_OpenFOAM_Foundation14": true,
+    "source_model": "ORIGINAL_C14_2D_FLUID_SOLID_ADAPTED_ONLY_FOR_3D_GEOMETRY",
+    "synthetic_mesh_regions_and_cells": {
+      "metal": 27,
+      "mold": 27
+    },
+    "original_C14_metal_heRhoThermo_sensibleEnthalpy": true,
+    "original_C14_mold_heSolidThermo_sensibleInternalEnergy": true,
+    "native_solidificationMeltingSource_selected": true,
+    "native_metal_h_mold_e_p_rgh_solved": true,
+    "native_U_p_rgh_T_alpha1_fields_written": true,
+    "native_final_time_s": 0.002,
+    "synthetic_final_metal_T_K_range": [
+      1499.92,
+      1499.98
+    ],
+    "synthetic_final_mold_T_K_range": [
+      300,
+      300.238
+    ],
+    "liquid_fraction_alpha1_uniform": 1,
+    "native_solidification_onset_verified": false,
+    "actual_V4_T02_mesh_used": false,
+    "actual_V4_T02_WSL_case_materialized": false,
+    "actual_C14_3D_research_CFD_executed": false,
+    "phase_change_conservation_verified": false,
+    "physical_validation": false,
+    "grid_independence": false,
+    "staged_source": "cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/stage_c14_3d_case_a.py",
+    "one_shot_WSL_runner": "cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/run_c14_native_milestone.sh",
+    "operational_progress_unchanged": "5/10 milestones = 50% (stage 06 IN_PROGRESS)"
   }
 }
