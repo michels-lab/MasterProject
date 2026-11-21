@@ -1,6 +1,10 @@
 # FS-C06 — VOF + cambio de fase, sin contracción todavía
 
 
+> **20-11-2026 — Segunda corrida real (HEAD `608332778`):** `foamMultiRun` y `checkMesh fluid/mold` PASS; ahora **10/10 `.dat`** de los function objects de Foundation14 detectados en nueva copia `FS_C06_VOF_SOLID_SMOKE_20261121T032645Z_064d3091`. El traslado a `system/functions` quedó **verificado en WSL para escritura de archivos**, no sus contenidos numéricos. Falta leer las series originales antes de certificar flujos de masa/calor; las métricas `f_s=0` descritas más abajo pertenecen a la **primera** corrida. **SIN contracción ni alimentación implementadas.** [Bitácora de ambas corridas](../../docs/granada/FS_C06_GATE_NATIVO_WSL_20261120_ES.md).
+
+
+
 > **20-11-2026 | RESULTADO REAL DE FS-C06 + CORRECCIÓN FOUNDATION14:** en los dos pasos nativos (`1e-7`, `2e-7 s`) `V_metal=4.801191628e-5 m³`, `V_sólido=0`, `f_s=0`, `T.metal=1499.9970068→1499.9965641 K`, `ΔVOF=0`. Cuatro monitores buscados en `postProcessing` devolvieron cero archivos. Causa identificada: en Foundation 14 los **function objects se leen desde `system/functions`**, pero FS-C06 los había colocado dentro del `controlDict` (sintaxis histórica). Los diez monitores (3 volumen, 5 flujo de masa, 2 flujo térmico) se trasladaron a [`native/system/functions`](native/system/functions), el stager los copia y valida, y el gate ahora **rechaza** PASS si no se escriben sus diez archivos `.dat`. **Corrección en Git no verificada aún con un segundo arranque WSL; sin contracción ni alimentación física.** [Bitácora con tabla de resultados](../../docs/granada/FS_C06_GATE_NATIVO_WSL_20261120_ES.md). Las descripciones anteriores de monitores en `controlDict` son históricas y no describen la configuración actual.
 
 
