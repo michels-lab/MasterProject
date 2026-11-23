@@ -1,0 +1,31 @@
+name: J0 JMatPro CSV source audit (synthetic only)
+on:
+  pull_request:
+    paths:
+      - 'analysis_tools/jmatpro_property_bridge.py'
+      - 'analysis_tools/test_jmatpro_property_bridge.py'
+      - '.github/workflows/granada-j0-jmatpro-source-gate.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'analysis_tools/jmatpro_property_bridge.py'
+      - 'analysis_tools/test_jmatpro_property_bridge.py'
+      - '.github/workflows/granada-j0-jmatpro-source-gate.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  j0-source-gate:
+    name: Check CSV parsing, interpolation and source integrity (no CFD)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run synthetic regression tests
+        run: |
+          python3 -m unittest discover -s analysis_tools -p 'test_jmatpro_property_bridge.py' -v
+      - name: Verify syntax and CLI usage
+        run: |
+          python3 -m py_compile analysis_tools/jmatpro_property_bridge.py analysis_tools/test_jmatpro_property_bridge.py
+          python3 analysis_tools/jmatpro_property_bridge.py --help
+# No OpenFOAM installation, no solver, no meshing, no JMatPro export upload.
