@@ -21,6 +21,11 @@ class OriginalC14NativePostprocessingPreparationTests(unittest.TestCase):
         self.assertEqual(len(centres),8960)
         plan=runner.sample_geometry(centres)
         self.assertEqual(len(plan["profiles"]),5)
+        self.assertAlmostEqual(plan["profiles"]["line_y10mm"]["actual_y_m"],0.01)
+        self.assertAlmostEqual(plan["profiles"]["line_y20mm"]["actual_y_m"],0.02)
+        self.assertAlmostEqual(plan["profiles"]["line_y30mm"]["actual_y_m"],0.03)
+        self.assertEqual(plan["profiles"]["line_y30mm"]["sampling_method"],
+                         "PRESERVED_C14_METRIC_Y_WITHIN_3D_BBOX_NEEDS_NATIVE_INSIDE_CHECK")
         probe=plan["probe_actual_m"]
         self.assertIn(probe,centres)
         for name,p in plan["profiles"].items():
@@ -73,6 +78,21 @@ class OriginalC14NativePostprocessingPreparationTests(unittest.TestCase):
         self.assertIn("fields (T);",changed)
         self.assertIn("new",changed)
         self.assertNotIn("old {",changed)
+
+    def test_native_3d_profiles_require_all_80_finite_points(self):
+        with tempfile.TemporaryDirectory() as td:
+            root=Path(td)
+            expected=runner.profile_coverage(root)
+            self.assertEqual(len(expected),9)
+            self.assertTrue(all(v["status"]=="MISSING" for v in expected.values()))
+            path=root/"postProcessing/metal/horizontalProfiles/10/line_y20mm.xy"
+            path.parent.mkdir(parents=True,exist_ok=True)
+            path.write_text("# x T\n"+"".join(f"{i} 1500\n" for i in range(80)))
+            result=runner.profile_coverage(root)
+            self.assertEqual(result["horizontalProfiles/line_y20mm"]["status"],"PASS")
+            path.write_text("# x T\n"+"".join(f"{i} nan\n" for i in range(80)))
+            result=runner.profile_coverage(root)
+            self.assertEqual(result["horizontalProfiles/line_y20mm"]["status"],"INCOMPLETE")
 
     def test_all_original_output_families_exist_in_reference(self):
         root=runner.C14/"postProcessing/metal"
