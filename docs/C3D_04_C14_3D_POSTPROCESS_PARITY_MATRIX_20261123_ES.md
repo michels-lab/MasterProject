@@ -70,7 +70,7 @@ Este documento es contrato de cobertura, no declaración de cálculo ejecutado n
 Se añadió run_c14_3d_complete_postprocess.py como orquestador integral **preparado, NO EJECUTADO en WSL**. Su diseño:
 1. valida contra la auditoría anterior la identidad de 101 estados, SHA del log y bytes intactos del controlDict C14;
 2. calcula las integrales volumétricas y deja informe separado;
-3. deriva coordenadas de sondas/perfiles mediante centroides geométricos de celdas metálicas REALES, normalizando los tres niveles horizontales a 25/50/75 % de altura para no copiar puntos 2D que pueden estar fuera de la 3D (registra coordenadas verdaderas);
+3. deriva coordenadas de sondas/perfiles mediante centroides geométricos de celdas metálicas REALES, priorizando las estaciones físicas originales de y=10,20,30 mm cuando caben en el dominio metálico 3D y utilizando únicamente entonces un fallback de 25/50/75 % si están fuera del alcance (registra coordenadas y método verdaderos; valida 80 puntos finitos para cada perfil nativo);
 4. crea una COPIA completa independiente del run original, copia los cinco diccionarios de función C14 y el postproceso de superficie, cambiando exclusivamente probeLocations/sets en la copia;
 5. ejecuta foamPostProcess para functions, momentum y topSurfaceFlow y después foamLog, sin invocar solver, checkMesh o blockMesh;
 6. compara carpetas postProcessing realmente producidas contra la lista de carpetas postProcessing que existen en C14 2D y emite JSON PASS/FAIL por bloque, faltantes y límites de muestreo.
