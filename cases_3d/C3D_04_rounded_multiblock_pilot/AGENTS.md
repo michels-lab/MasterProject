@@ -1,3 +1,9 @@
+## 23-11-2026 — No actualizar Caso A mientras B/FS están en ejecución
+
+Caso A fuente futura: ~/OpenFOAM/C3D04_A_WORKTREE (work/c3d04-a-isolated, sin upstream). Su corrida 10s C14 ya existente permanece fuera de repo en ~/OpenFOAM/C3D04_A_C14_FLUID_SOLID_FULL_10S_RUN_01. **Nunca git pull en MasterProject, ni solver desde árbol vivo de otro caso, ni limpieza de B o FS.** La creación segura sin actualizar main se documenta en docs/WSL_CONCURRENT_CASE_WORKTREES_20261123_ES.md. Contracción FS_C02_WORKTREE ya existe y está fuera de este alcance; no intervenir. No incrementar hitos 6/10=60% por worktrees, seguir etapa 07/10.
+
+---
+
 ## 23-11-2026 — C14 POSTPROCESSING PARITY: NO SOLO T Y ALPHA1
 
 Mandato científico explícito: Caso 3D-A debe reproducir **todo** lo que se calcula en el caso 2D original C14 en postProcessing (los 29 researchDiagnostics, sondas U/T/p_rgh/rho/alpha1, horizontal/vertical profiles, tasas térmicas/solidificación, vorticidad/topología, gradientes, energy/heat/advectiveFlux, metalTop phi/U por cara, contacto metal-arena, energía sensible/latente, Darcy/buoyancy/pRgh, momentumMean/Max/Profiles y foamLog). Añadir cálculos volumétricos 3D que el 2D no ofrece. La fuente canónica es el inventario de **diccionarios auténticos** en docs/C3D_04_C14_3D_POSTPROCESS_PARITY_MATRIX_20261123_ES.md, no una selección simplificada.

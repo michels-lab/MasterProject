@@ -1,0 +1,54 @@
+name: WSL concurrent CFD worktree isolation safety
+
+on:
+  push:
+    paths:
+      - tools/isolate_active_openfoam_cases.py
+      - tools/tests/test_isolate_active_openfoam_cases.py
+      - .github/workflows/wsl-concurrent-cfd-worktrees-safety.yml
+  pull_request:
+    paths:
+      - tools/isolate_active_openfoam_cases.py
+      - tools/tests/test_isolate_active_openfoam_cases.py
+      - .github/workflows/wsl-concurrent-cfd-worktrees-safety.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  isolated-worktrees:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile isolation tool and real disposable-Git tests
+        run: |
+          python3 -m py_compile tools/isolate_active_openfoam_cases.py tools/tests/test_isolate_active_openfoam_cases.py
+      - name: Exercise actual Git worktree creation with active run sentinels
+        run: |
+          python3 -B -m unittest discover -s tools/tests -p 'test_isolate_active_openfoam_cases.py' -v
+      - name: Verify worktree tool never invokes solver, pull, reset, clean or removal
+        run: |
+          python3 - <<'PY'
+          import ast
+          from pathlib import Path
+          p=Path("tools/isolate_active_openfoam_cases.py")
+          tree=ast.parse(p.read_text(encoding="utf-8"))
+          targets={"foamMultiRun","blockMesh","checkMesh","wmake","git pull",
+                   "git reset","git clean","worktree remove","worktree prune"}
+          body=p.read_text(encoding="utf-8")
+          assert all(word not in body for word in ("shutil.rmtree(", "os.remove(", "unlink("))
+          calls=[x for x in ast.walk(tree) if isinstance(x,ast.Call)
+                 and isinstance(x.func,ast.Name) and x.func.id=="git"]
+          commands=[]
+          for call in calls:
+              for arg in call.args[1:]:
+                  if isinstance(arg,ast.Constant) and isinstance(arg.value,str):
+                      commands.append(arg.value)
+          forbidden={"pull","reset","clean","checkout","switch","prune","remove"}
+          assert not any(command in forbidden for command in commands),commands
+          print("Static check PASS: no destructive Git worktree commands in isolation tool.")
+          PY

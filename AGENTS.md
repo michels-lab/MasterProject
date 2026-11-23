@@ -1,3 +1,13 @@
+## MANDATORY — Concurrent WSL CFD source isolation (2026-11-23)
+
+The investigator runs three independent OpenFOAM projects simultaneously: **C3D04 Case A**, **C3D05 Case B**, and **FS contraction**. No agent may issue or silently execute a generic git pull/checkout/merge/reset/clean on ~/OpenFOAM/MasterProject or on a worktree that could be supplying a live solver. **Always use project-specific development worktrees**, and preserve immutable OUT-OF-TREE native solver inputs/results. A git pull on main updates tracked source and tracked postProcessing for ALL cases, not just the named case.
+
+Approved WSL development layout: A=~/OpenFOAM/C3D04_A_WORKTREE (work/c3d04-a-isolated); B=~/OpenFOAM/C3D05_B_WORKTREE (work/c3d05-b-isolated); contraction=~/OpenFOAM/FS_C02_WORKTREE (existing research/fs-c02-metal-air-vof-20261117). The existing FS worktree and FS_C01/05/06/07_RUNS must NEVER be reset, moved, pruned, recreated or merged into A/B. Source isolation does not authorize re-running CFD or changing C14/material/mesh physics.
+
+The single approved fail-closed one-shot installer is tools/isolate_active_openfoam_cases.py. **It creates only missing A/B worktrees with --no-track and verifies the existing contraction worktree; --plan is strictly read-only.** Safest initial execution is via git fetch plus git show origin/main:... | python3 - (see docs/WSL_CONCURRENT_CASE_WORKTREES_20261123_ES.md) without pulling the live checkout. If the historical FS checkout is missing/mismatched, STOP; never fabricate its state. CI tests cannot attest the actual laptop or an active CFD process. Every future CFD command must specify its case-specific worktree AND an independent native-run destination; never update a branch during a solver that reads it. If status unknown, use fetch+diff (non-checkout) and not pull.
+
+---
+
 ## Mandatory project contract — PROJECT_PROGRESS_CONTRACT_20261119
 
 For ALL MasterProject 2D/3D cases, consult `docs/POLITICA_ENTREGA_INTEGRAL_Y_ESTADO_ES.md` and `docs/PROJECT_STAGE_STATUS.json` before any work and report case, stage, progress N/Y with properly bounded %, evidence/blocker and next full integrated milestone in EVERY update. No iterative one-off WSL tests or fake validation; integrate root-cause fixes, internal tests and synchronized ES/EN logs. Preserve accepted mesh/STEP. Only user's laptop runs OpenFOAM. This overrides any older piecemeal flow.
