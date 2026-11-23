@@ -29,7 +29,7 @@
     "POTENTIAL_UNLOGGED_CHANGES": 2
   },
   "finding_total": 9,
-  "inventory_fingerprint": "c1cc9add6f6f4f253a4acac3f06a287fdb8cfcc4a597c40b3f32e685c5f8f1e1",
+  "inventory_fingerprint": "2eceeacd5ee6cd8edc35aee08ef0eb13919a2c21f9bef6f09c7f47d9bf4762be",
   "evidence_fingerprint": "612fca58ac4aeb879f3e0208aa8e8f4ec67610377872b7e255bfc546f0373a9b",
   "files": [
     {
@@ -272435,7 +272435,7 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "3ef5620769be2f7f7ba0b4f2ee247ae51dceda82"
+      "blob": "feb1f3f65f295d51aa3b7f4c58a92e9ca7ac4c9b"
     },
     {
       "path": "docs/granada/B11_C11_ENERGY2_DOCUMENTATION_AUDIT_20261021.md",
