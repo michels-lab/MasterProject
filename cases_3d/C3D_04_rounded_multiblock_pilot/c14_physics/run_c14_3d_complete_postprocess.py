@@ -73,16 +73,16 @@ def vector(p:tuple[float,float,float])->str:
 
 
 def sample_geometry(centres:list[tuple[float,float,float]])->dict:
+    """Prefer literal C14 metric stations if within true 3D mesh extents."""
     need(len(centres)==METAL_CELLS,"metal cell-centre count invalid")
     axes=list(zip(*centres))
     lo=[min(a) for a in axes]
     hi=[max(a) for a in axes]
     span=[b-a for a,b in zip(lo,hi)]
     need(all(s>0 for s in span),"3D metal region degenerate extent")
-    mid=tuple((a+b)/2 for a,b in zip(lo,hi))
-    probe=min(centres,key=lambda p:sum((p[i]-mid[i])**2 for i in range(3)))
+    source_probe=(0.02,0.02,0.005)
+    probe=min(centres,key=lambda p:sum((p[i]-source_probe[i])**2 for i in range(3)))
     def near_slice(axis:int,target:float)->list[tuple[float,float,float]]:
-        # Restrict to native cell centres near the requested normalized height.
         thickness=max(span[axis]*0.06,1e-9)
         cand=[p for p in centres if abs(p[axis]-target)<=thickness
               and abs(p[2]-probe[2])<=max(span[2]*0.12,1e-9)]
@@ -90,18 +90,32 @@ def sample_geometry(centres:list[tuple[float,float,float]])->dict:
             cand=[p for p in centres if abs(p[axis]-target)<=span[axis]*0.13]
         need(len(cand)>=6,"insufficient actual 3D cells for sampling slice")
         return cand
-    profile={}
-    for label,fract in (("line_y10mm",0.25),("line_y20mm",0.50),
-                        ("line_y30mm",0.75),("line_topNear",0.92)):
-        cand=near_slice(1,lo[1]+span[1]*fract)
-        y=quantile([p[1] for p in cand],0.5)
-        z=quantile([p[2] for p in cand],0.5)
+    profiles={}
+    levels=(("line_y10mm",0.01,0.25),
+            ("line_y20mm",0.02,0.50),
+            ("line_y30mm",0.03,0.75),
+            ("line_topNear",0.03975,0.92))
+    for name,requested_y,fraction in levels:
+        metric_ok=(lo[1]+0.01*span[1]<requested_y<
+                   hi[1]-0.01*span[1] and name!="line_topNear")
+        target=requested_y if metric_ok else lo[1]+span[1]*fraction
+        cand=near_slice(1,target)
+        actual_y=target if metric_ok else quantile([p[1] for p in cand],0.5)
+        original_z_ok=(lo[2]<source_probe[2]<hi[2])
+        actual_z=source_probe[2] if original_z_ok else quantile([p[2] for p in cand],0.5)
         xl=quantile([p[0] for p in cand],0.12)
         xr=quantile([p[0] for p in cand],0.88)
         need(xr-xl>span[0]*0.10,"horizontal sampling chord too short")
-        profile[label]={"axis":"x","start":(xl,y,z),"end":(xr,y,z),
-                        "nPoints":80,"nominal_normalized_y":fract,
-                        "actual_y_m":y,"actual_z_m":z}
+        profiles[name]={"axis":"x",
+                        "start":(xl,actual_y,actual_z),
+                        "end":(xr,actual_y,actual_z),"nPoints":80,
+                        "requested_C14_y_m":requested_y,
+                        "actual_y_m":actual_y,"actual_z_m":actual_z,
+                        "sampling_method":(
+                            "PRESERVED_C14_METRIC_Y_WITHIN_3D_BBOX_NEEDS_NATIVE_INSIDE_CHECK"
+                            if metric_ok else
+                            "NORMALIZED_3D_HEIGHT_FALLBACK_NOT_SAME_METRIC_Y"),
+                        "normalized_y_fallback":fraction}
     cand=[p for p in centres if
           abs(p[0]-probe[0])<=span[0]*0.12 and
           abs(p[2]-probe[2])<=span[2]*0.12]
@@ -110,18 +124,22 @@ def sample_geometry(centres:list[tuple[float,float,float]])->dict:
     bottom=quantile([p[1] for p in cand],0.12)
     top=quantile([p[1] for p in cand],0.88)
     need(top-bottom>span[1]*0.10,"vertical sampling chord too short")
-    profile["line_x20mm"]={"axis":"y",
-        "start":(probe[0],bottom,probe[2]),
-        "end":(probe[0],top,probe[2]),"nPoints":80,
-        "actual_x_m":probe[0],"actual_z_m":probe[2]}
-    return {"method":"GEOMETRY_SAMPLED_CELL_VERTEX_CENTROIDS_NOT_NATIVE_INTERPOLATION",
+    actual_x=source_probe[0] if lo[0]<source_probe[0]<hi[0] else probe[0]
+    actual_z=source_probe[2] if lo[2]<source_probe[2]<hi[2] else probe[2]
+    profiles["line_x20mm"]={"axis":"y",
+        "start":(actual_x,bottom,actual_z),
+        "end":(actual_x,top,actual_z),"nPoints":80,
+        "requested_C14_x_m":source_probe[0],
+        "actual_x_m":actual_x,"actual_z_m":actual_z}
+    return {"method":"PRESERVE_C14_METRIC_STATIONS_WHERE_POSSIBLE_3D_MESH_CENTROIDS",
+            "requested_C14_probe_m":source_probe,
             "probe_actual_m":probe,
             "mesh_bbox_min_m":lo,"mesh_bbox_max_m":hi,
-            "profiles":profile,
+            "profiles":profiles,
             "warnings":[
-              "C14 names y10/y20/y30 only identify analogous 25/50/75 percent height; positions are NOT identical C14 2D metric coordinates.",
-              "Cell-centroid endpoints may not guarantee an uninterrupted inside-mesh chord in concave topology; validate native postProcessing point counts.",
-              "This is a staging plan based on saved polyMesh, not an experimental probe calibration.",
+              "Exact C14 10/20/30mm heights are preferred only when within 3D metal extents; otherwise report normalized 25/50/75 percent fallback.",
+              "A coordinate inside a bounding box does NOT ensure a full chord lies inside a curved 3D mesh: check native profile point counts.",
+              "Probe actual point is a native cell-vertex centroid nearest C14 original probe, not the exact original experimental coordinate.",
             ]}
 
 
