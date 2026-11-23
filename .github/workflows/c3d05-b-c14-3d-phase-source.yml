@@ -35,6 +35,27 @@ jobs:
               compile(file.read_bytes(),str(file),"exec")
               print("COMPILE_OK",file)
           PY
+      - name: Ensure native entrypoint safely sources Foundation14 bashrc with ZSH_NAME unset
+        run: |
+          bash -n cases_3d/C3D_05_step_gmsh_conformal/c14_physics/run_case_b_c14_native.sh
+          python3 - <<'PY'
+          from pathlib import Path
+          import subprocess
+          import tempfile
+          p=Path("cases_3d/C3D_05_step_gmsh_conformal/c14_physics/run_case_b_c14_native.sh")
+          s=p.read_text(encoding="utf-8")
+          disable=s.index("set +u\n")
+          source=s.index("source /opt/openfoam14/etc/bashrc\n")
+          restore=s.index("set -u\n",source)
+          assert disable < source < restore, "source must occur with nounset disabled and re-enabled afterward"
+          assert s.startswith("#!/usr/bin/env bash") and "set -Eeuo pipefail" in s[:350]
+          with tempfile.TemporaryDirectory() as root:
+              f=Path(root)/"openfoam14-bashrc-fixture"
+              f.write_text('if [ -n "$ZSH_NAME" ]; then :; fi\nWM_PROJECT_VERSION=14\n')
+              cmd='set -Eeuo pipefail; unset -v ZSH_NAME; set +u; source "$1"; set -u; [[ $- == *u* ]]; [[ "$WM_PROJECT_VERSION" == 14 ]]'
+              subprocess.run(["bash","-c",cmd,"bash",str(f)],check=True)
+          print("FOUNDATION14_BASHRC_UNBOUND_ZSH_NAME_GUARD_OK_NO_SOLVER")
+          PY
       - name: Source-faithful 3D full-C14 input regressions (NO CFD)
         run: |
           PYTHONDONTWRITEBYTECODE=1 python3 -B -m unittest discover \
