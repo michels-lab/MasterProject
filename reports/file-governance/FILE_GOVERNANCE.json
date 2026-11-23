@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
   "audit_kind": "deterministic_full_tracked_tree",
-  "tracked_files_total": 39038,
-  "classified_files_total": 39033,
-  "docs_content_inspected": 190,
+  "tracked_files_total": 39039,
+  "classified_files_total": 39034,
+  "docs_content_inspected": 191,
   "large_docs_skipped": 1,
   "excluded_reports": 5,
   "roles": {
@@ -13,7 +13,7 @@
     "config": 17,
     "data": 32,
     "document": 153,
-    "index": 33,
+    "index": 34,
     "license": 1,
     "simulation_case_file": 117,
     "simulation_input": 2683,
@@ -29,7 +29,7 @@
     "POTENTIAL_UNLOGGED_CHANGES": 2
   },
   "finding_total": 9,
-  "inventory_fingerprint": "978a286d410e860f07076f8544a81e4710eaaea9fadebfb42ccd60b3f04c9c49",
+  "inventory_fingerprint": "80175672debe9aa26866f99cc6ffa7a2e87c076bf3aa392096523d17876d529b",
   "evidence_fingerprint": "b431eb29dbf7237acd96dc9e1fcacc522665ee14d6bbfd41ad44df869b4bd7b7",
   "files": [
     {
@@ -1972,6 +1972,13 @@
       "blob": "69882552bc480ed0ee29dc2606bb4652d09d3f3b"
     },
     {
+      "path": "cases_3d/C3D_05_step_gmsh_conformal/c14_physics/README.md",
+      "role": "index",
+      "purpose": "navigation/onboarding",
+      "certainty": "rule",
+      "blob": "87a04ca2cebd11de167ac58e486601d7ef25326d"
+    },
+    {
       "path": "cases_3d/C3D_05_step_gmsh_conformal/c14_physics/run_case_b_c14_native.sh",
       "role": "source",
       "purpose": "code/test implementation",
@@ -1990,7 +1997,7 @@
       "role": "test",
       "purpose": "code/test implementation",
       "certainty": "rule",
-      "blob": "3e36bcf423e5513e6aba741c091f5cb5b3255213"
+      "blob": "0e00bdfe79ed4991dc484098cdd6b3acba7e31c0"
     },
     {
       "path": "cases_3d/C3D_05_step_gmsh_conformal/constant/geometry/QuickCupmm.STEP",
