@@ -242,6 +242,11 @@ def main()->int:
         centres=cell_centres(case)
         geom=sample_geometry(centres)
         shutil.copytree(case,copy,symlinks=False)
+        # The CFD clone can contain old postProcessing snapshots. Preserve
+        # them separately to prevent false positives in new native parity.
+        prior=copy/"postProcessing"
+        if prior.exists():
+            prior.rename(copy/"_original_postProcessing_preserved_unmodified")
         hashes=adapt_diagnostic_files(copy,geom)
         need((copy/"system/controlDict").read_bytes()==
              (C14/"system/controlDict").read_bytes(),
@@ -266,7 +271,23 @@ def main()->int:
         reference_post=C14/"postProcessing"/"metal"
         need(reference_post.is_dir(),"original C14 postProcessing baseline missing")
         expected={p.name for p in reference_post.iterdir() if p.is_dir()}
-        missing=sorted(expected-set(dirs))
+        populated={p.name for p in actual.iterdir() if p.is_dir()
+                   and any(q.is_file() and q.stat().st_size>0
+                           for q in p.rglob("*"))} if actual.is_dir() else set()
+        missing=sorted(expected-populated)
+        # Some C14 function objects write directly to time/region rather
+        # than to a postProcessing directory. Audit those files separately.
+        derived=("vorticity","flowType","gradT","magGradT","dTdt",
+                 "coolingRate","gradRho","magGradRho","dAlphaLdt",
+                 "solidificationRate","latentHeatRateVol","CoCell",
+                 "phaseChangeSolidFraction","phaseChangeDarcyCoeff",
+                 "phaseChangeModelDeltaT","phaseChangeDarcyAcceleration",
+                 "phaseChangeBuoyancyAcceleration","pRghAcceleration",
+                 "phaseChangeDragToBuoyancy","phaseChangeDragToPressure")
+        derived_found=[k for k in derived if
+                       (copy/"10"/"metal"/k).is_file()
+                       and (copy/"10"/"metal"/k).stat().st_size>0]
+        derived_missing=sorted(set(derived)-set(derived_found))
         info={
             "schema":"C3D04_A_C14_3D_NATIVE_FUNCTION_OBJECT_PARITY_V1",
             "created_utc":datetime.now(timezone.utc).isoformat(),
@@ -282,7 +303,9 @@ def main()->int:
             "steps":steps,
             "native_postprocessing_object_dirs":dirs,
             "missing_expected_C14_object_dirs":missing,
-            "all_original_C14_function_objects_observed":not missing,
+            "derived_C14_fields_at_final_time":derived_found,
+            "missing_derived_C14_fields_at_final_time":derived_missing,
+            "all_original_C14_function_objects_observed":not missing and not derived_missing,
             "energy_conservation_verified":False,
             "QuickCup_validation":False,
             "phase_rate_at_each_0_001s_recovered":False,
@@ -301,12 +324,13 @@ def main()->int:
             "native_commands_all_passed":info["all_native_processing_commands_passed"],
             "object_dirs":len(dirs),
             "missing_C14_objects":missing,
+            "missing_derived_fields":derived_missing,
             "energy_conservation_verified":False,
             "new_CFD_run":False,
             "volume_report":str(vol/"C3D04_A_C14_3D_POSTPROCESS_REPORT.json"),
             "native_report":str(report),
         },ensure_ascii=False,indent=2))
-        return 0 if info["all_native_processing_commands_passed"] and not missing else 3
+        return 0 if info["all_native_processing_commands_passed"] and not missing and not derived_missing else 3
     except (OSError,ValueError,KeyError,TypeError) as exc:
         print("C14_NATIVE_3D_POSTPROCESS_BLOCKED:",exc,file=sys.stderr)
         return 2
