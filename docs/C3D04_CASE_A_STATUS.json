@@ -34,7 +34,8 @@
     "STL surface fit distances are sample-only, not rigorous Hausdorff to exact STEP.",
     "El Caso A de TESIS debe tener metal=fluid heRhoThermo/Cp/enthalpy + solidificationMeltingSource del C14 original; T0 dos sólidos es sólo ensayo auxiliar. El sintético nativo F14 de 27 celdas por región PASÓ pero NO es el CFD V4/T02 y no confirma onset ni conservación.",
     "Original C14 material values and time controls must remain byte-preserved; NEVER introduce temperature-dependent properties or new numerical settings without researcher's explicit approval.",
-    "Observed real C14 3D phaseChangeSource:alpha1 changes across saved states and final fields (alpha1 min0 avg0.8367 max0.9923 at t10). All-step max Co=0.02404. These DO NOT verify latent heat/energy balance, numerical independence, or experiment; stage07 remains IN_PROGRESS."
+    "Observed real C14 3D phaseChangeSource:alpha1 changes across saved states and final fields (alpha1 min0 avg0.8367 max0.9923 at t10). All-step max Co=0.02404. These DO NOT verify latent heat/energy balance, numerical independence, or experiment; stage07 remains IN_PROGRESS.",
+    "El postprocesamiento completo 3D-A debe igualar todo el C14 original: probes, perfiles x/y, campos térmicos/flujo, phi top, Darcy/buoyancy, gradientes, calor latente, energyFlux/heatFlux, power integrals, momentum y foamLog; mantener distinción entre datos existentes de 0.1s y probes C14 de 0.001s."
   ],
   "milestones": [
     {
@@ -357,5 +358,27 @@
     "energy_balance_verified": false,
     "mesh_time_independence_verified": false,
     "phase_timeline_next_script": "cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/summarize_existing_c14_phase_timeline.py"
+  },
+  "postprocessing_C14_3D_parity": {
+    "request_date": "2026-11-23",
+    "scope": "match ALL original C14 postProcessing/functionObjects/foamLog and extend to authentic 3D",
+    "source_diagnostics": [
+      "cases_controlled_buoyancy/C14_topFixedFlux_explicitRef/system/functions",
+      "cases_controlled_buoyancy/C14_topFixedFlux_explicitRef/system/researchDiagnostics",
+      "cases_controlled_buoyancy/C14_topFixedFlux_explicitRef/system/lineProfiles",
+      "cases_controlled_buoyancy/C14_topFixedFlux_explicitRef/system/momentumPostProcessing",
+      "analysis_tools/topSurfaceFlowPostProcessing"
+    ],
+    "progress_preserved": "STAGE_07_IN_PROGRESS_6_OF_10_60_PERCENT",
+    "volume_weighted_postrun_code_committed": true,
+    "volume_weighted_actual_WSL_execution_verified": false,
+    "complete_C14_functionObjects_parity_verified": false,
+    "energy_balance_verified": false,
+    "requires_native_offline_postprocessing": true,
+    "original_solver_rerun_required": false,
+    "source_resolution_limitation": "101 snapshots 0.1s vs C14 native probes 0.001s; cannot recover 10001 probe samples",
+    "evidence_contract": "docs/C3D_04_C14_3D_POSTPROCESS_PARITY_MATRIX_20261123_ES.md",
+    "analyzer_path": "cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/c14_3d_postprocess_parity.py",
+    "work_branch": "science/c3d04-a-c14-postprocessing-parity-stage07"
   }
 }
