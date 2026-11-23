@@ -49,8 +49,31 @@ def check_case_a_status():
     ):
         if not (ROOT/p).is_file():
             errors.append("Caso A: missing mandatory governance/QA: "+p)
-    if data.get("CFD_run") is not False or data.get("physical_validation") is not False:
-        errors.append("Caso A: invalid scientific acceptance without T0/CFD evidence")
+    # Native CFD completion and physical/experimental validation are
+    # independent states. The ORIGINAL C14 fluid-solid V4/T02 native run reached
+    # t=10 s on 2026-11-20 and is evidenced by investigator WSL stdout.
+    # Do not treat CFD_run=True as either a failure or a validation claim.
+    if type(data.get("CFD_run")) is not bool:
+        errors.append("Caso A: CFD_run must be a boolean")
+    elif data["CFD_run"]:
+        original = data.get("original_C14_full_10s_3D_gate", {})
+        stage06 = next((e for e in entries
+                        if e.get("id") == "06_THERMAL_T0_PREFLIGHT_NATIVE"), None)
+        stage07 = next((e for e in entries
+                        if e.get("id") == "07_THERMAL_T0_EXECUTION"), None)
+        if not (original.get("WSL_native_10_second_CFD_executed") is True
+                and original.get("native_report_native_solver_run") is True
+                and stage06 and stage06.get("status") == "DONE"
+                and stage06.get("evidence")
+                and (ROOT/stage06["evidence"]).is_file()
+                and stage07 and stage07.get("status") in ("IN_PROGRESS", "DONE")):
+            errors.append("Caso A: CFD_run=True without ORIGINAL C14 V4/T02 native evidence")
+    if data.get("physical_validation") is not False:
+        errors.append("Caso A: physical QuickCup validation cannot be claimed without scientific evidence")
+    if data.get("numerical_accuracy_validated") is not False:
+        errors.append("Caso A: numerical accuracy/energy not yet validated")
+    if data.get("grid_independence") is not False:
+        errors.append("Caso A: grid independence not yet validated")
     return errors
 
 
