@@ -117,6 +117,8 @@ def stage(src: Path, dest: Path) -> dict:
             "isolated FS-C07 destination already exists")
     require(src != dest and src not in dest.parents and dest not in src.parents,
             "source/output overlap")
+    require(dest != ROOT and ROOT not in dest.parents,
+            "new FS-C07 cases must be external to Git worktree")
     require(dest.name.startswith("FS_C07_THERMAL_"),
             "destination must use FS_C07_THERMAL_ prefix")
     evidence = source_preflight(src)
@@ -203,6 +205,8 @@ def audit_saved_fields(dest: Path, report: dict) -> dict:
                 for name in ("alpha.metal", MODEL_FIELD, "T.metal")},
         })
     require(snapshots, "no complete native phase field snapshots")
+    require(snapshots[-1]["time_s"] >= 0.999,
+            "1 s native thermal horizon not reached; preserve files, no completed claim")
     report.update({
         "status": "FS_C07_NATIVE_THERMAL_SCREEN_COMPLETED_NO_SHRINKAGE_MODEL",
         "native_cfd_executed": True,
