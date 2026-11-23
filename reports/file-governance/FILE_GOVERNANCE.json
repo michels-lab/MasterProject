@@ -29,7 +29,7 @@
     "POTENTIAL_UNLOGGED_CHANGES": 2
   },
   "finding_total": 9,
-  "inventory_fingerprint": "835ba495d8a207177f5a1bd32869df264364e9b535a8916ca0d0c6639205192a",
+  "inventory_fingerprint": "3f869bae3848fa390eaf24159b60f80156450212d59f82a5878cb07466801950",
   "evidence_fingerprint": "86075bb8d159a0020a430719e8a4869194dad85bc79c90ea81176553e88e6661",
   "files": [
     {
@@ -1969,7 +1969,7 @@
       "role": "source",
       "purpose": "code/test implementation",
       "certainty": "rule",
-      "blob": "84c93259fbedf957d8f8228ee49f64a3e1b7b6cc"
+      "blob": "2442ecb506df414bc7ff5b847e5ad7c62997bb41"
     },
     {
       "path": "cases_3d/C3D_05_step_gmsh_conformal/constant/geometry/QuickCupmm.STEP",
