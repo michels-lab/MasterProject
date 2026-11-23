@@ -1,3 +1,5 @@
+> **23-11-2026 — Nueva etapa FS-C07 de transición térmica (NO corrido todavía):** [diseño físico, fuentes Foundation14, diccionario nativo de 1 s, preparador aislado y fuentes conservativas líquido/sólido](../freesurface/FS-C07_thermal_transition/README.md). No representa contracción física ya implementada ni densidades JMatPro conocidas.
+
 > **20-11-2026 — FS-C06: revisión cuantitativa de 10 monitores nativos reales:** [datos originales, diez SHA-256, discrepancia térmica +0.04326368 W y masa de mezcla +5.2e-12 kg](granada/FS_C06_AUDITORIA_MONITORES_20261120_ES.md). Los campos `alpha.metal.solid=0` y volumen metal estable; **no** hay evidencia de contracción o cierre conservativo global.
 
 > **20-11-2026 FS-C06 — campos cuantificados y diagnóstico Foundation14:** [bitácora de VOF/metal sólido 0 y cambio de `system/controlDict.functions` a `system/functions`](granada/FS_C06_GATE_NATIVO_WSL_20261120_ES.md). El solver ya ejecutó la prueba de 2 pasos en WSL y escribió `alpha.metal.solid`, pero la instrumentación corregida aún no se ha probado. No hay contracción física ni balance de masa/energía.
