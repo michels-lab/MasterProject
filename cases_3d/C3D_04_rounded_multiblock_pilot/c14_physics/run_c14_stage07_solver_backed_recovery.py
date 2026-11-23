@@ -294,6 +294,152 @@ def surface_energy_summary(copy: Path) -> dict:
     }
 
 
+def inspect_occupied_copy(case: Path, copy: Path,
+                          recovery: Path, forensic_dir: Path) -> dict:
+    """Read-only classification. An existing copy is NEVER an overwrite target.
+
+    Determine whether the existing six-pass output has a complete, source-
+    matched final report or is a partial/in-progress evidence directory.
+    Never conclude that an unfinished attempt is safe to resume or replace:
+    another WSL foamPostProcess process may still be using that directory.
+    """
+    case = case.expanduser().resolve()
+    copy = copy.expanduser().absolute()
+    need(copy.is_dir() and not copy.is_symlink(),
+         "occupied output is not a regular directory; refuse reading symlink")
+    result = {
+        "status": "EXISTING_COPY_PARTIAL_OR_POSSIBLY_ACTIVE_PRESERVED",
+        "copy": str(copy),
+        "mode": "READ_ONLY_INSPECTION",
+        "solver_rerun": False,
+        "copy_modified": False,
+        "original_CFD_modified": False,
+        "can_prove_other_process_not_running": False,
+        "native_validation_verified": False,
+        "global_energy_conservation_verified": False,
+        "per_group_logs": {},
+    }
+    real_c14 = C14 / "system/controlDict"
+    actual_ctrl = case / "system/controlDict"
+    copy_ctrl = copy / "system/controlDict"
+    for key, p in (("copy_original_controlDict", copy_ctrl),
+                   ("copy_solver_log", copy / "log.foamMultiRun")):
+        result[key + "_exists"] = file_ok(p)
+    if file_ok(real_c14) and file_ok(actual_ctrl) and file_ok(copy_ctrl):
+        result["source_C14_controlDict_matches"] = (
+            sha(real_c14) == sha(actual_ctrl) == sha(copy_ctrl)
+        )
+    else:
+        result["source_C14_controlDict_matches"] = False
+    log_source = case / "log.foamMultiRun"
+    copy_log = copy / "log.foamMultiRun"
+    if file_ok(log_source) and file_ok(copy_log):
+        result["copy_10s_solver_log_SHA_matches"] = sha(log_source) == sha(copy_log)
+    else:
+        result["copy_10s_solver_log_SHA_matches"] = False
+    for group in TASK_ORDER:
+        logfile = copy / ("log.C14_3D_postprocess_solverBacked_" + group)
+        if file_ok(logfile):
+            evidence = forensic.error_excerpt(logfile, limit=4)
+            result["per_group_logs"][group] = {
+                "present": True,
+                "sha256": evidence["sha256"],
+                "error_signatures": evidence["error_signatures"],
+                "tail_last_24_lines": evidence.get("tail_last_24_lines", [])[-8:],
+            }
+        else:
+            result["per_group_logs"][group] = {"present": False}
+    report_file = copy / REPORT
+    result["final_report_present"] = file_ok(report_file)
+    if not file_ok(report_file):
+        result["reason"] = (
+            "There is no final six-group report. This may be a previous "
+            "interrupted run OR a currently running foamPostProcess. Do not "
+            "delete it, assume failure, resume it, or use it as a new target."
+        )
+        return result
+    try:
+        prior = read_json(report_file)
+    except (OSError, ValueError, TypeError) as exc:
+        result["reason"] = "Final report unreadable/incomplete: " + str(exc)[:500]
+        return result
+    result["report"] = str(report_file)
+    result["report_sha256"] = sha(report_file)
+    identity = prior.get("source_authentication")
+    groups = prior.get("native_groups")
+    if (prior.get("schema") !=
+            "C3D04_A_C14_F14_SOLVER_BACKED_OFFLINE_RECOVERY_V1"
+        or not isinstance(identity, dict)
+        or not isinstance(groups, list)
+        or prior.get("isolated_new_workcopy") != str(copy)
+        or identity.get("case") != str(case)):
+        result["reason"] = "Final report has unexpected schema/case/copy identity."
+        return result
+    current = {
+        "original_10s_solver_log_sha256":
+            sha(log_source) if file_ok(log_source) else None,
+        "original_C14_controlDict_sha256":
+            sha(real_c14) if file_ok(real_c14) else None,
+        "recovery_report_sha256":
+            sha(recovery / "C3D04_A_STAGE07_RECOVERY_REPORT.json")
+            if file_ok(recovery / "C3D04_A_STAGE07_RECOVERY_REPORT.json") else None,
+        "forensic_report_sha256":
+            sha(forensic_dir / "C3D04_A_C14_NATIVE_STAGE07_FORENSIC_REPORT.json")
+            if file_ok(forensic_dir / "C3D04_A_C14_NATIVE_STAGE07_FORENSIC_REPORT.json")
+            else None,
+    }
+    need_keys = tuple(current)
+    if (not result["source_C14_controlDict_matches"] or
+        not result["copy_10s_solver_log_SHA_matches"] or
+        not all(current[k] and identity.get(k) == current[k] for k in need_keys)):
+        result["reason"] = "The completed report's authenticated original source/hash provenance differs."
+        return result
+    seen = set()
+    for item in groups:
+        if not isinstance(item, dict):
+            result["reason"] = "Malformed native group completion record."
+            return result
+        group = item.get("group")
+        if group not in TASK_ORDER or group in seen:
+            result["reason"] = "Duplicate or unexpected native group."
+            return result
+        seen.add(group)
+        native_log = result["per_group_logs"][group]
+        exit_code = item.get("exit_code")
+        if (not native_log.get("present") or
+            item.get("log_sha256") != native_log.get("sha256") or
+            not isinstance(exit_code, int) or isinstance(exit_code, bool) or
+            item.get("passed") is not (exit_code == 0) or
+            item.get("log") !=
+                "log.C14_3D_postprocess_solverBacked_" + group):
+            result["reason"] = (
+                "Native group exit/log provenance missing or changed: " + group
+            )
+            return result
+    if seen != set(TASK_ORDER):
+        result["reason"] = "Only some native groups were recorded in final report."
+        return result
+    groups_passed = [x["group"] for x in groups if x["passed"]]
+    groups_failed = [x["group"] for x in groups if not x["passed"]]
+    if (prior.get("native_groups_passed") != groups_passed or
+        prior.get("native_groups_failed") != groups_failed):
+        result["reason"] = "Native passed/failed rollups contradict individual exit codes."
+        return result
+    result.update({
+        "status": "EXISTING_COMPLETE_NATIVE_POSTPROCESS_REPORT_REUSED_NO_NEW_RUN",
+        "final_report_sha_verified": True,
+        "native_groups_passed": groups_passed,
+        "native_groups_failed": groups_failed,
+        "surface_energy": prior.get("surface_energy"),
+        "native_validation_verified": False,
+        "reason": (
+            "The prior six-group run is finished and its identities/logs "
+            "match. This is NOT evidence of physical/global energy validation."
+        ),
+    })
+    return result
+
+
 def main() -> int:
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument("--case",type=Path,default=Path.home()/
@@ -309,6 +455,12 @@ def main() -> int:
     source=opt.case.expanduser().resolve()
     out=opt.out.expanduser().absolute()
     try:
+        if out.exists() or out.is_symlink():
+            observed = inspect_occupied_copy(
+                source,out,opt.recovery,opt.forensic)
+            print(json.dumps(observed, indent=2, ensure_ascii=False))
+            # A partial/in-progress output must NOT be called a completed run.
+            return 0 if observed["status"].startswith("EXISTING_COMPLETE") else 3
         identity = original_case_gate(
             source,opt.failed_copy,opt.recovery,opt.forensic,out)
         # Any failure from this point forward touches only the new copy.
