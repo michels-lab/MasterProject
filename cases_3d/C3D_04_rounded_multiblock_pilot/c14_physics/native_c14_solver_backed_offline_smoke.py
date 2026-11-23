@@ -62,7 +62,12 @@ def main()->int:
     print("NATIVE_SOLVER_BACKED_RHO_H_REAL_FOUNDATION14_POSTPROCESS_PASS")
     # Test the actual dependency order required for contact/top face power.
     # This is a two-step disposable 27-cell/region CI case, NOT V4/T02.
-    energy_dict,_=production.assembled_dict_for_native_smoke(target)
+    # The synthetic research case only includes physical solver inputs;
+    # copying the diagnostic dictionary is a post-run operation on CI data.
+    research=target/"system/researchDiagnostics"
+    if research.exists(): raise FileExistsError(str(research))
+    shutil.copy2(orig,research)
+    energy_dict,_=production.assembled_dict(target,"energy")
     run_energy=["foamPostProcess","-region","metal","-solver","fluid",
                 "-dict","system/"+energy_dict.name,"-latestTime"]
     energy_process=subprocess.run(
