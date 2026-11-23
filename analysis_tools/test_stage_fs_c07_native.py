@@ -6,7 +6,7 @@ import unittest
 
 from stage_fs_c07_native import (
     CONTROL, FUNCTIONS, FVMODELS, MONITORS,
-    source_preflight, stage,
+    source_preflight, stage, audit_native_monitor_files,
 )
 
 
@@ -115,6 +115,48 @@ class FS_C07_Staging(unittest.TestCase):
         self.assertNotIn("massSource", text)
         self.assertNotIn("rhoLiquid", text)
         self.assertNotIn("functions\n{", text)
+
+
+    def test_legacy_initial_thermal_T_can_be_used(self):
+        (self.src / "0/fluid/T.metal").unlink()
+        (self.src / "0/fluid/T").write_text("INITIAL MIXTURE T\n")
+        source = source_preflight(self.src)
+        self.assertEqual(source["initial_temperature_source"], "0/fluid/T")
+
+    def test_accepts_realistic_multiregion_monitor_header_and_values(self):
+        stage(self.src, self.dest)
+        for name in MONITORS:
+            region = "mold" if name.endswith("FluxMold") else "fluid"
+            folder = self.dest / "postProcessing" / region / name / "0"
+            folder.mkdir(parents=True)
+            data = "# Time  output\n0  1\n1.0 "
+            if name.endswith("FluxMold") or name.endswith("FluxFluid"):
+                data += "mold_to_fluid -2.0 3.0 0.25 0.1\n"
+            else:
+                data += "0.25\n"
+            (folder / "probe.dat").write_text(data)
+        result = audit_native_monitor_files(self.dest, 1.0)
+        self.assertEqual(len(result), 10)
+        self.assertEqual(result["FS_C06_wallHeatFluxMold"]["time_last_s"], 1.0)
+
+    def test_native_monitor_time_must_reach_end(self):
+        stage(self.src, self.dest)
+        for name in MONITORS:
+            region = "mold" if name.endswith("FluxMold") else "fluid"
+            folder = self.dest / "postProcessing" / region / name / "0"
+            folder.mkdir(parents=True)
+            (folder / "probe.dat").write_text("# Time output\n0 1\n0.5 1\n")
+        with self.assertRaisesRegex(ValueError, "did not reach"):
+            audit_native_monitor_files(self.dest, 1.0)
+
+    def test_no_completed_thermal_screen_from_empty_monitor_rows(self):
+        stage(self.src, self.dest)
+        for name in MONITORS:
+            folder = self.dest / "postProcessing/fluid" / name / "0"
+            folder.mkdir(parents=True)
+            (folder / "probe.dat").write_text("# Time output\n")
+        with self.assertRaisesRegex(ValueError, "no numerical rows"):
+            audit_native_monitor_files(self.dest, 1.0)
 
 
 if __name__ == "__main__":
