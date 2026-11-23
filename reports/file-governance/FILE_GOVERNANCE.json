@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
   "audit_kind": "deterministic_full_tracked_tree",
-  "tracked_files_total": 39024,
-  "classified_files_total": 39019,
-  "docs_content_inspected": 187,
+  "tracked_files_total": 39032,
+  "classified_files_total": 39027,
+  "docs_content_inspected": 188,
   "large_docs_skipped": 1,
   "excluded_reports": 5,
   "roles": {
@@ -12,24 +12,25 @@
     "bitacora": 5,
     "config": 17,
     "data": 32,
-    "document": 150,
+    "document": 151,
     "index": 33,
     "license": 1,
     "simulation_case_file": 117,
     "simulation_input": 2683,
     "simulation_log": 3155,
     "simulation_output": 32615,
-    "source": 119,
-    "test": 52,
+    "source": 122,
+    "test": 55,
     "web_ui": 1,
-    "workflow": 29
+    "workflow": 30
   },
   "finding_counts": {
-    "BROKEN_RELATIVE_LINK": 7
+    "BROKEN_RELATIVE_LINK": 7,
+    "POTENTIAL_UNLOGGED_CHANGES": 2
   },
-  "finding_total": 7,
-  "inventory_fingerprint": "038236b249ab3b1d4bc6c93de3ae85a8b82a8d58ad57addfce71b8f83a002f9f",
-  "evidence_fingerprint": "a38cca05722cc62f2a19d8787a386e132771345cc8472199f5e39f915b2e8a45",
+  "finding_total": 9,
+  "inventory_fingerprint": "5dab15f1f9657d28a60449447ac4200dd22f1da78cf3f1322c52c941f6c63297",
+  "evidence_fingerprint": "625ed0b5d3bd2a82050311e943b5d700c338a19ed98e3e042773171109f7c6cd",
   "files": [
     {
       "path": ".github/agents/openfoam-solidification.agent.md",
@@ -86,6 +87,13 @@
       "purpose": "GitHub Actions automation",
       "certainty": "rule",
       "blob": "e95ee14a9f898c3eb2c35f2d294a9664901fb1f7"
+    },
+    {
+      "path": ".github/workflows/c3d04-a-c14-postprocessing-parity.yml",
+      "role": "workflow",
+      "purpose": "GitHub Actions automation",
+      "certainty": "rule",
+      "blob": "f00bdadf7ffcc2d630698de4cf91937f00079564"
     },
     {
       "path": ".github/workflows/c3d04-a-c14-real-10s-postrun-readonly.yml",
@@ -323,7 +331,7 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "f19f1beeda3c7fed1b32e0a115f31764c5792390"
+      "blob": "a01f3e9a6d2ad57be8b22652aa32d6ad367e7d10"
     },
     {
       "path": "JMATPRO_OPENFOAM_TRACEABILITY_ES.md",
@@ -337,7 +345,7 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "700e96728a301bd835b3c1ba73e11cff1288b8eb"
+      "blob": "69a3034f4a7475e4747c825a9fcc8460be98361a"
     },
     {
       "path": "OPENFOAM_COMMAND_MANUAL.md",
@@ -372,7 +380,7 @@
       "role": "bitacora",
       "purpose": "technical/audit change history",
       "certainty": "rule",
-      "blob": "9a9d1420b4b964948fdd5b501de7a8015753bae6"
+      "blob": "053afa86589b68074b7ae317f2317e14bb2d327a"
     },
     {
       "path": "PROJECT_AUDIT_LOG_EN.md",
@@ -407,14 +415,14 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "abd8cafb55b24e8540885fa8a555c0adab559709"
+      "blob": "884297ee709bc27bbfa5f41bb26dd3446433fa25"
     },
     {
       "path": "VALIDATION_MATRIX.md",
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "01f3018b72a20cd69e86277707bf1f56fc2b6672"
+      "blob": "331668b8241f02e75985c4a59b64263925782803"
     },
     {
       "path": "VALIDATION_MATRIX_EN.md",
@@ -1534,7 +1542,7 @@
       "role": "agent",
       "purpose": "assistant role/instructions",
       "certainty": "rule",
-      "blob": "344e09684a151f0f6f2c5d4a31ad7e3f2d9781cd"
+      "blob": "4f057087a849f54fa6ea2fa380702c67ea3dcbeb"
     },
     {
       "path": "cases_3d/C3D_04_rounded_multiblock_pilot/Allmesh",
@@ -1562,7 +1570,7 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "d090d73181465bbbfb142ac7b3d52a55698ef3d4"
+      "blob": "21866769f331499380a5d106a631b6adfab9bd6c"
     },
     {
       "path": "cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/analyze_existing_c14_3d_results.py",
@@ -1570,6 +1578,20 @@
       "purpose": "code/test implementation",
       "certainty": "rule",
       "blob": "f9f6501dc2abf26892e4ec4fe3a9d672cf985fa9"
+    },
+    {
+      "path": "cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/c14_3d_native_energy_closure.py",
+      "role": "source",
+      "purpose": "code/test implementation",
+      "certainty": "rule",
+      "blob": "b449081faceb466773c86406e5fb39e9f02a9d15"
+    },
+    {
+      "path": "cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/c14_3d_postprocess_parity.py",
+      "role": "source",
+      "purpose": "code/test implementation",
+      "certainty": "rule",
+      "blob": "c3445fe6bfd2cad988904e879ec6593196e01512"
     },
     {
       "path": "cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/c14_source_fidelity.py",
@@ -1584,6 +1606,13 @@
       "purpose": "code/test implementation",
       "certainty": "rule",
       "blob": "a42c188d0d7c920a83985f058b4d2119d7094d71"
+    },
+    {
+      "path": "cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/run_c14_3d_complete_postprocess.py",
+      "role": "source",
+      "purpose": "code/test implementation",
+      "certainty": "rule",
+      "blob": "49cb1b0e9ed9634c4fc9d61e12b8af049b11aabd"
     },
     {
       "path": "cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/run_c14_native_milestone.sh",
@@ -1607,6 +1636,20 @@
       "blob": "c9334ed35ff76ea3f8310d2ae1bb41eddd36462a"
     },
     {
+      "path": "cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/tests/test_c14_3d_native_energy_closure.py",
+      "role": "test",
+      "purpose": "code/test implementation",
+      "certainty": "rule",
+      "blob": "704d2936aef4ee6efc63ec24c5af26175b2eab3e"
+    },
+    {
+      "path": "cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/tests/test_c14_3d_postprocess_parity.py",
+      "role": "test",
+      "purpose": "code/test implementation",
+      "certainty": "rule",
+      "blob": "b33683f9d7f6e3e4f3403baaa080a207097e63db"
+    },
+    {
       "path": "cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/tests/test_existing_c14_3d_results.py",
       "role": "test",
       "purpose": "code/test implementation",
@@ -1619,6 +1662,13 @@
       "purpose": "code/test implementation",
       "certainty": "rule",
       "blob": "05694861ad4cc03807bd75b7b5fd2ff798087396"
+    },
+    {
+      "path": "cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/tests/test_native_complete_postprocess.py",
+      "role": "test",
+      "purpose": "code/test implementation",
+      "certainty": "rule",
+      "blob": "b1aa85a3fd43df07d956bee6cffe65ee290ce6fe"
     },
     {
       "path": "cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/tests/test_stage_c14_fluid_solid.py",
@@ -272042,7 +272092,7 @@
       "role": "config",
       "purpose": "machine-readable configuration",
       "certainty": "rule",
-      "blob": "5689cdf69fc47bb5524c7c23fb4f0f576ab2968e"
+      "blob": "3eddc138129782acd9196a38fc2158eea4db7bb6"
     },
     {
       "path": "docs/C3D_01_ESTADO_REAL_20261110_ES.md",
@@ -272106,6 +272156,13 @@
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
       "blob": "a87b8a42698121ef73ad00bc46fa219abbeb8d66"
+    },
+    {
+      "path": "docs/C3D_04_C14_3D_POSTPROCESS_PARITY_MATRIX_20261123_ES.md",
+      "role": "document",
+      "purpose": "manual/decision/report/historical note",
+      "certainty": "inferred",
+      "blob": "098030a5ac7339a73f2dad39dc30a6cc5fc44efa"
     },
     {
       "path": "docs/C3D_04_C14_V4_T02_REAL_10S_20261123_ES.md",
@@ -272273,7 +272330,7 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "93aba07fc0f946d7a165c969a1528f553edcb946"
+      "blob": "665daa7ee2a90ab711b2c704f8ad7c641ac53cea"
     },
     {
       "path": "docs/DOCUMENT_SYNC_20261110_ES.md",
@@ -273227,6 +273284,24 @@
       "path": "docs/granada/C3D05_T0_README_HISTORICAL_BEFORE_SINGLE_FLOW_20261120.md",
       "observation": "Missing: outside-repo",
       "recommendation": "Fix link or restore target",
+      "state": "REVIEW_REQUIRED"
+    },
+    {
+      "id": "1c2d4ad883736888",
+      "code": "POTENTIAL_UNLOGGED_CHANGES",
+      "severity": "review",
+      "path": "PROJECT_AUDIT_LOG_EN.md",
+      "observation": "8 implementation/config paths changed since this log's last commit; examples: .github/workflows/c3d04-a-c14-postprocessing-parity.yml, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/c14_3d_native_energy_closure.py, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/c14_3d_postprocess_parity.py, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/run_c14_3d_complete_postprocess.py, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/tests/test_c14_3d_native_energy_closure.py, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/tests/test_c14_3d_postprocess_parity.py",
+      "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
+      "state": "REVIEW_REQUIRED"
+    },
+    {
+      "id": "3688238d4eabe9a9",
+      "code": "POTENTIAL_UNLOGGED_CHANGES",
+      "severity": "review",
+      "path": "PROJECT_AUDIT_LOG_ES.md",
+      "observation": "8 implementation/config paths changed since this log's last commit; examples: .github/workflows/c3d04-a-c14-postprocessing-parity.yml, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/c14_3d_native_energy_closure.py, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/c14_3d_postprocess_parity.py, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/run_c14_3d_complete_postprocess.py, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/tests/test_c14_3d_native_energy_closure.py, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/tests/test_c14_3d_postprocess_parity.py",
+      "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     }
   ],

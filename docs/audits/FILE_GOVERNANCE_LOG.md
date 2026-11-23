@@ -1792,3 +1792,10 @@ Automatic evidence deltas, pending human triage. No deletion authority.
 - Finding changes: 0 NEW; 2 NO_LONGER_DETECTED (not necessarily resolved). Inventory: 0 new paths, 0 removed paths, 0 reclassified paths.
 - NO_LONGER_DETECTED — POTENTIAL_UNLOGGED_CHANGES at `PROJECT_AUDIT_LOG_EN.md` (ID ba6fb314fe97c7b4).
 - NO_LONGER_DETECTED — POTENTIAL_UNLOGGED_CHANGES at `PROJECT_AUDIT_LOG_ES.md` (ID ec2acdd569aa0126).
+
+## 2026-11-23 18:54 UTC
+
+- All tracked 39032; findings 9; inventory 5dab15f1f965; evidence 625ed0b5d3bd. Full local report in reports/file-governance/. Status REVIEW_REQUIRED.
+- Finding changes: 2 NEW; 0 NO_LONGER_DETECTED (not necessarily resolved). Inventory: 8 new paths, 0 removed paths, 0 reclassified paths.
+- NEW — POTENTIAL_UNLOGGED_CHANGES at `PROJECT_AUDIT_LOG_EN.md` (ID 1c2d4ad883736888).
+- NEW — POTENTIAL_UNLOGGED_CHANGES at `PROJECT_AUDIT_LOG_ES.md` (ID 3688238d4eabe9a9).
