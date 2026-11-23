@@ -2,19 +2,19 @@
   "schema": "C3D04_CASE_A_PROGRESS_V1",
   "project": "MasterProject",
   "scope": "CASE_A_C3D_04_V4_T02_ONLY",
-  "updated_local_date": "2026-11-20",
+  "updated_local_date": "2026-11-23",
   "source_of_truth": "AGENTS.md + cases_3d/C3D_04_rounded_multiblock_pilot/AGENTS.md",
   "reference_mesh": "~/OpenFOAM/C3D04_V4_TRANSITION_REPAIR_01/T02",
-  "current_stage": "06_THERMAL_T0_PREFLIGHT_NATIVE",
-  "current_stage_label": "Etapa 6/10 — preflight nativo del modelo C14 ORIGINAL metal fluido + arena sólida en V4/T02; T0 dos-sólidos es auxiliar",
+  "current_stage": "07_THERMAL_T0_EXECUTION",
+  "current_stage_label": "Etapa 7/10 — analizar CFD REAL V4/T02 original C14 fluido-sólido ejecutado de 0 a 10 s: temperaturas, alpha1, energía y calidad numérica",
   "progress_definition": "10 hitos operativos de igual peso; un hito solo cuenta DONE con evidencia observada. No es porcentaje de validación física ni de trabajo restante en horas.",
-  "progress_count_done": 5,
+  "progress_count_done": 6,
   "progress_count_total": 10,
-  "progress_percent": 50,
+  "progress_percent": 60,
   "numerical_accuracy_validated": false,
   "physical_validation": false,
   "grid_independence": false,
-  "CFD_run": false,
+  "CFD_run": true,
   "completed_evidence": [
     "3/3 logs native checkMesh accepted for parent/metal/mold",
     "metal 8960 cells, mold 12352 cells, total 21312 cells",
@@ -22,19 +22,18 @@
     "STL sampled bidirectional surface max 0.104973015 mm; NOT guaranteed Hausdorff",
     "native severe nonorth >70deg: parent 572, metal 276, mold 232; maxima 82.920/77.930/82.058 degrees",
     "64/64 extra parent severe faces individually matched to actual metal-mold interface; 0 outside",
-    "Reference V4/T02 preserved without CFD",
-    "T0 sourced from archived C14: 10 of 10 OpenFOAM Foundation14 dictionaries parsed on actual CI binary (GitHub Actions run 44825262805, artifact 14674730228); 15 of 15 integrated tests passed on run 44825262837"
+    "T0 sourced from archived C14: 10 of 10 OpenFOAM Foundation14 dictionaries parsed on actual CI binary (GitHub Actions run 44825262805, artifact 14674730228); 15 of 15 integrated tests passed on run 44825262837",
+    "20-11-2026 original C14 full 10s on ACTUAL V4/T02 WSL: terminal evidence of 101 states t0,t0.1,...t10, native report native_solver_run=true, Time=10s, End, h/e/p_rgh solved; 23-11-2026 investigator terminal upload. See docs/C3D_04_C14_V4_T02_REAL_10S_20261123_ES.md. Original accepted mesh preserved."
   ],
   "nonnegotiable_blockers": [
     "C14 numeric metal/arena parameters and 2D boundary reference NOW sourced directly in T0; they are constant C14-model inputs, NOT independently measured T-dependent iron/sand functions.",
     "Metal C14 Cp=827 and heRhoThermo fluid enthalpy is NOT a measured Cv: 3D two-solid T0 explicitly uses Cp_as_effective_Cv approximation and derived k=mu*Cp/Pr; this must not be called physically identical to C14.",
     "C14 exterior h=10, Ta=300, emissivity and 500 W/(m2 K) contact transferred to T0; therefore theoretical adiabatic two-solid energy equilibrium is COUNTERFACTUAL, not an acceptance condition for this T0.",
     "Nonorthogonality solver stability has NOT been validated, despite passed V4/T02 native checkMesh and the closed 64-face interface identity investigation.",
-    "T1 fluid-solid phase-change, temperature-dependent materials, actual casting cooling curves, mesh/time independence and experimental validation remain not executed.",
     "STL surface fit distances are sample-only, not rigorous Hausdorff to exact STEP.",
-    "F14 externalTemperature and coupledTemperature have been authored and crosschecked with official docs, but actual runtime initialization/energy equation integration in WSL remains unverified",
-    "Stage 05 design closed via native Foundation14 CI dictionary parser (10/10) and 15/15 static integrated tests; actual user WSL V4/T02 mesh-based runtime remains unverified, current Stage 06",
-    "El Caso A de TESIS debe tener metal=fluid heRhoThermo/Cp/enthalpy + solidificationMeltingSource del C14 original; T0 dos sólidos es sólo ensayo auxiliar. El sintético nativo F14 de 27 celdas por región PASÓ pero NO es el CFD V4/T02 y no confirma onset ni conservación."
+    "El Caso A de TESIS debe tener metal=fluid heRhoThermo/Cp/enthalpy + solidificationMeltingSource del C14 original; T0 dos sólidos es sólo ensayo auxiliar. El sintético nativo F14 de 27 celdas por región PASÓ pero NO es el CFD V4/T02 y no confirma onset ni conservación.",
+    "C14 original fluid+solid full 10s native WSL V4/T02 solver COMPLETED, but phase-change onset/energy conservation/whole-run numerical stability are NOT yet quantified from the actual fields and full log; do not equate Time=10s/End with physical validation.",
+    "Original C14 material values and time controls must remain byte-preserved; NEVER introduce temperature-dependent properties or new numerical settings without researcher's explicit approval."
   ],
   "milestones": [
     {
@@ -70,13 +69,13 @@
     {
       "id": "06_THERMAL_T0_PREFLIGHT_NATIVE",
       "label": "Preflight nativo integral del modelo ORIGINAL C14 fluido-sólido y cellZone metal sobre V4/T02, sin alterar la malla",
-      "status": "IN_PROGRESS",
-      "evidence": null
+      "status": "DONE",
+      "evidence": "docs/C3D_04_C14_V4_T02_REAL_10S_20261123_ES.md"
     },
     {
       "id": "07_THERMAL_T0_EXECUTION",
       "label": "Primera corrida C14 fluido-sólido sobre V4/T02 con U/p_rgh/h/e y balances, incluyendo estabilidad numérica; ID histórico retenido",
-      "status": "PENDING",
+      "status": "IN_PROGRESS",
       "evidence": null
     },
     {
@@ -101,30 +100,24 @@
   "response_rule": "Every update about this case must explicitly display: Etapa N/10; avance general completed/total (%) using this manifest, physical/CFD status, what changed, what remains; never imply false precision. Recompute on changes.",
   "execution_rule": "Integrate validations into one cohesive milestone; no one-script-per-subproblem loops, no rerun already closed V4/T02 audits; one user command only at a meaningful end-to-end delivery; preserve case and audit evidence.",
   "last_integrated_delivery": {
-    "date": "2026-11-20",
-    "stage_completed": "05_THERMAL_T0_DESIGN",
-    "current_stage": "06_THERMAL_T0_PREFLIGHT_NATIVE",
-    "operational_completion": "5/10=50%",
-    "status": "GITHUB_ACTIONS_FOUNDATION14_NATIVE_DICTIONARY_10_OF_10_PASS_AND_STATIC_15_OF_15_PASS",
-    "evidence_report": "reports/case-a-t0/CI_NATIVE_F14_20261120.json",
-    "merged_pr": "https://github.com/michels-lab/MasterProject/pull/53",
-    "merged_commit": "718bb48167d58218b344cad6eb169fef198b8dbf",
-    "observed_workflows": [
-      "44825262805 Native F14 success",
-      "44825262837 Case A integrated 15/15 success",
-      "44825262666 MasterProject delivery contract success",
-      "44825262677 QuickCup scientific audit success"
-    ],
-    "improvements": [
-      "Actual OpenFOAM Foundation14 installed on GitHub Ubuntu24.04 and all ten C14-derived T0 files parsed with foamDictionary",
-      "Ubuntu26.04 WSL source guard HWLOC_COMPONENTS=-gl used to avoid official pvdataserver hang, sourced once",
-      "Native CI tests have run-state artifacts and workflow job IDs, no user microtests"
-    ],
+    "date": "2026-11-23",
+    "stage_completed": "06_THERMAL_T0_PREFLIGHT_NATIVE",
+    "current_stage": "07_THERMAL_T0_EXECUTION",
+    "operational_completion": "6/10=60%",
+    "status": "FIRST_REAL_V4_T02_ORIGINAL_C14_FULL_10S_NATIVE_FOAMMULTIRUN_PASS_NOT_VALIDATED",
+    "evidence_report": "docs/C3D_04_C14_V4_T02_REAL_10S_20261123_ES.md",
+    "source": "Investigator-provided WSL terminal paste incl. JSON report and last 50 log lines; not independently received complete 28MB log or all field values",
+    "run_date": "2026-11-20",
+    "reference_case": "~/OpenFOAM/C3D04_V4_TRANSITION_REPAIR_01/T02",
+    "separate_output": "~/OpenFOAM/C3D04_A_C14_FLUID_SOLID_FULL_10S_RUN_01",
+    "native_final_time_s": 10,
+    "native_ClockTime_s": 839,
+    "observed_final_Courant_max": 0.00450431,
+    "continuity_cumulative": -6.5319e-14,
     "scientific_limits": [
-      "No foamMultiRun solver run",
-      "No actual user native V4/T02 mesh in CI",
-      "No boundary thermophysical runtime initialization, no heat transfer or independent mesh convergence",
-      "C14 Cp-as-Cv solid surrogate is explicitly not the original fluid-solidification model"
+      "No native T/alpha field extrema/averages computed for this WSL case yet",
+      "No energy balance or time/mesh independence yet",
+      "No QuickCup validation"
     ]
   },
   "stage06_preflight_integrity": {
@@ -149,7 +142,12 @@
       "Thermal boundary field instantiation and foamMultiRun on actual mesh",
       "Thermal energy conservation or numerical stability"
     ],
-    "milestone06_closed": false
+    "milestone06_closed": true,
+    "real_V4_T02_source": "~/OpenFOAM/C3D04_V4_TRANSITION_REPAIR_01/T02",
+    "native_output": "~/OpenFOAM/C3D04_A_C14_FLUID_SOLID_FULL_10S_RUN_01",
+    "real_WSL_evidence": "docs/C3D_04_C14_V4_T02_REAL_10S_20261123_ES.md",
+    "final_status": "DONE__REAL_ORIGINAL_C14_FLUID_SOLID_V4_T02_WSL_10S_EXECUTED",
+    "original_code_notes_historical": true
   },
   "stage06_synthetic_f14_runtime_gate": {
     "date": "2026-11-20",
@@ -215,8 +213,8 @@
       "verified phase-change metal cellZone on V4/T02",
       "complete native C14 fluid-solid runtime"
     ],
-    "status": "MERGED_TO_MAIN_SYNTHETIC_NATIVE_F14_C14_PASS_V4_T02_WSL_STILL_NOT_RUN",
-    "CFD_run": false,
+    "status": "REAL_V4_T02_WSL_ORIGINAL_C14_FULL_10S_NATIVE_SOLVER_COMPLETED__PHYSICAL_VALIDATION_PENDING",
+    "CFD_run": true,
     "original_progress_unchanged": "Etapa 6/10, 5/10 hitos, 50% operativa (not physical validation)",
     "instruction_2026_11_20": "Conservar TODO el caso 2D C14; solo cambia la geometría/dimensionalidad a la malla V4/T02 3D. Prohibido modificar propiedades, coeficientes, ecuaciones, condiciones físicas y parámetros numéricos.",
     "production_controls_preserved": "endTime 10 s, deltaT 0.001 s, writeInterval 100 (C14 original, byte-identical controlDict)",
@@ -228,9 +226,9 @@
     ],
     "native_automatic_enforcement": "cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/stage_c14_3d_case_a.py: enforce_C14_3D_only_delta",
     "synthetic_smoke_separate": "Two time steps only in diagnostic output, never research production time or C14 calibration",
-    "actual_V4_T02_C14_fluid_solid_CFD_run": false,
+    "actual_V4_T02_C14_fluid_solid_CFD_run": true,
     "source_fidelity_native_synthetic_smoke_url": "https://github.com/michels-lab/MasterProject/actions/runs/44859479359",
-    "milestone_progress_unchanged": "06/10, 5/10 done = 50% operational, no mesh-based physical validation"
+    "milestone_progress_unchanged": "Stage 7/10 IN_PROGRESS; 6/10 DONE=60% operative; physical/numerical accuracy/grid/experimental pending"
   },
   "original_C14_fluid_solid_native_gate": {
     "date": "2026-11-20",
@@ -260,19 +258,20 @@
     "liquid_fraction_alpha1_uniform": 1,
     "native_solidification_onset_verified": false,
     "actual_V4_T02_mesh_used": false,
-    "actual_V4_T02_WSL_case_materialized": false,
-    "actual_C14_3D_research_CFD_executed": false,
+    "actual_V4_T02_WSL_case_materialized": true,
+    "actual_C14_3D_research_CFD_executed": true,
     "phase_change_conservation_verified": false,
     "physical_validation": false,
     "grid_independence": false,
     "staged_source": "cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/stage_c14_3d_case_a.py",
     "one_shot_WSL_runner": "cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/run_c14_native_milestone.sh",
-    "operational_progress_unchanged": "5/10 milestones = 50% (stage 06 IN_PROGRESS)",
+    "operational_progress_unchanged": "6/10 milestones=60% (stage 07 IN_PROGRESS)",
     "PR": "https://github.com/michels-lab/MasterProject/pull/59",
     "merged_commit": "68d984a69316be8d2b0cbc1ccac855bd248962b7",
     "PR_checks": "6_OF_6_SUCCESS_ON_HEAD_including_actual_F14_C14_fluid_solid_27_PLUS_27_synthetic_native_smoke",
     "native_current_latest_workflow": "https://github.com/michels-lab/MasterProject/actions/runs/44859764142",
-    "status": "NATIVE_F14_C14_FLUID_SOLID_3D_SYNTHETIC_VERIFIED__V4_T02_WSL_PENDING"
+    "status": "REAL_WSL_V4_T02_10S_EXECUTED__PHYSICAL_VALIDATION_PENDING",
+    "real_WSL_evidence": "docs/C3D_04_C14_V4_T02_REAL_10S_20261123_ES.md"
   },
   "original_C14_full_10s_3D_gate": {
     "source_C14": "cases_controlled_buoyancy/C14_topFixedFlux_explicitRef",
@@ -281,19 +280,29 @@
     "CI_native_run_full_staging": "https://github.com/michels-lab/MasterProject/actions/runs/44860515973",
     "CI_verified": "Original C14 10-second inputs on isolated synthetic two-region 3D mesh native foamDictionary 22/22; separately original C14 two-step fluid-solid phase-change solver PASS",
     "real_V4_T02_used_in_CI": false,
-    "WSL_accepted_real_mesh_materialized": false,
-    "WSL_native_10_second_CFD_executed": false,
+    "WSL_accepted_real_mesh_materialized": true,
+    "WSL_native_10_second_CFD_executed": true,
     "physical_validation": false,
     "all_C14_scientific_parameters_unchanged": true,
     "full_10s_controlDict_byte_identical_original": true,
     "full_run_entrypoint": "cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/run_c14_native_milestone.sh --run-full",
     "source_mesh_expected": "~/OpenFOAM/C3D04_V4_TRANSITION_REPAIR_01/T02",
     "isolated_full_output_default": "~/OpenFOAM/C3D04_A_C14_FLUID_SOLID_FULL_10S_RUN_01",
-    "scientific_milestone_unchanged": "Stage 6/10 IN_PROGRESS, 5/10 completed = 50% operational",
+    "scientific_milestone_unchanged": "Stage 6/10 DONE, Stage 7/10 IN_PROGRESS, 6/10 completed = 60% operational",
     "remaining": [
-      "Run integrated native preflight/full CFD on verified WSL V4/T02 once",
-      "Read genuine solver log and fields; evaluate heat energy and phase evolution",
-      "Then assess stability / mesh dependence and QuickCup validation"
-    ]
+      "Analyze native fields T (metal,mold), U, p_rgh, phaseChangeSource:alpha1 across saved 0.1s states WITHOUT REEXECUTING CFD",
+      "Check all-step Courant/continuity/solver residuals; quantify temperature/phase profiles, energy with volume and heat flux when available",
+      "Then assess mesh/time independence and QuickCup comparison"
+    ],
+    "real_V4_T02_completion_evidence": "docs/C3D_04_C14_V4_T02_REAL_10S_20261123_ES.md",
+    "native_report_status": "C3D04_A_C14_ORIGINAL_FULL_10S_NATIVE_EXECUTED_NOT_PHYSICALLY_VALIDATED",
+    "native_report_native_solver_run": true,
+    "solver_time_s": 10,
+    "observed_clock_time_s": 839,
+    "observed_execution_time_s": 838.394,
+    "observed_final_Courant_mean": 0.00157478,
+    "observed_final_Courant_max": 0.00450431,
+    "observed_final_continuity_cumulative": -6.5319e-14,
+    "research_full_10s_status": "REAL_WSL_V4_T02_SOLVER_COMPLETE_NOT_PHYSICALLY_VALIDATED"
   }
 }
