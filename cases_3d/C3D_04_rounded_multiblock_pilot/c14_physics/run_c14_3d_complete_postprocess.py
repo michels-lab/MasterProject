@@ -260,13 +260,12 @@ def main()->int:
             "foamLog","log.foamMultiRun"]))
         actual=copy/"postProcessing"/"metal"
         dirs=sorted(p.name for p in actual.iterdir() if p.is_dir()) if actual.is_dir() else []
-        baseline=volume.original_inventory()
-        expected=set()
-        for k in ("functions","researchDiagnostics","lineProfiles","momentumPostProcessing"):
-            expected.update(baseline[k]["function_objects"])
-        # C14 top-surface generated objects are independent of system/functions.
-        expected.update(["topPatchFaceFields","topPhiNet","topPhiAbsolute",
-                         "topPhiMinimum","topPhiMaximum","nearTopInternalLine"])
+        # Compare output directories only against ACTUALLY written C14 2D output
+        # directories. Objects that write time-varying volFields instead of
+        # postProcessing/ directories must not be misclassified as failures.
+        reference_post=C14/"postProcessing"/"metal"
+        need(reference_post.is_dir(),"original C14 postProcessing baseline missing")
+        expected={p.name for p in reference_post.iterdir() if p.is_dir()}
         missing=sorted(expected-set(dirs))
         info={
             "schema":"C3D04_A_C14_3D_NATIVE_FUNCTION_OBJECT_PARITY_V1",
