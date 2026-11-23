@@ -28,7 +28,7 @@
     "BROKEN_RELATIVE_LINK": 7
   },
   "finding_total": 7,
-  "inventory_fingerprint": "a61ea6b8fdd242e3f66e03ea4279b3bfc50d6f988b3c8356768a7452ab743752",
+  "inventory_fingerprint": "e726cfd556598fed572a557c7fcb25d88dfed0b4389aad22e2e149ed21f4d13c",
   "evidence_fingerprint": "a38cca05722cc62f2a19d8787a386e132771345cc8472199f5e39f915b2e8a45",
   "files": [
     {
@@ -393,28 +393,28 @@
       "role": "bitacora",
       "purpose": "technical/audit change history",
       "certainty": "rule",
-      "blob": "676449b9b66270782f88f1ce610bf176d2557f37"
+      "blob": "2e488b0edf209114fba11939e5c31e2a3fc50c43"
     },
     {
       "path": "PROJECT_AUDIT_LOG_EN.md",
       "role": "bitacora",
       "purpose": "technical/audit change history",
       "certainty": "rule",
-      "blob": "3594f6f2c12334802e86d675eadd2e7ed0d301e2"
+      "blob": "6790eac3b8e3e6bb45beddfbe73451a90dd651a3"
     },
     {
       "path": "PROJECT_AUDIT_LOG_ES.md",
       "role": "bitacora",
       "purpose": "technical/audit change history",
       "certainty": "rule",
-      "blob": "3ae4eb00bc11d58943fc07357fc5aad6162c4058"
+      "blob": "a06ef5351687e8387460441f35bf525de66b0cb2"
     },
     {
       "path": "README.md",
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "90b3ffe0eb258d0aeafab29396f060566cd2bddc"
+      "blob": "9ea4e2ddbe7a4dbd790e9d6c9104a52b9bfc1788"
     },
     {
       "path": "RUN_CASE_REGISTRY.csv",
@@ -1555,7 +1555,7 @@
       "role": "agent",
       "purpose": "assistant role/instructions",
       "certainty": "rule",
-      "blob": "1ea05c0029a9c609a096024d9215be38aadbab29"
+      "blob": "c5dea8133d3e755404125168abd48f5355d37dcd"
     },
     {
       "path": "cases_3d/C3D_04_rounded_multiblock_pilot/Allmesh",
@@ -1660,7 +1660,7 @@
       "role": "source",
       "purpose": "code/test implementation",
       "certainty": "rule",
-      "blob": "bc1e57284e449a13beb77e20729f9083faeca99f"
+      "blob": "8e54dd46c5d5cef5a12989e91471a1c674fe86ec"
     },
     {
       "path": "cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/stage_c14_3d_case_a.py",
@@ -1709,7 +1709,7 @@
       "role": "test",
       "purpose": "code/test implementation",
       "certainty": "rule",
-      "blob": "834432b0963389bf03f53471566c7db65862db42"
+      "blob": "540e93d7957f45f9df1952b39479f5cf2b87e3a4"
     },
     {
       "path": "cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/tests/test_existing_c14_3d_results.py",
@@ -272182,7 +272182,7 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "f6d27da74c511095272d3483526562207a8f3f68"
+      "blob": "dcfd1968af3fc21bb15484d901a3a12ee8310bc4"
     },
     {
       "path": "docs/C3D04_A_STAGE07_FORENSIC_KINETICS_20261123_ES.md",
@@ -272203,7 +272203,7 @@
       "role": "config",
       "purpose": "machine-readable configuration",
       "certainty": "rule",
-      "blob": "f45a213c1fdd47363c3399766fea2e5b368c36fa"
+      "blob": "1b179a5af7459f768a0c3890f8d281e84a0d4ca3"
     },
     {
       "path": "docs/C3D_01_ESTADO_REAL_20261110_ES.md",
@@ -272441,7 +272441,7 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "939790679505fefe39d1589f68e7d67da56c2fd6"
+      "blob": "f05e6ef0f4a5654fdd4cc82c55d44d05db9ff61f"
     },
     {
       "path": "docs/DOCUMENT_SYNC_20261110_ES.md",
