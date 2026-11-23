@@ -13,6 +13,7 @@ repair source physics, fabricate 0.001s probe history, or claim conservation.
 from __future__ import annotations
 
 import argparse
+from collections import deque
 from datetime import datetime, timezone
 import hashlib
 import json
@@ -79,10 +80,15 @@ def read_obj(p: Path) -> dict:
 def error_excerpt(p: Path, limit: int = 6) -> dict:
     """Inspect actual log error evidence, without mistaking FPE banner for crash."""
     if not regular(p):
-        return {"exists": False, "sha256": None, "error_signatures": []}
+        return {"exists": False, "sha256": None, "error_signatures": [],
+                "tail_last_24_lines": []}
     results: list[dict[str, object]] = []
+    tail = deque(maxlen=24)
     with p.open(encoding="utf-8", errors="replace") as f:
         for line_number, line in enumerate(f, 1):
+            clean = line.strip()[:300]
+            if clean:
+                tail.append(clean)
             if "Enabling floating point exception trapping" in line:
                 continue  # normal native OpenFOAM configuration banner
             for key, pattern in ERROR_SIGNS:
@@ -93,7 +99,8 @@ def error_excerpt(p: Path, limit: int = 6) -> dict:
                             "excerpt": line.strip()[:260],
                         })
                     break
-    return {"exists": True, "sha256": sha(p), "error_signatures": results}
+    return {"exists": True, "sha256": sha(p),
+            "error_signatures": results, "tail_last_24_lines": list(tail)}
 
 
 def source_offline_incompatibilities() -> list[dict]:
@@ -326,6 +333,11 @@ def brief(report: dict) -> dict:
             k: v["error_signatures"] for k,v in
             report["native_command_runs"].items()
             if v["error_signatures"]
+        },
+        "failed_command_last_24_log_lines": {
+            k: v["tail_last_24_lines"] for k,v in
+            report["native_command_runs"].items()
+            if not v["exit_zero"]
         },
         "missing_C14_object_families_count":
             len(report["missing_C14_postProcessing_object_families"]),
