@@ -101,6 +101,7 @@ def native_cell_zone_state(source: Path) -> str:
     if re.search(r"(?s)\bFoamFile\s*\{[^{}]*\}",raw) is None:
         raise ValueError("source cellZones lacks OpenFOAM metadata")
     body=re.split(r"(?s)\bFoamFile\s*\{[^{}]*\}",raw,maxsplit=1)[-1]
+    body=original.strip_comments(body)
     if re.fullmatch(r"\s*0\s*\(\s*\)\s*",body):
         return "EMPTY"
     require(a.audit_existing_zone(file,EXPECTED["metal"]),
