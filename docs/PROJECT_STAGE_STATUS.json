@@ -250,7 +250,14 @@
     "case_b_c14_original_fluid_solid_source_hypothesis": "exact C14 2D physical/numeric source (hConst metal fluid + solidificationMeltingSource, eConst mold solid); B geometry-only 3D patch/pRefCell/cellZone mapping; NOT measured JMatPro/QuickCup conditions",
     "case_b_c14_original_fluid_solid_full_reference_dt_s": 0.001,
     "case_b_c14_original_fluid_solid_full_reference_endtime_s": 10,
-    "case_b_c14_original_fluid_solid_native_model_report": "docs/granada/C3D05_B_C14_SOLIDIFICACION_3D_FASE_FISICA_20261123_ES.md"
+    "case_b_c14_original_fluid_solid_native_model_report": "docs/granada/C3D05_B_C14_SOLIDIFICACION_3D_FASE_FISICA_20261123_ES.md",
+    "case_b_c14_first_user_WSL_launch_attempt_observed": true,
+    "case_b_c14_first_user_WSL_launch_attempt_error": "/opt/openfoam14/etc/bashrc: line 46: ZSH_NAME: unbound variable",
+    "case_b_c14_first_user_WSL_launch_attempt_reached_python_materializer": false,
+    "case_b_c14_first_user_WSL_launch_attempt_reached_foamMultiRun": false,
+    "case_b_c14_source_wrapper_nounset_bashrc_fix_committed": true,
+    "case_b_c14_source_wrapper_nounset_regression_ci_source_committed": true,
+    "case_b_c14_wrapper_fixed_source_WSL_rerun_observed": false
   },
   "other_cases": [
     {
@@ -290,7 +297,7 @@
       "evidence": "docs/granada/C3D05_B_C14_SOLIDIFICACION_3D_FASE_FISICA_20261123_ES.md"
     }
   ],
-  "blocker": "B original C14 numerical two-solid T0 and spatial q(y,t) diagnostics completed on WSL. New source-faithful C14 fluid-solid/solidificationMeltingSource 3D Case B stage/run code, 8 regression sources and CI workflow committed; original accepted 270788 HEX8 remains immutable; STILL NOT materialized/run in WSL or shown CI green. Physical G3/G4 await measured JMatPro/QuickCup inputs, and G5 requires native 10s fluid-solid B solver plus alpha1/latent heat validation. 1826 nonorth severe and time/mesh sensitivity open.",
-  "next_integrated_delivery": "Native code/CI static verification of Case B C14 original physics; one controlled WSL integral run using run_case_b_c14_native.sh --run-full creates independent 10s candidate if native geometry/22 dictionary gates pass (no T0 rerun). Then read original computed alpha1(T,t), h/e/U/p_rgh, energy and compare with Case A; no material change/JMatPro substitution.",
+  "blocker": "First WSL Case B C14 fluid-solid --run-full attempt STOPPED in system OpenFOAM14 bashrc before Python and foamMultiRun: ZSH_NAME unbound because our wrapper sourced official bashrc with set -u. Wrapper fixed via set +u while sourcing, restored set -u, static regression committed. Source code ready for retry; NO 3D B C14 materialization/run demonstrated yet, no G3/G4/G5 physical closure. Keep JMatPro/QuickCup, 1826 nonorth and convergence pending.",
+  "next_integrated_delivery": "User can repeat same git pull --ff-only && run_case_b_c14_native.sh --run-full after nounset wrapper fix (no prior CFD attempt executed). If any new native parser/preparation error occurs, preserve staging evidence and diagnose. On success demand actual C14 fluid-solid 10s WSL log, h/e/p_rgh, alpha1 and energy with physical-validation gates still open.",
   "science": "CASE_B_C14_NUMERICAL_TWO_SOLID_T0_AND_SPATIAL_Q_COMPLETED__ORIGINAL_C14_FLUID_SOLID_PHASE_SOURCE_STAGED_CODE_COMMITTED_NOT_WSL_RUN_OR_PHY_VALIDATED"
 }
