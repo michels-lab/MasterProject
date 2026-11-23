@@ -3,11 +3,12 @@ import json
 from pathlib import Path
 import tempfile
 import unittest
+from unittest.mock import patch
 
 from stage_fs_c07_native import (
     CONTROL, FUNCTIONS, FS_C06_FUNCTIONS, FVMODELS, MONITORS,
     source_preflight, stage, audit_native_monitor_files,
-    read_cfd_time_from_log,
+    read_cfd_time_from_log, run_native,
 )
 
 
@@ -185,6 +186,29 @@ class FS_C07_Staging(unittest.TestCase):
             self.assertIsNone(sim_time)
             self.assertGreater(size, 0)
 
+
+
+    def test_native_solver_success_is_persisted_before_failed_field_gate(self):
+        # No OpenFOAM invoked: mocked successful child, then failed scientific
+        # audit must NOT produce a false native_cfd_executed=false report.
+        self.dest.mkdir()
+        initial = {"native_cfd_executed": False,
+                   "status": "FS_C07_STAGED_NO_CFD"}
+        with (patch("stage_fs_c07_native.os.getenv", return_value="14"),
+              patch("stage_fs_c07_native.shutil.which", return_value="/mock/foamMultiRun"),
+              patch("stage_fs_c07_native.subprocess.Popen") as proc_class,
+              patch("stage_fs_c07_native.audit_saved_fields",
+                    side_effect=ValueError("invalid VOF allocation"))):
+            proc = proc_class.return_value
+            proc.poll.return_value = 0
+            proc.returncode = 0
+            with self.assertRaisesRegex(ValueError, "invalid VOF"):
+                run_native(self.dest, initial, 5)
+        saved = json.loads((self.dest / "FS_C07_REPORT.json").read_text())
+        self.assertTrue(saved["native_cfd_executed"])
+        self.assertTrue(saved["native_solver_completed"])
+        self.assertEqual(saved["status"],
+                         "FS_C07_NATIVE_SOLVER_COMPLETED_PHASE_AUDIT_PENDING")
 
 
 if __name__ == "__main__":
