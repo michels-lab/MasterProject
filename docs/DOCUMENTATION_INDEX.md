@@ -1,3 +1,5 @@
+- [**Caso B / C3D-05 — 23-nov: q(y,t) REAL de 12,636 caras × 6 tiempos y diagnóstico de integral temporal**](granada/C3D05_B_Q_ESPACIAL_REAL_6_TIEMPOS_Y_CONTRASTE_ENERGIA_20261123_ES.md) — salida WSL espacial 12 bandas Y y CSV/manifest SHA publicada; 31.964→19.248 kW entre 0.02 y 0.1 s, integral trapezoidal de 6 tiempos ~2263 J frente a metal ~2641 J (14.3%, NO pérdida energética del solver). Sin JMatPro/QuickCup ni convergencia; etapa 3/7, 2/7=29% técnico.
+
 - [**Caso B C3D-05 — 23-nov: q(y,t) en 12 bandas y centros de 12,636 pares para ParaView, sobre CSV originales SHA de la corrida real 270,788 HEX8**](granada/C3D05_FLUJO_ESPACIAL_Y_PUERTA_FISICA_20261123_ES.md). **Código listo, ejecución local WSL pendiente, sin nueva física JMatPro/QuickCup; etapa 3/7, 2/7=29% hitos técnicos**.
 
 - [**Caso B C3D-05: Granada C14 numérica T0 COMPLETADA en WSL sobre 270,788 HEX8** — 6 tiempos T metal/molde, error energético 4.3202925×10⁻⁸, 12,636 pares q/lado con desajuste 1.8239734×10⁻¹⁶, CSV, SHA y ParaView; **G3/G4 físicos abiertos, 3/7 y 2/7=29 % hitos técnicos**](granada/C3D05_WSL_T0_NUMERICO_COMPLETO_270788_HEX8_20261120_ES.md).
