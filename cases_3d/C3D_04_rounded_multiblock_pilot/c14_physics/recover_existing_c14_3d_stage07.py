@@ -284,7 +284,37 @@ def native_inspection(case:Path,copy:Path,log_hash:str)->dict:
     return result
 
 
-def evaluate(case:Path,vol:Path,copy:Path)->tuple[dict,list[dict]]:
+def select_volume_evidence(case:Path, volume:Path, copy:Path,
+                           analysis:Path, recovered:Path)->tuple[Path,str]:
+    """Repair INCOMPLETE previous output only in a fresh independent folder.
+
+    Never treat a corrupt/modified existing report as recoverable. Only missing
+    files allow rebuild via original 101-state source (NO CFD or native runs).
+    """
+    if file_ok(volume/JSON_IN) and file_ok(volume/CSV_IN):
+        return volume,"EXISTING_VOLUME_CSV_AND_JSON_FOUND"
+    check(not volume.is_symlink(),"previous volumetric output is symlinked")
+    new=recovered.expanduser().absolute()
+    old=[case.resolve(),volume.resolve(),copy.resolve(),REPO.resolve(),
+         C14.resolve(),analysis.resolve()]
+    check(all(new!=p and p not in new.parents and new not in p.parents
+              for p in old),"recovered output overlaps protected source")
+    if new.exists() or new.is_symlink():
+        check(new.is_dir() and not new.is_symlink()
+              and file_ok(new/JSON_IN) and file_ok(new/CSV_IN),
+              "recovered volume path is occupied/incomplete; do not overwrite")
+        return new,"PREVIOUSLY_RECOVERED_VOLUME_REUSED_NO_OVERWRITE"
+    check(analysis.is_dir() and not analysis.is_symlink(),
+          "original verified 101-state audit required for safe volume rebuild")
+    # This is purely postrun volume/field analysis in Python. The function
+    # validates its own immutable source log and original C14 controlDict.
+    import c14_3d_postprocess_parity as volume_rebuilder
+    volume_rebuilder.analyze(case,analysis,new)
+    return new,"NEW_SEPARATE_VOLUME_101_STATES_REBUILT_WITHOUT_CFD"
+
+
+def evaluate(case:Path,vol:Path,copy:Path,analysis:Path|None=None,
+             recovered:Path|None=None)->tuple[dict,list[dict]]:
     case=case.expanduser().resolve()
     vol=vol.expanduser().resolve()
     copy=copy.expanduser().absolute()
@@ -293,7 +323,13 @@ def evaluate(case:Path,vol:Path,copy:Path)->tuple[dict,list[dict]]:
     c14ctrl=C14/"system/controlDict"
     check(hashfile(sourcectrl)==hashfile(c14ctrl),
           "original C14 CFD controlDict differs from source")
-    data,meta,hashes=read_volume(case,vol)
+    if analysis is None:
+        analysis=Path.home()/"OpenFOAM/C3D04_A_C14_FLUID_SOLID_10S_ANALYSIS_01"
+    if recovered is None:
+        recovered=Path.home()/"OpenFOAM/C3D04_A_C14_3D_VOLUMETRIC_RECOVERED_02"
+    source_volume,selection=select_volume_evidence(
+        case,vol,copy,analysis.expanduser().resolve(),recovered)
+    data,meta,hashes=read_volume(case,source_volume)
     contract=json_file(CONTRACT)["C14_exact_values"]
     mass=float(meta["metal_total_mass_kg"])
     check(math.isclose(mass, data[0]["metal_volume_m3"]*
@@ -321,7 +357,9 @@ def evaluate(case:Path,vol:Path,copy:Path)->tuple[dict,list[dict]]:
         "created_utc":datetime.now(timezone.utc).isoformat(),
         "status":"GENUINE_SAVED_101_STATE_KINETICS_RECOVERED_NATIVE_UNVERIFIED",
         "case_A_source_run_read_only":str(case),
-        "source_volumetric_output_read_only":str(vol),
+        "source_volumetric_output_read_only":str(source_volume),
+        "volume_input_recovery_mode":selection,
+        "original_volumetric_directory_preserved":True,
         "source_native_postprocess_copy_read_only":str(copy),
         "source_C14_fluid_solid":str(C14),
         "source_sha256":{**hashes,
@@ -394,12 +432,18 @@ def main()->int:
                     "OpenFOAM/C3D04_A_C14_FULL_POSTPROCESS_WORKCOPY_01")
     ap.add_argument("--out",type=Path,default=Path.home()/
                     "OpenFOAM/C3D04_A_C14_STAGE07_RECOVERY_KINETICS_01")
+    ap.add_argument("--analysis",type=Path,default=Path.home()/
+                    "OpenFOAM/C3D04_A_C14_FLUID_SOLID_10S_ANALYSIS_01")
+    ap.add_argument("--recovered-volume-out",type=Path,default=Path.home()/
+                    "OpenFOAM/C3D04_A_C14_3D_VOLUMETRIC_RECOVERED_02")
     arg=ap.parse_args()
     try:
-        report,rows=evaluate(arg.case,arg.volume,arg.copy)
+        report,rows=evaluate(arg.case,arg.volume,arg.copy,
+                             arg.analysis,arg.recovered_volume_out)
         status=publish(report,rows,arg.out)
         print(json.dumps({
             "status":status,"case":"C3D04-A","stage":"7/10",
+            "source_volume_mode":report["volume_input_recovery_mode"],
             "milestones_done":"6/10","solver_rerun":False,
             "first_saved_alpha1_decrease":
                 report["kinetics"]["first_saved_alpha1_decrease"],
