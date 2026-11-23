@@ -33,7 +33,17 @@
   "experimentally_validated": false,
   "git_static_workflow_declared": true,
   "git_static_workflow_pass_verified": false,
-  "status": "PREPARED_FS_C07_1S_THERMAL_SCREEN_ONLY_NO_SHRINKAGE",
+  "status": "FS_C07_NATIVE_TRANSIENT_CODE_PREPARED__WLS_EXECUTION_REQUIRED__NO_SHRINKAGE",
   "scientific_next_gate": "Native 1s screen read alpha.metal.solid and T.metal on positive metallic volume; if liquidus not reached, extend horizon only with evidence and stable Courant. Next implement OpenFOAM Foundation14 metal liquid/solid conservative continuity and phase density with traceable alloy properties; do not use fictional massSource.",
-  "latest_repository_update": "Added native FS-C07 controlDict (adaptive time, maxCo .1, 1s), isolated clone and native run/audit script, synthetic CI, exact physical coupling equations and source audit."
+  "latest_repository_update": "Native fluid/solid thermal transition controlDict committed; provenance-safe isolated clone, 1s completion and ten real native monitor gate, synthetic test workflow; phase continuity/phase rho and shrinkage still not implemented",
+  "source_initial_fluid_temperature_candidates": [
+    "0/fluid/T.metal",
+    "0/fluid/T"
+  ],
+  "native_last_saved_time_required_s": 0.999,
+  "native_ten_function_object_data_rows_required": true,
+  "native_ten_function_object_final_time_required": true,
+  "native_monitor_SHA256_and_columns_recorded_after_run": true,
+  "source_can_be_copied_only_outside_repo": true,
+  "tests_updated_for_monitor_records_and_no_fake_solid": true
 }
