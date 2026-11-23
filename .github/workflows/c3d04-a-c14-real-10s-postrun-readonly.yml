@@ -1,0 +1,64 @@
+name: C3D04-A C14 real 10s WSL evidence + read-only postprocessing gates
+
+on:
+  push:
+    paths:
+      - "docs/C3D04_CASE_A_STATUS.json"
+      - "docs/C3D_04_C14_V4_T02_REAL_10S_20261123_ES.md"
+      - "cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/analyze_existing_c14_3d_results.py"
+      - "cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/tests/test_existing_c14_3d_results.py"
+      - ".github/workflows/c3d04-a-c14-real-10s-postrun-readonly.yml"
+  pull_request:
+    paths:
+      - "docs/C3D04_CASE_A_STATUS.json"
+      - "docs/C3D_04_C14_V4_T02_REAL_10S_20261123_ES.md"
+      - "cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/analyze_existing_c14_3d_results.py"
+      - "cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/tests/test_existing_c14_3d_results.py"
+      - ".github/workflows/c3d04-a-c14-real-10s-postrun-readonly.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  existing-c14-real-10s-postrun-static:
+    name: Case A original C14 real WSL evidence, 60pct milestones, read-only fields
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Python syntax gate (NO CFD)
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          base=Path("cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics")
+          for p in (base/"analyze_existing_c14_3d_results.py",
+                    base/"tests/test_existing_c14_3d_results.py"):
+              compile(p.read_bytes(),str(p),"exec")
+              print("COMPILE_OK",p)
+          PY
+      - name: Existing-run analytics and immutable input negative regressions
+        run: |
+          PYTHONDONTWRITEBYTECODE=1 python3 -B -m unittest discover \
+            -s cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/tests \
+            -p test_existing_c14_3d_results.py -v
+      - name: Canonical C3D04-A exactly 6/10 stage07 with actual WSL evidence
+        run: |
+          PYTHONDONTWRITEBYTECODE=1 python3 -B \
+            cases_3d/C3D_04_rounded_multiblock_pilot/scripts/report_case_a_progress.py
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path("docs/C3D04_CASE_A_STATUS.json")
+          d=json.loads(p.read_text())
+          assert d["current_stage"]=="07_THERMAL_T0_EXECUTION"
+          assert d["progress_count_done"]==6 and d["progress_percent"]==60
+          assert d["CFD_run"] is True
+          for key in ("physical_validation","grid_independence",
+                      "numerical_accuracy_validated"):
+              assert d[key] is False,key
+          assert d["milestones"][5]["status"]=="DONE"
+          assert Path(d["milestones"][5]["evidence"]).is_file()
+          assert d["milestones"][6]["status"]=="IN_PROGRESS"
+          assert d["original_C14_full_10s_3D_gate"]["WSL_native_10_second_CFD_executed"] is True
+          print("REAL_WSL_C14_10S_RESEARCH_STAGE_EVIDENCE_CONTRACT_OK")
+          PY
