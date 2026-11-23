@@ -1,3 +1,21 @@
+## 23-11-2026 — Resultados del CFD C14 original 3D-A, 10 s: phaseChangeSource:alpha1 EVOLUCIONÓ
+
+**Evidencia real WSL, NO CFD sintético:** el investigador ejecutó el análisis nativo de los 101 estados y **10 000 pasos** del C14 original en V4/T02. [Resultados térmicos y numéricos exactos](../../../docs/C3D_04_C14_V4_T02_REAL_10S_PHASE_NUMERICAL_RESULTS_20261123_ES.md).
+
+Al final, **metal T** 1401.91/1444.7185/1471.07 K (min/medio por celda/max); **arena T** 300.006/531.3307/918.764 K. C14 tiene `Tsol=1423 K`, `Tliq=1473 K`; 8 960/8 960 celdas del metal están bajo liquidus y 1 158/8 960 (12.924 %) bajo solidus. `phaseChangeSource:alpha1` llegó a **min 0, media por celda 0.8367355, max 0.992311**: el campo de fracción líquida original dejó de ser 1, y el modelo registra avance de solidificación. **No confundir `1−media(alpha1)` con fracción sólida volumétrica o másica.**
+
+La auditoría de todo el log registró **Courant máximo 0.0240415**, frente a `maxCo=0.25` configurado en C14, y continuidad global máxima absoluta 4.21562e-18. El residuo **final** máximo de presión `p_rgh` en cualquier iteración fue 0.00776125, frente a 5.19776e-08 en la última: localizar ese pico antes de declarar estabilidad numérica. **No hay todavía balance de energía (ni verificación del calor latente integrado), independencia de malla ni validación experimental.** Hito 07/10 **EN PROGRESO**, 6/10=60 % operativo; hito 08 aún pendiente de estudiar la secuencia completa y el término Darcy.
+
+**Siguiente paso: solo POSTPROCESAMIENTO sobre CSV/JSON que YA existen, sin `foamMultiRun` ni cambios físicos**. Desde `~/OpenFOAM/MasterProject` actualizado:
+
+```bash
+python3 -B cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/summarize_existing_c14_phase_timeline.py
+```
+
+El script abre `~/OpenFOAM/C3D04_A_C14_FLUID_SOLID_10S_ANALYSIS_01/C3D04_A_C14_10S_TIME_SERIES.csv` más `C3D04_A_C14_10S_DIAGNOSTICS.json` y calcula **primeros estados guardados** bajo liquidus, solidus y con `alpha1<0.999`, además de pendientes de enfriamiento/promedio. Guarda el resumen en **otro directorio nuevo**, `~/OpenFOAM/C3D04_A_C14_FLUID_SOLID_10S_PHASE_TIMELINE_01`. Los eventos quedan delimitados por la cadencia de 0.1 s: no son tiempos continuos exactos de inicio de cambio de fase. No tocar CFD previo ni reconstruir la malla.
+
+---
+
 ## 23-11-2026 — PRIMERA CORRIDA ORIGINAL C14 REAL V4/T02 3D COMPLETA (NO VOLVER A CORRER)
 
 **Evidencia de la laptop del investigador:** [reporte auditado](../../../docs/C3D_04_C14_V4_T02_REAL_10S_20261123_ES.md). El output **ya existe** en `~/OpenFOAM/C3D04_A_C14_FLUID_SOLID_FULL_10S_RUN_01` (20-11-2026 21:31–21:45). El `C14_3D_A_NATIVE_STAGE_REPORT.json` compartido señala `native_solver_run=true` y `C3D04_A_C14_ORIGINAL_FULL_10S_NATIVE_EXECUTED_NOT_PHYSICALLY_VALIDATED`. El `log.foamMultiRun` contiene `Time = 10s`, presión `p_rgh`, metal `h`, arena `e`, continuidad, `ClockTime=839 s` y `End`. Hay 101 estados de salida entre 0 y 10 s. El intento repetido fue correctamente bloqueado para preservar la corrida ya realizada. **NO borrar ni reejecutar** el CFD; comprobar resultados.
