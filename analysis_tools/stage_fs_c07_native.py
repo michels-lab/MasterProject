@@ -382,13 +382,25 @@ def main() -> int:
             print("FS-C07 STAGED ONLY: --native executes actual Foundation14 CFD")
         return 0
     except (ValueError, OSError, KeyError, TypeError) as exc:
-        print(str(exc), file=sys.stderr)
+        print("FS-C07 ROOT CAUSE:", str(exc), file=sys.stderr)
         if target.exists() and (target / "FS_C07_REPORT.json").exists():
             old = json.loads((target / "FS_C07_REPORT.json").read_text())
             old["status"] = "FS_C07_INCOMPLETE_PRESERVE_EVIDENCE"
             old["last_error"] = str(exc)
-            (target / "FS_C07_REPORT.json").write_text(json.dumps(old, indent=2)+"\n")
+            log = target / "log.FS_C07_foamMultiRun"
+            if log.is_file():
+                last_time, log_bytes = read_cfd_time_from_log(log)
+                old["last_native_log_time_s"] = last_time
+                old["last_native_log_size_bytes"] = log_bytes
+                old["solver_log_path"] = str(log)
+            (target / "FS_C07_REPORT.json").write_text(
+                json.dumps(old, indent=2) + "\n")
+            print("FS-C07 LAST NATIVE CFD TIME:",
+                  old.get("last_native_log_time_s", "not available"),
+                  file=sys.stderr)
             print("FS-C07 EVIDENCE PRESERVED:", target, file=sys.stderr)
+            print("FS-C07 SEE FS_C07_REPORT.json:last_error "
+                  "AND log.FS_C07_foamMultiRun", file=sys.stderr)
         return 2
 
 
