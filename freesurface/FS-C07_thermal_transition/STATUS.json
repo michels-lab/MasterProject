@@ -35,7 +35,7 @@
   "git_static_workflow_pass_verified": false,
   "status": "FS_C07_NATIVE_SOLVER_COMPLETED_1S__PHASE_ALLOCATION_DIAGNOSTIC_PENDING__NO_SHRINKAGE_ACCEPTANCE",
   "scientific_next_gate": "Native 1s screen read alpha.metal.solid and T.metal on positive metallic volume; if liquidus not reached, extend horizon only with evidence and stable Courant. Next implement OpenFOAM Foundation14 metal liquid/solid conservative continuity and phase density with traceable alloy properties; do not use fictional massSource.",
-  "latest_repository_update": "Native Foundation14 reached Time=1s and End after 2355s wall clock. Python postprocess failed first phase volume allocation tolerance gate (at least one cell violating >1e-8). 20 full native phase snapshots preserved; no rerun needed. Added non-clipping read-only all-state forensic to expose cell values.",
+  "latest_repository_update": "Complete 1s Foundation14 native solver proven from WSL; scientific phase allocation gate failed >1e-8. Added non-destructive 20-state VOF/solid forensic and tests. Future stage runner persists solver completion before postprocess failure; existing saved case unchanged.",
   "source_initial_fluid_temperature_candidates": [
     "0/fluid/T.metal",
     "0/fluid/T"
@@ -120,5 +120,11 @@
   "execution_attempt_latest_rhoPhi_atmosphere_lower_sides_kg_s": 0.00521717439313,
   "execution_attempt_latest_metal_mass_flux_atmosphere_sides_kg_s": 8.51597548632e-20,
   "forensic_native_phase_validation_script": "analysis_tools/diagnose_fs_c07_phase_allocation.py",
-  "forensic_native_phase_validation_execute_in_WSL": false
+  "forensic_native_phase_validation_execute_in_WSL": false,
+  "future_native_solver_completed_state_persisted_before_phase_audit": true,
+  "future_native_solver_success_no_longer_misreported_as_not_executed": true,
+  "future_native_solver_tracking_fix_wsl_validated": false,
+  "phase_allocation_forensic_tests_declared": 8,
+  "future_runner_scientific_audit_separation_test_declared": true,
+  "static_CI_pass_verified": false
 }
