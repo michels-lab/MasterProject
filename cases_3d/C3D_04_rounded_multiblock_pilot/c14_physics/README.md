@@ -1,3 +1,19 @@
+## 23-11-2026 — PRIMERA CORRIDA ORIGINAL C14 REAL V4/T02 3D COMPLETA (NO VOLVER A CORRER)
+
+**Evidencia de la laptop del investigador:** [reporte auditado](../../../docs/C3D_04_C14_V4_T02_REAL_10S_20261123_ES.md). El output **ya existe** en `~/OpenFOAM/C3D04_A_C14_FLUID_SOLID_FULL_10S_RUN_01` (20-11-2026 21:31–21:45). El `C14_3D_A_NATIVE_STAGE_REPORT.json` compartido señala `native_solver_run=true` y `C3D04_A_C14_ORIGINAL_FULL_10S_NATIVE_EXECUTED_NOT_PHYSICALLY_VALIDATED`. El `log.foamMultiRun` contiene `Time = 10s`, presión `p_rgh`, metal `h`, arena `e`, continuidad, `ClockTime=839 s` y `End`. Hay 101 estados de salida entre 0 y 10 s. El intento repetido fue correctamente bloqueado para preservar la corrida ya realizada. **NO borrar ni reejecutar** el CFD; comprobar resultados.
+
+**Estado actualizado:** hito 06 completado, hito 07 **EN PROGRESO**; 6/10=**60 % operativo**, `CFD_run=true`. Sin embargo, `physical_validation=false`, `grid_independence=false` y `numerical_accuracy_validated=false`. El metal podría o no haber atravesado `Tliq`; aún no se han leído las estadísticas de campo `phaseChangeSource:alpha1` de esta corrida. El Courant final máximo fue 0.00450431; **todavía no es el máximo del registro completo**. No añadir física ni parámetros nuevos: **C14 2D original, exclusivamente 3D**.
+
+**UNA orden de análisis postrun EN LECTURA (no CFD, no Foam lens requerido)**, desde la raíz de `MasterProject` actualizado, cuando se quiera auditar toda la corrida guardada:
+
+```bash
+python3 -B cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/analyze_existing_c14_3d_results.py
+```
+
+El analizador verifica el `controlDict` original, el reporte de corrida, las 8960+12352 celdas regionales y todos los estados disponibles; lee los `internalField` ASCII de `T` metal/arena, `phaseChangeSource:alpha1` y `p_rgh`; procesa el log completo para máximo Courant (no solo final), continuidad y residuos; y guarda un CSV temporal y JSON de estadísticas **en una carpeta nueva, separada**, `~/OpenFOAM/C3D04_A_C14_FLUID_SOLID_10S_ANALYSIS_01`. Si esa carpeta ya existe, se detiene para evitar reemplazar evidencias. **No calcula conservación energética, volumen promedio ponderado ni validación QuickCup:** esos son análisis separados por completar con malla/flujo.
+
+---
+
 ## 20-11-2026 — C14 original 10 s nativo en 3D: CI verificada y ejecutor protegido
 
 [PR #60 integrado](https://github.com/michels-lab/MasterProject/pull/60) mediante [commit d3b1f86](https://github.com/michels-lab/MasterProject/commit/d3b1f865076f2527976ae0db481bc6a5aaec5bbd). En [CI Foundation14 #44860515973](https://github.com/michels-lab/MasterProject/actions/runs/44860515973) se prepararon **DOS candidatos independientes de la misma geometría sintética 3D** (27 metal + 27 arena):
