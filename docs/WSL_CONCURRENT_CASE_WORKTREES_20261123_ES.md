@@ -12,7 +12,7 @@ Un git pull en MasterProject actualiza **todos** los archivos rastreados de la r
 
 - Desarrollo Caso A, nueva rama local sin upstream: ~/OpenFOAM/C3D04_A_WORKTREE, branch work/c3d04-a-isolated; fuente cases_3d/C3D_04_rounded_multiblock_pilot.
 - Desarrollo Caso B, nueva rama local sin upstream: ~/OpenFOAM/C3D05_B_WORKTREE, branch work/c3d05-b-isolated; fuente cases_3d/C3D_05_step_gmsh_conformal.
-- Contracción, rama HISTÓRICA, no migrar ni sustituir: ~/OpenFOAM/FS_C02_WORKTREE, branch research/fs-c02-metal-air-vof-20261117; fuentes freesurface/FS-C05_vof_cht, freesurface/FS-C06_vof_solidification y trabajos FS-C07. El preparador solo verifica la identidad del worktree, jamás lo actualiza.
+- **Contracción:** ~/OpenFOAM/FS_C02_WORKTREE. Su código procede de research/fs-c02-metal-air-vof-20261117, pero en el equipo real se usó `git switch --detach FETCH_HEAD`; por tanto, el checkout puede estar legítimamente en **detached HEAD**, no sobre la rama local. El instalador comprueba que Git lo registre en la ruta prevista, que comparta repositorio, que su HEAD tenga el archivo FS-C06 versionado y que el commit detached sea antecesor de la rama remota de investigación. **No conecta, reescribe, cambia ni actualiza HEAD**. La referencia remota puede avanzar mientras la copia de ejecución queda fija.
 - Checkout central compartido: ~/OpenFOAM/MasterProject, permanece SIN checkout, merge ni pull automático.
 - Ejecución 3D-A preservada: ~/OpenFOAM/C3D04_A_C14_FLUID_SOLID_FULL_10S_RUN_01.
 - Ejecución 3D-B preservada: ~/OpenFOAM/C3D05_T0_C14_SHK_01.
@@ -30,7 +30,7 @@ Un git pull en MasterProject actualiza **todos** los archivos rastreados de la r
       git -C "$HOME/OpenFOAM/MasterProject" show origin/main:tools/isolate_active_openfoam_cases.py |
       python3 -B - --repo "$HOME/OpenFOAM/MasterProject" --apply
 
-Con fetch se actualizan referencias Git, no la carpeta fuente que ejecuta un CFD. El script hace PREFLIGHT DE LOS TRES caminos antes del primer cambio. Solo llama git worktree add para los A/B ausentes, usando --no-track (sin upstream) para que un git pull simple desde estos worktrees no haga una fusión accidental. Si una carpeta existe pero no es el worktree reconocido, una rama está ocupada o FS_C02 no coincide con su ruta histórica, **SE DETIENE, sin borrar, mover, reasignar, force, reset, clean ni prune**.
+Con fetch se actualizan referencias Git, no la carpeta fuente que ejecuta un CFD. El script hace PREFLIGHT DE LOS TRES caminos antes del primer cambio. Solo llama git worktree add para los A/B ausentes, usando --no-track (sin upstream) para que un git pull simple desde estos worktrees no haga una fusión accidental. Si una carpeta existe pero no es el worktree reconocido, una rama está ocupada o la procedencia del HEAD experimental no se puede verificar, **SE DETIENE, sin borrar, mover, reasignar, force, reset, clean ni prune**. Un FS `detached HEAD` con código versionado y ascendencia de la rama remota **sí es válido**. El rechazo previo `contraction: unexpected existing worktree/branch` fue causado por asumir erróneamente que el worktree de investigación siempre debía mantener una rama local conectada. No repetir ese control.
 
 **Para ver el plan, sin instalar worktrees**, cambiar el argumento final --apply por --plan.
 
