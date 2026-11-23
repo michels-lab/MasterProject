@@ -28,8 +28,9 @@ AXIAL_HEADER = ("time_s", "band", "y_lo_mm", "y_hi_mm", "paired_faces",
                 "net_outward_W", "pairwise_abs_mismatch_W",
                 "metal_area_mean_q_W_m2", "mold_area_mean_q_W_m2",
                 "max_abs_metal_q_W_m2")
-FACE_HEADER = ("time_s", "metal_face", "mold_face", "x_mm", "y_mm", "z_mm",
-               "area_m2", "metal_outward_q_W_m2", "mold_outward_q_W_m2",
+FACE_HEADER = ("time_s", "metal_face", "mold_face", "x_m", "y_m", "z_m",
+               "x_mm", "y_mm", "z_mm", "area_m2",
+               "metal_outward_q_W_m2", "mold_outward_q_W_m2",
                "pairwise_abs_mismatch_W")
 SCHEMA = "C3D05_B_NATIVE_Q_SPATIAL_BANDS_V1"
 
@@ -106,24 +107,25 @@ def spatialize(metal: dict, mold: dict, original: dict, paired: list,
         observed = rows[it]
         all_m, all_d, all_pair, all_gross = [], [], [], []
         for b, pairs in enumerate(members):
-            areas, powers_m, powers_d, mismatches, max_q = [], [], [], [], []
+            areas, mold_areas, powers_m, powers_d, mismatches, max_q = [], [], [], [], [], []
             for i, j in pairs:
                 a, z = m[i], d[j]
                 area = a["area"]
                 wm = area * a["q"]
                 wd = z["area"] * z["q"]
                 areas.append(area)
+                mold_areas.append(z["area"])
                 powers_m.append(wm)
                 powers_d.append(wd)
                 mismatches.append(abs(wm + wd))
                 max_q.append(abs(a["q"]))
                 if it == len(mt)-1:
                     x, y, zz = a["center"]
-                    final_points.append((float(t), i, j, x*1000, y*1000,
-                                         zz*1000, area, a["q"], z["q"],
-                                         abs(wm+wd)))
-            am, wm, wd = (math.fsum(areas), math.fsum(powers_m),
-                          math.fsum(powers_d))
+                    final_points.append((float(t), i, j, x, y, zz,
+                                         x*1000, y*1000, zz*1000,
+                                         area, a["q"], z["q"], abs(wm+wd)))
+            am, ad, wm, wd = (math.fsum(areas), math.fsum(mold_areas),
+                              math.fsum(powers_m), math.fsum(powers_d))
             local_mismatch = math.fsum(mismatches)
             all_m.extend(powers_m)
             all_d.extend(powers_d)
@@ -134,7 +136,7 @@ def spatialize(metal: dict, mold: dict, original: dict, paired: list,
                                  (low+(b+1)*dy)*1000, len(pairs), am,
                                  wm, wd, wm+wd, local_mismatch,
                                  wm/am if am else None,
-                                 wd/am if am else None,
+                                 wd/ad if ad else None,
                                  max(max_q) if max_q else None))
         gm, gd, gp, gross = (math.fsum(all_m), math.fsum(all_d),
                              math.fsum(all_pair), math.fsum(all_gross))
@@ -164,7 +166,7 @@ def spatialize(metal: dict, mold: dict, original: dict, paired: list,
         "case": "C3D_05_step_gmsh_conformal",
         "source_scope": "Two solids, archived C14 constant-property 0.1 s numerical T0; not casting physics",
         "axial_coordinate": "y", "axial_unit": "mm",
-        "face_coordinate": "centre of native conformal metal interface face",
+        "face_coordinate": "centre of native conformal metal interface face; x_m/y_m/z_m overlay with OpenFOAM SI geometry in ParaView; x_mm/y_mm/z_mm are convenience only",
         "axial_band_count": bands,
         "axial_bounds_m": [low, high],
         "face_pairs_per_sample": len(paired),
