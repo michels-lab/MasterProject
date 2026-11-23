@@ -1,6 +1,23 @@
 # FS-C07 — Transitorio térmico nativo previo al modelo de contracción
 
 
+> **23-11-2026 — EXCESO SÓLIDO LOCALIZADO EN VOF BAJO, MECANISMO SOURCE-ORDER INVESTIGADO:** [Informe espacial sobre evidencia real a t=0.2,0.4,1.0s y fuente oficial Foundation14](../../docs/granada/FS_C07_ORIGEN_ESPACIAL_ALLOCATION_Y_ORDEN_NATIVE_C14_20261123_ES.md). Se midieron `187/598/378` celdas con `alphaSolid>alphaMetal+1e-8`; **0** en `alphaMetal>=0.5` de esos tres estados, y `185/594/371` con `alphaMetal<1e-3`. Parte del metal-traza en celdas defectuosas tiene `T.metal≈260–393K` y no representa la temperatura del núcleo. El código OpenFOAM 14 `foamMultiRun.C` llama `fvModels().correct()` **antes** de `prePredictor()`; el `twoPhaseSolver` transporta `alpha` en `alphaPredictor()` **después** de la actualización de `alphaSolid`, que contiene un `min(...,alphaVoF)`. Es causa posible fuertemente respaldada por el orden fuente, **sin confirmación de exclusividad física ni temporal**.
+>
+> Se añadió el modo **`--all-saved --compact`** al analizador espacial para comprobar las **20 instantáneas** en lugar de extrapolar desde tres. Los resultados/CI de esta extensión no se han verificado en WSL. Ejecución de solo lectura, **sin volver a correr CFD**:
+>
+> ```bash
+> cd ~/OpenFOAM/FS_C02_WORKTREE
+> git fetch origin research/fs-c02-metal-air-vof-20261117
+> git switch --detach FETCH_HEAD
+> python3 analysis_tools/locate_fs_c07_phase_violation.py \
+>   --all-saved --compact \
+>   ~/OpenFOAM/FS_C07_RUNS/FS_C07_THERMAL_20261123T183217Z_72da1bf4
+> ```
+>
+> **No se alteró la fase original, no se mejoró artificialmente el gate `0<=alphaSolid<=alphaMetal<=1`, y no se ha implementado contracción o alimentación.**
+
+
+
 > **23-11-2026 — RECUPERACIÓN RAW VOLUMÉTRICA NATIVA COMPLETADA EN WSL, SIN CFD NUEVA.** [Auditoría de los veinte estados y comparación con monitores de OpenFOAM](../../docs/granada/FS_C07_AUDITORIA_VOLUMETRICA_NATIVE_1S_20261123_ES.md). A 1s: `V_metal_raw=48.01103827 cm³`, `V_solid_raw=2.40359109 cm³` (`5.006330%` del metal, **numérico no aceptado**); `V_liquid_raw=45.60744718 cm³`. Exceso de sólido por encima de metal, integrado sin clip: `0.00176807 mm³` a 1s; el mayor exceso volumétrico `0.00612729 mm³` ocurrió a `0.40s`, mientras el mayor error local de fracción ocurrió a `0.20s`. Ambos monitores nativos de `volFieldValue` reproducen las integrales de forma consistente. La variación de `V_metal` respecto a inicio es `−0.878013 mm³` (`−0.00182874%`), **NO es contracción física demostrada**. La integral sólida raw `V_s` **bajó de t=0.05 a 0.10s** antes de crecer; requiere examinar arranque. La puerta `0<=alpha_solid<=alpha_metal<=1` **sigue FAIL** y no se alterarán los campos originales.
 
 > **DIAGNÓSTICO ESPACIAL PREPARADO, NO CORRIDO EN WSL:** [`analysis_tools/locate_fs_c07_phase_violation.py`](../../analysis_tools/locate_fs_c07_phase_violation.py) identifica los índices de celdas originales, posición promedio de sus 8 vértices, `T.metal`, distribución de errores por bandas de magnitud `alpha.metal`, los ocho máximos por error de fracción y por integral volumétrica, en `t=0.2,0.4,1.0s`. **Distingue magnitud VOF del núcleo de metal, no afirma automáticamente que una celda sea interfaz geométrica.** No ejecuta solver, ni remalla, ni sobrescribe la carpeta fuente:
