@@ -63,3 +63,22 @@ El analizador no invoca foamMultiRun, foamPostProcess, blockMesh o checkMesh. An
 6. Aún no hay evidencia local WSL de ejecución de este analizador nuevo. El avance operativo permanece 6/10=60%; Hito 7 no se cierra por escribir código.
 
 Este documento es contrato de cobertura, no declaración de cálculo ejecutado ni validación.
+
+
+## Segundo bloque: postprocesamiento OpenFOAM Foundation14 sobre copia física
+
+Se añadió run_c14_3d_complete_postprocess.py como orquestador integral **preparado, NO EJECUTADO en WSL**. Su diseño:
+1. valida contra la auditoría anterior la identidad de 101 estados, SHA del log y bytes intactos del controlDict C14;
+2. calcula las integrales volumétricas y deja informe separado;
+3. deriva coordenadas de sondas/perfiles mediante centroides geométricos de celdas metálicas REALES, normalizando los tres niveles horizontales a 25/50/75 % de altura para no copiar puntos 2D que pueden estar fuera de la 3D (registra coordenadas verdaderas);
+4. crea una COPIA completa independiente del run original, copia los cinco diccionarios de función C14 y el postproceso de superficie, cambiando exclusivamente probeLocations/sets en la copia;
+5. ejecuta foamPostProcess para functions, momentum y topSurfaceFlow y después foamLog, sin invocar solver, checkMesh o blockMesh;
+6. compara carpetas postProcessing realmente producidas contra la lista de carpetas postProcessing que existen en C14 2D y emite JSON PASS/FAIL por bloque, faltantes y límites de muestreo.
+
+Advertencias de aceptación: los puntos elegidos por centroides garantizan base geométrica real, pero los segmentos entre ellos **NO** garantizan estar enteramente dentro de una geometría cóncava: se requiere comprobar las salidas nativas. Además, campos de fuente de solidificación escritos ex post podrían no reconstruir el mismo resultado de ddt/latente que el functionObject durante la corrida; no asumir equivalencia sin comparación. La existencia de una carpeta por objeto no acredita precisión numérica ni cierre energético.
+
+Cuando la rama esté integrada y CI aprobado, la **única orden** para intentar el análisis íntegro en el entorno real es:
+
+    python3 cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/run_c14_3d_complete_postprocess.py
+
+El runner llama internamente al cálculo volumétrico, genera copia aislada, intenta todos los postprocesos y guarda logs individuales. Si algún native postprocess falla, NO borra ni sobrescribe el CFD de investigación y reporta el bloque incompleto. El avance sigue 6/10=60 % hasta obtener evidencia de ejecución y revisar los flujos/energía y estabilidad.
