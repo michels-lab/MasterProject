@@ -1,6 +1,10 @@
 # freesurface — Casos de prueba
 
 
+> **23-11-2026 — FS-C07 (NUEVO; NO CORRIDO):** se implementó un caso nativo Foundation14 de 1 s de enfriamiento fluido/arena con `compressibleVoF`+`solid`, `VoFSolidificationMelting`, `maxCo=0.1`, `maxDeltaT=1e-4 s`, campos cada 0.05 s y diez monitores heredados de FS-C06. [Entradas nativas, ejecución aislada, ecuaciones y límites](FS-C07_thermal_transition/README.md). Se clona la **segunda corrida** FS-C06 aceptada y nunca se la modifica. Aún no hay corrida FS-C07, solidificación positiva, acoplamiento de densidades, contracción volumétrica ni feeding.
+
+
+
 > **20-11-2026 — FS-C06 monitorización cuantificada:** segunda corrida real WSL Foundation14 con 10/10 archivos de monitor leídos: VOF metal estable 48.01191628 cm³, metal sólido 0 cm³, reciprocidad de Q interfacial ≈0.0433 W frente a 16.2 kW a 2e-7 s, inventario de mezcla ΔM=5.2e-12 kg. **NO** se ha validado balance global/contracción. [Auditoría de los datos y SHA-256](../docs/granada/FS_C06_AUDITORIA_MONITORES_20261120_ES.md).
 
 
