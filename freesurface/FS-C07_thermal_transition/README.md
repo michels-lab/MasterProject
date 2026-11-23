@@ -1,5 +1,21 @@
 # FS-C07 — Transitorio térmico nativo previo al modelo de contracción
 
+
+> **23-11-2026 — PRIMER INTENTO NATIVO INICIADO POR INVESTIGADOR, RESULTADO AÚN DESCONOCIDO.** `FS_C07_THERMAL_20261123T183217Z_72da1bf4` mostró `FS-C07 starting native 1s thermal screening (not shrinkage)...` y quedó sin salida visible. **No afirmar congelamiento ni finalización**: el ejecutor anterior enviaba toda la salida de `foamMultiRun` a `log.FS_C07_foamMultiRun` y mantenía bloqueado el terminal hasta el final (o su timeout). La cota `maxDeltaT=1e-4 s` exige al menos **10,000 intervalos** para `endTime=1s` si se llega al paso máximo; Courant puede imponer muchos más. El nuevo ejecutor (commit posterior al intento ya lanzado) muestra cada 15 s el tiempo `Time =` nativo, el tamaño del log y el tiempo de pared; conserva las salidas y trata Ctrl+C/timeout. **No afecta ni interrumpe automáticamente al solver ya en ejecución**.
+
+> **DIAGNÓSTICO DE SOLO LECTURA SOBRE ESA CORRIDA (en otra terminal WSL):**
+>
+> ```bash
+> CASE="$HOME/OpenFOAM/FS_C07_RUNS/FS_C07_THERMAL_20261123T183217Z_72da1bf4"
+> ps -eo pid,etime,pcpu,pmem,stat,args | grep -E '[f]oamMultiRun|[f]oamRun'
+> ls -lh "$CASE/log.FS_C07_foamMultiRun"
+> tail -n 35 "$CASE/log.FS_C07_foamMultiRun"
+> find "$CASE" -maxdepth 1 -type d -printf '%f\n' | sort -V | tail -n 12
+> ```
+>
+> No iniciar un segundo proceso para el mismo caso; no destruir ni reemplazar archivos. Si se confirma CPU a cero, `Time` congelado o fallos repetidos, interrumpir desde la terminal original con Ctrl+C para conservar el caso y revisar el log. Si `Time` y CPU avanzan, el cálculo está funcionando, aunque puede ser costoso. No etiquetar FS-C07 como validado hasta revisar campos de sólido, liquidus y diez monitores.
+
+
 **Estado (23-11-2026): CÓDIGO PREPARADO. No ejecutado todavía en WSL ni aprobado por CI.**
 Esta etapa implementa **un caso OpenFOAM Foundation 14 real** que deja de
 limitarse a los `2×1e-7 s` de arranque de FS-C06 y desarrolla el enfriamiento
