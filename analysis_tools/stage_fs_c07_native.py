@@ -172,6 +172,52 @@ def stage(src: Path, dest: Path) -> dict:
     return record
 
 
+def audit_native_monitor_files(dest: Path, final_time: float) -> dict:
+    """Read native Foundation14 .dat records; not a global balance claim."""
+    post = dest / "postProcessing"
+    require(post.is_dir(), "FS-C07 native postProcessing missing")
+    result = {}
+    for name in MONITORS:
+        files = sorted(p for p in post.rglob("*.dat")
+                       if name in p.parts and p.stat().st_size > 0)
+        require(files, "native monitor did not write data: " + name)
+        for p in files:
+            lines = p.read_text(errors="strict").splitlines()
+            require(any(line.lstrip().startswith("# Time") for line in lines),
+                    "native monitor .dat header missing: " + str(p))
+            rows = [line.split() for line in lines
+                    if line.strip() and not line.lstrip().startswith("#")]
+            require(rows, "native monitor has no numerical rows: " + str(p))
+            records = []
+            for row in rows:
+                try:
+                    t = float(row[0])
+                except (ValueError, IndexError) as exc:
+                    raise ValueError("invalid native monitor time: " + str(p)) from exc
+                values = []
+                for token in row[1:]:
+                    try:
+                        val = float(token)
+                    except ValueError:
+                        # wallHeatFlux.dat has a patch-name string after time.
+                        continue
+                    require(math.isfinite(val), "nonfinite monitor value: " + str(p))
+                    values.append(val)
+                require(math.isfinite(t) and t >= 0 and values,
+                        "empty/nonfinite numerical monitor record: " + str(p))
+                records.append((t, row))
+            require(abs(records[-1][0] - final_time) < 5e-4,
+                    "native monitor did not reach last saved solver time: " + str(p))
+            result[name] = {
+                "path": str(p.relative_to(dest)),
+                "sha256": digest(p),
+                "rows": len(records),
+                "time_last_s": records[-1][0],
+                "last_native_raw_columns": records[-1][1],
+            }
+    return result
+
+
 def audit_saved_fields(dest: Path, report: dict) -> dict:
     from stage_fs_c06_vof_solidification import check_solid_fraction
     mesh = read_mesh(dest / "constant/fluid/polyMesh", FLUID_CELLS)
@@ -208,8 +254,11 @@ def audit_saved_fields(dest: Path, report: dict) -> dict:
     require(snapshots, "no complete native phase field snapshots")
     require(snapshots[-1]["time_s"] >= 0.999,
             "1 s native thermal horizon not reached; preserve files, no completed claim")
+    monitor_records = audit_native_monitor_files(dest, snapshots[-1]["time_s"])
     report.update({
         "status": "FS_C07_NATIVE_THERMAL_SCREEN_COMPLETED_NO_SHRINKAGE_MODEL",
+        "native_10_monitors_values_reviewed": True,
+        "native_monitor_records": monitor_records,
         "native_cfd_executed": True,
         "native_saved_phase_snapshots": snapshots,
         "initial_metal_vof_volume_m3": initial_volume,
