@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
   "audit_kind": "deterministic_full_tracked_tree",
-  "tracked_files_total": 39014,
-  "classified_files_total": 39009,
-  "docs_content_inspected": 184,
+  "tracked_files_total": 39018,
+  "classified_files_total": 39013,
+  "docs_content_inspected": 185,
   "large_docs_skipped": 1,
   "excluded_reports": 5,
   "roles": {
@@ -12,24 +12,25 @@
     "bitacora": 5,
     "config": 17,
     "data": 32,
-    "document": 147,
+    "document": 148,
     "index": 33,
     "license": 1,
     "simulation_case_file": 117,
     "simulation_input": 2683,
     "simulation_log": 3155,
     "simulation_output": 32615,
-    "source": 116,
-    "test": 49,
+    "source": 117,
+    "test": 50,
     "web_ui": 1,
-    "workflow": 28
+    "workflow": 29
   },
   "finding_counts": {
-    "BROKEN_RELATIVE_LINK": 7
+    "BROKEN_RELATIVE_LINK": 7,
+    "POTENTIAL_UNLOGGED_CHANGES": 2
   },
-  "finding_total": 7,
-  "inventory_fingerprint": "2d8b69e192e9096ce6b78b135f91353b9f785a83a394f1eb456d1d53eb309774",
-  "evidence_fingerprint": "a38cca05722cc62f2a19d8787a386e132771345cc8472199f5e39f915b2e8a45",
+  "finding_total": 9,
+  "inventory_fingerprint": "e97d27c715bf7dd12baa3654f8ec9e143060aa3cf1f707c6ff65cbfe18450572",
+  "evidence_fingerprint": "a50c71a88f507fcfc64cdbb1ef194824d65b222db339d2594790f413b7aeb1e6",
   "files": [
     {
       "path": ".github/agents/openfoam-solidification.agent.md",
@@ -88,6 +89,13 @@
       "blob": "e95ee14a9f898c3eb2c35f2d294a9664901fb1f7"
     },
     {
+      "path": ".github/workflows/c3d04-a-c14-real-10s-postrun-readonly.yml",
+      "role": "workflow",
+      "purpose": "GitHub Actions automation",
+      "certainty": "rule",
+      "blob": "e94025b682bd6765fa20a54f7b521a4e1b40f82e"
+    },
+    {
       "path": ".github/workflows/c3d05-foundation14-energy-smoke.yml",
       "role": "workflow",
       "purpose": "GitHub Actions automation",
@@ -127,7 +135,7 @@
       "role": "workflow",
       "purpose": "GitHub Actions automation",
       "certainty": "rule",
-      "blob": "c183fd6aeea4699cb4f26ec6a59e8693791a3d52"
+      "blob": "c5a2c0d6b4a0bf02a6f030869a7ec25b06370afd"
     },
     {
       "path": ".github/workflows/file-governance-audit.yml",
@@ -1527,7 +1535,7 @@
       "role": "agent",
       "purpose": "assistant role/instructions",
       "certainty": "rule",
-      "blob": "954cc1ed4f42d2f881acf3cc09f7b2467ef95d3d"
+      "blob": "1b548470dd0cc832944f4ab53f36f485e38c580e"
     },
     {
       "path": "cases_3d/C3D_04_rounded_multiblock_pilot/Allmesh",
@@ -1555,7 +1563,14 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "c6656bdd402a437e628f166da473604279b50724"
+      "blob": "1deb3f6542a34e02087d850f18a145806a7cf3ae"
+    },
+    {
+      "path": "cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/analyze_existing_c14_3d_results.py",
+      "role": "source",
+      "purpose": "code/test implementation",
+      "certainty": "rule",
+      "blob": "f9f6501dc2abf26892e4ec4fe3a9d672cf985fa9"
     },
     {
       "path": "cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/c14_source_fidelity.py",
@@ -1584,6 +1599,13 @@
       "purpose": "code/test implementation",
       "certainty": "rule",
       "blob": "ab3bf2f5fef3cdcda8791e602ce9ae57805bd5eb"
+    },
+    {
+      "path": "cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/tests/test_existing_c14_3d_results.py",
+      "role": "test",
+      "purpose": "code/test implementation",
+      "certainty": "rule",
+      "blob": "696423b6b25f9b04da95afda5d732a679db4cbe9"
     },
     {
       "path": "cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/tests/test_stage_c14_fluid_solid.py",
@@ -271993,7 +272015,7 @@
       "role": "config",
       "purpose": "machine-readable configuration",
       "certainty": "rule",
-      "blob": "c555224122d2f60569a33ef0ceb2b6be6e43e9bf"
+      "blob": "f61550cfcbf15f5a808b54b85f622c200ff75cba"
     },
     {
       "path": "docs/C3D_01_ESTADO_REAL_20261110_ES.md",
@@ -272057,6 +272079,13 @@
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
       "blob": "a87b8a42698121ef73ad00bc46fa219abbeb8d66"
+    },
+    {
+      "path": "docs/C3D_04_C14_V4_T02_REAL_10S_20261123_ES.md",
+      "role": "document",
+      "purpose": "manual/decision/report/historical note",
+      "certainty": "inferred",
+      "blob": "e389f8d8f4190e1c0f3ed31e9ca4bbbcd5c0bc8c"
     },
     {
       "path": "docs/C3D_04_C3D_05_MALLADO_PARALELO_20261118_ES.md",
@@ -273157,6 +273186,24 @@
       "path": "docs/granada/C3D05_T0_README_HISTORICAL_BEFORE_SINGLE_FLOW_20261120.md",
       "observation": "Missing: outside-repo",
       "recommendation": "Fix link or restore target",
+      "state": "REVIEW_REQUIRED"
+    },
+    {
+      "id": "dc08de10cdad2608",
+      "code": "POTENTIAL_UNLOGGED_CHANGES",
+      "severity": "review",
+      "path": "PROJECT_AUDIT_LOG_EN.md",
+      "observation": "5 implementation/config paths changed since this log's last commit; examples: .github/workflows/c3d04-a-c14-real-10s-postrun-readonly.yml, .github/workflows/case-a-t0-stage-contract.yml, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/analyze_existing_c14_3d_results.py, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/tests/test_existing_c14_3d_results.py, docs/C3D04_CASE_A_STATUS.json",
+      "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
+      "state": "REVIEW_REQUIRED"
+    },
+    {
+      "id": "399d54010ef6b556",
+      "code": "POTENTIAL_UNLOGGED_CHANGES",
+      "severity": "review",
+      "path": "PROJECT_AUDIT_LOG_ES.md",
+      "observation": "5 implementation/config paths changed since this log's last commit; examples: .github/workflows/c3d04-a-c14-real-10s-postrun-readonly.yml, .github/workflows/case-a-t0-stage-contract.yml, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/analyze_existing_c14_3d_results.py, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/tests/test_existing_c14_3d_results.py, docs/C3D04_CASE_A_STATUS.json",
+      "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     }
   ],
