@@ -445,5 +445,55 @@
     "no_solver_run": true,
     "no_existing_native_output_overwrite": true,
     "science_stage07_complete": false
+  },
+  "stage07_real_native_failure": {
+    "date": "2026-11-23",
+    "investigator_WSL_evidence_source": "output of audit_existing_native_c14_stage07.py from ~/OpenFOAM/C3D04_A_WORKTREE",
+    "forensic_report": "~/OpenFOAM/C3D04_A_C14_NATIVE_STAGE07_FORENSICS_01/C3D04_A_C14_NATIVE_STAGE07_FORENSIC_REPORT.json",
+    "prior_copy": "~/OpenFOAM/C3D04_A_C14_FULL_POSTPROCESS_WORKCOPY_01",
+    "original_10s_CFD_untouched": true,
+    "native_commands_verified": false,
+    "native_failed_commands": [
+      "c14_functions"
+    ],
+    "actual_F14_fatal": "FOAM FATAL ERROR: Field rho not found in database",
+    "prior_missing_energy_models": [
+      "energyAdvectiveFlux",
+      "heatFlux",
+      "energyFlux"
+    ],
+    "prior_native_C14_object_families_missing_count": 14,
+    "prior_native_derived_fields_missing_count": 20,
+    "prior_native_profiles_missing_count": 5,
+    "native_energy_balance_verified": false,
+    "apparent_dynamicCode_compile_failure_proven": false,
+    "root_cause_analysis": "foamPostProcess was run WITHOUT -solver fluid so thermo registry rho/h/transport was not constructed; source-supported compatibility fix is -solver fluid for offline model-backed postprocessing; actual V4/T02 retry not yet executed",
+    "f14_documentation": [
+      "https://doc.cfd.direct/openfoam/user-guide-v14/post-processing-cli",
+      "https://cpp.openfoam.org/v14/foamPostProcess_8C_source.html"
+    ],
+    "isolated_recovery": {
+      "program": "cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/run_c14_stage07_solver_backed_recovery.py",
+      "output": "~/OpenFOAM/C3D04_A_C14_SOLVER_BACKED_POSTPROCESS_02",
+      "groups": [
+        "core",
+        "energy",
+        "phase",
+        "flow",
+        "profiles",
+        "momentum"
+      ],
+      "each_error_isolated": true,
+      "native_F14_synthetic_rho_h_smoke_test": "PASS Foundation14 native, 27 metal + 27 mold cells C14 2-step, solver-backed rho*h integral, three real C14 metal power tables (top/contact/boundary)",
+      "real_WSL_solver_backed_execution_verified": false,
+      "C14_in_run_0_001s_ddt_recovery_possible": false,
+      "C14_physics_changed": false,
+      "old_postprocessing_copy_modified": false,
+      "other_worktrees_modified": false,
+      "synthetic_F14_CI_run": "https://github.com/michels-lab/MasterProject/actions/runs/45263380861",
+      "synthetic_3_native_energy_surface_tables_verified": true,
+      "synthetic_solving_is_not_thesis_validation": true
+    },
+    "status": "REAL_F14_RHO_MISSING_CAUSE_OBSERVED__ISOLATED_SOLVER_BACKED_RECOVERY_CODE_PENDING_REAL_WSL"
   }
 }

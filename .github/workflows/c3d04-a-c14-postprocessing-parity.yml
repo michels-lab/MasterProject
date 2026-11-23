@@ -29,11 +29,13 @@ jobs:
             cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/c14_3d_native_energy_closure.py \
             cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/recover_existing_c14_3d_stage07.py \
             cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/audit_existing_native_c14_stage07.py \
+            cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/run_c14_stage07_solver_backed_recovery.py \
             cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/tests/test_c14_3d_postprocess_parity.py \
             cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/tests/test_native_complete_postprocess.py \
             cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/tests/test_c14_3d_native_energy_closure.py \
             cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/tests/test_c14_3d_stage07_recovery.py \
-            cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/tests/test_c14_3d_native_stage07_forensics.py
+            cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/tests/test_c14_3d_native_stage07_forensics.py \
+            cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/tests/test_c14_stage07_solver_backed_recovery.py
       - name: Synthetic native-polyMesh and C14 diagnostic fidelity tests
         run: |
           python -m unittest discover \
@@ -65,6 +67,28 @@ jobs:
               if isinstance(node,ast.ImportFrom):
                   assert node.module not in ("subprocess","shutil")
           print("Native-stage07 forensics never launches CFD, native postprocessing or bulk copy.")
+          PY
+      - name: C14 Foundation14 solver-backed offline separated groups and real patch-power tables
+        run: |
+          python -m unittest discover \
+            -s cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/tests \
+            -p 'test_c14_stage07_solver_backed_recovery.py' -v
+      - name: Fail if native recovery invokes CFD, mesh or destructive Git actions
+        run: |
+          python - <<'PY'
+          import ast
+          from pathlib import Path
+          src=Path("cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/run_c14_stage07_solver_backed_recovery.py")
+          tree=ast.parse(src.read_text(encoding="utf-8"))
+          allowed={"foamPostProcess"}
+          calls=[n for n in ast.walk(tree) if isinstance(n,ast.Call) and
+                 isinstance(n.func,ast.Name) and n.func.id=="old"]
+          assert not calls
+          txt=src.read_text(encoding="utf-8")
+          assert "old.run_native(copy,\"solverBacked_\"+group,args)" in txt
+          assert '["foamPostProcess","-region","metal","-solver","fluid"' in txt
+          assert "subprocess.run(" not in txt
+          print("Offline groups: only foamPostProcess on new isolated A copy, no CFD solver.")
           PY
       - name: Ensure recovery script has no solver/subprocess or destructive input writes
         run: |
