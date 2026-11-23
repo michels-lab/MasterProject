@@ -1,6 +1,22 @@
 # FS-C07 — Transitorio térmico nativo previo al modelo de contracción
 
 
+> **23-11-2026 — RESULTADO ACTUALIZADO: HAY CAMBIO DE FASE NUMÉRICO REAL, PERO EL GATE DE ENCAJE DE FASE SIGUE ABIERTO.** Los 20 estados guardados entre 0.05 y 1 s muestran `max(alpha.metal.solid): 0.00103272 → 0.50040120`. Primeras celdas metálicas del núcleo (`alpha.metal≥0.5`) bajo `Tliq=1473 K` provisional aparecen a `t=0.10 s`; al final son `1160`, con `Tmin=1447.9624 K`. El máximo error `alpha.metal.solid-alpha.metal` fue `6.1813429e-6` a 0.20 s en celda 30580; a 1 s, 378 de 34368 celdas superan 1e-8 y 20,459 incumplen estrictamente contando valores minúsculos. Esto **NO** significa 50.04% de hierro global sólido ni demuestra contracción: [informe de los 20 estados](../../docs/granada/FS_C07_20_ESTADOS_REALES_FRACCION_SOLIDA_Y_VOF_20261123_ES.md).
+
+> **RECUPERACIÓN DE VOLÚMENES SIN CLIP NI CFD**: [`analysis_tools/recover_fs_c07_native_phase_metrics.py`](../../analysis_tools/recover_fs_c07_native_phase_metrics.py) integra los campos `alpha.metal` y `alpha.metal.solid` **originales** usando volúmenes de celdas reales, reportando por separado `ΣV·max(alpha_solid-alpha_metal,0)`, los negativos, relación raw sólido/metal y contraste con los monitores `FS_C06_metalVoFVolume`/`FS_C06_solidMetalVolume`. **Los números que devuelve siguen siendo diagnósticos brutos, no sólidos físicos aceptados.** Requiere un único análisis de solo lectura en el caso existente:
+>
+> ```bash
+> cd ~/OpenFOAM/FS_C02_WORKTREE
+> git fetch origin research/fs-c02-metal-air-vof-20261117
+> git switch --detach FETCH_HEAD
+> python3 analysis_tools/recover_fs_c07_native_phase_metrics.py --compact \
+>   ~/OpenFOAM/FS_C07_RUNS/FS_C07_THERMAL_20261123T183217Z_72da1bf4
+> ```
+>
+> Las siete pruebas sintéticas están creadas, CI/ejecución WSL **no verificados**. No recortar fracciones ni editar los campos archivados para hacer pasar `phase_volume_metrics`. La actualización puede requerir intervención en el orden de actualización y transporte VOF/sólido (hipótesis) o una formulación más conservativa, pero aún no se ha resuelto físicamente.
+
+
+
 > **23-11-2026 — DIAGNÓSTICO DEFINITIVO DE EJECUCIÓN, PENDIENTE DE ACEPTACIÓN DE FASES.** El log nativo de la corrida `...183217Z_72da1bf4` llegó a **`Time=1s` y `End`**, después de **2355 s** de reloj. Hay **10868 directorios de tiempo** y **20 estados con campos VOF/sólido/T completos**. `FS_C07_REPORT.json` quedó `INCOMPLETE` únicamente porque `phase_volume_metrics` rechazó la asignación `alpha.metal.solid <= alpha.metal` en alguna celda bajo la **primera** tolerancia 1e-8: mensaje exacto `FS-C03 STATIC GATE: invalid VOF / absolute-solid phase allocation`. Ese mensaje no se explica solo por el mínimo VOF `-9.766e-46` observado a 0.114 s; se necesitan mínimos/máximos y celda exacta de los 20 estados. **No repetir CFD ni recortar campos hasta medir la gravedad real.** Potencia interfacial al final: `Q_fluid=-7184.75867563 W`, `Q_mold=+7184.84637194 W` (residuo `+0.08769631 W`, `0.00122058 %`). Se detecta `alphaRhoPhi.metal=+7.54288884513e-6 kg/s` en `atmosphereLowerSides` a 1 s, por lo que tampoco hay evidencia de confinamiento metálico perfecto. [Informe fuente y límites científicos](../../docs/granada/FS_C07_NATIVE_1S_SOLVER_COMPLETADO_POSTPROCESO_BLOQUEADO_20261123_ES.md).
 
 > **FORENSIC FS-C07 SIN SOLVER, SOBRE EL MISMO CASO EXISTENTE:**
