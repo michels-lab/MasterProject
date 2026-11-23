@@ -26,11 +26,11 @@
   },
   "finding_counts": {
     "BROKEN_RELATIVE_LINK": 7,
-    "POTENTIAL_UNLOGGED_CHANGES": 2
+    "POTENTIAL_UNLOGGED_CHANGES": 1
   },
-  "finding_total": 9,
-  "inventory_fingerprint": "f784c00bf58d5dbe4d6d9ced956b4018989c4be43ec313114c27fbe272b04f53",
-  "evidence_fingerprint": "fcd7906f6402bad65ed95ae5995a8d2f825de151f38d850862edc007a9fd1904",
+  "finding_total": 8,
+  "inventory_fingerprint": "15fa0bccec641b00f5eaf42a975d301536c526c8e67593c178df860519ec79e7",
+  "evidence_fingerprint": "cd1f1e4045fcf242d89bad157a962d297f15fab25c1eda7f0d766a658a2eb42b",
   "files": [
     {
       "path": ".github/agents/openfoam-solidification.agent.md",
@@ -401,7 +401,7 @@
       "role": "bitacora",
       "purpose": "technical/audit change history",
       "certainty": "rule",
-      "blob": "a98f4eee72ba99e27b334e7404fd704bfa6a1c73"
+      "blob": "f598cb7cacc1604a3e87c8b0e829e0f0d717b31f"
     },
     {
       "path": "README.md",
@@ -1969,14 +1969,14 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "4cd5f1b40ac0a37f6c0b9b6c9376ed9ef08ecbf4"
+      "blob": "806349081a9439ff7d14f9fb0db49cd3746b6b4c"
     },
     {
       "path": "cases_3d/C3D_05_step_gmsh_conformal/c14_physics/README.md",
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "87a04ca2cebd11de167ac58e486601d7ef25326d"
+      "blob": "3321063b426c9bb6f1ec19fbc4e8a9b0f1c973d2"
     },
     {
       "path": "cases_3d/C3D_05_step_gmsh_conformal/c14_physics/run_case_b_c14_native.sh",
@@ -272414,7 +272414,7 @@
       "role": "config",
       "purpose": "machine-readable configuration",
       "certainty": "rule",
-      "blob": "c40af14db60c3079d6128928ac4f7659f402a4fc"
+      "blob": "e47b2b37ffc7ee4b6707b2d3c89a842f4a25b80e"
     },
     {
       "path": "docs/REGLA_INSTRUCCIONES_UNIFICADAS_ES.md",
@@ -272456,7 +272456,7 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "b5e169514b6280ecee64b08b0eb7411b5585f96c"
+      "blob": "fdb8d539440a3f7181ae12e4bf0660484acfa223"
     },
     {
       "path": "docs/granada/C3D05_B_Q_ESPACIAL_REAL_6_TIEMPOS_Y_CONTRASTE_ENERGIA_20261123_ES.md",
@@ -273336,20 +273336,11 @@
       "state": "REVIEW_REQUIRED"
     },
     {
-      "id": "e042a5108f7043d3",
+      "id": "46b2cbd707dd79fb",
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_EN.md",
-      "observation": "2 implementation/config paths changed since this log's last commit; examples: .github/workflows/c3d05-b-c14-3d-phase-source.yml, cases_3d/C3D_05_step_gmsh_conformal/c14_physics/run_case_b_c14_native.sh",
-      "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "93c37735c89c99e9",
-      "code": "POTENTIAL_UNLOGGED_CHANGES",
-      "severity": "review",
-      "path": "PROJECT_AUDIT_LOG_ES.md",
-      "observation": "2 implementation/config paths changed since this log's last commit; examples: .github/workflows/c3d05-b-c14-3d-phase-source.yml, cases_3d/C3D_05_step_gmsh_conformal/c14_physics/run_case_b_c14_native.sh",
+      "observation": "3 implementation/config paths changed since this log's last commit; examples: .github/workflows/c3d05-b-c14-3d-phase-source.yml, cases_3d/C3D_05_step_gmsh_conformal/c14_physics/run_case_b_c14_native.sh, docs/PROJECT_STAGE_STATUS.json",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     }
