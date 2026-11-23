@@ -235,7 +235,22 @@
     "spatial_native_flux_trapezoid_undershoot_vs_metal_energy_fraction_approx": 0.1430348480170445,
     "spatial_native_flux_first_interval_trapezoid_undershoot_J_approx": 391.75939136271273,
     "spatial_native_flux_zero_at_initial_recorded": true,
-    "spatial_native_flux_quadrature_interpretation": "6 saved q snapshots are NOT a time-resolved integral at solver dt=0.001; especially q(t=0)=0 and first 0-0.02s rapidly varying. 14.3% difference from coarse snapshot trapezoid versus volume-energy loss is NOT solver energy leakage or a validated q(t) integral. True cause breakdown needs further scientific diagnostics."
+    "spatial_native_flux_quadrature_interpretation": "6 saved q snapshots are NOT a time-resolved integral at solver dt=0.001; especially q(t=0)=0 and first 0-0.02s rapidly varying. 14.3% difference from coarse snapshot trapezoid versus volume-energy loss is NOT solver energy leakage or a validated q(t) integral. True cause breakdown needs further scientific diagnostics.",
+    "case_b_c14_original_fluid_solid_source_code_committed": true,
+    "case_b_c14_original_fluid_solid_stage_script": "cases_3d/C3D_05_step_gmsh_conformal/c14_physics/stage_c14_3d_case_b.py",
+    "case_b_c14_original_fluid_solid_native_runner": "cases_3d/C3D_05_step_gmsh_conformal/c14_physics/run_case_b_c14_native.sh",
+    "case_b_c14_original_fluid_solid_ci_workflow": ".github/workflows/c3d05-b-c14-3d-phase-source.yml",
+    "case_b_c14_original_fluid_solid_regression_tests_source_committed": 8,
+    "case_b_c14_original_fluid_solid_regressions_ci_pass_observed": false,
+    "case_b_c14_original_fluid_solid_mesh_source": "~/OpenFOAM/C3D05_STEP_GMSH_HEX_SUBDIV_COARSE_02",
+    "case_b_c14_original_fluid_solid_native_output": "~/OpenFOAM/C3D05_B_C14_FLUID_SOLID_FULL_10S_01",
+    "case_b_c14_original_fluid_solid_3d_case_materialized_in_user_WSL": false,
+    "case_b_c14_original_fluid_solid_native_solver_run": false,
+    "case_b_c14_original_fluid_solid_alpha1_observed": false,
+    "case_b_c14_original_fluid_solid_source_hypothesis": "exact C14 2D physical/numeric source (hConst metal fluid + solidificationMeltingSource, eConst mold solid); B geometry-only 3D patch/pRefCell/cellZone mapping; NOT measured JMatPro/QuickCup conditions",
+    "case_b_c14_original_fluid_solid_full_reference_dt_s": 0.001,
+    "case_b_c14_original_fluid_solid_full_reference_endtime_s": 10,
+    "case_b_c14_original_fluid_solid_native_model_report": "docs/granada/C3D05_B_C14_SOLIDIFICACION_3D_FASE_FISICA_20261123_ES.md"
   },
   "other_cases": [
     {
@@ -271,11 +286,11 @@
     },
     {
       "case_id": "C3D-05 Caso B",
-      "status": "WSL C14 numerical T0: all 270788 HEX8 and 12636 interface face pairs/side. Read-only 12-band spatial q 6 time samples now EXECUTED; q metal 31.964 kW at 0.02 s to 19.248 kW at 0.1 s; q(t=0)=0. Trapezoid of six samples ~2263 J vs volume-average metal loss ~2641 J, difference ~14.3% is temporal sampling/integral diagnostic NOT solver energy leakage. Physical G3/G4 JMatPro/QuickCup and time/multi-mesh sensitivity open. 3/7,2/7=29% technical.",
-      "evidence": "docs/granada/C3D05_B_Q_ESPACIAL_REAL_6_TIEMPOS_Y_CONTRASTE_ENERGIA_20261123_ES.md"
+      "status": "Geometry 270788 HEX8 and numerical two-solid T0+12-band q executed, source-faithful C14 fluid-solid/solidificationMeltingSource preparation now COMMITTED with 8 regression test source and workflow; NOT yet run on B real WSL. G3/G4 physical, G5 phase model evidence, G6 contraction, G7 experimental sensitivity still OPEN. Technical milestone 3/7 active, 2/7=29% complete.",
+      "evidence": "docs/granada/C3D05_B_C14_SOLIDIFICACION_3D_FASE_FISICA_20261123_ES.md"
     }
   ],
-  "blocker": "Real C14 two-solid numerical T0 fully completed and first 12-band q spatial analysis successfully published from native WSL CSV (12636 faces/side x 6 times), no solver or mesh rerun. Scientific finding: six-snapshot q trapezoid underestimates volume-energy loss by ~14.3%, dominated by initial t=0-0.02s with q(0)=0; NOT a direct loss of energy by solver. Pending inspect real CSV band distribution + ParaView, establish sufficient time-sampled q integration and material/BC QuickCup/JMatPro for physical T0, mesh/dt sensitivity, 1826 severe nonorthogonal faces.",
-  "next_integrated_delivery": "Analyze real spatial q CSV and point cloud in ParaView (Table To Points using x_m,y_m,z_m), diagnose high q hot spots and q(t) early-time interpolation/integration separately from 3D volumetric energy. Prepare documented JMatPro/QuickCup physical metal-sand model and future controlled time sensitivity (NO rerun archived C14 case). Keep G3-G7 open.",
-  "science": "WSL_NATIVE_C14_NUMERICAL_T0_AND_SPATIAL_INTERFACE_Q_12_BANDS_6_SAMPLES_COMPLETE_270788_HEX8_NOT_PHYSICALLY_VALIDATED"
+  "blocker": "B original C14 numerical two-solid T0 and spatial q(y,t) diagnostics completed on WSL. New source-faithful C14 fluid-solid/solidificationMeltingSource 3D Case B stage/run code, 8 regression sources and CI workflow committed; original accepted 270788 HEX8 remains immutable; STILL NOT materialized/run in WSL or shown CI green. Physical G3/G4 await measured JMatPro/QuickCup inputs, and G5 requires native 10s fluid-solid B solver plus alpha1/latent heat validation. 1826 nonorth severe and time/mesh sensitivity open.",
+  "next_integrated_delivery": "Native code/CI static verification of Case B C14 original physics; one controlled WSL integral run using run_case_b_c14_native.sh --run-full creates independent 10s candidate if native geometry/22 dictionary gates pass (no T0 rerun). Then read original computed alpha1(T,t), h/e/U/p_rgh, energy and compare with Case A; no material change/JMatPro substitution.",
+  "science": "CASE_B_C14_NUMERICAL_TWO_SOLID_T0_AND_SPATIAL_Q_COMPLETED__ORIGINAL_C14_FLUID_SOLID_PHASE_SOURCE_STAGED_CODE_COMMITTED_NOT_WSL_RUN_OR_PHY_VALIDATED"
 }
