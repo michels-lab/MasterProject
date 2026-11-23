@@ -1,3 +1,5 @@
+> **23-11-2026 | REAL WSL STAGE07 UPDATE:** recovery `NEW_101_STATE_DIAGNOSTIC_PUBLISHED_NO_CFD`, existing 101-state C14 volume CSV/JSON authenticated. Observed alpha1 decline in (0.2,0.3]s; metal volume T final 1450.7091627651344 K; model solid inventory 0.03358283580064463 kg; nominal peak latent release 1038.881301373963 W in 7.2–7.3s. Native copy report source identity verified, but `native_commands_verified=false`. The original C14 `ddt` temperature/alpha objects are documented as in-run only, not real 0.001s offline. Full paridad and global energy balance NOT verified. One-shot read-only forensic follow-up tool `c14_physics/audit_existing_native_c14_stage07.py` inspects actual failures; no CFD rerun. **Stage 07/10, 6/10=60% hitos.** [WSL evidence record](C3D04_A_C14_NATIVE_101_STATES_REAL_FORENSICS_20261123_ES.md).
+
 # Caso 3D-A C3D-04 — contrato de paridad con el postprocesamiento C14 original
 
 Fecha: 2026-11-23. Estado: ETAPA 07/10 EN PROGRESO. Avance operativo 6/10 = 60 %. CFD real original 10 s completado. Conservación energética, independencia de malla, QuickCup y paridad funcional sin validar.
