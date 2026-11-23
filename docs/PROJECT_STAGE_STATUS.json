@@ -259,16 +259,17 @@
     "case_b_c14_source_wrapper_nounset_regression_ci_source_committed": true,
     "case_b_c14_wrapper_fixed_source_WSL_rerun_observed": true,
     "case_b_c14_real_native_solver_process_observed_running": true,
-    "case_b_c14_real_native_solver_observed_time_s": 1.417,
+    "case_b_c14_real_native_solver_observed_time_s": 2.249,
     "case_b_c14_real_native_solver_target_time_s": 10,
     "case_b_c14_real_native_solver_observed_Courant_mean": 0.0138185,
     "case_b_c14_real_native_solver_observed_Courant_max": 0.184568,
     "case_b_c14_real_native_solver_observed_log": "~/OpenFOAM/C3D05_B_C14_FLUID_SOLID_FULL_10S_01/log.foamMultiRun.C3D05_B_C14_10S",
     "case_b_c14_real_native_solver_observed_h_e_p_rgh": true,
-    "case_b_c14_real_native_solver_physical_time_progress_fraction": 0.1417,
+    "case_b_c14_real_native_solver_physical_time_progress_fraction": 0.2249,
     "case_b_c14_real_native_solver_finished_observed": false,
     "case_b_c14_real_native_solver_phase_source_startup_seen_in_excerpt": false,
-    "case_b_c14_real_native_solver_observation_report": "docs/granada/C3D05_B_C14_WSL_EJECUCION_REAL_EN_CURSO_20261123_ES.md"
+    "case_b_c14_real_native_solver_observation_report": "docs/granada/C3D05_B_C14_WSL_EJECUCION_REAL_EN_CURSO_20261123_ES.md",
+    "case_b_c14_real_native_solver_observed_clockTime_s": 1978
   },
   "other_cases": [
     {
@@ -309,6 +310,6 @@
     }
   ],
   "blocker": "REAL WSL Case B native C14 fluid-solid CFD confirmed running on accepted 270788 HEX8 at Time=1.417s of 10s (process foamMultiRun 97.6% CPU snapshot, h/e/p_rgh advancing, Courant max 0.184568); native 10-second solver NOT finished yet; complete log phase-source startup and alpha1 not yet inspected. Preserve running solver, no rerun/remesh. Physical G3/G4 JMatPro/QuickCup, G5 solidification/latent-heat verification, G6 shrinkage, G7 mesh/time sensitivity and experiment remain open (2/7=29% technical).",
-  "next_integrated_delivery": "Allow the currently running native foamMultiRun on C3D05_B_C14_FLUID_SOLID_FULL_10S_01 to finish without interruption; only read live log from a second terminal if desired. After completion audit Time=10s/End, exact C14 phase source loaded, final native h/e/p_rgh/T/alpha1, balance/conservation, alpha1(t), run stability and local q; do not promote milestones without physical validity.",
+  "next_integrated_delivery": "Live WSL C14 B fluid-solid solver reached Time=2.249s/10s (22.49% of simulated physical horizon, clock=1978s). Keep running process undisturbed. Confirm full End/10s and alpha1, latent heat, h/e/p_rgh and conservation only afterward. Model-selection marker not established by last-12-lines grep; check full log separately if needed.",
   "science": "WSL_REAL_CASE_B_C14_FLUID_SOLID_NATIVE_FOAMMULTIRUN_ACTIVE_AT_1_417_OF_10_SECONDS_NOT_COMPLETED_NOT_VALIDATED"
 }
