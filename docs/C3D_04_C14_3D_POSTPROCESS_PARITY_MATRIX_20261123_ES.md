@@ -99,3 +99,16 @@ Primero se exige que potencia de todas las fronteras metálicas coincida con la 
 El signo positivo de latentRelease procede de solidificationRate = -dAlphaLdt y latentHeatRateVol = rho * solidificationRate * L de los diccionarios originales. Este residual es una **prueba de coherencia nominal**, no la identidad discretizada exacta del solver ni una validación física de conservación. Falta el balance regional de la arena y la verificación de fuentes y temporalidad nativa. El resultado se reporta sin imponer artificialmente que el residuo sea cero. La regresión se prueba contra los archivos postProcessing REALES archivados del C14 2D.
 
 El ejecutor integral invoca el auditor de energía cuando los objetos nativos han producido sus tablas, conserva todos los logs, declara cualquier ausencia y sigue sin ejecutar CFD. Todo el proceso respeta **etapa 07/10, 6/10=60%** hasta comprobarlo sobre WSL y revisar críticamente el balance.
+
+
+## Incidencia real WSL del 23-11-2026 y corrección de compatibilidad
+
+En el primer intento auténtico de postprocesamiento C14 3D-A, el investigador obtuvo:
+
+    C14_NATIVE_3D_POSTPROCESS_BLOCKED: C14_3D_PARITY_BLOCKED: malformed native polyMesh list .../constant/metal/polyMesh/owner
+
+No se volvió a ejecutar la corrida CFD original de 10 s; el error ocurrió ANTES de escribir integrales volumétricas o copiar el caso de postprocesamiento. La causa estaba en el lector Python adicional de la etapa 7: intentaba interpretar la lista owner inmediatamente después del encabezado FoamFile sin omitir comentarios separadores nativos. Es un fallo del analizador, NO evidencia de malla defectuosa.
+
+Corrección: label_values reconoce metadatos de ASCII labelList y N(...), N{valor} y 0(), quita comentarios solo en memoria, comprueba recuentos y texto posterior. cell_volumes usa número de caras internas del neighbour leído por el mismo lector, y contrasta volumen celular integrado contra integral geométrica de superficie exterior sin invocar el antiguo helper que exige listas expandidas. Las regresiones sintéticas reproducen las separaciones // ... y 0() de OpenFOAM14.
+
+La ejecución WSL corregida sigue PENDIENTE DE OBSERVACIÓN. No completar hito 07/10 ni aumentar 6/10=60% hasta que la salida auténtica lo demuestre. Reintentar actualizando main y usando la misma orden, sin repetir solver ni borrar evidencia.

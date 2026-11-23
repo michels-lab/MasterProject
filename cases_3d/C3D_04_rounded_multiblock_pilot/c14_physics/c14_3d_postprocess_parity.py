@@ -60,14 +60,27 @@ def sha(path: Path) -> str:
 
 
 def label_values(path: Path) -> list[int]:
+    """Read real OpenFOAM 14 ASCII labelList, including native 6{0} / 0().
+
+    Native polyMesh files normally include a // ***** banner AFTER FoamFile.
+    Parsing the payload with re.match() immediately after the header rejects
+    those legitimate files. Remove comments then anchor to the first payload
+    token instead of searching arbitrary numerical comments/metadata.
+    This only reads the mesh; it never rewrites or normalizes the source.
+    """
     ensure(path.is_file() and not path.is_symlink(),
            "missing/unsafe mesh labelList "+str(path))
     raw=path.read_text(encoding="utf-8")
     meta=re.search(r"\bFoamFile\s*\{[^{}]*\}",raw,re.S)
-    ensure(meta is not None and re.search(r"\bclass\s+labelList\s*;",meta.group(0)),
-           "not an ASCII OpenFOAM labelList "+str(path))
+    ensure(meta is not None and
+           re.search(r"\bformat\s+ascii\s*;",meta.group(0)) is not None and
+           re.search(r"\bclass\s+labelList\s*;",meta.group(0)) is not None,
+           "expected native ASCII OpenFOAM labelList "+str(path))
+    tail=raw[meta.end():]
+    tail=re.sub(r"/\*.*?\*/","",tail,flags=re.S)
+    tail=re.sub(r"//[^\n]*","",tail)
     m=re.match(r"\s*(\d+)\s*(?:\{\s*(\d+)\s*\}|\(\s*([\d\s]*)\))",
-               raw[meta.end():],re.S)
+               tail,re.S)
     ensure(m is not None,"malformed native polyMesh list "+str(path))
     count=int(m.group(1))
     if m.group(2) is not None:
@@ -76,6 +89,8 @@ def label_values(path: Path) -> list[int]:
         data=[int(n) for n in (m.group(3) or "").split()]
     ensure(len(data)==count and all(n>=0 for n in data),
            "native labelList count/negative labels "+str(path))
+    ensure(tail[m.end():].strip()=="" ,
+           "unexpected trailing payload after native labelList "+str(path))
     return data
 
 
@@ -113,7 +128,11 @@ def cell_volumes(case: Path, region: str, expected: int) -> list[float]:
     vols=[fsum(row) for row in sums]
     ensure(all(math.isfinite(v) and v>0 for v in vols),
            "nonpositive/nonfinite per-cell volume in "+region)
-    true_total=stage.gate.native_region_volume(case,region)
+    # Reuse the same validated native polyMesh geometry but count internal
+    # faces from the newly parsed neighbour labels. The historic helper
+    # native_region_volume() parses only expanded n/(...) lists, rejecting
+    # valid compact neighbour files such as 0(); do not invoke it here.
+    true_total=stage.gate.oriented_boundary_volume(pts,faces,len(neighbours))
     ensure(math.isclose(fsum(vols),true_total,rel_tol=2e-6,abs_tol=1e-12),
            "cell volumes do not close against independent boundary integral "+region)
     return vols

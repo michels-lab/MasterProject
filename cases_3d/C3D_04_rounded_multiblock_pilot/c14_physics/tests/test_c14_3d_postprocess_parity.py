@@ -35,8 +35,14 @@ def write_single_hex(root:Path, reverse:bool=False)->None:
         poly_header("faceList")+"6\n(\n"+
         "\n".join("4("+ " ".join(map(str,f))+")" for f in faces)+"\n)\n"
     )
-    (root/"owner").write_text(poly_header("labelList")+"6{0}\n")
-    (root/"neighbour").write_text(poly_header("labelList")+"0\n(\n)\n")
+    # OpenFOAM Foundation14 writes separator comments AFTER FoamFile.
+    # Real-world owner/neighbour are allowed to use n{uniformLabel}, 0(),
+    # and n/(expanded...) forms. The previous strict re.match failed here.
+    separator="// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //\n"
+    (root/"owner").write_text(
+        poly_header("labelList")+separator+"6{0}\n"+separator)
+    (root/"neighbour").write_text(
+        poly_header("labelList")+separator+"0()\n"+separator)
     (root/"boundary").write_text(
         poly_header("polyBoundaryMesh")+"1\n(\nouter\n{ type wall; nFaces 6; startFace 0; }\n)\n"
     )
@@ -57,6 +63,28 @@ class C14VolumeParityTests(unittest.TestCase):
             self.assertAlmostEqual(vol[0],1.0,places=12)
             self.assertEqual(parity.label_values(case/"constant/metal/polyMesh/owner"),[0]*6)
             self.assertEqual(parity.label_values(case/"constant/metal/polyMesh/neighbour"),[])
+
+    def test_F14_header_comments_compact_and_expanded_label_lists(self):
+        with tempfile.TemporaryDirectory() as d:
+            p=Path(d)/"owner"
+            banner=poly_header("labelList")+(
+                "// * * * * * * * * * * * * * * * * * * * //\n"
+                "/* F14 generated native ASCII labelList */\n")
+            p.write_text(banner+"3\\n(\\n0\\n1\\n2\\n)\\n".replace("\\n","\n"))
+            self.assertEqual(parity.label_values(p),[0,1,2])
+            p.write_text(banner+"4{3}\n")
+            self.assertEqual(parity.label_values(p),[3]*4)
+            p.write_text(banner+"0()\n")
+            self.assertEqual(parity.label_values(p),[])
+            p.write_text(banner+"3\n(\n0\n1\n)\n")
+            with self.assertRaisesRegex(ValueError,"count/negative labels"):
+                parity.label_values(p)
+            p.write_text(banner+"2{1}\n999\n")
+            with self.assertRaisesRegex(ValueError,"unexpected trailing"):
+                parity.label_values(p)
+            p.write_text(poly_header("labelList").replace("format ascii","format binary")+"2{1}\n")
+            with self.assertRaisesRegex(ValueError,"ASCII"):
+                parity.label_values(p)
 
     def test_reversed_faces_must_fail(self):
         with tempfile.TemporaryDirectory() as d:
