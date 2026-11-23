@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "audit_kind": "deterministic_full_tracked_tree",
-  "tracked_files_total": 39022,
-  "classified_files_total": 39017,
+  "tracked_files_total": 39023,
+  "classified_files_total": 39018,
   "docs_content_inspected": 186,
   "large_docs_skipped": 1,
   "excluded_reports": 5,
@@ -20,7 +20,7 @@
     "simulation_log": 3155,
     "simulation_output": 32615,
     "source": 119,
-    "test": 51,
+    "test": 52,
     "web_ui": 1,
     "workflow": 29
   },
@@ -29,8 +29,8 @@
     "POTENTIAL_UNLOGGED_CHANGES": 2
   },
   "finding_total": 9,
-  "inventory_fingerprint": "6ce02925180bb6a597122598635dc2d0737a2bd9692085842beb328d9a689844",
-  "evidence_fingerprint": "9733baca86e2ce8b337eb7c8d7bc6d9b2d280831c1462bae40bc054622b172f3",
+  "inventory_fingerprint": "784162f1f78b2489efdb43568d4ebed361998792ed6b6c871ebe7a75c6b041a8",
+  "evidence_fingerprint": "b86f1380828626e42c749df5e981f711393ffb56c430322cb148d13dd9067145",
   "files": [
     {
       "path": ".github/agents/openfoam-solidification.agent.md",
@@ -2285,6 +2285,13 @@
       "purpose": "code/test implementation",
       "certainty": "rule",
       "blob": "57e9d02a8a1a5a95bd693f60f7e01c948c448279"
+    },
+    {
+      "path": "cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/tests/test_existing_t0_spatial.py",
+      "role": "test",
+      "purpose": "code/test implementation",
+      "certainty": "rule",
+      "blob": "d7af0b534a0da6a997a1994db9228f42d9a79f39"
     },
     {
       "path": "cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/tests/test_finalize_t0_granada.py",
@@ -273217,20 +273224,20 @@
       "state": "REVIEW_REQUIRED"
     },
     {
-      "id": "773e3e56fbf25dbc",
+      "id": "ba6fb314fe97c7b4",
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_EN.md",
-      "observation": "9 implementation/config paths changed since this log's last commit; examples: .github/workflows/c3d04-a-c14-real-10s-postrun-readonly.yml, .github/workflows/case-a-t0-stage-contract.yml, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/analyze_existing_c14_3d_results.py, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/summarize_existing_c14_phase_timeline.py, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/tests/test_existing_c14_3d_results.py, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/tests/test_existing_c14_phase_timeline.py",
+      "observation": "10 implementation/config paths changed since this log's last commit; examples: .github/workflows/c3d04-a-c14-real-10s-postrun-readonly.yml, .github/workflows/case-a-t0-stage-contract.yml, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/analyze_existing_c14_3d_results.py, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/summarize_existing_c14_phase_timeline.py, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/tests/test_existing_c14_3d_results.py, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/tests/test_existing_c14_phase_timeline.py",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     },
     {
-      "id": "ff11b5679e5797ff",
+      "id": "ec2acdd569aa0126",
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_ES.md",
-      "observation": "9 implementation/config paths changed since this log's last commit; examples: .github/workflows/c3d04-a-c14-real-10s-postrun-readonly.yml, .github/workflows/case-a-t0-stage-contract.yml, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/analyze_existing_c14_3d_results.py, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/summarize_existing_c14_phase_timeline.py, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/tests/test_existing_c14_3d_results.py, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/tests/test_existing_c14_phase_timeline.py",
+      "observation": "10 implementation/config paths changed since this log's last commit; examples: .github/workflows/c3d04-a-c14-real-10s-postrun-readonly.yml, .github/workflows/case-a-t0-stage-contract.yml, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/analyze_existing_c14_3d_results.py, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/summarize_existing_c14_phase_timeline.py, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/tests/test_existing_c14_3d_results.py, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/tests/test_existing_c14_phase_timeline.py",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     }
