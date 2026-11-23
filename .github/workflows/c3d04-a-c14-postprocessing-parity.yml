@@ -1,0 +1,55 @@
+name: C3D04 A Original C14 3D Postprocessing Volume Parity
+
+on:
+  push:
+    paths:
+      - "cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/**"
+      - ".github/workflows/c3d04-a-c14-postprocessing-parity.yml"
+  pull_request:
+    paths:
+      - "cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/**"
+      - ".github/workflows/c3d04-a-c14-postprocessing-parity.yml"
+  workflow_dispatch:
+
+jobs:
+  static-and-synthetic:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile read-only 3D C14 parity analyzer and regressions
+        run: |
+          python -m py_compile \
+            cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/c14_3d_postprocess_parity.py \
+            cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/run_c14_3d_complete_postprocess.py \
+            cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/c14_3d_native_energy_closure.py \
+            cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/tests/test_c14_3d_postprocess_parity.py \
+            cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/tests/test_native_complete_postprocess.py \
+            cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/tests/test_c14_3d_native_energy_closure.py
+      - name: Synthetic native-polyMesh and C14 diagnostic fidelity tests
+        run: |
+          python -m unittest discover \
+            -s cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/tests \
+            -p 'test_*postprocess*.py' -v
+          python -m unittest discover \
+            -s cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/tests \
+            -p 'test_c14_3d_native_energy_closure.py' -v
+      - name: Fail if postprocessing script launches a CFD solver
+        run: |
+          python - <<'PY'
+          import ast
+          from pathlib import Path
+          path=Path("cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/c14_3d_postprocess_parity.py")
+          tree=ast.parse(path.read_text(encoding="utf-8"))
+          forbidden={"subprocess","os.system","os.popen"}
+          for node in ast.walk(tree):
+              if isinstance(node,ast.Import):
+                  assert not any(x.name.startswith("subprocess") for x in node.names)
+              if isinstance(node,ast.ImportFrom):
+                  assert node.module!="subprocess"
+          print("Postprocessing only: no subprocess module, original 10s CFD is not re-executed.")
+          PY

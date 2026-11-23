@@ -1,3 +1,11 @@
+## 23-11-2026 — C14 POSTPROCESSING PARITY: NO SOLO T Y ALPHA1
+
+Mandato científico explícito: Caso 3D-A debe reproducir **todo** lo que se calcula en el caso 2D original C14 en postProcessing (los 29 researchDiagnostics, sondas U/T/p_rgh/rho/alpha1, horizontal/vertical profiles, tasas térmicas/solidificación, vorticidad/topología, gradientes, energy/heat/advectiveFlux, metalTop phi/U por cara, contacto metal-arena, energía sensible/latente, Darcy/buoyancy/pRgh, momentumMean/Max/Profiles y foamLog). Añadir cálculos volumétricos 3D que el 2D no ofrece. La fuente canónica es el inventario de **diccionarios auténticos** en docs/C3D_04_C14_3D_POSTPROCESS_PARITY_MATRIX_20261123_ES.md, no una selección simplificada.
+
+El código del primer bloque volumétrico está en c14_physics/c14_3d_postprocess_parity.py, que calcula sobre **los mismos 101 estados existentes** pero aún **no ha sido ejecutado en WSL por el investigador**. Las cifras verdaderas previas de 3D se conservan. No recuperar ni fingir las 10,001 mediciones originales de probes 2D C14 desde snapshots de 0.1 s. No cambiar física, C14, malla ni 10s CFD, y NO ejecutar C14 Allrun; postproceso nativo faltante será en copia aislada. Sin energía de fronteras nativa no declarar balance. **Etapa 07/10, 6/10=60%, en progreso**; esto es un requisito pendiente y no un nuevo hito concluido.
+
+---
+
 ## 23-11-2026 — Evidencia real de solidificación en C14 3D V4/T02
 
 **NO CONFUNDIR** el avance de solidificación que observa OpenFOAM con validación de energía, independencia o QuickCup. El investigador corrió `analyze_existing_c14_3d_results.py` en WSL sobre sus **101 estados existentes** y encontró a los 10 s metal `T=1401.91..1471.07 K`, media por celda 1444.7185 K, **8960/8960 bajo liquidus 1473 K**, **1158/8960 bajo solidus 1423 K**, `phaseChangeSource:alpha1=0..0.992311`, media por celda 0.8367355; la fracción líquida ya no está uniformemente en 1. Del log completo: 10 000 pasos, Courant máximo real **0.0240415** (`maxCo=0.25`), máximo residuo final `p_rgh=0.00776125` en alguna iteración. Fuente: `docs/C3D_04_C14_V4_T02_REAL_10S_PHASE_NUMERICAL_RESULTS_20261123_ES.md`. Los números son del **resumen impreso por WSL**; no afirmar que GitHub posee el CSV/JSON o 28 MB del log local.

@@ -1,3 +1,11 @@
+## 23-11-2026 — Paridad obligatoria de postprocesamiento 2D C14 → 3D-A
+
+Las métricas hasta hoy observadas de 10 s (T, alpha1, Courant, p_rgh) **no equivalen a todo el postprocesamiento C14 original**. La cobertura completa es requisito: ver [matriz de paridad C14 3D](../../../docs/C3D_04_C14_3D_POSTPROCESS_PARITY_MATRIX_20261123_ES.md), que enumera los functionObjects y los resultados postProcessing originales C14, como heatFlux/energyFlux, perfiles/sondas, gradientes, fuentes latentes, topFlow/phi, aceleraciones Darcy y flotación, y los diagnósticos de momentum. Primero se añadió [integrador volumétrico read-only](c14_3d_postprocess_parity.py) de 101 estados basado en polyMesh real, **código en desarrollo, sin ejecución WSL acreditada aún**. La ejecución nativa completa en copia de postproceso aislada y el balance de energía real siguen pendientes.
+
+Estado canónico **etapa 07/10 en progreso, 6/10=60% operativo**. No repetir CFD 10 s ni modificar 2D C14, malla V4/T02 o resultados originales. Ver también los regresores de geometría y la CI dedicada.
+
+---
+
 ## 23-11-2026 — Resultados del CFD C14 original 3D-A, 10 s: phaseChangeSource:alpha1 EVOLUCIONÓ
 
 **Evidencia real WSL, NO CFD sintético:** el investigador ejecutó el análisis nativo de los 101 estados y **10 000 pasos** del C14 original en V4/T02. [Resultados térmicos y numéricos exactos](../../../docs/C3D_04_C14_V4_T02_REAL_10S_PHASE_NUMERICAL_RESULTS_20261123_ES.md).
