@@ -67,7 +67,8 @@ class CaseBOriginalC14Physics(unittest.TestCase):
         self.assertIn("cellLabels List<label> 92200",cells)
         self.assertIn("\n92199\n",cells)
         self.assertIn("metal",cells)
-        self.assertEqual(len(re.findall(r"(?m)^\d{1,5}$",cells)),92200)
+        label_payload=cells.split("cellLabels List<label> 92200",1)[1].split(");",1)[0]
+        self.assertEqual(len(re.findall(r"(?m)^\d{1,5}$",label_payload)),92200)
         with self.assertRaisesRegex(ValueError,"wrong Case B metal cell count"):
             S.files_for_real_mesh(8960,has_zone=False)
         without=S.files_for_real_mesh(92200,has_zone=True)
