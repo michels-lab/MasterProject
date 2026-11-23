@@ -35,7 +35,7 @@
   "git_static_workflow_pass_verified": false,
   "status": "FS_C07_NATIVE_1S_SOLIDIFICATION_RAW_VOLUME_RECOVERED__PHASE_ALLOCATION_FAIL__NO_PHYSICAL_SHRINKAGE",
   "scientific_next_gate": "Map local solid>metal violation spatially and inspect native model correction/advection ordering; separately integrate phase-specific metal mass flux through all open boundaries and a real metal mass inventory. Do not reinterpret ΔVOF as shrinkage; next physics requires conservative phase densities and pressure/energy coupling.",
-  "latest_repository_update": "User executed no-recompute phase-volume recovery on all 20 native snapshots: raw final 2.403591085 cm3 solid, 48.01103827 cm3 metal (raw ratio 5.00633%), overlap excess 0.001768 mm3 at t1; largest integrated overlap 0.006127 mm3 at t0.4; metal ΔV -0.878 mm3 cannot be called shrinkage; native function-object integrals independently agree. Local alphaSolid>alphaMetal violations remain (FAIL).",
+  "latest_repository_update": "Real WSL 20-snapshot raw-volume report published; integrals metal/solid cross-check actual native monitors; raw solid/metal 5.006330% at 1s with phase bounding FAIL and microscopic integrated excess. Added spatial localization script and six synthetic tests for verifying low-VOF hypothesis without CFD rerun. GitHub CI not verified.",
   "source_initial_fluid_temperature_candidates": [
     "0/fluid/T.metal",
     "0/fluid/T"
@@ -205,5 +205,15 @@
   "science_gate_local_phase_allocation_bounded": false,
   "science_gate_global_mass_balance_closed": false,
   "science_gate_shrinkage_implemented": false,
-  "science_gate_JMatPro_validated": false
+  "science_gate_JMatPro_validated": false,
+  "next_scientific_diagnostic": "Native phase allocation spatial localization by actual fluid mesh vertices at t=0.2,0.4,1.0, source unchanged",
+  "spatial_native_violation_localization_script": "analysis_tools/locate_fs_c07_phase_violation.py",
+  "spatial_native_violation_localization_tests": "analysis_tools/test_locate_fs_c07_phase_violation.py",
+  "spatial_native_violation_localization_tests_declared": 6,
+  "spatial_native_violation_localization_executed_in_WSL": false,
+  "spatial_native_violation_localization_CI_verified": false,
+  "raw_volumetric_native_report_published": true,
+  "raw_volumetric_native_report_path": "docs/granada/FS_C07_AUDITORIA_VOLUMETRICA_NATIVE_1S_20261123_ES.md",
+  "raw_integrated_alpha_solid_t0p05_to_t0p10_nonmonotonic_true": true,
+  "raw_data_global_mass_conservation_pass": false
 }
