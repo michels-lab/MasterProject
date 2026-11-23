@@ -38,7 +38,10 @@ def fixture(have_contraction:bool=True):
     run("-C",repo,"push","-u","origin","main")
     run("-C",repo,"checkout","-b","research/fs-c02-metal-air-vof-20261117")
     (repo/"CONTRACTION.txt").write_text("live contraction source\n")
-    run("-C",repo,"add","CONTRACTION.txt")
+    fs_source=repo/"freesurface/FS-C06_vof_solidification/README.md"
+    fs_source.parent.mkdir(parents=True)
+    fs_source.write_text("committed FS-C06 native contraction source\n")
+    run("-C",repo,"add","CONTRACTION.txt","freesurface/FS-C06_vof_solidification/README.md")
     run("-C",repo,"commit","-m","contraction")
     run("-C",repo,"push","-u","origin","research/fs-c02-metal-air-vof-20261117")
     run("-C",repo,"checkout","main")
@@ -90,6 +93,71 @@ class ConcurrentOpenfoamIsolationTests(unittest.TestCase):
                                  "untouchable native run\n")
             self.assertEqual(iso.apply(repo,iso.plan(repo))["operation"],
                              "APPLIED_AND_VERIFIED")
+        finally:
+            tmp.cleanup()
+
+    def test_real_contraction_detached_head_and_dirty_files_are_preserved(self):
+        # Reproduce ACTUAL WSL state: FS_C02_WORKTREE used
+        # git switch --detach FETCH_HEAD on the research/FS branch.
+        tmp,repo,wsl=fixture()
+        try:
+            fs=wsl/"FS_C02_WORKTREE"
+            run("-C",fs,"switch","--detach","HEAD")
+            baseline=run("-C",fs,"rev-parse","HEAD")
+            (fs/"UNTRACKED_FS_C07_MONITOR").write_text("running\n")
+            (fs/"CONTRACTION.txt").write_text("locally modified, DO NOT TOUCH\n")
+            checked=iso.plan(repo)
+            entry=checked["worktrees"][2]
+            self.assertIsNone(entry["branch"])
+            self.assertTrue(entry["detached"])
+            self.assertEqual(entry["head"],baseline)
+            self.assertEqual(entry["remote_lineage_verified"],
+                             "refs/remotes/origin/research/fs-c02-metal-air-vof-20261117")
+            out=iso.apply(repo,checked)
+            self.assertEqual(out["operation"],"APPLIED_AND_VERIFIED")
+            self.assertEqual(out["worktrees"][2]["head"],baseline)
+            self.assertIsNone(out["worktrees"][2]["actual_branch"])
+            self.assertEqual(run("-C",fs,"rev-parse","HEAD"),baseline)
+            self.assertEqual(
+                subprocess.run(["git","-C",str(fs),"symbolic-ref","-q","HEAD"],
+                               capture_output=True).returncode,1)
+            self.assertEqual((fs/"UNTRACKED_FS_C07_MONITOR").read_text(),"running\n")
+            self.assertEqual((fs/"CONTRACTION.txt").read_text(),
+                             "locally modified, DO NOT TOUCH\n")
+            self.assertEqual(iso.apply(repo,iso.plan(repo))["operation"],
+                             "APPLIED_AND_VERIFIED")
+        finally:
+            tmp.cleanup()
+
+    def test_unrelated_detached_commit_blocks_before_A_B_worktree_writes(self):
+        tmp,repo,wsl=fixture()
+        try:
+            fs=wsl/"FS_C02_WORKTREE"
+            # main does not have the committed FS-C06 contraction overlay.
+            run("-C",fs,"switch","--detach","main")
+            with self.assertRaisesRegex(iso.Blocked,"source marker absent"):
+                iso.plan(repo)
+            self.assertFalse((wsl/"C3D04_A_WORKTREE").exists())
+            self.assertFalse((wsl/"C3D05_B_WORKTREE").exists())
+        finally:
+            tmp.cleanup()
+
+    def test_detached_nonancestor_with_FSC06_marker_is_refused(self):
+        tmp,repo,wsl=fixture()
+        try:
+            fs=wsl/"FS_C02_WORKTREE"
+            run("-C",fs,"switch","--detach","HEAD")
+            # A local-only change creates a detached commit not in the remote
+            # research branch. Preserve it, but do not claim FS provenance.
+            (fs/"CONTRACTION.txt").write_text("experimental lineage divergence\n")
+            run("-C",fs,"add","CONTRACTION.txt")
+            run("-C",fs,"config","user.email","fixture@example.invalid")
+            run("-C",fs,"config","user.name","Isolation Fixture")
+            run("-C",fs,"commit","-m","unpublished detached experiment")
+            with self.assertRaisesRegex(iso.Blocked,"not an ancestor"):
+                iso.plan(repo)
+            self.assertFalse((wsl/"C3D04_A_WORKTREE").exists())
+            self.assertFalse((wsl/"C3D05_B_WORKTREE").exists())
         finally:
             tmp.cleanup()
 
