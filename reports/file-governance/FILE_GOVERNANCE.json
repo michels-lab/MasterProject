@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
   "audit_kind": "deterministic_full_tracked_tree",
-  "tracked_files_total": 39023,
-  "classified_files_total": 39018,
-  "docs_content_inspected": 186,
+  "tracked_files_total": 39024,
+  "classified_files_total": 39019,
+  "docs_content_inspected": 187,
   "large_docs_skipped": 1,
   "excluded_reports": 5,
   "roles": {
@@ -12,7 +12,7 @@
     "bitacora": 5,
     "config": 17,
     "data": 32,
-    "document": 149,
+    "document": 150,
     "index": 33,
     "license": 1,
     "simulation_case_file": 117,
@@ -29,7 +29,7 @@
     "POTENTIAL_UNLOGGED_CHANGES": 2
   },
   "finding_total": 9,
-  "inventory_fingerprint": "784162f1f78b2489efdb43568d4ebed361998792ed6b6c871ebe7a75c6b041a8",
+  "inventory_fingerprint": "a1bb479a0c62aa1167f04f2aaee60daa107795a6b59293823890262e43b4ef74",
   "evidence_fingerprint": "b86f1380828626e42c749df5e981f711393ffb56c430322cb148d13dd9067145",
   "files": [
     {
@@ -2095,7 +2095,7 @@
       "role": "source",
       "purpose": "code/test implementation",
       "certainty": "rule",
-      "blob": "80ce851657ead31bd1e771a58990fbb1e97b522c"
+      "blob": "cc7cce4bd89a4dad3f5c0e37b9dbf412155ab70b"
     },
     {
       "path": "cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/scripts/analyze_t0_patch_flux.py",
@@ -2291,7 +2291,7 @@
       "role": "test",
       "purpose": "code/test implementation",
       "certainty": "rule",
-      "blob": "d7af0b534a0da6a997a1994db9228f42d9a79f39"
+      "blob": "ab26dd4b64b3b623b6d526ff79fb91e81837f1a1"
     },
     {
       "path": "cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/tests/test_finalize_t0_granada.py",
@@ -272387,6 +272387,13 @@
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
       "blob": "c721841a6346b419f7c29a971de7e8f2b9b50ba1"
+    },
+    {
+      "path": "docs/granada/C3D05_FLUJO_ESPACIAL_Y_PUERTA_FISICA_20261123_ES.md",
+      "role": "document",
+      "purpose": "manual/decision/report/historical note",
+      "certainty": "inferred",
+      "blob": "f2cdfc36c645ddd53f96bd970bdc50c4f86cfa53"
     },
     {
       "path": "docs/granada/C3D05_FVSOLUTION_C14_20261119_ES.md",
