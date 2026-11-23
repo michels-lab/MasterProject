@@ -88,6 +88,49 @@ def within(path: Path, parent: Path) -> bool:
     return path == parent or parent in path.parents
 
 
+def verified_fs_contraction(repo: Path, dest: Path, info: dict[str, str],
+                            source_branch: str) -> dict[str, object]:
+    """Accept the ACTIVE FS checkout as-is, including deliberate detached HEAD.
+
+    Previous FS runs explicitly used 'git switch --detach FETCH_HEAD', so a
+    mandatory refs/heads/... owner was wrong. For detached mode, require:
+    exact registered path, shared Git repository, a committed FS-C06 source
+    file, and HEAD ancestry in the fetched FS research remote line. Read only.
+    Never checkout, attach HEAD, switch, reset, merge, rebase or update FS.
+    """
+    head = info.get("HEAD")
+    if not head or not re.fullmatch(r"[0-9a-f]{40,64}", head):
+        raise Blocked("contraction: missing actual worktree HEAD identity")
+    source = "refs/remotes/origin/" + source_branch
+    if not has_ref(repo, source):
+        raise Blocked("contraction: missing remote research source " + source)
+    marker = "HEAD:freesurface/FS-C06_vof_solidification/README.md"
+    if git(dest, "cat-file", "-e", marker, check=False).returncode:
+        raise Blocked(
+            "contraction: committed FS-C06 source marker absent at detached "
+            "HEAD; worktree identity cannot be safely established"
+        )
+    actual = info.get("branch")
+    if actual == "refs/heads/" + source_branch and "detached" not in info:
+        return {"actual_branch": source_branch, "detached": False,
+                "remote_lineage_verified": "named_local_research_branch"}
+    if actual is None and info.get("detached") == "true":
+        if git(repo, "merge-base", "--is-ancestor", head, source,
+               check=False).returncode:
+            raise Blocked(
+                "contraction: detached HEAD " + head[:12]
+                + " is not an ancestor of " + source
+                + "; preserve FS worktree and inspect its provenance"
+            )
+        return {"actual_branch": None, "detached": True,
+                "remote_lineage_verified": source}
+    raise Blocked(
+        "contraction: registered FS worktree uses unexpected branch "
+        + repr(actual) + " (detached=" + str(info.get("detached") == "true")
+        + ", HEAD=" + head[:12] + "). It was not modified."
+    )
+
+
 def plan(repo: Path) -> dict:
     repo = repo.expanduser().resolve()
     if not repo.is_dir():
@@ -116,12 +159,22 @@ def plan(repo: Path) -> dict:
         ):
             raise Blocked(label + ": destination overlaps source or CFD runs")
         owners = [p for p, d in existing.items() if d.get("branch") == ref]
+        details: dict[str, object] = {}
         if target in existing:
             info = existing[target]
-            if not dest.is_dir() or info.get("branch") != ref:
-                raise Blocked(label + ": unexpected existing worktree/branch")
+            if not dest.is_dir():
+                raise Blocked(label + ": registered worktree path is not a directory")
             if common_dir(dest) != same:
                 raise Blocked(label + ": existing worktree belongs to other Git repository")
+            if label == "contraction":
+                details = verified_fs_contraction(repo, dest, info, branch)
+            elif info.get("branch") != ref or "detached" in info:
+                raise Blocked(
+                    label + ": unexpected existing worktree/branch; actual "
+                    + repr(info.get("branch")) + " detached="
+                    + str(info.get("detached") == "true") + ", HEAD="
+                    + str(info.get("HEAD", ""))[:12]
+                )
             action = "EXISTING_PRESERVED"
         else:
             if dest.exists() or dest.is_symlink():
@@ -140,8 +193,12 @@ def plan(repo: Path) -> dict:
         if owners and target not in owners:
             raise Blocked(label + ": conflicting existing branch owner")
         checks.append({
-            "case": label, "path": str(target), "branch": branch,
+            "case": label, "path": str(target),
+            "branch": existing.get(target, {}).get("branch", ref) if
+                      target in existing else branch,
+            "expected_source_branch": branch,
             "action": action, "head": existing.get(target, {}).get("HEAD"),
+            **details,
         })
     return {
         "schema": "MASTERPROJECT_WSL_CONCURRENT_ISOLATION_V1",
