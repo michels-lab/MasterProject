@@ -82,3 +82,20 @@ Cuando la rama esté integrada y CI aprobado, la **única orden** para intentar 
     python3 cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/run_c14_3d_complete_postprocess.py
 
 El runner llama internamente al cálculo volumétrico, genera copia aislada, intenta todos los postprocesos y guarda logs individuales. Si algún native postprocess falla, NO borra ni sobrescribe el CFD de investigación y reporta el bloque incompleto. El avance sigue 6/10=60 % hasta obtener evidencia de ejecución y revisar los flujos/energía y estabilidad.
+
+
+## Tercer bloque: balance térmico nativo trazable a C14 (código listo, WSL pendiente)
+
+La herramienta c14_physics/c14_3d_native_energy_closure.py utiliza exactamente las columnas reales publicadas por los objetos originales C14 en:
+- metalSensibleEnthalpy: volIntegrate(rho,h), energía sensible integral de metal [J].
+- metalLatentHeatPower: volIntegrate(latentHeatRateVol), potencia volumétrica integrada de solidificación [W].
+- metalTopEnergyPower, metalMoldEnergyPower y metalBoundaryEnergyPower: sum(energyFlux), sum(heatFlux) y sum(energyAdvectiveFlux), expresadas como potencia de caras [W].
+- metalMeanLiquidFraction: volAverage(phaseChangeSource:alpha1), para contraste con integrales de la malla 3D.
+
+Primero se exige que potencia de todas las fronteras metálicas coincida con la suma metalTop + metal_to_mold, aceptando únicamente tolerancia por formato de escritura. Luego se calcula la integral trapezoidal de P_salida y P_latente sobre los estados guardados de 0.1 a 10 s; el t=0 se excluye de la integral porque el functionObject puede registrar flujos iniciales no evaluados. La expresión diagnóstica es:
+
+    residual_J = [H(t)-H(0.1)] + integral(P_energyFlux_out dt) - integral(P_latentRelease dt)
+
+El signo positivo de latentRelease procede de solidificationRate = -dAlphaLdt y latentHeatRateVol = rho * solidificationRate * L de los diccionarios originales. Este residual es una **prueba de coherencia nominal**, no la identidad discretizada exacta del solver ni una validación física de conservación. Falta el balance regional de la arena y la verificación de fuentes y temporalidad nativa. El resultado se reporta sin imponer artificialmente que el residuo sea cero. La regresión se prueba contra los archivos postProcessing REALES archivados del C14 2D.
+
+El ejecutor integral invoca el auditor de energía cuando los objetos nativos han producido sus tablas, conserva todos los logs, declara cualquier ausencia y sigue sin ejecutar CFD. Todo el proceso respeta **etapa 07/10, 6/10=60%** hasta comprobarlo sobre WSL y revisar críticamente el balance.
