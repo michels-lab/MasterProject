@@ -20,6 +20,7 @@ import secrets
 import shutil
 import subprocess
 import sys
+import time
 
 from audit_fs_c02_local import read_alpha
 from audit_fs_c04_split_cells import read_mesh, cell_volume_m3
@@ -274,6 +275,35 @@ def audit_saved_fields(dest: Path, report: dict) -> dict:
     return report
 
 
+def read_cfd_time_from_log(log: Path) -> tuple[float | None, int]:
+    """Read only the tail of a growing native solver log (no CFD work)."""
+    try:
+        with log.open("rb") as fh:
+            fh.seek(0, os.SEEK_END)
+            size = fh.tell()
+            fh.seek(max(0, size - 65536), os.SEEK_SET)
+            tail = fh.read().decode("utf-8", errors="replace")
+    except OSError:
+        return None, 0
+    matches = re.findall(
+        r"(?m)^\\s*Time\\s*=\\s*([0-9]+(?:\\.[0-9]*)?(?:[eE][+-]?[0-9]+)?)",
+        tail,
+    )
+    return (float(matches[-1]) if matches else None), size
+
+
+def _stop_native_child(proc: subprocess.Popen, log: Path, why: str) -> None:
+    """Leave a stopped child and preserve every saved OpenFOAM file."""
+    if proc.poll() is None:
+        proc.terminate()
+        try:
+            proc.wait(timeout=15)
+        except subprocess.TimeoutExpired:
+            proc.kill()
+            proc.wait(timeout=15)
+    raise ValueError(f"{why}; native logs/fields preserved: {log}")
+
+
 def run_native(dest: Path, report: dict, timeout_minutes: int) -> dict:
     require(os.getenv("WM_PROJECT_VERSION") == "14",
             "native run needs sourced OpenFOAM Foundation 14")
@@ -281,15 +311,30 @@ def run_native(dest: Path, report: dict, timeout_minutes: int) -> dict:
             "native foamMultiRun not found")
     require(1 <= timeout_minutes <= 240, "timeout must be 1..240 minutes")
     log = dest / "log.FS_C07_foamMultiRun"
-    with log.open("w") as f:
+    started = time.monotonic()
+    print("FS-C07 LIVE LOG:", log, flush=True)
+    print("FS-C07 RUN: each 15s prints elapsed wall time and latest native Time; "
+          "no fields are inferred from missing log data.", flush=True)
+    with log.open("w") as fh:
+        proc = subprocess.Popen(["foamMultiRun", "-case", str(dest)],
+                                stdout=fh, stderr=subprocess.STDOUT)
         try:
-            p = subprocess.run(["foamMultiRun", "-case", str(dest)],
-                               stdout=f, stderr=subprocess.STDOUT,
-                               timeout=timeout_minutes*60, check=False)
-            require(p.returncode == 0,
-                    f"foamMultiRun returned {p.returncode}; read {log}")
-        except subprocess.TimeoutExpired as exc:
-            raise ValueError(f"native timeout {timeout_minutes} min; read {log}") from exc
+            while proc.poll() is None:
+                remaining = timeout_minutes*60 - (time.monotonic() - started)
+                if remaining <= 0:
+                    _stop_native_child(proc, log, f"FS-C07 watchdog timeout at {timeout_minutes} minutes")
+                try:
+                    proc.wait(timeout=min(15.0, remaining))
+                except subprocess.TimeoutExpired:
+                    simtime, logsize = read_cfd_time_from_log(log)
+                    elapsed = time.monotonic() - started
+                    print(f"FS-C07 LIVE: wall={elapsed:.0f}s, "
+                          f"CFD_Time={simtime if simtime is not None else 'not-yet-found'}, "
+                          f"log={logsize} bytes", flush=True)
+            require(proc.returncode == 0,
+                    f"foamMultiRun returned {proc.returncode}; inspect {log}")
+        except KeyboardInterrupt:
+            _stop_native_child(proc, log, "FS-C07 user interrupted")
     report["native_log_sha256"] = digest(log)
     return audit_saved_fields(dest, report)
 
