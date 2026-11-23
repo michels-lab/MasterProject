@@ -75,9 +75,9 @@ class ReadOnlyRealC14AnalysisTests(unittest.TestCase):
             p.write_text(field(1400,n=3).replace("format ascii","format binary"))
             with self.assertRaisesRegex(ValueError,"ASCII"):
                 inspector.scalar_field_values(p,3)
-            p.write_text(field(1400,n=3))
-            with self.assertRaisesRegex(ValueError,"count"):
-                inspector.scalar_field_values(p,4) if False else inspector.scalar_field_values(p,0)
+            p.write_text(field([1400,1450,1500],n=3))
+            with self.assertRaisesRegex(ValueError,"field cell count"):
+                inspector.scalar_field_values(p,4)
 
     def test_all_run_log_uses_actual_max_not_only_last_Courant(self):
         stats=inspector.parse_full_log(NATIVE_LOG)
