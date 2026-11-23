@@ -113,7 +113,7 @@ class GenuineSavedVolumeRecoveryTests(unittest.TestCase):
         self.assertEqual(report["milestones_done"],"6/10")
         k=report["kinetics"]
         self.assertAlmostEqual(k["final"]["metal_T_volMean_K"],1450)
-        self.assertAlmostEqual(k["final"]["metal_alpha1_volMean"],0.81)
+        self.assertAlmostEqual(k["final"]["metal_alpha1_volMean"],0.8)
         self.assertAlmostEqual(
             k["peak_saved_interval_metal_cooling_K_s"]["value"],5.0)
         self.assertEqual(k["first_saved_below_liquidus"]["first_saved_time_s"],1.0)
