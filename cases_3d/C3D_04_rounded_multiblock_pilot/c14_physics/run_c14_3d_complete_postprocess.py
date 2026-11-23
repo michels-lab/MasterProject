@@ -24,6 +24,7 @@ import sys
 from datetime import datetime, timezone
 
 import c14_3d_postprocess_parity as volume
+import c14_3d_native_energy_closure as energy
 import stage_c14_3d_case_a as stage
 
 C14=stage.physics.C14
@@ -263,6 +264,17 @@ def main()->int:
             "system/topSurfaceFlowPostProcessing","-time","0:"]))
         steps.append(run_native(copy,"foamLog",[
             "foamLog","log.foamMultiRun"]))
+        energy_report={"attempted":True,"passed":False,
+                       "physically_validated":False}
+        try:
+            closure=energy.audit(copy)
+            energy_report["passed"]=True
+            energy_report["final_relative_nominal_residual"]=(
+                closure["final_relative_nominal_closure_residual"])
+            energy_report["report"]=str(
+                copy/"C3D04_A_C14_NATIVE_ENERGY_AUDIT"/energy.OUT_JSON)
+        except (OSError,ValueError,KeyError) as exc:
+            energy_report["error"]=str(exc)
         actual=copy/"postProcessing"/"metal"
         dirs=sorted(p.name for p in actual.iterdir() if p.is_dir()) if actual.is_dir() else []
         # Compare output directories only against ACTUALLY written C14 2D output
@@ -301,6 +313,7 @@ def main()->int:
             "solver_CFD_rerun":False,
             "all_native_processing_commands_passed":all(x["passed"] for x in steps),
             "steps":steps,
+            "native_energy_closure_audit":energy_report,
             "native_postprocessing_object_dirs":dirs,
             "missing_expected_C14_object_dirs":missing,
             "derived_C14_fields_at_final_time":derived_found,
@@ -326,11 +339,12 @@ def main()->int:
             "missing_C14_objects":missing,
             "missing_derived_fields":derived_missing,
             "energy_conservation_verified":False,
+            "native_energy_audit_passed":energy_report["passed"],
             "new_CFD_run":False,
             "volume_report":str(vol/"C3D04_A_C14_3D_POSTPROCESS_REPORT.json"),
             "native_report":str(report),
         },ensure_ascii=False,indent=2))
-        return 0 if info["all_native_processing_commands_passed"] and not missing and not derived_missing else 3
+        return 0 if info["all_native_processing_commands_passed"] and energy_report["passed"] and not missing and not derived_missing else 3
     except (OSError,ValueError,KeyError,TypeError) as exc:
         print("C14_NATIVE_3D_POSTPROCESS_BLOCKED:",exc,file=sys.stderr)
         return 2
