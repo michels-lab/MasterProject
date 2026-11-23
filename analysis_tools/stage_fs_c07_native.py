@@ -346,6 +346,18 @@ def run_native(dest: Path, report: dict, timeout_minutes: int) -> dict:
         except KeyboardInterrupt:
             _stop_native_child(proc, log, "FS-C07 user interrupted")
     report["native_log_sha256"] = digest(log)
+    # A solver that returned 0 is *executed and completed* even if the
+    # subsequent phase-allocation audit blocks physical acceptance. Save this
+    # fact BEFORE the scientific audit so the failure handler does not
+    # rewrite a real 1 s run as "native_cfd_executed=false".
+    report["native_cfd_executed"] = True
+    report["native_solver_completed"] = True
+    report["status"] = "FS_C07_NATIVE_SOLVER_COMPLETED_PHASE_AUDIT_PENDING"
+    report["last_native_log_time_s"], report["native_log_size_bytes"] = (
+        read_cfd_time_from_log(log)
+    )
+    (dest / "FS_C07_REPORT.json").write_text(
+        json.dumps(report, indent=2, ensure_ascii=False) + "\n")
     return audit_saved_fields(dest, report)
 
 
