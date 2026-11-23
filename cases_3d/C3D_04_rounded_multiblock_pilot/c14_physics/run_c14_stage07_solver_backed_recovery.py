@@ -1,0 +1,393 @@
+#!/usr/bin/env python3
+"""Foundation14 C3D04-A OFFLINE postProcessing recovery in a NEW physical copy.
+
+The actual WSL C14 full-functions postProcess died at "Field rho not found
+in database" while the bare-mode registry lacked thermo/transport models.
+Foundation v14 explicitly supports "-region metal -solver fluid" for
+postProcessing with model fields. This runner always splits the ORIGINAL C14
+diagnostic definitions into independent dependency-isolated passes so failure
+of any optional object cannot block native energy/primitives/phase/profiles.
+
+Only POST-PROCESSING on a new copy: NEVER foamMultiRun, Allrun, remesh, re-solve,
+checkout/reset, write to old workcopy, or update the research source.
+The source C14 physical dictionaries, mesh and 101 original states are copied
+unaltered. Original time-step derivatives ddt(phaseChange:alpha1) and ddt(T)
+cannot be recovered retrospectively from 0.1-second saved states.
+"""
+from __future__ import annotations
+
+import argparse
+from datetime import datetime, timezone
+import hashlib
+import json
+import math
+from pathlib import Path
+import re
+import shutil
+import sys
+
+import run_c14_3d_complete_postprocess as old
+import c14_3d_native_energy_closure as energy
+import audit_existing_native_c14_stage07 as forensic
+
+ROOT = Path(__file__).resolve().parent
+C14 = old.C14
+OUTPUT = "C3D04_A_C14_SOLVER_BACKED_POSTPROCESS_02"
+REPORT = "C3D04_A_C14_SOLVER_BACKED_RECOVERY_REPORT.json"
+PAIRS = {
+    "core": (
+        ("functions", "temperatureProbe"),
+        ("functions", "topFlow"),
+        ("researchDiagnostics", "metalTopPhiSum"),
+        ("researchDiagnostics", "metalSensibleEnthalpy"),
+    ),
+    "energy": (
+        ("researchDiagnostics", "energyAdvectiveFlux"),
+        ("researchDiagnostics", "heatFlux"),
+        ("researchDiagnostics", "energyFlux"),
+        ("researchDiagnostics", "metalTopEnergyPower"),
+        ("researchDiagnostics", "metalMoldEnergyPower"),
+        ("researchDiagnostics", "metalBoundaryEnergyPower"),
+    ),
+    "phase": (
+        ("researchDiagnostics", "metalMeanLiquidFraction"),
+    ),
+    "flow": (
+        ("researchDiagnostics", "vorticityField"),
+        ("researchDiagnostics", "flowTopology"),
+        ("researchDiagnostics", "temperatureGradient"),
+        ("researchDiagnostics", "temperatureGradientMagnitude"),
+        ("researchDiagnostics", "densityGradient"),
+        ("researchDiagnostics", "densityGradientMagnitude"),
+        ("researchDiagnostics", "cellCourantNumber"),
+        ("researchDiagnostics", "metalMaxCourant"),
+        ("researchDiagnostics", "metalMaxThermalGradient"),
+        ("researchDiagnostics", "metalMaxDensityGradient"),
+    ),
+    "profiles": (
+        ("lineProfiles", "horizontalProfiles"),
+        ("lineProfiles", "verticalProfiles"),
+    ),
+    "momentum": (
+        ("researchDiagnostics", "solidificationMeltingMomentumDiagnostics"),
+        ("momentumPostProcessing", "momentumMean"),
+        ("momentumPostProcessing", "momentumMax"),
+        ("momentumPostProcessing", "momentumHorizontalProfiles"),
+        ("momentumPostProcessing", "momentumVerticalProfiles"),
+    ),
+}
+TASK_ORDER = ("core", "energy", "phase", "flow", "profiles", "momentum")
+
+
+class Blocked(ValueError):
+    pass
+
+
+def need(condition: bool, reason: str) -> None:
+    if not condition:
+        raise Blocked("C3D04_A_NATIVE_RECOVERY_BLOCKED: " + reason)
+
+
+def file_ok(p: Path) -> bool:
+    return p.is_file() and not p.is_symlink()
+
+
+def sha(path: Path) -> str:
+    need(file_ok(path), "expected regular file missing or symlinked: " + str(path))
+    result = hashlib.sha256()
+    with path.open("rb") as stream:
+        for chunk in iter(lambda: stream.read(1 << 20), b""):
+            result.update(chunk)
+    return result.hexdigest()
+
+
+def read_json(path: Path) -> dict:
+    need(file_ok(path), "JSON evidence missing: " + str(path))
+    item = json.loads(path.read_text(encoding="utf-8"))
+    need(isinstance(item, dict), "JSON evidence not an object: " + str(path))
+    return item
+
+
+def selected_source_block(content: str, name: str) -> str:
+    """Copy an ORIGINAL C14 object byte-equivalent; never edit model params."""
+    m = re.search(r"(?m)^[ \t]*" + re.escape(name) + r"[ \t]*\r?\n?[ \t]*\{", content)
+    need(m is not None, "C14 diagnostic function not found: " + name)
+    at = content.index("{", m.start())
+    end = old.balanced(content, at)
+    return content[m.start():end + 1].strip() + "\n"
+
+
+def strip_profile_unsupported_fields(block: str) -> str:
+    """Only in OFFLINE sample dictionary, not original C14 physics/objects.
+
+    Restores primitive profiles at 101 saved times. The original ddt/T phase
+    rate/derived-field profiles cannot be fabricated from 0.1s snapshots.
+    """
+    fields = re.compile(r"\bfields\s*\((.*?)\)\s*;", re.S)
+    new = ("fields\n    (\n        U\n        T\n        p_rgh\n"
+           "        phaseChangeSource:alpha1\n    );")
+    changed, count = fields.subn(new, block, count=1)
+    need(count == 1, "original C14 profile has no unique fields block")
+    return changed
+
+
+def assembled_dict(copy: Path, group: str) -> tuple[Path, list[dict]]:
+    need(group in PAIRS, "unrecognized C14 group")
+    records = []
+    blocks = []
+    for filename, name in PAIRS[group]:
+        source = copy / "system" / filename
+        need(file_ok(source), "copied C14 source dictionary absent: " + str(source))
+        content = source.read_text(encoding="utf-8")
+        b = selected_source_block(content, name)
+        if group == "profiles":
+            b = strip_profile_unsupported_fields(b)
+        records.append({
+            "object": name, "original_C14_dictionary": filename,
+            "original_adapted_source_sha256": sha(source),
+            "offline_geometry_or_field_filter": group == "profiles",
+        })
+        blocks.append(b)
+    p = copy / "system" / ("stage07Offline_" + group)
+    need(not p.exists() and not p.is_symlink(),
+         "new physical copy unexpectedly already contains generated group " + group)
+    p.write_text(
+        "FoamFile\n{\n    format ascii;\n    class dictionary;\n"
+        "    location \"system\";\n    object stage07Offline_" + group + ";\n}\n\n"
+        + "\n".join(blocks), encoding="utf-8",
+    )
+    return p, records
+
+
+def original_case_gate(case: Path, failed: Path, recovery: Path,
+                       forensic_dir: Path, out: Path) -> dict:
+    """All source/target safety checks BEFORE a potentially large copytree."""
+    case = case.expanduser().resolve()
+    failed = failed.expanduser().resolve()
+    recovery = recovery.expanduser().resolve()
+    forensic_dir = forensic_dir.expanduser().resolve()
+    out = out.expanduser().absolute()
+    input_dirs = [case, failed, recovery, forensic_dir, C14.resolve(),
+                  ROOT.parents[2].resolve()]
+    need(case.is_dir() and failed.is_dir() and recovery.is_dir()
+         and forensic_dir.is_dir(), "real 10s CFD or archived prior evidence absent")
+    need(not out.exists() and not out.is_symlink(),
+         "new isolated copy output occupied; NEVER overwrite previous CFD or postprocessing")
+    need(all(out != p and p not in out.parents and out not in p.parents
+             for p in input_dirs),
+         "new output overlaps original CFD, failed copy or repository")
+    need(out.parent.is_dir(), "new workcopy parent does not exist")
+    need(not any(p.is_symlink() for p in case.rglob("*")),
+         "original CFD source contains symlinks; refuse implicit external file copy")
+    orig_control = C14 / "system/controlDict"
+    source_control = case / "system/controlDict"
+    failed_control = failed / "system/controlDict"
+    need(sha(orig_control) == sha(source_control) == sha(failed_control),
+         "C14 original, actual source or prior failed controlDict changed")
+    original_log = sha(case / "log.foamMultiRun")
+    need(sha(failed / "log.foamMultiRun") == original_log,
+         "failed copy native solver log differs from original CFD")
+    prior = read_json(recovery / "C3D04_A_STAGE07_RECOVERY_REPORT.json")
+    need(prior.get("schema") == "C3D04_A_C14_3D_STAGE07_EXISTING_EVIDENCE_V1"
+         and prior.get("case_A_source_run_read_only") == str(case)
+         and prior.get("source_sha256", {}).get("source_CFD_log_sha256") == original_log,
+         "previous real 101-state recovery does not match this CFD case")
+    failure = read_json(
+        forensic_dir / "C3D04_A_C14_NATIVE_STAGE07_FORENSIC_REPORT.json"
+    )
+    need(failure.get("schema") == "C3D04_A_STAGE07_NATIVE_FAILURE_FORENSICS_V1"
+         and failure.get("original_10s_case_read_only") == str(case)
+         and failure.get("existing_native_workcopy_read_only") == str(failed),
+         "native failure evidence belongs to another case/workcopy")
+    sid = failure.get("evidence_sha256", {}).get("source_model_sha", {})
+    need(sid.get("authentic_10s_solver_log_sha256") == original_log,
+         "native failure forensic report SHA contradicts original C14 solver")
+    need(failure.get("native_commands_verified") is False
+         and "c14_functions" in failure.get("native_failed_commands", []),
+         "source failure is not the verified C14 functions rho-registry blocker")
+    need(file_ok(case/"10/metal/T") and file_ok(case/"10/metal/U")
+         and file_ok(case/"10/metal/phaseChangeSource:alpha1"),
+         "original genuine C14 terminal 10-second state is missing")
+    return {
+        "case": str(case), "failed_workcopy": str(failed),
+        "recovery_report_sha256": sha(recovery/"C3D04_A_STAGE07_RECOVERY_REPORT.json"),
+        "forensic_report_sha256":
+            sha(forensic_dir/"C3D04_A_C14_NATIVE_STAGE07_FORENSIC_REPORT.json"),
+        "original_C14_controlDict_sha256": sha(orig_control),
+        "original_10s_solver_log_sha256": original_log,
+        "prior_failed_copy_solver_log_sha256": sha(failed/"log.foamMultiRun"),
+        "original_final_alpha1_sha256": sha(case/"10/metal/phaseChangeSource:alpha1"),
+    }
+
+
+def native_group(copy: Path, group: str, dictionary: Path) -> dict:
+    # Foundation14 user guide: -solver fluid reconstructs thermo/transport
+    # model registry for rho,h and energyFlux; does not advance fluid solver.
+    if group in ("core", "energy", "flow", "momentum"):
+        args = ["foamPostProcess","-region","metal","-solver","fluid",
+                "-dict","system/" + dictionary.name,"-time","0:"]
+    else:
+        # Without -solver, foamPostProcess reads these explicitly saved
+        # primitive fields. Phase/object profiles must not rely on thermo.
+        required = ("(phaseChangeSource:alpha1)" if group == "phase" else
+                    "(U T p_rgh phaseChangeSource:alpha1)")
+        args = ["foamPostProcess","-region","metal","-fields",required,
+                "-dict","system/" + dictionary.name,"-time","0:"]
+    executed = old.run_native(copy,"solverBacked_"+group,args)
+    log = copy/executed["log"]
+    errors = forensic.error_excerpt(log, limit=8)
+    return {
+        **executed, "group": group,
+        "read_model": "fluid_solver_registry_no_FV_solve"
+                      if group in ("core","energy","flow","momentum")
+                      else "only_explicit_saved_fields",
+        "log_sha256": errors["sha256"],
+        "log_signatures": errors["error_signatures"],
+        "log_last_24_lines": errors.get("tail_last_24_lines",[]),
+    }
+
+
+def surface_energy_summary(copy: Path) -> dict:
+    """Native metal-side *face power* check, NEVER global energy closure."""
+    base = copy / "postProcessing/metal"
+    names = {
+        "top":"metalTopEnergyPower",
+        "contact":"metalMoldEnergyPower",
+        "total":"metalBoundaryEnergyPower",
+    }
+    rows = {}
+    for key, folder in names.items():
+        try:
+            header,table = energy.parse_table(
+                base/folder/"0"/"surfaceFieldValue.dat"
+            )
+        except (ValueError, OSError, KeyError) as err:
+            return {"status":"NATIVE_SURFACE_POWER_TABLES_MISSING_OR_INCOMPATIBLE",
+                    "reason":str(err)[:900],
+                    "nominal_metal_surface_power_reconciled":False,
+                    "global_energy_conservation_verified":False}
+        field = "sum(energyFlux)"
+        if field not in header:
+            return {"status":"NATIVE_ENERGY_POWER_COLUMN_MISSING",
+                    "missing_in":key,"available":header,
+                    "nominal_metal_surface_power_reconciled":False,
+                    "global_energy_conservation_verified":False}
+        rows[key] = table
+    discrepancy = []
+    for i in range(101):
+        top=rows["top"][i]["sum(energyFlux)"]
+        interface=rows["contact"][i]["sum(energyFlux)"]
+        total=rows["total"][i]["sum(energyFlux)"]
+        err=total-top-interface
+        scale=max(1,abs(total),abs(top)+abs(interface))
+        discrepancy.append(abs(err)/scale)
+    final = {k: rows[k][-1]["sum(energyFlux)"] for k in names}
+    return {
+        "status":"METAL_SURFACE_POWER_101_STATES_DIAGNOSTIC",
+        "final_energy_power_out_W":final,
+        "maximum_relative_top_plus_contact_vs_total_discrepancy":max(discrepancy),
+        "nominal_metal_surface_power_reconciled":max(discrepancy)<5e-5,
+        "energy_flux_direction":"outward positive (C14 native surfaceFieldValue convention)",
+        "global_energy_conservation_verified":False,
+        "mold_side_flux_compared":False,
+        "phase_change_source_discretization_verified":False,
+    }
+
+
+def main() -> int:
+    p = argparse.ArgumentParser(description=__doc__)
+    p.add_argument("--case",type=Path,default=Path.home()/
+                   "OpenFOAM/C3D04_A_C14_FLUID_SOLID_FULL_10S_RUN_01")
+    p.add_argument("--failed-copy",type=Path,default=Path.home()/
+                   "OpenFOAM/C3D04_A_C14_FULL_POSTPROCESS_WORKCOPY_01")
+    p.add_argument("--recovery",type=Path,default=Path.home()/
+                   "OpenFOAM/C3D04_A_C14_STAGE07_RECOVERY_KINETICS_01")
+    p.add_argument("--forensic",type=Path,default=Path.home()/
+                   "OpenFOAM/C3D04_A_C14_NATIVE_STAGE07_FORENSICS_01")
+    p.add_argument("--out",type=Path,default=Path.home()/("OpenFOAM/"+OUTPUT))
+    opt=p.parse_args()
+    source=opt.case.expanduser().resolve()
+    out=opt.out.expanduser().absolute()
+    try:
+        identity = original_case_gate(
+            source,opt.failed_copy,opt.recovery,opt.forensic,out)
+        # Any failure from this point forward touches only the new copy.
+        shutil.copytree(source,out,symlinks=False)
+        prior=out/"postProcessing"
+        if prior.exists():
+            need(not (out/"_original_postProcessing_preserved").exists(),
+                 "new copy already contains reserved postprocessing archive")
+            prior.rename(out/"_original_postProcessing_preserved")
+        centres=old.cell_centres(out)
+        geometry=old.sample_geometry(centres)
+        original_fo_hashes=old.adapt_diagnostic_files(out,geometry)
+        need(sha(out/"system/controlDict")==
+             identity["original_C14_controlDict_sha256"],
+             "C14 original controlDict changed during isolated copying")
+        need(sha(out/"log.foamMultiRun") ==
+             identity["original_10s_solver_log_sha256"],
+             "C14 original solver log changed during isolated copying")
+        steps=[]
+        dict_audit={}
+        for group in TASK_ORDER:
+            dictionary, provenance = assembled_dict(out,group)
+            dict_audit[group]={
+                "path":str(dictionary.relative_to(out)),
+                "sha256":sha(dictionary),"objects":provenance}
+            # A failed stage never blocks other independent stage executions.
+            steps.append(native_group(out,group,dictionary))
+        energy_result=surface_energy_summary(out)
+        final={
+            "schema":"C3D04_A_C14_F14_SOLVER_BACKED_OFFLINE_RECOVERY_V1",
+            "date_utc":datetime.now(timezone.utc).isoformat(),
+            "source_authentication":identity,
+            "original_C14_postprocess_source_hashes":original_fo_hashes,
+            "isolated_new_workcopy":str(out),
+            "geometry_sampling":geometry,
+            "group_dictionary_SHA256":dict_audit,
+            "native_groups":steps,
+            "native_groups_passed":[s["group"] for s in steps if s["passed"]],
+            "native_groups_failed":[s["group"] for s in steps if not s["passed"]],
+            "surface_energy":energy_result,
+            "original_solver_reexecuted":False,
+            "mesh_changed":False,
+            "original_C14_physics_or_controlDict_changed":False,
+            "other_A_old_workcopy_B_FS_modified":False,
+            "in_run_ddt_fields_recovered":False,
+            "in_run_0_001s_probe_10001_history_recovered":False,
+            "full_C14_2D_parity_verified":False,
+            "global_energy_conservation_verified":False,
+            "quickcup_validated":False,
+            "milestones_completed":"6/10","stage":"07/10",
+            "scientific_limits":[
+                "Foundation14 -solver fluid constructs fluid thermo/transport model for native postprocessing without advancing the CFD solver.",
+                "Source C14 phase and cooling rates computed as ddt during the original 0.001s runtime cannot be reconstructed from 0.1s snapshots.",
+                "Postprocessing only of pre-existing fields, not a CFD/mesh/time-step or experimental validation.",
+                "Native face energy sums alone cannot validate global metal+mold heat balance or original latent source accounting.",
+                "The offline profiles deliberately include only original primitive fields, not unavailable ddt/derived fields.",
+                "Any coded/momentum group failure is isolated and remains visibly incomplete; no original C14 model terms were changed.",
+            ],
+        }
+        target=out/REPORT
+        target.write_text(json.dumps(final,indent=2,ensure_ascii=False)+"\n",
+                          encoding="utf-8")
+        print(json.dumps({
+            "status":"NATIVE_SOLVER_BACKED_OFFLINE_ATTEMPT_PRESERVED",
+            "new_copy":str(out),"solver_rerun":False,
+            "groups_passed":final["native_groups_passed"],
+            "groups_failed":final["native_groups_failed"],
+            "failed_group_last_24_lines":{
+                s["group"]:s["log_last_24_lines"] for s in steps if not s["passed"]},
+            "native_energy_power":energy_result,
+            "scientific_validation":False,
+            "stage":"07/10","milestones_done":"6/10",
+            "report":str(target),
+        },indent=2,ensure_ascii=False))
+        return 0  # Audit outcome: per-group PASS/FAIL is always in report.
+    except (OSError,ValueError,KeyError,TypeError) as exc:
+        print("C3D04_A_SOLVER_BACKED_RECOVERY_BLOCKED:",exc,file=sys.stderr)
+        return 2
+
+
+if __name__=="__main__":
+    raise SystemExit(main())
