@@ -1,6 +1,6 @@
 {
   "schema": "masterproject-fs-c07-progress-20261123",
-  "stage": "NATIVE_THERMAL_TRANSITION_RUNNING_REPORTED_BY_RESEARCHER",
+  "stage": "INCOMPLETE_NATIVE_RUN_PENDING_FORENSIC_REPORT_READ",
   "project": "CINVESTAV solidification/shrinkage MasterProject",
   "branch": "research/fs-c02-metal-air-vof-20261117",
   "code_base": "OpenFOAM Foundation 14",
@@ -33,9 +33,9 @@
   "experimentally_validated": false,
   "git_static_workflow_declared": true,
   "git_static_workflow_pass_verified": false,
-  "status": "FS_C07_NATIVE_SOLVER_RUNNING_AT_T0p1143_REPORTED__FULL_HORIZON_PENDING__NO_SHRINKAGE",
+  "status": "FS_C07_NATIVE_RUN_INCOMPLETE_EVIDENCE_PRESERVED__LAST_ERROR_NOT_YET_READ",
   "scientific_next_gate": "Native 1s screen read alpha.metal.solid and T.metal on positive metallic volume; if liquidus not reached, extend horizon only with evidence and stable Courant. Next implement OpenFOAM Foundation14 metal liquid/solid conservative continuity and phase density with traceable alloy properties; do not use fictional massSource.",
-  "latest_repository_update": "Live OpenFOAM FS-C07 confirmed at t≈0.114269 s (99.6% CPU), 203MB and native Q mismatch 0.02098%; observed one time directory each step. Prepared future-only FS-C07 native function object writeTime schedule separate from accepted FS-C06; does not alter running case.",
+  "latest_repository_update": "Recorded FS-C07 EVIDENCE PRESERVED, free WSL 895GB and no basis for disk exhaustion. Added read-only native report/log inspector. Do not rerun or overwrite until actual last_error and last saved physics time are reviewed.",
   "source_initial_fluid_temperature_candidates": [
     "0/fluid/T.metal",
     "0/fluid/T"
@@ -82,5 +82,20 @@
   "new_FS_C07_functions_write_control": "writeTime; writeInterval 1; (global writeControl adjustableRunTime; writeInterval 0.05)",
   "new_FS_C07_function_objects_versioned": true,
   "new_FS_C07_function_objects_WSL_verified": false,
-  "old_active_case_unchanged": true
+  "old_active_case_unchanged": true,
+  "execution_attempt_status_from_console": "FS-C07 EVIDENCE PRESERVED; native report last_error and final log not supplied yet",
+  "execution_attempt_last_error_actual": null,
+  "execution_attempt_stored_logs_inspected": false,
+  "execution_attempt_disk_space_user_report": {
+    "mount": "/dev/sdd",
+    "size_human": "1007G",
+    "used_human": "62G",
+    "available_human": "895G",
+    "use_percent": 7,
+    "verified": "WSL df -h pasted by researcher, not directly inspected"
+  },
+  "execution_attempt_disk_exhaustion_supported_by_df": false,
+  "execution_attempt_diagnostics_script": "analysis_tools/inspect_existing_fs_c07.py",
+  "execution_attempt_diagnostics_wsl_run_verified": false,
+  "execution_attempt_potential_solver_vs_auditor_failure": "UNDETERMINED; report last_error needed"
 }
