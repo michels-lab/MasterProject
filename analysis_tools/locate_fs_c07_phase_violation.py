@@ -222,6 +222,12 @@ def compact_result(report: dict) -> dict:
     rows = []
     for r in results:
         bins = r["bin_by_actual_native_alpha_metal"]
+        counted = sum(g["count_gt_tolerance"] for g in bins.values())
+        if counted != r["cells_above_tolerance"]:
+            raise ValueError(
+                "Native alpha.metal bins do not reproduce actual significant "
+                "solid>metal cell count at time " + str(r["time_s"])
+            )
         rows.append({
             "time_s": r["time_s"],
             "total_native_cells": r["total_native_cells"],
