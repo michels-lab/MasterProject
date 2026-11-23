@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "audit_kind": "deterministic_full_tracked_tree",
-  "tracked_files_total": 39033,
-  "classified_files_total": 39028,
+  "tracked_files_total": 39034,
+  "classified_files_total": 39029,
   "docs_content_inspected": 189,
   "large_docs_skipped": 1,
   "excluded_reports": 5,
@@ -19,7 +19,7 @@
     "simulation_input": 2683,
     "simulation_log": 3155,
     "simulation_output": 32615,
-    "source": 122,
+    "source": 123,
     "test": 55,
     "web_ui": 1,
     "workflow": 30
@@ -29,8 +29,8 @@
     "POTENTIAL_UNLOGGED_CHANGES": 2
   },
   "finding_total": 9,
-  "inventory_fingerprint": "c1e897b3db3b7a39c7ccaf2aa117ccd44e81105538497c3185b70dbbfdd9d98f",
-  "evidence_fingerprint": "01815d4f82f0594e60d76235f116d9db4fd547e35d33f78446e36b51cdd908a4",
+  "inventory_fingerprint": "835ba495d8a207177f5a1bd32869df264364e9b535a8916ca0d0c6639205192a",
+  "evidence_fingerprint": "86075bb8d159a0020a430719e8a4869194dad85bc79c90ea81176553e88e6661",
   "files": [
     {
       "path": ".github/agents/openfoam-solidification.agent.md",
@@ -1963,6 +1963,13 @@
       "purpose": "navigation/onboarding",
       "certainty": "rule",
       "blob": "69882552bc480ed0ee29dc2606bb4652d09d3f3b"
+    },
+    {
+      "path": "cases_3d/C3D_05_step_gmsh_conformal/c14_physics/stage_c14_3d_case_b.py",
+      "role": "source",
+      "purpose": "code/test implementation",
+      "certainty": "rule",
+      "blob": "84c93259fbedf957d8f8228ee49f64a3e1b7b6cc"
     },
     {
       "path": "cases_3d/C3D_05_step_gmsh_conformal/constant/geometry/QuickCupmm.STEP",
@@ -273294,20 +273301,20 @@
       "state": "REVIEW_REQUIRED"
     },
     {
-      "id": "7aea32501e37c1d7",
+      "id": "60301ec6f3df3ef8",
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_EN.md",
-      "observation": "2 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/c14_3d_postprocess_parity.py, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/tests/test_c14_3d_postprocess_parity.py",
+      "observation": "3 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/c14_3d_postprocess_parity.py, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/tests/test_c14_3d_postprocess_parity.py, cases_3d/C3D_05_step_gmsh_conformal/c14_physics/stage_c14_3d_case_b.py",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     },
     {
-      "id": "4a34d0dfb1b0bcc9",
+      "id": "5104be017d0da170",
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_ES.md",
-      "observation": "2 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/c14_3d_postprocess_parity.py, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/tests/test_c14_3d_postprocess_parity.py",
+      "observation": "3 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/c14_3d_postprocess_parity.py, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/tests/test_c14_3d_postprocess_parity.py, cases_3d/C3D_05_step_gmsh_conformal/c14_physics/stage_c14_3d_case_b.py",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     }
