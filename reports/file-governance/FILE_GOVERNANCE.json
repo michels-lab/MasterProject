@@ -25,11 +25,12 @@
     "workflow": 31
   },
   "finding_counts": {
-    "BROKEN_RELATIVE_LINK": 7
+    "BROKEN_RELATIVE_LINK": 7,
+    "POTENTIAL_UNLOGGED_CHANGES": 2
   },
-  "finding_total": 7,
-  "inventory_fingerprint": "c91e3556d896388111f42da80d4c2a0df7fc015fc94053c2ae51c1cca65d83ae",
-  "evidence_fingerprint": "a38cca05722cc62f2a19d8787a386e132771345cc8472199f5e39f915b2e8a45",
+  "finding_total": 9,
+  "inventory_fingerprint": "4b4ddd1869e6f2f96204398221f37ce58ea216e28961d0b70726e53dc0ee68a3",
+  "evidence_fingerprint": "fb0cc8731527741d0fae87523706b44cf5148c477dd1cd507e4ba5cf1b7ea0dd",
   "files": [
     {
       "path": ".github/agents/openfoam-solidification.agent.md",
@@ -1982,7 +1983,7 @@
       "role": "source",
       "purpose": "code/test implementation",
       "certainty": "rule",
-      "blob": "a7bc9aca3c7c909cb61430554896a63f7da5461c"
+      "blob": "07df2581852a81c5eb717e55ec7f4f2d40dfe91c"
     },
     {
       "path": "cases_3d/C3D_05_step_gmsh_conformal/c14_physics/stage_c14_3d_case_b.py",
@@ -273332,6 +273333,24 @@
       "path": "docs/granada/C3D05_T0_README_HISTORICAL_BEFORE_SINGLE_FLOW_20261120.md",
       "observation": "Missing: outside-repo",
       "recommendation": "Fix link or restore target",
+      "state": "REVIEW_REQUIRED"
+    },
+    {
+      "id": "36b9ad38ca8b2f9c",
+      "code": "POTENTIAL_UNLOGGED_CHANGES",
+      "severity": "review",
+      "path": "PROJECT_AUDIT_LOG_EN.md",
+      "observation": "1 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_05_step_gmsh_conformal/c14_physics/run_case_b_c14_native.sh",
+      "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
+      "state": "REVIEW_REQUIRED"
+    },
+    {
+      "id": "4fac020a62cef8b8",
+      "code": "POTENTIAL_UNLOGGED_CHANGES",
+      "severity": "review",
+      "path": "PROJECT_AUDIT_LOG_ES.md",
+      "observation": "1 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_05_step_gmsh_conformal/c14_physics/run_case_b_c14_native.sh",
+      "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     }
   ],
