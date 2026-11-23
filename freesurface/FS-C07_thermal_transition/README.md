@@ -1,6 +1,22 @@
 # FS-C07 — Transitorio térmico nativo previo al modelo de contracción
 
 
+> **23-11-2026 — CORRIDA PRIMERA TERMINÓ CON EVIDENCIA PRESERVADA; CAUSA NO IDENTIFICADA.** El investigador aportó `FS-C07 EVIDENCE PRESERVED: /home/michel/OpenFOAM/FS_C07_RUNS/FS_C07_THERMAL_20261123T183217Z_72da1bf4`, pero **no** la línea precedente de error, el JSON `last_error` ni el final del log. Esto **no permite** inferir error del solver: el mismo mensaje se imprime cuando falla la auditoría Python tras un `foamMultiRun` exitoso, cuando el solver devuelve código no cero o ante timeout. Se observó antes `t=0.1142694919 s`, **no** se ha establecido el tiempo final. El investigador aportó `df -h`: `/dev/sdd`, 1007 GB capacidad, 62 GB usados, **895 GB libres, 7 % utilizado**. No hay evidencia de agotamiento de disco. **No relanzar ni editar la corrida antes de recuperar la causa exacta**.
+
+> Para leer la evidencia **sin CFD ni escritura en el caso**, se incorporó [`analysis_tools/inspect_existing_fs_c07.py`](../../analysis_tools/inspect_existing_fs_c07.py):
+>
+> ```bash
+> cd ~/OpenFOAM/FS_C02_WORKTREE
+> git fetch origin research/fs-c02-metal-air-vof-20261117
+> git switch --detach FETCH_HEAD
+> python3 analysis_tools/inspect_existing_fs_c07.py \
+>   ~/OpenFOAM/FS_C07_RUNS/FS_C07_THERMAL_20261123T183217Z_72da1bf4
+> ```
+>
+> Imprime `FS_C07_REPORT.json.status` y `last_error`, los últimos tiempos nativos `Time =`, el mayor directorio físico por valor numérico (no `sort -V`), el último estado que tenga **alpha.metal, alpha.metal.solid y T.metal** y el final del log para diferenciar fallas del solver y de auditoría. Incluye seis pruebas sintéticas de no modificación de archivos (CI aún no verificado). El ejecutor quedó corregido para que en **futuros** fallos imprima nuevamente `ROOT CAUSE` y último tiempo CFD, sin cambiar la corrida guardada.
+
+
+
 > **23-11-2026 — FS-C07 PRIMER TRANSITORIO NATIVO CONFIRMADO EN EJECUCIÓN (NO COMPLETADO).** Diagnóstico WSL del investigador: PID `7761` (`foamMultiRun`), CPU `99.6%`, tiempo físico `t=0.1142694919 s` tras 5 min 15 s, `deltaT=8.5072638377e-5 s`, `maxCo=0.0999378380216`, `maxAlphaCo=0.0629947162022`, tamaño del caso `203 MB`. Los monitores nativos de pared aportan `Q_fluid=-13857.4604404 W` y `Q_mold=+13860.3677049 W` (`R_Q=+2.9072645 W`, desajuste relativo `0.0209776 %`). El `alpha.metal` de OpenFOAM continúa acotado salvo un residuo negativo ~`1e-45` sin significado físico. **No hay evidencia de que haya terminado ni de que se haya formado metal sólido**.
 
 > **CAUSA DE SALIDA EXCESIVA INVESTIGADA:** existen carpetas de tiempo por cada paso físico, a pesar de `controlDict.writeControl=adjustableRunTime` y `writeInterval=0.05 s`. El FS-C07 inicialmente heredó los diez `system/functions` FS-C06 con `writeControl timeStep; writeInterval 1`; en Foundation14 `wallHeatFlux::write` invoca `writeLocalObjects::write()`, por lo que esta ruta puede emitir volFields incluso cuando la escritura principal es infrecuente. Se versionó un **nuevo** [`native/system/functions`](native/system/functions) exclusivo de FS-C07: los diez monitores conservan `executeControl` nativo pero cambian a `writeControl writeTime; writeInterval 1` para emitir resultados cuando escribe el caso principal (cada 0.05 s). El stager ahora verifica que el FS-C06 original siga intacto y coloca SOLO en la nueva copia los monitores FS-C07 con menor frecuencia. **Esta solución no afecta al proceso ya activo y todavía debe validarse en WSL**. No hacer `git fetch`/reiniciar otro solver para arreglar a mitad de ejecución.
