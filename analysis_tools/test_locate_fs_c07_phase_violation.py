@@ -1,6 +1,9 @@
 """Native FS-C07 spatial allocation diagnostic tests, synthetic, NO CFD."""
 import math
+from pathlib import Path
+import tempfile
 import unittest
+from unittest.mock import patch
 
 import locate_fs_c07_phase_violation as d
 
@@ -90,6 +93,61 @@ class PhaseAllocationSpatialTests(unittest.TestCase):
                      [1500,1500,1500], self.mesh)
         with self.assertRaisesRegex(ValueError, "matching cell counts"):
             d.locate([1], [0.1], [0.1], [1500], self.mesh)
+
+
+    def test_discover_20_real_saved_phase_states_not_function_object_folders(self):
+        with tempfile.TemporaryDirectory() as td:
+            case = Path(td) / "FS_C07_THERMAL_fixture"
+            case.mkdir()
+            for idx in range(1, 21):
+                t = round(idx*0.05, 10)
+                fluid = case / str(t) / "fluid"
+                fluid.mkdir(parents=True)
+                for name in ("alpha.metal", d.MODEL_FIELD, "T.metal"):
+                    (fluid / name).write_text("synthetic mock")
+            (case / "0.12745").mkdir()  # function-object-only time
+            self.assertEqual(
+                d.complete_saved_native_times(case),
+                tuple(round(idx*0.05, 10) for idx in range(1, 21))
+            )
+            (case / "0.25/fluid/T.metal").unlink()
+            with self.assertRaisesRegex(ValueError, "exactly 20"):
+                d.complete_saved_native_times(case)
+
+    def test_compact_all_states_requires_each_core_to_have_zero_significant_violation(self):
+        results = []
+        for idx in range(1, 21):
+            b = {name: {"count_gt_tolerance": 0}
+                 for name in d.BINS}
+            b["alpha_metal_1e-6_to_1e-3"]["count_gt_tolerance"] = 2
+            results.append({
+                "time_s": round(idx*0.05, 10),
+                "total_native_cells": 34368,
+                "cells_above_tolerance": 2,
+                "bin_by_actual_native_alpha_metal": b,
+                "positive_excess_integral_m3_all_cells": idx*1e-13,
+                "top_8_by_local_excess": [{"excess_fraction": idx*1e-7}],
+            })
+        report = {
+            "results": results,
+            "case_modified": False,
+            "solver_rerun": False,
+        }
+        got = d.compact_result(report)
+        self.assertTrue(got["all_20_states_have_zero_core_cell_excess_above_threshold"])
+        self.assertEqual(got["max_core_cells_exceeding_threshold_any_state"], 0)
+        self.assertEqual(got["total_cell_time_incidences_above_threshold"], 40)
+        self.assertEqual(got["peak_integrated_excess_time_s"], 1.0)
+        self.assertEqual(len(got["results"]), 20)
+        self.assertFalse(got["case_modified"])
+        self.assertTrue(got["no_new_native_solver_run"])
+        results[3]["bin_by_actual_native_alpha_metal"]["alpha_metal_ge_0p5"][
+            "count_gt_tolerance"
+        ] = 1
+        got2 = d.compact_result(report)
+        self.assertFalse(got2["all_20_states_have_zero_core_cell_excess_above_threshold"])
+        self.assertEqual(got2["max_core_cells_exceeding_threshold_any_state"], 1)
+
 
 
 if __name__ == "__main__":
