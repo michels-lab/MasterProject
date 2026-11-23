@@ -193,5 +193,116 @@ class NativeSolverBackedStage07Tests(unittest.TestCase):
         self.assertFalse(result["global_energy_conservation_verified"])
 
 
+class ExistingNewCopyNonDestructiveInspectionTests(unittest.TestCase):
+    def setUp(self):
+        tmp=tempfile.TemporaryDirectory()
+        self.addCleanup(tmp.cleanup)
+        self.root=Path(tmp.name)
+        self.c14=self.root/"ORIGINAL_C14"
+        self.case=self.root/"C14_10S_REAL"
+        self.copy=self.root/"C14_NATIVE_NEW_COPY_02"
+        self.recovery=self.root/"C14_STAGE07_KINETICS"
+        self.forensic=self.root/"C14_STAGE07_FAILED_COPY_FORENSICS"
+        (self.c14/"system").mkdir(parents=True)
+        (self.case/"system").mkdir(parents=True)
+        (self.copy/"system").mkdir(parents=True)
+        self.recovery.mkdir()
+        self.forensic.mkdir()
+        for base in (self.c14,self.case,self.copy):
+            (base/"system/controlDict").write_text("ORIGINAL C14 controlDict\n")
+        for base in (self.case,self.copy):
+            (base/"log.foamMultiRun").write_text("Time = 10s\nEnd\n")
+        (self.recovery/"C3D04_A_STAGE07_RECOVERY_REPORT.json").write_text("{}\n")
+        (self.forensic/"C3D04_A_C14_NATIVE_STAGE07_FORENSIC_REPORT.json").write_text("{}\n")
+        prev=sut.C14
+        sut.C14=self.c14
+        self.addCleanup(lambda:setattr(sut,"C14",prev))
+        self.groups=[]
+        for i,g in enumerate(sut.TASK_ORDER):
+            f=self.copy/("log.C14_3D_postprocess_solverBacked_"+g)
+            f.write_text("start\nEnd\n" if i != 5 else
+                         "--> FOAM FATAL ERROR:\nfield missing\n")
+            self.groups.append({
+                "group":g,"name":"solverBacked_"+g,
+                "exit_code":0 if i != 5 else 2,
+                "passed":i != 5,
+                "log":f.name,
+                "log_sha256":sut.sha(f),
+            })
+        self.report=self.copy/sut.REPORT
+        self.report.write_text(json.dumps({
+            "schema":"C3D04_A_C14_F14_SOLVER_BACKED_OFFLINE_RECOVERY_V1",
+            "isolated_new_workcopy":str(self.copy),
+            "source_authentication":{
+                "case":str(self.case),
+                "original_10s_solver_log_sha256":
+                    sut.sha(self.case/"log.foamMultiRun"),
+                "original_C14_controlDict_sha256":
+                    sut.sha(self.c14/"system/controlDict"),
+                "recovery_report_sha256":sut.sha(
+                    self.recovery/"C3D04_A_STAGE07_RECOVERY_REPORT.json"),
+                "forensic_report_sha256":sut.sha(
+                    self.forensic/"C3D04_A_C14_NATIVE_STAGE07_FORENSIC_REPORT.json"),
+            },
+            "native_groups":self.groups,
+            "native_groups_passed":[x["group"] for x in self.groups if x["passed"]],
+            "native_groups_failed":[x["group"] for x in self.groups if not x["passed"]],
+            "surface_energy":{"status":"METAL_SURFACE_POWER_101_STATES_DIAGNOSTIC",
+                              "global_energy_conservation_verified":False},
+        }))
+
+    def inspect(self):
+        return sut.inspect_occupied_copy(
+            self.case,self.copy,self.recovery,self.forensic)
+
+    def test_completed_earlier_run_is_identified_no_new_commands_or_writes(self):
+        data=[(p,sut.sha(p)) for p in [
+            self.report,self.case/"log.foamMultiRun",
+            self.copy/"log.C14_3D_postprocess_solverBacked_core"]]
+        with mock.patch.object(sut.old,"run_native",
+                               side_effect=AssertionError("must never call native")):
+            state=self.inspect()
+        self.assertEqual(state["status"],
+                         "EXISTING_COMPLETE_NATIVE_POSTPROCESS_REPORT_REUSED_NO_NEW_RUN")
+        self.assertEqual(state["native_groups_failed"],["momentum"])
+        self.assertEqual(len(state["native_groups_passed"]),5)
+        self.assertFalse(state["native_validation_verified"])
+        self.assertFalse(state["global_energy_conservation_verified"])
+        self.assertEqual(data,[(p,sut.sha(p)) for p,_ in data])
+
+    def test_partial_workcopy_no_final_report_preserved_and_not_marked_pass(self):
+        self.report.unlink()
+        state=self.inspect()
+        self.assertEqual(state["status"],
+                         "EXISTING_COPY_PARTIAL_OR_POSSIBLY_ACTIVE_PRESERVED")
+        self.assertFalse(state["final_report_present"])
+        self.assertTrue(state["per_group_logs"]["energy"]["present"])
+        self.assertTrue(state["copy_10s_solver_log_SHA_matches"])
+        self.assertTrue(state["can_prove_other_process_not_running"] is False)
+        self.assertFalse(self.report.exists())
+
+    def test_changed_native_group_log_invalidates_completed_report(self):
+        original=sut.sha(self.report)
+        logfile=self.copy/"log.C14_3D_postprocess_solverBacked_core"
+        logfile.write_text(logfile.read_text()+"New divergent log evidence\n")
+        state=self.inspect()
+        self.assertEqual(state["status"],
+                         "EXISTING_COPY_PARTIAL_OR_POSSIBLY_ACTIVE_PRESERVED")
+        self.assertIn("provenance",state["reason"])
+        self.assertEqual(sut.sha(self.report),original)
+
+    def test_mismatched_source_authentication_is_not_accepted_as_complete(self):
+        (self.case/"log.foamMultiRun").write_text("modified forbidden source\n")
+        state=self.inspect()
+        self.assertIn("authenticated original source",state["reason"])
+        self.assertFalse(state.get("final_report_sha_verified",False))
+
+    def test_symlink_or_directory_instead_of_regular_copy_blocks(self):
+        alias=self.root/"unsafe_alias"
+        alias.symlink_to(self.copy,target_is_directory=True)
+        with self.assertRaisesRegex(sut.Blocked,"symlink"):
+            sut.inspect_occupied_copy(self.case,alias,self.recovery,self.forensic)
+
+
 if __name__=="__main__":
     unittest.main()
