@@ -5,15 +5,21 @@ on:
     paths:
       - "docs/C3D04_CASE_A_STATUS.json"
       - "docs/C3D_04_C14_V4_T02_REAL_10S_20261123_ES.md"
+      - "docs/C3D_04_C14_V4_T02_REAL_10S_PHASE_NUMERICAL_RESULTS_20261123_ES.md"
       - "cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/analyze_existing_c14_3d_results.py"
       - "cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/tests/test_existing_c14_3d_results.py"
+      - "cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/summarize_existing_c14_phase_timeline.py"
+      - "cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/tests/test_existing_c14_phase_timeline.py"
       - ".github/workflows/c3d04-a-c14-real-10s-postrun-readonly.yml"
   pull_request:
     paths:
       - "docs/C3D04_CASE_A_STATUS.json"
       - "docs/C3D_04_C14_V4_T02_REAL_10S_20261123_ES.md"
+      - "docs/C3D_04_C14_V4_T02_REAL_10S_PHASE_NUMERICAL_RESULTS_20261123_ES.md"
       - "cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/analyze_existing_c14_3d_results.py"
       - "cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/tests/test_existing_c14_3d_results.py"
+      - "cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/summarize_existing_c14_phase_timeline.py"
+      - "cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/tests/test_existing_c14_phase_timeline.py"
       - ".github/workflows/c3d04-a-c14-real-10s-postrun-readonly.yml"
 
 permissions:
@@ -32,7 +38,9 @@ jobs:
           from pathlib import Path
           base=Path("cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics")
           for p in (base/"analyze_existing_c14_3d_results.py",
-                    base/"tests/test_existing_c14_3d_results.py"):
+                    base/"tests/test_existing_c14_3d_results.py",
+                    base/"summarize_existing_c14_phase_timeline.py",
+                    base/"tests/test_existing_c14_phase_timeline.py"):
               compile(p.read_bytes(),str(p),"exec")
               print("COMPILE_OK",p)
           PY
@@ -41,6 +49,9 @@ jobs:
           PYTHONDONTWRITEBYTECODE=1 python3 -B -m unittest discover \
             -s cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/tests \
             -p test_existing_c14_3d_results.py -v
+          PYTHONDONTWRITEBYTECODE=1 python3 -B -m unittest discover \
+            -s cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/tests \
+            -p test_existing_c14_phase_timeline.py -v
       - name: Canonical C3D04-A exactly 6/10 stage07 with actual WSL evidence
         run: |
           PYTHONDONTWRITEBYTECODE=1 python3 -B \
