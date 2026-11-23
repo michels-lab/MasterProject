@@ -25,11 +25,12 @@
     "workflow": 32
   },
   "finding_counts": {
-    "BROKEN_RELATIVE_LINK": 7
+    "BROKEN_RELATIVE_LINK": 7,
+    "POTENTIAL_UNLOGGED_CHANGES": 2
   },
-  "finding_total": 7,
-  "inventory_fingerprint": "54a63c3f3b4018caf64ff9c29aec1c1e15c736f69e20d3ebbaf8c8d9e10e2094",
-  "evidence_fingerprint": "a38cca05722cc62f2a19d8787a386e132771345cc8472199f5e39f915b2e8a45",
+  "finding_total": 9,
+  "inventory_fingerprint": "c1cc9add6f6f4f253a4acac3f06a287fdb8cfcc4a597c40b3f32e685c5f8f1e1",
+  "evidence_fingerprint": "612fca58ac4aeb879f3e0208aa8e8f4ec67610377872b7e255bfc546f0373a9b",
   "files": [
     {
       "path": ".github/agents/openfoam-solidification.agent.md",
@@ -323,7 +324,7 @@
       "role": "agent",
       "purpose": "assistant role/instructions",
       "certainty": "rule",
-      "blob": "7f674827fd967cb46e2fd0e70898af4a13e5d29d"
+      "blob": "b1696cc8f6df19694430d5ef7276e28cde1ab5f7"
     },
     {
       "path": "CASE_GUIDE_ES.md",
@@ -344,7 +345,7 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "974584092931a2502a9ae5fca520530912a186ae"
+      "blob": "d0b70d107a102e95d9ed85a8db91811601af6bed"
     },
     {
       "path": "JMATPRO_OPENFOAM_TRACEABILITY_ES.md",
@@ -272434,7 +272435,7 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "885e28f31c884f3e71eb9a2157868258d53ed9bc"
+      "blob": "3ef5620769be2f7f7ba0b4f2ee247ae51dceda82"
     },
     {
       "path": "docs/granada/B11_C11_ENERGY2_DOCUMENTATION_AUDIT_20261021.md",
@@ -273260,7 +273261,7 @@
       "role": "source",
       "purpose": "code/test implementation",
       "certainty": "rule",
-      "blob": "59a3d7f2e7c3444d618914e18b8177127e53d65b"
+      "blob": "6cc7407b131a594756c166ad2aeb1915d98368af"
     },
     {
       "path": "tools/repository_file_auditor.py",
@@ -273295,7 +273296,7 @@
       "role": "test",
       "purpose": "code/test implementation",
       "certainty": "rule",
-      "blob": "bd9a7e29af61caa8a5a50375dc5e3b4fa6870d9a"
+      "blob": "f5fa768549adc56c98b67029effe03c86a320b64"
     }
   ],
   "findings": [
@@ -273360,6 +273361,24 @@
       "path": "docs/granada/C3D05_T0_README_HISTORICAL_BEFORE_SINGLE_FLOW_20261120.md",
       "observation": "Missing: outside-repo",
       "recommendation": "Fix link or restore target",
+      "state": "REVIEW_REQUIRED"
+    },
+    {
+      "id": "fb65857ae7f10a52",
+      "code": "POTENTIAL_UNLOGGED_CHANGES",
+      "severity": "review",
+      "path": "PROJECT_AUDIT_LOG_EN.md",
+      "observation": "2 implementation/config paths changed since this log's last commit; examples: tools/isolate_active_openfoam_cases.py, tools/tests/test_isolate_active_openfoam_cases.py",
+      "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
+      "state": "REVIEW_REQUIRED"
+    },
+    {
+      "id": "eb36f06900e04a0e",
+      "code": "POTENTIAL_UNLOGGED_CHANGES",
+      "severity": "review",
+      "path": "PROJECT_AUDIT_LOG_ES.md",
+      "observation": "2 implementation/config paths changed since this log's last commit; examples: tools/isolate_active_openfoam_cases.py, tools/tests/test_isolate_active_openfoam_cases.py",
+      "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     }
   ],
