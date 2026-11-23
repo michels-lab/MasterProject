@@ -112,6 +112,7 @@ class BFS01Tests(unittest.TestCase):
     def test_stage_preserves_thermo_and_writes_volume_instrumentation(self):
         self.staged()
         self.assertIn("waterVolume",(self.dest/"system/controlDict").read_text())
+        self.assertIn("writeFields false;",(self.dest/"system/controlDict").read_text())
         self.assertIn("volIntegrate",(self.dest/"system/controlDict").read_text())
         self.assertIn("writeInterval 0.01;",(self.dest/"system/controlDict").read_text())
         self.assertIn("maxAlphaCo 0.25;",(self.dest/"system/controlDict").read_text())

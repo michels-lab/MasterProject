@@ -103,6 +103,7 @@ functions
         cellZone all;
         operation volIntegrate;
         fields (alpha.water);
+        writeFields false;
         executeControl writeTime;
         writeControl writeTime;
         writeInterval 1;
