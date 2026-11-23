@@ -72,10 +72,14 @@ def source_preflight(src: Path) -> dict:
             and previous.get("native_cfd_executed") is True
             and previous.get("solid_fraction_fields_measured") is True,
             "FS-C06 CFD provenance not accepted")
-    for relative in ("0/fluid/T.metal", "0/fluid/alpha.metal",
+    for relative in ("0/fluid/alpha.metal",
                      "0/mold/T", "constant/fluid/polyMesh/points",
                      "constant/mold/polyMesh/points"):
         require((src / relative).is_file(), "missing initial file " + relative)
+    initial_metal_T = src / "0/fluid/T.metal"
+    if not initial_metal_T.is_file():
+        initial_metal_T = src / "0/fluid/T"
+    require(initial_metal_T.is_file(), "no initial thermal field in accepted fluid case")
     for name in ("1e-07", "2e-07"):
         # Source may use different numeric representations.
         require(any(time_dir(p.name) == float(name)
@@ -101,7 +105,8 @@ def source_preflight(src: Path) -> dict:
                             "sha256": digest(p)} for p in files]
     return {"native_FS_C06_report_sha256": digest(report_file),
             "source_monitor_sha256": available,
-            "initial_T_metal_sha256": digest(src / "0/fluid/T.metal"),
+            "initial_temperature_source": str(initial_metal_T.relative_to(src)),
+            "initial_temperature_sha256": digest(initial_metal_T),
             "initial_alpha_metal_sha256": digest(src / "0/fluid/alpha.metal")}
 
 
