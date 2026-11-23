@@ -60,6 +60,33 @@ def main()->int:
         print("NATIVE_SOLVER_BACKED_SMOKE_FAILED: no C14 rho*h output table")
         return 4
     print("NATIVE_SOLVER_BACKED_RHO_H_REAL_FOUNDATION14_POSTPROCESS_PASS")
+    # Test the actual dependency order required for contact/top face power.
+    # This is a two-step disposable 27-cell/region CI case, NOT V4/T02.
+    energy_dict,_=production.assembled_dict_for_native_smoke(target)
+    run_energy=["foamPostProcess","-region","metal","-solver","fluid",
+                "-dict","system/"+energy_dict.name,"-latestTime"]
+    energy_process=subprocess.run(
+        run_energy,cwd=target,capture_output=True,text=True,
+        check=False,timeout=180)
+    energy_log=target/"log.stage07.native.flux.energy.smoke"
+    energy_log.write_text(
+        "ARGS: "+" ".join(run_energy)+"\\nRC: "+str(energy_process.returncode)
+        +"\\nSTDOUT:\\n"+energy_process.stdout
+        +"\\nSTDERR:\\n"+energy_process.stderr,
+        encoding="utf-8")
+    print("SOLVER_BACKED_NATIVE_ENERGY_FLUX_SMOKE_RESULT",json.dumps({
+        "exit_code":energy_process.returncode,"log":str(energy_log),
+        "tail":(energy_process.stdout+energy_process.stderr)[-2000:]}))
+    if energy_process.returncode:
+        return 5
+    # All 3 face-power output families must be produced, not merely execute.
+    for name in ("metalTopEnergyPower","metalMoldEnergyPower",
+                 "metalBoundaryEnergyPower"):
+        root=target/"postProcessing/metal"/name
+        if not root.is_dir() or not list(root.rglob("surfaceFieldValue.dat")):
+            print("NATIVE_SOLVER_BACKED_SMOKE_FAILED: missing energy table "+name)
+            return 6
+    print("NATIVE_SOLVER_BACKED_3_SURFACE_ENERGY_POWER_TABLES_F14_PASS")
     return 0
 
 
