@@ -25,12 +25,11 @@
     "workflow": 29
   },
   "finding_counts": {
-    "BROKEN_RELATIVE_LINK": 7,
-    "POTENTIAL_UNLOGGED_CHANGES": 2
+    "BROKEN_RELATIVE_LINK": 7
   },
-  "finding_total": 9,
-  "inventory_fingerprint": "a1bb479a0c62aa1167f04f2aaee60daa107795a6b59293823890262e43b4ef74",
-  "evidence_fingerprint": "b86f1380828626e42c749df5e981f711393ffb56c430322cb148d13dd9067145",
+  "finding_total": 7,
+  "inventory_fingerprint": "038236b249ab3b1d4bc6c93de3ae85a8b82a8d58ad57addfce71b8f83a002f9f",
+  "evidence_fingerprint": "a38cca05722cc62f2a19d8787a386e132771345cc8472199f5e39f915b2e8a45",
   "files": [
     {
       "path": ".github/agents/openfoam-solidification.agent.md",
@@ -380,21 +379,21 @@
       "role": "bitacora",
       "purpose": "technical/audit change history",
       "certainty": "rule",
-      "blob": "a07b11d2c426725f0c38d200350ff2cc36fec6cb"
+      "blob": "00256cd3cc71b541b9e75f56ae4de721d9ad8cef"
     },
     {
       "path": "PROJECT_AUDIT_LOG_ES.md",
       "role": "bitacora",
       "purpose": "technical/audit change history",
       "certainty": "rule",
-      "blob": "3649d2eaed9e38bec580e5553b76b0f230dcd34d"
+      "blob": "59b641241073211c09d22b2ce2d4e649c94c1141"
     },
     {
       "path": "README.md",
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "315ec50c036f770bc4f8d211117b4942141ffe4c"
+      "blob": "073bec3f851b9a08dd9fd3ae97aefea6b760a259"
     },
     {
       "path": "RUN_CASE_REGISTRY.csv",
@@ -422,14 +421,14 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "7a648de57689cf5b633c6767049adb4238e1d7d1"
+      "blob": "0fb14c5e974430c48e07849490c8ff3113173c51"
     },
     {
       "path": "VALIDATION_MATRIX_ES.md",
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "968a33cc732edfebd3146724fb5661371c9c9543"
+      "blob": "baabc62b8053a5f465c36397fbb751fb47eeffe1"
     },
     {
       "path": "analysis_results/c11_energy2_test/summary.md",
@@ -1899,7 +1898,7 @@
       "role": "agent",
       "purpose": "assistant role/instructions",
       "certainty": "rule",
-      "blob": "7c545dbbca86e6284495c0dc33f9f04d2b6ccec8"
+      "blob": "0f5176f7cd5d84520ef992849a9e448d8dce6606"
     },
     {
       "path": "cases_3d/C3D_05_step_gmsh_conformal/Allmesh",
@@ -1913,7 +1912,7 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "4aa7fdbee7dbf5d18ec36c12238b560b02a5edd8"
+      "blob": "907286ebdf6f8aee6d9896c1965c858b5e882b69"
     },
     {
       "path": "cases_3d/C3D_05_step_gmsh_conformal/constant/geometry/QuickCupmm.STEP",
@@ -2060,7 +2059,7 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "028d02b9a761be3a786802d93497f3cb4bdf6c5e"
+      "blob": "7d6639c4f8ec62248f21ea36ee336d48491dcc4c"
     },
     {
       "path": "cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/T0_INPUTS.json",
@@ -272323,7 +272322,7 @@
       "role": "config",
       "purpose": "machine-readable configuration",
       "certainty": "rule",
-      "blob": "06ab92712f93364a7cbf9ce52e873a9ed3477618"
+      "blob": "5123848b15065cac2c43b7dc202b55e5c376c44e"
     },
     {
       "path": "docs/REGLA_INSTRUCCIONES_UNIFICADAS_ES.md",
@@ -273228,24 +273227,6 @@
       "path": "docs/granada/C3D05_T0_README_HISTORICAL_BEFORE_SINGLE_FLOW_20261120.md",
       "observation": "Missing: outside-repo",
       "recommendation": "Fix link or restore target",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "ba6fb314fe97c7b4",
-      "code": "POTENTIAL_UNLOGGED_CHANGES",
-      "severity": "review",
-      "path": "PROJECT_AUDIT_LOG_EN.md",
-      "observation": "10 implementation/config paths changed since this log's last commit; examples: .github/workflows/c3d04-a-c14-real-10s-postrun-readonly.yml, .github/workflows/case-a-t0-stage-contract.yml, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/analyze_existing_c14_3d_results.py, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/summarize_existing_c14_phase_timeline.py, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/tests/test_existing_c14_3d_results.py, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/tests/test_existing_c14_phase_timeline.py",
-      "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "ec2acdd569aa0126",
-      "code": "POTENTIAL_UNLOGGED_CHANGES",
-      "severity": "review",
-      "path": "PROJECT_AUDIT_LOG_ES.md",
-      "observation": "10 implementation/config paths changed since this log's last commit; examples: .github/workflows/c3d04-a-c14-real-10s-postrun-readonly.yml, .github/workflows/case-a-t0-stage-contract.yml, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/analyze_existing_c14_3d_results.py, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/summarize_existing_c14_phase_timeline.py, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/tests/test_existing_c14_3d_results.py, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/tests/test_existing_c14_phase_timeline.py",
-      "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     }
   ],
