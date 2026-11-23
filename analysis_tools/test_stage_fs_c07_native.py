@@ -7,6 +7,7 @@ import unittest
 from stage_fs_c07_native import (
     CONTROL, FUNCTIONS, FVMODELS, MONITORS,
     source_preflight, stage, audit_native_monitor_files,
+    read_cfd_time_from_log,
 )
 
 
@@ -157,6 +158,30 @@ class FS_C07_Staging(unittest.TestCase):
             (folder / "probe.dat").write_text("# Time output\n")
         with self.assertRaisesRegex(ValueError, "no numerical rows"):
             audit_native_monitor_files(self.dest, 1.0)
+
+
+    def test_live_log_parser_recovers_last_native_time(self):
+        with tempfile.TemporaryDirectory() as t:
+            log = Path(t) / "log.FS_C07_foamMultiRun"
+            log.write_text(
+                "Create time\nTime = 0\nPIMPLE: iteration 1\n"
+                "ExecutionTime = 0.5 s\n"
+                "Time = 1e-07\n"
+                "Time = 0.0004\n"
+                "Courant Number mean: 0.1 max: 0.2\n"
+            )
+            sim_time, size = read_cfd_time_from_log(log)
+            self.assertEqual(sim_time, 4e-4)
+            self.assertEqual(size, log.stat().st_size)
+
+    def test_live_log_parser_does_not_invent_progress(self):
+        with tempfile.TemporaryDirectory() as t:
+            log = Path(t) / "log.FS_C07_foamMultiRun"
+            log.write_text("OpenFOAM Foundation14 solver starting...\n")
+            sim_time, size = read_cfd_time_from_log(log)
+            self.assertIsNone(sim_time)
+            self.assertGreater(size, 0)
+
 
 
 if __name__ == "__main__":
