@@ -185,13 +185,57 @@
     "experimental_validation_complete": false,
     "spatial_native_flux_postrun_source_committed": true,
     "spatial_native_flux_postrun_test_source_committed": true,
-    "spatial_native_flux_postrun_wsl_executed": false,
-    "spatial_native_flux_postrun_wsl_outputs_generated": false,
+    "spatial_native_flux_postrun_wsl_executed": true,
+    "spatial_native_flux_postrun_wsl_outputs_generated": true,
     "spatial_native_flux_postrun_output_directory": "~/OpenFOAM/C3D05_B_T0_SPATIAL_DIAGNOSTICS_01",
     "spatial_native_flux_postrun_source": "cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/scripts/analyze_existing_t0_spatial.py",
-    "spatial_native_flux_postrun_report": "docs/granada/C3D05_FLUJO_ESPACIAL_Y_PUERTA_FISICA_20261123_ES.md",
+    "spatial_native_flux_postrun_report": "docs/granada/C3D05_B_Q_ESPACIAL_REAL_6_TIEMPOS_Y_CONTRASTE_ENERGIA_20261123_ES.md",
     "spatial_native_flux_postrun_scope": "12 longitudinal Y bands and native paired q face centres x_m/y_m/z_m for ParaView, q/energy SHA verification, no native solver or mesh, no physical acceptance",
-    "spatial_native_flux_postrun_ci_execution_verified": false
+    "spatial_native_flux_postrun_ci_execution_verified": false,
+    "spatial_native_flux_postrun_wsl_report_status": "C3D05_B_SPATIAL_NATIVE_Q_PUBLISHED_NOT_PHYSICALLY_ACCEPTED",
+    "spatial_native_flux_postrun_number_paired_faces_per_side": 12636,
+    "spatial_native_flux_postrun_number_temporal_samples": 6,
+    "spatial_native_flux_postrun_number_axial_bands": 12,
+    "spatial_native_flux_postrun_WSL_data_directly_mounted_or_attested": false,
+    "spatial_native_flux_WSL_times_s": [
+      0,
+      0.02,
+      0.04,
+      0.06,
+      0.08,
+      0.1
+    ],
+    "spatial_native_flux_WSL_metal_outward_W": [
+      0,
+      31964.349507504317,
+      26922.3326721436,
+      23539.61552765752,
+      21098.993690449217,
+      19247.798718713468
+    ],
+    "spatial_native_flux_WSL_max_abs_face_q_W_m2": [
+      0,
+      7916666.107165879,
+      5486496.907724503,
+      4626412.033997418,
+      4229733.292677608,
+      3955033.0061154533
+    ],
+    "spatial_native_flux_WSL_mold_outward_W": [
+      0,
+      -31964.349507504317,
+      -26922.3326721436,
+      -23539.61552765752,
+      -21098.993690449217,
+      -19247.79871871347
+    ],
+    "spatial_native_flux_trapezoid_6_samples_interface_heat_J_approx": 2262.9838151422277,
+    "spatial_native_flux_metal_sensible_heat_loss_from_rounded_meanT_J_approx": 2640.6952603683435,
+    "spatial_native_flux_mold_sensible_heat_gain_from_rounded_meanT_J_approx": 2640.693742081372,
+    "spatial_native_flux_trapezoid_undershoot_vs_metal_energy_fraction_approx": 0.1430348480170445,
+    "spatial_native_flux_first_interval_trapezoid_undershoot_J_approx": 391.75939136271273,
+    "spatial_native_flux_zero_at_initial_recorded": true,
+    "spatial_native_flux_quadrature_interpretation": "6 saved q snapshots are NOT a time-resolved integral at solver dt=0.001; especially q(t=0)=0 and first 0-0.02s rapidly varying. 14.3% difference from coarse snapshot trapezoid versus volume-energy loss is NOT solver energy leakage or a validated q(t) integral. True cause breakdown needs further scientific diagnostics."
   },
   "other_cases": [
     {
@@ -227,11 +271,11 @@
     },
     {
       "case_id": "C3D-05 Caso B",
-      "status": "T0 de referencia C14 numérica 6/6 completa sobre 270788 HEX8 en WSL. Nuevo código Python de solo lectura para mapas q axiales (12 bandas y nube de 12636 centros) publicado, no ejecutado sobre CSV WSL. Pendientes propiedades JMatPro/QuickCup y validación física. 2/7=29% hitos; G3/G4 abiertos.",
-      "evidence": "docs/granada/C3D05_FLUJO_ESPACIAL_Y_PUERTA_FISICA_20261123_ES.md"
+      "status": "WSL C14 numerical T0: all 270788 HEX8 and 12636 interface face pairs/side. Read-only 12-band spatial q 6 time samples now EXECUTED; q metal 31.964 kW at 0.02 s to 19.248 kW at 0.1 s; q(t=0)=0. Trapezoid of six samples ~2263 J vs volume-average metal loss ~2641 J, difference ~14.3% is temporal sampling/integral diagnostic NOT solver energy leakage. Physical G3/G4 JMatPro/QuickCup and time/multi-mesh sensitivity open. 3/7,2/7=29% technical.",
+      "evidence": "docs/granada/C3D05_B_Q_ESPACIAL_REAL_6_TIEMPOS_Y_CONTRASTE_ENERGIA_20261123_ES.md"
     }
   ],
-  "blocker": "Bloqueo del modelo FÍSICO de Caso B, no del diagnóstico T0 C14 numérico ya completado: faltan propiedades de hierro/arena trazables, IC/BC de vaciado y contacto, curvas experimentales QuickCup y estudios de convergencia/dt con 1826 caras no ortogonales severas. Script de análisis espacial q 12 bandas y nube de 12636 caras publicado 23-11-2026 pero aún NO ejecutado contra CSV WSL; CI sin verificación de ejecución aquí.",
-  "next_integrated_delivery": "Ejecutar UNA SOLA VEZ el analizador Python de solo lectura de q real preservado (sin foamMultiRun, wmake, Gmsh ni reauditoría de malla); analizar distribución axial de 12636 caras en CSV e importar puntos SI a ParaView. Después preparar y verificar entradas de hierro/arena JMatPro y QuickCup para T0 físico sin inventar valores; mantener G3/G4 abiertos.",
-  "science": "WSL_REAL_270788_HEX8_C14_NUMERICAL_T0_END_TO_END_COMPLETE_ENERGY_AND_BILATERAL_Q_SHA_NOT_PHYSICALLY_VALIDATED"
+  "blocker": "Real C14 two-solid numerical T0 fully completed and first 12-band q spatial analysis successfully published from native WSL CSV (12636 faces/side x 6 times), no solver or mesh rerun. Scientific finding: six-snapshot q trapezoid underestimates volume-energy loss by ~14.3%, dominated by initial t=0-0.02s with q(0)=0; NOT a direct loss of energy by solver. Pending inspect real CSV band distribution + ParaView, establish sufficient time-sampled q integration and material/BC QuickCup/JMatPro for physical T0, mesh/dt sensitivity, 1826 severe nonorthogonal faces.",
+  "next_integrated_delivery": "Analyze real spatial q CSV and point cloud in ParaView (Table To Points using x_m,y_m,z_m), diagnose high q hot spots and q(t) early-time interpolation/integration separately from 3D volumetric energy. Prepare documented JMatPro/QuickCup physical metal-sand model and future controlled time sensitivity (NO rerun archived C14 case). Keep G3-G7 open.",
+  "science": "WSL_NATIVE_C14_NUMERICAL_T0_AND_SPATIAL_INTERFACE_Q_12_BANDS_6_SAMPLES_COMPLETE_270788_HEX8_NOT_PHYSICALLY_VALIDATED"
 }
