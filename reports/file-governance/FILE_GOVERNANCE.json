@@ -25,12 +25,11 @@
     "workflow": 31
   },
   "finding_counts": {
-    "BROKEN_RELATIVE_LINK": 7,
-    "POTENTIAL_UNLOGGED_CHANGES": 2
+    "BROKEN_RELATIVE_LINK": 7
   },
-  "finding_total": 9,
-  "inventory_fingerprint": "80175672debe9aa26866f99cc6ffa7a2e87c076bf3aa392096523d17876d529b",
-  "evidence_fingerprint": "b431eb29dbf7237acd96dc9e1fcacc522665ee14d6bbfd41ad44df869b4bd7b7",
+  "finding_total": 7,
+  "inventory_fingerprint": "c91e3556d896388111f42da80d4c2a0df7fc015fc94053c2ae51c1cca65d83ae",
+  "evidence_fingerprint": "a38cca05722cc62f2a19d8787a386e132771345cc8472199f5e39f915b2e8a45",
   "files": [
     {
       "path": ".github/agents/openfoam-solidification.agent.md",
@@ -338,7 +337,7 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "a626d052920ae318b12d3ce4dcbf27c420f8ceae"
+      "blob": "53bc95bde047e0bbd9634d14f7711fca9a1c3940"
     },
     {
       "path": "JMATPRO_OPENFOAM_TRACEABILITY_ES.md",
@@ -352,7 +351,7 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "f8efc54fb8319eb8a35753ce3167a9260914b7f9"
+      "blob": "4acb4b8d729fde118fcdcb2bc99381f842d133ec"
     },
     {
       "path": "OPENFOAM_COMMAND_MANUAL.md",
@@ -387,28 +386,28 @@
       "role": "bitacora",
       "purpose": "technical/audit change history",
       "certainty": "rule",
-      "blob": "5e9d0f019694d08da08283fb5b551643d70bd96f"
+      "blob": "dfb31eda65a115f0e375c65a9d56cbbda69af838"
     },
     {
       "path": "PROJECT_AUDIT_LOG_EN.md",
       "role": "bitacora",
       "purpose": "technical/audit change history",
       "certainty": "rule",
-      "blob": "b68e1d1e35615c5b5a5f09d95e00ecd347d6352a"
+      "blob": "ddb30b8cc6d15bb409729dad55de8854b5914ee1"
     },
     {
       "path": "PROJECT_AUDIT_LOG_ES.md",
       "role": "bitacora",
       "purpose": "technical/audit change history",
       "certainty": "rule",
-      "blob": "af0eb36332083dbfb6a43c18b5e01a3bac26186a"
+      "blob": "a98f4eee72ba99e27b334e7404fd704bfa6a1c73"
     },
     {
       "path": "README.md",
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "7f13deea05e0c456aca30200b6008315bd086b7e"
+      "blob": "a61175f0a35816624f511975d888289141595069"
     },
     {
       "path": "RUN_CASE_REGISTRY.csv",
@@ -422,28 +421,28 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "c2dd828219a99d4a03df5c76b82d88ea800b2147"
+      "blob": "e384b9f1133c9bee29acca3433932524bdd1d2c5"
     },
     {
       "path": "VALIDATION_MATRIX.md",
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "39aba0a849a3eb6936fc2137f3655bbbb1728727"
+      "blob": "77e0c3aca93c4cfb4c590f390f8164ae02d5ffac"
     },
     {
       "path": "VALIDATION_MATRIX_EN.md",
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "bc7c6831d3e04cc4d2abaf42ac2f29c1b1efce2b"
+      "blob": "145cf05463120dec0c80dcd103de970685172fb6"
     },
     {
       "path": "VALIDATION_MATRIX_ES.md",
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "af5fa855778d5c861c405d9d73a3c051ec949ad1"
+      "blob": "b1e4b15221fc23b1313c721a23edd347b5b78567"
     },
     {
       "path": "analysis_results/c11_energy2_test/summary.md",
@@ -1955,7 +1954,7 @@
       "role": "agent",
       "purpose": "assistant role/instructions",
       "certainty": "rule",
-      "blob": "b1b032307027261aa3aee5948cf013c7d355c445"
+      "blob": "2f86fab1f6fe7b7186b264e0766e1c0087d12460"
     },
     {
       "path": "cases_3d/C3D_05_step_gmsh_conformal/Allmesh",
@@ -1969,7 +1968,7 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "69882552bc480ed0ee29dc2606bb4652d09d3f3b"
+      "blob": "4cd5f1b40ac0a37f6c0b9b6c9376ed9ef08ecbf4"
     },
     {
       "path": "cases_3d/C3D_05_step_gmsh_conformal/c14_physics/README.md",
@@ -272365,7 +272364,7 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "0763bcdf0b8d5d2cc8e7d99bad847cf0d1bd7909"
+      "blob": "2db1d2d6d6b4ce52b9f7941140a6d5421dc4faa6"
     },
     {
       "path": "docs/DOCUMENT_SYNC_20261110_ES.md",
@@ -273333,24 +273332,6 @@
       "path": "docs/granada/C3D05_T0_README_HISTORICAL_BEFORE_SINGLE_FLOW_20261120.md",
       "observation": "Missing: outside-repo",
       "recommendation": "Fix link or restore target",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "49fe45c35f5439c4",
-      "code": "POTENTIAL_UNLOGGED_CHANGES",
-      "severity": "review",
-      "path": "PROJECT_AUDIT_LOG_EN.md",
-      "observation": "7 implementation/config paths changed since this log's last commit; examples: .github/workflows/c3d05-b-c14-3d-phase-source.yml, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/c14_3d_postprocess_parity.py, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/tests/test_c14_3d_postprocess_parity.py, cases_3d/C3D_05_step_gmsh_conformal/c14_physics/run_case_b_c14_native.sh, cases_3d/C3D_05_step_gmsh_conformal/c14_physics/stage_c14_3d_case_b.py, cases_3d/C3D_05_step_gmsh_conformal/c14_physics/tests/test_stage_c14_3d_case_b.py",
-      "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "db42c3b9d43902ef",
-      "code": "POTENTIAL_UNLOGGED_CHANGES",
-      "severity": "review",
-      "path": "PROJECT_AUDIT_LOG_ES.md",
-      "observation": "7 implementation/config paths changed since this log's last commit; examples: .github/workflows/c3d05-b-c14-3d-phase-source.yml, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/c14_3d_postprocess_parity.py, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/tests/test_c14_3d_postprocess_parity.py, cases_3d/C3D_05_step_gmsh_conformal/c14_physics/run_case_b_c14_native.sh, cases_3d/C3D_05_step_gmsh_conformal/c14_physics/stage_c14_3d_case_b.py, cases_3d/C3D_05_step_gmsh_conformal/c14_physics/tests/test_stage_c14_3d_case_b.py",
-      "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     }
   ],
