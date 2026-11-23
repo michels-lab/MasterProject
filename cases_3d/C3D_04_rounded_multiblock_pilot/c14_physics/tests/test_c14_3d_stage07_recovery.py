@@ -9,6 +9,10 @@ import json
 from pathlib import Path
 import tempfile
 import unittest
+from unittest.mock import patch
+import shutil
+import sys
+import types
 
 ROOT=Path(__file__).resolve().parents[1]
 spec=importlib.util.spec_from_file_location(
@@ -144,6 +148,54 @@ class GenuineSavedVolumeRecoveryTests(unittest.TestCase):
             sha(self.vol/module.CSV_IN),
             sha(self.copy/"log.C14_3D_postprocess_c14_functions"),
         ])
+
+    def test_missing_prior_volume_csv_rebuilds_elsewhere_without_writes_to_sources(self):
+        # The volume folder may exist after a prior interrupted run. This
+        # fallback calls the production volume analyser on actual WSL; the
+        # fixture tests only its output selection/immutability.
+        previous_csv=self.vol/module.CSV_IN
+        original_csv_bytes=previous_csv.read_bytes()
+        previous_csv.unlink()  # synthetic interrupted result
+        previous_report_hash=sha(self.vol/module.JSON_IN)
+        original_case_hash=sha(self.case/"log.foamMultiRun")
+        original_copy_hash=sha(self.copy/"log.foamMultiRun")
+        analysis=self.root/"PREVIOUS_101_SNAPSHOT_ANALYSIS"
+        analysis.mkdir()
+        recovered=self.root/"FRESH_VOLUME_RECOVERED"
+        invocations=[]
+        def fake_volume_analyze(case,analysis_path,out):
+            invocations.append((case,analysis_path,out))
+            out.mkdir()
+            shutil.copy2(self.vol/module.JSON_IN,out/module.JSON_IN)
+            (out/module.CSV_IN).write_bytes(original_csv_bytes)
+        stub=types.SimpleNamespace(analyze=fake_volume_analyze)
+        with patch.dict(sys.modules,{"c14_3d_postprocess_parity":stub}):
+            report,rows=module.evaluate(self.case,self.vol,self.copy,analysis,recovered)
+        self.assertEqual(len(rows),101)
+        self.assertEqual(len(invocations),1)
+        self.assertEqual(report["volume_input_recovery_mode"],
+                         "NEW_SEPARATE_VOLUME_101_STATES_REBUILT_WITHOUT_CFD")
+        self.assertEqual(report["source_volumetric_output_read_only"],str(recovered))
+        self.assertFalse(previous_csv.exists())
+        self.assertEqual(sha(self.vol/module.JSON_IN),previous_report_hash)
+        self.assertEqual(sha(self.case/"log.foamMultiRun"),original_case_hash)
+        self.assertEqual(sha(self.copy/"log.foamMultiRun"),original_copy_hash)
+        reused,mode=module.select_volume_evidence(
+            self.case,self.vol,self.copy,analysis,recovered)
+        self.assertEqual(reused,recovered)
+        self.assertEqual(mode,"PREVIOUSLY_RECOVERED_VOLUME_REUSED_NO_OVERWRITE")
+
+    def test_missing_volume_does_not_overwrite_occupied_recovery(self):
+        (self.vol/module.CSV_IN).unlink()
+        analysis=self.root/"AUDIT"
+        analysis.mkdir()
+        recovered=self.root/"RECOVERY_ALREADY_OCCUPIED"
+        recovered.mkdir()
+        (recovered/"IMPORTANT").write_text("existing data untouched\\n".replace("\\n","\n"))
+        with self.assertRaisesRegex(module.Blocked,"occupied/incomplete"):
+            module.select_volume_evidence(self.case,self.vol,self.copy,
+                                          analysis,recovered)
+        self.assertTrue((recovered/"IMPORTANT").exists())
 
     def test_existing_copy_missing_or_partial_is_explicit_not_native_pass(self):
         report,_=module.evaluate(self.case,self.vol,self.copy)
