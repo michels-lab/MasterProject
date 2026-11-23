@@ -5,7 +5,7 @@ No file is auto-deleted or declared unused.
 
 ## Coverage
 
-Tracked: 39021; classified: 39016; readable documents: 186; above read cap: 1; findings: 9.
+Tracked: 39022; classified: 39017; readable documents: 186; above read cap: 1; findings: 9.
 
 ## File roles
 
@@ -23,7 +23,7 @@ Tracked: 39021; classified: 39016; readable documents: 186; above read cap: 1; f
 | simulation_input | 2683 |
 | simulation_log | 3155 |
 | simulation_output | 32615 |
-| source | 118 |
+| source | 119 |
 | test | 51 |
 | web_ui | 1 |
 | workflow | 29 |
@@ -37,8 +37,8 @@ Tracked: 39021; classified: 39016; readable documents: 186; above read cap: 1; f
 - **CONFIRMED / BROKEN_RELATIVE_LINK** docs/granada/C3D05_T0_README_HISTORICAL_BEFORE_SINGLE_FLOW_20261120.md: Missing: outside-repo. Next: Fix link or restore target (ID 2fa56a22be90f045)
 - **CONFIRMED / BROKEN_RELATIVE_LINK** docs/granada/C3D05_T0_README_HISTORICAL_BEFORE_SINGLE_FLOW_20261120.md: Missing: outside-repo. Next: Fix link or restore target (ID 2fa56a22be90f045)
 - **CONFIRMED / BROKEN_RELATIVE_LINK** docs/granada/C3D05_T0_README_HISTORICAL_BEFORE_SINGLE_FLOW_20261120.md: Missing: outside-repo. Next: Fix link or restore target (ID 2fa56a22be90f045)
-- **REVIEW / POTENTIAL_UNLOGGED_CHANGES** PROJECT_AUDIT_LOG_EN.md: 8 implementation/config paths changed since this log's last commit; examples: .github/workflows/c3d04-a-c14-real-10s-postrun-readonly.yml, .github/workflows/case-a-t0-stage-contract.yml, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/analyze_existing_c14_3d_results.py, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/summarize_existing_c14_phase_timeline.py, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/tests/test_existing_c14_3d_results.py, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/tests/test_existing_c14_phase_timeline.py. Next: Inspect diffs and reconcile only meaningful decisions/results in the canonical log (ID 1f1a94599223432f)
-- **REVIEW / POTENTIAL_UNLOGGED_CHANGES** PROJECT_AUDIT_LOG_ES.md: 8 implementation/config paths changed since this log's last commit; examples: .github/workflows/c3d04-a-c14-real-10s-postrun-readonly.yml, .github/workflows/case-a-t0-stage-contract.yml, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/analyze_existing_c14_3d_results.py, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/summarize_existing_c14_phase_timeline.py, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/tests/test_existing_c14_3d_results.py, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/tests/test_existing_c14_phase_timeline.py. Next: Inspect diffs and reconcile only meaningful decisions/results in the canonical log (ID f9b306b422c3cf7d)
+- **REVIEW / POTENTIAL_UNLOGGED_CHANGES** PROJECT_AUDIT_LOG_EN.md: 9 implementation/config paths changed since this log's last commit; examples: .github/workflows/c3d04-a-c14-real-10s-postrun-readonly.yml, .github/workflows/case-a-t0-stage-contract.yml, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/analyze_existing_c14_3d_results.py, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/summarize_existing_c14_phase_timeline.py, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/tests/test_existing_c14_3d_results.py, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/tests/test_existing_c14_phase_timeline.py. Next: Inspect diffs and reconcile only meaningful decisions/results in the canonical log (ID 773e3e56fbf25dbc)
+- **REVIEW / POTENTIAL_UNLOGGED_CHANGES** PROJECT_AUDIT_LOG_ES.md: 9 implementation/config paths changed since this log's last commit; examples: .github/workflows/c3d04-a-c14-real-10s-postrun-readonly.yml, .github/workflows/case-a-t0-stage-contract.yml, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/analyze_existing_c14_3d_results.py, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/summarize_existing_c14_phase_timeline.py, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/tests/test_existing_c14_3d_results.py, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/tests/test_existing_c14_phase_timeline.py. Next: Inspect diffs and reconcile only meaningful decisions/results in the canonical log (ID ff11b5679e5797ff)
 
 Complete path → purpose/role/certainty list lives in FILE_GOVERNANCE.json. SUMMARY.json has counts only for master polling.
 A dated file, duplicate, or suspicious name is an **investigation candidate**, not unwanted material.
