@@ -1,3 +1,9 @@
+## Evidencia más reciente — 23-11-2026, Caso A REAL YA CORRIDO
+
+El usuario aportó salida de su laptop confirmando **`foamMultiRun` nativo en V4/T02 con C14 ORIGINAL 0–10 s: `native_solver_run=true`, `Time = 10s`, `End`, 101 tiempos guardados, `ClockTime=839 s`**. El intento siguiente se bloqueó correctamente por carpeta existente: **NO indicar repetir 10 s ni eliminar la carpeta; no tratarla como «aún no hay CFD»**. La evidencia está en `docs/C3D_04_C14_V4_T02_REAL_10S_20261123_ES.md`. La etapa 06 nativa está terminada; **etapa 07/10, avance 6/10=60 % de hitos**, sin validación de conservación, fracción de fase, independencia ni QuickCup. Para análisis: ejecutar **solo lectura** `c14_physics/analyze_existing_c14_3d_results.py` sobre la corrida previa; el analizador crea resultados en carpeta separada. En respuestas posteriores **siempre consultar estado JSON canónico**. Es imperativo preservar el C14 físico original, sin cambios numéricos/materiales.
+
+---
+
 ## Contrato definitivo del investigador: C14 idéntico, únicamente de 2D a 3D (20-11-2026)
 
 **Instrucción literal de intención:** conservar TODO del Caso 2D C14; **el único cambio del modelo de investigación es su dimensionalidad y la geometría de mallado 3D**. Ninguna propiedad, constante, modelo, ecuación, tratamiento físico, condición inicial/física ni control numérico puede cambiar por conveniencia. La copia física completa conserva el `system/controlDict` original de **10 s, Δt=0.001 s y writeInterval=100**, además de los originales `fvModels`, termofísica y fluid/solid.
