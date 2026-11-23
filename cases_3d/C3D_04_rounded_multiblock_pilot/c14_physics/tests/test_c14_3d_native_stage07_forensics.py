@@ -58,7 +58,7 @@ liquidFractionTimeDerivative
     ]:
         (copy/("log.C14_3D_postprocess_"+name)).write_text(
             "Enabling floating point exception trapping (FOAM_SIGFPE)\n"
-            + ("--> FOAM FATAL ERROR: missing field U\n" if exit_code else
+            + ("--> FOAM FATAL ERROR:\nCannot find field U in metal\n" if exit_code else
                "End\n"))
         tasks.append({"name":name,"exit_code":exit_code,
                       "passed":exit_code==0,
@@ -119,6 +119,10 @@ class NativeEvidenceForensicsTests(unittest.TestCase):
         self.assertEqual(
             r["native_command_runs"]["c14_functions"]["error_signatures"][0]["kind"],
             "FATAL_OPENFOAM")
+        self.assertIn("Cannot find field U in metal",
+                      r["native_command_runs"]["c14_functions"]["tail_last_24_lines"])
+        self.assertIn("Cannot find field U in metal",
+                      sut.brief(r)["failed_command_last_24_log_lines"]["c14_functions"])
         self.assertEqual(
             [x["object"] for x in
              r["known_original_C14_functionObjects_unavailable_in_offline_replay"]],
