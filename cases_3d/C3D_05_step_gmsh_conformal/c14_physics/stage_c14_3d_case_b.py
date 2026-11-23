@@ -98,10 +98,10 @@ def native_cell_zone_state(source: Path) -> str:
     require(file.is_file() and not file.is_symlink(),
             "source cellZones symlink or non-file forbidden")
     raw=file.read_text(encoding="utf-8")
-    if re.search(r"(?s)\\bFoamFile\\s*\\{[^{}]*\\}",raw) is None:
+    if re.search(r"(?s)\bFoamFile\s*\{[^{}]*\}",raw) is None:
         raise ValueError("source cellZones lacks OpenFOAM metadata")
-    body=re.split(r"(?s)\\bFoamFile\\s*\\{[^{}]*\\}",raw,maxsplit=1)[-1]
-    if re.fullmatch(r"\\s*0\\s*\\(\\s*\\)\\s*",body):
+    body=re.split(r"(?s)\bFoamFile\s*\{[^{}]*\}",raw,maxsplit=1)[-1]
+    if re.fullmatch(r"\s*0\s*\(\s*\)\s*",body):
         return "EMPTY"
     require(a.audit_existing_zone(file,EXPECTED["metal"]),
             "real metal source has incomplete or unparseable cellZone")
