@@ -62,7 +62,7 @@ class PhaseAllocationSpatialTests(unittest.TestCase):
         self.assertEqual(
             out["top_8_by_local_excess"][0]["8_vertex_average_xyz_m"],
             [0.5, 0.5, 0.5])
-        self.assertTrue(out["claim_all_violations_in_interface"])
+        self.assertTrue(out["all_significant_solid_excess_outside_metal_core_alpha_ge_0p5"])
         self.assertFalse(out["native_field_edited"])
         self.assertEqual(raw, (alpha, solid))
 
@@ -71,7 +71,7 @@ class PhaseAllocationSpatialTests(unittest.TestCase):
             [1, 1, 1], [0.1, 0.2, 1.0], [0, 0.1, 1.00001],
             [1400, 1400, 1400], self.mesh)
         self.assertEqual(out["cells_above_tolerance"], 1)
-        self.assertFalse(out["claim_all_violations_in_interface"])
+        self.assertFalse(out["all_significant_solid_excess_outside_metal_core_alpha_ge_0p5"])
         self.assertEqual(
             out["bin_by_actual_native_alpha_metal"]
                 ["alpha_metal_ge_0p5"]["count_gt_tolerance"], 1)
