@@ -21,7 +21,8 @@ import shutil
 import subprocess
 import sys
 
-from audit_fs_c05_postrun_fields import read_alpha, read_mesh, cell_volume_m3
+from audit_fs_c02_local import read_alpha
+from audit_fs_c04_split_cells import read_mesh, cell_volume_m3
 from stage_fs_c06_vof_solidification import (
     FLUID_CELLS, MODEL_FIELD, phase_volume_metrics,
     read_native_metal_temperature, read_native_solid_fraction,
