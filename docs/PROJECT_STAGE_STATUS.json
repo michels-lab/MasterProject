@@ -244,7 +244,7 @@
     "case_b_c14_original_fluid_solid_regressions_ci_pass_observed": false,
     "case_b_c14_original_fluid_solid_mesh_source": "~/OpenFOAM/C3D05_STEP_GMSH_HEX_SUBDIV_COARSE_02",
     "case_b_c14_original_fluid_solid_native_output": "~/OpenFOAM/C3D05_B_C14_FLUID_SOLID_FULL_10S_01",
-    "case_b_c14_original_fluid_solid_3d_case_materialized_in_user_WSL": false,
+    "case_b_c14_original_fluid_solid_3d_case_materialized_in_user_WSL": true,
     "case_b_c14_original_fluid_solid_native_solver_run": false,
     "case_b_c14_original_fluid_solid_alpha1_observed": false,
     "case_b_c14_original_fluid_solid_source_hypothesis": "exact C14 2D physical/numeric source (hConst metal fluid + solidificationMeltingSource, eConst mold solid); B geometry-only 3D patch/pRefCell/cellZone mapping; NOT measured JMatPro/QuickCup conditions",
@@ -257,7 +257,18 @@
     "case_b_c14_first_user_WSL_launch_attempt_reached_foamMultiRun": false,
     "case_b_c14_source_wrapper_nounset_bashrc_fix_committed": true,
     "case_b_c14_source_wrapper_nounset_regression_ci_source_committed": true,
-    "case_b_c14_wrapper_fixed_source_WSL_rerun_observed": false
+    "case_b_c14_wrapper_fixed_source_WSL_rerun_observed": true,
+    "case_b_c14_real_native_solver_process_observed_running": true,
+    "case_b_c14_real_native_solver_observed_time_s": 1.417,
+    "case_b_c14_real_native_solver_target_time_s": 10,
+    "case_b_c14_real_native_solver_observed_Courant_mean": 0.0138185,
+    "case_b_c14_real_native_solver_observed_Courant_max": 0.184568,
+    "case_b_c14_real_native_solver_observed_log": "~/OpenFOAM/C3D05_B_C14_FLUID_SOLID_FULL_10S_01/log.foamMultiRun.C3D05_B_C14_10S",
+    "case_b_c14_real_native_solver_observed_h_e_p_rgh": true,
+    "case_b_c14_real_native_solver_physical_time_progress_fraction": 0.1417,
+    "case_b_c14_real_native_solver_finished_observed": false,
+    "case_b_c14_real_native_solver_phase_source_startup_seen_in_excerpt": false,
+    "case_b_c14_real_native_solver_observation_report": "docs/granada/C3D05_B_C14_WSL_EJECUCION_REAL_EN_CURSO_20261123_ES.md"
   },
   "other_cases": [
     {
@@ -293,11 +304,11 @@
     },
     {
       "case_id": "C3D-05 Caso B",
-      "status": "Geometry 270788 HEX8 and numerical two-solid T0+12-band q executed, source-faithful C14 fluid-solid/solidificationMeltingSource preparation now COMMITTED with 8 regression test source and workflow; NOT yet run on B real WSL. G3/G4 physical, G5 phase model evidence, G6 contraction, G7 experimental sensitivity still OPEN. Technical milestone 3/7 active, 2/7=29% complete.",
-      "evidence": "docs/granada/C3D05_B_C14_SOLIDIFICACION_3D_FASE_FISICA_20261123_ES.md"
+      "status": "Real WSL C14 fluid-solid phase-change reference CFD ACTIVE on 270788 accepted HEX8: time observed 1.417/10 seconds (14.17% simulation time), native h/e/p_rgh solving; no completed solver, alpha1 evolution or experimental validation. Stage3/7 2/7=29% technical unchanged; preserve run.",
+      "evidence": "docs/granada/C3D05_B_C14_WSL_EJECUCION_REAL_EN_CURSO_20261123_ES.md"
     }
   ],
-  "blocker": "First WSL Case B C14 fluid-solid --run-full attempt STOPPED in system OpenFOAM14 bashrc before Python and foamMultiRun: ZSH_NAME unbound because our wrapper sourced official bashrc with set -u. Wrapper fixed via set +u while sourcing, restored set -u, static regression committed. Source code ready for retry; NO 3D B C14 materialization/run demonstrated yet, no G3/G4/G5 physical closure. Keep JMatPro/QuickCup, 1826 nonorth and convergence pending.",
-  "next_integrated_delivery": "User can repeat same git pull --ff-only && run_case_b_c14_native.sh --run-full after nounset wrapper fix (no prior CFD attempt executed). If any new native parser/preparation error occurs, preserve staging evidence and diagnose. On success demand actual C14 fluid-solid 10s WSL log, h/e/p_rgh, alpha1 and energy with physical-validation gates still open.",
-  "science": "CASE_B_C14_NUMERICAL_TWO_SOLID_T0_AND_SPATIAL_Q_COMPLETED__ORIGINAL_C14_FLUID_SOLID_PHASE_SOURCE_STAGED_CODE_COMMITTED_NOT_WSL_RUN_OR_PHY_VALIDATED"
+  "blocker": "REAL WSL Case B native C14 fluid-solid CFD confirmed running on accepted 270788 HEX8 at Time=1.417s of 10s (process foamMultiRun 97.6% CPU snapshot, h/e/p_rgh advancing, Courant max 0.184568); native 10-second solver NOT finished yet; complete log phase-source startup and alpha1 not yet inspected. Preserve running solver, no rerun/remesh. Physical G3/G4 JMatPro/QuickCup, G5 solidification/latent-heat verification, G6 shrinkage, G7 mesh/time sensitivity and experiment remain open (2/7=29% technical).",
+  "next_integrated_delivery": "Allow the currently running native foamMultiRun on C3D05_B_C14_FLUID_SOLID_FULL_10S_01 to finish without interruption; only read live log from a second terminal if desired. After completion audit Time=10s/End, exact C14 phase source loaded, final native h/e/p_rgh/T/alpha1, balance/conservation, alpha1(t), run stability and local q; do not promote milestones without physical validity.",
+  "science": "WSL_REAL_CASE_B_C14_FLUID_SOLID_NATIVE_FOAMMULTIRUN_ACTIVE_AT_1_417_OF_10_SECONDS_NOT_COMPLETED_NOT_VALIDATED"
 }
