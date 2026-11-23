@@ -155,18 +155,19 @@ def scan_log_extrema(log:Path)->dict:
     time_re=re.compile(r"^\s*Time\s*=\s*("+NUM+r")s\s*$")
     solver_re=re.compile(r"Solving for (h|e|p_rgh),\s*Initial residual\s*=\s*"+
                          NUM+r",\s*Final residual\s*=\s*("+NUM+r")")
-    for line in log.open(encoding="utf-8",errors="replace"):
-        m=time_re.match(line)
-        if m: current=float(m.group(1))
-        m=solver_re.search(line)
-        if not m or current is None: continue
-        key=m.group(1)
-        val=float(m.group(2))
-        ensure(math.isfinite(val),"nonfinite final residual "+key)
-        found[key]["occurrences"]+=1
-        if val>found[key]["final_residual_max"]:
-            found[key]["final_residual_max"]=val
-            found[key]["time_s"]=current
+    with log.open(encoding="utf-8",errors="replace") as stream:
+        for line in stream:
+            m=time_re.match(line)
+            if m: current=float(m.group(1))
+            m=solver_re.search(line)
+            if not m or current is None: continue
+            key=m.group(1)
+            val=float(m.group(2))
+            ensure(math.isfinite(val),"nonfinite final residual "+key)
+            found[key]["occurrences"]+=1
+            if val>found[key]["final_residual_max"]:
+                found[key]["final_residual_max"]=val
+                found[key]["time_s"]=current
     ensure(all(d["occurrences"] for d in found.values()),
            "native log lacks solver residuals h/e/p_rgh")
     return found
