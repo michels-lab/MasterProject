@@ -13,6 +13,8 @@ on:
       - 'analysis_tools/test_diagnose_fs_c07_phase_allocation.py'
       - 'analysis_tools/recover_fs_c07_native_phase_metrics.py'
       - 'analysis_tools/test_recover_fs_c07_native_phase_metrics.py'
+      - 'analysis_tools/locate_fs_c07_phase_violation.py'
+      - 'analysis_tools/test_locate_fs_c07_phase_violation.py'
       - 'freesurface/FS-C07_thermal_transition/**'
       - '.github/workflows/fs-c07-static.yml'
   pull_request:
@@ -25,6 +27,8 @@ on:
       - 'analysis_tools/test_diagnose_fs_c07_phase_allocation.py'
       - 'analysis_tools/recover_fs_c07_native_phase_metrics.py'
       - 'analysis_tools/test_recover_fs_c07_native_phase_metrics.py'
+      - 'analysis_tools/locate_fs_c07_phase_violation.py'
+      - 'analysis_tools/test_locate_fs_c07_phase_violation.py'
       - 'freesurface/FS-C07_thermal_transition/**'
       - '.github/workflows/fs-c07-static.yml'
   workflow_dispatch:
@@ -40,10 +44,11 @@ jobs:
       - uses: actions/checkout@v4
       - name: Python native stager syntax (does not run foamMultiRun)
         run: |
-          python3 -m py_compile analysis_tools/stage_fs_c07_native.py analysis_tools/test_stage_fs_c07_native.py analysis_tools/inspect_existing_fs_c07.py analysis_tools/test_inspect_existing_fs_c07.py analysis_tools/diagnose_fs_c07_phase_allocation.py analysis_tools/test_diagnose_fs_c07_phase_allocation.py analysis_tools/recover_fs_c07_native_phase_metrics.py analysis_tools/test_recover_fs_c07_native_phase_metrics.py
+          python3 -m py_compile analysis_tools/stage_fs_c07_native.py analysis_tools/test_stage_fs_c07_native.py analysis_tools/inspect_existing_fs_c07.py analysis_tools/test_inspect_existing_fs_c07.py analysis_tools/diagnose_fs_c07_phase_allocation.py analysis_tools/test_diagnose_fs_c07_phase_allocation.py analysis_tools/recover_fs_c07_native_phase_metrics.py analysis_tools/test_recover_fs_c07_native_phase_metrics.py analysis_tools/locate_fs_c07_phase_violation.py analysis_tools/test_locate_fs_c07_phase_violation.py
       - name: FS-C07 source preflight, native input and source isolation regressions
         run: |
           python3 -m unittest discover -s analysis_tools -p 'test_stage_fs_c07_native.py' -v
           python3 -m unittest discover -s analysis_tools -p 'test_inspect_existing_fs_c07.py' -v
           python3 -m unittest discover -s analysis_tools -p 'test_diagnose_fs_c07_phase_allocation.py' -v
           python3 -m unittest discover -s analysis_tools -p 'test_recover_fs_c07_native_phase_metrics.py' -v
+          python3 -m unittest discover -s analysis_tools -p 'test_locate_fs_c07_phase_violation.py' -v
