@@ -172,10 +172,51 @@ def inspect_saved_phases(case: Path, max_examples: int = 3) -> dict:
     }
 
 
+
+def compact_summary(report: dict) -> dict:
+    """Human-sized forensic report; never discard worst violations."""
+    snaps = report["native_snapshots"]
+    priority = sorted(snaps,
+                      key=lambda x: x["max_physical_constraint_violation"],
+                      reverse=True)
+    critical = {
+        snaps[0]["time_s"], snaps[-1]["time_s"],
+        priority[0]["time_s"],
+    }
+    if report["first_snapshot_failing_original_tolerance"] is not None:
+        critical.add(report["first_snapshot_failing_original_tolerance"])
+    compact = dict(report)
+    compact["time_series_summary"] = [
+        {
+            "time_s": x["time_s"],
+            "alpha_metal_min": x["alpha_metal_min"],
+            "alpha_metal_max": x["alpha_metal_max"],
+            "alpha_metal_solid_min": x["alpha_metal_solid_min"],
+            "alpha_metal_solid_max": x["alpha_metal_solid_max"],
+            "positive_solid_cells": x["positive_solid_cell_count_exact"],
+            "metal_core_below_C14_liquidus_cells":
+                x["metal_core_cells_below_C14_liquidus_count"],
+            "max_constraint_violation":
+                x["max_physical_constraint_violation"],
+            "strict_invalid_cells": x["strict_invalid_cells"],
+            "above_1e-8_cells":
+                x["violating_cells_above_tolerance"][str(1e-8)],
+        }
+        for x in snaps
+    ]
+    compact["critical_detailed_snapshots"] = [
+        x for x in snaps if x["time_s"] in critical
+    ]
+    del compact["native_snapshots"]
+    return compact
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("case", type=Path)
     parser.add_argument("--examples", type=int, default=2)
+    parser.add_argument("--compact", action="store_true",
+                        help="Brief 20-state summary, detailed first/worst/final cases")
     args = parser.parse_args()
     if not 0 <= args.examples <= 10:
         parser.error("--examples must be 0..10")
@@ -184,6 +225,8 @@ def main() -> int:
     except (ValueError, OSError, KeyError, TypeError, json.JSONDecodeError) as e:
         print("FS-C07 PHASE FORENSIC BLOCKED:", e, file=sys.stderr)
         return 2
+    if args.compact:
+        result = compact_summary(result)
     print(json.dumps(result, indent=2, ensure_ascii=False, allow_nan=False))
     return 0
 
