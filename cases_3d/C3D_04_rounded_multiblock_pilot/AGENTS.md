@@ -1,3 +1,11 @@
+## 23-11-2026 — A/C14 Stage 07: recuperación inmutable de 101 estados y copia nativa existente
+
+Tras la instalación aislada de A/B/FS se confirmó por terminal WSL que existen **las carpetas** del postprocesado volumétrico A y la copia física nativa de A; **no equivale a confirmar contenido ni ejecución terminada**. El orquestador histórico bloquea por diseño si existen ambas carpetas. Está PROHIBIDO borrarlas, forzar sobrescrituras, repetir 10s CFD o copiar por segunda vez sin necesidad.
+
+Usar `c14_physics/recover_existing_c14_3d_stage07.py` desde `~/OpenFOAM/C3D04_A_WORKTREE` tras actualización FF-only de esa rama exclusivamente. El nuevo analizador audita identidad SHA del CFD log/controlDict C14 y del informe/CSV volumétrico (101 estados, alpha1, porcentajes, energía nominal). Si faltan archivos en la carpeta previa, regenera **sólo** integrales Python en otra carpeta sin CFD ni sobrescritura; si hay corrupción o SHA divergente, bloquea. También revisa únicamente por lectura la presencia y origen de los resultados nativos C14 y publica un JSON+CSV cinético 0.1s en directorio nuevo independiente, sin solver ni postProcess. **No recuperar recalescencia/10,001 sondas ni proclamar cierre de energía/QuickCup por integrales nominales.** Solo si el reporte WSL revela estado real podrá decidirse el próximo bloque de paridad nativa. Documentación: docs/C3D04_A_STAGE07_FORENSIC_KINETICS_20261123_ES.md. **Etapa 07/10 · 6/10 hitos=60%**, NO nueva validación física.
+
+---
+
 ## 23-11-2026 — No actualizar Caso A mientras B/FS están en ejecución
 
 Caso A fuente futura: ~/OpenFOAM/C3D04_A_WORKTREE (work/c3d04-a-isolated, sin upstream). Su corrida 10s C14 ya existente permanece fuera de repo en ~/OpenFOAM/C3D04_A_C14_FLUID_SOLID_FULL_10S_RUN_01. **Nunca git pull en MasterProject, ni solver desde árbol vivo de otro caso, ni limpieza de B o FS.** La creación segura sin actualizar main se documenta en docs/WSL_CONCURRENT_CASE_WORKTREES_20261123_ES.md. Contracción FS_C02_WORKTREE ya existe y está fuera de este alcance; no intervenir. No incrementar hitos 6/10=60% por worktrees, seguir etapa 07/10.
