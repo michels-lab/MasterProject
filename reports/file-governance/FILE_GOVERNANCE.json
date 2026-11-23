@@ -29,7 +29,7 @@
     "POTENTIAL_UNLOGGED_CHANGES": 2
   },
   "finding_total": 9,
-  "inventory_fingerprint": "73323b77bbb8e76be3058f6d955aae809742b11b4062815d851181819b7d042d",
+  "inventory_fingerprint": "7a1d55d25f8bf758fdc47e05084d04c75fa914307126e700ba62529b3bb7cfbd",
   "evidence_fingerprint": "e0b763ef01b0fc29ab66134ca558ad98f9110b47fd1b19a38a1e898033338c38",
   "files": [
     {
@@ -272421,7 +272421,7 @@
       "role": "config",
       "purpose": "machine-readable configuration",
       "certainty": "rule",
-      "blob": "9b1ea32e63c1b23b072f85c7b91050d8afcaddcf"
+      "blob": "300a23de123c430dffe2d533d4ee18592c63536c"
     },
     {
       "path": "docs/REGLA_INSTRUCCIONES_UNIFICADAS_ES.md",
