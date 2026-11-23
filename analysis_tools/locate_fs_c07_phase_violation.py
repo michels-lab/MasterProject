@@ -130,7 +130,7 @@ def locate(
         "bin_by_actual_native_alpha_metal": groups,
         "top_8_by_local_excess": by_fraction[:8],
         "top_8_by_integrated_excess": by_volume[:8],
-        "claim_all_violations_in_interface": (
+        "all_significant_solid_excess_outside_metal_core_alpha_ge_0p5": (
             measured > 0
             and groups["alpha_metal_ge_0p5"]["count_gt_tolerance"] == 0
             and groups["alpha_metal_above_one"]["count_gt_tolerance"] == 0
