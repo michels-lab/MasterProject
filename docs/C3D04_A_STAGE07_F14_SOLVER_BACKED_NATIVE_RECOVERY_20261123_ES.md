@@ -1,5 +1,24 @@
 # C3D04 Caso A — recuperación nativa C14 con Foundation14 y registros termofísicos
 
+## 23-11-2026 — WSL real: destino _02 ocupado; inspección recuperable sin borrar
+
+En la segunda invocación del programa por el investigador en `~/OpenFOAM/C3D04_A_WORKTREE`, Git informó `Already up to date` y **el programa se detuvo en preflight** con `C3D04_A_NATIVE_RECOVERY_BLOCKED: new isolated copy output occupied; NEVER overwrite previous CFD or postprocessing`.
+
+Esta salida **solo significa que ya existe** `~/OpenFOAM/C3D04_A_C14_SOLVER_BACKED_POSTPROCESS_02`, no identifica si es un proceso terminado, uno parcial o uno actualmente ejecutándose. La invocación que falló **no realizó copia, `foamPostProcess`, CFD, remallado ni cambios en la evidencia**. No borrar `_02`, no inferir sus seis resultados ni lanzar automáticamente otra copia `_03`.
+
+### Corrección permanente implementada
+
+`run_c14_stage07_solver_backed_recovery.py` reconoce ahora que `--out` ya existe, y **cambia automáticamente a inspección estrictamente de solo lectura**:
+
+- Compara `system/controlDict` original C14, CFD y copia `_02`; compara el SHA256 del log original `log.foamMultiRun` con el log de copia.
+- Busca el informe `C3D04_A_C14_SOLVER_BACKED_RECOVERY_REPORT.json` **sin crearlo**. Si existe, comprueba su esquema, ruta fuente y destino, hashes del recuperador original/forense, y **las seis** entradas individuales de `core/energy/phase/flow/profiles/momentum` con `exit_code`, `passed` y SHA256 del log correspondiente. Se puede certificar que **la ejecución de los seis grupos terminó** aunque alguno tenga `passed=false`; eso NO valida energía o física.
+- Si falta el informe, no se pueden comprobar los hashes, hay logs incompletos o el reporte no corresponde al caso: clasifica `EXISTING_COPY_PARTIAL_OR_POSSIBLY_ACTIVE_PRESERVED`, muestra presencia y extractos de logs, y devuelve código 3. **No asume que sea seguro reanudar ni que ningún otro proceso esté trabajando.** Si está completo, responde `EXISTING_COMPLETE_NATIVE_POSTPROCESS_REPORT_REUSED_NO_NEW_RUN` con grupos aprobados/fallidos y potencia reportada, **sin reejecutar funciones**.
+- Symlinks y rutas engañosas continúan bloqueadas; un destino distinto `--out` requiere una elección explícita, y nunca puede sobrescribir `_02`.
+
+El usuario únicamente debe repetir una vez la invocación normal del script actualizado desde worktree A. **No hace falta volver a ejecutar el ejecutor anterior sin corregir.** No cambia el modelo termofísico, la malla V4/T02, los 101 estados C14 ni los worktrees B/FS. Esta corrección de gobernanza de evidencia no suma hitos.
+
+---
+
 **23 de noviembre de 2026 | Etapa 07/10 abierta | 6/10 = 60 % de hitos operativos.** Este documento diferencia evidencias WSL reales, código nuevo y aceptación futura. No supone validación física ni CFD nuevo.
 
 ## Causa real observada en el Caso A de investigación
