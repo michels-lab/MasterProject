@@ -5,7 +5,7 @@ No file is auto-deleted or declared unused.
 
 ## Coverage
 
-Tracked: 39035; classified: 39030; readable documents: 189; above read cap: 1; findings: 9.
+Tracked: 39037; classified: 39032; readable documents: 189; above read cap: 1; findings: 9.
 
 ## File roles
 
@@ -23,10 +23,10 @@ Tracked: 39035; classified: 39030; readable documents: 189; above read cap: 1; f
 | simulation_input | 2683 |
 | simulation_log | 3155 |
 | simulation_output | 32615 |
-| source | 123 |
+| source | 124 |
 | test | 56 |
 | web_ui | 1 |
-| workflow | 30 |
+| workflow | 31 |
 
 ## Findings (human review required)
 
@@ -37,8 +37,8 @@ Tracked: 39035; classified: 39030; readable documents: 189; above read cap: 1; f
 - **CONFIRMED / BROKEN_RELATIVE_LINK** docs/granada/C3D05_T0_README_HISTORICAL_BEFORE_SINGLE_FLOW_20261120.md: Missing: outside-repo. Next: Fix link or restore target (ID 2fa56a22be90f045)
 - **CONFIRMED / BROKEN_RELATIVE_LINK** docs/granada/C3D05_T0_README_HISTORICAL_BEFORE_SINGLE_FLOW_20261120.md: Missing: outside-repo. Next: Fix link or restore target (ID 2fa56a22be90f045)
 - **CONFIRMED / BROKEN_RELATIVE_LINK** docs/granada/C3D05_T0_README_HISTORICAL_BEFORE_SINGLE_FLOW_20261120.md: Missing: outside-repo. Next: Fix link or restore target (ID 2fa56a22be90f045)
-- **REVIEW / POTENTIAL_UNLOGGED_CHANGES** PROJECT_AUDIT_LOG_EN.md: 4 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/c14_3d_postprocess_parity.py, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/tests/test_c14_3d_postprocess_parity.py, cases_3d/C3D_05_step_gmsh_conformal/c14_physics/stage_c14_3d_case_b.py, cases_3d/C3D_05_step_gmsh_conformal/c14_physics/tests/test_stage_c14_3d_case_b.py. Next: Inspect diffs and reconcile only meaningful decisions/results in the canonical log (ID acc378a33684db38)
-- **REVIEW / POTENTIAL_UNLOGGED_CHANGES** PROJECT_AUDIT_LOG_ES.md: 4 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/c14_3d_postprocess_parity.py, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/tests/test_c14_3d_postprocess_parity.py, cases_3d/C3D_05_step_gmsh_conformal/c14_physics/stage_c14_3d_case_b.py, cases_3d/C3D_05_step_gmsh_conformal/c14_physics/tests/test_stage_c14_3d_case_b.py. Next: Inspect diffs and reconcile only meaningful decisions/results in the canonical log (ID 0f43817c58277c21)
+- **REVIEW / POTENTIAL_UNLOGGED_CHANGES** PROJECT_AUDIT_LOG_EN.md: 6 implementation/config paths changed since this log's last commit; examples: .github/workflows/c3d05-b-c14-3d-phase-source.yml, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/c14_3d_postprocess_parity.py, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/tests/test_c14_3d_postprocess_parity.py, cases_3d/C3D_05_step_gmsh_conformal/c14_physics/run_case_b_c14_native.sh, cases_3d/C3D_05_step_gmsh_conformal/c14_physics/stage_c14_3d_case_b.py, cases_3d/C3D_05_step_gmsh_conformal/c14_physics/tests/test_stage_c14_3d_case_b.py. Next: Inspect diffs and reconcile only meaningful decisions/results in the canonical log (ID 6561c30ab2515ebf)
+- **REVIEW / POTENTIAL_UNLOGGED_CHANGES** PROJECT_AUDIT_LOG_ES.md: 6 implementation/config paths changed since this log's last commit; examples: .github/workflows/c3d05-b-c14-3d-phase-source.yml, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/c14_3d_postprocess_parity.py, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/tests/test_c14_3d_postprocess_parity.py, cases_3d/C3D_05_step_gmsh_conformal/c14_physics/run_case_b_c14_native.sh, cases_3d/C3D_05_step_gmsh_conformal/c14_physics/stage_c14_3d_case_b.py, cases_3d/C3D_05_step_gmsh_conformal/c14_physics/tests/test_stage_c14_3d_case_b.py. Next: Inspect diffs and reconcile only meaningful decisions/results in the canonical log (ID cb912ef0d4b5c2d3)
 
 Complete path → purpose/role/certainty list lives in FILE_GOVERNANCE.json. SUMMARY.json has counts only for master polling.
 A dated file, duplicate, or suspicious name is an **investigation candidate**, not unwanted material.
