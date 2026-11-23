@@ -90,6 +90,24 @@ def patch_names(native_boundary: Path) -> set[str]:
     return {p for p, typ in found}
 
 
+def native_cell_zone_state(source: Path) -> str:
+    """Accept only absent/EMPTY or verified FULL original zone, never partial."""
+    file=source/"constant/metal/polyMesh/cellZones"
+    if not file.exists() and not file.is_symlink():
+        return "ABSENT"
+    require(file.is_file() and not file.is_symlink(),
+            "source cellZones symlink or non-file forbidden")
+    raw=file.read_text(encoding="utf-8")
+    if re.search(r"(?s)\\bFoamFile\\s*\\{[^{}]*\\}",raw) is None:
+        raise ValueError("source cellZones lacks OpenFOAM metadata")
+    body=re.split(r"(?s)\\bFoamFile\\s*\\{[^{}]*\\}",raw,maxsplit=1)[-1]
+    if re.fullmatch(r"\\s*0\\s*\\(\\s*\\)\\s*",body):
+        return "EMPTY"
+    require(a.audit_existing_zone(file,EXPECTED["metal"]),
+            "real metal source has incomplete or unparseable cellZone")
+    return "FULL"
+
+
 def source_gate(source: Path) -> dict:
     require(source.name == SOURCE.name, "only real accepted Case B C3D05 mesh allowed")
     source = source.resolve()
@@ -106,8 +124,7 @@ def source_gate(source: Path) -> dict:
             source/"constant"/region/"polyMesh"/"boundary", name)
         require(info["type"]=="mappedWall" and info["nFaces"]==12636,
                 f"{region}: native mappedWall contact not accepted")
-    existing = a.audit_existing_zone(
-        source/"constant/metal/polyMesh/cellZones",EXPECTED["metal"])
+    zone_state=native_cell_zone_state(source)
     return {
         "C14_source_contract_passed":True,
         "Case_B_real_HEX8_acceptance":native["geometry_topology_gate_passed"],
@@ -115,7 +132,8 @@ def source_gate(source: Path) -> dict:
         "nCells":{key:item["nCells"] for key,item in counts.items()},
         "region_patches":{key:sorted(PATCHES[key]) for key in PATCHES},
         "coupled_faces_each":12636,
-        "metal_full_cellZone_exists":existing,
+        "metal_full_cellZone_exists":zone_state=="FULL",
+        "original_metal_cell_zone_state":zone_state,
         "severe_nonorth_faces_total":1826,
     }
 
@@ -238,6 +256,12 @@ def stage(source: Path, output: Path) -> dict:
         for rel,body in files.items():
             file=candidate/rel
             file.parent.mkdir(parents=True,exist_ok=True)
+            if rel=="constant/metal/polyMesh/cellZones" and file.exists():
+                require(gate["original_metal_cell_zone_state"]=="EMPTY",
+                        "cannot replace any nonempty cellZone even in isolated copy")
+                require(not file.is_symlink(),"cannot replace a linked cellZone")
+                source_hashes["source_empty_metal_cellZones"]=sha256(source/rel)
+                file.unlink()  # candidate ONLY; the original source remains immutable
             require(not file.exists(),"C14 files collide with source cellZones: "+rel)
             with file.open("x",encoding="utf-8",newline="") as stream:
                 stream.write(body)
