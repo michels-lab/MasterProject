@@ -218,6 +218,39 @@ def adapt_diagnostic_files(copy:Path,geometry:dict)->dict:
     return hashes
 
 
+
+def profile_coverage(work:Path)->dict:
+    """Validate every requested native C14-style profile has 80 finite points."""
+    expected={
+        "horizontalProfiles":("line_y10mm","line_y20mm","line_y30mm"),
+        "verticalProfiles":("line_x20mm",),
+        "momentumHorizontalProfiles":("line_y10mm","line_y20mm","line_y30mm"),
+        "momentumVerticalProfiles":("line_x20mm",),
+        "nearTopInternalLine":("line_topNear",),
+    }
+    result={}
+    for family,lines in expected.items():
+        for name in lines:
+            key=family+"/"+name
+            path=work/"postProcessing"/"metal"/family/"10"/(name+".xy")
+            if not path.is_file() or path.is_symlink():
+                result[key]={"status":"MISSING","saved_data_points":0}
+                continue
+            rows=[line for line in path.read_text(encoding="utf-8").splitlines()
+                  if line.strip() and not line.lstrip().startswith("#")]
+            valid=True
+            for line in rows:
+                try:
+                    values=[float(x) for x in line.split()]
+                    if not values or not all(math.isfinite(x) for x in values):
+                        valid=False
+                except ValueError:
+                    valid=False
+            result[key]={"status":"PASS" if len(rows)==80 and valid else "INCOMPLETE",
+                         "saved_data_points":len(rows)}
+    return result
+
+
 def run_native(copy:Path,name:str,args:list[str])->dict:
     logfile=copy/("log.C14_3D_postprocess_"+name)
     cmd=["bash","-c",F14_ENV,"c14_3d_offline_postprocess"]+args
@@ -318,6 +351,8 @@ def main()->int:
                        (copy/"10"/"metal"/k).is_file()
                        and (copy/"10"/"metal"/k).stat().st_size>0]
         derived_missing=sorted(set(derived)-set(derived_found))
+        profile_checks=profile_coverage(copy)
+        profile_failures=[k for k,v in profile_checks.items() if v["status"]!="PASS"]
         info={
             "schema":"C3D04_A_C14_3D_NATIVE_FUNCTION_OBJECT_PARITY_V1",
             "created_utc":datetime.now(timezone.utc).isoformat(),
@@ -336,6 +371,8 @@ def main()->int:
             "missing_expected_C14_object_dirs":missing,
             "derived_C14_fields_at_final_time":derived_found,
             "missing_derived_C14_fields_at_final_time":derived_missing,
+            "full_80_point_profiles_at_t10":profile_checks,
+            "incomplete_profiles_at_t10":profile_failures,
             "all_original_C14_function_objects_observed":not missing and not derived_missing,
             "energy_conservation_verified":False,
             "QuickCup_validation":False,
@@ -356,13 +393,14 @@ def main()->int:
             "object_dirs":len(dirs),
             "missing_C14_objects":missing,
             "missing_derived_fields":derived_missing,
+            "incomplete_native_profiles":profile_failures,
             "energy_conservation_verified":False,
             "native_energy_audit_passed":energy_report["passed"],
             "new_CFD_run":False,
             "volume_report":str(vol/"C3D04_A_C14_3D_POSTPROCESS_REPORT.json"),
             "native_report":str(report),
         },ensure_ascii=False,indent=2))
-        return 0 if info["all_native_processing_commands_passed"] and energy_report["passed"] and not missing and not derived_missing else 3
+        return 0 if info["all_native_processing_commands_passed"] and energy_report["passed"] and not missing and not derived_missing and not profile_failures else 3
     except (OSError,ValueError,KeyError,TypeError) as exc:
         print("C14_NATIVE_3D_POSTPROCESS_BLOCKED:",exc,file=sys.stderr)
         return 2
