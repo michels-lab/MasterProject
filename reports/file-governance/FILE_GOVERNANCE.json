@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
   "audit_kind": "deterministic_full_tracked_tree",
-  "tracked_files_total": 39039,
-  "classified_files_total": 39034,
-  "docs_content_inspected": 191,
+  "tracked_files_total": 39043,
+  "classified_files_total": 39038,
+  "docs_content_inspected": 192,
   "large_docs_skipped": 1,
   "excluded_reports": 5,
   "roles": {
@@ -12,25 +12,24 @@
     "bitacora": 5,
     "config": 17,
     "data": 32,
-    "document": 153,
+    "document": 154,
     "index": 34,
     "license": 1,
     "simulation_case_file": 117,
     "simulation_input": 2683,
     "simulation_log": 3155,
     "simulation_output": 32615,
-    "source": 124,
-    "test": 56,
+    "source": 125,
+    "test": 57,
     "web_ui": 1,
-    "workflow": 31
+    "workflow": 32
   },
   "finding_counts": {
-    "BROKEN_RELATIVE_LINK": 7,
-    "POTENTIAL_UNLOGGED_CHANGES": 1
+    "BROKEN_RELATIVE_LINK": 7
   },
-  "finding_total": 8,
-  "inventory_fingerprint": "15fa0bccec641b00f5eaf42a975d301536c526c8e67593c178df860519ec79e7",
-  "evidence_fingerprint": "cd1f1e4045fcf242d89bad157a962d297f15fab25c1eda7f0d766a658a2eb42b",
+  "finding_total": 7,
+  "inventory_fingerprint": "54a63c3f3b4018caf64ff9c29aec1c1e15c736f69e20d3ebbaf8c8d9e10e2094",
+  "evidence_fingerprint": "a38cca05722cc62f2a19d8787a386e132771345cc8472199f5e39f915b2e8a45",
   "files": [
     {
       "path": ".github/agents/openfoam-solidification.agent.md",
@@ -285,6 +284,13 @@
       "blob": "60891c3337f735ecdf3618811fa2af52130323a7"
     },
     {
+      "path": ".github/workflows/wsl-concurrent-cfd-worktrees-safety.yml",
+      "role": "workflow",
+      "purpose": "GitHub Actions automation",
+      "certainty": "rule",
+      "blob": "cd1cc87393877b34cf742cf13e723fe4205ef775"
+    },
+    {
       "path": ".gitignore",
       "role": "config",
       "purpose": "machine-readable configuration",
@@ -317,7 +323,7 @@
       "role": "agent",
       "purpose": "assistant role/instructions",
       "certainty": "rule",
-      "blob": "aa76419ca1a0dff1f6be82d13f2a8340d638be3c"
+      "blob": "7f674827fd967cb46e2fd0e70898af4a13e5d29d"
     },
     {
       "path": "CASE_GUIDE_ES.md",
@@ -338,7 +344,7 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "53bc95bde047e0bbd9634d14f7711fca9a1c3940"
+      "blob": "974584092931a2502a9ae5fca520530912a186ae"
     },
     {
       "path": "JMATPRO_OPENFOAM_TRACEABILITY_ES.md",
@@ -387,28 +393,28 @@
       "role": "bitacora",
       "purpose": "technical/audit change history",
       "certainty": "rule",
-      "blob": "dfb31eda65a115f0e375c65a9d56cbbda69af838"
+      "blob": "b7a273d0334b933aa62ce7d82cf7b12399228697"
     },
     {
       "path": "PROJECT_AUDIT_LOG_EN.md",
       "role": "bitacora",
       "purpose": "technical/audit change history",
       "certainty": "rule",
-      "blob": "ddb30b8cc6d15bb409729dad55de8854b5914ee1"
+      "blob": "add6946d41bf54d5620ddad65f1427290150c07f"
     },
     {
       "path": "PROJECT_AUDIT_LOG_ES.md",
       "role": "bitacora",
       "purpose": "technical/audit change history",
       "certainty": "rule",
-      "blob": "f598cb7cacc1604a3e87c8b0e829e0f0d717b31f"
+      "blob": "82fb83fa541aa3aa908012833e1e8226519b4d0e"
     },
     {
       "path": "README.md",
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "a61175f0a35816624f511975d888289141595069"
+      "blob": "95d88c530e5e3caa7f7c1630144f444fa0045604"
     },
     {
       "path": "RUN_CASE_REGISTRY.csv",
@@ -422,7 +428,7 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "e384b9f1133c9bee29acca3433932524bdd1d2c5"
+      "blob": "3b7e7fe1d2584135eeb9607e1690b066d024bece"
     },
     {
       "path": "VALIDATION_MATRIX.md",
@@ -1549,7 +1555,7 @@
       "role": "agent",
       "purpose": "assistant role/instructions",
       "certainty": "rule",
-      "blob": "4f057087a849f54fa6ea2fa380702c67ea3dcbeb"
+      "blob": "bfa5df4ae76812db6e79b6d4f6ca2e248e58fbd9"
     },
     {
       "path": "cases_3d/C3D_04_rounded_multiblock_pilot/Allmesh",
@@ -1955,7 +1961,7 @@
       "role": "agent",
       "purpose": "assistant role/instructions",
       "certainty": "rule",
-      "blob": "2f86fab1f6fe7b7186b264e0766e1c0087d12460"
+      "blob": "db734b34a7d8fda577056bddbd435d17b3dfad1e"
     },
     {
       "path": "cases_3d/C3D_05_step_gmsh_conformal/Allmesh",
@@ -272365,7 +272371,7 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "2db1d2d6d6b4ce52b9f7941140a6d5421dc4faa6"
+      "blob": "c3092c3a3906d2113687432e98bf272b7e53fb54"
     },
     {
       "path": "docs/DOCUMENT_SYNC_20261110_ES.md",
@@ -272422,6 +272428,13 @@
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
       "blob": "ec5ad9be404036193fcd2b7e217e66b644c54e6d"
+    },
+    {
+      "path": "docs/WSL_CONCURRENT_CASE_WORKTREES_20261123_ES.md",
+      "role": "document",
+      "purpose": "manual/decision/report/historical note",
+      "certainty": "inferred",
+      "blob": "885e28f31c884f3e71eb9a2157868258d53ed9bc"
     },
     {
       "path": "docs/granada/B11_C11_ENERGY2_DOCUMENTATION_AUDIT_20261021.md",
@@ -273243,6 +273256,13 @@
       "blob": "d339c6306fab8eaf413c7590cc39286a0261fdec"
     },
     {
+      "path": "tools/isolate_active_openfoam_cases.py",
+      "role": "source",
+      "purpose": "code/test implementation",
+      "certainty": "rule",
+      "blob": "59a3d7f2e7c3444d618914e18b8177127e53d65b"
+    },
+    {
       "path": "tools/repository_file_auditor.py",
       "role": "source",
       "purpose": "code/test implementation",
@@ -273269,6 +273289,13 @@
       "purpose": "code/test implementation",
       "certainty": "rule",
       "blob": "0b65cc6aa3d29917f57a31a96fd5c3afeffb4ed4"
+    },
+    {
+      "path": "tools/tests/test_isolate_active_openfoam_cases.py",
+      "role": "test",
+      "purpose": "code/test implementation",
+      "certainty": "rule",
+      "blob": "bd9a7e29af61caa8a5a50375dc5e3b4fa6870d9a"
     }
   ],
   "findings": [
@@ -273333,15 +273360,6 @@
       "path": "docs/granada/C3D05_T0_README_HISTORICAL_BEFORE_SINGLE_FLOW_20261120.md",
       "observation": "Missing: outside-repo",
       "recommendation": "Fix link or restore target",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "46b2cbd707dd79fb",
-      "code": "POTENTIAL_UNLOGGED_CHANGES",
-      "severity": "review",
-      "path": "PROJECT_AUDIT_LOG_EN.md",
-      "observation": "3 implementation/config paths changed since this log's last commit; examples: .github/workflows/c3d05-b-c14-3d-phase-source.yml, cases_3d/C3D_05_step_gmsh_conformal/c14_physics/run_case_b_c14_native.sh, docs/PROJECT_STAGE_STATUS.json",
-      "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     }
   ],
