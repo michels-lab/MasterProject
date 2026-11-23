@@ -189,17 +189,102 @@ def evaluate(case: Path, selected_times: tuple[float, ...]) -> dict:
     }
 
 
+def complete_saved_native_times(case: Path) -> tuple[float, ...]:
+    """Discover true saved phase states, not function-object-only time folders."""
+    case = case.expanduser().resolve()
+    times = tuple(
+        t for t, p in native_time_dirs(case)
+        if t > 0 and all(
+            (p / "fluid" / name).is_file()
+            and not (p / "fluid" / name).is_symlink()
+            for name in ("alpha.metal", MODEL_FIELD, "T.metal")
+        )
+    )
+    if len(times) != 20 or not math.isclose(times[-1], 1.0, abs_tol=1e-9):
+        raise ValueError(
+            "Expected exactly 20 native saved FS-C07 1s phase snapshots; "
+            "preserve case and inspect actual time directories"
+        )
+    return times
+
+
+def compact_result(report: dict) -> dict:
+    """20 native state summary with zero numerical invention or clipping."""
+    results = report["results"]
+    if not results:
+        raise ValueError("No native phase-location results to summarize")
+    def count(r: dict, group: str) -> int:
+        return r["bin_by_actual_native_alpha_metal"][group][
+            "count_gt_tolerance"
+        ]
+    core = [count(r, "alpha_metal_ge_0p5") for r in results]
+    total_violations = sum(r["cells_above_tolerance"] for r in results)
+    rows = []
+    for r in results:
+        bins = r["bin_by_actual_native_alpha_metal"]
+        rows.append({
+            "time_s": r["time_s"],
+            "total_native_cells": r["total_native_cells"],
+            "cells_with_solid_excess_gt_1e8": r["cells_above_tolerance"],
+            "cells_alpha_negative_or_zero_gt_1e8":
+                count(r, "alpha_metal_negative")
+                + count(r, "alpha_metal_exactly_zero"),
+            "cells_alpha_lt_1e6_gt_1e8":
+                count(r, "alpha_metal_0_to_1e-6"),
+            "cells_alpha_1e6_to_1e3_gt_1e8":
+                count(r, "alpha_metal_1e-6_to_1e-3"),
+            "cells_alpha_1e3_to_0p5_gt_1e8":
+                count(r, "alpha_metal_1e-3_to_0p5"),
+            "cells_core_alpha_ge_0p5_gt_1e8":
+                count(r, "alpha_metal_ge_0p5"),
+            "integrated_unphysical_excess_m3":
+                r["positive_excess_integral_m3_all_cells"],
+            "max_fraction_excess": (
+                r["top_8_by_local_excess"][0]["excess_fraction"]
+                if r["top_8_by_local_excess"] else None
+            ),
+        })
+    peak = max(results,
+               key=lambda r: r["positive_excess_integral_m3_all_cells"])
+    result = dict(report)
+    result["results"] = rows
+    result["all_20_states_have_zero_core_cell_excess_above_threshold"] = (
+        len(results) == 20 and all(v == 0 for v in core)
+    )
+    result["max_core_cells_exceeding_threshold_any_state"] = max(core)
+    result["total_cell_time_incidences_above_threshold"] = total_violations
+    result["peak_integrated_excess_time_s"] = peak["time_s"]
+    result["peak_integrated_excess_m3"] = (
+        peak["positive_excess_integral_m3_all_cells"]
+    )
+    result["peak_case_top_8_by_fraction"] = peak["top_8_by_local_excess"]
+    result["not_a_geometric_interface_classification"] = True
+    result["no_global_phase_boundedness_claim"] = True
+    result["no_new_native_solver_run"] = True
+    return result
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("case", type=Path)
     parser.add_argument("--times", type=float, nargs="+",
                         default=[0.2, 0.4, 1.0],
-                        help="Actual saved times (default: 0.2 0.4 1.0)")
+                        help="Existing native saved times (default 0.2 0.4 1.0)")
+    parser.add_argument("--all-saved", action="store_true",
+                        help="Inspect every one of 20 actual 0.05..1.0s snapshots")
+    parser.add_argument("--compact", action="store_true",
+                        help="Print 20-state summary and worst-case cells")
     args = parser.parse_args()
-    if any(not math.isfinite(x) or x <= 0 for x in args.times):
-        parser.error("All requested saved times must be finite positive")
+    if not args.all_saved and any(
+        not math.isfinite(x) or x <= 0 for x in args.times
+    ):
+        parser.error("Requested saved times must be finite positive")
     try:
-        result = evaluate(args.case, tuple(args.times))
+        times = (complete_saved_native_times(args.case)
+                 if args.all_saved else tuple(args.times))
+        result = evaluate(args.case, times)
+        if args.compact:
+            result = compact_result(result)
     except (ValueError, OSError, KeyError, TypeError, json.JSONDecodeError) as exc:
         print("FS-C07 NATIVE GEOMETRY FORENSIC BLOCKED:", exc, file=sys.stderr)
         return 2
