@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
   "audit_kind": "deterministic_full_tracked_tree",
-  "tracked_files_total": 39032,
-  "classified_files_total": 39027,
-  "docs_content_inspected": 188,
+  "tracked_files_total": 39033,
+  "classified_files_total": 39028,
+  "docs_content_inspected": 189,
   "large_docs_skipped": 1,
   "excluded_reports": 5,
   "roles": {
@@ -12,7 +12,7 @@
     "bitacora": 5,
     "config": 17,
     "data": 32,
-    "document": 151,
+    "document": 152,
     "index": 33,
     "license": 1,
     "simulation_case_file": 117,
@@ -29,8 +29,8 @@
     "POTENTIAL_UNLOGGED_CHANGES": 2
   },
   "finding_total": 9,
-  "inventory_fingerprint": "5dab15f1f9657d28a60449447ac4200dd22f1da78cf3f1322c52c941f6c63297",
-  "evidence_fingerprint": "625ed0b5d3bd2a82050311e943b5d700c338a19ed98e3e042773171109f7c6cd",
+  "inventory_fingerprint": "46a6135f589b70470c69af2d40aa2e273a2f71c1e629c4c5f2de05efa5e60999",
+  "evidence_fingerprint": "c387618f4668776b46acd53f4f3b24693ca77d5c6d882dddb1b6b5c01c7d282b",
   "files": [
     {
       "path": ".github/agents/openfoam-solidification.agent.md",
@@ -401,7 +401,7 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "073bec3f851b9a08dd9fd3ae97aefea6b760a259"
+      "blob": "7f13deea05e0c456aca30200b6008315bd086b7e"
     },
     {
       "path": "RUN_CASE_REGISTRY.csv",
@@ -272379,7 +272379,7 @@
       "role": "config",
       "purpose": "machine-readable configuration",
       "certainty": "rule",
-      "blob": "5123848b15065cac2c43b7dc202b55e5c376c44e"
+      "blob": "d007640995afead44074b7b4824eaee58eae515a"
     },
     {
       "path": "docs/REGLA_INSTRUCCIONES_UNIFICADAS_ES.md",
@@ -272415,6 +272415,13 @@
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
       "blob": "393b029ea89239d24ed4c1e30e1fec596fedc22c"
+    },
+    {
+      "path": "docs/granada/C3D05_B_Q_ESPACIAL_REAL_6_TIEMPOS_Y_CONTRASTE_ENERGIA_20261123_ES.md",
+      "role": "document",
+      "purpose": "manual/decision/report/historical note",
+      "certainty": "inferred",
+      "blob": "7afccc112c7b3658c80415c9a3fa70ba6240bbf7"
     },
     {
       "path": "docs/granada/C3D05_C14_NUMERICAL_ONE_SHOT_20261119_ES.md",
@@ -273287,20 +273294,20 @@
       "state": "REVIEW_REQUIRED"
     },
     {
-      "id": "1c2d4ad883736888",
+      "id": "7db9efaf5ff56805",
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_EN.md",
-      "observation": "8 implementation/config paths changed since this log's last commit; examples: .github/workflows/c3d04-a-c14-postprocessing-parity.yml, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/c14_3d_native_energy_closure.py, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/c14_3d_postprocess_parity.py, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/run_c14_3d_complete_postprocess.py, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/tests/test_c14_3d_native_energy_closure.py, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/tests/test_c14_3d_postprocess_parity.py",
+      "observation": "9 implementation/config paths changed since this log's last commit; examples: .github/workflows/c3d04-a-c14-postprocessing-parity.yml, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/c14_3d_native_energy_closure.py, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/c14_3d_postprocess_parity.py, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/run_c14_3d_complete_postprocess.py, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/tests/test_c14_3d_native_energy_closure.py, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/tests/test_c14_3d_postprocess_parity.py",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     },
     {
-      "id": "3688238d4eabe9a9",
+      "id": "d132bf408d30359d",
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_ES.md",
-      "observation": "8 implementation/config paths changed since this log's last commit; examples: .github/workflows/c3d04-a-c14-postprocessing-parity.yml, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/c14_3d_native_energy_closure.py, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/c14_3d_postprocess_parity.py, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/run_c14_3d_complete_postprocess.py, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/tests/test_c14_3d_native_energy_closure.py, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/tests/test_c14_3d_postprocess_parity.py",
+      "observation": "9 implementation/config paths changed since this log's last commit; examples: .github/workflows/c3d04-a-c14-postprocessing-parity.yml, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/c14_3d_native_energy_closure.py, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/c14_3d_postprocess_parity.py, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/run_c14_3d_complete_postprocess.py, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/tests/test_c14_3d_native_energy_closure.py, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/tests/test_c14_3d_postprocess_parity.py",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     }
