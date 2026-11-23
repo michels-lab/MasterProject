@@ -1,5 +1,21 @@
 # Protección real de corridas concurrentes — OpenFOAM C3D04-A, C3D05-B, contracción FS
 
+## VERIFICACIÓN REAL WSL: AISLAMIENTO A/B/CONTRACCIÓN COMPLETADO (23-11-2026)
+
+**Estado operativo observado:** `APPLIED_AND_VERIFIED`. Evidencia: salida completa de terminal proporcionada por el investigador tras ejecutar `git fetch origin` y `git show origin/main:tools/isolate_active_openfoam_cases.py | python3 -B - --apply`. No es un resultado inferido exclusivamente de CI.
+
+- `~/OpenFOAM/C3D04_A_WORKTREE` — `refs/heads/work/c3d04-a-isolated`, `EXISTING_PRESERVED`, `HEAD=4d11e7bb3339e10db8329cbcd0674b1db2bc49f7`.
+- `~/OpenFOAM/C3D05_B_WORKTREE` — `refs/heads/work/c3d05-b-isolated`, `EXISTING_PRESERVED`, `HEAD=4d11e7bb3339e10db8329cbcd0674b1db2bc49f7`.
+- `~/OpenFOAM/FS_C02_WORKTREE` — `detached=true`, `branch=null`, `EXISTING_PRESERVED`, `HEAD=437bf13c3265d6ac1507cee20436b32669ed740d`; ascendencia verificada contra `refs/remotes/origin/research/fs-c02-metal-air-vof-20261117`. Su HEAD no se cambió.
+- Snapshot remoto de creación de A/B: `origin/main=4d11e7bb3339e10db8329cbcd0674b1db2bc49f7`.
+- Las NUEVE carpetas protegidas figuran `exists=true`: `C3D04_A_C14_FLUID_SOLID_FULL_10S_RUN_01`, `C3D04_A_C14_FULL_POSTPROCESS_WORKCOPY_01`, `C3D04_A_C14_3D_VOLUMETRIC_POSTPROCESS_01`, `C3D05_T0_C14_SHK_01`, `C3D05_STEP_GMSH_PILOT_01`, `FS_C01_RUNS`, `FS_C05_VOF_CHT_RUNS`, `FS_C06_RUNS` y `FS_C07_RUNS`.
+
+**Límite de evidencia:** `exists=true` demuestra presencia de directorios, no integridad de cada archivo, finalización de todos los postprocesos, corrección física ni estado actual del proceso CFD. El instalador únicamente verificó y creó worktrees; no ejecutó CFD ni inspeccionó campos termofísicos. Esta puerta de **aislamiento operativo** sí está cerrada, pero NO suma hitos de investigación. A continúa en etapa 7/10, 6/10 (60 %); B en etapa 3/7, 2/7 (29 %); el avance científico FS no se deduce de esta ejecución.
+
+**Regla de continuidad:** NO volver a pedir instalar estos worktrees. Antes de cualquier modificación, usar el worktree preciso del caso y revisar su HEAD; no se hará `git pull` en `~/OpenFOAM/MasterProject` para actualizar solo un caso, ni `git switch` en FS_C02_WORKTREE. La copia de ejecución independiente seguirá siendo la fuente para postprocesar campos ya calculados.
+
+---
+
 **23 de noviembre de 2026 · Contrato operacional del investigador · No altera física CFD.**
 
 ## Problema de origen
