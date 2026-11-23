@@ -29,8 +29,8 @@
     "POTENTIAL_UNLOGGED_CHANGES": 2
   },
   "finding_total": 9,
-  "inventory_fingerprint": "4b4ddd1869e6f2f96204398221f37ce58ea216e28961d0b70726e53dc0ee68a3",
-  "evidence_fingerprint": "fb0cc8731527741d0fae87523706b44cf5148c477dd1cd507e4ba5cf1b7ea0dd",
+  "inventory_fingerprint": "f784c00bf58d5dbe4d6d9ced956b4018989c4be43ec313114c27fbe272b04f53",
+  "evidence_fingerprint": "fcd7906f6402bad65ed95ae5995a8d2f825de151f38d850862edc007a9fd1904",
   "files": [
     {
       "path": ".github/agents/openfoam-solidification.agent.md",
@@ -107,7 +107,7 @@
       "role": "workflow",
       "purpose": "GitHub Actions automation",
       "certainty": "rule",
-      "blob": "2c8ac887a8f3fb54585bb8800e1e619c1a5fb525"
+      "blob": "a72119589514d41772bcac52d092535985906c9d"
     },
     {
       "path": ".github/workflows/c3d05-foundation14-energy-smoke.yml",
@@ -273336,20 +273336,20 @@
       "state": "REVIEW_REQUIRED"
     },
     {
-      "id": "36b9ad38ca8b2f9c",
+      "id": "e042a5108f7043d3",
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_EN.md",
-      "observation": "1 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_05_step_gmsh_conformal/c14_physics/run_case_b_c14_native.sh",
+      "observation": "2 implementation/config paths changed since this log's last commit; examples: .github/workflows/c3d05-b-c14-3d-phase-source.yml, cases_3d/C3D_05_step_gmsh_conformal/c14_physics/run_case_b_c14_native.sh",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     },
     {
-      "id": "4fac020a62cef8b8",
+      "id": "93c37735c89c99e9",
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_ES.md",
-      "observation": "1 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_05_step_gmsh_conformal/c14_physics/run_case_b_c14_native.sh",
+      "observation": "2 implementation/config paths changed since this log's last commit; examples: .github/workflows/c3d05-b-c14-3d-phase-source.yml, cases_3d/C3D_05_step_gmsh_conformal/c14_physics/run_case_b_c14_native.sh",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     }
