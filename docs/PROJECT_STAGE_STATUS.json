@@ -267,9 +267,10 @@
     "case_b_c14_real_native_solver_observed_h_e_p_rgh": true,
     "case_b_c14_real_native_solver_physical_time_progress_fraction": 0.2249,
     "case_b_c14_real_native_solver_finished_observed": false,
-    "case_b_c14_real_native_solver_phase_source_startup_seen_in_excerpt": false,
+    "case_b_c14_real_native_solver_phase_source_startup_seen_in_excerpt": true,
     "case_b_c14_real_native_solver_observation_report": "docs/granada/C3D05_B_C14_WSL_EJECUCION_REAL_EN_CURSO_20261123_ES.md",
-    "case_b_c14_real_native_solver_observed_clockTime_s": 1978
+    "case_b_c14_real_native_solver_observed_clockTime_s": 1978,
+    "case_b_c14_real_native_solver_phase_source_model_selection_message": "Selecting solidificationMeltingSource with name phaseChangeSource"
   },
   "other_cases": [
     {
@@ -309,7 +310,7 @@
       "evidence": "docs/granada/C3D05_B_C14_WSL_EJECUCION_REAL_EN_CURSO_20261123_ES.md"
     }
   ],
-  "blocker": "REAL WSL Case B native C14 fluid-solid CFD confirmed running on accepted 270788 HEX8 at Time=1.417s of 10s (process foamMultiRun 97.6% CPU snapshot, h/e/p_rgh advancing, Courant max 0.184568); native 10-second solver NOT finished yet; complete log phase-source startup and alpha1 not yet inspected. Preserve running solver, no rerun/remesh. Physical G3/G4 JMatPro/QuickCup, G5 solidification/latent-heat verification, G6 shrinkage, G7 mesh/time sensitivity and experiment remain open (2/7=29% technical).",
-  "next_integrated_delivery": "Live WSL C14 B fluid-solid solver reached Time=2.249s/10s (22.49% of simulated physical horizon, clock=1978s). Keep running process undisturbed. Confirm full End/10s and alpha1, latent heat, h/e/p_rgh and conservation only afterward. Model-selection marker not established by last-12-lines grep; check full log separately if needed.",
+  "blocker": "WSL real C3D05 B native C14 270788-HEX8 foamMultiRun executed to last user-observed Time=2.249s/10s; actual solver log confirmed 'Selecting solidificationMeltingSource with name phaseChangeSource' (phase source ACTIVATED). 10s/End and alpha1 evolution still NOT observed; leave native process undisturbed. Physical JMatPro/QuickCup materials, latent heat effect/conservation, nonorth sensitivity, contraction and comparison pending; G3-G7 not promoted.",
+  "next_integrated_delivery": "Allow native 10-second CFD B simulation to finish. On completion verify End, 10s, original C14 model selections, h/e/p_rgh, temperatures, alpha1(t), sensible/latent energy and Courant/residual extrema. Do not rerun active CFD or claim physical experimental validation.",
   "science": "WSL_REAL_CASE_B_C14_FLUID_SOLID_NATIVE_FOAMMULTIRUN_ACTIVE_AT_1_417_OF_10_SECONDS_NOT_COMPLETED_NOT_VALIDATED"
 }
