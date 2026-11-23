@@ -194,7 +194,7 @@ def plan(repo: Path) -> dict:
             raise Blocked(label + ": conflicting existing branch owner")
         checks.append({
             "case": label, "path": str(target),
-            "branch": existing.get(target, {}).get("branch", ref) if
+            "branch": existing[target].get("branch") if
                       target in existing else branch,
             "expected_source_branch": branch,
             "action": action, "head": existing.get(target, {}).get("HEAD"),
