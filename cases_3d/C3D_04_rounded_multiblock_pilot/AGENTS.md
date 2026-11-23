@@ -1,3 +1,9 @@
+## 23-11-2026 — WSL C3D04-A DESTINO NATIVO _02 EXISTENTE: PROHIBIDO BORRAR O RERUN A CIEGAS
+
+Una invocación real WSL del ejecutor solver-backed informó `new isolated copy output occupied` **antes de copiar o ejecutar foamPostProcess**: `~/OpenFOAM/C3D04_A_C14_SOLVER_BACKED_POSTPROCESS_02` ya existía. El contenido interior NO está certificado. Ejecutar la versión actualizada de `run_c14_stage07_solver_backed_recovery.py` en el worktree A: cuando `--out` existe ejecuta exclusivamente `inspect_occupied_copy` en lectura, valida C14/controlDict, logs fuente y copia, informe final de 6 grupos y sus hashes, y clasifica `EXISTING_COMPLETE_NATIVE_POSTPROCESS_REPORT_REUSED_NO_NEW_RUN` o `EXISTING_COPY_PARTIAL_OR_POSSIBLY_ACTIVE_PRESERVED`. Ninguna clasificación permite sobrescribir. No programar otro `_03` ni borrar `_02` sin verificar que no haya otra función nativa ejecutándose. La inspección no valida física/energía. Estado científico etapa 07/10, 6/10=60% hitos.
+
+---
+
 ## 23-11-2026 — PREPARADO: Caso A native Foundation14 CORRECCIÓN DEL FATAL rho EN COPIA NUEVA
 
 Error WSL REAL en `C3D04_A_C14_FULL_POSTPROCESS_WORKCOPY_01`: solo `c14_functions` abortó por `FOAM FATAL ERROR: Field rho not found in database`, y `energyAdvectiveFlux/heatFlux/energyFlux` no estaban en el registro nativo; 14 familias C14 originales, 20 derivados y 5 perfiles faltaban, metal/arena energyFlux sin cerrar. Según el manual Foundation14, usar `foamPostProcess -region metal -solver fluid` para reconstruir los modelos termofísicos; es postprocesamiento, NO resolver CFD. Prohibido modificar modelo C14/fvModels/controlDict, malla, CFD original, vieja workcopy, B o FS.

@@ -495,5 +495,20 @@
       "synthetic_solving_is_not_thesis_validation": true
     },
     "status": "REAL_F14_RHO_MISSING_CAUSE_OBSERVED__ISOLATED_SOLVER_BACKED_RECOVERY_CODE_PENDING_REAL_WSL"
+  },
+  "stage07_solver_backed_occupied_copy_02": {
+    "date": "2026-11-23",
+    "source": "Investigator pasted Foundation14 WSL terminal output",
+    "worktree_A_git_update": "Already up to date",
+    "attempted_program": "run_c14_stage07_solver_backed_recovery.py",
+    "attempted_default_destination": "~/OpenFOAM/C3D04_A_C14_SOLVER_BACKED_POSTPROCESS_02",
+    "runtime_error": "C3D04_A_NATIVE_RECOVERY_BLOCKED: new isolated copy output occupied; NEVER overwrite previous CFD or postprocessing",
+    "source_CFD_modified_by_this_invocation": false,
+    "native_postprocess_executed_by_this_invocation": false,
+    "cause": "Workcopy output path exists; prior copy completion/partial/active state remains unobserved",
+    "existing_02_contents_verified": false,
+    "next_tool": "run_c14_stage07_solver_backed_recovery.py updated to inspect occupied workcopy and verify existing report, six native step logs and SHA provenance READ ONLY; does not rerun on occupied _02",
+    "stage07_complete": false,
+    "science_progress_unchanged_60_percent": true
   }
 }
