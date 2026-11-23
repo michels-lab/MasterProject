@@ -5,7 +5,7 @@ import tempfile
 import unittest
 
 from stage_fs_c07_native import (
-    CONTROL, FUNCTIONS, FVMODELS, MONITORS,
+    CONTROL, FUNCTIONS, FS_C06_FUNCTIONS, FVMODELS, MONITORS,
     source_preflight, stage, audit_native_monitor_files,
     read_cfd_time_from_log,
 )
@@ -27,7 +27,7 @@ class FS_C07_Staging(unittest.TestCase):
                      "constant/mold/polyMesh/points"):
             (self.src / name).write_text("ORIGINAL PRESERVE\n")
         (self.src / "constant/fluid/fvModels").write_bytes(FVMODELS.read_bytes())
-        (self.src / "system/functions").write_bytes(FUNCTIONS.read_bytes())
+        (self.src / "system/functions").write_bytes(FS_C06_FUNCTIONS.read_bytes())
         (self.src / "system/controlDict").write_text("C06 ORIGINAL\n")
         (self.src / "FS_C06_REPORT.json").write_text(json.dumps({
             "status": "FS_C06_NATIVE_TWO_STEP_MODEL_FIELD_OBSERVED_NOT_SHRINKAGE",
@@ -116,6 +116,9 @@ class FS_C07_Staging(unittest.TestCase):
         self.assertNotIn("massSource", text)
         self.assertNotIn("rhoLiquid", text)
         self.assertNotIn("functions\n{", text)
+        self.assertEqual(FUNCTIONS.read_text().count("writeControl  writeTime;"), 10)
+        self.assertNotIn("writeControl  timeStep;", FUNCTIONS.read_text())
+        self.assertEqual(FS_C06_FUNCTIONS.read_text().count("writeControl  timeStep;"), 10)
 
 
     def test_legacy_initial_thermal_T_can_be_used(self):
