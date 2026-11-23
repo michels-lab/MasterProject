@@ -1,6 +1,6 @@
 {
   "schema": "masterproject-fs-c07-progress-20261123",
-  "stage": "FOUNDATION14_NATIVE_1S_COMPLETED_20_SNAPSHOTS_RAW_VOLUME_DIAGNOSTICS_REPRODUCED__LOCAL_PHASE_BOUND_FAIL",
+  "stage": "C07_NATIVE_1S_COMPLETED_SOLID_RAW_VOLUME_RECOVERED_SPATIAL_LOW_VOF_DIAGNOSTIC_3OF20__BOUND_FAIL",
   "project": "CINVESTAV solidification/shrinkage MasterProject",
   "branch": "research/fs-c02-metal-air-vof-20261117",
   "code_base": "OpenFOAM Foundation 14",
@@ -33,9 +33,9 @@
   "experimentally_validated": false,
   "git_static_workflow_declared": true,
   "git_static_workflow_pass_verified": false,
-  "status": "FS_C07_NATIVE_1S_SOLIDIFICATION_RAW_VOLUME_RECOVERED__PHASE_ALLOCATION_FAIL__NO_PHYSICAL_SHRINKAGE",
+  "status": "FS_C07_NATIVE_1S_SOLIDIFICATION_5P00633PCT_RAW__LOCAL_PHASE_OVERALLOCATION_CONFINED_TO_LOW_VOF_IN_3_SAMPLES__NO_SHRINKAGE",
   "scientific_next_gate": "Map local solid>metal violation spatially and inspect native model correction/advection ordering; separately integrate phase-specific metal mass flux through all open boundaries and a real metal mass inventory. Do not reinterpret ΔVOF as shrinkage; next physics requires conservative phase densities and pressure/energy coupling.",
-  "latest_repository_update": "Real WSL 20-snapshot raw-volume report published; integrals metal/solid cross-check actual native monitors; raw solid/metal 5.006330% at 1s with phase bounding FAIL and microscopic integrated excess. Added spatial localization script and six synthetic tests for verifying low-VOF hypothesis without CFD rerun. GitHub CI not verified.",
+  "latest_repository_update": "Researcher WSL gave actual mesh-located phase allocation at 0.2/0.4/1s: 187/598/378 alpha_s>alpha_m violations >1e-8, 0 in alpha_m>=0.5 core and 185/594/371 in alpha_m<1e-3. Max error integrals tiny; 260K/392K T in tiny VOF not core. Inspected exact OpenFOAM-14 foamMultiRun native order: fvModels.correct before alphaPredictor, consistent with stale alphaSolid relative to transported alpha, not uniquely causally proved. New all-20-native-saved audit and 8 tests committed, not yet run in WSL.",
   "source_initial_fluid_temperature_candidates": [
     "0/fluid/T.metal",
     "0/fluid/T"
@@ -215,5 +215,54 @@
   "raw_volumetric_native_report_published": true,
   "raw_volumetric_native_report_path": "docs/granada/FS_C07_AUDITORIA_VOLUMETRICA_NATIVE_1S_20261123_ES.md",
   "raw_integrated_alpha_solid_t0p05_to_t0p10_nonmonotonic_true": true,
-  "raw_data_global_mass_conservation_pass": false
+  "raw_data_global_mass_conservation_pass": false,
+  "native_spatial_phase_3_times_WSL_executed_and_reported": true,
+  "native_spatial_phase_3_times_s": [
+    0.2,
+    0.4,
+    1
+  ],
+  "native_spatial_phase_3_times_above_tolerance_counts": [
+    187,
+    598,
+    378
+  ],
+  "native_spatial_phase_3_times_core_alpha_ge_0p5_above_tolerance_counts": [
+    0,
+    0,
+    0
+  ],
+  "native_spatial_phase_low_vof_lt_0p001_above_tolerance_counts": [
+    185,
+    594,
+    371
+  ],
+  "native_spatial_phase_excess_mm3": [
+    0.002974383439616884,
+    0.0061272893715684775,
+    0.0017680724185913683
+  ],
+  "native_spatial_core_phase_allocation_20_saved_pass_verified": false,
+  "native_spatial_all_saved_native_audit_prepared": true,
+  "native_spatial_all_saved_native_audit_command": "python3 analysis_tools/locate_fs_c07_phase_violation.py --all-saved --compact /home/michel/OpenFOAM/FS_C07_RUNS/FS_C07_THERMAL_20261123T183217Z_72da1bf4",
+  "native_spatial_all_saved_native_audit_WSL_executed": false,
+  "native_spatial_all_saved_native_audit_CI_verified": false,
+  "native_spatial_low_VOF_below_1e3_integrated_excess_percent_by_time": [
+    93.121,
+    96.089,
+    99.862
+  ],
+  "native_phase_source_update_order_source_inspected": true,
+  "native_phase_source_update_order_foundation14": "foamMultiRun fvModels().correct() -> solvers[i].prePredictor() -> twoPhaseSolver::alphaPredictor() -> thermal/pressure -> runTime.write()",
+  "native_phase_model_clip_on_correct_foundation14": "alphaSolid_[celli]=min(relax*alphaVoF*alphaSolidT(T)+(1-relax)*alphaSolid_[celli],alphaVoF[celli])",
+  "native_phase_source_update_order_plausible_root_cause": true,
+  "native_phase_source_update_order_unique_root_cause_proven": false,
+  "native_spatial_source_GitHub_src": [
+    "https://github.com/OpenFOAM/OpenFOAM-14/blob/master/applications/solvers/foamMultiRun/foamMultiRun.C",
+    "https://github.com/OpenFOAM/OpenFOAM-14/blob/master/applications/modules/twoPhaseSolver/twoPhaseSolver.C",
+    "https://github.com/OpenFOAM/OpenFOAM-14/blob/master/applications/modules/compressibleVoF/fvModels/VoFSolidificationMelting/VoFSolidificationMelting.C"
+  ],
+  "native_spatial_analysis_transcript_sha256": "80429d631fbccd4d5dc1dfb0061263a8d1a05cb183bf18a2a03329672fbcaad8",
+  "native_spatial_report_path": "docs/granada/FS_C07_ORIGEN_ESPACIAL_ALLOCATION_Y_ORDEN_NATIVE_C14_20261123_ES.md",
+  "native_saved_phase_fields_edited": false
 }
