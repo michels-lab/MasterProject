@@ -1,6 +1,6 @@
 {
   "schema": "MASTERPROJECT_STAGE_PROGRESS_V1",
-  "date": "2026-11-20",
+  "date": "2026-11-23",
   "case": "C3D_05_step_gmsh_conformal",
   "stage": "3/7 — T0 acoplamiento térmico: preparación de parámetros",
   "completed": 2,
@@ -182,7 +182,16 @@
     "native_hex8_270788_T0_scope": "C14-ARCHIVED reference: two solid regions, constant rho Cv k and no latent heat, flow, shrinkage, JMatPro or QuickCup experimental validation",
     "native_hex8_270788_postprocess_source": "Investigator-provided terminal output of run_c14_numerical_granada.sh --solve on 2026-11-20, not raw mounted data",
     "sensitivity_time_and_mesh_passed": false,
-    "experimental_validation_complete": false
+    "experimental_validation_complete": false,
+    "spatial_native_flux_postrun_source_committed": true,
+    "spatial_native_flux_postrun_test_source_committed": true,
+    "spatial_native_flux_postrun_wsl_executed": false,
+    "spatial_native_flux_postrun_wsl_outputs_generated": false,
+    "spatial_native_flux_postrun_output_directory": "~/OpenFOAM/C3D05_B_T0_SPATIAL_DIAGNOSTICS_01",
+    "spatial_native_flux_postrun_source": "cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/scripts/analyze_existing_t0_spatial.py",
+    "spatial_native_flux_postrun_report": "docs/granada/C3D05_FLUJO_ESPACIAL_Y_PUERTA_FISICA_20261123_ES.md",
+    "spatial_native_flux_postrun_scope": "12 longitudinal Y bands and native paired q face centres x_m/y_m/z_m for ParaView, q/energy SHA verification, no native solver or mesh, no physical acceptance",
+    "spatial_native_flux_postrun_ci_execution_verified": false
   },
   "other_cases": [
     {
@@ -218,11 +227,11 @@
     },
     {
       "case_id": "C3D-05 Caso B",
-      "status": "T0 referencia C14 numérica completada sobre 270788 HEX8 reales en WSL: 6 temperaturas regionales, error energético relativo máximo 4.3202925e-8, q 12636 pares/lado con discrepancia relativa máxima 1.82397338e-16, expediente SHA y marcador ParaView. Sin datos JMatPro/QuickCup, convergencia ni validación física; G3/G4 abiertos.",
-      "evidence": "docs/granada/C3D05_WSL_T0_NUMERICO_COMPLETO_270788_HEX8_20261120_ES.md"
+      "status": "T0 de referencia C14 numérica 6/6 completa sobre 270788 HEX8 en WSL. Nuevo código Python de solo lectura para mapas q axiales (12 bandas y nube de 12636 centros) publicado, no ejecutado sobre CSV WSL. Pendientes propiedades JMatPro/QuickCup y validación física. 2/7=29% hitos; G3/G4 abiertos.",
+      "evidence": "docs/granada/C3D05_FLUJO_ESPACIAL_Y_PUERTA_FISICA_20261123_ES.md"
     }
   ],
-  "blocker": "Sin bloqueo de software para diagnóstico numérico C14 T0: seis fases completadas por WSL sobre 270788 HEX8 (reutilizó solver/CSV originales), energía, q bilateral 12636 pares y resumen SHA generado. Bloqueo científico: faltan propiedades físicas trazables JMatPro/QuickCup, T0 de física de fundición, sensibilidad dt/malla y validación experimental; 1826 nonorth severas. G3 y G4 físicos aún abiertos.",
-  "next_integrated_delivery": "Inspeccionar T/gradientes/q espaciales en ParaView y métricas ya guardadas sin repetir C14; preparar T0 con propiedades de metal/molde documentadas, condiciones de transferencia representativas y curvas QuickCup; luego estudio de sensibilidad y transición controlada a T1 calor latente/solidificación, T2 contracción.",
+  "blocker": "Bloqueo del modelo FÍSICO de Caso B, no del diagnóstico T0 C14 numérico ya completado: faltan propiedades de hierro/arena trazables, IC/BC de vaciado y contacto, curvas experimentales QuickCup y estudios de convergencia/dt con 1826 caras no ortogonales severas. Script de análisis espacial q 12 bandas y nube de 12636 caras publicado 23-11-2026 pero aún NO ejecutado contra CSV WSL; CI sin verificación de ejecución aquí.",
+  "next_integrated_delivery": "Ejecutar UNA SOLA VEZ el analizador Python de solo lectura de q real preservado (sin foamMultiRun, wmake, Gmsh ni reauditoría de malla); analizar distribución axial de 12636 caras en CSV e importar puntos SI a ParaView. Después preparar y verificar entradas de hierro/arena JMatPro y QuickCup para T0 físico sin inventar valores; mantener G3/G4 abiertos.",
   "science": "WSL_REAL_270788_HEX8_C14_NUMERICAL_T0_END_TO_END_COMPLETE_ENERGY_AND_BILATERAL_Q_SHA_NOT_PHYSICALLY_VALIDATED"
 }
