@@ -1,6 +1,22 @@
 # FS-C07 — Transitorio térmico nativo previo al modelo de contracción
 
 
+> **23-11-2026 — DIAGNÓSTICO DEFINITIVO DE EJECUCIÓN, PENDIENTE DE ACEPTACIÓN DE FASES.** El log nativo de la corrida `...183217Z_72da1bf4` llegó a **`Time=1s` y `End`**, después de **2355 s** de reloj. Hay **10868 directorios de tiempo** y **20 estados con campos VOF/sólido/T completos**. `FS_C07_REPORT.json` quedó `INCOMPLETE` únicamente porque `phase_volume_metrics` rechazó la asignación `alpha.metal.solid <= alpha.metal` en alguna celda bajo la **primera** tolerancia 1e-8: mensaje exacto `FS-C03 STATIC GATE: invalid VOF / absolute-solid phase allocation`. Ese mensaje no se explica solo por el mínimo VOF `-9.766e-46` observado a 0.114 s; se necesitan mínimos/máximos y celda exacta de los 20 estados. **No repetir CFD ni recortar campos hasta medir la gravedad real.** Potencia interfacial al final: `Q_fluid=-7184.75867563 W`, `Q_mold=+7184.84637194 W` (residuo `+0.08769631 W`, `0.00122058 %`). Se detecta `alphaRhoPhi.metal=+7.54288884513e-6 kg/s` en `atmosphereLowerSides` a 1 s, por lo que tampoco hay evidencia de confinamiento metálico perfecto. [Informe fuente y límites científicos](../../docs/granada/FS_C07_NATIVE_1S_SOLVER_COMPLETADO_POSTPROCESO_BLOQUEADO_20261123_ES.md).
+
+> **FORENSIC FS-C07 SIN SOLVER, SOBRE EL MISMO CASO EXISTENTE:**
+>
+> ```bash
+> cd ~/OpenFOAM/FS_C02_WORKTREE
+> git fetch origin research/fs-c02-metal-air-vof-20261117
+> git switch --detach FETCH_HEAD
+> python3 analysis_tools/diagnose_fs_c07_phase_allocation.py --compact \
+>   ~/OpenFOAM/FS_C07_RUNS/FS_C07_THERMAL_20261123T183217Z_72da1bf4
+> ```
+>
+> Este inspector no invoca `foamMultiRun`, no modifica ningún archivo original y cuantifica por cada instante las celdas que violan las restricciones en tolerancias `1e-12`, `1e-10`, `1e-8`. Recupera el primer/peor caso y presenta temperaturas de cribado y hashes de los campos; esas temperaturas **no** validan JMatPro ni contracción.
+
+
+
 > **23-11-2026 — CORRIDA PRIMERA TERMINÓ CON EVIDENCIA PRESERVADA; CAUSA NO IDENTIFICADA.** El investigador aportó `FS-C07 EVIDENCE PRESERVED: /home/michel/OpenFOAM/FS_C07_RUNS/FS_C07_THERMAL_20261123T183217Z_72da1bf4`, pero **no** la línea precedente de error, el JSON `last_error` ni el final del log. Esto **no permite** inferir error del solver: el mismo mensaje se imprime cuando falla la auditoría Python tras un `foamMultiRun` exitoso, cuando el solver devuelve código no cero o ante timeout. Se observó antes `t=0.1142694919 s`, **no** se ha establecido el tiempo final. El investigador aportó `df -h`: `/dev/sdd`, 1007 GB capacidad, 62 GB usados, **895 GB libres, 7 % utilizado**. No hay evidencia de agotamiento de disco. **No relanzar ni editar la corrida antes de recuperar la causa exacta**.
 
 > Para leer la evidencia **sin CFD ni escritura en el caso**, se incorporó [`analysis_tools/inspect_existing_fs_c07.py`](../../analysis_tools/inspect_existing_fs_c07.py):
