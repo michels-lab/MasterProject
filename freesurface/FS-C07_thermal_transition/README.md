@@ -1,6 +1,22 @@
 # FS-C07 — Transitorio térmico nativo previo al modelo de contracción
 
 
+> **23-11-2026 — RECUPERACIÓN RAW VOLUMÉTRICA NATIVA COMPLETADA EN WSL, SIN CFD NUEVA.** [Auditoría de los veinte estados y comparación con monitores de OpenFOAM](../../docs/granada/FS_C07_AUDITORIA_VOLUMETRICA_NATIVE_1S_20261123_ES.md). A 1s: `V_metal_raw=48.01103827 cm³`, `V_solid_raw=2.40359109 cm³` (`5.006330%` del metal, **numérico no aceptado**); `V_liquid_raw=45.60744718 cm³`. Exceso de sólido por encima de metal, integrado sin clip: `0.00176807 mm³` a 1s; el mayor exceso volumétrico `0.00612729 mm³` ocurrió a `0.40s`, mientras el mayor error local de fracción ocurrió a `0.20s`. Ambos monitores nativos de `volFieldValue` reproducen las integrales de forma consistente. La variación de `V_metal` respecto a inicio es `−0.878013 mm³` (`−0.00182874%`), **NO es contracción física demostrada**. La integral sólida raw `V_s` **bajó de t=0.05 a 0.10s** antes de crecer; requiere examinar arranque. La puerta `0<=alpha_solid<=alpha_metal<=1` **sigue FAIL** y no se alterarán los campos originales.
+
+> **DIAGNÓSTICO ESPACIAL PREPARADO, NO CORRIDO EN WSL:** [`analysis_tools/locate_fs_c07_phase_violation.py`](../../analysis_tools/locate_fs_c07_phase_violation.py) identifica los índices de celdas originales, posición promedio de sus 8 vértices, `T.metal`, distribución de errores por bandas de magnitud `alpha.metal`, los ocho máximos por error de fracción y por integral volumétrica, en `t=0.2,0.4,1.0s`. **Distingue magnitud VOF del núcleo de metal, no afirma automáticamente que una celda sea interfaz geométrica.** No ejecuta solver, ni remalla, ni sobrescribe la carpeta fuente:
+>
+> ```bash
+> cd ~/OpenFOAM/FS_C02_WORKTREE
+> git fetch origin research/fs-c02-metal-air-vof-20261117
+> git switch --detach FETCH_HEAD
+> python3 analysis_tools/locate_fs_c07_phase_violation.py \
+>   ~/OpenFOAM/FS_C07_RUNS/FS_C07_THERMAL_20261123T183217Z_72da1bf4
+> ```
+>
+> Las pruebas sintéticas del nuevo diagnóstico fueron añadidas al workflow pero aún no hay CI/WSL verificado para este código.
+
+
+
 > **23-11-2026 — RESULTADO ACTUALIZADO: HAY CAMBIO DE FASE NUMÉRICO REAL, PERO EL GATE DE ENCAJE DE FASE SIGUE ABIERTO.** Los 20 estados guardados entre 0.05 y 1 s muestran `max(alpha.metal.solid): 0.00103272 → 0.50040120`. Primeras celdas metálicas del núcleo (`alpha.metal≥0.5`) bajo `Tliq=1473 K` provisional aparecen a `t=0.10 s`; al final son `1160`, con `Tmin=1447.9624 K`. El máximo error `alpha.metal.solid-alpha.metal` fue `6.1813429e-6` a 0.20 s en celda 30580; a 1 s, 378 de 34368 celdas superan 1e-8 y 20,459 incumplen estrictamente contando valores minúsculos. Esto **NO** significa 50.04% de hierro global sólido ni demuestra contracción: [informe de los 20 estados](../../docs/granada/FS_C07_20_ESTADOS_REALES_FRACCION_SOLIDA_Y_VOF_20261123_ES.md).
 
 > **RECUPERACIÓN DE VOLÚMENES SIN CLIP NI CFD**: [`analysis_tools/recover_fs_c07_native_phase_metrics.py`](../../analysis_tools/recover_fs_c07_native_phase_metrics.py) integra los campos `alpha.metal` y `alpha.metal.solid` **originales** usando volúmenes de celdas reales, reportando por separado `ΣV·max(alpha_solid-alpha_metal,0)`, los negativos, relación raw sólido/metal y contraste con los monitores `FS_C06_metalVoFVolume`/`FS_C06_solidMetalVolume`. **Los números que devuelve siguen siendo diagnósticos brutos, no sólidos físicos aceptados.** Requiere un único análisis de solo lectura en el caso existente:
