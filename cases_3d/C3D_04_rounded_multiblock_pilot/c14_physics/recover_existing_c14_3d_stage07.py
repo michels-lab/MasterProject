@@ -229,7 +229,7 @@ def native_inspection(case:Path,copy:Path,log_hash:str)->dict:
     """Read and attest what actually exists, including incomplete prior runs."""
     result={"copy_exists":copy.is_dir(),"native_final_report_exists":False,
             "verified_native_success":False,
-            "original_model_modified":False,"new_CFD_run":False,
+            "new_CFD_run":False,
             "log_inspection":{}}
     if not copy.is_dir() or copy.is_symlink():
         result["status"]="ABSENT_OR_UNSAFE_COPY"
@@ -301,6 +301,21 @@ def evaluate(case:Path,vol:Path,copy:Path)->tuple[dict,list[dict]]:
           "reported C14 metal mass not matched to original rho and volume")
     timeline,kinetics=calculate(data,mass,float(contract["solidification"]["L_J_kg"]))
     native=native_inspection(case,copy,hashes["source_CFD_log_sha256"])
+    # If native logs or the final report appear after the first analysis,
+    # do not call a previous immutable report an unchanged-evidence rerun.
+    # A new output directory must be explicitly selected, no overwrites.
+    native_identity={
+        "copy_exists":native["copy_exists"],
+        "copy_original_controlDict_matches":
+            native.get("copy_original_controlDict_matches"),
+        "copy_original_solver_log_matches":
+            native.get("copy_original_solver_log_matches"),
+        "native_final_report_sha256":
+            native.get("final_report_sha256"),
+        "native_step_log_sha256":{
+            k:v.get("sha256") for k,v in native["log_inspection"].items()
+        },
+    }
     report={
         "schema":"C3D04_A_C14_3D_STAGE07_EXISTING_EVIDENCE_V1",
         "created_utc":datetime.now(timezone.utc).isoformat(),
@@ -312,7 +327,8 @@ def evaluate(case:Path,vol:Path,copy:Path)->tuple[dict,list[dict]]:
         "source_sha256":{**hashes,
              "source_C14_controlDict_sha256":hashfile(c14ctrl),
              "native_case_controlDict_sha256":hashfile(sourcectrl),
-             "C14_contract_sha256":hashfile(CONTRACT)},
+             "C14_contract_sha256":hashfile(CONTRACT),
+             "existing_native_copy_inputs":native_identity},
         "original_residual_peak_timestamps":
             meta["peak_solver_final_residual_with_time"],
         "metal_mass_kg_nominal":mass,
