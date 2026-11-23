@@ -286,7 +286,7 @@ def read_cfd_time_from_log(log: Path) -> tuple[float | None, int]:
     except OSError:
         return None, 0
     matches = re.findall(
-        r"(?m)^\\s*Time\\s*=\\s*([0-9]+(?:\\.[0-9]*)?(?:[eE][+-]?[0-9]+)?)",
+        r"(?m)^\s*Time\s*=\s*([0-9]+(?:\.[0-9]*)?(?:[eE][+-]?[0-9]+)?)",
         tail,
     )
     return (float(matches[-1]) if matches else None), size
