@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
   "audit_kind": "deterministic_full_tracked_tree",
-  "tracked_files_total": 39050,
-  "classified_files_total": 39045,
-  "docs_content_inspected": 195,
+  "tracked_files_total": 39054,
+  "classified_files_total": 39049,
+  "docs_content_inspected": 196,
   "large_docs_skipped": 1,
   "excluded_reports": 5,
   "roles": {
@@ -12,15 +12,15 @@
     "bitacora": 5,
     "config": 17,
     "data": 32,
-    "document": 157,
+    "document": 158,
     "index": 34,
     "license": 1,
     "simulation_case_file": 117,
     "simulation_input": 2683,
     "simulation_log": 3155,
     "simulation_output": 32615,
-    "source": 127,
-    "test": 59,
+    "source": 129,
+    "test": 60,
     "web_ui": 1,
     "workflow": 32
   },
@@ -28,7 +28,7 @@
     "BROKEN_RELATIVE_LINK": 7
   },
   "finding_total": 7,
-  "inventory_fingerprint": "477729c8f59baf01cda80d367dfb2f8543b42469d3b2a20c31ba3d2868f11da2",
+  "inventory_fingerprint": "a61ea6b8fdd242e3f66e03ea4279b3bfc50d6f988b3c8356768a7452ab743752",
   "evidence_fingerprint": "a38cca05722cc62f2a19d8787a386e132771345cc8472199f5e39f915b2e8a45",
   "files": [
     {
@@ -78,7 +78,7 @@
       "role": "workflow",
       "purpose": "GitHub Actions automation",
       "certainty": "rule",
-      "blob": "4ad245f8ef1fe22b375de2653b1afd858ba32dbc"
+      "blob": "f95c1599880be5c3b12a25803e5cea7a056d569c"
     },
     {
       "path": ".github/workflows/c3d04-a-c14-physics-fidelity.yml",
@@ -92,7 +92,7 @@
       "role": "workflow",
       "purpose": "GitHub Actions automation",
       "certainty": "rule",
-      "blob": "547d9aec694956aa5c70cac6880009269c442c5d"
+      "blob": "22158841296f787e141f1f8bef240e1d76afe6fe"
     },
     {
       "path": ".github/workflows/c3d04-a-c14-real-10s-postrun-readonly.yml",
@@ -393,28 +393,28 @@
       "role": "bitacora",
       "purpose": "technical/audit change history",
       "certainty": "rule",
-      "blob": "4da03567dc0c4a617a4e53c2c91d83e9c052d2db"
+      "blob": "676449b9b66270782f88f1ce610bf176d2557f37"
     },
     {
       "path": "PROJECT_AUDIT_LOG_EN.md",
       "role": "bitacora",
       "purpose": "technical/audit change history",
       "certainty": "rule",
-      "blob": "53c9c8552ef4b4fda124b6b3c61cda8e6f138fbb"
+      "blob": "3594f6f2c12334802e86d675eadd2e7ed0d301e2"
     },
     {
       "path": "PROJECT_AUDIT_LOG_ES.md",
       "role": "bitacora",
       "purpose": "technical/audit change history",
       "certainty": "rule",
-      "blob": "52ce0a1c1f4b40d4c2fdcb1feca6effbb400940e"
+      "blob": "3ae4eb00bc11d58943fc07357fc5aad6162c4058"
     },
     {
       "path": "README.md",
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "9570ca12259ab486f50a9085147574e8756af58f"
+      "blob": "90b3ffe0eb258d0aeafab29396f060566cd2bddc"
     },
     {
       "path": "RUN_CASE_REGISTRY.csv",
@@ -1555,7 +1555,7 @@
       "role": "agent",
       "purpose": "assistant role/instructions",
       "certainty": "rule",
-      "blob": "3f8f113d1efb89c17e8b595313f94dfb0f7f2cf5"
+      "blob": "1ea05c0029a9c609a096024d9215be38aadbab29"
     },
     {
       "path": "cases_3d/C3D_04_rounded_multiblock_pilot/Allmesh",
@@ -1628,6 +1628,13 @@
       "blob": "a42c188d0d7c920a83985f058b4d2119d7094d71"
     },
     {
+      "path": "cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/native_c14_solver_backed_offline_smoke.py",
+      "role": "source",
+      "purpose": "code/test implementation",
+      "certainty": "rule",
+      "blob": "73bace5b73d318d154a5e0297bae7bfda83872b5"
+    },
+    {
       "path": "cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/recover_existing_c14_3d_stage07.py",
       "role": "source",
       "purpose": "code/test implementation",
@@ -1647,6 +1654,13 @@
       "purpose": "code/test implementation",
       "certainty": "rule",
       "blob": "28e27c1756d88e8686396e50a8653d0979f3f0d4"
+    },
+    {
+      "path": "cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/run_c14_stage07_solver_backed_recovery.py",
+      "role": "source",
+      "purpose": "code/test implementation",
+      "certainty": "rule",
+      "blob": "bc1e57284e449a13beb77e20729f9083faeca99f"
     },
     {
       "path": "cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/stage_c14_3d_case_a.py",
@@ -1689,6 +1703,13 @@
       "purpose": "code/test implementation",
       "certainty": "rule",
       "blob": "b9458c0e64c55f1ab10999468c5c8bfa0012c383"
+    },
+    {
+      "path": "cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/tests/test_c14_stage07_solver_backed_recovery.py",
+      "role": "test",
+      "purpose": "code/test implementation",
+      "certainty": "rule",
+      "blob": "834432b0963389bf03f53471566c7db65862db42"
     },
     {
       "path": "cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/tests/test_existing_c14_3d_results.py",
@@ -272157,6 +272178,13 @@
       "blob": "f5476dc1e47e3aa90fe60ae77eb920fe795f0c86"
     },
     {
+      "path": "docs/C3D04_A_STAGE07_F14_SOLVER_BACKED_NATIVE_RECOVERY_20261123_ES.md",
+      "role": "document",
+      "purpose": "manual/decision/report/historical note",
+      "certainty": "inferred",
+      "blob": "f6d27da74c511095272d3483526562207a8f3f68"
+    },
+    {
       "path": "docs/C3D04_A_STAGE07_FORENSIC_KINETICS_20261123_ES.md",
       "role": "document",
       "purpose": "manual/decision/report/historical note",
@@ -272175,7 +272203,7 @@
       "role": "config",
       "purpose": "machine-readable configuration",
       "certainty": "rule",
-      "blob": "50d31a23476935db204c0fd06c5d5556fd51fdf1"
+      "blob": "f45a213c1fdd47363c3399766fea2e5b368c36fa"
     },
     {
       "path": "docs/C3D_01_ESTADO_REAL_20261110_ES.md",
@@ -272413,7 +272441,7 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "9dc05161b46720417a40fa74b9ea825213be468c"
+      "blob": "939790679505fefe39d1589f68e7d67da56c2fd6"
     },
     {
       "path": "docs/DOCUMENT_SYNC_20261110_ES.md",
