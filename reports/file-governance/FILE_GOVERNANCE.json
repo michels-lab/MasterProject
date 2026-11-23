@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
   "audit_kind": "deterministic_full_tracked_tree",
-  "tracked_files_total": 39044,
-  "classified_files_total": 39039,
-  "docs_content_inspected": 193,
+  "tracked_files_total": 39050,
+  "classified_files_total": 39045,
+  "docs_content_inspected": 195,
   "large_docs_skipped": 1,
   "excluded_reports": 5,
   "roles": {
@@ -12,25 +12,24 @@
     "bitacora": 5,
     "config": 17,
     "data": 32,
-    "document": 155,
+    "document": 157,
     "index": 34,
     "license": 1,
     "simulation_case_file": 117,
     "simulation_input": 2683,
     "simulation_log": 3155,
     "simulation_output": 32615,
-    "source": 125,
-    "test": 57,
+    "source": 127,
+    "test": 59,
     "web_ui": 1,
     "workflow": 32
   },
   "finding_counts": {
-    "BROKEN_RELATIVE_LINK": 7,
-    "POTENTIAL_UNLOGGED_CHANGES": 2
+    "BROKEN_RELATIVE_LINK": 7
   },
-  "finding_total": 9,
-  "inventory_fingerprint": "7a1d55d25f8bf758fdc47e05084d04c75fa914307126e700ba62529b3bb7cfbd",
-  "evidence_fingerprint": "e0b763ef01b0fc29ab66134ca558ad98f9110b47fd1b19a38a1e898033338c38",
+  "finding_total": 7,
+  "inventory_fingerprint": "477729c8f59baf01cda80d367dfb2f8543b42469d3b2a20c31ba3d2868f11da2",
+  "evidence_fingerprint": "a38cca05722cc62f2a19d8787a386e132771345cc8472199f5e39f915b2e8a45",
   "files": [
     {
       "path": ".github/agents/openfoam-solidification.agent.md",
@@ -93,7 +92,7 @@
       "role": "workflow",
       "purpose": "GitHub Actions automation",
       "certainty": "rule",
-      "blob": "f00bdadf7ffcc2d630698de4cf91937f00079564"
+      "blob": "547d9aec694956aa5c70cac6880009269c442c5d"
     },
     {
       "path": ".github/workflows/c3d04-a-c14-real-10s-postrun-readonly.yml",
@@ -394,28 +393,28 @@
       "role": "bitacora",
       "purpose": "technical/audit change history",
       "certainty": "rule",
-      "blob": "b7a273d0334b933aa62ce7d82cf7b12399228697"
+      "blob": "4da03567dc0c4a617a4e53c2c91d83e9c052d2db"
     },
     {
       "path": "PROJECT_AUDIT_LOG_EN.md",
       "role": "bitacora",
       "purpose": "technical/audit change history",
       "certainty": "rule",
-      "blob": "add6946d41bf54d5620ddad65f1427290150c07f"
+      "blob": "53c9c8552ef4b4fda124b6b3c61cda8e6f138fbb"
     },
     {
       "path": "PROJECT_AUDIT_LOG_ES.md",
       "role": "bitacora",
       "purpose": "technical/audit change history",
       "certainty": "rule",
-      "blob": "82fb83fa541aa3aa908012833e1e8226519b4d0e"
+      "blob": "52ce0a1c1f4b40d4c2fdcb1feca6effbb400940e"
     },
     {
       "path": "README.md",
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "95d88c530e5e3caa7f7c1630144f444fa0045604"
+      "blob": "9570ca12259ab486f50a9085147574e8756af58f"
     },
     {
       "path": "RUN_CASE_REGISTRY.csv",
@@ -1556,7 +1555,7 @@
       "role": "agent",
       "purpose": "assistant role/instructions",
       "certainty": "rule",
-      "blob": "bfa5df4ae76812db6e79b6d4f6ca2e248e58fbd9"
+      "blob": "3f8f113d1efb89c17e8b595313f94dfb0f7f2cf5"
     },
     {
       "path": "cases_3d/C3D_04_rounded_multiblock_pilot/Allmesh",
@@ -1594,6 +1593,13 @@
       "blob": "f9f6501dc2abf26892e4ec4fe3a9d672cf985fa9"
     },
     {
+      "path": "cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/audit_existing_native_c14_stage07.py",
+      "role": "source",
+      "purpose": "code/test implementation",
+      "certainty": "rule",
+      "blob": "43f5042068c99a2773c1669fa860bc997a8a545c"
+    },
+    {
       "path": "cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/c14_3d_native_energy_closure.py",
       "role": "source",
       "purpose": "code/test implementation",
@@ -1620,6 +1626,13 @@
       "purpose": "code/test implementation",
       "certainty": "rule",
       "blob": "a42c188d0d7c920a83985f058b4d2119d7094d71"
+    },
+    {
+      "path": "cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/recover_existing_c14_3d_stage07.py",
+      "role": "source",
+      "purpose": "code/test implementation",
+      "certainty": "rule",
+      "blob": "9e52a04e5fab03f77e9a06f04a5b0cb3e9fe226c"
     },
     {
       "path": "cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/run_c14_3d_complete_postprocess.py",
@@ -1657,11 +1670,25 @@
       "blob": "704d2936aef4ee6efc63ec24c5af26175b2eab3e"
     },
     {
+      "path": "cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/tests/test_c14_3d_native_stage07_forensics.py",
+      "role": "test",
+      "purpose": "code/test implementation",
+      "certainty": "rule",
+      "blob": "72c6e6a531bcb86a70d7a188244bd46151b53839"
+    },
+    {
       "path": "cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/tests/test_c14_3d_postprocess_parity.py",
       "role": "test",
       "purpose": "code/test implementation",
       "certainty": "rule",
       "blob": "5e2df254a5357494c772ef33e46a386ea7f12f3c"
+    },
+    {
+      "path": "cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/tests/test_c14_3d_stage07_recovery.py",
+      "role": "test",
+      "purpose": "code/test implementation",
+      "certainty": "rule",
+      "blob": "b9458c0e64c55f1ab10999468c5c8bfa0012c383"
     },
     {
       "path": "cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/tests/test_existing_c14_3d_results.py",
@@ -272123,6 +272150,20 @@
       "blob": "b58282ae2a9927397bc36f0a60c205db2669a50a"
     },
     {
+      "path": "docs/C3D04_A_C14_NATIVE_101_STATES_REAL_FORENSICS_20261123_ES.md",
+      "role": "document",
+      "purpose": "manual/decision/report/historical note",
+      "certainty": "inferred",
+      "blob": "f5476dc1e47e3aa90fe60ae77eb920fe795f0c86"
+    },
+    {
+      "path": "docs/C3D04_A_STAGE07_FORENSIC_KINETICS_20261123_ES.md",
+      "role": "document",
+      "purpose": "manual/decision/report/historical note",
+      "certainty": "inferred",
+      "blob": "64ff5838ff719e169b30ec55ed0d5e0259422810"
+    },
+    {
       "path": "docs/C3D04_CASE_A_MILESTONE_TRACKER.csv",
       "role": "data",
       "purpose": "structured/research data (semantics not validated)",
@@ -272134,7 +272175,7 @@
       "role": "config",
       "purpose": "machine-readable configuration",
       "certainty": "rule",
-      "blob": "3eddc138129782acd9196a38fc2158eea4db7bb6"
+      "blob": "50d31a23476935db204c0fd06c5d5556fd51fdf1"
     },
     {
       "path": "docs/C3D_01_ESTADO_REAL_20261110_ES.md",
@@ -272204,7 +272245,7 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "3f2f461e17dd458b4c8572a017262a3f452e5991"
+      "blob": "67d4e4890e80816fb82e5a00367991a69ce34471"
     },
     {
       "path": "docs/C3D_04_C14_V4_T02_REAL_10S_20261123_ES.md",
@@ -272372,7 +272413,7 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "c3092c3a3906d2113687432e98bf272b7e53fb54"
+      "blob": "9dc05161b46720417a40fa74b9ea825213be468c"
     },
     {
       "path": "docs/DOCUMENT_SYNC_20261110_ES.md",
@@ -273368,24 +273409,6 @@
       "path": "docs/granada/C3D05_T0_README_HISTORICAL_BEFORE_SINGLE_FLOW_20261120.md",
       "observation": "Missing: outside-repo",
       "recommendation": "Fix link or restore target",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "081aa781d9a6bd60",
-      "code": "POTENTIAL_UNLOGGED_CHANGES",
-      "severity": "review",
-      "path": "PROJECT_AUDIT_LOG_EN.md",
-      "observation": "3 implementation/config paths changed since this log's last commit; examples: docs/PROJECT_STAGE_STATUS.json, tools/isolate_active_openfoam_cases.py, tools/tests/test_isolate_active_openfoam_cases.py",
-      "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "546038de30235ff9",
-      "code": "POTENTIAL_UNLOGGED_CHANGES",
-      "severity": "review",
-      "path": "PROJECT_AUDIT_LOG_ES.md",
-      "observation": "3 implementation/config paths changed since this log's last commit; examples: docs/PROJECT_STAGE_STATUS.json, tools/isolate_active_openfoam_cases.py, tools/tests/test_isolate_active_openfoam_cases.py",
-      "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     }
   ],
