@@ -25,12 +25,14 @@ jobs:
         run: |
           python -m py_compile \
             cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/c14_3d_postprocess_parity.py \
-            cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/tests/test_c14_3d_postprocess_parity.py
+            cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/run_c14_3d_complete_postprocess.py \
+            cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/tests/test_c14_3d_postprocess_parity.py \
+            cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/tests/test_native_complete_postprocess.py
       - name: Synthetic native-polyMesh and C14 diagnostic fidelity tests
         run: |
           python -m unittest discover \
             -s cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/tests \
-            -p 'test_c14_3d_postprocess_parity.py' -v
+            -p 'test_*postprocess*.py' -v
       - name: Fail if postprocessing script launches a CFD solver
         run: |
           python - <<'PY'
