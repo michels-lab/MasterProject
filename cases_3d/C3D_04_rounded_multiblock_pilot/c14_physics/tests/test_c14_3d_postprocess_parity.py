@@ -36,7 +36,7 @@ def write_single_hex(root:Path, reverse:bool=False)->None:
         "\n".join("4("+ " ".join(map(str,f))+")" for f in faces)+"\n)\n"
     )
     (root/"owner").write_text(poly_header("labelList")+"6{0}\n")
-    (root/"neighbour").write_text(poly_header("labelList")+"0()\n")
+    (root/"neighbour").write_text(poly_header("labelList")+"0\n(\n)\n")
     (root/"boundary").write_text(
         poly_header("polyBoundaryMesh")+"1\n(\nouter\n{ type wall; nFaces 6; startFace 0; }\n)\n"
     )
