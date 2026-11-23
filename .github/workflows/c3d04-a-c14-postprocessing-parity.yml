@@ -27,9 +27,11 @@ jobs:
             cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/c14_3d_postprocess_parity.py \
             cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/run_c14_3d_complete_postprocess.py \
             cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/c14_3d_native_energy_closure.py \
+            cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/recover_existing_c14_3d_stage07.py \
             cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/tests/test_c14_3d_postprocess_parity.py \
             cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/tests/test_native_complete_postprocess.py \
-            cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/tests/test_c14_3d_native_energy_closure.py
+            cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/tests/test_c14_3d_native_energy_closure.py \
+            cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/tests/test_c14_3d_stage07_recovery.py
       - name: Synthetic native-polyMesh and C14 diagnostic fidelity tests
         run: |
           python -m unittest discover \
@@ -38,6 +40,25 @@ jobs:
           python -m unittest discover \
             -s cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/tests \
             -p 'test_c14_3d_native_energy_closure.py' -v
+      - name: Stage07 read-only recovery, 101-state kinetics and native-copy provenance
+        run: |
+          python -m unittest discover \
+            -s cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/tests \
+            -p 'test_c14_3d_stage07_recovery.py' -v
+      - name: Ensure recovery script has no solver/subprocess or destructive input writes
+        run: |
+          python - <<'PY'
+          import ast
+          from pathlib import Path
+          file=Path("cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/recover_existing_c14_3d_stage07.py")
+          tree=ast.parse(file.read_text(encoding="utf-8"))
+          for x in ast.walk(tree):
+              if isinstance(x,ast.Import):
+                  assert all(i.name not in ("subprocess","shutil") for i in x.names)
+              if isinstance(x,ast.ImportFrom):
+                  assert x.module not in ("subprocess","shutil")
+          print("Recovery script cannot launch solver or clone/delete native CFD artifacts.")
+          PY
       - name: Fail if postprocessing script launches a CFD solver
         run: |
           python - <<'PY'
