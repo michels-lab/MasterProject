@@ -380,5 +380,35 @@
     "evidence_contract": "docs/C3D_04_C14_3D_POSTPROCESS_PARITY_MATRIX_20261123_ES.md",
     "analyzer_path": "cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/c14_3d_postprocess_parity.py",
     "work_branch": "science/c3d04-a-c14-postprocessing-parity-stage07"
+  },
+  "stage07_existing_artifacts_readonly_recovery": {
+    "date": "2026-11-23",
+    "status": "RECOVERY_SCRIPT_AND_SYNTHETIC_TESTS_PREPARED__REAL_WSL_RESULT_PENDING",
+    "source": "cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/recover_existing_c14_3d_stage07.py",
+    "evidence_from_investigator_terminal": {
+      "original_10s_case_directory_exists": true,
+      "volume_101_state_directory_exists": true,
+      "native_postprocess_workcopy_directory_exists": true,
+      "individual_volume_CSV_and_JSON_contents_checked": false,
+      "native_workcopy_function_object_completion_checked": false
+    },
+    "does_not_rerun_solver": true,
+    "does_not_modify_existing_volume_or_native_workcopy": true,
+    "source_worktree_A": "~/OpenFOAM/C3D04_A_WORKTREE",
+    "source_worktree_B_and_FS_untouched": true,
+    "independent_output": "~/OpenFOAM/C3D04_A_C14_STAGE07_RECOVERY_KINETICS_01",
+    "calculate_from_saved_states": [
+      "first saved interval below original C14 Tliq/Tsol, not exact onset",
+      "temperature and model liquid/solid inventories volume-weighted at 101 saved times",
+      "finite-difference cooling, model solidification and nominal latent-power intervals",
+      "original log residual peaks with time; existing native postProcessing report/log SHA inspection"
+    ],
+    "scientific_limits": [
+      "No reliable native energy closure from saved storage estimates alone",
+      "No 0.001s in-run source-function history recovered from 0.1s snapshots",
+      "No QuickCup, JMatPro constitutive update, grid or time-step independence"
+    ],
+    "stage07_complete": false,
+    "progress_count_done_unchanged": 6
   }
 }
