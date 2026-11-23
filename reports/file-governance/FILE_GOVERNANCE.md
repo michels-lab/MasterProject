@@ -5,7 +5,7 @@ No file is auto-deleted or declared unused.
 
 ## Coverage
 
-Tracked: 39037; classified: 39032; readable documents: 189; above read cap: 1; findings: 9.
+Tracked: 39038; classified: 39033; readable documents: 190; above read cap: 1; findings: 9.
 
 ## File roles
 
@@ -16,7 +16,7 @@ Tracked: 39037; classified: 39032; readable documents: 189; above read cap: 1; f
 | bitacora | 5 |
 | config | 17 |
 | data | 32 |
-| document | 152 |
+| document | 153 |
 | index | 33 |
 | license | 1 |
 | simulation_case_file | 117 |
@@ -37,8 +37,8 @@ Tracked: 39037; classified: 39032; readable documents: 189; above read cap: 1; f
 - **CONFIRMED / BROKEN_RELATIVE_LINK** docs/granada/C3D05_T0_README_HISTORICAL_BEFORE_SINGLE_FLOW_20261120.md: Missing: outside-repo. Next: Fix link or restore target (ID 2fa56a22be90f045)
 - **CONFIRMED / BROKEN_RELATIVE_LINK** docs/granada/C3D05_T0_README_HISTORICAL_BEFORE_SINGLE_FLOW_20261120.md: Missing: outside-repo. Next: Fix link or restore target (ID 2fa56a22be90f045)
 - **CONFIRMED / BROKEN_RELATIVE_LINK** docs/granada/C3D05_T0_README_HISTORICAL_BEFORE_SINGLE_FLOW_20261120.md: Missing: outside-repo. Next: Fix link or restore target (ID 2fa56a22be90f045)
-- **REVIEW / POTENTIAL_UNLOGGED_CHANGES** PROJECT_AUDIT_LOG_EN.md: 6 implementation/config paths changed since this log's last commit; examples: .github/workflows/c3d05-b-c14-3d-phase-source.yml, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/c14_3d_postprocess_parity.py, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/tests/test_c14_3d_postprocess_parity.py, cases_3d/C3D_05_step_gmsh_conformal/c14_physics/run_case_b_c14_native.sh, cases_3d/C3D_05_step_gmsh_conformal/c14_physics/stage_c14_3d_case_b.py, cases_3d/C3D_05_step_gmsh_conformal/c14_physics/tests/test_stage_c14_3d_case_b.py. Next: Inspect diffs and reconcile only meaningful decisions/results in the canonical log (ID 6561c30ab2515ebf)
-- **REVIEW / POTENTIAL_UNLOGGED_CHANGES** PROJECT_AUDIT_LOG_ES.md: 6 implementation/config paths changed since this log's last commit; examples: .github/workflows/c3d05-b-c14-3d-phase-source.yml, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/c14_3d_postprocess_parity.py, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/tests/test_c14_3d_postprocess_parity.py, cases_3d/C3D_05_step_gmsh_conformal/c14_physics/run_case_b_c14_native.sh, cases_3d/C3D_05_step_gmsh_conformal/c14_physics/stage_c14_3d_case_b.py, cases_3d/C3D_05_step_gmsh_conformal/c14_physics/tests/test_stage_c14_3d_case_b.py. Next: Inspect diffs and reconcile only meaningful decisions/results in the canonical log (ID cb912ef0d4b5c2d3)
+- **REVIEW / POTENTIAL_UNLOGGED_CHANGES** PROJECT_AUDIT_LOG_EN.md: 7 implementation/config paths changed since this log's last commit; examples: .github/workflows/c3d05-b-c14-3d-phase-source.yml, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/c14_3d_postprocess_parity.py, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/tests/test_c14_3d_postprocess_parity.py, cases_3d/C3D_05_step_gmsh_conformal/c14_physics/run_case_b_c14_native.sh, cases_3d/C3D_05_step_gmsh_conformal/c14_physics/stage_c14_3d_case_b.py, cases_3d/C3D_05_step_gmsh_conformal/c14_physics/tests/test_stage_c14_3d_case_b.py. Next: Inspect diffs and reconcile only meaningful decisions/results in the canonical log (ID 49fe45c35f5439c4)
+- **REVIEW / POTENTIAL_UNLOGGED_CHANGES** PROJECT_AUDIT_LOG_ES.md: 7 implementation/config paths changed since this log's last commit; examples: .github/workflows/c3d05-b-c14-3d-phase-source.yml, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/c14_3d_postprocess_parity.py, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/tests/test_c14_3d_postprocess_parity.py, cases_3d/C3D_05_step_gmsh_conformal/c14_physics/run_case_b_c14_native.sh, cases_3d/C3D_05_step_gmsh_conformal/c14_physics/stage_c14_3d_case_b.py, cases_3d/C3D_05_step_gmsh_conformal/c14_physics/tests/test_stage_c14_3d_case_b.py. Next: Inspect diffs and reconcile only meaningful decisions/results in the canonical log (ID db42c3b9d43902ef)
 
 Complete path → purpose/role/certainty list lives in FILE_GOVERNANCE.json. SUMMARY.json has counts only for master polling.
 A dated file, duplicate, or suspicious name is an **investigation candidate**, not unwanted material.
