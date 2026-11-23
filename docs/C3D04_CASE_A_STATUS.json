@@ -24,7 +24,8 @@
     "64/64 extra parent severe faces individually matched to actual metal-mold interface; 0 outside",
     "T0 sourced from archived C14: 10 of 10 OpenFOAM Foundation14 dictionaries parsed on actual CI binary (GitHub Actions run 44825262805, artifact 14674730228); 15 of 15 integrated tests passed on run 44825262837",
     "20-11-2026 original C14 full 10s on ACTUAL V4/T02 WSL: terminal evidence of 101 states t0,t0.1,...t10, native report native_solver_run=true, Time=10s, End, h/e/p_rgh solved; 23-11-2026 investigator terminal upload. See docs/C3D_04_C14_V4_T02_REAL_10S_20261123_ES.md. Original accepted mesh preserved.",
-    "23-11-2026 ACTUAL WSL REAL V4/T02 existing C14 10s 101-state native ASCII postrun: all 8960 metal cells below 1473 K, 1158 below 1423 K, alpha1 mean 0.8367355017427456 min0 max0.992311; all-log max Co 0.0240415 across 10000 steps; energy balance NOT verified. docs/C3D_04_C14_V4_T02_REAL_10S_PHASE_NUMERICAL_RESULTS_20261123_ES.md"
+    "23-11-2026 ACTUAL WSL REAL V4/T02 existing C14 10s 101-state native ASCII postrun: all 8960 metal cells below 1473 K, 1158 below 1423 K, alpha1 mean 0.8367355017427456 min0 max0.992311; all-log max Co 0.0240415 across 10000 steps; energy balance NOT verified. docs/C3D_04_C14_V4_T02_REAL_10S_PHASE_NUMERICAL_RESULTS_20261123_ES.md",
+    "23-11-2026 investigator WSL real 101-state saved-volume kinetic analysis completed with original C14 10s fields unchanged, source volume CSV+JSON found, first saved model alpha1 decrease between 0.2 and 0.3 s, nominal peak latent release 1038.8813 W over 7.2-7.3 s, final volume-mean metal T 1450.70916 K and nominal solid inventory 0.0335828358 kg. Native copy source provenance PASSED, but native commands NOT fully verified; energy closure/QuickCup NOT verified."
   ],
   "nonnegotiable_blockers": [
     "C14 numeric metal/arena parameters and 2D boundary reference NOW sourced directly in T0; they are constant C14-model inputs, NOT independently measured T-dependent iron/sand functions.",
@@ -383,14 +384,14 @@
   },
   "stage07_existing_artifacts_readonly_recovery": {
     "date": "2026-11-23",
-    "status": "RECOVERY_SCRIPT_AND_SYNTHETIC_TESTS_PREPARED__REAL_WSL_RESULT_PENDING",
+    "status": "REAL_WSL_101_STATE_RECOVERY_COMPLETED__NATIVE_SOURCE_VERIFIED_BUT_COMMANDS_NOT_FULLY_VERIFIED",
     "source": "cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/recover_existing_c14_3d_stage07.py",
     "evidence_from_investigator_terminal": {
       "original_10s_case_directory_exists": true,
       "volume_101_state_directory_exists": true,
       "native_postprocess_workcopy_directory_exists": true,
-      "individual_volume_CSV_and_JSON_contents_checked": false,
-      "native_workcopy_function_object_completion_checked": false
+      "individual_volume_CSV_and_JSON_contents_checked": true,
+      "native_workcopy_function_object_completion_checked": true
     },
     "does_not_rerun_solver": true,
     "does_not_modify_existing_volume_or_native_workcopy": true,
@@ -409,6 +410,40 @@
       "No QuickCup, JMatPro constitutive update, grid or time-step independence"
     ],
     "stage07_complete": false,
-    "progress_count_done_unchanged": 6
+    "progress_count_done_unchanged": 6,
+    "real_WSL_observation": {
+      "date": "2026-11-23",
+      "original_case": "/home/michel/OpenFOAM/C3D04_A_C14_FLUID_SOLID_FULL_10S_RUN_01",
+      "worktree_A_source": "/home/michel/OpenFOAM/C3D04_A_WORKTREE",
+      "source_volume_mode": "EXISTING_VOLUME_CSV_AND_JSON_FOUND",
+      "run_status": "NEW_101_STATE_DIAGNOSTIC_PUBLISHED_NO_CFD",
+      "original_CFD_rerun": false,
+      "model_alpha1_first_saved_decrease_after_s": 0.2,
+      "model_alpha1_first_saved_decrease_on_or_before_s": 0.3,
+      "onset_exact_verified": false,
+      "maximum_nominal_latent_power_W": 1038.881301373963,
+      "max_nominal_latent_power_saved_interval_s": [
+        7.2,
+        7.3
+      ],
+      "final_metal_T_volume_mean_K": 1450.7091627651344,
+      "final_model_solid_inventory_kg": 0.03358283580064463,
+      "native_copy_forensic_status": "NATIVE_REPORT_SOURCE_VERIFIED_NOT_PHYSICAL_VALIDATION",
+      "native_commands_verified": false,
+      "energy_conservation_verified": false,
+      "output_report": "/home/michel/OpenFOAM/C3D04_A_C14_STAGE07_RECOVERY_KINETICS_01/C3D04_A_STAGE07_RECOVERY_REPORT.json",
+      "output_csv": "/home/michel/OpenFOAM/C3D04_A_C14_STAGE07_RECOVERY_KINETICS_01/C3D04_A_STAGE07_KINETICS_101_STATES.csv",
+      "provenance": "Investigator-provided stdout, not raw WSL file contents accessible from GitHub"
+    }
+  },
+  "stage07_native_postprocess_failure_forensics": {
+    "date": "2026-11-23",
+    "code": "cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/audit_existing_native_c14_stage07.py",
+    "scope": "SHA-bound four native subprocess exit codes, actual C14 object gaps, profile coverage, log failure markers, original ddt offline limitation, and existing native energy tables, read-only",
+    "native_report_hashed_real_WSL_forensic_executed": false,
+    "expected_output": "~/OpenFOAM/C3D04_A_C14_NATIVE_STAGE07_FORENSICS_01",
+    "no_solver_run": true,
+    "no_existing_native_output_overwrite": true,
+    "science_stage07_complete": false
   }
 }
