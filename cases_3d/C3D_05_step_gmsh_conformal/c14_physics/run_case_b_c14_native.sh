@@ -15,8 +15,15 @@ if [[ ! -f /opt/openfoam14/etc/bashrc ]]; then
     echo "BLOCKED_FOUNDATION14: /opt/openfoam14/etc/bashrc missing; no mesh/model touched" >&2
     exit 4
 fi
+# OpenFOAM Foundation14's official bashrc probes ZSH_NAME and other optional
+# variables without default expansions. Running it under our set -u triggers
+# "ZSH_NAME: unbound variable" before ANY native case or CFD exists.
+# Temporarily disable nounset ONLY while sourcing this trusted system script.
+# Restore strict guards for the rest of this runner.
+set +u
 # shellcheck disable=SC1091
 source /opt/openfoam14/etc/bashrc
+set -u
 if [[ "${WM_PROJECT_VERSION:-}" != "14" ]]; then
     echo "BLOCKED_FOUNDATION14: sourced environment is not Foundation14" >&2
     exit 4
