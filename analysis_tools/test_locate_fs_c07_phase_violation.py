@@ -3,7 +3,6 @@ import math
 from pathlib import Path
 import tempfile
 import unittest
-from unittest.mock import patch
 
 import locate_fs_c07_phase_violation as d
 
@@ -144,6 +143,9 @@ class PhaseAllocationSpatialTests(unittest.TestCase):
         results[3]["bin_by_actual_native_alpha_metal"]["alpha_metal_ge_0p5"][
             "count_gt_tolerance"
         ] = 1
+        with self.assertRaisesRegex(ValueError, "do not reproduce"):
+            d.compact_result(report)
+        results[3]["cells_above_tolerance"] = 3
         got2 = d.compact_result(report)
         self.assertFalse(got2["all_20_states_have_zero_core_cell_excess_above_threshold"])
         self.assertEqual(got2["max_core_cells_exceeding_threshold_any_state"], 1)
