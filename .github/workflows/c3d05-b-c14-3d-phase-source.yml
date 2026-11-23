@@ -1,0 +1,54 @@
+name: C3D05-B original C14 fluid-solid phase-source fidelity, no CFD
+on:
+  push:
+    branches: [main]
+    paths:
+      - "cases_3d/C3D_05_step_gmsh_conformal/c14_physics/**"
+      - ".github/workflows/c3d05-b-c14-3d-phase-source.yml"
+      - "cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/c14_source_fidelity.py"
+      - "cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/C14_3D_PHYSICS_CONTRACT.json"
+      - "cases_controlled_buoyancy/C14_topFixedFlux_explicitRef/**"
+  pull_request:
+    paths:
+      - "cases_3d/C3D_05_step_gmsh_conformal/c14_physics/**"
+      - ".github/workflows/c3d05-b-c14-3d-phase-source.yml"
+      - "cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/c14_source_fidelity.py"
+      - "cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/C14_3D_PHYSICS_CONTRACT.json"
+      - "cases_controlled_buoyancy/C14_topFixedFlux_explicitRef/**"
+  workflow_dispatch:
+permissions:
+  contents: read
+
+jobs:
+  c14-source-and-geometry-delta-only:
+    name: 22 source C14 files fidelity and Case B patch/zone negative QA
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Python source syntax and package imports (NO OpenFOAM solver)
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          code=Path("cases_3d/C3D_05_step_gmsh_conformal/c14_physics")
+          for file in sorted(code.rglob("*.py")):
+              compile(file.read_bytes(),str(file),"exec")
+              print("COMPILE_OK",file)
+          PY
+      - name: Source-faithful 3D full-C14 input regressions (NO CFD)
+        run: |
+          PYTHONDONTWRITEBYTECODE=1 python3 -B -m unittest discover \
+            -s cases_3d/C3D_05_step_gmsh_conformal/c14_physics/tests \
+            -p "test_*.py" -v
+      - name: Assert canonical original C14 model and no false stage promotion
+        run: |
+          PYTHONDONTWRITEBYTECODE=1 python3 -B - <<'PY'
+          import json
+          from pathlib import Path
+          d=json.loads(Path("docs/PROJECT_STAGE_STATUS.json").read_text())
+          assert d["case"]=="C3D_05_step_gmsh_conformal"
+          assert d["completed"]==2 and d["total"]==7
+          assert d["gates"][0]["done"] and d["gates"][1]["done"]
+          assert not any(g["done"] for g in d["gates"][2:])
+          print("C3D05_B_C14_SOURCE_READY_NO_WSL_CFD_NO_EXPERIMENTAL_VALIDATION")
+          PY
