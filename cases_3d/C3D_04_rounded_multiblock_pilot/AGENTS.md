@@ -1,3 +1,11 @@
+## 23-11-2026 | Etapa 07 — 101 estados reales PASS; postproceso nativo NO completo
+
+El usuario corrió REAL `recover_existing_c14_3d_stage07.py` en `~/OpenFOAM/C3D04_A_WORKTREE` y obtuvo `NEW_101_STATE_DIAGNOSTIC_PUBLISHED_NO_CFD` y `EXISTING_VOLUME_CSV_AND_JSON_FOUND`. El primer descenso observado de alpha1 está acotado entre 0.2 y 0.3 s; pico de potencia latente **nominal** discreta `1038.881301373963 W` (7.2–7.3s); metal T media volumétrica final `1450.7091627651344 K`; inventario sólido C14 final nominal `0.03358283580064463 kg`. No se reejecutó CFD ni se modificó la evidencia.
+
+**Prioridad actual:** la copia nativa reportó `NATIVE_REPORT_SOURCE_VERIFIED_NOT_PHYSICAL_VALIDATION` y `native_commands_verified=false`. NO declarar todos los functionObjects PASS, ni deducir la causa exacta sin leer cuatro `exit_code` y logs reales. El nuevo `c14_physics/audit_existing_native_c14_stage07.py` verifica SHA C14/source/copia, comandos, objetos/campos/perfiles nativos y energía metal-only nominal en UNA pasada, publica reporte aislado y no ejecuta solver/foamPostProcess. El C14 fuente documenta `ddt(T)` y `ddt(alpha1)` como incompatibles con recuperación offline de 0.001 s: es límite conocido, no error demostrado por sí solo. Mantener etapa **7/10** y avance **6/10 = 60 % hitos**, no conservación ni QuickCup. [Bitácora científica](../../docs/C3D04_A_C14_NATIVE_101_STATES_REAL_FORENSICS_20261123_ES.md). Seguir usando worktree A sin editar B o FS.
+
+---
+
 ## 23-11-2026 — A/C14 Stage 07: recuperación inmutable de 101 estados y copia nativa existente
 
 Tras la instalación aislada de A/B/FS se confirmó por terminal WSL que existen **las carpetas** del postprocesado volumétrico A y la copia física nativa de A; **no equivale a confirmar contenido ni ejecución terminada**. El orquestador histórico bloquea por diseño si existen ambas carpetas. Está PROHIBIDO borrarlas, forzar sobrescrituras, repetir 10s CFD o copiar por segunda vez sin necesidad.
