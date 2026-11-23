@@ -48,6 +48,16 @@ La regresión Python construye solo expedientes temporales sintéticos, prueba l
 
 Se agregó además al workflow nativo C14 en GitHub una comprobación directa de Foundation14 que parte del caso **sintético de 27 celdas por región** después de sus dos pasos CFD y llama `foamPostProcess -solver fluid -latestTime` sobre `metalSensibleEnthalpy` (el objeto original `rho*h`). Es una prueba de interoperabilidad del solucionador F14 real, **NO** resultados de tesis 3D V4/T02.
 
+## Aceptación nativa real en GitHub Actions — PASS (NO malla V4/T02)
+
+**Workflow:** `https://github.com/michels-lab/MasterProject/actions/runs/45263380861`, en el commit de la rama de implementación. OpenFOAM Foundation **14** instaló los módulos originales C14 y ejecutó el smoke nativo de dos pasos sobre dos regiones sintéticas de **27 celdas por región**. Una vez terminado ese CFD sintético, un segundo proceso `foamPostProcess -region metal -solver fluid -latestTime` (sin nuevo `foamMultiRun`) confirmó:
+
+1. `NATIVE_SOLVER_BACKED_RHO_H_REAL_FOUNDATION14_POSTPROCESS_PASS`: registro termodinámico `heRhoThermo` y `rho`, tabla nativa `metalSensibleEnthalpy` integrada correctamente.
+2. `NATIVE_SOLVER_BACKED_3_SURFACE_ENERGY_POWER_TABLES_F14_PASS`: `energyAdvectiveFlux`, `heatFlux`, `energyFlux`, `metalTopEnergyPower`, `metalMoldEnergyPower` y `metalBoundaryEnergyPower` reales calculados con códigos de salida cero y archivos de tabla en el directorio `postProcessing/metal` del caso sintético.
+3. Este test **no** prueba que la copia V4/T02 de 101 estados haya corrido el nuevo pipeline ni que los objetos opcionales de momentum/perfiles sean reconstruibles. Tampoco valida el balance total metal+arena; las potencias son nativas pero de una malla sintética.
+
+El workflow de regresión Python `C3D04 A Original C14 3D Postprocessing Volume Parity` terminó `success` en el mismo HEAD. Se conserva explícita la diferencia entre QA nativa sobre 27+27 celdas y resultados científicos WSL de 8960+12352 celdas.
+
 ## Única siguiente ejecución WSL (después de integrar y pasar CI)
 
 ```bash
