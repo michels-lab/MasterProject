@@ -188,6 +188,22 @@ class GenuineSavedVolumeRecoveryTests(unittest.TestCase):
             module.publish(fake,rows,dest)
         self.assertEqual(sha(dest/module.JSON_OUT),original)
 
+    def test_new_native_log_after_publication_requires_new_output(self):
+        report,rows=module.evaluate(self.case,self.vol,self.copy)
+        dest=self.root/"RECOVERY_ALREADY_PUBLISHED"
+        module.publish(report,rows,dest)
+        fingerprint=sha(dest/module.JSON_OUT)
+        (self.copy/"log.C14_3D_postprocess_momentum").write_text(
+            "new downstream native postprocessing evidence\\n".replace("\\n","\n"))
+        updated,newrows=module.evaluate(self.case,self.vol,self.copy)
+        with self.assertRaisesRegex(module.Blocked,"incompatible"):
+            module.publish(updated,newrows,dest)
+        self.assertEqual(sha(dest/module.JSON_OUT),fingerprint)
+        newdir=self.root/"RECOVERY_NEXT_IMMUTABLE_VERSION"
+        self.assertEqual(
+            module.publish(updated,newrows,newdir),
+            "NEW_101_STATE_DIAGNOSTIC_PUBLISHED_NO_CFD")
+
     def test_never_create_within_existing_cfd_or_workcopy(self):
         report,rows=module.evaluate(self.case,self.vol,self.copy)
         for target in (self.case/"newreport",self.vol/"newreport",
