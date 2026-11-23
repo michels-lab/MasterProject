@@ -49,6 +49,12 @@ jobs:
           set -euo pipefail
           python3 -B cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/native_c14_fluid_solid_smoke.py \
             --out "$RUNNER_TEMP/C3D04_A_C14_ORIGINAL_FLUID_SOLID_SYNTHETIC"
+      - name: Real F14 offline rho*h regression with -solver fluid on finished synthetic C14 two-step data
+        run: |
+          set -euo pipefail
+          PYTHONDONTWRITEBYTECODE=1 python3 -B \
+            cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/native_c14_solver_backed_offline_smoke.py \
+            --case "$RUNNER_TEMP/C3D04_A_C14_ORIGINAL_FLUID_SOLID_SYNTHETIC/actual_C14_fluid_solid_2step"
       - name: ZIP logs including original colon-bearing phaseChangeSource fields (even on failure)
         if: always()
         run: |
