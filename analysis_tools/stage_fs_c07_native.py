@@ -31,7 +31,8 @@ from stage_fs_c06_vof_solidification import (
 
 ROOT = Path(__file__).resolve().parents[1]
 CONTROL = ROOT / "freesurface/FS-C07_thermal_transition/native/system/controlDict"
-FUNCTIONS = ROOT / "freesurface/FS-C06_vof_solidification/native/system/functions"
+FS_C06_FUNCTIONS = ROOT / "freesurface/FS-C06_vof_solidification/native/system/functions"
+FUNCTIONS = ROOT / "freesurface/FS-C07_thermal_transition/native/system/functions"
 FVMODELS = ROOT / "freesurface/FS-C06_vof_solidification/native/constant/fluid/fvModels"
 MONITORS = (
     "FS_C06_metalVoFVolume", "FS_C06_solidMetalVolume",
@@ -94,7 +95,7 @@ def source_preflight(src: Path) -> dict:
                     "unexpected or unreviewed source time " + p.name)
     require((src / "constant/fluid/fvModels").read_bytes() == FVMODELS.read_bytes(),
             "native FS-C06 fvModels differs from proven physics")
-    require((src / "system/functions").read_bytes() == FUNCTIONS.read_bytes(),
+    require((src / "system/functions").read_bytes() == FS_C06_FUNCTIONS.read_bytes(),
             "native FS-C06 function object definitions changed")
     post = src / "postProcessing"
     require(post.is_dir(), "accepted second run monitors absent")
@@ -133,6 +134,15 @@ def stage(src: Path, dest: Path) -> dict:
         require(marker in control, "native FS-C07 runtime gate drift: " + marker)
     require(re.search(r"(?m)^\s*functions\s*\{", control) is None,
             "function objects must be separate system/functions")
+    require(FUNCTIONS.is_file() and FS_C06_FUNCTIONS.is_file(),
+            "native FS-C07 or accepted FS-C06 monitoring dictionary missing")
+    ftext = FUNCTIONS.read_text()
+    require(ftext.count("writeControl  writeTime;") == len(MONITORS),
+            "FS-C07 must write each native monitor on main writeTime")
+    require("writeControl  timeStep;" not in ftext,
+            "FS-C07 monitor writes every CFD timestep; storage explosion risk")
+    require(ftext.count("writeInterval 1;") == len(MONITORS),
+            "FS-C07 monitor write interval drift")
     dest.parent.mkdir(parents=True, exist_ok=True)
     shutil.copytree(src, dest, symlinks=False)
     (dest / "FS_C06_REPORT.json").rename(dest / "FS_C06_PARENT_REPORT.json")
