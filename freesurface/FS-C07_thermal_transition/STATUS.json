@@ -33,9 +33,9 @@
   "experimentally_validated": false,
   "git_static_workflow_declared": true,
   "git_static_workflow_pass_verified": false,
-  "status": "FS_C07_NATIVE_TRANSIENT_CODE_PREPARED__WSL_EXECUTION_REQUIRED__NO_SHRINKAGE",
+  "status": "FS_C07_NATIVE_LAUNCH_REPORTED_OUTPUT_REDIRECTED__OUTCOME_UNKNOWN__NO_SHRINKAGE",
   "scientific_next_gate": "Native 1s screen read alpha.metal.solid and T.metal on positive metallic volume; if liquidus not reached, extend horizon only with evidence and stable Courant. Next implement OpenFOAM Foundation14 metal liquid/solid conservative continuity and phase density with traceable alloy properties; do not use fictional massSource.",
-  "latest_repository_update": "Native fluid/solid thermal transition controlDict committed; provenance-safe isolated clone, 1s completion and ten real native monitor gate, synthetic test workflow; phase continuity/phase rho and shrinkage still not implemented",
+  "latest_repository_update": "Investigator launched FS-C07 but reported silent terminal. Implemented periodic CFD native Time/log heartbeat in future launches and safe native child termination, left existing evidence untouched. Actual CFD completion still UNKNOWN.",
   "source_initial_fluid_temperature_candidates": [
     "0/fluid/T.metal",
     "0/fluid/T"
@@ -45,5 +45,19 @@
   "native_ten_function_object_final_time_required": true,
   "native_monitor_SHA256_and_columns_recorded_after_run": true,
   "source_can_be_copied_only_outside_repo": true,
-  "tests_updated_for_monitor_records_and_no_fake_solid": true
+  "tests_updated_for_monitor_records_and_no_fake_solid": true,
+  "execution_attempt_reported_from_researcher_terminal": true,
+  "execution_attempt_case_path": "/home/michel/OpenFOAM/FS_C07_RUNS/FS_C07_THERMAL_20261123T183217Z_72da1bf4",
+  "execution_attempt_repo_head_at_launch": "7b0626e41",
+  "execution_attempt_last_observed_line": "FS-C07 starting native 1s thermal screening (not shrinkage)...",
+  "execution_attempt_native_process_status": "UNKNOWN; stdout/stderr redirected to log; must inspect existing log/ps in separate WSL terminal",
+  "execution_attempt_solver_completion_verified": false,
+  "execution_attempt_liquidus_crossing_verified": false,
+  "execution_attempt_positive_solid_verified": false,
+  "real_CFD_logs_retrieved": false,
+  "native_progress_stdout_watchdog_in_git": true,
+  "native_progress_stdout_watchdog_verified_in_WSL": false,
+  "native_progress_stdout_watchdog_interval_seconds": 15,
+  "current_version_live_progress_fix_does_not_affect_already_running_process": true,
+  "suspected_long_runtime_reason": "1 simulated second with maxDeltaT=1e-4, at least 10000 steps if max dt reached; Courant constraints may force more; log originally redirected"
 }
