@@ -1,3 +1,11 @@
+## 23-11-2026 — PREPARADO: Caso A native Foundation14 CORRECCIÓN DEL FATAL rho EN COPIA NUEVA
+
+Error WSL REAL en `C3D04_A_C14_FULL_POSTPROCESS_WORKCOPY_01`: solo `c14_functions` abortó por `FOAM FATAL ERROR: Field rho not found in database`, y `energyAdvectiveFlux/heatFlux/energyFlux` no estaban en el registro nativo; 14 familias C14 originales, 20 derivados y 5 perfiles faltaban, metal/arena energyFlux sin cerrar. Según el manual Foundation14, usar `foamPostProcess -region metal -solver fluid` para reconstruir los modelos termofísicos; es postprocesamiento, NO resolver CFD. Prohibido modificar modelo C14/fvModels/controlDict, malla, CFD original, vieja workcopy, B o FS.
+
+Se entregó `c14_physics/run_c14_stage07_solver_backed_recovery.py`: preflight de hashes de CFD y forenses reales; NUEVA copia física `~/OpenFOAM/C3D04_A_C14_SOLVER_BACKED_POSTPROCESS_02` y seis grupos nativos separados (core/energy/phase/flow/profiles/momentum). Preserva controlDict y C14 originales byte por byte, muestra FAIL individual y jamás finge tasa ddt de 0.001s desde 0.1s. CI sintética prueba también F14 en caso 3D de 27 celdas por región, **no evidencia WSL V4/T02**. Documentación `docs/C3D04_A_STAGE07_F14_SOLVER_BACKED_NATIVE_RECOVERY_20261123_ES.md`. **Etapa 7/10, 6/10=60 % hitos; no conservación/QuickCup/independencia.**
+
+---
+
 ## 23-11-2026 | Etapa 07 — 101 estados reales PASS; postproceso nativo NO completo
 
 El usuario corrió REAL `recover_existing_c14_3d_stage07.py` en `~/OpenFOAM/C3D04_A_WORKTREE` y obtuvo `NEW_101_STATE_DIAGNOSTIC_PUBLISHED_NO_CFD` y `EXISTING_VOLUME_CSV_AND_JSON_FOUND`. El primer descenso observado de alpha1 está acotado entre 0.2 y 0.3 s; pico de potencia latente **nominal** discreta `1038.881301373963 W` (7.2–7.3s); metal T media volumétrica final `1450.7091627651344 K`; inventario sólido C14 final nominal `0.03358283580064463 kg`. No se reejecutó CFD ni se modificó la evidencia.
