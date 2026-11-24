@@ -11,3 +11,6 @@
 - C3D-01/02/03: preservados como antecedentes de geometría/malla; no nuevos resultados. No editar casos históricos individuales sin evidencia nueva.
 
 Se mantienen worktrees A/B/FS separados; no se fusiona FS-C08 ni se toca WSL. Los estados y matrices anteriores se conservan como historia.
+
+## Comparación de las tres sondas centrales (verificada posteriormente)
+[Informe C14 2D / A fiel / B](C14_COMPARATIVO_2D_3DA_3DB_SONDAS_20261124_ES.md). Máximos observados |U|: 10.76 / 22.41 / 23.07 mm/s; temperaturas finales 1464.19 / 1466.36 / 1467.76 K. Series completas T/U/alpha1 A y 2D (10001 registros) y B (101). Patrón central 3D concordante; no se demuestra independencia ni validación. Los hitos A y B no cambian.
