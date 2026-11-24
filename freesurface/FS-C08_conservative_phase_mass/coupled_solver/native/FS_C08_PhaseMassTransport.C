@@ -22,6 +22,7 @@ PhaseMassTransport::PhaseMassTransport
     Tmin_K_(material_.lookup<scalar>("Tmin_K")),
     Tmax_K_(material_.lookup<scalar>("Tmax_K")),
     phaseRelaxation_(material_.lookup<scalar>("phaseRelaxation")),
+    metalPresenceThreshold_(material_.lookup<scalar>("metalPresenceThreshold")),
     rhoLiquidT_(Function1<scalar>::New("rhoLiquidT",dimTemperature,dimDensity,material_)),
     rhoSolidT_(Function1<scalar>::New("rhoSolidT",dimTemperature,dimDensity,material_)),
     solidMassFractionT_
@@ -96,6 +97,8 @@ PhaseMassTransport::PhaseMassTransport
         || Tmin_K_<=0 || Tmax_K_<=Tmin_K_
         || !std::isfinite(phaseRelaxation_)
         || phaseRelaxation_<=0 || phaseRelaxation_>1
+        || !std::isfinite(metalPresenceThreshold_)
+        || metalPresenceThreshold_<=0 || metalPresenceThreshold_>=0.5
         || !std::isfinite(latentHeat_.value()) || latentHeat_.value()<=0
         || !std::isfinite(cpSolid_.value()) || cpSolid_.value()<=0)
     {
@@ -104,18 +107,31 @@ PhaseMassTransport::PhaseMassTransport
           << "range and relaxation in (0,1]. Synthetic fixture refused."
           << exit(FatalError);
     }
-    checkAndUpdateProperties(T);
+    checkAndUpdateProperties(T,metal);
     initializeIfRequired(metal,T);
     reconstructFractions();
 }
 
-void PhaseMassTransport::checkAndUpdateProperties(const volScalarField& T)
+void PhaseMassTransport::checkAndUpdateProperties
+(
+    const volScalarField& T,
+    const volScalarField& metal
+)
 {
     auto& rl=rhoLiquid_.primitiveFieldRef();
     auto& rs=rhoSolid_.primitiveFieldRef();
     const auto& t=T.primitiveField();
+    const auto& a=metal.primitiveField();
     forAll(t,i)
     {
+        // Air/VOF trace has no physically meaningful Fe temperature.
+        // Retain metal mass; do not infer phase change from gas temperature.
+        if (a[i]<metalPresenceThreshold_)
+        {
+            rl[i]=rhoLiquidT_->value(Tmin_K_);
+            rs[i]=rhoSolidT_->value(Tmin_K_);
+            continue;
+        }
         if (!std::isfinite(t[i]) || t[i]<Tmin_K_ || t[i]>Tmax_K_)
             FatalErrorInFunction << "T out of sourced range at cell " << i
                                  << " T=" << t[i] << exit(FatalError);
@@ -147,7 +163,8 @@ void PhaseMassTransport::initializeIfRequired
         const auto& rs=rhoSolid_.primitiveField();
         forAll(a,i)
         {
-            const scalar fs=solidMassFractionT_->value(t[i]);
+            const scalar fs=a[i]<metalPresenceThreshold_
+                ? 0 : solidMassFractionT_->value(t[i]);
             if (!std::isfinite(a[i]) || a[i]<0 || a[i]>1
                 || !std::isfinite(fs) || fs<0 || fs>1)
                 FatalErrorInFunction << "Invalid initial metal or fs in cell "
@@ -162,7 +179,11 @@ void PhaseMassTransport::initializeIfRequired
     initialized_=true;
 }
 
-void PhaseMassTransport::evaluateGamma(const volScalarField& T)
+void PhaseMassTransport::evaluateGamma
+(
+    const volScalarField& T,
+    const volScalarField& metal
+)
 {
     const scalar dt=mesh_.time().deltaTValue();
     if (!std::isfinite(dt) || dt<=0)
@@ -174,8 +195,15 @@ void PhaseMassTransport::evaluateGamma(const volScalarField& T)
     const auto& rl=rhoLiquid_.primitiveField();
     const auto& rs=rhoSolid_.primitiveField();
     const auto& t=T.primitiveField();
+    const auto& a=metal.primitiveField();
     forAll(gamma,i)
     {
+        if (a[i]<metalPresenceThreshold_)
+        {
+            gamma[i]=0;
+            s[i]=0;
+            continue;
+        }
         const scalar fs=solidMassFractionT_->value(t[i]);
         if (!std::isfinite(fs) || fs<0 || fs>1 || ml[i]<0 || ms[i]<0)
             FatalErrorInFunction << "Invalid phase masses / fs at cell "
@@ -219,10 +247,10 @@ void PhaseMassTransport::solve
 )
 {
     if (lastSolvedTimeIndex_==mesh_.time().timeIndex()) return;
-    checkAndUpdateProperties(T);
+    checkAndUpdateProperties(T,alphaMetal);
     initializeIfRequired(alphaMetal,T);
     reconstructFractions();
-    evaluateGamma(T);
+    evaluateGamma(T,alphaMetal);
     volScalarField liquidShare
     (
         IOobject("fsC08LiquidShare",mesh_.time().name(),mesh_,
