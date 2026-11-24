@@ -1,6 +1,12 @@
 # FS-C08: puente de campos nativos Foundation 14 — primera integración `wmake`
 
 
+> **24-11-2026 — `wmake` y puente `fvMesh` finalmente APROBADOS en WSL.** Después de corregir `Info.precision` y agregar `#include "IOmanip.H"`, el investigador ejecutó el comando único con código `90117e3b8`. La salida informó **`FS_C08_NATIVE_FVMESH_READ_ONLY_BRIDGE_PASS__NO_CFD`**. El ejecutor reserva esa salida para compilación `wmake` correcta, utilidad nativa ejecutada, coincidencia con evidencia FS-C07 y hashes SHA-256 iguales en los seis campos originales. El reporte fue escrito en `~/OpenFOAM/FS_C08_DIAGNOSTICS/FS_C08_NATIVE_FIELD_BRIDGE_20261124T073954Z_1d35c584/FS_C08_NATIVE_BRIDGE_REPORT.json`. **La confirmación recibida fue el stdout, no el contenido independiente del reporte JSON.**
+>
+> **Estado científico:** puente de solo lectura finalizado, `Γ=0` en el kernel de compatibilidad. Este resultado **no contiene CFD nueva** ni cierre de masa/energía/presión con contracción real. Los apartados previos que describen wmake como no compilado son el historial previo a este hito; el estado vigente está en `STATUS.json`.
+
+
+
 > **24-11-2026 — SEGUNDO FALLO NATIVO CONFIRMADO Y CORREGIDO EN FUENTE:** el usuario recompiló desde `1f29553b4` y Foundation14 informó `fsC08NativeInventory.C:131:12: error: 'setprecision' was not declared in this scope`. El código anterior cambiaba `Info.precision(16)` a `Info<<setprecision(16)`, pero faltaba **`#include "IOmanip.H"`**. Se contrastó con `OpenFOAM-14/src/OpenFOAM/db/IOstreams/IOstreams/IOmanip.H`, donde se define `Foam::setprecision`, y con `applications/utilities/surface/surfaceInertia/surfaceInertia.C`, que incluye el mismo encabezado. **Se agregó el include y un test de regresión.** El nuevo parche no se ha recompilado todavía en WSL. Se conservó el log de la segunda compilación en `~/OpenFOAM/FS_C08_DIAGNOSTICS/FS_C08_NATIVE_FIELD_BRIDGE_20261124T073116Z_29ebf5fc/wmake.log`. No se ejecutó CFD ni se aceptó contracción física.
 
 
