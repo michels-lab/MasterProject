@@ -1,3 +1,9 @@
+## 24-11-2026 | Caso A Stage07 F14: zona metal ORIGINAL sí íntegra; aislar BUCLE MULTITIEMPO
+
+WSL real audit_c14_stage07_active_cellzone.py: original y _03 tienen **misma celda zona metal 8960 completa SHA e0826b5fa0f3dac433d239dceee10896f251b97f1e950dd224406381e8baa89e**. Original mesh points/faces/owner/neighbour/boundary idéntica, **0** polyMesh temporales entre **101** estados. Aun así core, energy, flow, momentum emiten **100 FOAM FATAL IO** cada uno luego de t0. phase y profiles sin fatal, pero vertical x20 27/80 y energy solo t0 1 fila en cada top/contact/total. **NO** vuelva a crear cellZones ni remallar; la causa ya no es una ausencia de archivo. Foundation14 foamPostProcess.C instancia solver por iteración y limpia mesh.objectRegistry; eso SUGIERE bug de postproceso multitemporal, aún no demostrado. Implementado probe_c14_native_f14_single_vs_multi_time.py para comparar 0/0.1/10 individuales vs combinados usando original rho*h en CUATRO miniclones aislados de solo 3 snapshots y certificación de SHA original. CI sobre C14 27+27 sintético 0/0.001/0.002. NO relanzar foamMultiRun, 101 estados, o full _04 antes de prueba. No tocar _01/_02/_03, B, FS. Reporte: ../../docs/C3D04_A_STAGE07_FOUNDATION14_3TIME_LOOP_ISOLATION_20261124_ES.md. **Etapa 7/10; hitos 6/10 (60%).**
+
+---
+
 ## 24-11-2026 C3D04-A _03 F14 cellZones STILL MISSING AT RUNTIME — do not create _04 blindly
 
 ## 23-11-2026 Caso A native offline F14: missing metal cellZone caused false success
