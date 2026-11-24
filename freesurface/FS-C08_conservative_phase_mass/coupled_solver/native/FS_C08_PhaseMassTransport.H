@@ -43,6 +43,10 @@ class PhaseMassTransport
     autoPtr<Function1<scalar>> rhoSolidT_;
     autoPtr<Function1<scalar>> solidMassFractionT_;
 
+    // Composition-specific enthalpy closure; no legacy fvModel latent source.
+    dimensionedScalar latentHeat_;
+    dimensionedScalar cpSolid_;
+
     // kg/m3 physical masses per unit mesh volume: conserved variables
     volScalarField mLiquid_;
     volScalarField mSolid_;
@@ -98,6 +102,8 @@ public:
     const volScalarField& liquidDensity() const { return rhoLiquid_; }
     const volScalarField& solidDensity() const { return rhoSolid_; }
     const volScalarField& gamma() const { return Gamma_; }
+    const dimensionedScalar& latentHeat() const { return latentHeat_; }
+    const dimensionedScalar& cpSolid() const { return cpSolid_; }
     const volScalarField& phaseVolumeSource() const
     {
         return SvolPhaseChange_;
