@@ -9,6 +9,7 @@ import math
 from pathlib import Path
 from tempfile import TemporaryDirectory
 import unittest
+from unittest.mock import patch
 
 HERE=Path(__file__).resolve().parents[1]
 spec=importlib.util.spec_from_file_location(
@@ -16,6 +17,9 @@ spec=importlib.util.spec_from_file_location(
 A=importlib.util.module_from_spec(spec)
 spec.loader.exec_module(A)
 run_source=(HERE/"run_existing_case_b_c14_native_flux.py")
+runner_spec=importlib.util.spec_from_file_location("case_b_native_q_runner",run_source)
+R=importlib.util.module_from_spec(runner_spec)
+runner_spec.loader.exec_module(R)
 cpp_source=HERE/"native_flux/c3d05C14FluidSolidFlux.C"
 PATCHES=tuple(A.PATCHES)
 INTERFACE=12636
@@ -151,6 +155,49 @@ class CaseBC14TrueFluidSolidFluxAudit(unittest.TestCase):
         self.assertIn('#include "linear.H"',code)
         self.assertNotIn('#include "linearInterpolate.H"',code)
         self.assertNotIn("autoPtr<solidThermo> tm",code)
+
+    def test_diagnose_existing_real_WSL_attempt_exposes_fatal_io_context_only(self):
+        with TemporaryDirectory() as rootname:
+            root=Path(rootname)
+            output=root/"C3D05_B_C14_NATIVE_FLUID_SOLID_PATCH_Q_01"
+            attempt=root/("."+output.name+".ATTEMPT_native")
+            attempt.mkdir()
+            (attempt/R.LOG_BUILD).write_text("wmake success\\n",encoding="utf-8")
+            (attempt/R.LOG_EXTRACT).write_text(
+                "Create time\\nSelecting thermo fluid\\n"
+                "--> FOAM FATAL IO ERROR:\\n"
+                "keyword thermophysicalTransport is undefined\\n"
+                "file: constant/metal/momentumTransport\\n",
+                encoding="utf-8"
+            )
+            (attempt/"bin").mkdir()
+            (attempt/"bin/c3d05C14FluidSolidFlux").write_text(
+                "fake fixture, not executable",encoding="utf-8"
+            )
+            with patch.object(R,"OUTPUT",output):
+                diagnosis=R.diagnose_attempt(attempt)
+            self.assertTrue(diagnosis["compiled_native_binary_exists"])
+            self.assertTrue(any("FOAM FATAL IO ERROR" in line
+                                for line in diagnosis["fatal_error_context_lines"]))
+            self.assertTrue(any("keyword thermophysicalTransport" in line
+                                for line in diagnosis["fatal_error_context_lines"]))
+            self.assertTrue(diagnosis["NO_CFD_NO_REBUILD_NO_NEW_EXTRACTION"])
+            self.assertFalse(diagnosis["native_q_successfully_published"])
+
+    def test_diagnose_rejects_unrelated_or_missing_attempt_without_executing(self):
+        with TemporaryDirectory() as rootname:
+            root=Path(rootname)
+            output=root/"C3D05_B_C14_NATIVE_FLUID_SOLID_PATCH_Q_01"
+            wrong=root/"not_a_real_q_ATTEMPT"
+            wrong.mkdir()
+            (wrong/R.LOG_EXTRACT).write_text("FOAM FATAL\\n",encoding="utf-8")
+            with patch.object(R,"OUTPUT",output):
+                with self.assertRaisesRegex(ValueError,"isolated C3D05"):
+                    R.diagnose_attempt(wrong)
+                missing=root/("."+output.name+".ATTEMPT_missing_log")
+                missing.mkdir()
+                with self.assertRaisesRegex(ValueError,"extractor log not present"):
+                    R.diagnose_attempt(missing)
 
     def test_no_CFD_solver_or_old_case_mutation_runner(self):
         source=run_source.read_text(encoding="utf-8")
