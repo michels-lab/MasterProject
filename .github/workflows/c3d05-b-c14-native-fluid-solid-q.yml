@@ -11,6 +11,8 @@ on:
       - 'cases_3d/C3D_05_step_gmsh_conformal/c14_physics/tests/test_existing_case_b_c14_q_storage_join.py'
       - 'cases_3d/C3D_05_step_gmsh_conformal/c14_physics/audit_existing_case_b_c14_energy_closure_readiness.py'
       - 'cases_3d/C3D_05_step_gmsh_conformal/c14_physics/tests/test_existing_case_b_c14_energy_closure_readiness.py'
+      - 'cases_3d/C3D_05_step_gmsh_conformal/c14_physics/analyze_existing_case_b_c14_metal_mass_phi.py'
+      - 'cases_3d/C3D_05_step_gmsh_conformal/c14_physics/tests/test_existing_case_b_c14_metal_mass_phi.py'
       - '.github/workflows/c3d05-b-c14-native-fluid-solid-q.yml'
   pull_request:
     paths:
@@ -22,6 +24,8 @@ on:
       - 'cases_3d/C3D_05_step_gmsh_conformal/c14_physics/tests/test_existing_case_b_c14_q_storage_join.py'
       - 'cases_3d/C3D_05_step_gmsh_conformal/c14_physics/audit_existing_case_b_c14_energy_closure_readiness.py'
       - 'cases_3d/C3D_05_step_gmsh_conformal/c14_physics/tests/test_existing_case_b_c14_energy_closure_readiness.py'
+      - 'cases_3d/C3D_05_step_gmsh_conformal/c14_physics/analyze_existing_case_b_c14_metal_mass_phi.py'
+      - 'cases_3d/C3D_05_step_gmsh_conformal/c14_physics/tests/test_existing_case_b_c14_metal_mass_phi.py'
       - '.github/workflows/c3d05-b-c14-native-fluid-solid-q.yml'
   workflow_dispatch:
 permissions:
@@ -48,7 +52,9 @@ jobs:
                     'compare_existing_case_b_c14_native_q_and_storage.py',
                     'tests/test_existing_case_b_c14_q_storage_join.py',
                     'audit_existing_case_b_c14_energy_closure_readiness.py',
-                    'tests/test_existing_case_b_c14_energy_closure_readiness.py'):
+                    'tests/test_existing_case_b_c14_energy_closure_readiness.py',
+                    'analyze_existing_case_b_c14_metal_mass_phi.py',
+                    'tests/test_existing_case_b_c14_metal_mass_phi.py'):
               compile((d/n).read_bytes(),str(d/n),'exec')
           print('C3D05_B_C14_NATIVE_Q_PYTHON_SYNTAX_OK')
           PY
@@ -61,6 +67,9 @@ jobs:
           PYTHONDONTWRITEBYTECODE=1 python3 -B -m unittest discover \
             -s cases_3d/C3D_05_step_gmsh_conformal/c14_physics/tests \
             -p "test_existing_case_b_c14_energy_closure_readiness.py" -v
+          PYTHONDONTWRITEBYTECODE=1 python3 -B -m unittest discover \
+            -s cases_3d/C3D_05_step_gmsh_conformal/c14_physics/tests \
+            -p "test_existing_case_b_c14_metal_mass_phi.py" -v
       - name: Source-specific Foundation14 wmake of C14 fluid+solid patch q exporter (NO CFD)
         shell: bash
         run: |
