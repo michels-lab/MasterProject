@@ -26,7 +26,7 @@
 #include "compressibleMomentumTransportModel.H"
 #include "fluidThermoThermophysicalTransportModel.H"
 #include "solidThermophysicalTransportModel.H"
-#include "surfaceInterpolate.H"
+#include "linear.H"
 #include <cstdio>
 #include <cmath>
 
