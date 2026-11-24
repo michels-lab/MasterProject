@@ -56,7 +56,7 @@ def discover(home,explicit):
             dirs[:]=[d for d in dirs if not d.startswith(".") and not re.match(r"^\d",d)
                       and not d.startswith("C3D") and d not in ("postProcessing","processor0","constant","system","dynamicCode")
                       and depth<5]
-            if p.name==NAME and len(numeric_times(p))>=2 and (p/"constant/metal/polyMesh/points").is_file():
+            if p.name.startswith(NAME) and len(numeric_times(p))>=2 and (p/"constant/metal/polyMesh/points").is_file():
                 found.add(p.resolve())
                 dirs[:]=[]
     if not found:
@@ -255,7 +255,7 @@ def dashboard(out,profiles,curves,meanrows,times):
 <script>const D=__DATA__; const $=s=>document.getElementById(s);
 const labels={T_K:"Temperatura [K]",alphaL:"Fracción líquida",p_rgh_Pa:"p_rgh [Pa]",Ux_m_s:"Ux [m/s]",Uy_m_s:"Uy [m/s]",Uz_m_s:"Uz [m/s]",U_mag_m_s:"|U| [m/s]",gradTx_K_m:"gradTx [K/m]",gradTy_K_m:"gradTy [K/m]",gradTz_K_m:"gradTz [K/m]",gradT_mag_K_m:"|gradT| [K/m]",cooling_K_s:"Enfriamiento [K/s]"};
 function plot(rows,x,k,title){let vals=rows.flatMap(r=>[r[k+"_2D"],r[k+"_3D"]]).filter(Number.isFinite);if(!vals.length)return "<h3>"+title+"</h3><p>Sin datos disponibles.</p>";let xs=rows.map(r=>r[x]),lo=Math.min(...vals),hi=Math.max(...vals),xl=Math.min(...xs),xh=Math.max(...xs);if(hi===lo){lo-=.5;hi+=.5}if(xh===xl)xh=xl+1;
-let X=v=>65+v*0+((v-xl)/(xh-xl))*795,Y=v=>240-(v-lo)/(hi-lo)*195;let s='<h3>'+title+'</h3><div class="legend"><span class="a">━━ 2D</span><span class="b">━━ 3D-A</span></div><svg viewBox="0 0 900 290" role="img">';
+let X=v=>65+((v-xl)/(xh-xl))*795,Y=v=>240-(v-lo)/(hi-lo)*195;let s='<h3>'+title+'</h3><div class="legend"><span class="a">━━ 2D</span><span class="b">━━ 3D-A</span></div><svg viewBox="0 0 900 290" role="img">';
 for(let i=0;i<=5;i++){let v=lo+(hi-lo)*i/5,y=Y(v);s+='<line x1="65" x2="860" y1="'+y+'" y2="'+y+'" stroke="#e0e4e9"/><text x="58" y="'+(y+4)+'" text-anchor="end" font-size="11">'+v.toPrecision(4)+'</text>';let z=xl+(xh-xl)*i/5,xx=X(z);s+='<text x="'+xx+'" y="258" text-anchor="middle" font-size="11">'+z.toPrecision(3)+'</text>'}
 for(let [dim,color] of [["2D","#2563eb"],["3D","#d97706"]]){let p="",active=false;for(let r of rows){let v=r[k+"_"+dim];if(!Number.isFinite(v)){active=false;continue}p+=(active?" L":" M")+X(r[x]).toFixed(2)+" "+Y(v).toFixed(2);active=true}s+='<path d="'+p+'" fill="none" stroke="'+color+'" stroke-width="2"/>'}
 s+='<text x="460" y="280" text-anchor="middle" font-size="12">'+(x==="time_s"?"Tiempo [s]":"Posición homologada [mm]")+'</text></svg>';return s}
@@ -296,6 +296,10 @@ def execute(case2d,case3d,out):
         copy_case(source,cases[dim],names)
         sample(cases[dim],gs[dim],names)
     profiles,curves,coverage,metrics=compare(cases,gs,times,out)
+    usable={station:sum(r["station"]==station and r["T_K_2D"] is not None and r["T_K_3D"] is not None for r in curves) for station in STATIONS[4:]}
+    need(usable["probe20"]>=2,"central common temperature curve unavailable; inspect preserved native sampling")
+    need(all(any(r["station"]==station and r["common_points"]>=2 for r in metrics) for station in STATIONS[:4]),"one or more common spatial profiles unavailable; inspect native coverage")
+    complete_coverage=all(r["common_points"]==80 for r in metrics) and all(n==len(common) for n in usable.values())
     m2=means(case2d,g2,{t:t2[t] for t in common})
     m3=means(case3d,g3,{t:t3[t] for t in common})
     m=[]
@@ -310,9 +314,10 @@ def execute(case2d,case3d,out):
     csvwrite(out/"volume_means.csv",m)
     probes=save_native_probe(case2d,out)
     dashboard(out,profiles,curves,m,common)
-    result={"status":"COMPARISON_READY","case_2D":str(case2d),"case_3D_A":str(case3d),
+    result={"status":"COMPARISON_READY" if complete_coverage and len(common)==101 else "COMPARISON_READY_PARTIAL_COVERAGE","case_2D":str(case2d),"case_3D_A":str(case3d),
             "reference_provenance":provenance,"common_saved_times":common,
-            "full_101_time_coverage":len(common)==101,"geometries":gs,
+            "full_101_time_coverage":len(common)==101,"full_spatial_coverage":complete_coverage,
+            "common_temperature_curve_points_by_station":usable,"geometries":gs,
             "native_sampling_coordinates":{d:lines(g) for d,g in gs.items()},
             "mapping":"x relative to cross-section centre; y relative to metal bottom; z central plane; no geometric equivalence claimed",
             "common_profile_T_points_final":{r["station"]:r["common_points"] for r in metrics if r["time_s"]==common[-1]},
