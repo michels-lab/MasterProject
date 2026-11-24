@@ -120,6 +120,21 @@ class NativeBridgeRunnerTests(unittest.TestCase):
         self.assertFalse(result["source_changed"])
         self.assertFalse(result["wmake_compiled"])
 
+    def test_real_compiler_error_lines_are_visible_in_report(self):
+        log = self.root / "synthetic-wmake.log"
+        log.write_text(
+            "wmake: Entering directory /tmp/fs-c08\n"
+            "native.C:42:7: fatal error: MissingFoundationHeader.H: No such file\n"
+            "make: *** [Make/linux64GccDPInt32Opt/native.o] Error 2\n",
+            encoding="utf-8",
+        )
+        excerpt=r.compiler_error_excerpt(log)
+        self.assertIn("native.C:42:7: fatal error",excerpt)
+        self.assertIn("Error 2",excerpt)
+        self.assertLessEqual(len(excerpt.splitlines()),8)
+        log.write_text("short build output without a compiler error\n")
+        self.assertIn("short build output",r.compiler_error_excerpt(log))
+
     def test_requires_loaded_actual_Foundation14(self):
         with (
             patch.object(r, "ROOT", self.worktree),
