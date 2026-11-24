@@ -259,9 +259,11 @@ void PhaseMassTransport::checkAndUpdateProperties
     const auto& a=metal.primitiveField();
     forAll(t,i)
     {
-        // Air/VOF trace has no physically meaningful Fe temperature.
-        // Retain metal mass; do not infer phase change from gas temperature.
-        if (a[i]<metalPresenceThreshold_)
+        // NO arbitrary density for nonzero metal, even at tiny VOF.
+        // The single-T mixture model must have sourced Fe properties
+        // covering the temperature of every metal-containing cell.
+        // Only pure gas can use an inert reference density.
+        if (a[i]<=0)
         {
             rl[i]=rhoLiquidT_->value(Tmin_K_);
             rs[i]=rhoSolidT_->value(Tmin_K_);
@@ -298,7 +300,7 @@ void PhaseMassTransport::initializeIfRequired
         const auto& rs=rhoSolid_.primitiveField();
         forAll(a,i)
         {
-            const scalar fs=a[i]<metalPresenceThreshold_
+            const scalar fs=a[i]<=0
                 ? 0 : solidMassFractionT_->value(t[i]);
             if (!std::isfinite(a[i]) || a[i]<0 || a[i]>1
                 || !std::isfinite(fs) || fs<0 || fs>1)
@@ -328,15 +330,23 @@ void PhaseMassTransport::evaluateGamma
     const auto& ml=mLiquid_.primitiveField();
     const auto& ms=mSolid_.primitiveField();
     const auto& t=T.primitiveField();
-    const auto& a=metal.primitiveField();
 
     forAll(gamma,i)
     {
-        if (a[i]<metalPresenceThreshold_)
+        // Every positive transported metal mass participates in
+        // phase conversion. Provisional VOF thresholds may not erase it.
+        if (ml[i]+ms[i]<=0)
         {
             gamma[i]=0;
             continue;
         }
+        if (!std::isfinite(t[i]) || t[i]<Tmin_K_ || t[i]>Tmax_K_)
+            FatalErrorInFunction
+                << "FS-C08 metal mass exists at unsupported mixture T="
+                << t[i] << " K in cell " << i
+                << ". Supply validated alloy tables for the interface "
+                << "temperature range; no phase-mass clipping."
+                << exit(FatalError);
 
         const scalar fs=solidMassFractionT_->value(t[i]);
         if
@@ -388,10 +398,12 @@ void PhaseMassTransport::updateVolumeSources
 
     const auto& t=T.primitiveField();
     const auto& t0=T.oldTime().primitiveField();
-    const auto& a=metal.primitiveField();
-    const auto& a0=metal.oldTime().primitiveField();
+    // Use the conserved phase masses rather than provisional VOF
+    // for material phase-volume and thermal-volume bookkeeping.
     const auto& ml=mLiquid_.primitiveField();
     const auto& ms=mSolid_.primitiveField();
+    const auto& ml0=mLiquid_.oldTime().primitiveField();
+    const auto& ms0=mSolid_.oldTime().primitiveField();
     const auto& rl=rhoLiquid_.primitiveField();
     const auto& rs=rhoSolid_.primitiveField();
     const auto& gamma=Gamma_.primitiveField();
@@ -405,7 +417,7 @@ void PhaseMassTransport::updateVolumeSources
         spc[i]=0;
         sth[i]=0;
         smat[i]=0;
-        if (a[i]<metalPresenceThreshold_) continue;
+        if (ml[i]+ms[i]<=0) continue;
 
         // Equal and opposite Gamma removes NO METAL MASS. Only the
         // specific-volume difference converts phase mass to volume.
@@ -418,11 +430,18 @@ void PhaseMassTransport::updateVolumeSources
         // do not use the previous air T as an iron property.
         if
         (
-            a0[i]>=metalPresenceThreshold_
-         && std::isfinite(t0[i])
-         && t0[i]>=Tmin_K_ && t0[i]<=Tmax_K_
+            (ml0[i]+ms0[i])>0
         )
         {
+            if
+            (
+                !std::isfinite(t0[i])
+             || t0[i]<Tmin_K_ || t0[i]>Tmax_K_
+            )
+                FatalErrorInFunction
+                    << "FS-C08 positive previous metal mass outside "
+                    << "sourced material T range. cell=" << i
+                    << " Told=" << t0[i] << exit(FatalError);
             const scalar rl0=rhoLiquidT_->value(t0[i]);
             const scalar rs0=rhoSolidT_->value(t0[i]);
             if
