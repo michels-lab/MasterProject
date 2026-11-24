@@ -1,0 +1,6 @@
+FS_C08_PhaseMassTransport.C
+fsC08ConservativeVoF.C
+fsC08PressureCorrector.C
+fsC08ThermophysicalPredictor.C
+
+LIB = $(FOAM_USER_LIBBIN)/libfsC08ConservativeVoF
