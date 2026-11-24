@@ -20,6 +20,7 @@ import hashlib
 import json
 import os
 from pathlib import Path
+import re
 import shutil
 import subprocess
 import sys
@@ -191,6 +192,106 @@ def diagnose_attempt(attempt:Path)->dict:
     }
 
 
+
+def prepare_isolated_c14_flux_case(
+    original:Path, shadow:Path, saved:list[tuple[float,str]]
+)->dict:
+    """An ORIGINAL-FIELDS read-only mirror with one explicit q-only scheme.
+
+    The completed CFD's original system/mold/fvSchemes has
+        interpolate((kappa|Cv)) harmonic;
+    which does not satisfy F14 solidTransport.q() exact lookup
+        interpolate(kappa).
+    We ADD this explicit harmonic entry ONLY to the COPIED system file. All
+    101 original time directories and constant are symlinked READ-ONLY-INTENT
+    to original source (the extractor has NO write to input). Never insert
+    this into the thesis CFD's real fvSchemes or rewrite archived fields.
+    """
+    original=original.expanduser().absolute()
+    shadow=shadow.expanduser().absolute()
+    require(original.is_dir() and original.name==CASE.name
+            and not original.is_symlink(),
+            "shadow source must be the source-verified real C14 B case")
+    require(shadow!=original and shadow not in original.parents
+            and original not in shadow.parents,
+            "shadow must be separate from old CFD case")
+    require(not shadow.exists() and not shadow.is_symlink(),
+            "never replace existing isolated shadow")
+    require(len(saved)==101 and saved[0][0]==0 and saved[-1][0]==10,
+            "shadow requires exactly the 101 original native 0..10s time states")
+    require(len({label for _,label in saved})==101,
+            "original CFD saved time names duplicated")
+    source_schemes=original/"system/mold/fvSchemes"
+    require(source_schemes.is_file() and not source_schemes.is_symlink(),
+            "original mold fvSchemes not a regular source dictionary")
+    original_text=source_schemes.read_text(encoding="utf-8")
+    # Require exactly one real interpolationSchemes dictionary and harmonic
+    # C14 mold baseline; do NOT choose a numeric scheme arbitrarily.
+    blocks=list(re.finditer(
+        r"\binterpolationSchemes\s*\{([^{}]*)\}",original_text,re.S))
+    require(len(blocks)==1,"C14 native mold interpolationSchemes not unique/simple")
+    body=blocks[0].group(1)
+    non_comments=re.sub(r"/\*.*?\*/|//[^\n]*","",body,flags=re.S)
+    require(re.search(
+        r"\binterpolate\(\(kappa\|Cv\)\)\s+harmonic\s*;",
+        non_comments) is not None,
+        "real original C14 harmonic kappa/Cv intent absent; no invented scheme")
+    require(re.search(
+        r"\binterpolate\(kappa\)\s+\w+\s*;",non_comments) is None,
+        "real original scheme already specifies interpolate(kappa); "
+        "unexpected WSL IO error, do not inject duplicate")
+    original_sha=sha(source_schemes)
+    insertion="\n    interpolate(kappa) harmonic; // POSTPROCESSING ONLY, original C14 harmonic scheme\n"
+    at=blocks[0].end()-1
+    copied_text=original_text[:at]+insertion+original_text[at:]
+    require(copied_text.count(insertion)==1,
+            "q-only harmonic insertion did not happen exactly once")
+    shadow.mkdir(parents=True)
+    source_system=original/"system"
+    require(source_system.is_dir() and not source_system.is_symlink(),
+            "native original system dictionary not a directory")
+    shutil.copytree(source_system,shadow/"system",symlinks=False)
+    target=shadow/"system/mold/fvSchemes"
+    require(target.is_file() and not target.is_symlink(),
+            "unexpected copied system/mold/fvSchemes")
+    target.write_text(copied_text,encoding="utf-8")
+    for name in ("constant",):
+        source_dir=original/name
+        require(source_dir.is_dir() and not source_dir.is_symlink(),
+                "original CFD constant directory unsafe/missing")
+        (shadow/name).symlink_to(source_dir,target_is_directory=True)
+    for time,label in saved:
+        require(re.fullmatch(r"\d+(?:\.\d+)?",label) is not None
+                and 0<=time<=10,
+                "unsafe original native CFD saved time label")
+        original_dir=original/label
+        require(original_dir.is_dir() and not original_dir.is_symlink(),
+                "missing/nonregular original archived time directory: "+label)
+        (shadow/label).symlink_to(original_dir,target_is_directory=True)
+    require(sha(source_schemes)==original_sha,
+            "original mold fvSchemes SHA altered during shadow creation")
+    require(sha(target)!=original_sha,
+            "q-only shadow scheme not distinguished from source")
+    return {
+        "schema":"C3D05_B_C14_ISOLATED_Q_ONLY_MOLD_INTERPOLATION_OVERLAY_V1",
+        "original_CFD_source_unchanged":str(original),
+        "original_mold_fvSchemes_SHA256":original_sha,
+        "temporary_overlay_mold_fvSchemes_SHA256":sha(target),
+        "original_mold_scheme":"interpolate((kappa|Cv)) harmonic;",
+        "explicit_shadow_only_scheme":"interpolate(kappa) harmonic;",
+        "saved_real_time_directories_linked":len(saved),
+        "constant_linked_read_only_intent":True,
+        "system_copied_and_ONLY_mold_fvSchemes_amended":True,
+        "original_CFD_not_remeshed_or_resolved":True,
+        "notes":[
+            "One explicit F14 interpolate(kappa) harmonic entry is added to isolated q-only fvSchemes.",
+            "This exact postprocessing scheme was NOT in original solver dictionary; "
+            "the postrun q reconstruction is not a solver-dt native flux history.",
+            "The source CFD case's original thermos, fvModels, archived fields and mesh are unchanged.",
+        ],
+    }
+
+
 def run(case:Path,output:Path)->dict:
     case=case.expanduser().absolute()
     output=output.expanduser().absolute()
@@ -216,8 +317,18 @@ def run(case:Path,output:Path)->dict:
             "real native C14 fluid+solid flux binary not produced: "+str(work))
     staging=work/"published"
     staging.mkdir()
+    # Shadow contains COPIED system dictionaries (only mold interpolate(kappa)
+    # added) + 101 symlinks to IMMUTABLE archived time fields and constant.
+    # Never insert a scheme into ORIGINAL $HOME/OpenFOAM/.../system/mold/fvSchemes.
+    saved=native.saved_times(case)
+    overlay=prepare_isolated_c14_flux_case(
+        case,work/"shadow_postrun_case",saved)
+    (staging/"C3D05_B_C14_FLUX_Q_ONLY_SHADOW_SCHEME.json").write_text(
+        json.dumps(overlay,indent=2)+"\n",encoding="utf-8")
+    print("C3D05_B_C14_Q_ONLY_SHADOW_HARMONIC_FVSCHEMES: "
+          +str(work/"shadow_postrun_case"),flush=True)
     invoke([
-        str(binary),"-case",str(case),"-time","0:10",
+        str(binary),"-case",str(work/"shadow_postrun_case"),"-time","0:10",
         "-outIntegrated",str(staging/INTEGRALS),
         "-outLastFaces",str(staging/LAST_FACES)
     ],work,env,work/LOG_EXTRACT)
@@ -234,6 +345,7 @@ def run(case:Path,output:Path)->dict:
     q["patch_time_history_file"]=TIMELINE
     q["native_q_method_compiled_in_user_environment_not_verified_until_execution"]=True
     q["original_CFD_source_read_only"]=str(case)
+    q["q_only_shadow_fvSchemes_provenance"]=overlay
     q["source_preflight"]=state
     (staging/REPORT).write_text(json.dumps(
         q,indent=2,ensure_ascii=False)+"\n",encoding="utf-8")
@@ -251,7 +363,12 @@ def run(case:Path,output:Path)->dict:
         "wmake_log_SHA256":sha(staging/LOG_BUILD),
         "native_q_log_SHA256":sha(staging/LOG_EXTRACT),
         "original_CFD_untouched":True,
-        "source_isolated":True
+        "source_isolated":True,
+        "original_mold_fvSchemes_SHA256":overlay["original_mold_fvSchemes_SHA256"],
+        "q_only_overlay_mold_fvSchemes_SHA256":
+            overlay["temporary_overlay_mold_fvSchemes_SHA256"],
+        "q_only_overlay_report_SHA256":sha(
+            staging/"C3D05_B_C14_FLUX_Q_ONLY_SHADOW_SCHEME.json")
     },indent=2)+"\n",encoding="utf-8")
     require(not output.exists() and not output.is_symlink(),
             "another q result appeared; do not replace")
