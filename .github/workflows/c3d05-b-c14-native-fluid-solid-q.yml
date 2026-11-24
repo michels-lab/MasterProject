@@ -1,0 +1,59 @@
+name: C3D05-B C14 authentic fluid-and-solid native q build (no CFD)
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'cases_3d/C3D_05_step_gmsh_conformal/c14_physics/native_flux/**'
+      - 'cases_3d/C3D_05_step_gmsh_conformal/c14_physics/analyze_existing_case_b_c14_native_flux.py'
+      - 'cases_3d/C3D_05_step_gmsh_conformal/c14_physics/run_existing_case_b_c14_native_flux.py'
+      - 'cases_3d/C3D_05_step_gmsh_conformal/c14_physics/tests/test_existing_case_b_c14_native_flux.py'
+      - '.github/workflows/c3d05-b-c14-native-fluid-solid-q.yml'
+  pull_request:
+    paths:
+      - 'cases_3d/C3D_05_step_gmsh_conformal/c14_physics/native_flux/**'
+      - 'cases_3d/C3D_05_step_gmsh_conformal/c14_physics/analyze_existing_case_b_c14_native_flux.py'
+      - 'cases_3d/C3D_05_step_gmsh_conformal/c14_physics/run_existing_case_b_c14_native_flux.py'
+      - 'cases_3d/C3D_05_step_gmsh_conformal/c14_physics/tests/test_existing_case_b_c14_native_flux.py'
+      - '.github/workflows/c3d05-b-c14-native-fluid-solid-q.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  c14-f14-flux-source-and-native-compile:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: gerlero/setup-openfoam@v1
+        with:
+          openfoam-version: 14
+      - name: Strict Python static parse and standalone native-q CSV regression tests (NO CFD)
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          d=Path('cases_3d/C3D_05_step_gmsh_conformal/c14_physics')
+          for n in ('analyze_existing_case_b_c14_native_flux.py',
+                    'run_existing_case_b_c14_native_flux.py',
+                    'tests/test_existing_case_b_c14_native_flux.py'):
+              compile((d/n).read_bytes(),str(d/n),'exec')
+          print('C3D05_B_C14_NATIVE_Q_PYTHON_SYNTAX_OK')
+          PY
+          PYTHONDONTWRITEBYTECODE=1 python3 -B -m unittest discover \
+            -s cases_3d/C3D_05_step_gmsh_conformal/c14_physics/tests \
+            -p "test_existing_case_b_c14_native_flux.py" -v
+      - name: Source-specific Foundation14 wmake of C14 fluid+solid patch q exporter (NO CFD)
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          test "\${WM_PROJECT_VERSION:-}" = "14"
+          SRC="cases_3d/C3D_05_step_gmsh_conformal/c14_physics/native_flux"
+          mkdir -p "$RUNNER_TEMP/c3d05-b-c14-native-q-bin"
+          export FOAM_USER_APPBIN="$RUNNER_TEMP/c3d05-b-c14-native-q-bin"
+          wmake "$SRC"
+          test -x "$FOAM_USER_APPBIN/c3d05C14FluidSolidFlux"
+          "$FOAM_USER_APPBIN/c3d05C14FluidSolidFlux" -help > "$RUNNER_TEMP/c3d05-b-c14-native-q-help.log" 2>&1
+          grep -q 'outIntegrated' "$RUNNER_TEMP/c3d05-b-c14-native-q-help.log"
+          grep -q 'outLastFaces' "$RUNNER_TEMP/c3d05-b-c14-native-q-help.log"
+          echo "C3D05_B_C14_FOUNDATION14_REAL_FLUID_SOLID_Q_BINARY_BUILD_HELP_PASS_NO_WSL_CFD"
