@@ -37,12 +37,15 @@ class PhaseMassTransport
     word propertySource_;
     scalar Tmin_K_;
     scalar Tmax_K_;
-    scalar phaseRelaxation_;
+    // Either equilibrium fs(T), or physically sourced kinetic timescale.
+    // No arbitrary per-CFD-timestep relaxation factor.
+    word phaseChangeClosure_;
     scalar metalPresenceThreshold_;
 
     autoPtr<Function1<scalar>> rhoLiquidT_;
     autoPtr<Function1<scalar>> rhoSolidT_;
     autoPtr<Function1<scalar>> solidMassFractionT_;
+    autoPtr<Function1<scalar>> tauPhaseChangeT_;
 
     // Composition-specific enthalpy closure; no legacy fvModel latent source.
     dimensionedScalar latentHeat_;
