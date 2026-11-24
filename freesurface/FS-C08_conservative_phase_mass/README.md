@@ -1,5 +1,21 @@
 # FS-C08 — Primer núcleo conservativo líquido–sólido–gas
 
+
+> **24-11-2026 — WSL REAL VERIFICADO Y PUENTE OpenFOAM14 PREPARADO.** El investigador ejecutó en Ubuntu/WSL los **18/18 tests Python OK** (0.072 s), compiló con `c++ -std=c++17 -Wall -Wextra -Werror -pedantic` y obtuvo `FS-C08 C++17 ... PASS`. El escenario sintético de equilibrio produjo `m_metal=0.042 kg` constante, `m_solid=0.008049301974720929 kg`, `T=1463.417497649 K`, `Gamma=804.930197472 kg/(m³·s)` y residuo `E=-5.82076609e-11 J`. **Esa evidencia ya es de la laptop, no solo del contenedor del asistente.**
+>
+> **NUEVO BLOQUE FS-C08 `wmake` — AÚN POR VALIDAR EN WSL:** [puente nativo Foundation14 `fvMesh`→`alpha.metal`/`alpha.metal.solid`→kernel C++17](native_openfoam/README.md). Incluye `Make/files` y `Make/options`, siete pruebas de contrato/paridad, y [un ejecutor único](../../analysis_tools/run_fs_c08_native_bridge.py) con cinco pruebas de orquestación que compila con `wmake`, lee tres tiempos FS-C07, compara las integrales con la evidencia histórica **y comprueba SHA256 de seis campos originales** antes/después. Los logs se preservan en `~/OpenFOAM/FS_C08_DIAGNOSTICS`. **Esto NO vuelve a ejecutar `foamMultiRun`, ni resuelve masa/energía/presión de forma acoplada.**
+>
+> ```bash
+> cd ~/OpenFOAM/FS_C08_WORKTREE
+> git fetch origin research/fs-c08-conservative-phase-mass-20261123
+> git switch --detach FETCH_HEAD
+> python3 -B analysis_tools/run_fs_c08_native_bridge.py \
+>   --case ~/OpenFOAM/FS_C07_RUNS/FS_C07_THERMAL_20261123T183217Z_72da1bf4
+> ```
+>
+> El siguiente hito aún es **solver nativo de masa conservativa no nula con fuentes ±Γ y acoplamiento de presión/energía/interfaz**; ni esta integración de API ni las propiedades sintéticas suplen eso.
+
+
 **Estado:** implementación ejecutable de **referencia de volúmenes finitos**, probada localmente en el contenedor del asistente (18/18 tests sintéticos). **Todavía NO es un módulo del solver OpenFOAM Foundation14**, NO ha sido compilada con `wmake` en WSL, NO es una corrida de contracción 3D de QuickCup ni fue alimentada con tablas reales JMatPro. Separación explícita de los hitos de código y de la validación física.
 
 **Rama:** `research/fs-c08-conservative-phase-mass-20261123`, creada desde `research/fs-c02-metal-air-vof-20261117`. **FS-C07 y sus campos originales permanecen intactos**. No relanzar el antiguo `foamMultiRun` para validar este prototipo.
