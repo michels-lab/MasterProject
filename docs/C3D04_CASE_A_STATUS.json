@@ -675,6 +675,45 @@
       "root_case_directory_fixed_on_main": true,
       "enforced_in_unit_regression": true,
       "next_native_run": "CI head after trial_case = dictionary.parent.parent fix; scientific claim remains pending native results"
+    },
+    "f14_synthetic_corrected_native_comparison": {
+      "run": "https://github.com/michels-lab/MasterProject/actions/runs/45350869304",
+      "status": "SUCCESS",
+      "dataset": "Original C14 two-step 27-cell metal / 27-cell mold synthetic, NOT real V4/T02",
+      "process_working_directory": "trial CASE root, not system/; corrected and regression-tested",
+      "t0_independent": {
+        "time_s": 0,
+        "FOAM_FATAL": 0,
+        "native_table_rows": 1,
+        "passed": true
+      },
+      "t1_independent": {
+        "time_s": 0.001,
+        "FOAM_FATAL": 0,
+        "native_table_rows": 1,
+        "passed": true
+      },
+      "t2_independent": {
+        "time_s": 0.002,
+        "FOAM_FATAL": 0,
+        "native_table_rows": 1,
+        "passed": true
+      },
+      "combined_three_times": {
+        "times_s": [
+          0,
+          0.001,
+          0.002
+        ],
+        "FOAM_FATAL": 0,
+        "native_table_rows": 3,
+        "passed": true
+      },
+      "native_CI_verdict": "SINGLE_AND_MULTITIME_NATIVE_PASS_NO_REGISTRY_FAILURE_REPRODUCED",
+      "scientific_inference": "An inherent generic F14 three-time loop/zone loss is NOT demonstrated by the synthetic test. Actual real 101-state C14 A still has zone FATAL after t0, cause unresolved; requires user's real three-snapshot isolated comparison.",
+      "real_WSL_V4_T02_three_time_executed": false,
+      "no_original_CFD_recompute": true,
+      "no_energy_global_conservation_claim": true
     }
   }
 }
