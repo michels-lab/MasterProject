@@ -14,6 +14,7 @@ import argparse
 from datetime import datetime, timezone
 import hashlib
 import json
+import math
 import os
 from pathlib import Path
 import re
@@ -87,6 +88,96 @@ def first_native_error(logfile: Path) -> str | None:
         if pattern.search(line):
             return line.strip()[:1000]
     return None
+
+
+
+def inspect_real_cfd_budgets(log: str, final_saved_time_s: float) -> dict:
+    """Require actual per-time OpenFOAM metal/gas gates, not log marker counts.
+
+    Thermal energy remains diagnostic until the full multi-region first-law
+    balance is independently accepted. No material or CFD values are invented.
+    """
+    required = (
+        "time_s", "liquidSolidMetalMass_kg", "previousMetalMass_kg",
+        "metalMassResidual_kg", "nativeGasInventory_kg",
+        "previousGasInventory_kg", "gasContinuityDefect_kg",
+        "gasMassBudgetTolerance_kg", "totalInternalEnergyEquationBalance_J",
+        "pressureCorrectionEnergyGap_J",
+        "phaseChangeVolumeSourceMean_s_1",
+        "combinedMaterialVolumeSourceMean_s_1",
+    )
+    budgets: list[dict] = []
+    pass_times: list[float] = []
+    thermal_times: list[float] = []
+    for line in log.splitlines():
+        if not any(marker in line for marker in (
+            "FS_C08_REAL_CFD_MASS_BUDGET",
+            "FS_C08_NATIVE_METAL_AND_GAS_CONSERVATION_GATES_PASSED",
+            "FS_C08_NATIVE_PHASE_RESOLVED_INTERNAL_ENERGY",
+        )):
+            continue
+        entries = dict(re.findall(r"([A-Za-z][A-Za-z0-9_]*)=([^\\s]+)", line))
+        if "FS_C08_REAL_CFD_MASS_BUDGET" in line:
+            missing = [field for field in required if field not in entries]
+            if missing:
+                raise ValueError("real mass/energy budget lacks " + ", ".join(missing))
+            try:
+                values = {field: float(entries[field]) for field in required}
+            except ValueError as exc:
+                raise ValueError("non-numeric native CFD mass budget") from exc
+            if not all(math.isfinite(value) for value in values.values()):
+                raise ValueError("nonfinite mass/energy/volume CFD budget")
+            m = values["liquidSolidMetalMass_kg"]
+            m0 = values["previousMetalMass_kg"]
+            if m <= 0 or m0 <= 0:
+                raise ValueError("no positive metal inventory in real CFD")
+            if abs(values["metalMassResidual_kg"]) > 1e-7 * max(m, m0):
+                raise ValueError("native metal mass balance exceeds 1e-7")
+            if (values["gasMassBudgetTolerance_kg"] <= 0
+                    or values["nativeGasInventory_kg"] < 0
+                    or values["previousGasInventory_kg"] < 0
+                    or abs(values["gasContinuityDefect_kg"])
+                       > values["gasMassBudgetTolerance_kg"]):
+                raise ValueError("native gas mass balance exceeds tolerance")
+            budgets.append(values)
+        else:
+            if "time_s" not in entries:
+                raise ValueError("native conservation/thermal PASS without time")
+            try:
+                t = float(entries["time_s"])
+            except ValueError as exc:
+                raise ValueError("non-numeric native gate time") from exc
+            if not math.isfinite(t) or t <= 0:
+                raise ValueError("invalid native gate timestamp")
+            if "FS_C08_NATIVE_METAL_AND_GAS_CONSERVATION_GATES_PASSED" in line:
+                pass_times.append(t)
+            if "FS_C08_NATIVE_PHASE_RESOLVED_INTERNAL_ENERGY" in line:
+                thermal_times.append(t)
+
+    if not budgets:
+        raise ValueError("no actual FS-C08 numerical mass/energy budgets")
+    tol = max(1e-9, 1e-6 * abs(final_saved_time_s))
+    near_final = lambda t: abs(t - final_saved_time_s) <= tol
+    if (not near_final(budgets[-1]["time_s"])
+            or not any(near_final(t) for t in pass_times)
+            or not any(near_final(t) for t in thermal_times)):
+        raise ValueError("last saved CFD time lacks matched physical budget,"
+                         " conservation gate, or thermal solve")
+    return {
+        "numeric_budget_records": len(budgets),
+        "mass_conservation_pass_records": len(pass_times),
+        "native_thermal_solve_records": len(thermal_times),
+        "final_time_s": final_saved_time_s,
+        "final_native_mass_energy_budget": budgets[-1],
+        "maximum_absolute_metal_residual_kg":
+            max(abs(b["metalMassResidual_kg"]) for b in budgets),
+        "maximum_absolute_gas_residual_kg":
+            max(abs(b["gasContinuityDefect_kg"]) for b in budgets),
+        "all_native_mass_budget_records_checked": True,
+        "global_energy_verified": False,
+        "energy_residual_is_diagnostic_only": True,
+        "physical_casting_shrinkage_validated": False,
+    }
 
 
 def numeric_time_dirs(case: Path) -> list[tuple[float, Path]]:
@@ -176,16 +267,9 @@ def execute(source: Path, material: Path, output: Path,
             return report
 
         log = native_log.read_text(encoding="utf-8", errors="replace")
-        report["metal_gas_conservation_gate_records"] = log.count(
-            "FS_C08_NATIVE_METAL_AND_GAS_CONSERVATION_GATES_PASSED"
-        )
-        report["native_thermal_solve_records"] = log.count(
-            "FS_C08_NATIVE_PHASE_RESOLVED_INTERNAL_ENERGY"
-        )
         report["per_patch_budget_records"] = log.count(
             "FS_C08_REAL_CFD_PATCH_BUDGET"
         )
-
         snapshots = numeric_time_dirs(output)
         report["saved_positive_times_s"] = [t for t, _ in snapshots]
         if not snapshots:
@@ -193,6 +277,20 @@ def execute(source: Path, material: Path, output: Path,
             return report
 
         finaltime, finaldir = snapshots[-1]
+        try:
+            report["native_numeric_budget_gate"] = inspect_real_cfd_budgets(
+                log, finaltime
+            )
+        except ValueError as exc:
+            report["status"] = "FS_C08_REAL_CFD_NUMERIC_BUDGET_GATE_FAILED"
+            report["budget_gate_error"] = str(exc)
+            return report
+        report["metal_gas_conservation_gate_records"] = (
+            report["native_numeric_budget_gate"]["mass_conservation_pass_records"]
+        )
+        report["native_thermal_solve_records"] = (
+            report["native_numeric_budget_gate"]["native_thermal_solve_records"]
+        )
         fluid = finaldir / "fluid"
         missing = [name for name in REQUIRED_FINAL_FIELDS
                    if not (fluid / name).is_file()]
