@@ -108,8 +108,8 @@
   "cpp_mass_phase_update_gamma_and_volume_closure": true,
   "cpp_pressure_velocity_energy_or_cht": false,
   "CI_cxx_compile_step_declared": true,
-  "last_work": "WSL validated Python18/18 and C++17 success; created native Foundation14 wmake fvMesh read-only bridge, plus 7 contract/parity tests against real 20 FS-C07 states. Native wmake compilation and interoperability remain unverified in WSL; no physical 3D shrinkage.",
-  "next_scientific_stage": "Compile native bridge in researcher's Foundation14 WSL and confirm parity without editing FS-C07, then implement and compile conservative three-phase transport with equal/opposite Gamma sources, coupled pressure/energy/free-surface on isolated case. All 3D physical acceptance remains pending.",
+  "last_work": "Researcher WSL success recorded: 18 Python tests, independent C++17 compile, one-cell synthetic Gamma energy example. Added Foundation14 wmake actual-fvMesh reader invoking C++17 Gamma=0 on core cells, fail-closed 20-state evidence parity, one-command WSL runner with six original field SHA256 preservation, and 12 regression tests (untested in WSL/CI). No new CFD or pressure/free-surface/shrinkage model.",
+  "next_scientific_stage": "Run single-command native Foundation14 bridge and inspect report; fix actual API/compiler issues based on WSL logs; only after that integrate equal/opposite Gamma and liquid/solid/gas continuity into separate native solver with energy, pressure and interface coupling.",
   "Wsl_tests_runner": "python3 -B -m unittest discover -s analysis_tools -p 'test_fs_c08_conservative_reference.py' -v",
   "Wsl_tests_summary": "Ran 18 tests in 0.072s; OK",
   "Wsl_tests_source_head": "eddacd6e9",
@@ -149,5 +149,22 @@
   "native_OpenFOAM_bridge_contract_tests": "analysis_tools/test_verify_fs_c08_openfoam_inventory.py",
   "native_OpenFOAM_bridge_contract_test_count_declared": 7,
   "native_OpenFOAM_bridge_contract_test_execution_verified": false,
-  "native_OpenFOAM_bridge_scientific_gate": "Native field interoperability only; physical phase boundedness still fails at low VOF and pressure/free-surface/nonzero-Gamma not solved"
+  "native_OpenFOAM_bridge_scientific_gate": "Native field interoperability only; physical phase boundedness still fails at low VOF and pressure/free-surface/nonzero-Gamma not solved",
+  "native_OpenFOAM_bridge_one_command_runner": "analysis_tools/run_fs_c08_native_bridge.py",
+  "native_OpenFOAM_bridge_native_parity_checker": "analysis_tools/verify_fs_c08_openfoam_inventory.py",
+  "native_OpenFOAM_bridge_runner_tests": "analysis_tools/test_run_fs_c08_native_bridge.py",
+  "native_OpenFOAM_bridge_parity_tests": "analysis_tools/test_verify_fs_c08_openfoam_inventory.py",
+  "native_OpenFOAM_bridge_runner_test_count_declared": 5,
+  "native_OpenFOAM_bridge_combined_new_test_count_declared": 12,
+  "native_OpenFOAM_bridge_one_command_created": true,
+  "native_OpenFOAM_bridge_report_path_pattern": "~/OpenFOAM/FS_C08_DIAGNOSTICS/FS_C08_NATIVE_FIELD_BRIDGE_*/FS_C08_NATIVE_BRIDGE_REPORT.json",
+  "native_OpenFOAM_bridge_hash_input_count": 6,
+  "native_OpenFOAM_bridge_gates": [
+    "OpenFOAM Foundation14 environment, wmake and FOAM_USER_APPBIN",
+    "wmake native utility build",
+    "native fvMesh snapshot 0.2/0.4/1 read-only inventory",
+    "independent count/integral parity to observed FS-C07 data",
+    "SHA256 of six original 0.2/0.4/1 alpha.metal and alpha.metal.solid fields identical before/after"
+  ],
+  "native_OpenFOAM_bridge_synthetic_ci_tests_passed_verified": false
 }
