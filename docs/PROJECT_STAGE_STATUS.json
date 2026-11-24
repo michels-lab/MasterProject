@@ -450,7 +450,23 @@
     "case_b_c14_native_C14_fluid_solid_q_WSL_native_IO_readonly_diagnostic_arg": "--diagnose-attempt",
     "case_b_c14_native_C14_fluid_solid_q_WSL_native_IO_error_context_print_on_next_failure": true,
     "case_b_c14_native_C14_fluid_solid_q_WSL_native_IO_diagnostic_test_source_count": 10,
-    "case_b_c14_native_C14_fluid_solid_q_WSL_native_IO_diagnostic_tests_WSL_executed": false
+    "case_b_c14_native_C14_fluid_solid_q_WSL_native_IO_diagnostic_tests_WSL_executed": false,
+    "case_b_c14_native_C14_fluid_solid_q_WSL_preserved_fatal_IO_log_diagnosed": true,
+    "case_b_c14_native_C14_fluid_solid_q_WSL_preserved_fatal_IO_root_cause": "Cannot find scheme for interpolate(kappa) in system/mold/fvSchemes!interpolationSchemes",
+    "case_b_c14_native_C14_fluid_solid_q_WSL_fatal_IO_offending_region": "mold",
+    "case_b_c14_native_C14_fluid_solid_q_WSL_fatal_IO_scheme_key": "interpolate(kappa)",
+    "case_b_c14_native_C14_fluid_solid_q_WSL_original_C14_mold_intent": "interpolate((kappa|Cv)) harmonic;",
+    "case_b_c14_native_C14_fluid_solid_q_WSL_original_C14_mold_fvSchemes_never_edit": true,
+    "case_b_c14_native_C14_fluid_solid_q_q_only_original_harmonic_explicit_scheme_overlay_source_committed": true,
+    "case_b_c14_native_C14_fluid_solid_q_q_only_original_harmonic_explicit_scheme": "interpolate(kappa) harmonic;",
+    "case_b_c14_native_C14_fluid_solid_q_q_only_shadow_case_101_native_time_dirs_staged": true,
+    "case_b_c14_native_C14_fluid_solid_q_q_only_shadow_case_original_fields_symlinked_not_copied": true,
+    "case_b_c14_native_C14_fluid_solid_q_q_only_shadow_case_original_constant_linked": true,
+    "case_b_c14_native_C14_fluid_solid_q_q_only_shadow_case_isolated_fvSchemes_SHA_manifest": true,
+    "case_b_c14_native_C14_fluid_solid_q_WSL_native_IO_root_cause_confirmed": true,
+    "case_b_c14_native_C14_fluid_solid_q_WSL_q_only_harmonic_overlay_tests_source_count": 14,
+    "case_b_c14_native_C14_fluid_solid_q_WSL_q_only_harmonic_overlay_WSL_tests_passed_observed": false,
+    "case_b_c14_native_C14_fluid_solid_q_WSL_q_only_harmonic_overlay_extractor_executed": false
   },
   "other_cases": [
     {
@@ -490,7 +506,7 @@
       "evidence": "docs/granada/C3D05_B_C14_WSL_EJECUCION_REAL_EN_CURSO_20261123_ES.md"
     }
   ],
-  "blocker": "Case B REAL native F14 original 10s/101 CFD complete and all metal+molde C14 reference inventories verified previously. Latest WSL native C14 FLUID+SOLID q: 8/8 offline tests PASS, original 10s/101 native preflight SHA PASS; wmake BINARY COMPILED after linear.H fix. Runtime C++ q extractor then emitted FOAM FATAL IO ERROR before any q output passed verification; only error header printed because wrapper filtered out subsequent fatal context. Actual IO root cause UNCONFIRMED until full preserved log is reviewed. ATTEMPT_1lg4hihv and log preserved. New runner --diagnose-attempt reads fatal context from preserved attempt with NO wmake, CFD, new extraction or source mutation; 2 new tests committed, WSL testing pending. No q measured; no energy closure, G3-G7 remain OPEN, 2/7.",
-  "next_integrated_delivery": "DO NOT rerun CFD or native q extractor yet. Read exact preserved native q runtime fatal log via `git pull --ff-only && python3 -B cases_3d/C3D_05_step_gmsh_conformal/c14_physics/run_existing_case_b_c14_native_flux.py --diagnose-attempt /home/michel/OpenFOAM/.C3D05_B_C14_NATIVE_FLUID_SOLID_PATCH_Q_01.ATTEMPT_1lg4hihv`. It prints native error context for IO dictionary/file/field name and does no compiler/CFD work. Then repair true F14 runtime IO issue from actual evidence; rerun isolated extractor only after root cause is known.",
-  "science": "CASE_B_NATIVE_C14_10S_CFD_AND_REFERENCE_METAL_MOLD_ENERGY_WSL_DONE_FLUID_SOLID_TRUE_F14_Q_CPP_RUNNER_CODE_STAGED_NATIVE_WSL_COMPILE_PENDING_NO_PHYSICAL_CLOSURE"
+  "blocker": "Real WSL completed B C14 F14 fluid-solid 10s + 101 native states + alpha1/metal/mold reference energy. Native q extractor compiled and 8/8 QA + source SHA preflight pass, but runtime fatal IO logged. Preserved log NOW READ-ONLY DIAGNOSED: F14 solidThermophysicalTransportModel::q() lookup requires interpolate(kappa); original C14 system/mold/fvSchemes contains interpolate((kappa|Cv)) harmonic; but exact lookup is not found. New runner constructs independent 101-time REAL-directory SHADOW (source field symlinks + constant link) with COPIED system/mold/fvSchemes only receiving interpolate(kappa) harmonic; original CFD system and all archived data never mutated. 14 synthetic regression test cases source now staged, WSL execution and real q unobserved. Original pre-existing failed ATTEMPT preserved, no physical conservation or experimental validation; G3-G7 open, progress 2/7.",
+  "next_integrated_delivery": "First git pull; run 14 native_q tests, confirmed original 10s SHA --preflight, isolated wmake+q extractor which uses 101-state SHADOW case with explicit harmonic interpolate(kappa) only in copied mold fvSchemes. Source CFD never modified, old failed ATTEMPT kept. If native q extraction succeeds, check 404 patch-q records, 12636 interface faces/side and t=10s per-face q; distinguish 0.1s saved-time trapezoid from native dt=0.001 solver integral. No physical claims until actual WSL reported. Any further runtime errors printed full log tail.",
+  "science": "CASE_B_10S_101_SAVED_NATIVE_C14_Q_F14_WMAKE_PASS_ROOT_CAUSE_MOLD_INTERPOLATE_KAPPA_MISSING_ISOLATED_HARMONIC_FVSCHEMES_SHADOW_STAGED_UNRUN"
 }
