@@ -667,6 +667,14 @@
     "old_CFD_or_postprocess_modified": false,
     "stage": "7/10",
     "milestones": "6/10",
-    "percent_operational": 60
+    "percent_operational": 60,
+    "f14_synthetic_first_attempt": {
+      "run": "https://github.com/michels-lab/MasterProject/actions/runs/45350301865",
+      "result": "INVALID_DIAGNOSTIC_ONLY",
+      "reason": "Native runner started in each clone's system/ subdirectory, so OpenFOAM Case became .../system and it searched system/system/controlDict; individual trials never reached C14 model. Cannot claim missing-zone multi-time issue from that result.",
+      "root_case_directory_fixed_on_main": true,
+      "enforced_in_unit_regression": true,
+      "next_native_run": "CI head after trial_case = dictionary.parent.parent fix; scientific claim remains pending native results"
+    }
   }
 }
