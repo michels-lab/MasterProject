@@ -74,6 +74,21 @@ def first_compiler_error(logfile: Path) -> str | None:
     return None
 
 
+def first_native_error(logfile: Path) -> str | None:
+    pattern = re.compile(
+        r"FOAM FATAL ERROR|FOAM FATAL IO ERROR|floating point exception|"
+        r"segmentation fault|error:|cannot open shared object|"
+        r"unknown solver|uncaught exception",
+        flags=re.IGNORECASE,
+    )
+    for line in logfile.read_text(
+        encoding="utf-8", errors="replace"
+    ).splitlines():
+        if pattern.search(line):
+            return line.strip()[:1000]
+    return None
+
+
 def numeric_time_dirs(case: Path) -> list[tuple[float, Path]]:
     times: list[tuple[float, Path]] = []
     for path in case.iterdir():
@@ -157,7 +172,7 @@ def execute(source: Path, material: Path, output: Path,
         report["foamMultiRun"] = run
         if run["exit_code"] != 0:
             report["status"] = "FS_C08_REAL_CFD_NATIVE_RUN_FAILED_OR_INCOMPLETE"
-            report["first_run_error"] = first_compiler_error(native_log)
+            report["first_run_error"] = first_native_error(native_log)
             return report
 
         log = native_log.read_text(encoding="utf-8", errors="replace")
@@ -189,7 +204,10 @@ def execute(source: Path, material: Path, output: Path,
             return report
 
         report["real_CFD_completed"] = True
-        report["field_evolution_verified"] = True
+        # The presence of written fields is not proof that any quantity
+        # changed or that the casting shrank physically.
+        report["required_physical_fields_written"] = True
+        report["field_evolution_verified"] = False
         report["global_metal_and_gas_mass_verified"] = True
         report["status"] = (
             "FS_C08_REAL_CFD_NATIVE_EXECUTION_WITH_CONSERVATION_GATES_PASS"
@@ -200,6 +218,10 @@ def execute(source: Path, material: Path, output: Path,
         report["source_sha256_after"] = {
             part: digest(source / part) for part in tracked
         }
+        if report["source_sha256_after"] != source_before:
+            report["status"] = "FS_C08_SOURCE_FS_C07_CHANGED__INVALID_RUN"
+            report["real_CFD_completed"] = False
+            report["global_metal_and_gas_mass_verified"] = False
         write_report(reportfile, report)
 
 
