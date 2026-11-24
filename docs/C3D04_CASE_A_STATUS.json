@@ -25,7 +25,8 @@
     "T0 sourced from archived C14: 10 of 10 OpenFOAM Foundation14 dictionaries parsed on actual CI binary (GitHub Actions run 44825262805, artifact 14674730228); 15 of 15 integrated tests passed on run 44825262837",
     "20-11-2026 original C14 full 10s on ACTUAL V4/T02 WSL: terminal evidence of 101 states t0,t0.1,...t10, native report native_solver_run=true, Time=10s, End, h/e/p_rgh solved; 23-11-2026 investigator terminal upload. See docs/C3D_04_C14_V4_T02_REAL_10S_20261123_ES.md. Original accepted mesh preserved.",
     "23-11-2026 ACTUAL WSL REAL V4/T02 existing C14 10s 101-state native ASCII postrun: all 8960 metal cells below 1473 K, 1158 below 1423 K, alpha1 mean 0.8367355017427456 min0 max0.992311; all-log max Co 0.0240415 across 10000 steps; energy balance NOT verified. docs/C3D_04_C14_V4_T02_REAL_10S_PHASE_NUMERICAL_RESULTS_20261123_ES.md",
-    "23-11-2026 investigator WSL real 101-state saved-volume kinetic analysis completed with original C14 10s fields unchanged, source volume CSV+JSON found, first saved model alpha1 decrease between 0.2 and 0.3 s, nominal peak latent release 1038.8813 W over 7.2-7.3 s, final volume-mean metal T 1450.70916 K and nominal solid inventory 0.0335828358 kg. Native copy source provenance PASSED, but native commands NOT fully verified; energy closure/QuickCup NOT verified."
+    "23-11-2026 investigator WSL real 101-state saved-volume kinetic analysis completed with original C14 10s fields unchanged, source volume CSV+JSON found, first saved model alpha1 decrease between 0.2 and 0.3 s, nominal peak latent release 1038.8813 W over 7.2-7.3 s, final volume-mean metal T 1450.70916 K and nominal solid inventory 0.0335828358 kg. Native copy source provenance PASSED, but native commands NOT fully verified; energy closure/QuickCup NOT verified.",
+    "24-11-2026 WSL real grouped recovery: cellZone all only in isolated copy, 7/7 native groups no FATAL, five scalar series 101/101, rho*h equal at 0/0.1/10 to printed precision, three surface powers reconcile (max relative 4.7503433312219475e-7); 7/9 final profiles pass, both vertical 27/80. Source hashes unchanged. No energy/QuickCup validation."
   ],
   "nonnegotiable_blockers": [
     "C14 numeric metal/arena parameters and 2D boundary reference NOW sourced directly in T0; they are constant C14-model inputs, NOT independently measured T-dependent iron/sand functions.",
@@ -754,7 +755,7 @@
       "preferred": "Test native grouped multi-time recovery in isolated postprocessing only; F14 generatedCellZone supports cellZone all, equivalent cell membership only if original zone covers every regional metal cell. Compare authentic saved outputs and verify unchanged source; do not alter original fvModels or claim equivalence until measured.",
       "fallback": "Per-time native processes with consolidated data if grouped recovery cannot be justified or does not pass.",
       "source": "https://cpp.openfoam.org/v14/generatedCellZone_8C_source.html",
-      "native_test_executed": false,
+      "native_test_executed": true,
       "code_implemented": true,
       "delivery_commit": "5017ec57e96f74dcdf2172fa572eb6a2dafd62fd",
       "entrypoint": "cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/run_c14_stage07_grouped_native_recovery.py",
@@ -766,10 +767,75 @@
         "101 finite scalar rows and exact time axes; 80-point final profiles; face-power reconciliation; source hashes unchanged"
       ],
       "limitations": [
-        "Only copy fvModels selection changed from metal to all; original CFD untouched",
-        "No observed WSL grouped execution or CI result yet",
-        "Vertical sampling geometry may still be incomplete; no global energy balance or QuickCup"
+        "Grouped native execution observed on real WSL V4/T02; 7/7 groups log-semantic PASS and five audited scalar series 101/101, not blanket field parity",
+        "Two vertical profiles remain 27/80; spatial coverage unresolved",
+        "No global energy conservation or QuickCup validation; native runtime ddt not recovered"
       ]
+    },
+    "grouped_recovery_real_WSL": {
+      "date": "2026-11-24",
+      "source": "Investigator-pasted WSL stdout; JSON and full native tables remain on laptop",
+      "source_commit": "d7b99974d",
+      "report": "~/OpenFOAM/C3D04_A_C14_GROUPED_NATIVE_RECOVERY_01/C3D04_A_C14_GROUPED_NATIVE_RECOVERY.json",
+      "regression_tests_passed": 5,
+      "regression_tests_total": 5,
+      "groups_passed": [
+        "core",
+        "energy",
+        "phase",
+        "flow",
+        "profiles",
+        "momentum",
+        "top_surface"
+      ],
+      "all_groups_without_fatal": true,
+      "reference_times_s": [
+        0,
+        0.1,
+        10
+      ],
+      "reference_enthalpy_J": [
+        324845.2,
+        324518.7,
+        311527.6
+      ],
+      "grouped_enthalpy_J": [
+        324845.2,
+        324518.7,
+        311527.6
+      ],
+      "absolute_differences_J": [
+        0,
+        0,
+        0
+      ],
+      "equivalence_scope": "rho*h native integral at three selected times, precision of written table only",
+      "scalar_series_rows": {
+        "metalSensibleEnthalpy": 101,
+        "metalMeanLiquidFraction": 101,
+        "metalTopEnergyPower": 101,
+        "metalMoldEnergyPower": 101,
+        "metalBoundaryEnergyPower": 101
+      },
+      "final_outward_energy_power_W": {
+        "top": 117.2792,
+        "contact": 1524.644,
+        "total": 1641.923
+      },
+      "maximum_relative_surface_power_reconciliation_discrepancy": 4.7503433312219475e-7,
+      "profiles_passed": 7,
+      "profiles_requested": 9,
+      "vertical_primitive_points": 27,
+      "vertical_momentum_points": 27,
+      "vertical_target_points": 80,
+      "source_hashes_unchanged": true,
+      "copy_controlDict_unchanged": true,
+      "original_fvModels_sha256": "a4747af8974998e3fe69e3931b80f6d82f92d3ee4d19f471d5179936fa8e6525",
+      "offline_fvModels_sha256": "d57c67f55a88b9958bced88d82ceaafa31f20c57430896109825872dfff5f976",
+      "source_solver_rerun": false,
+      "global_energy_conservation_verified": false,
+      "quickcup_validated": false,
+      "remaining": "Investigate vertical sampling geometry on native mesh; audit additional outputs; integrate fluxes and metal/mold inventories, bilateral interface flux and discrete phase source before balance; no CFD rerun for existing snapshots."
     }
   }
 }
