@@ -413,6 +413,55 @@ void solvers::fsC08ConservativeVoF::postSolve()
     reduce(energyAdvectionOut_W,sumOp<scalar>());
     reduce(conductionOut_W,sumOp<scalar>());
 
+    // Actual open-face metal feeding and mold/ambient heat extraction
+    // MUST remain distinguishable. A single global outflow can cancel
+    // feeding and discharge from different boundaries. These labels
+    // use the actual region mesh patch names; no patch is classified
+    // as "inlet", "mold" or "vent" without the case geometry.
+    scalar totalMetalIn_kg_s=0;
+    scalar totalMetalOut_kg_s=0;
+    forAll(mesh.boundary(),patchi)
+    {
+        scalar metalInto_kg_s=0,metalOut_kg_s=0;
+        scalar gasOut_kg_s=0,heatOut_W=0,energyOut_W=0;
+        const auto& patchMetal=liquidBoundary[patchi];
+        const auto& patchGas=gasBoundary[patchi];
+        const auto& patchHeat=heatPatches[patchi];
+        const auto& patchEnergy=energyPatches[patchi];
+        forAll(patchMetal,facei)
+        {
+            const scalar mflux=patchMetal[facei];
+            metalInto_kg_s+=max(-mflux,scalar(0));
+            metalOut_kg_s+=max(mflux,scalar(0));
+            gasOut_kg_s+=patchGas[facei];
+            heatOut_W+=patchHeat[facei];
+            energyOut_W+=patchEnergy[facei];
+        }
+        reduce(metalInto_kg_s,sumOp<scalar>());
+        reduce(metalOut_kg_s,sumOp<scalar>());
+        reduce(gasOut_kg_s,sumOp<scalar>());
+        reduce(heatOut_W,sumOp<scalar>());
+        reduce(energyOut_W,sumOp<scalar>());
+
+        totalMetalIn_kg_s+=metalInto_kg_s;
+        totalMetalOut_kg_s+=metalOut_kg_s;
+
+        Info<< "FS_C08_REAL_CFD_PATCH_BUDGET"
+            << " time_s=" << runTime.value()
+            << " patch=" << mesh.boundary()[patchi].name()
+            << " liquidMetalIn_kg_s=" << metalInto_kg_s
+            << " liquidMetalOut_kg_s=" << metalOut_kg_s
+            << " signedGasOut_kg_s=" << gasOut_kg_s
+            << " signedCHTHeatOut_W=" << heatOut_W
+            << " energySolverAdvectedOut_W=" << energyOut_W
+            << " physicalFeedingNotYetValidated=1" << nl;
+    }
+    Info<< "FS_C08_REAL_CFD_METAL_FEEDING_SUMMARY"
+        << " time_s=" << runTime.value()
+        << " allBoundaryLiquidMetalIn_kg_s=" << totalMetalIn_kg_s
+        << " allBoundaryLiquidMetalOut_kg_s=" << totalMetalOut_kg_s
+        << " shrinkageFeedingPhysicsNotYetValidated=1" << nl;
+
     const scalar dt=runTime.deltaTValue();
     const scalar metalResidual=M-M0+dt*boundaryMassRate;
     const scalar gasContinuityDefect=Mgas-Mgas0+dt*gasBoundaryOut;
