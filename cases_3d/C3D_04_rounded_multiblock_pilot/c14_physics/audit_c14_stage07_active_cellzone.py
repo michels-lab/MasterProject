@@ -94,8 +94,7 @@ def saved_instances(copy: Path, n: int) -> dict:
     # Time-local zone instances can take precedence over constant depending on
     # the active foam mesh instance. Presence alone is NOT proof of precedence.
     suspicious=[x for x in entries if x["relative"].endswith("metal/polyMesh")
-                and x["files"].get("cellZones",{}).get("exists") and
-                not x["full_metal_cellzone_verified"]]
+                and not x["full_metal_cellzone_verified"]]
     return {
         "saved_time_directories":len(time_dirs),
         "time_local_mesh_directories_found":len(entries),
