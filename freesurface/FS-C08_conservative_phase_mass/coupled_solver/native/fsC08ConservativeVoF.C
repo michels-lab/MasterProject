@@ -255,7 +255,17 @@ void solvers::fsC08ConservativeVoF::prePredictor()
 void solvers::fsC08ConservativeVoF::postSolve()
 {
     compressibleVoF::postSolve();
-    // Update after gas pressure/EOS correction to store full phase energy.
+
+    // Snapshot the thermodynamic internal E immediately AFTER the
+    // thermal solve but BEFORE pressure changed the gas EOS.
+    // For PIMPLE multiple outer loops this is the final predictor's
+    // phase inventory, not an old synthetic or postprocessed field.
+    const scalarField energyBeforePressure
+    (
+        phaseInternalEnergy_.primitiveField()
+    );
+
+    // Now include the actual corrected gas p/rho/u state.
     updatePhaseInternalEnergy();
     // Runtime budget from REAL CFD state, all fluid cells and all
     // fluid boundary patches. Gamma cancels in total metal mass.
@@ -271,6 +281,7 @@ void solvers::fsC08ConservativeVoF::postSolve()
     const auto& aGas0=alpha2.oldTime().primitiveField();
     scalar M0=0, M=0, Mgas=0, Mgas0=0;
     scalar E0=0,E=0,mechanicalWork_W=0,darcyDissipation_W=0;
+    scalar postPressureEnergyJump_J=0;
     const auto& workDensity=mechanicalWorkDensity_.primitiveField();
     const auto& darcyHeat=mushyDarcyDissipation_.primitiveField();
     const auto& u=phaseInternalEnergy_.primitiveField();
@@ -283,6 +294,8 @@ void solvers::fsC08ConservativeVoF::postSolve()
         Mgas0+=V[i]*aGas0[i]*rGas0[i];
         E+=V[i]*u[i];
         E0+=V[i]*u0[i];
+        postPressureEnergyJump_J+=
+            V[i]*(u[i]-energyBeforePressure[i]);
         mechanicalWork_W+=V[i]*workDensity[i];
         darcyDissipation_W+=V[i]*darcyHeat[i];
     }
@@ -292,6 +305,7 @@ void solvers::fsC08ConservativeVoF::postSolve()
     reduce(Mgas0,sumOp<scalar>());
     reduce(E0,sumOp<scalar>());
     reduce(E,sumOp<scalar>());
+    reduce(postPressureEnergyJump_J,sumOp<scalar>());
     reduce(mechanicalWork_W,sumOp<scalar>());
     reduce(darcyDissipation_W,sumOp<scalar>());
 
@@ -389,6 +403,8 @@ void solvers::fsC08ConservativeVoF::postSolve()
         << " phaseResolvedInternalEnergy_J=" << E
         << " previousInternalEnergy_J=" << E0
         << " deltaInternalEnergy_J=" << E-E0
+        << " gasPressureCorrectionInternalEnergyJump_J="
+        << postPressureEnergyJump_J
         << " nativeEnergySolveAdvectionOut_W=" << energyAdvectionOut_W
         << " nativeEnergySolveConductionOut_W=" << conductionOut_W
         << " nativeMechanicalWork_W=" << mechanicalWork_W
