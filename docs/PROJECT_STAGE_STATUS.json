@@ -640,8 +640,8 @@
       "percent_hitos": 80,
       "percentage_scope": "SOLO_HITOS_OPERATIVOS_DEL_CASO_A_NO_VALIDACION_FISICA",
       "primary_contract": "cases_3d/C3D_04_rounded_multiblock_pilot/AGENTS.md",
-      "next_integrated_milestone": "Same-geometry discretization sensitivity and discrete energy conservation; no repetition of existing CFD/comparison.",
-      "blocker": "No discrete energy closure, same-geometry grid/time independence or QuickCup validation. FoamLens sweep import not observed.",
+      "next_integrated_milestone": "Authorized faithful C14 runtime replica, same V4/T02 and identical controlDict with native diagnostics; runner published, WSL pending.",
+      "blocker": "Original CFD and 2D–3D comparison complete, but native diagnostic cadence parity pending new isolated run; discrete energy closure, same-geometry sensitivity and QuickCup pending.",
       "CI_status": "REAL_WSL_ARCHIVED_C14_2D_3D_COMPARISON_READY",
       "CI_evidence": "docs/C3D04_A_STAGE09_ARCHIVED_C14_COMPARISON_20261124_ES.md"
     },
