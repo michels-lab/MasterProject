@@ -127,7 +127,8 @@ int main(int argc, char *argv[])
         )
     );
 
-    Info.precision(16);
+    // Foundation14 Foam::Ostream idiom, as used by native utilities.
+    Info<< setprecision(16);
 
     forAll(timeDirs, timei)
     {
