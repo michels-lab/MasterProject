@@ -16,7 +16,7 @@ import run_c14_stage07_solver_backed_recovery as recovery
 FIELDS={"T":("T",1),"U":("U",3),"alpha":("phaseChangeSource:alpha1",1),
         "gradT":("gradT",3),"p":("p_rgh",1)}
 VARS=("T_K","alphaL","Ux_m_s","Uy_m_s","Uz_m_s","U_mag_m_s",
-      "gradTx_K_m","gradTy_K_m","gradTz_K_m","gradT_mag_K_m","p_rgh_Pa")
+      "gradTx_K_m","gradTy_K_m","gradTz_K_m","gradT_mag_K_m","p_rgh_Pa","Ur_m_s","Utheta_m_s")
 HEIGHTS=(10,20,30)
 ANGLES=(0,45,90,135)
 REPORT="C3D04_A_MULTIDIRECTIONAL_REPORT.json"
@@ -143,6 +143,14 @@ def analyze(case,sets,area,out,grid):
             for name,s in sets.items():
                 rows=collect(case,t,name,s)
                 current[name]=rows
+                if s["kind"]=="diameter":
+                    ux,uz=s["direction_xz"]
+                    for i,r in rows.items():
+                        if i==40 or r["Ux_m_s"] is None:continue
+                        sign=1 if i>40 else -1
+                        ex,ez=sign*ux,sign*uz
+                        r["Ur_m_s"]=r["Ux_m_s"]*ex+r["Uz_m_s"]*ez
+                        r["Utheta_m_s"]=-r["Ux_m_s"]*ez+r["Uz_m_s"]*ex
                 if s["kind"]=="section":
                     points=[]
                     for i,r in rows.items():
@@ -200,7 +208,7 @@ def dashboard(out,d,r,v,s):
     # Keep compact chart data, with blank values for points outside the metal.
     def small(rows,meta,values):
         return [{k:x[k] for k in (*meta,*values) if k in x} for x in rows]
-    variables=("T_K","alphaL","U_mag_m_s","Ux_m_s","Uy_m_s","Uz_m_s","gradT_mag_K_m","p_rgh_Pa")
+    variables=("T_K","alphaL","U_mag_m_s","Ux_m_s","Uy_m_s","Uz_m_s","gradT_mag_K_m","p_rgh_Pa","Ur_m_s","Utheta_m_s")
     data={"d":small(d,("time_s","height_mm","angle_deg","position_mm"),variables),
           "r":small(r,("time_s","height_mm","radius_mm"),tuple(k+suffix for k in variables for suffix in ("_mean","_std","_min","_max","_n"))),
           "v":small(v,("time_s","line","position_mm"),variables),
@@ -216,7 +224,7 @@ def dashboard(out,d,r,v,s):
 <section><h2>Curvas temporales de sección transversal</h2><div id="sec"></div><p class="note">Promedio de magnitudes y componentes por separado. Solo T, alpha y U se muestrean en la cuadratura de área.</p></section>
 <p><a href="diameters_101.csv">Diámetros</a> · <a href="radial_statistics_101.csv">Estadística radial</a> · <a href="vertical_lines_101.csv">Verticales</a> · <a href="section_statistics_101.csv">Secciones</a> · <a href="section_quadrature_points.csv">Puntos de cuadratura</a></p>
 <script>const D=__DATA__,$=s=>document.getElementById(s);
-const labels={T_K:"T [K]",alphaL:"Fracción líquida",U_mag_m_s:"|U| [m/s]",Ux_m_s:"Ux [m/s]",Uy_m_s:"Uy [m/s]",Uz_m_s:"Uz [m/s]",gradT_mag_K_m:"|gradT| [K/m]",p_rgh_Pa:"p_rgh [Pa]"};
+const labels={T_K:"T [K]",alphaL:"Fracción líquida",U_mag_m_s:"|U| [m/s]",Ux_m_s:"Ux [m/s]",Uy_m_s:"Uy [m/s]",Uz_m_s:"Uz [m/s]",gradT_mag_K_m:"|gradT| [K/m]",p_rgh_Pa:"p_rgh [Pa]",Ur_m_s:"Ur [m/s]",Utheta_m_s:"Uθ [m/s]"};
 const colors=["#2563eb","#d97706","#059669","#9333ea","#dc2626"];
 function draw(id,series,xlabel,ylabel){let all=series.flatMap(s=>s.points),xs=all.map(p=>p[0]),ys=all.map(p=>p[1]).filter(Number.isFinite);if(!ys.length){$(id).innerHTML="<p>Sin datos para esta variable.</p>";return}
 let xl=Math.min(...xs),xh=Math.max(...xs),lo=Math.min(...ys),hi=Math.max(...ys);if(lo===hi){let a=Math.max(Math.abs(lo)*.01,1e-9);lo-=a;hi+=a}if(xl===xh)xh=xl+1;
