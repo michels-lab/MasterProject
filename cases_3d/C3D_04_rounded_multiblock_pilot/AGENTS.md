@@ -1,3 +1,5 @@
+## 24-11-2026 | Caso A Stage07 F14: zona metal ORIGINAL sí íntegra; aislar BUCLE MULTITIEMPO
+
 ## 24-11-2026 C3D04-A _03 F14 cellZones STILL MISSING AT RUNTIME — do not create _04 blindly
 
 ## 23-11-2026 Caso A native offline F14: missing metal cellZone caused false success
