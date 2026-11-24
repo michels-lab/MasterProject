@@ -325,47 +325,129 @@ def native_group(copy: Path, group: str, dictionary: Path) -> dict:
     }
 
 
+def saved_native_power_table(path: Path) -> tuple[list[str], list[dict[str, float]]]:
+    """Strict 101 states or complete 100 intervals excluding 0s startup.
+
+    Source C14 native functionObjects may not write an initialized t=0 table.
+    0.1..10.0 is not the same dataset as 0..10.0; document the distinction.
+    No extrapolation or fabricated initial power.
+    """
+    need(file_ok(path), "missing native face-power table " + str(path))
+    header = None
+    data = []
+    with path.open(encoding="utf-8", errors="replace") as stream:
+        for line in stream:
+            if line.startswith("# Time"):
+                need(header is None, "duplicate native table header " + str(path))
+                header = line[1:].split()
+            elif not line.strip() or line.lstrip().startswith("#"):
+                continue
+            else:
+                need(header is not None, "native power data before header")
+                parts = line.split()
+                need(len(parts) == len(header), "native power columns do not match header")
+                try:
+                    values = [float(x) for x in parts]
+                except ValueError as exc:
+                    raise Blocked("native power table contains nonnumeric entries") from exc
+                need(all(math.isfinite(x) for x in values),
+                     "native power table includes nonfinite values")
+                data.append(dict(zip(header, values)))
+    need(header is not None and "Time" in header and "sum(energyFlux)" in header,
+         "native face table lacks Time/sum(energyFlux) columns")
+    n = len(data)
+    need(n in (100, 101),
+         "native face-power time-series has " + str(n) +
+         " rows; need all saved times 0..10 or 0.1..10")
+    first = 0.0 if n == 101 else 0.1
+    need(all(math.isclose(row["Time"],first+i*0.1,abs_tol=1e-8,rel_tol=0)
+             for i,row in enumerate(data)),
+         "native face-power times not exact consecutive saved 0.1s states")
+    return header, data
+
+
+def native_surface_table_coverage(copy: Path) -> dict:
+    """Show real row counts even if incomplete, never invent times."""
+    output = {}
+    for family in ("metalTopEnergyPower","metalMoldEnergyPower",
+                   "metalBoundaryEnergyPower"):
+        path=copy/"postProcessing/metal"/family/"0/surfaceFieldValue.dat"
+        if not file_ok(path):
+            output[family]={"present":False}
+            continue
+        data_lines = []
+        with path.open(encoding="utf-8",errors="replace") as stream:
+            for ln in stream:
+                if ln.strip() and not ln.lstrip().startswith("#"):
+                    data_lines.append(ln.strip())
+        first = data_lines[0].split()[0] if data_lines else None
+        last = data_lines[-1].split()[0] if data_lines else None
+        output[family]={"present":True,"sha256":sha(path),
+                        "numeric_data_row_count":len(data_lines),
+                        "first_recorded_time_text":first,
+                        "last_recorded_time_text":last}
+    return output
+
+
+def primitive_profile_coverage(copy: Path) -> dict:
+    """Original 3D sample locations: 80 finite points per saved final profile."""
+    all_profiles = old.profile_coverage(copy)
+    names = ("horizontalProfiles/line_y10mm",
+             "horizontalProfiles/line_y20mm",
+             "horizontalProfiles/line_y30mm",
+             "verticalProfiles/line_x20mm")
+    return {name:all_profiles[name] for name in names}
+
+
 def surface_energy_summary(copy: Path) -> dict:
-    """Native metal-side *face power* check, NEVER global energy closure."""
-    base = copy / "postProcessing/metal"
+    """Face-power reconciliation is not metal+mold energy conservation."""
+    base = copy/"postProcessing/metal"
     names = {
         "top":"metalTopEnergyPower",
         "contact":"metalMoldEnergyPower",
         "total":"metalBoundaryEnergyPower",
     }
-    rows = {}
-    for key, folder in names.items():
-        try:
-            header,table = energy.parse_table(
-                base/folder/"0"/"surfaceFieldValue.dat"
-            )
-        except (ValueError, OSError, KeyError) as err:
-            return {"status":"NATIVE_SURFACE_POWER_TABLES_MISSING_OR_INCOMPATIBLE",
-                    "reason":str(err)[:900],
-                    "nominal_metal_surface_power_reconciled":False,
-                    "global_energy_conservation_verified":False}
-        field = "sum(energyFlux)"
-        if field not in header:
-            return {"status":"NATIVE_ENERGY_POWER_COLUMN_MISSING",
-                    "missing_in":key,"available":header,
-                    "nominal_metal_surface_power_reconciled":False,
-                    "global_energy_conservation_verified":False}
-        rows[key] = table
-    discrepancy = []
-    for i in range(101):
-        top=rows["top"][i]["sum(energyFlux)"]
-        interface=rows["contact"][i]["sum(energyFlux)"]
-        total=rows["total"][i]["sum(energyFlux)"]
+    tables={}
+    try:
+        for key, family in names.items():
+            _,rows = saved_native_power_table(
+                base/family/"0"/"surfaceFieldValue.dat")
+            tables[key]=rows
+        first_times = [r["Time"] for r in tables["top"]]
+        need(all(len(tables[k])==len(first_times)
+                 and all(math.isclose(r["Time"], t, abs_tol=1e-8, rel_tol=0)
+                         for r,t in zip(tables[k],first_times))
+                 for k in names),
+             "three native face-power time axes are inconsistent")
+    except (Blocked, ValueError, OSError, KeyError) as err:
+        return {
+            "status":"NATIVE_SURFACE_POWER_TABLES_MISSING_OR_INCOMPATIBLE",
+            "reason":str(err)[:900],
+            "native_time_series":native_surface_table_coverage(copy),
+            "nominal_metal_surface_power_reconciled":False,
+            "global_energy_conservation_verified":False,
+        }
+    discrepancy=[]
+    for i in range(len(first_times)):
+        top=tables["top"][i]["sum(energyFlux)"]
+        interface=tables["contact"][i]["sum(energyFlux)"]
+        total=tables["total"][i]["sum(energyFlux)"]
         err=total-top-interface
         scale=max(1,abs(total),abs(top)+abs(interface))
         discrepancy.append(abs(err)/scale)
-    final = {k: rows[k][-1]["sum(energyFlux)"] for k in names}
+    final={k:tables[k][-1]["sum(energyFlux)"] for k in names}
     return {
-        "status":"METAL_SURFACE_POWER_101_STATES_DIAGNOSTIC",
+        "status":"NATIVE_METAL_SURFACE_POWER_SAVED_STATES_DIAGNOSTIC",
+        "saved_times_count":len(first_times),
+        "first_saved_time_s":first_times[0],
+        "last_saved_time_s":first_times[-1],
+        "t0_native_power_available":math.isclose(first_times[0],0,abs_tol=1e-9),
+        "t0_native_flux_fabricated":False,
         "final_energy_power_out_W":final,
         "maximum_relative_top_plus_contact_vs_total_discrepancy":max(discrepancy),
         "nominal_metal_surface_power_reconciled":max(discrepancy)<5e-5,
-        "energy_flux_direction":"outward positive (C14 native surfaceFieldValue convention)",
+        "native_time_series":native_surface_table_coverage(copy),
+        "energy_flux_direction":"outward positive (original C14 native surfaceFieldValue convention)",
         "global_energy_conservation_verified":False,
         "mold_side_flux_compared":False,
         "phase_change_source_discretization_verified":False,
@@ -533,6 +615,10 @@ def inspect_occupied_copy(case: Path, copy: Path,
         for x in semantic.values()
     )
     result.update({
+        "read_only_existing_native_surface_table_coverage":
+            native_surface_table_coverage(copy),
+        "read_only_existing_primitive_profile_coverage":
+            primitive_profile_coverage(copy),
         "status": (
             "EXISTING_COMPLETE_REPORT_WITH_NATIVE_FATALS_PRESERVED"
             if false_positive else
@@ -619,6 +705,10 @@ def main() -> int:
             "native_groups_passed":[s["group"] for s in steps if s["passed"]],
             "native_groups_failed":[s["group"] for s in steps if not s["passed"]],
             "surface_energy":energy_result,
+            "native_surface_table_coverage":native_surface_table_coverage(out),
+            "primitive_profile_coverage_at_10s":primitive_profile_coverage(out),
+            "native_energy_group_without_fatal":
+                any(x["group"]=="energy" and x["passed"] for x in steps),
             "original_solver_reexecuted":False,
             "original_CFD_mesh_changed":False,
             "new_copy_cellZone_metadata_added":zone_meta["added_to_copy_only"],
