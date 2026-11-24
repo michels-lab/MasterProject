@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
   "audit_kind": "deterministic_full_tracked_tree",
-  "tracked_files_total": 42857,
-  "classified_files_total": 42852,
-  "docs_content_inspected": 223,
+  "tracked_files_total": 42860,
+  "classified_files_total": 42855,
+  "docs_content_inspected": 224,
   "large_docs_skipped": 1,
   "excluded_reports": 5,
   "roles": {
@@ -11,8 +11,8 @@
     "analysis_tool": 1,
     "bitacora": 5,
     "config": 21,
-    "data": 36,
-    "document": 184,
+    "data": 37,
+    "document": 185,
     "index": 35,
     "license": 1,
     "simulation_case_file": 141,
@@ -22,15 +22,15 @@
     "source": 161,
     "test": 74,
     "web_ui": 1,
-    "workflow": 33
+    "workflow": 34
   },
   "finding_counts": {
     "BROKEN_RELATIVE_LINK": 7,
     "POTENTIAL_UNLOGGED_CHANGES": 2
   },
   "finding_total": 9,
-  "inventory_fingerprint": "1d4906e3e86575ef76b6bcfebb2d0a3a664f383f491212cb19398cb53c93fd0c",
-  "evidence_fingerprint": "66ca2d56a847b99b83c6b7e3a99a13c23a9d632382872c3ab7b486cceaaecdb5",
+  "inventory_fingerprint": "7c7c43edff7ebeb65315d637284f45929c76f156c6dc32104e3beb22ca1fb309",
+  "evidence_fingerprint": "8e2992f164b6b2400442e9c48a419b66db69730ee1479c4941f1fa6ff02b6f63",
   "files": [
     {
       "path": ".github/agents/openfoam-solidification.agent.md",
@@ -115,6 +115,13 @@
       "purpose": "GitHub Actions automation",
       "certainty": "rule",
       "blob": "e63aeef8f5953300ff756f67e09b8d6c5835f80a"
+    },
+    {
+      "path": ".github/workflows/c3d05-b-published-profile-analysis.yml",
+      "role": "workflow",
+      "purpose": "GitHub Actions automation",
+      "certainty": "rule",
+      "blob": "d121acf83cc7ddc07e8bbaabee40c84e458c1f0f"
     },
     {
       "path": ".github/workflows/c3d05-foundation14-energy-smoke.yml",
@@ -1879,6 +1886,13 @@
       "purpose": "machine-readable configuration",
       "certainty": "rule",
       "blob": "0bd877829b9c390abc390731e0827fb0d9967b94"
+    },
+    {
+      "path": "cases_3d/C3D_04_rounded_multiblock_pilot/C14_3D_A_faithful/analysis_results/faithful_native_analysis_20261124/thermal_energy_101.csv",
+      "role": "data",
+      "purpose": "structured/research data (semantics not validated)",
+      "certainty": "rule",
+      "blob": "af83d32389e3ab7ba2ea83b22be10fb75fd4c8e4"
     },
     {
       "path": "cases_3d/C3D_04_rounded_multiblock_pilot/C14_3D_A_faithful/analysis_results/previous_A_baseline_vs_C14_2D/C14_ARCHIVED_COMPARISON_REPORT.json",
@@ -299101,6 +299115,13 @@
       "blob": "9dd00bee87b5eaf867cd88acc87d2264f1f8913b"
     },
     {
+      "path": "docs/granada/C3D05_B_C14_EVOLUCION_DIRECCIONAL_20261124_ES.md",
+      "role": "document",
+      "purpose": "manual/decision/report/historical note",
+      "certainty": "inferred",
+      "blob": "dee8bfa48a3309a7dac23cfef4b15980b55f3821"
+    },
+    {
       "path": "docs/granada/C3D05_B_C14_FLUJOS_NATIVOS_101_ESTADOS_Y_CRUCE_ENERGETICO_20261124_ES.md",
       "role": "document",
       "purpose": "manual/decision/report/historical note",
@@ -300062,20 +300083,20 @@
       "state": "REVIEW_REQUIRED"
     },
     {
-      "id": "bb77827e76987166",
+      "id": "55ac7a777c2e6c1c",
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_EN.md",
-      "observation": "1 implementation/config paths changed since this log's last commit; examples: analysis_tools/analyze_c3d05_b_corrected_profiles.py",
+      "observation": "2 implementation/config paths changed since this log's last commit; examples: .github/workflows/c3d05-b-published-profile-analysis.yml, analysis_tools/analyze_c3d05_b_corrected_profiles.py",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     },
     {
-      "id": "9bc37ab2d3c8745e",
+      "id": "e27e58fd0c93f4b2",
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_ES.md",
-      "observation": "1 implementation/config paths changed since this log's last commit; examples: analysis_tools/analyze_c3d05_b_corrected_profiles.py",
+      "observation": "2 implementation/config paths changed since this log's last commit; examples: .github/workflows/c3d05-b-published-profile-analysis.yml, analysis_tools/analyze_c3d05_b_corrected_profiles.py",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     }
