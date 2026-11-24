@@ -26,6 +26,12 @@ Tmin_K <SUPPORTED_MIN_TEMPERATURE_K>;
 Tmax_K <SUPPORTED_MAX_TEMPERATURE_K>;
 metalPresenceThreshold <MATERIAL_TRACE_VOF_THRESHOLD>;
 
+// Darcy drag for mushy-region momentum, calibrated or separately sourced.
+// Cu units [1/s]; q is a positive dimensionless regularizer (0<q<=1).
+// Both entries are mandatory and intentionally have NO numeric defaults.
+mushyDarcyCu [0 0 -1 0 0 0 0] <CALIBRATED_MUSHY_CU_PER_SECOND>;
+mushyDarcyQ <DOCUMENTED_DARCY_REGULARIZER>;
+
 // Select an EXPLICIT physical closure. No arbitrary per-deltaT factor:
 // - equilibrium: evaluate f_s,mass(T) at each CFD time step
 // - kineticRelaxation: use physical tau(T) in seconds, from measured data
