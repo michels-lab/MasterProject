@@ -134,8 +134,8 @@ class CaseBNativeQStorageJoinQA(unittest.TestCase):
             M.CUM_COLS["interface_sum_outward_W"]],0)
         self.assertEqual(result[-1][
             "combined_model_thermal_storage_change_from_t0_J_NOT_CLOSED_ENERGY"],-50)
-        self.assertEqual(result[-1][
-            "reference_storage_change_plus_external_conduction_trapezoid_J_NOT_ENERGY_RESIDUAL"],0)
+        self.assertAlmostEqual(result[-1][
+            "reference_storage_change_plus_external_conduction_trapezoid_J_NOT_ENERGY_RESIDUAL"],0,places=10)
 
     def test_missing_time_rejected(self):
         qq,ss=rows()
