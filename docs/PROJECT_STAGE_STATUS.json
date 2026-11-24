@@ -603,7 +603,7 @@
       "percent_hitos": 80,
       "percentage_scope": "SOLO_HITOS_OPERATIVOS_DEL_CASO_A_NO_VALIDACION_FISICA",
       "primary_contract": "cases_3d/C3D_04_rounded_multiblock_pilot/AGENTS.md",
-      "next_integrated_milestone": "Direct 2D C14 vs A common-coordinate cooling and profiles, native offline sampling and HTML dashboard code published; one WSL execution pending.",
+      "next_integrated_milestone": "Published 3D multidirectional 12 diameters/5 verticals/8-angle radial stats/41x41 area quadrature and offline HTML; WSL execution pending; C14 2D direct comparison still pending.",
       "blocker": "Local original solved 2D snapshots not yet observed; no discrete conservation, grid/time independence or QuickCup validation.",
       "CI_status": "REAL_WSL_VISUALIZATION_AND_SOLIDIFICATION_READY",
       "CI_evidence": "docs/C3D04_A_STAGE08_SOLIDIFICATION_REAL_20261124_ES.md"
