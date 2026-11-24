@@ -72,7 +72,7 @@ def compiler_error_excerpt(log: Path, *, limit: int = 8) -> str:
         line.strip() for line in lines
         if re.search(
             r"fatal error:|(?<!\w)error:|undefined reference"
-            r"|No rule to make target|\\*\\*\\*.*Error [0-9]+",
+            r"|No rule to make target|\*\*\*.*Error [0-9]+",
             line, re.IGNORECASE,
         )
     ]
@@ -80,6 +80,7 @@ def compiler_error_excerpt(log: Path, *, limit: int = 8) -> str:
     return "\n".join(chosen)
 
 
+def execute_checked(
     argv: list[str], cwd: Path, timeout_seconds: int, log: Path,
 ) -> subprocess.CompletedProcess:
     with log.open("w", encoding="utf-8") as sink:
