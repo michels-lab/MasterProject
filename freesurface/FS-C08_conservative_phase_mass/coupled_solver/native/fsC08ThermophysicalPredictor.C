@@ -49,7 +49,7 @@ License
 #include "fvcMeshPhi.H"
 #include "fvcDdt.H"
 #include "fvcDiv.H"
-#include "fvcInterpolate.H"
+#include "fvc.H"
 #include "fvcSnGrad.H"
 #include "fvmSup.H"
 #include "fvmLaplacian.H"
