@@ -52,6 +52,19 @@ La herramienta se corrigió para usar `trial_case = dictionary.parent.parent` (d
 
 Se añadió al workflow original C14 F14 nativo una prueba reutilizando el caso 27+27 celdas, dos pasos de solver ya terminados en CI. **Solo después de terminar** esos dos pasos sintéticos, prueba `0`, `0.001`, `0.002` por separado y juntos mediante postproceso C14, conservando logs de todos los experimentos. Las regresiones Python prueban además un error fatal que aparece exclusivamente en multitiempo y protegen el expediente original. La CI sintética y la WSL real son experimentos distintos; no presentar la primera como prueba del V4/T02.
 
+## Resultado nativo corregido: Foundation14 PASS en el caso sintético
+
+La prueba repetida y corregida con cwd en la raíz del caso ([GitHub Actions 45350869304](https://github.com/michels-lab/MasterProject/actions/runs/45350869304)) obtuvo `SINGLE_AND_MULTITIME_NATIVE_PASS_NO_REGISTRY_FAILURE_REPRODUCED`:
+
+- Tiempo 0, individual: sin errores FOAM FATAL, una fila nativa real de integral de entalpía sensible.
+- Tiempo 0.001 s, individual: sin errores FOAM FATAL, una fila nativa real.
+- Tiempo 0.002 s, individual: sin errores FOAM FATAL, una fila nativa real.
+- Los tres tiempos **en un solo `foamPostProcess -solver fluid`**: sin FOAM FATAL; la tabla nativa contiene 3 filas en 0, 0.001 y 0.002 s.
+
+**Interpretación estricta:** el fallo genérico de un bucle multitemporal no se reproduce en el C14 sintético de 27 celdas metálicas. No es evidencia de que el modelo V4/T02 de 8960 celdas se haya arreglado. Tampoco valida los 101 estados, las tres potencias del metal ni la conservación global.
+
+La prueba WSL real de tres estados (0, 0.1, 10) seguirá siendo necesaria para aislar el comportamiento en la malla real y comparar el mismo `metalSensibleEnthalpy`; si el caso real también pasa en las cuatro modalidades, los FATAL previos deben relacionarse con grupos adicionales/condiciones de ejecución, y no con la opción multitiempo por sí sola. No repetir el CFD 10s.
+
 ## Ejecución propuesta en WSL una vez integrado y validado el código
 
 ```bash
