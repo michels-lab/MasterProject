@@ -29,7 +29,7 @@
     "POTENTIAL_UNLOGGED_CHANGES": 2
   },
   "finding_total": 9,
-  "inventory_fingerprint": "6fff35d3e850d23d91b365f79588f9a85c914a7be87efb7bb9ea9fdb264b3dd9",
+  "inventory_fingerprint": "45468d551eb2d1b4f40a13e123ff0adc2ce2aca6baaa1662ade4f4b9e43dc8d8",
   "evidence_fingerprint": "14860aa2344bc5f8a833ce3fed6825e22e0c63a33f37ab4dbb00189929715542",
   "files": [
     {
@@ -272561,7 +272561,7 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "6c0813f9d5589c6785e81cc564153df68f362e1e"
+      "blob": "29d87c01d7fa4f2fbe6593355f9716ca6fd74e51"
     },
     {
       "path": "docs/C3D04_A_STAGE09_C14_2D_3D_COMPARISON_20261124_ES.md",
