@@ -360,14 +360,32 @@
     "case_b_c14_101_state_mold_sensible_combined_source_committed": true,
     "case_b_c14_101_state_mold_sensible_combined_source": "cases_3d/C3D_05_step_gmsh_conformal/c14_physics/quantify_existing_case_b_c14_mold_and_combined_inventory.py",
     "case_b_c14_101_state_mold_sensible_combined_tests_source_count": 8,
-    "case_b_c14_101_state_mold_sensible_combined_wsl_executed": false,
-    "case_b_c14_101_state_mold_sensible_combined_WSL_tests_pass_observed": false,
+    "case_b_c14_101_state_mold_sensible_combined_wsl_executed": true,
+    "case_b_c14_101_state_mold_sensible_combined_WSL_tests_pass_observed": true,
     "case_b_c14_101_state_mold_sensible_combined_ci_pass_observed": false,
     "case_b_c14_101_state_mold_sensible_combined_output_expected": "~/OpenFOAM/C3D05_B_C14_MOLD_COMBINED_REFERENCE_STORAGE_01",
     "case_b_c14_101_state_mold_sensible_combined_note": "docs/granada/C3D05_B_C14_WSL_INVENTARIO_METAL_Y_ARENA_PREPARADO_20261124_ES.md",
-    "case_b_c14_101_state_mold_sensible_delta_J": null,
-    "case_b_c14_101_state_combined_reference_storage_delta_J": null,
-    "case_b_c14_101_state_metal_liquid_latent_content_change_at_10s_J": -8100.198210984614
+    "case_b_c14_101_state_mold_sensible_delta_J": 20323.651945808975,
+    "case_b_c14_101_state_combined_reference_storage_delta_J": -1352.9442013308708,
+    "case_b_c14_101_state_metal_liquid_latent_content_change_at_10s_J": -8100.198210984614,
+    "case_b_c14_101_state_mold_sensible_combined_WSL_tests_passed_count": 8,
+    "case_b_c14_101_state_mold_sensible_combined_WSL_tests_failed_count": 0,
+    "case_b_c14_101_state_mold_sensible_combined_status": "C3D05_B_C14_REAL_MOLD_AND_METAL_REFERENCE_STORAGE_ONLY_NOT_ENERGY_CLOSURE",
+    "case_b_c14_101_state_mold_sensible_combined_output_observed": "/home/michel/OpenFOAM/C3D05_B_C14_MOLD_COMBINED_REFERENCE_STORAGE_01",
+    "case_b_c14_101_state_mold_sensible_combined_saved_states": 101,
+    "case_b_c14_101_state_mold_cells": 178588,
+    "case_b_c14_101_state_mold_faces": 553893,
+    "case_b_c14_101_state_mold_internal_faces": 517635,
+    "case_b_c14_101_state_mold_points": 211219,
+    "case_b_c14_101_state_mold_volume_reconstructed_m3": 0.00010284340553162189,
+    "case_b_c14_101_state_mold_volume_checkMesh_m3": 0.000102843380345,
+    "case_b_c14_101_state_mold_volume_relative_mismatch": 2.4490270351713404e-7,
+    "case_b_c14_101_state_mold_volume_native_per_cell_verified": false,
+    "case_b_c14_101_state_metal_sensible_delta_confirmed_J": -13576.397936155232,
+    "case_b_c14_101_state_metal_liquid_latent_content_delta_confirmed_J": -8100.198210984614,
+    "case_b_c14_101_state_combined_reference_storage_is_energy_leak": false,
+    "case_b_c14_101_state_native_interface_exterior_energy_balance_verified": false,
+    "case_b_c14_101_state_physical_validation": false
   },
   "other_cases": [
     {
@@ -407,7 +425,7 @@
       "evidence": "docs/granada/C3D05_B_C14_WSL_EJECUCION_REAL_EN_CURSO_20261123_ES.md"
     }
   ],
-  "blocker": "User WSL observed 9/9 reference metal C14 inventory tests PASS. Real metal sensible delta=-13.5763979 kJ, modeled positive solidification latent-equivalent=+8.1001982 kJ (liquid latent stored change NEGATIVE). Real alpha1 volume-weighted final=.8917029861, 8/8 volume geometry tests PASS, volume closure relative 1.6145e-7, 101 states. New full mold HEX8 178588-cell sensible inventory+combined reference-storage SOURCE published with 8 tests but NOT executed/CI confirmed; mold values presently unknown. C14 source-term energy accounting and interface/exterior q, JMatPro/QuickCup experiments, shrinkage and mesh/time convergence OPEN. G3-G7 not promoted; 2/7.",
-  "next_integrated_delivery": "WSL confirmed native 101-state original C14 metal inventory 9/9 regressions pass: Delta E_sens metal=-13576.397936155232 J; positive modeled solid latent-equivalent=8100.198210984614 J (Delta latent LIQUID content=-8100.198210984614 J). New source-only mold full 178588-cell HEX8 + 101 native T and combined reference-thermal STORAGE calculation with 8 tests published but NEVER executed WSL. Run 8-test+module on real WSL; no solver. Need native fVModel integral, mappedWall + exterior flux/advective terms, material and sensitivity verification for true conservation.",
-  "science": "CASE_B_REAL_WSL_METAL_C14_SENSIBLE_NEG_13_576KJ_LATENT_SOLID_EQ_POS_8_100KJ_NINE_TESTS_PASS_MOLD_ENERGY_SOURCE_ONLY"
+  "blocker": "C3D05 B REAL original Foundation14 C14 metal-fluid/mold-solid 10s run, 101 native states and all data-only postrun PASSED. Latest WSL mold+combined reference inventory 8/8 tests PASS; mold (178588 HEX8) reconstructed volume=0.00010284340553162189m3, checkMesh relative difference=2.4490270351713404e-7; mold sensible delta t10=+20323.651945808975 J; metal sensible=-13576.397936155232 J; liquid latent content delta=-8100.198210984614 J; combined MODEL reference stored energy change=-1352.9442013308708 J. This combined delta IS NOT lost heat, error, conservation residual or actual native fvModel source. Need true per-face source-faithful fluid/solid heat q, interface exterior, advection/work, source integration, grid/dt sensitivity, JMatPro QuickCup validation and shrinkage. 2/7 gate count remains.",
+  "next_integrated_delivery": "Prepare a SOURCE-SPECIFIC native C14 boundary thermal-transport inspection and real heat-flux extraction plan from existing 101 saved fields: fluid metal requires fluidThermophysicalTransportModel (not T0 solid-isotropic q), sand solidTransport q, mappedWall coupling 12636 faces/side, metalTop + moldOuterUnclassified. Extract and validate source-faithful q per patch with original fvModels/advection if possible; only compare signed time-resolved flux integrals with reference stored-energy change when all terms available. Never run foamMultiRun or overwrite original CFD. No claims of energy closure until verified.",
+  "science": "CASE_B_C14_REAL_WSL_METAL_MOLD_101_REFERENCE_STORAGES_PASSED_8_TESTS_MOLD_PLUS_20_323KJ_METAL_SENS_NEG_13_576KJ_LIQUID_LATENT_NEG_8_100KJ_COMBINED_NEG_1_353KJ_NOT_CLOSURE"
 }
