@@ -62,6 +62,26 @@ solvers::fsC08ConservativeVoF::fsC08ConservativeVoF(fvMesh& mesh)
             IOobject::NO_READ,IOobject::NO_WRITE
         ),
         mesh,dimensionedScalar(dimPower,0)
+    ),
+    mechanicalWorkDensity_
+    (
+        IOobject
+        (
+            "mechanicalWorkDensity.fsC08",mesh.time().name(),mesh,
+            IOobject::NO_READ,IOobject::AUTO_WRITE
+        ),
+        mesh,dimensionedScalar(dimPower/dimVolume,0),
+        zeroGradientFvPatchScalarField::typeName
+    ),
+    mushyDarcyDissipation_
+    (
+        IOobject
+        (
+            "mushyDarcyDissipation.fsC08",mesh.time().name(),mesh,
+            IOobject::NO_READ,IOobject::AUTO_WRITE
+        ),
+        mesh,dimensionedScalar(dimPower/dimVolume,0),
+        zeroGradientFvPatchScalarField::typeName
     )
 {
     // This first native phase-mass/energy formulation assumes the
@@ -250,7 +270,9 @@ void solvers::fsC08ConservativeVoF::postSolve()
     const auto& rGas0=mixture_.rho2().oldTime().primitiveField();
     const auto& aGas0=alpha2.oldTime().primitiveField();
     scalar M0=0, M=0, Mgas=0, Mgas0=0;
-    scalar E0=0,E=0;
+    scalar E0=0,E=0,mechanicalWork_W=0,darcyDissipation_W=0;
+    const auto& workDensity=mechanicalWorkDensity_.primitiveField();
+    const auto& darcyHeat=mushyDarcyDissipation_.primitiveField();
     const auto& u=phaseInternalEnergy_.primitiveField();
     const auto& u0=phaseInternalEnergy_.oldTime().primitiveField();
     forAll(V,i)
@@ -261,6 +283,8 @@ void solvers::fsC08ConservativeVoF::postSolve()
         Mgas0+=V[i]*aGas0[i]*rGas0[i];
         E+=V[i]*u[i];
         E0+=V[i]*u0[i];
+        mechanicalWork_W+=V[i]*workDensity[i];
+        darcyDissipation_W+=V[i]*darcyHeat[i];
     }
     reduce(M0,sumOp<scalar>());
     reduce(M,sumOp<scalar>());
@@ -268,6 +292,8 @@ void solvers::fsC08ConservativeVoF::postSolve()
     reduce(Mgas0,sumOp<scalar>());
     reduce(E0,sumOp<scalar>());
     reduce(E,sumOp<scalar>());
+    reduce(mechanicalWork_W,sumOp<scalar>());
+    reduce(darcyDissipation_W,sumOp<scalar>());
 
     scalar boundaryMassRate=0;
     const auto& patches=phaseMass_->liquidMassFlux().boundaryField();
@@ -359,8 +385,12 @@ void solvers::fsC08ConservativeVoF::postSolve()
         << " deltaInternalEnergy_J=" << E-E0
         << " nativeEnergySolveAdvectionOut_W=" << energyAdvectionOut_W
         << " nativeEnergySolveConductionOut_W=" << conductionOut_W
-        << " partialEnergyBalanceIgnoringMechanicalWork_J="
-        << E-E0+dt*(energyAdvectionOut_W+conductionOut_W)
+        << " nativeMechanicalWork_W=" << mechanicalWork_W
+        << " mushyDarcyDissipation_W=" << darcyDissipation_W
+        << " totalInternalEnergyEquationBalance_J="
+        << E-E0
+         + dt*(energyAdvectionOut_W+conductionOut_W+mechanicalWork_W)
+        << " energyResidualNotYetValidated=1"
         << " liquidAdvectedEnergyOut_W=" << liquidEnergyOut_W
         << " gasAdvectedEnergyOut_W=" << gasEnergyOut_W
         << " deltaInternalPlusAdvectedEnergy_J="
