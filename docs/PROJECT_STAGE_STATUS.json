@@ -356,7 +356,18 @@
     "case_b_c14_101_state_latent_equivalent_solid_change_at_10s_J": 8100.198210984614,
     "case_b_c14_101_state_energy_inventory_at_10s_weighted_liquid": 0.8917029860767621,
     "case_b_c14_101_state_fvModel_source_integral_verified": false,
-    "case_b_c14_101_state_interface_and_exterior_energy_closure_verified": false
+    "case_b_c14_101_state_interface_and_exterior_energy_closure_verified": false,
+    "case_b_c14_101_state_mold_sensible_combined_source_committed": true,
+    "case_b_c14_101_state_mold_sensible_combined_source": "cases_3d/C3D_05_step_gmsh_conformal/c14_physics/quantify_existing_case_b_c14_mold_and_combined_inventory.py",
+    "case_b_c14_101_state_mold_sensible_combined_tests_source_count": 8,
+    "case_b_c14_101_state_mold_sensible_combined_wsl_executed": false,
+    "case_b_c14_101_state_mold_sensible_combined_WSL_tests_pass_observed": false,
+    "case_b_c14_101_state_mold_sensible_combined_ci_pass_observed": false,
+    "case_b_c14_101_state_mold_sensible_combined_output_expected": "~/OpenFOAM/C3D05_B_C14_MOLD_COMBINED_REFERENCE_STORAGE_01",
+    "case_b_c14_101_state_mold_sensible_combined_note": "docs/granada/C3D05_B_C14_WSL_INVENTARIO_METAL_Y_ARENA_PREPARADO_20261124_ES.md",
+    "case_b_c14_101_state_mold_sensible_delta_J": null,
+    "case_b_c14_101_state_combined_reference_storage_delta_J": null,
+    "case_b_c14_101_state_metal_liquid_latent_content_change_at_10s_J": -8100.198210984614
   },
   "other_cases": [
     {
@@ -396,7 +407,7 @@
       "evidence": "docs/granada/C3D05_B_C14_WSL_EJECUCION_REAL_EN_CURSO_20261123_ES.md"
     }
   ],
-  "blocker": "Real user WSL: Case B C14 original F14 CFD 10s + 101 snapshots, 9/9 phase timeline, 8/8 native HEX8 volume-weighted alpha and NOW 9/9 C14 metal energy-inventory tests PASS, 101-state proxy completed with metal sensible delta t10=-13576.397936155232 J and MODEL latent-equivalent solid-complement increase=+8100.198210984614 J. This is NOT the actual fvModel latent-energy integral, NOT an energy balance and NOT experimentally validated. t10 alpha1 volume weighted=.8917029860767621. Sand 101-state volumetric sensible energy, boundary/interfacial q, native energy/continuity closure, JMatPro/QuickCup, severe nonorth effects, grid/time convergence and shrinkage are still open. G3-G7 remain open 2/7 milestones.",
-  "next_integrated_delivery": "From independently preserved 101 real T/mold and metal inventories, derive mold sensible storage on the real 178588-cell original HEX8 mold mesh, cross-check native checkMesh mold volume 0.000102843380345 m3, then compare with metal sensible and phase latent-liquid content changes over 101 times. This is a reference storage accounting only, NO native fvModel source or interface/exterior flux budget. Later true q closure and JMatPro/QuickCup/convergence.",
-  "science": "CASE_B_C14_10S_101_STATES_WSL_SENSIBLE_DELTA_NEG_13576_40J_LATENT_EQUIV_POS_8100_20J_MODEL_ONLY_NO_ENERGY_BALANCE"
+  "blocker": "User WSL observed 9/9 reference metal C14 inventory tests PASS. Real metal sensible delta=-13.5763979 kJ, modeled positive solidification latent-equivalent=+8.1001982 kJ (liquid latent stored change NEGATIVE). Real alpha1 volume-weighted final=.8917029861, 8/8 volume geometry tests PASS, volume closure relative 1.6145e-7, 101 states. New full mold HEX8 178588-cell sensible inventory+combined reference-storage SOURCE published with 8 tests but NOT executed/CI confirmed; mold values presently unknown. C14 source-term energy accounting and interface/exterior q, JMatPro/QuickCup experiments, shrinkage and mesh/time convergence OPEN. G3-G7 not promoted; 2/7.",
+  "next_integrated_delivery": "WSL confirmed native 101-state original C14 metal inventory 9/9 regressions pass: Delta E_sens metal=-13576.397936155232 J; positive modeled solid latent-equivalent=8100.198210984614 J (Delta latent LIQUID content=-8100.198210984614 J). New source-only mold full 178588-cell HEX8 + 101 native T and combined reference-thermal STORAGE calculation with 8 tests published but NEVER executed WSL. Run 8-test+module on real WSL; no solver. Need native fVModel integral, mappedWall + exterior flux/advective terms, material and sensitivity verification for true conservation.",
+  "science": "CASE_B_REAL_WSL_METAL_C14_SENSIBLE_NEG_13_576KJ_LATENT_SOLID_EQ_POS_8_100KJ_NINE_TESTS_PASS_MOLD_ENERGY_SOURCE_ONLY"
 }
