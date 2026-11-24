@@ -69,7 +69,7 @@ class PhaseMassTransport
     bool initialized_;
 
     void checkAndUpdateProperties(const volScalarField& T);
-    void initializeIfRequired(const volScalarField& alphaMetal);
+    void initializeIfRequired(const volScalarField& alphaMetal, const volScalarField& T);
     void evaluateGamma(const volScalarField& T);
     void reconstructFractions();
 
