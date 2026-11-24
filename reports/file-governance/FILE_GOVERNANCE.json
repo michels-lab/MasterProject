@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "audit_kind": "deterministic_full_tracked_tree",
-  "tracked_files_total": 39105,
-  "classified_files_total": 39100,
+  "tracked_files_total": 39106,
+  "classified_files_total": 39101,
   "docs_content_inspected": 210,
   "large_docs_skipped": 1,
   "excluded_reports": 5,
@@ -20,7 +20,7 @@
     "simulation_log": 3155,
     "simulation_output": 32615,
     "source": 148,
-    "test": 73,
+    "test": 74,
     "web_ui": 1,
     "workflow": 33
   },
@@ -29,8 +29,8 @@
     "POTENTIAL_UNLOGGED_CHANGES": 2
   },
   "finding_total": 9,
-  "inventory_fingerprint": "4218b6d3b087835c84e1ce71a5cf8b91c9c068d8fa16e87d7ae3030d05359b7e",
-  "evidence_fingerprint": "c1694bf34f66edf20b5181643796cc830b28dd0547af495cf6d11822af1b096d",
+  "inventory_fingerprint": "f02227c35030312de094fae77461e20a5ba704e6ebb4608268f4c6557dc69977",
+  "evidence_fingerprint": "593314c95cda4091fed175994ddaae2d70ff464324e0257236c9be81981f030a",
   "files": [
     {
       "path": ".github/agents/openfoam-solidification.agent.md",
@@ -2158,7 +2158,7 @@
       "role": "source",
       "purpose": "code/test implementation",
       "certainty": "rule",
-      "blob": "09c9e03fc64c62314783b105311bcb6a1e769e2f"
+      "blob": "e550217b42973be37d74d73ef659ea017a4572c8"
     },
     {
       "path": "cases_3d/C3D_05_step_gmsh_conformal/c14_physics/analyze_existing_case_b_c14_native_flux.py",
@@ -2264,6 +2264,13 @@
       "purpose": "code/test implementation",
       "certainty": "rule",
       "blob": "9e70e7dc2dcc23df21a59e661a489657e5155e05"
+    },
+    {
+      "path": "cases_3d/C3D_05_step_gmsh_conformal/c14_physics/tests/test_existing_case_b_c14_metal_mass_phi.py",
+      "role": "test",
+      "purpose": "code/test implementation",
+      "certainty": "rule",
+      "blob": "8efef5d246686d52aa71cf2a9d158e78fb11085c"
     },
     {
       "path": "cases_3d/C3D_05_step_gmsh_conformal/c14_physics/tests/test_existing_case_b_c14_mold_and_combined_inventory.py",
@@ -272785,7 +272792,7 @@
       "role": "config",
       "purpose": "machine-readable configuration",
       "certainty": "rule",
-      "blob": "cc2e16c486c1dabf1a0b925a609a56ac1048d1ec"
+      "blob": "73fd689813c6ea1e6ce8e21d57027f0c16595efd"
     },
     {
       "path": "docs/REGLA_INSTRUCCIONES_UNIFICADAS_ES.md",
@@ -273798,20 +273805,20 @@
       "state": "REVIEW_REQUIRED"
     },
     {
-      "id": "47272ee20d58a9ee",
+      "id": "dcaa54fd174e808b",
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_EN.md",
-      "observation": "28 implementation/config paths changed since this log's last commit; examples: .github/workflows/c3d04-a-c14-native-fluid-solid.yml, .github/workflows/c3d04-a-c14-postprocessing-parity.yml, .github/workflows/c3d05-b-c14-native-fluid-solid-q.yml, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/continue_c14_stage07_grouped_evidence.py, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/native_bilateral_flux/c3d04C14FluidSolidFlux.C, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/probe_c14_native_f14_single_vs_multi_time.py",
+      "observation": "29 implementation/config paths changed since this log's last commit; examples: .github/workflows/c3d04-a-c14-native-fluid-solid.yml, .github/workflows/c3d04-a-c14-postprocessing-parity.yml, .github/workflows/c3d05-b-c14-native-fluid-solid-q.yml, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/continue_c14_stage07_grouped_evidence.py, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/native_bilateral_flux/c3d04C14FluidSolidFlux.C, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/probe_c14_native_f14_single_vs_multi_time.py",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     },
     {
-      "id": "c7b7581f07c4c741",
+      "id": "aee4d1c7efffe71a",
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_ES.md",
-      "observation": "2 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_05_step_gmsh_conformal/c14_physics/analyze_existing_case_b_c14_metal_mass_phi.py, docs/PROJECT_STAGE_STATUS.json",
+      "observation": "3 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_05_step_gmsh_conformal/c14_physics/analyze_existing_case_b_c14_metal_mass_phi.py, cases_3d/C3D_05_step_gmsh_conformal/c14_physics/tests/test_existing_case_b_c14_metal_mass_phi.py, docs/PROJECT_STAGE_STATUS.json",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     }
