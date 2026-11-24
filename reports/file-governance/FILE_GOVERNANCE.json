@@ -29,8 +29,8 @@
     "POTENTIAL_UNLOGGED_CHANGES": 2
   },
   "finding_total": 9,
-  "inventory_fingerprint": "0fab4fc5089efd1dcaa8012a0e042fdb41299621d66c611b2a9065a89c928b27",
-  "evidence_fingerprint": "cacc19a9a1a57fce41f9993759c50e14ceaebef5694f79b45969b353e13e4d40",
+  "inventory_fingerprint": "dbf406fb0dd12ad369e5b1903b72fdb240302a140a18279519a7faf04b8c8860",
+  "evidence_fingerprint": "f33d0fb46ae980f2165bb30ac01284d49cb867e766aaa8e8fadafbf7c0ea526b",
   "files": [
     {
       "path": ".github/agents/openfoam-solidification.agent.md",
@@ -298748,7 +298748,7 @@
       "role": "config",
       "purpose": "machine-readable configuration",
       "certainty": "rule",
-      "blob": "aec2fb10f5e4a52af98e2bc9356be7495502c45f"
+      "blob": "e21942acc57349ea14b89f5e2a03727089700307"
     },
     {
       "path": "docs/C3D_01_ESTADO_REAL_20261110_ES.md",
@@ -299035,7 +299035,7 @@
       "role": "config",
       "purpose": "machine-readable configuration",
       "certainty": "rule",
-      "blob": "7be9866a2670afcdd374cfbdfc1107b95a724283"
+      "blob": "b7da6bfc3852e62eb4bcb7f33b08086163bc24db"
     },
     {
       "path": "docs/REGLA_INSTRUCCIONES_UNIFICADAS_ES.md",
@@ -299336,14 +299336,14 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "c1a9b722d928d4a7ccec612ecba1fd08ec4e130e"
+      "blob": "387947db09c486fd0a666ed730c137360333c764"
     },
     {
       "path": "docs/granada/MAESTRIA_ESTADO_INTEGRADO_20261124_ES.md",
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "61f162bc6945c1f754cbd167efa5656c73ba6d04"
+      "blob": "b0351de234cbb9e82f87b6080e524a15f888be57"
     },
     {
       "path": "docs/granada/OPENFOAM_HUB_READ_ACCESS_20261021.md",
@@ -300022,7 +300022,7 @@
       "role": "source",
       "purpose": "code/test implementation",
       "certainty": "rule",
-      "blob": "1c287c3c69e923df6a2b9089993e86dd976d64c3"
+      "blob": "7ab593c97eeec29cba8888e1826fd8d3decfed1d"
     },
     {
       "path": "tools/repository_file_auditor.py",
@@ -300125,20 +300125,20 @@
       "state": "REVIEW_REQUIRED"
     },
     {
-      "id": "770b53327930fad0",
+      "id": "8091e4fea63ac8a7",
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_EN.md",
-      "observation": "1 implementation/config paths changed since this log's last commit; examples: tools/prepare_campaign_200s.py",
+      "observation": "3 implementation/config paths changed since this log's last commit; examples: docs/C3D04_CASE_A_STATUS.json, docs/PROJECT_STAGE_STATUS.json, tools/prepare_campaign_200s.py",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     },
     {
-      "id": "7c09aba68c57143b",
+      "id": "35d6f0fe691659f1",
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_ES.md",
-      "observation": "1 implementation/config paths changed since this log's last commit; examples: tools/prepare_campaign_200s.py",
+      "observation": "3 implementation/config paths changed since this log's last commit; examples: docs/C3D04_CASE_A_STATUS.json, docs/PROJECT_STAGE_STATUS.json, tools/prepare_campaign_200s.py",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     }
