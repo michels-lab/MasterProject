@@ -46,6 +46,20 @@ solvers::fsC08ConservativeVoF::fsC08ConservativeVoF(fvMesh& mesh)
         zeroGradientFvPatchScalarField::typeName
     )
 {
+    // This first native phase-mass/energy formulation assumes the
+    // FS-C07 STATIC Eulerian fluid mesh. Using volume V(n+1) for
+    // masses at n on a moving/changing mesh would break the GCL and
+    // silently corrupt both mass and internal-energy ledgers.
+    if (mesh.moving() || mesh.topoChanging())
+    {
+        FatalErrorInFunction
+            << "FS-C08 current CFD phase mass + energy equations "
+            << "are for stationary non-topology-changing fvMesh only. "
+            << "Moving mesh requires conservative V(n)/V(n+1) "
+            << "geometric conservation and remapping."
+            << exit(FatalError);
+    }
+
     // The density curves rhoLiquid(T), rhoSolid(T) have no pressure
     // argument. Thus, within this first EOS closure, metal psi MUST
     // be zero (pressure-incompressible). Gas retains its native
