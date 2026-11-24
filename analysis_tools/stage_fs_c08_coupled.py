@@ -25,7 +25,8 @@ BASE_MODULE=ROOT/"freesurface/FS-C08_conservative_phase_mass/coupled_solver/nati
 REQUIRED_MATERIAL=(
     "materialId", "propertySource","Tmin_K","Tmax_K",
     "phaseChangeClosure","metalPresenceThreshold","mushyDarcyCu","mushyDarcyQ","rhoLiquidT",
-    "rhoSolidT","solidMassFractionT","latentHeat","cvSolid",
+    "rhoSolidT","solidMassFractionT","latentHeat",
+    "energyReferenceT_K","cvLiquidT","cvSolidT",
 )
 
 
@@ -83,6 +84,10 @@ def stage(source: Path, material: Path, output: Path) -> dict:
     require(len(closure_matches)==1,
             "phaseChangeClosure must be exactly equilibrium or "
             "kineticRelaxation")
+    # Reject old effective-Cv-only input before staging real CFD.
+    require("cvSolid [" not in mt,
+            "old constant cvSolid is not a phase-resolved u(T) curve")
+
     if closure_matches[0]=="kineticRelaxation":
         require(re.search(r"(?m)^\\s*tauPhaseChangeT\\s+",mt) is not None,
                 "kineticRelaxation requires sourced tauPhaseChangeT(T) [s]")
