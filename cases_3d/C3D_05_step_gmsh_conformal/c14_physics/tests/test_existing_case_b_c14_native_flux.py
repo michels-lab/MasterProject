@@ -162,12 +162,12 @@ class CaseBC14TrueFluidSolidFluxAudit(unittest.TestCase):
             output=root/"C3D05_B_C14_NATIVE_FLUID_SOLID_PATCH_Q_01"
             attempt=root/("."+output.name+".ATTEMPT_native")
             attempt.mkdir()
-            (attempt/R.LOG_BUILD).write_text("wmake success\\n",encoding="utf-8")
+            (attempt/R.LOG_BUILD).write_text("wmake success\n",encoding="utf-8")
             (attempt/R.LOG_EXTRACT).write_text(
-                "Create time\\nSelecting thermo fluid\\n"
-                "--> FOAM FATAL IO ERROR:\\n"
-                "keyword thermophysicalTransport is undefined\\n"
-                "file: constant/metal/momentumTransport\\n",
+                "Create time\nSelecting thermo fluid\n"
+                "--> FOAM FATAL IO ERROR:\n"
+                "keyword thermophysicalTransport is undefined\n"
+                "file: constant/metal/momentumTransport\n",
                 encoding="utf-8"
             )
             (attempt/"bin").mkdir()
@@ -190,7 +190,7 @@ class CaseBC14TrueFluidSolidFluxAudit(unittest.TestCase):
             output=root/"C3D05_B_C14_NATIVE_FLUID_SOLID_PATCH_Q_01"
             wrong=root/"not_a_real_q_ATTEMPT"
             wrong.mkdir()
-            (wrong/R.LOG_EXTRACT).write_text("FOAM FATAL\\n",encoding="utf-8")
+            (wrong/R.LOG_EXTRACT).write_text("FOAM FATAL\n",encoding="utf-8")
             with patch.object(R,"OUTPUT",output):
                 with self.assertRaisesRegex(ValueError,"isolated C3D05"):
                     R.diagnose_attempt(wrong)
