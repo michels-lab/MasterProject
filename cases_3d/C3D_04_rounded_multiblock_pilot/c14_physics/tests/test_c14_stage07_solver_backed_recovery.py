@@ -99,6 +99,13 @@ class NativeSolverBackedStage07Tests(unittest.TestCase):
                 self.assertNotIn("-solver",args)
 
     def test_existing_CFD_failed_copy_and_forensics_are_SHA_bound(self):
+        # Synthetic log/controlDict-only fixture omits native 8960-cell mesh.
+        # Mesh topology is tested independently by fresh-zone regression.
+        mocked_mesh=mock.patch.object(
+            sut.stage,"region_cells",return_value={
+                "nCells":sut.stage.EXPECTED["metal"]})
+        mocked_mesh.start()
+        self.addCleanup(mocked_mesh.stop)
         ca=self.root/"CANONICAL_C14"
         (ca/"system").mkdir(parents=True)
         (ca/"system/controlDict").write_text("AUTHENTIC C14\n")
@@ -174,7 +181,7 @@ class NativeSolverBackedStage07Tests(unittest.TestCase):
             (d/"surfaceFieldValue.dat").write_text("\n".join(rows)+"\n")
         result=sut.surface_energy_summary(self.newcopy)
         self.assertEqual(result["status"],
-                         "METAL_SURFACE_POWER_101_STATES_DIAGNOSTIC")
+                         "NATIVE_METAL_SURFACE_POWER_SAVED_STATES_DIAGNOSTIC")
         self.assertEqual(result["final_energy_power_out_W"],
                          {"top":200.0,"contact":300.0,"total":500.0})
         self.assertTrue(result["nominal_metal_surface_power_reconciled"])
@@ -185,6 +192,42 @@ class NativeSolverBackedStage07Tests(unittest.TestCase):
         changed=sut.surface_energy_summary(self.newcopy)
         self.assertFalse(changed["nominal_metal_surface_power_reconciled"])
         self.assertFalse(changed["global_energy_conservation_verified"])
+
+    def test_native_power_100_complete_saved_states_excluding_t0_not_fabricated(self):
+        base=self.newcopy/"postProcessing/metal"
+        for name,fac in (("metalTopEnergyPower",2),
+                         ("metalMoldEnergyPower",3),
+                         ("metalBoundaryEnergyPower",5)):
+            folder=base/name/"0"
+            folder.mkdir(parents=True)
+            with (folder/"surfaceFieldValue.dat").open("w") as stream:
+                stream.write("# Time sum(energyFlux)\n")
+                for i in range(1,101):
+                    stream.write(f"{i/10:g} {i*fac:g}\n")
+        out=sut.surface_energy_summary(self.newcopy)
+        self.assertTrue(out["nominal_metal_surface_power_reconciled"])
+        self.assertEqual(out["saved_times_count"],100)
+        self.assertAlmostEqual(out["first_saved_time_s"],0.1)
+        self.assertFalse(out["t0_native_power_available"])
+        self.assertFalse(out["t0_native_flux_fabricated"])
+        self.assertFalse(out["global_energy_conservation_verified"])
+        self.assertEqual(out["native_time_series"][
+            "metalBoundaryEnergyPower"]["numeric_data_row_count"],100)
+
+    def test_native_power_only_99_states_is_blocked_without_guessing(self):
+        base=self.newcopy/"postProcessing/metal"
+        for name in ("metalTopEnergyPower","metalMoldEnergyPower",
+                     "metalBoundaryEnergyPower"):
+            path=base/name/"0"
+            path.mkdir(parents=True)
+            (path/"surfaceFieldValue.dat").write_text(
+                "# Time sum(energyFlux)\n"+
+                "\n".join(f"{i/10:g} {i:g}" for i in range(2,101))+"\n")
+        out=sut.surface_energy_summary(self.newcopy)
+        self.assertEqual(out["status"],
+                         "NATIVE_SURFACE_POWER_TABLES_MISSING_OR_INCOMPATIBLE")
+        self.assertIn("99 rows",out["reason"])
+        self.assertFalse(out["nominal_metal_surface_power_reconciled"])
 
     def test_missing_energy_table_is_reported_without_fabrication(self):
         result=sut.surface_energy_summary(self.newcopy)
@@ -247,7 +290,7 @@ class ExistingNewCopyNonDestructiveInspectionTests(unittest.TestCase):
             "native_groups":self.groups,
             "native_groups_passed":[x["group"] for x in self.groups if x["passed"]],
             "native_groups_failed":[x["group"] for x in self.groups if not x["passed"]],
-            "surface_energy":{"status":"METAL_SURFACE_POWER_101_STATES_DIAGNOSTIC",
+            "surface_energy":{"status":"NATIVE_METAL_SURFACE_POWER_SAVED_STATES_DIAGNOSTIC",
                               "global_energy_conservation_verified":False},
         }))
 
@@ -269,6 +312,62 @@ class ExistingNewCopyNonDestructiveInspectionTests(unittest.TestCase):
         self.assertFalse(state["native_validation_verified"])
         self.assertFalse(state["global_energy_conservation_verified"])
         self.assertEqual(data,[(p,sut.sha(p)) for p,_ in data])
+
+    def test_real_wsl_exit_zero_four_fatal_groups_reclassified_in_place(self):
+        """All OS passes in prior report; native FATAL for four groups overrides."""
+        record=json.loads(self.report.read_text())
+        for item in record["native_groups"]:
+            group=item["group"]
+            # Simulate the actual _02 report with zero OS exit codes for all.
+            item["exit_code"]=0
+            item["passed"]=True
+            p=self.copy/("log.C14_3D_postprocess_solverBacked_"+group)
+            if group in ("core","energy","flow","momentum"):
+                p.write_text(
+                    "Time = 10s\n--> FOAM FATAL IO ERROR:\n"
+                    "Cannot find cellZone metal\nAvailable cellZones: 0()\nEnd\n")
+            else:
+                p.write_text("Time = 10s\nNative field processing\nEnd\n")
+            item["log_sha256"]=sut.sha(p)
+        record["native_groups_passed"]=list(sut.TASK_ORDER)
+        record["native_groups_failed"]=[]
+        self.report.write_text(json.dumps(record))
+        before=sut.sha(self.report)
+        with mock.patch.object(sut.old,"run_native",
+                               side_effect=AssertionError("NO native rerun")):
+            observed=self.inspect()
+        self.assertEqual(observed["status"],
+                         "EXISTING_COMPLETE_REPORT_WITH_NATIVE_FATALS_PRESERVED")
+        self.assertEqual(observed["native_groups_passed"],["phase","profiles"])
+        self.assertEqual(observed["native_groups_failed"],
+                         ["core","energy","flow","momentum"])
+        self.assertTrue(observed["prior_report_false_positive_success_detected"])
+        self.assertEqual(observed["original_report_groups_passed_by_exit_code_only"],
+                         list(sut.TASK_ORDER))
+        self.assertEqual(sut.sha(self.report),before)
+
+    def test_new_semantic_group_report_with_fatal_exit_zero_is_authenticated(self):
+        """Future _03 must not fail authenticity checks on semantic FAIL/rc=0."""
+        record=json.loads(self.report.read_text())
+        for item in record["native_groups"]:
+            log=self.copy/("log.C14_3D_postprocess_solverBacked_"+item["group"])
+            log.write_text(
+                "--> FOAM FATAL IO ERROR:\n"
+                "Cannot find cellZone metal\nEnd\n"
+                if item["group"]=="core" else "End\n")
+            item["exit_code"]=0
+            item["passed"]=item["group"]!="core"
+            item["foam_fatal_present"]=item["group"]=="core"
+            item["log_sha256"]=sut.sha(log)
+        record["native_groups_passed"]=[x["group"] for x in record["native_groups"]
+                                        if x["passed"]]
+        record["native_groups_failed"]=["core"]
+        self.report.write_text(json.dumps(record))
+        observed=self.inspect()
+        self.assertEqual(observed["status"],
+                         "EXISTING_COMPLETE_NATIVE_POSTPROCESS_REPORT_REUSED_NO_NEW_RUN")
+        self.assertEqual(observed["native_groups_failed"],["core"])
+        self.assertFalse(observed["prior_report_false_positive_success_detected"])
 
     def test_partial_workcopy_no_final_report_preserved_and_not_marked_pass(self):
         self.report.unlink()
@@ -302,6 +401,84 @@ class ExistingNewCopyNonDestructiveInspectionTests(unittest.TestCase):
         alias.symlink_to(self.copy,target_is_directory=True)
         with self.assertRaisesRegex(sut.Blocked,"symlink"):
             sut.inspect_occupied_copy(self.case,alias,self.recovery,self.forensic)
+
+
+class RealWSLFatalAndFullMetalZoneRegression(unittest.TestCase):
+    """Disposable files reproduce the REAL C14 _02 F14 exit-zero fatal IO."""
+
+    def setUp(self):
+        t=tempfile.TemporaryDirectory()
+        self.addCleanup(t.cleanup)
+        self.root=Path(t.name)
+        self.copy=self.root/"NEW_COPY_NOT_ORIGINAL_CFD"
+        (self.copy/"system").mkdir(parents=True)
+
+    def test_native_zero_exit_with_foam_fatal_io_never_counted_pass(self):
+        dic=self.copy/"system/stage07Offline_core"
+        dic.write_text("FoamFile {}")
+        log=self.copy/"log.C14_3D_postprocess_solverBacked_core"
+        def fake_native(case,name,args):
+            log.write_text(
+                "Time = 10s\n"
+                "--> FOAM FATAL IO ERROR:\n"
+                "Cannot find cellZone metal\n"
+                "Available cellZones: 0()\n"
+                "End\n")
+            return {"name":name,"command_without_bootstrap":args,
+                    "exit_code":0,"passed":True,"log":log.name}
+        with mock.patch.object(sut.old,"run_native",side_effect=fake_native):
+            result=sut.native_group(self.copy,"core",dic)
+        self.assertEqual(result["exit_code"],0)
+        self.assertTrue(result["os_exit_code_zero"])
+        self.assertFalse(result["passed"])
+        self.assertTrue(result["foam_fatal_present"])
+        self.assertEqual(result["foam_fatal_occurrence_count"],1)
+        self.assertTrue(sut.fatal_openfoam_log(log)["foam_fatal_present"])
+
+    def test_full_metal_zone_materialized_only_in_separate_copy(self):
+        source=self.root/"C14_ORIGINAL_IMMUTABLE_CFD"
+        clone=self.copy
+        for region in (source,clone):
+            root=region/"constant/metal/polyMesh"
+            root.mkdir(parents=True)
+            for name in sut.stage.MESH:
+                (root/name).write_text("Native source mesh element "+name+"\n")
+        source_checksums={
+            x:sut.sha(source/"constant/metal/polyMesh"/x)
+            for x in sut.stage.MESH}
+        # Use real Foundation14 cellZones formatter + exhaustive audit, but
+        # replace only the mesh cell-count reader (not included in the fixture).
+        with mock.patch.object(sut.stage,"region_cells",
+                               return_value={"nCells":3}):
+            item=sut.verify_or_add_metal_zone_in_new_copy(source,clone)
+        self.assertTrue(item["added_to_copy_only"])
+        self.assertTrue(item["geometry_connectivity_unchanged"])
+        self.assertEqual(item["metal_cells"],3)
+        self.assertFalse((source/"constant/metal/polyMesh/cellZones").exists())
+        self.assertTrue(sut.stage.audit_existing_zone(
+            clone/"constant/metal/polyMesh/cellZones",3))
+        self.assertEqual(source_checksums,{
+            x:sut.sha(source/"constant/metal/polyMesh"/x)
+            for x in sut.stage.MESH})
+        with mock.patch.object(sut.stage,"region_cells",
+                               return_value={"nCells":3}):
+            with self.assertRaisesRegex(sut.Blocked,"unexpected zone"):
+                sut.verify_or_add_metal_zone_in_new_copy(source,clone)
+
+    def test_existing_metal_zone_is_exactly_cloned_not_rewritten(self):
+        source=self.root/"C14_ORIGINAL"
+        for folder in (source,self.copy):
+            root=folder/"constant/metal/polyMesh"
+            root.mkdir(parents=True)
+            for name in sut.stage.MESH:
+                (root/name).write_text("fixture mesh "+name+"\n")
+            (root/"cellZones").write_text(sut.stage.whole_region_zone(4))
+        saved=sut.sha(self.copy/"constant/metal/polyMesh/cellZones")
+        with mock.patch.object(sut.stage,"region_cells",
+                               return_value={"nCells":4}):
+            result=sut.verify_or_add_metal_zone_in_new_copy(source,self.copy)
+        self.assertFalse(result["added_to_copy_only"])
+        self.assertEqual(sut.sha(self.copy/"constant/metal/polyMesh/cellZones"),saved)
 
 
 if __name__=="__main__":
