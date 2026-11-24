@@ -22,9 +22,14 @@ class fsC08ConservativeVoF : public compressibleVoF
     // Must own oldTime() for the native compressible pressure ddt terms.
     volScalarField rhoMetalEffective_;
 
+    // Persisted conservative thermal inventory [J/m3], built from
+    // m_l*u_l(T) + m_s*u_s(T) + m_g*u_g(p,T).
+    volScalarField phaseInternalEnergy_;
+
     // Restore mixture mass from actual liquid+solid inventories, not
     // alpha.metal * rho_liquid alone. Gas remains native compressibleVoF.
     void reconcileMixtureDensity();
+    void updatePhaseInternalEnergy();
 
 protected:
     virtual void prePredictor() override;
