@@ -29,8 +29,8 @@
     "POTENTIAL_UNLOGGED_CHANGES": 2
   },
   "finding_total": 9,
-  "inventory_fingerprint": "cb4e0474092ee7ac8f7496cb8c98f4024ae8079373e47db0becd4008e720d4da",
-  "evidence_fingerprint": "8c04ade72c3d9d7aefe992aff9838273cb5cb79dab6d887a85d35ee54ab27718",
+  "inventory_fingerprint": "3ed813e089def13a17e9dd1e174f60b50d6097a33c8acad86151cfeb88f538ca",
+  "evidence_fingerprint": "12545031f2199afacc62465614cdf2afc610f3483586811e35502f9d3cd1ed7b",
   "files": [
     {
       "path": ".github/agents/openfoam-solidification.agent.md",
@@ -2179,7 +2179,7 @@
       "role": "source",
       "purpose": "code/test implementation",
       "certainty": "rule",
-      "blob": "7d6c1b650ec5431118918eb30b528b65679ee657"
+      "blob": "b65b11dca76d2d90c0a32119e9feca056833b8fd"
     },
     {
       "path": "cases_3d/C3D_05_step_gmsh_conformal/c14_physics/README.md",
@@ -272862,7 +272862,7 @@
       "role": "config",
       "purpose": "machine-readable configuration",
       "certainty": "rule",
-      "blob": "8cc875ec0ccfbfaf0209fc09ce72bc4967126cca"
+      "blob": "50f6a5426e27ad8f99036a606aa513b677d78cdd"
     },
     {
       "path": "docs/REGLA_INSTRUCCIONES_UNIFICADAS_ES.md",
@@ -273898,11 +273898,11 @@
       "state": "REVIEW_REQUIRED"
     },
     {
-      "id": "b1ff894363a07090",
+      "id": "4024c56a4829fe9b",
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_ES.md",
-      "observation": "1 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_05_step_gmsh_conformal/c14_physics/EJECUTAR_CASO_B_C14_COMPLETO.sh",
+      "observation": "2 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_05_step_gmsh_conformal/c14_physics/EJECUTAR_CASO_B_C14_COMPLETO.sh, docs/PROJECT_STAGE_STATUS.json",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     }
