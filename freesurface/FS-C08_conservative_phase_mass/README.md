@@ -1,6 +1,20 @@
 # FS-C08 — Primer núcleo conservativo líquido–sólido–gas
 
 
+> **24-11-2026 — NUEVO AVANCE CON Γ NO NULA:** después del hito de lectura nativa OpenFOAM14 con PASS en WSL, se incorporó una segunda utilidad [fsC08NativeShadowStep](native_openfoam/shadow_step/README.md) que usa el **fvMesh real de FS-C07** (volumen, owner, neighbour) y, **solo en memoria**, aplica un paso transitorio explícito de **tres masas conservativas** con fuentes opuestas ±Γ no nulas, flujos internos de las tres fases y entalpía con calor latente una sola vez. La fixture es enteramente **SYNTHETIC_ONLY_NOT_JMATPRO** y las condiciones iniciales son artificiales: se usa la malla real pero **NO los campos reales como estado físico nuevo**. El [núcleo C++17 multi-celda](native_cpp/ConservativePhaseNetwork.H) compiló y pasó en el entorno Linux del asistente; el **nuevo wmake Foundation14 continúa pendiente de prueba en WSL**. No se implementa presión, velocidad, CFD-VOF, alimentación ni contracción física.
+>
+> **Próxima ejecución, sobre el worktree FS-C08 existente:** 
+>
+>     cd ~/OpenFOAM/FS_C08_WORKTREE
+>     git fetch origin research/fs-c08-conservative-phase-mass-20261123
+>     git switch --detach FETCH_HEAD
+>     python3 -B analysis_tools/run_fs_c08_native_shadow.py --case ~/OpenFOAM/FS_C07_RUNS/FS_C07_THERMAL_20261123T183217Z_72da1bf4
+>
+> El nuevo comando [run_fs_c08_native_shadow.py](../../analysis_tools/run_fs_c08_native_shadow.py) crea un reporte independiente en FS_C08_DIAGNOSTICS, exige 3 flujos de fase y Γ local no nula, comprueba balances de metal/gas/entalpía y conserva SHA-256 de los seis archivos FS-C07. Solo imprimirá **FS_C08_NATIVE_GAMMA_FV_SHADOW_PASS__SYNTHETIC_NO_CFD** después de compilar, ejecutar y validar cada condición.
+
+
+
+
 > **24-11-2026 — HITO NATIVO WSL CONFIRMADO POR EL INVESTIGADOR.** Al actualizar el worktree a `90117e3b8` y ejecutar `run_fs_c08_native_bridge.py`, la consola confirmó **`FS_C08_NATIVE_FVMESH_READ_ONLY_BRIDGE_PASS__NO_CFD`**. Reporte:
 > `~/OpenFOAM/FS_C08_DIAGNOSTICS/FS_C08_NATIVE_FIELD_BRIDGE_20261124T073954Z_1d35c584/FS_C08_NATIVE_BRIDGE_REPORT.json`.
 > El retorno PASS del [ejecutor versionado](../../analysis_tools/run_fs_c08_native_bridge.py) solo se alcanza si pasan `wmake`, lectura real de `fvMesh`/`alpha.metal`/`alpha.metal.solid`, paridad con el conjunto FS-C07 de 20 estados y **SHA256 idéntico** antes/después de seis campos originales. La evidencia de esta ejecución consta del **estado de terminal suministrado por el investigador**; el contenido del JSON nativo no fue inspeccionado independientemente desde este entorno.
