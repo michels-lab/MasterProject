@@ -262,57 +262,102 @@ void PhaseMassTransport::evaluateGamma
     const scalar dt=mesh_.time().deltaTValue();
     if (!std::isfinite(dt) || dt<=0)
         FatalErrorInFunction << "Invalid CFD deltaT" << exit(FatalError);
+
     auto& gamma=Gamma_.primitiveFieldRef();
-    auto& s=SvolPhaseChange_.primitiveFieldRef();
-    auto& st=SvolThermal_.primitiveFieldRef();
-    auto& sm=SvolMaterial_.primitiveFieldRef();
-    const auto& t0=T.oldTime().primitiveField();
-    const auto& alpha0=metal.oldTime().primitiveField();
     const auto& ml=mLiquid_.primitiveField();
     const auto& ms=mSolid_.primitiveField();
-    const auto& rl=rhoLiquid_.primitiveField();
-    const auto& rs=rhoSolid_.primitiveField();
     const auto& t=T.primitiveField();
     const auto& a=metal.primitiveField();
+
     forAll(gamma,i)
     {
-        st[i]=0;
-        sm[i]=0;
         if (a[i]<metalPresenceThreshold_)
         {
             gamma[i]=0;
-            s[i]=0;
             continue;
         }
+
         const scalar fs=solidMassFractionT_->value(t[i]);
-        if (!std::isfinite(fs) || fs<0 || fs>1 || ml[i]<0 || ms[i]<0)
-            FatalErrorInFunction << "Invalid phase masses / fs at cell "
-                                 << i << exit(FatalError);
-        scalar conversionFactor=1.0;
+        if
+        (
+            !std::isfinite(fs) || fs<0 || fs>1
+         || !std::isfinite(ml[i]) || !std::isfinite(ms[i])
+         || ml[i]<0 || ms[i]<0
+        )
+            FatalErrorInFunction
+                << "FS-C08 invalid phase masses/fs cell=" << i
+                << exit(FatalError);
+
+        scalar conversionFactor=1;
         if (phaseChangeClosure_=="kineticRelaxation")
         {
             const scalar tau=tauPhaseChangeT_->value(t[i]);
             if (!std::isfinite(tau) || tau<=0)
-            {
                 FatalErrorInFunction
-                    << "FS-C08 invalid sourced kinetic tau(T) in cell "
-                    << i << " tau=" << tau << " s."
+                    << "FS-C08 invalid sourced tauPhaseChangeT(T)="
+                    << tau << " s in cell " << i
                     << exit(FatalError);
-            }
-            // 1-exp(-dt/tau): exact positive bounded relaxation
-            // for a constant equilibrium target over this time step.
+
+            // Exact bounded kinetic relaxation for constant target in dt.
+            // Unlike phaseRelaxation per step, it converges as dt -> 0.
             conversionFactor=-std::expm1(-dt/tau);
         }
-        gamma[i]=conversionFactor*(fs*(ml[i]+ms[i])-ms[i])/dt;
-        s[i]=gamma[i]*(1/rs[i]-1/rl[i]);
 
-        // Density(T) material contraction at FIXED transported masses:
-        // Δ(alphaMetal)_thermal / Δt, excluding phase transfer/advection.
-        // An incoming air-to-metal interface has no iron T(n) history;
-        // do NOT interpret its old gas temperature as thermal shrinkage.
+        gamma[i]=conversionFactor*(fs*(ml[i]+ms[i])-ms[i])/dt;
+    }
+    Gamma_.correctBoundaryConditions();
+
+    // This first calculation uses T before the energy solve. The
+    // after-energy refresh updates thermal and phase volume rates at
+    // T(n+1) WITHOUT applying Gamma a second time.
+    updateVolumeSources(T,metal);
+}
+
+
+void PhaseMassTransport::updateVolumeSources
+(
+    const volScalarField& T,
+    const volScalarField& metal
+)
+{
+    const scalar dt=mesh_.time().deltaTValue();
+    if (!std::isfinite(dt) || dt<=0)
+        FatalErrorInFunction << "Invalid CFD deltaT for Svol"
+                             << exit(FatalError);
+
+    const auto& t=T.primitiveField();
+    const auto& t0=T.oldTime().primitiveField();
+    const auto& a=metal.primitiveField();
+    const auto& a0=metal.oldTime().primitiveField();
+    const auto& ml=mLiquid_.primitiveField();
+    const auto& ms=mSolid_.primitiveField();
+    const auto& rl=rhoLiquid_.primitiveField();
+    const auto& rs=rhoSolid_.primitiveField();
+    const auto& gamma=Gamma_.primitiveField();
+
+    auto& spc=SvolPhaseChange_.primitiveFieldRef();
+    auto& sth=SvolThermal_.primitiveFieldRef();
+    auto& smat=SvolMaterial_.primitiveFieldRef();
+
+    forAll(spc,i)
+    {
+        spc[i]=0;
+        sth[i]=0;
+        smat[i]=0;
+        if (a[i]<metalPresenceThreshold_) continue;
+
+        // Equal and opposite Gamma removes NO METAL MASS. Only the
+        // specific-volume difference converts phase mass to volume.
+        spc[i]=gamma[i]*(1.0/rs[i]-1.0/rl[i]);
+
+        // Separate density(T) contraction/expansion at fixed current
+        // transported metal masses. This is a MATERIAL contribution,
+        // not a VOF/advective/geometrical volume loss.
+        // A newly metal-filled cell has no previous METAL temperature;
+        // do not use the previous air T as an iron property.
         if
         (
-            alpha0[i]>=metalPresenceThreshold_
+            a0[i]>=metalPresenceThreshold_
          && std::isfinite(t0[i])
          && t0[i]>=Tmin_K_ && t0[i]<=Tmax_K_
         )
@@ -324,24 +369,37 @@ void PhaseMassTransport::evaluateGamma
                 !std::isfinite(rl0) || rl0<=0
              || !std::isfinite(rs0) || rs0<=0
             )
-            {
                 FatalErrorInFunction
-                    << "FS-C08 previous temperature produced invalid "
-                    << "rho(T) at cell " << i << exit(FatalError);
-            }
-            st[i]=
+                    << "FS-C08 invalid old rho(T) cell=" << i
+                    << exit(FatalError);
+            sth[i]=
             (
                 ml[i]*(1.0/rl[i]-1.0/rl0)
               + ms[i]*(1.0/rs[i]-1.0/rs0)
             )/dt;
         }
-        sm[i]=s[i]+st[i];
+        smat[i]=spc[i]+sth[i];
     }
-    Gamma_.correctBoundaryConditions();
     SvolPhaseChange_.correctBoundaryConditions();
     SvolThermal_.correctBoundaryConditions();
     SvolMaterial_.correctBoundaryConditions();
 }
+
+
+void PhaseMassTransport::refreshAfterEnergy
+(
+    const volScalarField& T,
+    const volScalarField& metal
+)
+{
+    // After the native CHT energy solve, densities can change even when
+    // mass transport is complete. Pressure MUST see the new volume.
+    // Never consume phase mass or re-evaluate kinetic Gamma here.
+    checkAndUpdateProperties(T,metal);
+    reconstructFractions();
+    updateVolumeSources(T,metal);
+}
+
 
 void PhaseMassTransport::reconstructFractions()
 {
