@@ -111,14 +111,14 @@
     "stage_completed": "08_SOLIDIFICATION_T1",
     "current_stage": "09_VERIFICATION_AND_GRID",
     "operational_completion": "8/10=80%",
-    "status": "REAL_GIT_NATIVE_THERMAL_AND_METAL_ENERGY_DIAGNOSTICS_ANALYZED",
+    "status": "REAL_WSL_EXACT_REPRODUCTION_AND_BILATERAL_SAVED_STATE_DIAGNOSTIC_READY",
     "evidence_report": "docs/C3D04_A_STAGE09_FAITHFUL_NATIVE_ANALYSIS_20261124_ES.md",
     "scientific_limits": [
-      "Native Git probe, profiles and reductions analyzed; full 3D primary field equivalence not verified",
-      "0.1s quadrature and nominal latent inventory not discrete conservation",
-      "Mold-side energy balance of faithful run pending local audit; grid/time independence and QuickCup pending"
+      "Saved-state primary fields identical; no assertion of physical accuracy",
+      "Nominal bilateral balance on 0.1s states, not discrete closure",
+      "Local audit CSV publication, grid/time independence and QuickCup pending"
     ],
-    "next": "Run read-only same-mesh primary field comparison and bilateral saved-state energy audit; no CFD rerun."
+    "next": "Plan same-geometry mesh and time-step sensitivity; investigate initial pressure/thermal transient and discrete energy accounting. Preserve reference and publish existing audit CSV when available."
   },
   "stage06_preflight_integrity": {
     "date": "2026-11-20",
@@ -1286,7 +1286,7 @@
       "excluded_generated_mesh": true
     },
     "native_analysis": {
-      "status": "ARCHIVED_NATIVE_THERMAL_FLOW_AND_METAL_ENERGY_ANALYZED_LOCAL_FIELD_BILATERAL_AUDIT_PENDING",
+      "status": "REAL_WSL_EXACT_REPRODUCTION_AND_BILATERAL_SAVED_STATE_DIAGNOSTIC_READY",
       "doc": "docs/C3D04_A_STAGE09_FAITHFUL_NATIVE_ANALYSIS_20261124_ES.md",
       "thermal_energy_csv": "cases_3d/C3D_04_rounded_multiblock_pilot/C14_3D_A_faithful/analysis_results/faithful_native_analysis_20261124/thermal_energy_101.csv",
       "native_probe_temperature_rmse_K": 6.7058704356831935,
@@ -1295,7 +1295,7 @@
       "probe_first_below_liquidus_3D_s": 3.451,
       "probe_first_below_liquidus_2D_s": 4.72,
       "volume_mean_T_reconstructed_3D_K": 1450.727322911963,
-      "solid_fraction_final_3D": 0.102755,
+      "solid_fraction_final_3D": 0.1027550247293385,
       "latent_peak_native_W": 1038.793,
       "latent_peak_time_s": 7.3,
       "metal_energy_residual_inventory_0p1_to_10_J": 1.5140835516422158,
@@ -1303,8 +1303,21 @@
       "metal_energy_residual_inventory_0_to_10_J": -164.09061644837948,
       "metal_energy_residual_power_0_to_10_J": -168.53346470003817,
       "local_audit_entrypoint": "cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/audit_faithful_a_fields_and_energy.py",
-      "local_audit_executed": false,
-      "discrete_conservation_verified": false
+      "local_audit_executed": true,
+      "discrete_conservation_verified": false,
+      "all_606_primary_files_identical": true,
+      "all_primary_RMSE_zero": true,
+      "volume_mean_T_direct_3D_K": 1450.7091627651344,
+      "mold_volume_mean_T_K": 481.7459413749073,
+      "maximum_saved_speed_m_s": 0.025338494975605794,
+      "maximum_saved_speed_time_s": 2.8,
+      "combined_nominal_energy_residual_0p1_to_10_J": 0.03051585055555961,
+      "combined_nominal_energy_residual_0_to_10_J": -6.421036614093225,
+      "interface_signed_energy_residual_0p1_to_10_J": 0.4096941409349939,
+      "mold_nominal_residual_0p1_to_10_J": -1.4807794850352707,
+      "q_reused_on_exact_input_field_identity": true,
+      "local_csv_publication_pending": true,
+      "base_and_faithful_unchanged": true
     }
   },
   "planned_200s_campaign": {
