@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
   "audit_kind": "deterministic_full_tracked_tree",
-  "tracked_files_total": 39123,
-  "classified_files_total": 39118,
-  "docs_content_inspected": 217,
+  "tracked_files_total": 39124,
+  "classified_files_total": 39119,
+  "docs_content_inspected": 218,
   "large_docs_skipped": 1,
   "excluded_reports": 5,
   "roles": {
@@ -12,7 +12,7 @@
     "bitacora": 5,
     "config": 17,
     "data": 32,
-    "document": 179,
+    "document": 180,
     "index": 34,
     "license": 1,
     "simulation_case_file": 121,
@@ -26,11 +26,11 @@
   },
   "finding_counts": {
     "BROKEN_RELATIVE_LINK": 7,
-    "POTENTIAL_UNLOGGED_CHANGES": 2
+    "POTENTIAL_UNLOGGED_CHANGES": 1
   },
-  "finding_total": 9,
-  "inventory_fingerprint": "1392be24fdb0a4b500ff3bb81a3bb87599fbe37fb4b97cf19f168ad2c268d022",
-  "evidence_fingerprint": "0b1c8ea0804ae7293986f9ea53353d7683b3c936be727a532ffd4a508f327a66",
+  "finding_total": 8,
+  "inventory_fingerprint": "2e752506f73d6a9a0fc62577745090f559216a0865c0d94b85d399f8074fe2ba",
+  "evidence_fingerprint": "b7df942211f80499a4e4df21ecd8a7fd0e970b9ab783d557de68b1d5efdc6020",
   "files": [
     {
       "path": ".github/agents/openfoam-solidification.agent.md",
@@ -415,7 +415,7 @@
       "role": "bitacora",
       "purpose": "technical/audit change history",
       "certainty": "rule",
-      "blob": "f83ef076b04e8f7fa22e8fbf62805a98effc1eeb"
+      "blob": "24efd0c2e18662d8ae0abb1ff773367e06732ab5"
     },
     {
       "path": "README.md",
@@ -1563,7 +1563,7 @@
       "role": "agent",
       "purpose": "assistant role/instructions",
       "certainty": "rule",
-      "blob": "321035d78ce244bceaeaf870f1e1ad73270d6484"
+      "blob": "b6533446898e4800e58e3312e5e587eeb6da073e"
     },
     {
       "path": "cases_3d/C3D_04_rounded_multiblock_pilot/Allmesh",
@@ -1745,7 +1745,7 @@
       "role": "source",
       "purpose": "code/test implementation",
       "certainty": "rule",
-      "blob": "11b3b1bfb5f390d41e0f4a4411f80a501434e477"
+      "blob": "7bf2befc4a01c19822af3938a190d7ae68c9bb66"
     },
     {
       "path": "cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/run_c14_native_milestone.sh",
@@ -272578,6 +272578,13 @@
       "blob": "521248efe120f465536e58f23b852462270e778c"
     },
     {
+      "path": "docs/C3D04_A_STAGE09_FAITHFUL_C14_RUNTIME_20261124_ES.md",
+      "role": "document",
+      "purpose": "manual/decision/report/historical note",
+      "certainty": "inferred",
+      "blob": "924d1441eae4558d0f221734c2b6caf82cb11eac"
+    },
+    {
       "path": "docs/C3D04_A_STAGE09_MULTIDIRECTIONAL_20261124_ES.md",
       "role": "document",
       "purpose": "manual/decision/report/historical note",
@@ -272596,7 +272603,7 @@
       "role": "config",
       "purpose": "machine-readable configuration",
       "certainty": "rule",
-      "blob": "33214adff0d77116636b7ea8d4a3cfdb26540933"
+      "blob": "2bcae1faf14a6d2f558f1c8f0eff97d61ff89256"
     },
     {
       "path": "docs/C3D_01_ESTADO_REAL_20261110_ES.md",
@@ -272883,7 +272890,7 @@
       "role": "config",
       "purpose": "machine-readable configuration",
       "certainty": "rule",
-      "blob": "64f15c5a06903c36425471cfd46657ced854f265"
+      "blob": "9e050c2fabc2375ac6cf9817e92efdc0ee096d2c"
     },
     {
       "path": "docs/REGLA_INSTRUCCIONES_UNIFICADAS_ES.md",
@@ -273929,15 +273936,6 @@
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_EN.md",
       "observation": "39 implementation/config paths changed since this log's last commit; examples: .github/workflows/c3d04-a-c14-native-fluid-solid.yml, .github/workflows/c3d04-a-c14-postprocessing-parity.yml, .github/workflows/c3d05-b-c14-native-fluid-solid-q.yml, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/analyze_c14_a_multidirectional.py, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/compare_c14_2d_3d_a.py, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/compare_c14_archived_results.py",
-      "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "95c74af10c9e18c8",
-      "code": "POTENTIAL_UNLOGGED_CHANGES",
-      "severity": "review",
-      "path": "PROJECT_AUDIT_LOG_ES.md",
-      "observation": "2 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/run_c14_a_faithful_runtime.py, docs/C3D04_CASE_A_STATUS.json",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     }
