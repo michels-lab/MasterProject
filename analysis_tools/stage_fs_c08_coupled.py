@@ -72,7 +72,8 @@ def stage(source: Path, material: Path, output: Path) -> dict:
         require(re.search(r"(?m)^\s*"+re.escape(key)+r"\s+",mt) is not None,
                 "mandatory physical property entry absent: "+key)
     require("SYNTHETIC_ONLY_NOT_JMATPRO" not in mt
-            and "PLACEHOLDER" not in mt and "TODO" not in mt,
+            and "PLACEHOLDER" not in mt and "TODO" not in mt
+            and re.search(r"<[A-Z][^>]*>",mt) is None,
             "no synthetic or unfilled material properties allowed")
     ctrl=(source/"system/controlDict").read_text(encoding="utf-8")
     old=r"(?m)^(\s*fluid\s+)compressibleVoF(\s*;)"
