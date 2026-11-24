@@ -24,7 +24,7 @@ MODEL=ROOT/"freesurface/FS-C06_vof_solidification/native/constant/fluid/fvModels
 BASE_MODULE=ROOT/"freesurface/FS-C08_conservative_phase_mass/coupled_solver/native"
 REQUIRED_MATERIAL=(
     "materialId", "propertySource","Tmin_K","Tmax_K",
-    "phaseChangeClosure","metalPresenceThreshold","mushyDarcyCu","mushyDarcyQ","rhoLiquidT",
+    "phaseChangeClosure","mushyDarcyCu","mushyDarcyQ","rhoLiquidT",
     "rhoSolidT","solidMassFractionT","latentHeat",
     "energyReferenceT_K","cvLiquidT","cvSolidT",
     "kappaLiquidT","kappaSolidT",
@@ -77,6 +77,12 @@ def stage(source: Path, material: Path, output: Path) -> dict:
             and "PLACEHOLDER" not in mt and "TODO" not in mt
             and re.search(r"<[A-Z][^>]*>",mt) is None,
             "no synthetic or unfilled material properties allowed")
+    # No numerical interface cutoff may hide positive metal mass.
+    # All positive metal inventories need sourced phase properties.
+    require("metalPresenceThreshold" not in mt,
+            "metalPresenceThreshold would discard trace-metal physics; "
+            "remove it and extend material curves to actual interface T")
+
     # Explicit physical closure, never an arbitrary per-step gamma multiplier.
     closure_matches=re.findall(
         r"(?m)^\s*phaseChangeClosure\s+(equilibrium|kineticRelaxation)\s*;",
