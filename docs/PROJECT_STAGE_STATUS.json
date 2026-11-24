@@ -430,7 +430,13 @@
     "case_b_c14_native_C14_fluid_solid_q_WSL_first_compilation_attempt_log": "/home/michel/OpenFOAM/.C3D05_B_C14_NATIVE_FLUID_SOLID_PATCH_Q_01.ATTEMPT_wktw8k7j/log.wmake.C3D05_B_C14_NATIVE_FLUX",
     "case_b_c14_native_C14_fluid_solid_q_WSL_C14_header_fix_committed": true,
     "case_b_c14_native_C14_fluid_solid_q_WSL_C14_header_fix_commit": "8fc1648013acaa8953db3cef7dde66cbc0e6ded3",
-    "case_b_c14_native_C14_fluid_solid_q_WSL_C14_header_regression_fix_commit": "4ca63aaf6ee94e6246c1ade0e5be14c487955771"
+    "case_b_c14_native_C14_fluid_solid_q_WSL_C14_header_regression_fix_commit": "4ca63aaf6ee94e6246c1ade0e5be14c487955771",
+    "case_b_c14_native_C14_fluid_solid_q_WSL_first_compilation_attempt_blocker_resolved_in_source": true,
+    "case_b_c14_native_C14_fluid_solid_q_WSL_F14_exact_header": "linear.H",
+    "case_b_c14_native_C14_fluid_solid_q_WSL_F14_exact_header_source": "https://cpp.openfoam.org/v14/src_2finiteVolume_2interpolation_2surfaceInterpolation_2schemes_2linear_2linear_8H_source.html",
+    "case_b_c14_native_C14_fluid_solid_q_WSL_F14_exact_header_fix_commit": "477b886a387e64adb7740684bc2a2fecd28ac519",
+    "case_b_c14_native_C14_fluid_solid_q_WSL_F14_exact_header_test_commit": "f2ff22ee29e53cf9d0888635274c59f5153b34e2",
+    "case_b_c14_native_C14_fluid_solid_q_WSL_compilation_retried_after_header_fix": false
   },
   "other_cases": [
     {
@@ -470,7 +476,7 @@
       "evidence": "docs/granada/C3D05_B_C14_WSL_EJECUCION_REAL_EN_CURSO_20261123_ES.md"
     }
   ],
-  "blocker": "Real WSL Case B 10s C14 CFD & 101 native postrun, volume-weighted solidification, metal/mold C14 reference inventories complete. NEW true fluid+solid q extractor: 8/8 synthetic tests PASSED and source/mesh/10s SHA preflight PASSED on user WSL. FIRST wmake failed BEFORE native q due to missing header linearInterpolate.H (real compiler fatal). Source FIX committed official surfaceInterpolate.H preserving native linearInterpolate(rho*U), regression added; corrected CPP not yet WSL compiled/executed, q unknown. Separate failed ATTEMPT log preserved, real CFD untouched. Need user git pull rerun q isolated build; source-specific flux/latent fvModel/advective flux and energy closure still open. Gates 2/7 remains.",
-  "next_integrated_delivery": "Re-pull after source update: 8 native-q tests (regression checks Foundation14 surfaceInterpolate.H), strictly read-only preflight, isolated wmake of true fluid+solid C14 q exporter and 101x4 original patch output. Original StageReport and log SHA confirmed in user WSL. Keep old ATTEMPT_wktw8k7j intact. If subsequent compile errors, preserve log and repair actual F14 API; do NOT rerun CFD or declare flux until binary completes and CSV auditor passes.",
+  "blocker": "User WSL B C14 native fluid+solid patch q: 8/8 tests PASS, real 10s/101 state/mesh SHA preflight PASS; isolated wmake stopped BEFORE execution at 'fatal error: linearInterpolate.H not found'. Exact OpenFOAM Foundation14 API source was verified: Foam::linearInterpolate is defined in finiteVolume interpolation schemes linear/linear.H, final C++ source and regression NOW use #include \"linear.H\". Header-fix code/test committed, NOT WSL recompiled after this change. Existing failed ATTEMPT path/log preserved, CFD untouched. Real native q, energy closure and physics verification still PENDING. Original reference combined energy inventory -1352.9442013308708 J is NOT lost heat. G3-G7 remain open 2/7.",
+  "next_integrated_delivery": "Re-pull latest master and rerun strict eight native flux QA regressions, original Case B 10s SHA preflight, isolated Foundation14 wmake + 101×4 fluid/solid original patch q extraction. Correct header is linear.H (direct API declaration) not linearInterpolate.H or surfaceInterpolate.H. If further compile errors occur, preserve log ATTEMPT and fix actual Foundation14 API; no foamMultiRun and no q claims until real output exists.",
   "science": "CASE_B_NATIVE_C14_10S_CFD_AND_REFERENCE_METAL_MOLD_ENERGY_WSL_DONE_FLUID_SOLID_TRUE_F14_Q_CPP_RUNNER_CODE_STAGED_NATIVE_WSL_COMPILE_PENDING_NO_PHYSICAL_CLOSURE"
 }
