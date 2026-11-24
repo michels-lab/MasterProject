@@ -22,7 +22,6 @@ PhaseMassTransport::PhaseMassTransport
     Tmin_K_(material_.lookup<scalar>("Tmin_K")),
     Tmax_K_(material_.lookup<scalar>("Tmax_K")),
     phaseChangeClosure_(material_.lookup<word>("phaseChangeClosure")),
-    metalPresenceThreshold_(material_.lookup<scalar>("metalPresenceThreshold")),
     rhoLiquidT_(Function1<scalar>::New("rhoLiquidT",dimTemperature,dimDensity,material_)),
     rhoSolidT_(Function1<scalar>::New("rhoSolidT",dimTemperature,dimDensity,material_)),
     solidMassFractionT_
@@ -149,8 +148,6 @@ PhaseMassTransport::PhaseMassTransport
         || Tmin_K_<=0 || Tmax_K_<=Tmin_K_
         || (phaseChangeClosure_!="equilibrium"
             && phaseChangeClosure_!="kineticRelaxation")
-        || !std::isfinite(metalPresenceThreshold_)
-        || metalPresenceThreshold_<=0 || metalPresenceThreshold_>=0.5
         || !std::isfinite(latentHeat_.value()) || latentHeat_.value()<=0
         || !std::isfinite(energyReferenceT_K_)
         || energyReferenceT_K_<Tmin_K_
@@ -263,7 +260,11 @@ void PhaseMassTransport::checkAndUpdateProperties
         // The single-T mixture model must have sourced Fe properties
         // covering the temperature of every metal-containing cell.
         // Only pure gas can use an inert reference density.
-        if (a[i]<=0)
+        if
+        (
+            a[i]<=0
+         && mLiquid_.primitiveField()[i]+mSolid_.primitiveField()[i]<=0
+        )
         {
             rl[i]=rhoLiquidT_->value(Tmin_K_);
             rs[i]=rhoSolidT_->value(Tmin_K_);
@@ -316,11 +317,7 @@ void PhaseMassTransport::initializeIfRequired
     initialized_=true;
 }
 
-void PhaseMassTransport::evaluateGamma
-(
-    const volScalarField& T,
-    const volScalarField& metal
-)
+void PhaseMassTransport::evaluateGamma(const volScalarField& T)
 {
     const scalar dt=mesh_.time().deltaTValue();
     if (!std::isfinite(dt) || dt<=0)
@@ -381,15 +378,11 @@ void PhaseMassTransport::evaluateGamma
     // This first calculation uses T before the energy solve. The
     // after-energy refresh updates thermal and phase volume rates at
     // T(n+1) WITHOUT applying Gamma a second time.
-    updateVolumeSources(T,metal);
+    updateVolumeSources(T);
 }
 
 
-void PhaseMassTransport::updateVolumeSources
-(
-    const volScalarField& T,
-    const volScalarField& metal
-)
+void PhaseMassTransport::updateVolumeSources(const volScalarField& T)
 {
     const scalar dt=mesh_.time().deltaTValue();
     if (!std::isfinite(dt) || dt<=0)
@@ -477,7 +470,7 @@ void PhaseMassTransport::refreshAfterEnergy
     // Never consume phase mass or re-evaluate kinetic Gamma here.
     checkAndUpdateProperties(T,metal);
     reconstructFractions();
-    updateVolumeSources(T,metal);
+    updateVolumeSources(T);
 }
 
 
@@ -578,7 +571,7 @@ void PhaseMassTransport::solve
         }
     }
 
-    evaluateGamma(T,alphaMetal);
+    evaluateGamma(T);
 
     // Step C: equal-and-opposite local mass exchange in the *same*
     // physical CFD time step. For 0<relax<=1 and 0<=fs<=1,
