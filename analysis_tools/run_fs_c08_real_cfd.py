@@ -116,7 +116,7 @@ def inspect_real_cfd_budgets(log: str, final_saved_time_s: float) -> dict:
             "FS_C08_NATIVE_PHASE_RESOLVED_INTERNAL_ENERGY",
         )):
             continue
-        entries = dict(re.findall(r"([A-Za-z][A-Za-z0-9_]*)=([^\\s]+)", line))
+        entries = dict(re.findall(r"([A-Za-z][A-Za-z0-9_]*)=([^\s]+)", line))
         if "FS_C08_REAL_CFD_MASS_BUDGET" in line:
             missing = [field for field in required if field not in entries]
             if missing:
