@@ -79,7 +79,7 @@ def stage(source: Path, material: Path, output: Path) -> dict:
             "no synthetic or unfilled material properties allowed")
     # Explicit physical closure, never an arbitrary per-step gamma multiplier.
     closure_matches=re.findall(
-        r"(?m)^\\s*phaseChangeClosure\\s+(equilibrium|kineticRelaxation)\\s*;",
+        r"(?m)^\s*phaseChangeClosure\s+(equilibrium|kineticRelaxation)\s*;",
         mt
     )
     require(len(closure_matches)==1,
@@ -90,7 +90,7 @@ def stage(source: Path, material: Path, output: Path) -> dict:
             "old constant cvSolid is not a phase-resolved u(T) curve")
 
     if closure_matches[0]=="kineticRelaxation":
-        require(re.search(r"(?m)^\\s*tauPhaseChangeT\\s+",mt) is not None,
+        require(re.search(r"(?m)^\s*tauPhaseChangeT\s+",mt) is not None,
                 "kineticRelaxation requires sourced tauPhaseChangeT(T) [s]")
 
     ctrl=(source/"system/controlDict").read_text(encoding="utf-8")
@@ -114,7 +114,7 @@ def stage(source: Path, material: Path, output: Path) -> dict:
             "retained turbulence damping or removed old latent source incorrectly")
     newModels += (
         "\n// FS-C08: old alphaSolidT/VoFSolidificationMelting REMOVED.\n"
-        "// Native coupled solver owns phase-mass Gamma and SINGLE Gamma*L.\n"
+        "// Phase energy contains latent only in u_liquid-u_solid reference.\n"
     )
     solution=(source/"system/fluid/fvSolution").read_text(encoding="utf-8")
     require(re.search(r"(?m)^\s*solvers\s*\{",solution) is not None,
