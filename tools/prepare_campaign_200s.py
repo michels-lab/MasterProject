@@ -84,6 +84,19 @@ def mesh_hashes(case):
 def bytes_tree(p):
     return sum(x.stat().st_size for x in p.rglob("*") if x.is_file() and not x.is_symlink()) if p.is_dir() else 0
 def estimate(g,case):
+    if g=="3DA":
+        # Estimate from the actual A geometry/full diagnostic reference only.
+        a=BASELINES["3DA"]
+        need((a/"10/metal/T").is_file() and (a/"postProcessing/metal/temperatureProbe").is_dir(),"faithful A 10s baseline required")
+        per=max(bytes_tree(a/t) for t in ("0.1","5","10"))
+        pp=bytes_tree(a/"postProcessing")
+        log=bytes_tree(a/"logs")+(a/"log.foamMultiRun").stat().st_size
+        need(per>0 and pp>0 and log>0,"missing actual A storage baseline")
+        field_bytes=per*len(TIMES)
+        diag_bytes=20*(pp+log)
+        return {"cells":CELLS[g],"field_estimate_bytes":field_bytes,"diagnostic_estimate_bytes":diag_bytes,
+                "projected_bytes_with_50pct_margin":math.ceil(1.5*(field_bytes+diag_bytes)),
+                "method":"A faithful actual maximum sampled snapshot size; 2001 states and 20x postProcessing/logs; 50% margin; not guaranteed bound"}
     # Empirical local 10s runs: maximum saved-state size per cell, plus logs and
     # all postProcessing. A faithful run is the required full diagnostics proxy.
     a,b=BASELINES["3DA"],BASELINES["3DB"]
@@ -236,7 +249,7 @@ def audit(case,report):
     counts["topFlow_positive_saved_times"]=len(top_times)
     if len(top_times)!=2000:errors.append("topFlow positive saved-time coverage")
     return {"counts":counts,"errors":errors,"native_runtime_coverage_complete":not errors}
-def execute(case):
+def execute(case,*,offline=True):
     r=json.loads((case/REPORT).read_text())
     need(r["status"]=="PREPARED_NOT_RUN" and not (case/"log.foamMultiRun").exists(),"case already attempted; do not overwrite")
     need(all(sha(case/p)==h for p,h in r["input_sha256"].items()),"prepared inputs changed")
@@ -273,10 +286,11 @@ def execute(case):
         # Original native runtime outputs first; offline momentum/topSurface products
         # are separate from solver acceptance and may be unavailable.
         r["runtime_audit"]=audit(case,r)
-        r["optional_offline_postprocessing"]={"momentum":"pending","topSurfaceFlow":"pending"}
+        r["optional_offline_postprocessing"]={"momentum":"pending","topSurfaceFlow":"pending"} if offline else {"status":"not requested; native runtime diagnostics preserved"}
         for key,dct,fields in (
           ("momentum",case/"system/momentumPostProcessing","(phaseChangeSolidFraction phaseChangeDarcyCoeff phaseChangeModelDeltaT phaseChangeDarcyAcceleration phaseChangeBuoyancyAcceleration pRghAcceleration magPhaseChangeDarcyAcceleration magPhaseChangeBuoyancyAcceleration magPRghAcceleration phaseChangeDragToBuoyancy phaseChangeDragToPressure)"),
           ("topSurfaceFlow",case/"system/topSurfaceFlowPostProcessing","(U T p_rgh rho phi phaseChangeSource:alpha1)")):
+            if not offline:break
             try:
                 run_cmd(case,"log.campaign."+key,["foamPostProcess","-region","metal","-dict",str(dct),"-time","0.1:200","-fields",fields])
                 r["optional_offline_postprocessing"][key]="process completed; output coverage not certified"
@@ -286,15 +300,99 @@ def execute(case):
         r["status"]="SOLVER_COMPLETE_AUDIT_BLOCKED" if r["solver_completed"] else "RUN_INCOMPLETE_PRESERVED"
         r["error"]=str(e);raise
     finally:write_json(case/REPORT,r)
+def a_reference():
+    ref=BASELINES["3DA"]
+    r=json.loads((ref/runtime.REPORT).read_text())
+    need(r["status"]=="FAITHFUL_C14_RUNTIME_READY" and r["solver_completed"] and r["native_diagnostic_parity"],"accepted faithful 10s reference required")
+    need(sha(ref/"log.foamMultiRun")==r["solver"]["log_sha256"],"reference solver log drift")
+    for rel,h in r["input_sha256"].items():
+        need(sha(ref/rel)==h,"reference inputs changed "+rel)
+    need((ref/"system/controlDict").read_bytes()==(src("C14")/"system/controlDict").read_bytes(),"reference controlDict not original C14")
+    return ref,r
+
+def a_expected_control(ref):
+    old=(ref/"system/controlDict").read_bytes()
+    new,n=re.subn(rb"(?m)^([ \t]*endTime[ \t]+)10([ \t]*;)",rb"\g<1>200\2",old)
+    need(n==1,"reference endTime not 10")
+    return new
+
+def a_fidelity(case,ref,r):
+    need(mesh_hashes(case)==mesh_hashes(ref),"A mesh differs from faithful 10s reference")
+    need((case/"system/controlDict").read_bytes()==a_expected_control(ref),"only endTime 10->200 is allowed")
+    for rel,h in r["input_sha256"].items():
+        if rel=="system/controlDict":continue
+        need((case/rel).is_file() and sha(case/rel)==h,"A physical or diagnostic input drift "+rel)
+
+def prepare_a_priority(case,ref,r):
+    need(not case.exists() and not case.is_symlink(),"existing A case preserved")
+    sa.stage(sa.SOURCE,case,smoke=False)
+    # Use the exact proven 10s runtime dictionaries, no new spatial mapping.
+    for name in ("functions","researchDiagnostics","lineProfiles","additional3DProfiles"):
+        shutil.copy2(ref/"system"/name,case/"system"/name)
+    edit_end(case/"system/controlDict")
+    a_fidelity(case,ref,r)
+    for rel in ("system/controlDict","system/functions"):
+        run_cmd(case,"log.campaign.parse."+rel.replace("/","."),["foamDictionary",str(case/rel)])
+    tracked={str(p.relative_to(case)):sha(p) for d in ("0","constant","system") for p in (case/d).rglob("*") if p.is_file()}
+    result={"status":"PREPARED_NOT_RUN","case":"C14-3DA-200s","formulation":"C14","geometry":"3DA",
+            "purpose":"solidification","source_sha256":source_files(src("C14")),"input_sha256":tracked,
+            "mesh_sha256":mesh_hashes(case),"sampling":r["sampling"],"end_s":200,"dt_s":.001,"saved_dt_s":.1,
+            "solver_completed":False,"physical_validation":False,
+            "reference_10s_log_sha256":r["solver"]["log_sha256"],"only_control_change":"endTime 10 -> 200",
+            "disk_projection":estimate("3DA",case)}
+    write_json(case/REPORT,result)
+    (case/"C14-3DA-200s.foam").touch(exist_ok=False)
+    return result
+
+def priority_a(root):
+    # Share the campaign lock even if only A is prepared. Never create or run
+    # B14, 2D, 3DB or FS variants from this entrypoint.
+    root.mkdir(exist_ok=True)
+    with (root/".execution.lock").open("a") as lock:
+        try:fcntl.flock(lock,fcntl.LOCK_EX|fcntl.LOCK_NB)
+        except BlockingIOError:raise ValueError("another campaign run holds the disk reservation; no concurrent A")
+        ref,reference=a_reference()
+        case=root/"C14-3DA-200s"
+        need(not case.is_symlink(),"unsafe A destination")
+        if not case.exists():
+            report=prepare_a_priority(case,ref,reference)
+        else:
+            need((case/REPORT).is_file(),"existing incomplete A preparation preserved")
+            report=json.loads((case/REPORT).read_text())
+        need(report["case"]=="C14-3DA-200s" and report["geometry"]=="3DA" and report["formulation"]=="C14","wrong prepared case")
+        a_fidelity(case,ref,reference)
+        need(report["sampling"]==reference["sampling"] or report["sampling"].get("probe_xyz_m")==reference["sampling"]["probe_xyz_m"],"sampling provenance differs")
+        if report.get("solver_completed"):
+            print(json.dumps({"status":report["status"],"case":str(case),"existing_completed_solver_preserved":True,
+                              "solver_steps":report.get("solver_steps"),"final_time_s":report.get("final_time_s"),
+                              "runtime_audit":report.get("runtime_audit")},indent=2));return
+        need(report["status"]=="PREPARED_NOT_RUN","existing attempted/incomplete A run preserved")
+        projection=estimate("3DA",case)
+        print(json.dumps({"case":str(case),"reference":str(ref),"projection":projection,
+                          "free_bytes":shutil.disk_usage(case).free,"reserve_bytes":10*1024**3},indent=2),flush=True)
+        execute(case,offline=False)
+        # Check reference's original input/log identity again.
+        a_reference()
+        a_fidelity(case,ref,reference)
+        result=json.loads((case/REPORT).read_text())
+        print(json.dumps({"status":result["status"],"case":str(case),"solver_steps":result.get("solver_steps"),
+                          "final_time_s":result.get("final_time_s"),"runtime_audit":result.get("runtime_audit"),
+                          "reference_inputs_and_log_unchanged":True},indent=2),flush=True)
+        if result["status"]!="SOLVER_COMPLETE_NATIVE_DIAGNOSTICS_AUDITED":sys.exit(3)
+
 def main():
     ap=argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--root",type=Path,default=HOME/"CAMPAIGN_200S_01")
-    ap.add_argument("--run",choices=CASES,help="explicitly run one already prepared case")
+    mode=ap.add_mutually_exclusive_group()
+    mode.add_argument("--run",choices=CASES,help="explicitly run one already prepared case")
+    mode.add_argument("--prepare-run",choices=("C14-3DA-200s",),help="prepare/run only priority C14 A, reuse matching prepared case")
     args=ap.parse_args()
     need(os.environ.get("WM_PROJECT_VERSION")=="14","source Foundation14 environment")
     root=args.root.expanduser().absolute()
     need(root.parent.resolve()==HOME.resolve() and not root.is_symlink(),"isolated campaign sibling under ~/OpenFOAM required")
     need(not root.exists() or root.is_dir(),"invalid campaign root")
+    if args.prepare_run:
+        priority_a(root);return
     if args.run:
         need(root.is_dir(),"campaign not prepared")
         with (root/".execution.lock").open("a") as lock:
