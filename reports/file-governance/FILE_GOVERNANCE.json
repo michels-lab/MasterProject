@@ -29,8 +29,8 @@
     "POTENTIAL_UNLOGGED_CHANGES": 2
   },
   "finding_total": 9,
-  "inventory_fingerprint": "855cde15f660aed73c3f50bb3c569fee37bd6a6774c30c879cfd8eb8f5a01d5d",
-  "evidence_fingerprint": "e616841240ebc711de1f31a299c6964dc3adfa087b9afba4f7629fa27422ce6f",
+  "inventory_fingerprint": "28c93a12504300609878e1feb3c283b84703c39fbe0b4a5d54ea70b8be1febed",
+  "evidence_fingerprint": "5693c6370a40c392fc4e688c11bbb3fe5bd3fd10e4a909c3e85ea58dc76eb99c",
   "files": [
     {
       "path": ".github/agents/openfoam-solidification.agent.md",
@@ -408,7 +408,7 @@
       "role": "bitacora",
       "purpose": "technical/audit change history",
       "certainty": "rule",
-      "blob": "9b8efa46d7e5f07f98d0383cec026478e6e4ef9e"
+      "blob": "f7cb4954f7ca12d7a10e638307d7c361e4054e42"
     },
     {
       "path": "README.md",
@@ -2053,7 +2053,7 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "a704aa2cf0b8ddd6a69a651016549ef1b3950160"
+      "blob": "2dd8f6b622b32c19babb259d0eb9577c48c63fa2"
     },
     {
       "path": "cases_3d/C3D_05_step_gmsh_conformal/c14_physics/analyze_existing_case_b_c14.py",
@@ -272547,7 +272547,7 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "68fbade30022225da1b14a9d8446794f29ee759c"
+      "blob": "7f35fd033a113a1fe4a54c14871f8d7a1ff15224"
     },
     {
       "path": "docs/DOCUMENT_SYNC_20261110_ES.md",
@@ -272596,7 +272596,7 @@
       "role": "config",
       "purpose": "machine-readable configuration",
       "certainty": "rule",
-      "blob": "3b25b6052c7d5759f1d00f1efef6226fdc85db47"
+      "blob": "b42479421dff949c6a70a420f0248866afc8b349"
     },
     {
       "path": "docs/REGLA_INSTRUCCIONES_UNIFICADAS_ES.md",
@@ -273590,11 +273590,11 @@
       "state": "REVIEW_REQUIRED"
     },
     {
-      "id": "2fc0aef01fc2b087",
+      "id": "b7e85c814cfe1fac",
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_ES.md",
-      "observation": "3 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_05_step_gmsh_conformal/c14_physics/quantify_existing_case_b_c14_mold_and_combined_inventory.py, cases_3d/C3D_05_step_gmsh_conformal/c14_physics/tests/test_existing_case_b_c14_mold_and_combined_inventory.py, docs/PROJECT_STAGE_STATUS.json",
+      "observation": "1 implementation/config paths changed since this log's last commit; examples: docs/PROJECT_STAGE_STATUS.json",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     }
