@@ -1,6 +1,10 @@
 # FS-C08: puente de campos nativos Foundation 14 — primera integración `wmake`
 
 
+> **24-11-2026 — SEGUNDO FALLO NATIVO CONFIRMADO Y CORREGIDO EN FUENTE:** el usuario recompiló desde `1f29553b4` y Foundation14 informó `fsC08NativeInventory.C:131:12: error: 'setprecision' was not declared in this scope`. El código anterior cambiaba `Info.precision(16)` a `Info<<setprecision(16)`, pero faltaba **`#include "IOmanip.H"`**. Se contrastó con `OpenFOAM-14/src/OpenFOAM/db/IOstreams/IOstreams/IOmanip.H`, donde se define `Foam::setprecision`, y con `applications/utilities/surface/surfaceInertia/surfaceInertia.C`, que incluye el mismo encabezado. **Se agregó el include y un test de regresión.** El nuevo parche no se ha recompilado todavía en WSL. Se conservó el log de la segunda compilación en `~/OpenFOAM/FS_C08_DIAGNOSTICS/FS_C08_NATIVE_FIELD_BRIDGE_20261124T073116Z_29ebf5fc/wmake.log`. No se ejecutó CFD ni se aceptó contracción física.
+
+
+
 > **24-11-2026 — PRIMER `wmake` REAL INTENTADO EN WSL: FALLÓ CON EXIT CODE 2.** El log original sigue en `~/OpenFOAM/FS_C08_DIAGNOSTICS/FS_C08_NATIVE_FIELD_BRIDGE_20261124T071423Z_f2a418bf/wmake.log` y **todavía no se compartió su contenido**; el número 2 no permite inferir cuál línea de C++ falló. `fsC08NativeInventory` no alcanzó a leer FS-C07. Se sustituyó `Info.precision(16)` por el manipulador `Info<<setprecision(16)` usado en herramientas oficiales de Foundation14 y se mejoró el runner para extraer las primeras líneas de error del compilador, pero **no se afirma que estas correcciones resuelvan el error que aún no conocemos**.
 >
 > Para leer el error **sin recompilar**:
