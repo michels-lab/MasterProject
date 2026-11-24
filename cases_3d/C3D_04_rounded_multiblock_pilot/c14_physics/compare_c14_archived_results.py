@@ -144,7 +144,7 @@ def execute(ref,vis,sweeps,out):
     qr=readcsv(p3[4]);q={(float(r["time_s"]),r["region"],r["patch"]):r for r in qr}
     need(len(q)==808,"unexpected 3D patch records")
     # Match volume to original accepted A geometry, already audited in WSL.
-    V3=.000047921447006662436
+    V3=.000047921447006662436  # audited native V4/T02 metal volume; scope restricted by visual report and area check
     A3=number(q[(0.0,"metal","metal_to_mold")]["area_m2"])
     At3=number(q[(0.0,"metal","metalTop")]["area_m2"])
     need(abs(A3-.006343771874)<1e-8,"wrong 3D interface area")
@@ -222,6 +222,7 @@ def execute(ref,vis,sweeps,out):
                           "first_below_Tliq_3D_interval_s":first_change(rr,"T_K_3D",1473),
                           "final":rr[-1]})
     need(summaries[1]["T_metrics"]["n"]>=2,"no common central curve")
+    need(all(any(r["station"]==station and r["variable"]=="T_K" and r["n"]>=2 for r in pm) for station in ("horizontal10","horizontal20","horizontal30","vertical")),"missing common spatial support")
     out.parent.mkdir(parents=True,exist_ok=True)
     temp=Path(tempfile.mkdtemp(prefix=".C14_compare_",dir=out.parent))
     try:
@@ -238,6 +239,7 @@ def execute(ref,vis,sweeps,out):
                           "2D center 20 mm uses native probe; other center data interpolated from archived line profiles; 3D uses cellPoint line center",
                           "3D diameters interpolated only between neighboring valid 0.5 mm samples, no extrapolation",
                           "rotated diameters compare scalar quantities, not global vector components",
+                          "2D flux t=0 is zero as archived; no initial-flux equivalence or energy integration claimed",
                           "different geometry, no grid independence or validation claim"],
                 "solver_rerun":False,"native_sampling_rerun":False,"grid_independence_verified":False,"quickcup_validated":False}
         (temp/"C14_ARCHIVED_COMPARISON_REPORT.json").write_text(json.dumps(report,indent=2)+"\n")
