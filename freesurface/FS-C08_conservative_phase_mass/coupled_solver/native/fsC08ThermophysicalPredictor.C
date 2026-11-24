@@ -58,7 +58,7 @@ void Foam::solvers::fsC08ConservativeVoF::thermophysicalPredictor()
     const auto& ml=phaseMass_->liquidMass().primitiveField();
     const auto& ms=phaseMass_->solidMass().primitiveField();
     auto& cv=cvMetal.primitiveFieldRef();
-    const scalar cvS=phaseMass_->cpSolid().value();
+    const scalar cvS=phaseMass_->cvSolid().value();
     forAll(cv,celli)
     {
         const scalar M=ml[celli]+ms[celli];
