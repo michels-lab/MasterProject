@@ -1,6 +1,17 @@
 # FS-C08: puente de campos nativos Foundation 14 — primera integración `wmake`
 
 
+> **24-11-2026 — PRIMER `wmake` REAL INTENTADO EN WSL: FALLÓ CON EXIT CODE 2.** El log original sigue en `~/OpenFOAM/FS_C08_DIAGNOSTICS/FS_C08_NATIVE_FIELD_BRIDGE_20261124T071423Z_f2a418bf/wmake.log` y **todavía no se compartió su contenido**; el número 2 no permite inferir cuál línea de C++ falló. `fsC08NativeInventory` no alcanzó a leer FS-C07. Se sustituyó `Info.precision(16)` por el manipulador `Info<<setprecision(16)` usado en herramientas oficiales de Foundation14 y se mejoró el runner para extraer las primeras líneas de error del compilador, pero **no se afirma que estas correcciones resuelvan el error que aún no conocemos**.
+>
+> Para leer el error **sin recompilar**:
+> ```bash
+> tail -n 80 ~/OpenFOAM/FS_C08_DIAGNOSTICS/FS_C08_NATIVE_FIELD_BRIDGE_20261124T071423Z_f2a418bf/wmake.log
+> ```
+>
+> Al actualizar al nuevo commit y volver a ejecutar `analysis_tools/run_fs_c08_native_bridge.py`, cualquier fallo `wmake` imprimirá líneas concretas del compilador en terminal y conservará el log. Continúan verificados en WSL **18/18 Python y C++17 independiente**, NO el puente `wmake`, ni la masa/energía/presión acopladas de la CFD.
+
+
+
 ## Ejecución recomendada: un solo comando de diagnóstico
 
 El worktree `FS_C08_WORKTREE` **ya fue creado y comprobado por el investigador en WSL**, por lo que **NO vuelvas a ejecutar `git worktree add`**. Actualiza el mismo árbol:
