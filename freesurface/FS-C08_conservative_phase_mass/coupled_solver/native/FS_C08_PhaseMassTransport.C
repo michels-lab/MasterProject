@@ -32,7 +32,23 @@ PhaseMassTransport::PhaseMassTransport
     ),
     tauPhaseChangeT_(),
     latentHeat_(dimensionedScalar("latentHeat",dimEnergy/dimMass,material_)),
-    cvSolid_(dimensionedScalar("cvSolid",dimEnergy/dimMass/dimTemperature,material_)),
+    energyReferenceT_K_(material_.lookup<scalar>("energyReferenceT_K")),
+    cvLiquidT_
+    (
+        Function1<scalar>::New
+        (
+            "cvLiquidT",dimTemperature,dimEnergy/dimMass/dimTemperature,
+            material_
+        )
+    ),
+    cvSolidT_
+    (
+        Function1<scalar>::New
+        (
+            "cvSolidT",dimTemperature,dimEnergy/dimMass/dimTemperature,
+            material_
+        )
+    ),
     mushyDarcyCu_
     (
         dimensionedScalar("mushyDarcyCu",dimless/dimTime,material_)
@@ -120,7 +136,9 @@ PhaseMassTransport::PhaseMassTransport
         || !std::isfinite(metalPresenceThreshold_)
         || metalPresenceThreshold_<=0 || metalPresenceThreshold_>=0.5
         || !std::isfinite(latentHeat_.value()) || latentHeat_.value()<=0
-        || !std::isfinite(cvSolid_.value()) || cvSolid_.value()<=0
+        || !std::isfinite(energyReferenceT_K_)
+        || energyReferenceT_K_<Tmin_K_
+        || energyReferenceT_K_>Tmax_K_
         || !std::isfinite(mushyDarcyCu_.value())
         || mushyDarcyCu_.value()<=0
         || !std::isfinite(mushyDarcyQ_)
@@ -131,6 +149,29 @@ PhaseMassTransport::PhaseMassTransport
           << "range and relaxation in (0,1]. Synthetic fixture refused."
           << exit(FatalError);
     }
+    // Thermodynamic Cv(T) is a sourced material function, NOT a
+    // numerical coefficient. Check the entire supported domain with
+    // a minimum grid of 257 samples to catch negative/NaN input.
+    for (label j=0;j<=256;++j)
+    {
+        const scalar temp=
+            Tmin_K_+(Tmax_K_-Tmin_K_)*scalar(j)/scalar(256);
+        if
+        (
+            !std::isfinite(cvLiquidT_->value(temp))
+         || !std::isfinite(cvSolidT_->value(temp))
+         || cvLiquidT_->value(temp)<=0
+         || cvSolidT_->value(temp)<=0
+        )
+        {
+            FatalErrorInFunction
+                << "FS-C08 liquid/solid Cv(T) must remain finite and "
+                << "strictly positive across the sourced alloy range."
+                << " Bad T=" << temp << " K."
+                << exit(FatalError);
+        }
+    }
+
     // Never reinitialize a partially restored physical inventory.
     // A single saved rhoAlpha field is not a meaningful restart.
     const bool liquidSaved=
@@ -524,4 +565,45 @@ void PhaseMassTransport::solve
         << " gammaMax=" << max(Gamma_).value()
         << " pressure/energy NOT YET linked" << nl;
 }
+
+scalar PhaseMassTransport::liquidCv(const scalar T) const
+{
+    if (!std::isfinite(T) || T<Tmin_K_ || T>Tmax_K_)
+        FatalErrorInFunction
+            << "FS-C08 liquid Cv requested outside sourced T range: "
+            << T << exit(FatalError);
+    return cvLiquidT_->value(T);
+}
+
+scalar PhaseMassTransport::solidCv(const scalar T) const
+{
+    if (!std::isfinite(T) || T<Tmin_K_ || T>Tmax_K_)
+        FatalErrorInFunction
+            << "FS-C08 solid Cv requested outside sourced T range: "
+            << T << exit(FatalError);
+    return cvSolidT_->value(T);
+}
+
+scalar PhaseMassTransport::liquidInternalEnergy(const scalar T) const
+{
+    if (!std::isfinite(T) || T<Tmin_K_ || T>Tmax_K_)
+        FatalErrorInFunction
+            << "FS-C08 liquid u(T) outside tabulated T range: "
+            << T << exit(FatalError);
+
+    // At Tref, u_l-u_s=latentHeat. This is the ONLY latent offset.
+    return latentHeat_.value()
+         + cvLiquidT_->integral(energyReferenceT_K_,T);
+}
+
+scalar PhaseMassTransport::solidInternalEnergy(const scalar T) const
+{
+    if (!std::isfinite(T) || T<Tmin_K_ || T>Tmax_K_)
+        FatalErrorInFunction
+            << "FS-C08 solid u(T) outside tabulated T range: "
+            << T << exit(FatalError);
+
+    return cvSolidT_->integral(energyReferenceT_K_,T);
+}
+
 }} // Foam::fsC08
