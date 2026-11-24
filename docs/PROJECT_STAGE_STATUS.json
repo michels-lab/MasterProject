@@ -546,7 +546,21 @@
     "case_b_c14_saved_sample_q_external_trapezoid_0_5s_J": 1315.8423511587207,
     "case_b_c14_saved_sample_q_external_trapezoid_1_0s_J": 1284.1978120372619,
     "case_b_c14_saved_sample_q_1s_minus_0_1s_J": -57.31009498398362,
-    "case_b_c14_saved_sample_q_subsampling_error_vs_solver_dt_known": false
+    "case_b_c14_saved_sample_q_subsampling_error_vs_solver_dt_known": false,
+    "case_b_c14_real_C14_native_rho_phi_mass_source_committed": true,
+    "case_b_c14_real_C14_native_rho_phi_mass_source": "cases_3d/C3D_05_step_gmsh_conformal/c14_physics/analyze_existing_case_b_c14_metal_mass_phi.py",
+    "case_b_c14_real_C14_native_rho_phi_mass_tests_source_committed": true,
+    "case_b_c14_real_C14_native_rho_phi_mass_tests_source_count": 11,
+    "case_b_c14_real_C14_native_rho_phi_mass_tests_WSL_executed": false,
+    "case_b_c14_real_C14_native_rho_phi_mass_output_expected": "~/OpenFOAM/C3D05_B_C14_NATIVE_RHO_PHI_MASS_01",
+    "case_b_c14_real_C14_native_rho_phi_mass_WSL_executed": false,
+    "case_b_c14_real_C14_native_rho_phi_mass_volume_weighted_density_real": false,
+    "case_b_c14_real_C14_native_rho_phi_mass_flux_kg_s_real": false,
+    "case_b_c14_real_C14_native_rho_phi_mass_source_original_cases_read_only": true,
+    "case_b_c14_real_C14_native_rho_phi_mass_delta_t0_not_fabricated": true,
+    "case_b_c14_real_C14_native_rho_phi_mass_modelled_phase_complement_only": true,
+    "case_b_c14_real_C14_native_rho_phi_mass_full_conservation_verified": false,
+    "case_b_c14_real_C14_native_rho_phi_mass_no_fvModels_energy_source_integrated": true
   },
   "other_cases": [
     {
@@ -586,7 +600,7 @@
       "evidence": "docs/granada/C3D05_B_C14_WSL_EJECUCION_REAL_EN_CURSO_20261123_ES.md"
     }
   ],
-  "blocker": "Case B C3D05 F14 actual 10s 101 original saved stages, q(t) and 101-state metal+mold thermal reference join complete: 14 q + 12 join + NOW 9/9 energy readiness QA PASS on real WSL. Readiness actual ORIGINAL fields: metal T,U,p,p_rgh,alpha1 101/101 each; metal rho and phi 100/101 each (no t0), metal h/he 0/101; mold T 101/101 but e/he/rho 0/101. Cannot directly read native h/e history or t0 rho/phi from archived data; do not fabricate them. Source C14 h-based fvModels declared, NOT native solver source integral. Region partial ΔEref+q for metal=-181.048491J, mold=+169.496914J, global exterior-only=-11.436294J, none physically verified conservation residual. Outward q_saved trapezoids 0.1=1341.507907J,0.2=1335.070047J,0.5=1315.842351J,1.0=1284.197812J; coarsening sensitivity NOT error vs true dt=0.001s. Source phi and rho 100 snapshots can support a separate read-only real FLUID mass and boundary flux screening. G3-G7 OPEN, 2/7.",
-  "next_integrated_delivery": "Use original actual saved fluid rho and surface phi (100 snapshots, 0.1..10 s), original HEX8 real per-cell volumes and alpha1 fields to audit metal mass inventory/flow, rho-weighted modeled solid complement and h-based source closure readiness. Missing t0 rho/phi and missing all h/e must remain explicitly unobserved, not replaced by guesses. Review phi dimensions [kg/s] and metalTop/contact patch values; if unsupported binary or missing phi boundary serialization, mark unavailable, do not invent. Then inspect F14 solver discretization and source energy integral requirements. No foamMultiRun/wmake or altering CFD, q or existing archives.",
+  "blocker": "Case B F14 original 10s/101 saved states, 14/14 native q tests, 12/12 q-storage joined tests and now 9/9 real energy-terms readiness tests PASS in user WSL. Genuine archived T,U,p,p_rgh,alpha1=101/101 each; rho,phi metal=100/101 (missing identity confirmed only by readiness report, no t0 values guessed), metal h/he and mold e/he/rho zero. Saved exterior q trapezoids 0.1/0.2/0.5/1s = 1341.507907/1335.070047/1315.842351/1284.197812 J; not solver dt error. Reference combined -1352.944201J, outside-only comparison -11.436294J NOT energy residual. NEW source-only native rho/phi 100-snapshot mass/phase/phi parser and 11 tests staged; values unobserved. Lack of direct h/e or native fvModels energy-source integral, advection/work, radiation/convection, solver-step time integral and material validation still blocks G3-G7 (2/7).",
+  "next_integrated_delivery": "New genuine Case B C14 native 100-state rho/phi mass and rho-weighted modeled alpha1 source-only analyzer +11 QA tests have been COMMITTED but NEVER EXECUTED on WSL. User should git pull then run -m unittest discover -p test_existing_case_b_c14_metal_mass_phi.py -v and analyze_existing_case_b_c14_metal_mass_phi.py. It independently SHA-qualifies original C14 CFD and prior 101-time q/storage analysis, reconstructs real HEX8 cell V, analyzes actually archived rho fields 100/101, parses phi as outward kg/s ONLY with unit and patch face gates, screens saved-time mass continuity as NOT conservation, never invents missing t0, never edits old output. If phi serialization unsupported, record unavailable (not zero). Native h/e and fvModel energy source remain unarchived/unverified; no scientific gate promotion.",
   "science": "CASE_B_F14_REAL_101_STATE_ENERGY_READINESS_WSL_9of9_PASS_SOURCE_H_E_NONE_METAL_RHO_PHI_100_NATIVE_SAVED_Q_SAMPLING_COARSE_SENSITIVITY_NOT_SOLVER_DT_ERROR"
 }
