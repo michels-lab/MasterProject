@@ -244,6 +244,68 @@ void Foam::solvers::fsC08ConservativeVoF::thermophysicalPredictor()
           + alphaRhoPhi2*fvc::interpolate(mixture_.thermo2().he())
         );
 
+        // Native thermal transport still uses a ONE-PHASE metal k(T).
+        // Replace its MOLECULAR metal contribution with real
+        // alpha_liquid*k_liquid(T) + alpha_solid*k_solid(T).
+        // Preserve the gas molecular transport and upstream turbulent
+        // enhancement. Turbulence in the coherent solid requires
+        // subsequent closure (not silently called validated).
+        volScalarField kappaFsC08
+        (
+            "kappaEffective.fsC08",
+            thermophysicalTransport.kappaEff()
+        );
+        const tmp<volScalarField> tNativeMetalK=
+            mixture_.thermo1().kappa();
+        const auto& nativeK=tNativeMetalK().primitiveField();
+        const auto& aL=phaseMass_->alphaLiquid().primitiveField();
+        const auto& aS=phaseMass_->alphaSolid().primitiveField();
+        auto& keff=kappaFsC08.primitiveFieldRef();
+        forAll(keff,i)
+        {
+            if (aL[i]+aS[i]>0)
+            {
+                keff[i]+=
+                    aL[i]*phaseMass_->liquidKappa(temp[i])
+                  + aS[i]*phaseMass_->solidKappa(temp[i])
+                  - (aL[i]+aS[i])*nativeK[i];
+            }
+            if (!std::isfinite(keff[i]) || keff[i]<=0)
+                FatalErrorInFunction
+                    << "FS-C08 nonpositive phase-specific effective "
+                    << "conductivity at cell " << i << exit(FatalError);
+        }
+
+        // Correct metal conductivity on the REAL mold interface BCs,
+        // not only internal cells. This affects CHT heat extraction.
+        forAll(kappaFsC08.boundaryField(),patchi)
+        {
+            auto& kPatch=kappaFsC08.boundaryFieldRef()[patchi];
+            const auto& Tpatch=T.boundaryField()[patchi];
+            const auto& lPatch=
+                phaseMass_->alphaLiquid().boundaryField()[patchi];
+            const auto& sPatch=
+                phaseMass_->alphaSolid().boundaryField()[patchi];
+            const auto& oldK=tNativeMetalK().boundaryField()[patchi];
+            forAll(kPatch,facei)
+            {
+                if (lPatch[facei]+sPatch[facei]>0)
+                {
+                    kPatch[facei]+=
+                        lPatch[facei]
+                           *phaseMass_->liquidKappa(Tpatch[facei])
+                      + sPatch[facei]
+                           *phaseMass_->solidKappa(Tpatch[facei])
+                      - (lPatch[facei]+sPatch[facei])*oldK[facei];
+                }
+                if (!std::isfinite(kPatch[facei]) || kPatch[facei]<=0)
+                    FatalErrorInFunction
+                        << "FS-C08 invalid mold-interface kappa on patch "
+                        << patchi << ", face " << facei
+                        << exit(FatalError);
+            }
+        }
+
         const scalarField T_before(T.primitiveField());
 
         // Newton/Picard linearisation of E(T):
@@ -255,7 +317,7 @@ void Foam::solvers::fsC08ConservativeVoF::thermophysicalPredictor()
         fvScalarMatrix TEqn
         (
             fvm::Sp(CVvol/runTime.deltaT(),T)
-          - fvm::laplacian(thermophysicalTransport.kappaEff(),T)
+          - fvm::laplacian(kappaFsC08,T)
           + (
                 fvc::div(fvc::absolute(phi,U),p)()()
               + (fvc::ddt(rho,K)+fvc::div(rhoPhi,K))()()
