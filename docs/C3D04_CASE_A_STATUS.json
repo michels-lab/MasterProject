@@ -492,7 +492,12 @@
       "other_worktrees_modified": false,
       "synthetic_F14_CI_run": "https://github.com/michels-lab/MasterProject/actions/runs/45263380861",
       "synthetic_3_native_energy_surface_tables_verified": true,
-      "synthetic_solving_is_not_thesis_validation": true
+      "synthetic_solving_is_not_thesis_validation": true,
+      "solver_backed_02_reported_pass_but_fatal_present": true,
+      "verified_actual_missing_metal_zone_in_existing_copy_02": true,
+      "fresh_copy_metal_zone_fix_source": "stage_c14_3d_case_a.whole_region_zone(n) + audit_existing_zone + region_cells expected 8960",
+      "new_isolated_copy_proposal": "~/OpenFOAM/C3D04_A_C14_SOLVER_BACKED_POSTPROCESS_03",
+      "real_WSL_new_copy_03_executed": false
     },
     "status": "REAL_F14_RHO_MISSING_CAUSE_OBSERVED__ISOLATED_SOLVER_BACKED_RECOVERY_CODE_PENDING_REAL_WSL"
   },
@@ -506,9 +511,45 @@
     "source_CFD_modified_by_this_invocation": false,
     "native_postprocess_executed_by_this_invocation": false,
     "cause": "Workcopy output path exists; prior copy completion/partial/active state remains unobserved",
-    "existing_02_contents_verified": false,
-    "next_tool": "run_c14_stage07_solver_backed_recovery.py updated to inspect occupied workcopy and verify existing report, six native step logs and SHA provenance READ ONLY; does not rerun on occupied _02",
+    "existing_02_contents_verified": true,
+    "next_tool": "Fix merged to main: classify semantic FOAM FATAL even rc=0; require exact metal 8960 all-cell zone and materialize only in NEW --out _03, preserving _02. Summarize real 100/101 saved-energy rows and 80pt profiles with no fabricated t0.",
     "stage07_complete": false,
-    "science_progress_unchanged_60_percent": true
+    "science_progress_unchanged_60_percent": true,
+    "latest_real_WSL_evidence": {
+      "source": "Investigator-provided full output of existing _02 read-only inspector, 2026-11-23",
+      "status": "EXISTING_COMPLETE_NATIVE_POSTPROCESS_REPORT_REUSED_NO_NEW_RUN",
+      "final_report_authentic_SHA_verified": true,
+      "source_controlDict_SHA_matched": true,
+      "source_10s_solver_log_SHA_matched": true,
+      "all_six_subprocess_reports_exist": true,
+      "original_report_claimed_groups_passed": [
+        "core",
+        "energy",
+        "phase",
+        "flow",
+        "profiles",
+        "momentum"
+      ],
+      "scientific_acceptance_of_all_groups": false,
+      "native_F14_FOAM_FATAL_IO_ERROR_in": [
+        "core",
+        "energy",
+        "flow",
+        "momentum"
+      ],
+      "exact_fatal": "Cannot find cellZone metal; Available cellZones: 0()",
+      "metal_fvModel_source": "constant/metal/fvModels!phaseChangeSource/cellZone at line 23",
+      "only_no_fatal_markers_seen": [
+        "phase",
+        "profiles"
+      ],
+      "phase_native_final_liquid_fraction_volAverage": 0.897245,
+      "primitive_profiles_actual_80_point_validation_verified": false,
+      "energy_surface_power_status": "NATIVE_SURFACE_POWER_TABLES_MISSING_OR_INCOMPATIBLE",
+      "energy_reason": "C14_NATIVE_ENERGY_BALANCE_BLOCKED: need 101 native saved time rows",
+      "energy_conservation_verified": false,
+      "all_results_are_postprocessing_of_existing_10s_CFD": true,
+      "original_case_and_02_modified_by_readonly_inspector": false
+    }
   }
 }
