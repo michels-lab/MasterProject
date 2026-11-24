@@ -183,11 +183,15 @@ def analyze(case,sets,area,out,grid):
         cmp.csvwrite(out/name,rows)
     # Do not certify fully sampled lines at their requested outer endpoints;
     # those may lie outside the curved metal, and nulls are intentional.
+    counts_by_line_time={}
+    for row in diameter+vertical:
+        if row["T_K"] is not None:
+            k=(row["line"],row["time_s"])
+            counts_by_line_time[k]=counts_by_line_time.get(k,0)+1
     coverage={}
     for name,s in sets.items():
         if s["kind"]=="section":continue
-        rr=diameter if s["kind"]=="diameter" else vertical
-        counts=[sum(r["line"]==name and r["time_s"]==float(t) and r["T_K"] is not None for r in rr) for t in evidence.NAMES]
+        counts=[counts_by_line_time.get((name,float(t)),0) for t in evidence.NAMES]
         coverage[name]={"min_valid_T_points":min(counts),"max_valid_T_points":max(counts),"requested":s["n"]}
         need(min(counts)>=2,"line has no usable support: "+name)
     return diameter,radial,vertical,section,coverage
@@ -242,6 +246,9 @@ def execute(src,out,grid):
     need(g["n"]==8960,"not accepted A mesh")
     sets,area=geometry(g,grid)
     before=recovery.sha(src/"C3D04_A_VISUALIZATION_AND_SOLIDIFICATION_REPORT.json")
+    tracked=[src/t/region/f for t in evidence.NAMES for region,fs in (("metal",tuple(v[0] for v in FIELDS.values())),("mold",("T",))) for f in fs]
+    tracked.extend(p for folder in ("constant","system") for p in (src/folder).rglob("*") if p.is_file())
+    source_hashes={str(p):recovery.sha(p) for p in tracked}
     out.mkdir()
     work=out/"sampling_case"
     report={"status":"INCOMPLETE_PRESERVED","source":str(src),"solver_rerun":False,
@@ -251,7 +258,17 @@ def execute(src,out,grid):
             "angle_135_signed_axis":"negative 135-degree direction so x is increasing; unsigned radial statistics unchanged",
             "geometry":g,"native_sampling_lines":sets,"section_grid_n":grid,"section_point_weight_m2":area}
     try:
-        cmp.copy_case(src,work,evidence.NAMES)
+        work.mkdir()
+        for name in ("constant","system"):
+            shutil.copytree(src/name,work/name)
+        for t in evidence.NAMES:
+            for region,fields in (("metal",tuple(v[0] for v in FIELDS.values())),("mold",("T",))):
+                dst=work/t/region
+                dst.mkdir(parents=True)
+                for field in fields:
+                    p=src/t/region/field
+                    need(p.is_file() and not p.is_symlink(),"missing archived field "+str(p))
+                    shutil.copy2(p,dst/field)
         # Only fresh isolated sample case receives these dictionaries/results.
         dct=work/"system/c14Multidirectional"
         make_dict(dct,sets,FIELDS)
@@ -265,6 +282,7 @@ def execute(src,out,grid):
     except (OSError,ValueError,RuntimeError,KeyError,TypeError) as exc:
         report["error"]=str(exc)
     report["source_report_sha_unchanged"]=recovery.sha(src/"C3D04_A_VISUALIZATION_AND_SOLIDIFICATION_REPORT.json")==before
+    report["source_sampled_fields_and_dictionaries_sha_unchanged"]=all(recovery.sha(Path(p))==h for p,h in source_hashes.items())
     (out/REPORT).write_text(json.dumps(report,indent=2)+"\n",encoding="utf-8")
     return report
 
@@ -278,7 +296,7 @@ def main():
     try:
         r=execute(a.case,a.out,a.grid)
         print(json.dumps({k:v for k,v in r.items() if k!="native_sampling_lines"},indent=2))
-        return 0 if r["status"]=="MULTIDIRECTIONAL_3D_READY" and r["source_report_sha_unchanged"] else 3
+        return 0 if r["status"]=="MULTIDIRECTIONAL_3D_READY" and r["source_report_sha_unchanged"] and r["source_sampled_fields_and_dictionaries_sha_unchanged"] else 3
     except (OSError,ValueError,RuntimeError,KeyError,TypeError) as exc:
         print("C14_MULTIDIRECTIONAL_BLOCKED:",exc,file=sys.stderr)
         return 2
