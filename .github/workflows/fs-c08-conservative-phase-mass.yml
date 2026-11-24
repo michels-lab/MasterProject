@@ -1,4 +1,4 @@
-name: FS-C08 conservative mass, energy, and phase-change prototype (synthetic NO CFD)
+name: FS-C08 native-mesh Gamma network and energy ledger (synthetic NO CFD)
 
 on:
   push:
@@ -11,6 +11,9 @@ on:
       - 'analysis_tools/test_verify_fs_c08_openfoam_inventory.py'
       - 'analysis_tools/run_fs_c08_native_bridge.py'
       - 'analysis_tools/test_run_fs_c08_native_bridge.py'
+      - 'analysis_tools/verify_fs_c08_native_shadow.py'
+      - 'analysis_tools/run_fs_c08_native_shadow.py'
+      - 'analysis_tools/test_fs_c08_native_shadow.py'
       - 'freesurface/FS-C08_conservative_phase_mass/**'
       - '.github/workflows/fs-c08-conservative-phase-mass.yml'
   pull_request:
@@ -21,6 +24,9 @@ on:
       - 'analysis_tools/test_verify_fs_c08_openfoam_inventory.py'
       - 'analysis_tools/run_fs_c08_native_bridge.py'
       - 'analysis_tools/test_run_fs_c08_native_bridge.py'
+      - 'analysis_tools/verify_fs_c08_native_shadow.py'
+      - 'analysis_tools/run_fs_c08_native_shadow.py'
+      - 'analysis_tools/test_fs_c08_native_shadow.py'
       - 'freesurface/FS-C08_conservative_phase_mass/**'
       - '.github/workflows/fs-c08-conservative-phase-mass.yml'
   workflow_dispatch:
@@ -30,7 +36,7 @@ permissions:
 
 jobs:
   fs-c08-conservative-reference:
-    name: Mass/Gamma/enthalpy/pressure diagnostic, NO OpenFOAM CFD
+    name: Real-fvMesh shadow source static contract, native C++17 FV network, NO OpenFOAM CFD
     runs-on: ubuntu-latest
     timeout-minutes: 6
     steps:
@@ -40,16 +46,21 @@ jobs:
           python-version: '3.12'
       - name: Syntax check and eighteen synthetic regression tests
         run: |
-          python3 -B -m py_compile analysis_tools/fs_c08_conservative_reference.py analysis_tools/test_fs_c08_conservative_reference.py analysis_tools/verify_fs_c08_openfoam_inventory.py analysis_tools/test_verify_fs_c08_openfoam_inventory.py analysis_tools/run_fs_c08_native_bridge.py analysis_tools/test_run_fs_c08_native_bridge.py
+          python3 -B -m py_compile analysis_tools/fs_c08_conservative_reference.py analysis_tools/test_fs_c08_conservative_reference.py analysis_tools/verify_fs_c08_openfoam_inventory.py analysis_tools/test_verify_fs_c08_openfoam_inventory.py analysis_tools/run_fs_c08_native_bridge.py analysis_tools/test_run_fs_c08_native_bridge.py analysis_tools/verify_fs_c08_native_shadow.py analysis_tools/run_fs_c08_native_shadow.py analysis_tools/test_fs_c08_native_shadow.py
           python3 -B -m unittest discover -s analysis_tools -p 'test_fs_c08_conservative_reference.py' -v
           python3 -B -m unittest discover -s analysis_tools -p 'test_verify_fs_c08_openfoam_inventory.py' -v
           python3 -B -m unittest discover -s analysis_tools -p 'test_run_fs_c08_native_bridge.py' -v
+          python3 -B -m unittest discover -s analysis_tools -p 'test_fs_c08_native_shadow.py' -v
       - name: Compile native-language C++17 Gamma phase-mass kernel and run fail-closed tests (not wmake)
         run: |
           c++ -std=c++17 -O2 -Wall -Wextra -Werror -pedantic \
             -o /tmp/fs_c08_cpp_exchange_test \
             freesurface/FS-C08_conservative_phase_mass/native_cpp/test_ConservativePhaseExchange.C
           /tmp/fs_c08_cpp_exchange_test
+          c++ -std=c++17 -O2 -Wall -Wextra -Werror -pedantic \
+            -o /tmp/fs_c08_cpp_network_test \
+            freesurface/FS-C08_conservative_phase_mass/native_cpp/test_ConservativePhaseNetwork.C
+          /tmp/fs_c08_cpp_network_test
       - name: Execute synthetic two-cell FV flux ledger, assert conservation
         run: |
           python3 -B analysis_tools/fs_c08_conservative_reference.py             freesurface/FS-C08_conservative_phase_mass/fixtures/SYNTHETIC_TWO_CELL_REFERENCE.json > /tmp/fs_c08_two_cell.json
