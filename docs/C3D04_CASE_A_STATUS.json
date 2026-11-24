@@ -111,14 +111,14 @@
     "stage_completed": "08_SOLIDIFICATION_T1",
     "current_stage": "09_VERIFICATION_AND_GRID",
     "operational_completion": "8/10=80%",
-    "status": "REAL_WSL_VISUALIZATION_AND_SOLIDIFICATION_READY",
-    "evidence_report": "docs/C3D04_A_STAGE08_SOLIDIFICATION_REAL_20261124_ES.md",
+    "status": "REAL_WSL_ARCHIVED_C14_2D_3D_COMPARISON_READY",
+    "evidence_report": "docs/C3D04_A_STAGE09_ARCHIVED_C14_COMPARISON_20261124_ES.md",
     "scientific_limits": [
       "Nominal saved-state energy balance only",
       "No demonstrated solver-step discrete conservation or grid/time independence",
-      "No experimental validation or GUI opening observed"
+      "No experimental validation; FoamLens sweep import not observed"
     ],
-    "next": "Join archived 2D C14 and existing A sweep data for local cooling and spatial quantitative metrics; no CFD or sampling replay."
+    "next": "Plan controlled same-geometry mesh/time sensitivity and discrete conservation; do not repeat completed base CFD/comparison."
   },
   "stage06_preflight_integrity": {
     "date": "2026-11-20",
@@ -984,7 +984,7 @@
     "priority": "Direct original C14 2D vs C3D04-A cooling curves and spatial profiles before further CFD/mesh changes",
     "reference_case": "cases_controlled_buoyancy/C14_topFixedFlux_explicitRef",
     "visual_case": "~/OpenFOAM/C3D04_A_C14_VISUALIZATION_01",
-    "status": "REAL_ARCHIVED_2D_REFERENCE_VERIFIED_INITIAL_GLOBAL_COMPARISON_DONE_LOCAL_SPATIAL_JOIN_PENDING",
+    "status": "REAL_WSL_ARCHIVED_C14_2D_3D_COMPARISON_READY",
     "reference_probe_m": [
       0.02,
       0.02,
@@ -1022,7 +1022,7 @@
       "Compare cooling rate and phase evolution with common 0.1s temporal support; preserve native 2D dt=0.001s probe if present",
       "Report differences and missing coverage; no extrapolation outside metal or fake 2D data"
     ],
-    "blocker": "2D archived outputs found and global initial comparison done. Local A sweep CSV contents and full spatial join not observed; no new solver or sampling needed if sweeps complete.",
+    "blocker": "Comparison complete. Scientific stage09 remains open: discrete energy closure and same-geometry spatial/temporal sensitivity; QuickCup stage10 pending.",
     "GUI_open_user_confirmed": true,
     "entrypoint": "cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/compare_c14_2d_3d_a.py",
     "commit": "355d6bc0fc7de667c40a82fa09b25d37d31991ce",
@@ -1054,12 +1054,118 @@
       "reference_center_alpha_final": 0.964815,
       "reference_center_first_below_Tliq_s": 4.72,
       "reference_CFD_snapshots_required": false,
-      "local_sweep_join_executed": false,
-      "output": "~/OpenFOAM/C3D04_A_C14_VISUALIZATION_01/analysis/C14_2D_3D_ARCHIVED_COMPARISON_01"
+      "local_sweep_join_executed": true,
+      "output": "~/OpenFOAM/C3D04_A_C14_VISUALIZATION_01/analysis/C14_2D_3D_ARCHIVED_COMPARISON_01",
+      "real_wsl_head": "d838d5fab",
+      "saved_times": 101,
+      "center_results": [
+        {
+          "height_mm": 10,
+          "T_2D_K": 1456.14,
+          "T_3D_K": 1457.06,
+          "RMSE_K": 4.052680447787755,
+          "bias_K": -1.1907920792079252,
+          "crossing_2D_s": [
+            3.3,
+            3.4
+          ],
+          "crossing_3D_s": [
+            2.7,
+            2.8
+          ]
+        },
+        {
+          "height_mm": 20,
+          "T_2D_K": 1464.19,
+          "T_3D_K": 1466.73,
+          "RMSE_K": 6.554826428285531,
+          "bias_K": -1.5092079207920754,
+          "crossing_2D_s": [
+            4.7,
+            4.8
+          ],
+          "crossing_3D_s": [
+            3.5,
+            3.6
+          ]
+        },
+        {
+          "height_mm": 30,
+          "T_2D_K": 1471.45,
+          "T_3D_K": 1470.34,
+          "RMSE_K": 13.155196353118752,
+          "bias_K": -9.622079207920788,
+          "crossing_2D_s": [
+            9.3,
+            9.4
+          ],
+          "crossing_3D_s": [
+            4.5,
+            4.6
+          ]
+        }
+      ],
+      "final_horizontal_RMSE_K_by_angle_0_45_90_135": {
+        "height10": [
+          18.674859467646964,
+          13.268931334135388,
+          18.676904308408677,
+          13.299736369567611
+        ],
+        "height20": [
+          14.160250600142044,
+          10.63234255115022,
+          14.16044397359812,
+          10.691393705920664
+        ],
+        "height30": [
+          12.140315040628646,
+          9.297980593924688,
+          12.140315040628646,
+          9.265289998159814
+        ]
+      },
+      "final_horizontal_common_points": {
+        "height10": [
+          66,
+          80,
+          66,
+          80
+        ],
+        "height20": [
+          68,
+          80,
+          68,
+          80
+        ],
+        "height30": [
+          70,
+          80,
+          70,
+          80
+        ]
+      },
+      "final_vertical": {
+        "RMSE_K": 3.7499474996324884,
+        "bias_K": -0.8836250000000121,
+        "max_abs_K": 8.44,
+        "common_points": 80
+      },
+      "final_contact_flux_W_m2": {
+        "reference": 231179.25,
+        "A": 240337.19362396878
+      },
+      "final_contact_power_density_W_m3": {
+        "reference": 17338443.75,
+        "A": 31815490.232327934
+      },
+      "source_solver_rerun": false,
+      "native_sampling_rerun": false,
+      "provenance": "Actual WSL stdout supplied by researcher, local CSVs not independently retrieved"
     }
   },
   "stage09_multidirectional_3D": {
-    "status": "PUBLISHED_CODE_NOT_EXECUTED_WSL",
+    "status": "EXISTING_SWEEPS_CONFIRMED_USABLE_BY_REAL_ARCHIVED_COMPARISON",
     "entrypoint": "cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/analyze_c14_a_multidirectional.py",
     "commit": "acdf8625bdb9eff327471a31ba298fdfb18b0ad4",
     "doc": "docs/C3D04_A_STAGE09_MULTIDIRECTIONAL_20261124_ES.md",
