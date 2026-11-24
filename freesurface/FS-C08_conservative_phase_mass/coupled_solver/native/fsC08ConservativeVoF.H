@@ -29,6 +29,7 @@ class fsC08ConservativeVoF : public compressibleVoF
 protected:
     virtual void prePredictor() override;
     virtual void pressureCorrector() override;
+    virtual void thermophysicalPredictor() override;
 
 public:
     TypeName("fsC08ConservativeVoF");
