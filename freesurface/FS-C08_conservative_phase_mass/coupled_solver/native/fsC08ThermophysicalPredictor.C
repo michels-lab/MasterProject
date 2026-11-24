@@ -402,6 +402,11 @@ void Foam::solvers::fsC08ConservativeVoF::thermophysicalPredictor()
     rhoPhi=alphaRhoPhi1+alphaRhoPhi2;
     reconcileMixtureDensity();
 
+    // Retain the state solved by the ENERGY equation before the pressure
+    // corrector changes gas p/rho. The delta to postSolve internal E
+    // measures operator-splitting inconsistency, not a phase-change term.
+    updatePhaseInternalEnergy();
+
     Info<< "FS_C08_NATIVE_PHASE_RESOLVED_INTERNAL_ENERGY"
         << " time_s=" << runTime.value()
         << " nonlinearDeltaT_K=" << lastDeltaT
