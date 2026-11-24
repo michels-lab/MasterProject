@@ -29,8 +29,8 @@
     "POTENTIAL_UNLOGGED_CHANGES": 2
   },
   "finding_total": 9,
-  "inventory_fingerprint": "5e12638678ed9af031dbe9c80ec946dd3e64f3472d5a4b0a92f49a2b81f33706",
-  "evidence_fingerprint": "296c9bd220b80983883977ce971694f9b33aab4a985a5499067b749a9ffe75aa",
+  "inventory_fingerprint": "f5ddc23813da23c0a5d97bd1e37b236a08e4148c6d83b98d17c3272c8c215ee0",
+  "evidence_fingerprint": "45c69cf425607368c4a3cbef0519c67be4073661a20dd0df09dbe7fea16bad6d",
   "files": [
     {
       "path": ".github/agents/openfoam-solidification.agent.md",
@@ -272358,7 +272358,7 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "04dd05189a045de3198fe0ec3d4e3a18f8c1f2c7"
+      "blob": "2579e7c0c94206b68661e94cd09c74023eb5a7b9"
     },
     {
       "path": "docs/C3D04_A_STAGE07_NATIVE_METAL_CELLZONE_RECOVERY_20261123_ES.md",
@@ -272379,7 +272379,7 @@
       "role": "config",
       "purpose": "machine-readable configuration",
       "certainty": "rule",
-      "blob": "dd6d11c6d42078a6a90bda93b4f948553de5f905"
+      "blob": "4839f15eae87a5d68bb1028541922f546ef7190f"
     },
     {
       "path": "docs/C3D_01_ESTADO_REAL_20261110_ES.md",
@@ -273674,11 +273674,11 @@
       "state": "REVIEW_REQUIRED"
     },
     {
-      "id": "de16de3f8ddc879d",
+      "id": "9854a2a5b64d50fd",
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_ES.md",
-      "observation": "1 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/tests/test_c14_f14_single_vs_multi_time_probe.py",
+      "observation": "2 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/tests/test_c14_f14_single_vs_multi_time_probe.py, docs/C3D04_CASE_A_STATUS.json",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     }
