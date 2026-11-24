@@ -118,7 +118,7 @@
       "No demonstrated solver-step discrete conservation or grid/time independence",
       "No experimental validation or GUI opening observed"
     ],
-    "next": "Multidirectional 3D-A spatial analysis plus pending C14 2D homologous comparison, before numerical verification."
+    "next": "Join archived 2D C14 and existing A sweep data for local cooling and spatial quantitative metrics; no CFD or sampling replay."
   },
   "stage06_preflight_integrity": {
     "date": "2026-11-20",
@@ -984,7 +984,7 @@
     "priority": "Direct original C14 2D vs C3D04-A cooling curves and spatial profiles before further CFD/mesh changes",
     "reference_case": "cases_controlled_buoyancy/C14_topFixedFlux_explicitRef",
     "visual_case": "~/OpenFOAM/C3D04_A_C14_VISUALIZATION_01",
-    "status": "INTEGRATED_COMPARISON_DASHBOARD_CODE_PUBLISHED_WSL_NOT_EXECUTED",
+    "status": "REAL_ARCHIVED_2D_REFERENCE_VERIFIED_INITIAL_GLOBAL_COMPARISON_DONE_LOCAL_SPATIAL_JOIN_PENDING",
     "reference_probe_m": [
       0.02,
       0.02,
@@ -1022,7 +1022,7 @@
       "Compare cooling rate and phase evolution with common 0.1s temporal support; preserve native 2D dt=0.001s probe if present",
       "Report differences and missing coverage; no extrapolation outside metal or fake 2D data"
     ],
-    "blocker": "Local solved C14 2D snapshots not observed; execution pending. No CFD rerun or manual unit tests.",
+    "blocker": "2D archived outputs found and global initial comparison done. Local A sweep CSV contents and full spatial join not observed; no new solver or sampling needed if sweeps complete.",
     "GUI_open_user_confirmed": true,
     "entrypoint": "cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/compare_c14_2d_3d_a.py",
     "commit": "355d6bc0fc7de667c40a82fa09b25d37d31991ce",
@@ -1034,7 +1034,29 @@
       "101 common saved-time curves if available",
       "three horizontal and one central vertical profiles, temperature/velocity/pressure/alpha/gradT",
       "coverage and RMSE CSV, volume means, preserved 2D native probe files"
-    ]
+    ],
+    "archived_comparison": {
+      "entrypoint": "cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/compare_c14_archived_results.py",
+      "commit": "4ddf49b21cbdc360b4369dd09459829dd1fa7b43",
+      "doc": "docs/C3D04_A_STAGE09_ARCHIVED_C14_COMPARISON_20261124_ES.md",
+      "reference_center_probe_samples": 10001,
+      "reference_volumetric_time_count": 101,
+      "reference_spatial_profiles_sampled_in_git": true,
+      "reference_T_mean_10s_K_reconstructed": 1465.1593311513545,
+      "A_T_mean_10s_K": 1450.7091627651344,
+      "delta_mean_K": -14.450168386220184,
+      "reference_solid_fraction_10s": 0.0379407,
+      "A_solid_fraction_10s": 0.1027550247293385,
+      "solid_ratio": 2.70830598089488,
+      "contact_area_volume_2D_m_inv": 75,
+      "contact_area_volume_A_m_inv": 132.3785542852668,
+      "reference_center_T_final_K": 1464.19,
+      "reference_center_alpha_final": 0.964815,
+      "reference_center_first_below_Tliq_s": 4.72,
+      "reference_CFD_snapshots_required": false,
+      "local_sweep_join_executed": false,
+      "output": "~/OpenFOAM/C3D04_A_C14_VISUALIZATION_01/analysis/C14_2D_3D_ARCHIVED_COMPARISON_01"
+    }
   },
   "stage09_multidirectional_3D": {
     "status": "PUBLISHED_CODE_NOT_EXECUTED_WSL",
