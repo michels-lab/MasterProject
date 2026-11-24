@@ -118,7 +118,7 @@
       "No demonstrated solver-step discrete conservation or grid/time independence",
       "No experimental validation; FoamLens sweep import not observed"
     ],
-    "next": "Prioritize faithful C14 runtime diagnostic parity on same V4/T02 before discretization sensitivity; preserve original CFD and completed comparisons."
+    "next": "Run authorized isolated C14 faithful native diagnostic reproduction on identical V4/T02; verify actual native probe cadence and field coverage before mesh/time sensitivity."
   },
   "stage06_preflight_integrity": {
     "date": "2026-11-20",
@@ -1198,7 +1198,7 @@
   },
   "stage09_C14_full_runtime_parity": {
     "date": "2026-11-24",
-    "status": "ORIGINAL_PHYSICS_AND_CONTROL_IDENTICAL_RUNTIME_DIAGNOSTIC_PARITY_NOT_YET_ACHIEVED",
+    "status": "FAITHFUL_RUNTIME_EXECUTOR_PUBLISHED_WSL_RUN_PENDING",
     "owner_requirement": "Faithful 3D copy of C14 including runtime functionObjects and sampling cadence; only mesh-dependent coordinates/patches adapted.",
     "original_controlDict_byte_identical_at_launch": true,
     "source_full_run": "~/OpenFOAM/C3D04_A_C14_FLUID_SOLID_FULL_10S_RUN_01",
@@ -1213,6 +1213,14 @@
     "existing_3D_saved_field_dt_s": 0.1,
     "required_native_runtime_probe_samples_target": 10001,
     "planned": "Prepare separate same-V4/T02 3D C14 reproduction from t0 with original functionObjects, only coordinate/patch/syntax changes necessary, preserve 10s/dt=.001/writeInterval=100 and base run; verify native cadence and diagnostic coverage, no claim until actual run. No mesh/time study before baseline diagnostic parity if researcher prioritizes fidelity.",
-    "new_run_executed": false
+    "new_run_executed": false,
+    "entrypoint": "cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/run_c14_a_faithful_runtime.py",
+    "commit": "7f528b69e03023b9dd4106817807a07bc44fa6d5",
+    "doc": "docs/C3D04_A_STAGE09_FAITHFUL_C14_RUNTIME_20261124_ES.md",
+    "new_run_output": "~/OpenFOAM/C3D04_A_C14_FAITHFUL_RUNTIME_10S_01",
+    "native_diagnostic_parity_verified": false,
+    "additional_profile_lines": 13,
+    "original_profile_lines": 4,
+    "native_runtime_functionObjects": "original researchDiagnostics unchanged; functions/lineProfiles coordinates mapped; extra separate profiles"
   }
 }
