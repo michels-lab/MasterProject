@@ -65,6 +65,20 @@ PhaseMassTransport::PhaseMassTransport
         mesh,dimensionedScalar(dimless/dimTime,0),
         zeroGradientFvPatchScalarField::typeName
     ),
+    SvolThermal_
+    (
+        IOobject("SvolThermal.fsC08",mesh.time().name(),mesh,
+                 IOobject::NO_READ,IOobject::AUTO_WRITE),
+        mesh,dimensionedScalar(dimless/dimTime,0),
+        zeroGradientFvPatchScalarField::typeName
+    ),
+    SvolMaterial_
+    (
+        IOobject("SvolMaterial.fsC08",mesh.time().name(),mesh,
+                 IOobject::NO_READ,IOobject::AUTO_WRITE),
+        mesh,dimensionedScalar(dimless/dimTime,0),
+        zeroGradientFvPatchScalarField::typeName
+    ),
     alphaLiquid_(IOobject("alphaLiquid.fsC08",mesh.time().name(),mesh,
                           IOobject::NO_READ,IOobject::AUTO_WRITE),
                  mesh,dimensionedScalar(dimless,0),
@@ -250,6 +264,10 @@ void PhaseMassTransport::evaluateGamma
         FatalErrorInFunction << "Invalid CFD deltaT" << exit(FatalError);
     auto& gamma=Gamma_.primitiveFieldRef();
     auto& s=SvolPhaseChange_.primitiveFieldRef();
+    auto& st=SvolThermal_.primitiveFieldRef();
+    auto& sm=SvolMaterial_.primitiveFieldRef();
+    const auto& t0=T.oldTime().primitiveField();
+    const auto& alpha0=metal.oldTime().primitiveField();
     const auto& ml=mLiquid_.primitiveField();
     const auto& ms=mSolid_.primitiveField();
     const auto& rl=rhoLiquid_.primitiveField();
@@ -258,6 +276,8 @@ void PhaseMassTransport::evaluateGamma
     const auto& a=metal.primitiveField();
     forAll(gamma,i)
     {
+        st[i]=0;
+        sm[i]=0;
         if (a[i]<metalPresenceThreshold_)
         {
             gamma[i]=0;
@@ -285,9 +305,42 @@ void PhaseMassTransport::evaluateGamma
         }
         gamma[i]=conversionFactor*(fs*(ml[i]+ms[i])-ms[i])/dt;
         s[i]=gamma[i]*(1/rs[i]-1/rl[i]);
+
+        // Density(T) material contraction at FIXED transported masses:
+        // Δ(alphaMetal)_thermal / Δt, excluding phase transfer/advection.
+        // An incoming air-to-metal interface has no iron T(n) history;
+        // do NOT interpret its old gas temperature as thermal shrinkage.
+        if
+        (
+            alpha0[i]>=metalPresenceThreshold_
+         && std::isfinite(t0[i])
+         && t0[i]>=Tmin_K_ && t0[i]<=Tmax_K_
+        )
+        {
+            const scalar rl0=rhoLiquidT_->value(t0[i]);
+            const scalar rs0=rhoSolidT_->value(t0[i]);
+            if
+            (
+                !std::isfinite(rl0) || rl0<=0
+             || !std::isfinite(rs0) || rs0<=0
+            )
+            {
+                FatalErrorInFunction
+                    << "FS-C08 previous temperature produced invalid "
+                    << "rho(T) at cell " << i << exit(FatalError);
+            }
+            st[i]=
+            (
+                ml[i]*(1.0/rl[i]-1.0/rl0)
+              + ms[i]*(1.0/rs[i]-1.0/rs0)
+            )/dt;
+        }
+        sm[i]=s[i]+st[i];
     }
     Gamma_.correctBoundaryConditions();
     SvolPhaseChange_.correctBoundaryConditions();
+    SvolThermal_.correctBoundaryConditions();
+    SvolMaterial_.correctBoundaryConditions();
 }
 
 void PhaseMassTransport::reconstructFractions()
