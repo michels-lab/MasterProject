@@ -399,8 +399,8 @@
     "case_b_c14_native_C14_fluid_solid_q_native_CI_compile_pass_confirmed": false,
     "case_b_c14_native_C14_fluid_solid_q_WSL_preflight_pass_confirmed": true,
     "case_b_c14_native_C14_fluid_solid_q_WSL_compile_pass_confirmed": true,
-    "case_b_c14_native_C14_fluid_solid_q_WSL_extractor_executed": false,
-    "case_b_c14_native_C14_fluid_solid_q_WSL_q_measured": false,
+    "case_b_c14_native_C14_fluid_solid_q_WSL_extractor_executed": true,
+    "case_b_c14_native_C14_fluid_solid_q_WSL_q_measured": true,
     "case_b_c14_native_C14_fluid_solid_q_final_report": null,
     "case_b_c14_native_C14_fluid_solid_q_target_101_times": true,
     "case_b_c14_native_C14_fluid_solid_q_target_regions_patches": [
@@ -465,8 +465,29 @@
     "case_b_c14_native_C14_fluid_solid_q_q_only_shadow_case_isolated_fvSchemes_SHA_manifest": true,
     "case_b_c14_native_C14_fluid_solid_q_WSL_native_IO_root_cause_confirmed": true,
     "case_b_c14_native_C14_fluid_solid_q_WSL_q_only_harmonic_overlay_tests_source_count": 14,
-    "case_b_c14_native_C14_fluid_solid_q_WSL_q_only_harmonic_overlay_WSL_tests_passed_observed": false,
-    "case_b_c14_native_C14_fluid_solid_q_WSL_q_only_harmonic_overlay_extractor_executed": false
+    "case_b_c14_native_C14_fluid_solid_q_WSL_q_only_harmonic_overlay_WSL_tests_passed_observed": true,
+    "case_b_c14_native_C14_fluid_solid_q_WSL_q_only_harmonic_overlay_extractor_executed": true,
+    "case_b_c14_native_C14_fluid_solid_q_WSL_overlay_tests_passed": 14,
+    "case_b_c14_native_C14_fluid_solid_q_WSL_overlay_tests_failed": 0,
+    "case_b_c14_native_C14_fluid_solid_q_WSL_success_status": "C3D05_B_C14_REAL_FLUID_SOLID_NATIVE_Q_EXTRACTED_ANALYZED_NOT_ENERGY_CLOSURE",
+    "case_b_c14_native_C14_fluid_solid_q_WSL_output_observed": "/home/michel/OpenFOAM/C3D05_B_C14_NATIVE_FLUID_SOLID_PATCH_Q_01",
+    "case_b_c14_native_C14_fluid_solid_q_WSL_completed_saved_states": 101,
+    "case_b_c14_native_C14_fluid_solid_q_WSL_original_patch_count": 4,
+    "case_b_c14_native_C14_fluid_solid_q_WSL_contact_faces_each": 12636,
+    "case_b_c14_native_C14_fluid_solid_q_WSL_contact_geometry_matched": 12636,
+    "case_b_c14_native_C14_fluid_solid_q_WSL_contact_opposing_normals": 12636,
+    "case_b_c14_native_C14_fluid_solid_q_WSL_contact_area_matched": 12636,
+    "case_b_c14_native_C14_fluid_solid_q_WSL_t10_metal_to_mold_out_W": 1581.5646631744044,
+    "case_b_c14_native_C14_fluid_solid_q_WSL_t10_mold_to_metal_out_W": -1581.5383267429747,
+    "case_b_c14_native_C14_fluid_solid_q_WSL_t10_interface_out_sum_W": 0.026336431429626828,
+    "case_b_c14_native_C14_fluid_solid_q_WSL_t10_interface_relative_mismatch": 0.000008326137818963252,
+    "case_b_c14_native_C14_fluid_solid_q_WSL_t10_metalTop_out_W": 117.06292503343666,
+    "case_b_c14_native_C14_fluid_solid_q_WSL_t10_moldOuter_out_W": 34.38628817469787,
+    "case_b_c14_native_C14_fluid_solid_q_WSL_t10_total_exterior_out_W": 151.44921320813452,
+    "case_b_c14_native_C14_fluid_solid_q_WSL_t10_facewise_abs_mismatch_W": 1.8703362871771045,
+    "case_b_c14_native_C14_fluid_solid_q_WSL_original_CFD_rerun": false,
+    "case_b_c14_native_C14_fluid_solid_q_WSL_native_latent_source_integrated": false,
+    "case_b_c14_native_C14_fluid_solid_q_WSL_energy_closure_verified": false
   },
   "other_cases": [
     {
@@ -506,7 +527,7 @@
       "evidence": "docs/granada/C3D05_B_C14_WSL_EJECUCION_REAL_EN_CURSO_20261123_ES.md"
     }
   ],
-  "blocker": "Real WSL completed B C14 F14 fluid-solid 10s + 101 native states + alpha1/metal/mold reference energy. Native q extractor compiled and 8/8 QA + source SHA preflight pass, but runtime fatal IO logged. Preserved log NOW READ-ONLY DIAGNOSED: F14 solidThermophysicalTransportModel::q() lookup requires interpolate(kappa); original C14 system/mold/fvSchemes contains interpolate((kappa|Cv)) harmonic; but exact lookup is not found. New runner constructs independent 101-time REAL-directory SHADOW (source field symlinks + constant link) with COPIED system/mold/fvSchemes only receiving interpolate(kappa) harmonic; original CFD system and all archived data never mutated. 14 synthetic regression test cases source now staged, WSL execution and real q unobserved. Original pre-existing failed ATTEMPT preserved, no physical conservation or experimental validation; G3-G7 open, progress 2/7.",
-  "next_integrated_delivery": "First git pull; run 14 native_q tests, confirmed original 10s SHA --preflight, isolated wmake+q extractor which uses 101-state SHADOW case with explicit harmonic interpolate(kappa) only in copied mold fvSchemes. Source CFD never modified, old failed ATTEMPT kept. If native q extraction succeeds, check 404 patch-q records, 12636 interface faces/side and t=10s per-face q; distinguish 0.1s saved-time trapezoid from native dt=0.001 solver integral. No physical claims until actual WSL reported. Any further runtime errors printed full log tail.",
-  "science": "CASE_B_10S_101_SAVED_NATIVE_C14_Q_F14_WMAKE_PASS_ROOT_CAUSE_MOLD_INTERPOLATE_KAPPA_MISSING_ISOLATED_HARMONIC_FVSCHEMES_SHADOW_STAGED_UNRUN"
+  "blocker": "C3D05-B original 10s C14 101 real saved states; SHA-verified postrun volume-weighted alpha1, metal+mold energy proxies and NEW REAL Foundation14 fluid/solid native conduction q COMPLETE in USER WSL! 14/14 QA tests PASS; native shadow harmonic fvSchemes-only overlay, 101/101 q snapshots, 4 patches, 12,636 interface faces each paired. t10 outward metal→mold=+1581.564663 W, mold→metal=-1581.538327 W, instantaneous net interface mismatch=0.0263364314 W (relative 8.326e-6); exterior metalTop=+117.062925 W, moldOuter=+34.386288 W, total exterior=+151.449213 W. 12,636 matched face centers, opposite normals, matched areas; facewise absolute paired power mismatch=1.870336 W (not zero). Important: q derived via C14 postrun-specific additional harmonic interpolate(kappa) on COPIED fvSchemes only, 101 saved 0.1s times NOT 0.001s solver-integrated flux, metal fluid and mold solid. No native fvModel time-integral/advective/pressure source, radiation/convection verified separately, no full energy conservation or QuickCup/JMatPro, no convergence/contraccion. G3-G7 OPEN, 2/7 milestones.",
+  "next_integrated_delivery": "Without rerunning CFD, analytically JOIN SHA-verified published original Case B 101-time metal+mold reference stored-energy CSV with SHA-verified 101x4 native FLUID/SOLID conduction q output: compute signed patch trapezoid at saved 0.1s, interface mismatch accumulation and selected-time reference storage vs exterior-only conduction q comparisons. Clearly LABEL this a partial diagnostic, NEVER true energy closure or a measured missing-energy residual; needs native fvModel source, boundary convection/radiation, mass/enthalpy advection, pressure work and timestep fidelity. Preserve all prior q/CFD outputs.",
+  "science": "CASE_B_NATIVE_FOUNDATION14_FLUID_SOLID_CONDUCTION_Q_101x4_WSL_COMPLETE_14of14_TESTS_PASS_t10_INTERFACE_NET_0_026336W_REL_8_326e-6_EXTERIOR_151_449W_NO_ENERGY_CLOSURE"
 }
