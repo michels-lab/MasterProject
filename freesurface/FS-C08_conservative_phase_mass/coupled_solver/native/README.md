@@ -1,5 +1,8 @@
 # FS-C08 — Integración de física en el solver CFD, no shadow
 
+> **CONTRATO DE ENERGÍA ACTUALIZADO:** la variable del material se llama `cvSolid` (energía específica por masa y temperatura a volumen constante), no `cpSolid`. Se corrigieron los dos archivos C++ de masa/energía, el esquema de material y el preparador de caso. Esto **no garantiza que una tabla externa corresponda realmente a Cv**: su procedencia sigue siendo responsabilidad de los datos experimentales/JMatPro. La ecuación energética actual sigue siendo una aproximación de Cv efectivo + ΓL, **no** un cierre conservativo por entalpías separadas; una nueva simulación física debe esperar a completar ese cierre. 
+
+
 > **24-11-2026 — SECUENCIA TÉRMICA Y PRESIÓN:** se incorporó `refreshAfterEnergy` para actualizar propiedades de fase y `alpha.metal` con la temperatura **recién resuelta por CHT**, antes del corrector de presión, sin reintroducir Γ en masa. Los campos nativos `SvolPhaseChange.fsC08` y `SvolThermal.fsC08` separan respectivamente `Γ(1/ρ_s-1/ρ_l)` y el cambio de volumen por `ρ_l(T),ρ_s(T)` a **masa metálica transportada fija**. `SvolMaterial.fsC08` suma ambos. La contribución térmica excluye células recién llenadas con metal porque su antigua temperatura era de gas; los volúmenes también cambian por **advección, compresión del gas y desplazamiento de interfaz**, que NO deben contarse como contracción metalúrgica. Los tres campos son diagnósticos; **no agregar de nuevo Svol como pérdida neta de masa** al corrector de presión. Sigue pendiente cerrar energía separada y resolver expansión gráfica/sobresaturación. Compilación y CFD WSL de este nuevo módulo: NO verificadas.
 
 
