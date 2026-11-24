@@ -3,8 +3,10 @@
 from __future__ import annotations
 
 import unittest
+from pathlib import Path
+from tempfile import TemporaryDirectory
 
-from run_fs_c08_real_cfd import inspect_real_cfd_budgets
+from run_fs_c08_real_cfd import inspect_real_cfd_budgets, require_native_end_time
 
 
 def native_log(
@@ -67,6 +69,21 @@ class RealCFDBudgetEvidenceTests(unittest.TestCase):
     def test_nonfinite_energy_is_never_a_valid_numeric_report(self):
         with self.assertRaisesRegex(ValueError, "nonfinite"):
             inspect_real_cfd_budgets(native_log(energy_residual="nan"), 0.05)
+
+    def test_requested_end_time_parsed_from_actual_control_dict(self):
+        with TemporaryDirectory() as temp:
+            path = Path(temp) / "controlDict"
+            path.write_text("startTime 0;\\nendTime 1;\\n")
+            self.assertEqual(require_native_end_time(path), 1.0)
+
+    def test_missing_or_duplicate_end_time_blocked(self):
+        with TemporaryDirectory() as temp:
+            path = Path(temp) / "controlDict"
+            for data in ("startTime 0;\\n",
+                         "endTime 0.5;\\nendTime 1;\\n"):
+                path.write_text(data)
+                with self.assertRaisesRegex(RuntimeError, "exactly one"):
+                    require_native_end_time(path)
 
     def test_empty_log_rejected(self):
         with self.assertRaisesRegex(ValueError, "no actual"):

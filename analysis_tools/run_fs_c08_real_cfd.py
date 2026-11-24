@@ -180,6 +180,19 @@ def inspect_real_cfd_budgets(log: str, final_saved_time_s: float) -> dict:
     }
 
 
+def require_native_end_time(control_dict: Path) -> float:
+    """Read the staged OpenFOAM controlDict's finite requested endTime."""
+    data = control_dict.read_text(encoding="utf-8")
+    matches = re.findall(
+        r"(?m)^\\s*endTime\\s+([0-9]+(?:\\.[0-9]*)?(?:[eE][+-]?[0-9]+)?)\\s*;",
+        data,
+    )
+    require(len(matches) == 1, "staged case requires exactly one numeric endTime")
+    value = float(matches[0])
+    require(math.isfinite(value) and value > 0, "invalid requested endTime")
+    return value
+
+
 def numeric_time_dirs(case: Path) -> list[tuple[float, Path]]:
     times: list[tuple[float, Path]] = []
     for path in case.iterdir():
@@ -277,6 +290,15 @@ def execute(source: Path, material: Path, output: Path,
             return report
 
         finaltime, finaldir = snapshots[-1]
+        requested_endtime = require_native_end_time(output / "system/controlDict")
+        report["requested_endTime_s"] = requested_endtime
+        report["latest_saved_time_s"] = finaltime
+        # A clean solver exit or a snapshot at t=0.05 is not completion
+        # of the full endTime=1 s transient. Never accept partial cooling.
+        horizon_tolerance = max(1e-8, 1e-6 * requested_endtime)
+        if finaltime + horizon_tolerance < requested_endtime:
+            report["status"] = "FS_C08_REAL_CFD_STOPPED_BEFORE_ENDTIME"
+            return report
         try:
             report["native_numeric_budget_gate"] = inspect_real_cfd_budgets(
                 log, finaltime
