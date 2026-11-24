@@ -405,6 +405,11 @@ void solvers::fsC08ConservativeVoF::postSolve()
         << " deltaInternalEnergy_J=" << E-E0
         << " gasPressureCorrectionInternalEnergyJump_J="
         << postPressureEnergyJump_J
+        << " thermalPredictorEnergyBudget_J="
+        << E-E0-postPressureEnergyJump_J
+         + dt*(energyAdvectionOut_W+conductionOut_W+mechanicalWork_W)
+        << " pressureCorrectionEnergyGap_J="
+        << postPressureEnergyJump_J
         << " nativeEnergySolveAdvectionOut_W=" << energyAdvectionOut_W
         << " nativeEnergySolveConductionOut_W=" << conductionOut_W
         << " nativeMechanicalWork_W=" << mechanicalWork_W
