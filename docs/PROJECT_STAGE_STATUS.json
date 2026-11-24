@@ -298,11 +298,27 @@
     "case_b_c14_10s_phase_timeline_source_committed": true,
     "case_b_c14_10s_phase_timeline_source": "cases_3d/C3D_05_step_gmsh_conformal/c14_physics/summarize_existing_case_b_c14_phase_timeline.py",
     "case_b_c14_10s_phase_timeline_regression_test_source_committed": 9,
-    "case_b_c14_10s_phase_timeline_wsl_executed": false,
+    "case_b_c14_10s_phase_timeline_wsl_executed": true,
     "case_b_c14_10s_phase_timeline_ci_pass_confirmed": false,
     "case_b_c14_10s_phase_timeline_output_expected": "~/OpenFOAM/C3D05_B_C14_PHASE_TIMELINE_01",
-    "case_b_c14_10s_phase_timeline_first_alpha1_zero_time_known": false,
-    "case_b_c14_10s_phase_timeline_physical_volume_weighting_confirmed": false
+    "case_b_c14_10s_phase_timeline_first_alpha1_zero_time_known": true,
+    "case_b_c14_10s_phase_timeline_physical_volume_weighting_confirmed": false,
+    "case_b_c14_10s_phase_timeline_test_count_passed_in_user_WSL": 9,
+    "case_b_c14_10s_phase_timeline_test_count_failed_in_user_WSL": 0,
+    "case_b_c14_10s_phase_timeline_source_sha_verified_in_user_WSL": true,
+    "case_b_c14_10s_phase_timeline_status": "C3D05_B_C14_ARCHIVED_PHASE_TIMELINE_NUMERICAL_ONLY",
+    "case_b_c14_10s_phase_timeline_output_observed": "/home/michel/OpenFOAM/C3D05_B_C14_PHASE_TIMELINE_01",
+    "case_b_c14_10s_phase_timeline_first_alpha1_zero_saved_time_s": 5.1,
+    "case_b_c14_10s_phase_timeline_first_alpha1_zero_previous_saved_s": 5,
+    "case_b_c14_10s_phase_timeline_first_alpha1_below_0_999_saved_s": 0.3,
+    "case_b_c14_10s_phase_timeline_mean_solid_complement_unweighted_final": 0.1575794367375163,
+    "case_b_c14_volume_weighted_phase_source_committed": true,
+    "case_b_c14_volume_weighted_phase_source": "cases_3d/C3D_05_step_gmsh_conformal/c14_physics/volume_weighted_existing_case_b_c14.py",
+    "case_b_c14_volume_weighted_phase_tests_source_count": 8,
+    "case_b_c14_volume_weighted_phase_native_WSL_executed": false,
+    "case_b_c14_volume_weighted_phase_native_CI_pass_confirmed": false,
+    "case_b_c14_volume_weighted_phase_output_expected": "~/OpenFOAM/C3D05_B_C14_VOLUME_WEIGHTED_PHASE_01",
+    "case_b_c14_volume_weighted_phase_result_observed": null
   },
   "other_cases": [
     {
@@ -342,7 +358,7 @@
       "evidence": "docs/granada/C3D05_B_C14_WSL_EJECUCION_REAL_EN_CURSO_20261123_ES.md"
     }
   ],
-  "blocker": "Real Case B C14 native fluid-solid 10s + 101 snapshot read-only WSL PASS. Modeled alpha1<.999 first saved t=.3s (previous .2s), t10 cell-mean alpha1=.8424205633, min over saved times=0, max Courant .267133. Source-only phase timeline+9 tests now committed, NOT yet executed in WSL/confirmed CI. Volume/mass-weighted fraction, latent heat and interface/exterior conservation, physical alloy JMatPro QuickCup, convergence and contraction still unvalidated; G3-G7 OPEN.",
-  "next_integrated_delivery": "Existing B original C14 101-state native alpha1 audit PASSED with first modeled phase at saved t=.3s and mean alpha1(t10)=.8424205633. Next run SOURCE-only verified timeline on ALREADY archived analysis (NO CFD): python3 -B cases_3d/C3D_05_step_gmsh_conformal/c14_physics/summarize_existing_case_b_c14_phase_timeline.py. Then mass-/volume-weighted alpha and energy/latent/boundary balance from real cell volumes/fluxes, mesh-dt sensitivity and QuickCup material calibration. G3-G7 remain open.",
-  "science": "CASE_B_WSL_REAL_C14_10S_101_NATIVE_SNAPSHOTS_ALPHA1_PHASE_EVOLUTION_CONFIRMED_NUMERIC_NOT_PHYSICAL"
+  "blocker": "C3D05 Case B REAL F14 C14 10s CFD and 101 snapshots plus phase timeline complete in user WSL; 9 phase-timeline regressions PASSED. First model alpha1<.999 saved t=0.3s (prior .2s), first any alpha1=0 saved t=5.1s (prior 5.0s), unweighted solid complement at 10s=0.1575794367375163; native max Courant=0.267133. NEW native HEX8 volume-based alpha1-only analysis SOURCE COMMITTED with eight test files, NOT run/confirmed WSL; no true volume-weighted result known. Energy flux/latent balance, QuickCup/JMatPro calibration, nonorth sensitivity, mesh/time convergence, shrinkage not verified. Physical G3-G7 OPEN.",
+  "next_integrated_delivery": "From ORIGINAL completed Case B C14 10s and SHA-verified 101-state existing analysis, compute 92200 real metal HEX8 per-cell polyMesh volumes with signed oriented face geometry and strict native checkMesh closure; then volume-weight alpha1(t) in NEW isolated folder, NO CFD rerun. Command: python3 -B cases_3d/C3D_05_step_gmsh_conformal/c14_physics/volume_weighted_existing_case_b_c14.py. Source/8 synthetic geometry regressions published but WSL run remains pending. Then develop quantified sensible/latent storage and true interface/exterior energy flux comparison without claiming physical QuickCup acceptance.",
+  "science": "CASE_B_WSL_101_SNAPSHOTS_PHASE_TIMELINE_COMPLETE_9_TESTS_PASS_FIRST_FULLY_SOLID_CELL_5_0_TO_5_1S_WEIGHTED_PHASE_CODE_STAGED_NO_PHYSICAL_VALIDATION"
 }
