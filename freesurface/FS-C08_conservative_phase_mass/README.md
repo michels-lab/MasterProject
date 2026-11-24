@@ -1,5 +1,8 @@
 # FS-C08 — Primer núcleo conservativo líquido–sólido–gas
 
+> **ESTADO VIGENTE 24-11-2026 — NO MÁS COMANDOS DE PRUEBAS SINTÉTICAS.** El investigador completó `FS_C08_NATIVE_GAMMA_FV_SHADOW_PASS__SYNTHETIC_NO_CFD` sobre malla real Foundation14; ese resultado se registra como infraestructura numérica, **NO** contracción simulada ni validación de hierro. La ruta de lectura + shadow queda CERRADA. **Prioridad única: [implementación de solver físico con continuidad de metal líquido/sólido/gas, densidades distintas, presión, VOF y energía](coupled_solver/FS_C08_CAMBIO_DE_RUMBO_SOLVER_FISICO_20261124_ES.md)**. El documento contiene las ecuaciones y los archivos nativos Foundation14 localizados. **El solver acoplado aún NO está implementado**; no presentar los bloques históricos de comandos de abajo como pasos siguientes.
+
+
 
 > **24-11-2026 — NUEVO AVANCE CON Γ NO NULA:** después del hito de lectura nativa OpenFOAM14 con PASS en WSL, se incorporó una segunda utilidad [fsC08NativeShadowStep](native_openfoam/shadow_step/README.md) que usa el **fvMesh real de FS-C07** (volumen, owner, neighbour) y, **solo en memoria**, aplica un paso transitorio explícito de **tres masas conservativas** con fuentes opuestas ±Γ no nulas, flujos internos de las tres fases y entalpía con calor latente una sola vez. La fixture es enteramente **SYNTHETIC_ONLY_NOT_JMATPRO** y las condiciones iniciales son artificiales: se usa la malla real pero **NO los campos reales como estado físico nuevo**. El [núcleo C++17 multi-celda](native_cpp/ConservativePhaseNetwork.H) compiló y pasó en el entorno Linux del asistente; el **nuevo wmake Foundation14 continúa pendiente de prueba en WSL**. No se implementa presión, velocidad, CFD-VOF, alimentación ni contracción física.
 >
