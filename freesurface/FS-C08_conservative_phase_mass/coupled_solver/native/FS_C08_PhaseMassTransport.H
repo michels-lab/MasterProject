@@ -49,7 +49,7 @@ class PhaseMassTransport
 
     // Composition-specific enthalpy closure; no legacy fvModel latent source.
     dimensionedScalar latentHeat_;
-    dimensionedScalar cpSolid_;
+    dimensionedScalar cvSolid_;
 
     // Darcy mushy drag: magnitude calibrated for alloy/coherency conditions.
     dimensionedScalar mushyDarcyCu_;
@@ -127,7 +127,7 @@ public:
     const volScalarField& solidDensity() const { return rhoSolid_; }
     const volScalarField& gamma() const { return Gamma_; }
     const dimensionedScalar& latentHeat() const { return latentHeat_; }
-    const dimensionedScalar& cpSolid() const { return cpSolid_; }
+    const dimensionedScalar& cvSolid() const { return cvSolid_; }
     const dimensionedScalar& mushyDarcyCu() const
     {
         return mushyDarcyCu_;
