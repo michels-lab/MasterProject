@@ -111,14 +111,14 @@
     "stage_completed": "08_SOLIDIFICATION_T1",
     "current_stage": "09_VERIFICATION_AND_GRID",
     "operational_completion": "8/10=80%",
-    "status": "REAL_WSL_ARCHIVED_C14_2D_3D_COMPARISON_READY",
-    "evidence_report": "docs/C3D04_A_STAGE09_ARCHIVED_C14_COMPARISON_20261124_ES.md",
+    "status": "REAL_WSL_FAITHFUL_C14_RUNTIME_READY",
+    "evidence_report": "docs/C3D04_A_STAGE09_FAITHFUL_C14_RUNTIME_20261124_ES.md",
     "scientific_limits": [
-      "Nominal saved-state energy balance only",
-      "No demonstrated solver-step discrete conservation or grid/time independence",
-      "No experimental validation; FoamLens sweep import not observed"
+      "Native diagnostic coverage verified; new field values not independently inspected",
+      "Discrete conservation and same-geometry grid/time independence not established",
+      "QuickCup validation and FoamLens import not observed"
     ],
-    "next": "Run authorized isolated C14 faithful native diagnostic reproduction on identical V4/T02; verify actual native probe cadence and field coverage before mesh/time sensitivity."
+    "next": "Compare primary fields between same-mesh baseline and faithful replica, native 2D/3D probe histories at .001 s, and runtime thermal/phase reductions; no new CFD until evidence assessed."
   },
   "stage06_preflight_integrity": {
     "date": "2026-11-20",
@@ -1198,7 +1198,7 @@
   },
   "stage09_C14_full_runtime_parity": {
     "date": "2026-11-24",
-    "status": "FAITHFUL_RUNTIME_EXECUTOR_PUBLISHED_WSL_RUN_PENDING",
+    "status": "REAL_WSL_FAITHFUL_C14_RUNTIME_READY",
     "owner_requirement": "Faithful 3D copy of C14 including runtime functionObjects and sampling cadence; only mesh-dependent coordinates/patches adapted.",
     "original_controlDict_byte_identical_at_launch": true,
     "source_full_run": "~/OpenFOAM/C3D04_A_C14_FLUID_SOLID_FULL_10S_RUN_01",
@@ -1213,14 +1213,68 @@
     "existing_3D_saved_field_dt_s": 0.1,
     "required_native_runtime_probe_samples_target": 10001,
     "planned": "Prepare separate same-V4/T02 3D C14 reproduction from t0 with original functionObjects, only coordinate/patch/syntax changes necessary, preserve 10s/dt=.001/writeInterval=100 and base run; verify native cadence and diagnostic coverage, no claim until actual run. No mesh/time study before baseline diagnostic parity if researcher prioritizes fidelity.",
-    "new_run_executed": false,
+    "new_run_executed": true,
     "entrypoint": "cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/run_c14_a_faithful_runtime.py",
     "commit": "7f528b69e03023b9dd4106817807a07bc44fa6d5",
     "doc": "docs/C3D04_A_STAGE09_FAITHFUL_C14_RUNTIME_20261124_ES.md",
     "new_run_output": "~/OpenFOAM/C3D04_A_C14_FAITHFUL_RUNTIME_10S_01",
-    "native_diagnostic_parity_verified": false,
+    "native_diagnostic_parity_verified": true,
     "additional_profile_lines": 13,
     "original_profile_lines": 4,
-    "native_runtime_functionObjects": "original researchDiagnostics unchanged; functions/lineProfiles coordinates mapped; extra separate profiles"
+    "native_runtime_functionObjects": "original researchDiagnostics unchanged; functions/lineProfiles coordinates mapped; extra separate profiles",
+    "real_wsl_head": "97463be12",
+    "actual_solver_steps": 10000,
+    "actual_final_time_s": 10,
+    "solver_rc": 0,
+    "probe_xyz_m": [
+      0.0259,
+      -0.02,
+      0.0259
+    ],
+    "probe_fields": [
+      "T",
+      "U",
+      "p_rgh",
+      "rho",
+      "phaseChangeSource:alpha1"
+    ],
+    "probe_samples_per_field": 10001,
+    "probe_exact_cadence_s": 0.001,
+    "reductions_count": 12,
+    "reduction_times_each": 101,
+    "derived_fields_audited": 15,
+    "derived_field_times_each": 101,
+    "canonical_profile_files": 1717,
+    "topFlow_native_files": 101,
+    "horizontal_valid_points_by_height_0_45_90_135": {
+      "10": [
+        68,
+        80,
+        68,
+        80
+      ],
+      "20": [
+        70,
+        80,
+        70,
+        80
+      ],
+      "30": [
+        72,
+        80,
+        72,
+        80
+      ]
+    },
+    "vertical_lines_full": 5,
+    "input_hashes_unchanged": true,
+    "base_evidence_unchanged": true,
+    "controlDict_sha256": "c6db4389d758c31259285e18c8b3cef9fe945767ace1ee3fe147a8e286d7a9ec",
+    "researchDiagnostics_sha256": "58cf0db3e07fce65ba7b2cb797ef9cb62949dc233a716ad63d64af491a6d1ff3",
+    "solver_log_sha256": "c1a0028504e04397bc00b7ecdb40eafa3cf5c046a8b0b0d73f6859946843676a",
+    "foamLog_rc": 0,
+    "missing_or_incomplete": [],
+    "preferred_reference_for_future_analysis": true,
+    "provenance": "Actual researcher WSL stdout, not direct retrieval of new run field values."
   }
 }
