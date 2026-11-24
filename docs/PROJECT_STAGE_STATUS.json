@@ -413,7 +413,14 @@
     "case_b_c14_native_C14_fluid_solid_q_expected_output": "~/OpenFOAM/C3D05_B_C14_NATIVE_FLUID_SOLID_PATCH_Q_01",
     "case_b_c14_native_C14_fluid_solid_q_stage_note": "docs/granada/C3D05_B_C14_FLUJO_NATIVO_FLUIDO_SOLIDO_F14_20261124_ES.md",
     "case_b_c14_native_interface_thermal_flux_conservation_verified": false,
-    "case_b_c14_native_solidification_fvModel_integrated_latent_source_verified": false
+    "case_b_c14_native_solidification_fvModel_integrated_latent_source_verified": false,
+    "case_b_c14_native_C14_fluid_solid_q_WSL_qa_first_attempt_observed": true,
+    "case_b_c14_native_C14_fluid_solid_q_WSL_qa_first_attempt_passed_count": 7,
+    "case_b_c14_native_C14_fluid_solid_q_WSL_qa_first_attempt_failed_count": 1,
+    "case_b_c14_native_C14_fluid_solid_q_WSL_qa_first_attempt_failure_kind": "FALSE_POSITIVE_STATIC_STRING_SCAN_SAFETY_GUARD",
+    "case_b_c14_native_C14_fluid_solid_q_WSL_qa_false_positive_test_source_fixed": true,
+    "case_b_c14_native_C14_fluid_solid_q_WSL_qa_false_positive_test_source_fix_commit": "c706a48487b35f97367ebe7f4078b9d6e448661e",
+    "case_b_c14_native_C14_fluid_solid_q_WSL_qa_after_fix_observed_pass": false
   },
   "other_cases": [
     {
@@ -453,7 +460,7 @@
       "evidence": "docs/granada/C3D05_B_C14_WSL_EJECUCION_REAL_EN_CURSO_20261123_ES.md"
     }
   ],
-  "blocker": "Real C14 Case B CFD 10s and 101 archived snapshots + native model alpha1 + volume-weighted phase + separate metal/mold reference inventory all WSL executed, with 8 mold inventory tests PASS. Combined source-referenced delta at t10 = -1352.9442013308708 J, NOT energy leakage or conservation error. NEW source-faithful C14 F14 q extractor committed with real fluidThermoThermophysicalTransportModel metal and solidThermophysicalTransportModel mold, target 101x4 saved-time patch integrated conduction q plus last-state face q; isolated wmake, SHA, 8 synthetic tests and compile CI. WSL/CI actual q extractor NOT compiled/executed/verified, q values unknown. Need real interface/exterior q, advective/pressure work and native phase source, time-resolved closure, material JMatPro/QuickCup and convergence/contraccion before promoting G3-G7. 2/7.",
-  "next_integrated_delivery": "Run existing Case B F14 native FLUID-SOLID q SOURCE-only workflow: first 8 synthetic CSV QA tests, strict read-only preflight (original 10s C14 phase-stage+field+mesh SHA), then compile wmake in independent attempt directory and extract 101x4 q patch records, all face q at t10, validate SHA/geometry/paired interfaces; NO foamMultiRun. Observe real WSL compile outcome and q before any scientific inference. CI F14 source build workflow committed, outcome not yet verified. Never equate saved-time trapezoid to solver-dt true energy integral.",
+  "blocker": "User WSL Case B original C14 native q extractor: git pull updated repo; 7/8 synthetic unit tests PASS, one FAILED because test searched string 'foamMultiRun(' in whole runner source but found safety guard require('foamMultiRun(' not in cpp). A FALSE POSITIVE: pipeline && stopped BEFORE preflight, wmake, native C14 q. FIX committed: AST calls audit explicitly wmake + isolated extractor; not yet rerun WSL. All original 10s CFD, 101 snapshots, native weighted alpha and metal+mold model reference thermal inventories preserved. q and energy closure still unobserved/unvalidated; G3-G7 remain open, stage3/7 2/7.",
+  "next_integrated_delivery": "User must pull source fix then rerun ONLY C3D05-B native flux eight tests, preflight and isolated Foundation14 wmake q extraction (NO foamMultiRun): git pull --ff-only && python3 -B -m unittest discover -s cases_3d/C3D_05_step_gmsh_conformal/c14_physics/tests -p 'test_existing_case_b_c14_native_flux.py' -v && python3 -B cases_3d/C3D_05_step_gmsh_conformal/c14_physics/run_existing_case_b_c14_native_flux.py --preflight && bash -lc 'source /opt/openfoam14/etc/bashrc && python3 -B cases_3d/C3D_05_step_gmsh_conformal/c14_physics/run_existing_case_b_c14_native_flux.py --extract'. Treat any new wmake errors as runtime compile evidence; never claim q measured until actual outputs.",
   "science": "CASE_B_NATIVE_C14_10S_CFD_AND_REFERENCE_METAL_MOLD_ENERGY_WSL_DONE_FLUID_SOLID_TRUE_F14_Q_CPP_RUNNER_CODE_STAGED_NATIVE_WSL_COMPILE_PENDING_NO_PHYSICAL_CLOSURE"
 }
