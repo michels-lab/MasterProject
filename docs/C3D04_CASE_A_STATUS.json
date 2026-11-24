@@ -118,7 +118,7 @@
       "No demonstrated solver-step discrete conservation or grid/time independence",
       "No experimental validation; FoamLens sweep import not observed"
     ],
-    "next": "Plan controlled same-geometry mesh/time sensitivity and discrete conservation; do not repeat completed base CFD/comparison."
+    "next": "Prioritize faithful C14 runtime diagnostic parity on same V4/T02 before discretization sensitivity; preserve original CFD and completed comparisons."
   },
   "stage06_preflight_integrity": {
     "date": "2026-11-20",
@@ -1195,5 +1195,24 @@
       "compatibility_basis": "FoamLens frontend index.html profileHeaderTokens, parseSpatialProfileFile, profileTimeFromFile, profileOutputPathFromFile, fastOpenFOAMKind, parseFile; runtime import not observed",
       "user_preference": "Persist data directly in case for FoamLens; HTML secondary only"
     }
+  },
+  "stage09_C14_full_runtime_parity": {
+    "date": "2026-11-24",
+    "status": "ORIGINAL_PHYSICS_AND_CONTROL_IDENTICAL_RUNTIME_DIAGNOSTIC_PARITY_NOT_YET_ACHIEVED",
+    "owner_requirement": "Faithful 3D copy of C14 including runtime functionObjects and sampling cadence; only mesh-dependent coordinates/patches adapted.",
+    "original_controlDict_byte_identical_at_launch": true,
+    "source_full_run": "~/OpenFOAM/C3D04_A_C14_FLUID_SOLID_FULL_10S_RUN_01",
+    "source_stage_generator": "cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/stage_c14_3d_case_a.py",
+    "source_fileset": "cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/c14_source_fidelity.py",
+    "omitted_runtime_dictionaries": [
+      "system/functions",
+      "system/researchDiagnostics",
+      "system/lineProfiles"
+    ],
+    "native_2D_probe_dt_s": 0.001,
+    "existing_3D_saved_field_dt_s": 0.1,
+    "required_native_runtime_probe_samples_target": 10001,
+    "planned": "Prepare separate same-V4/T02 3D C14 reproduction from t0 with original functionObjects, only coordinate/patch/syntax changes necessary, preserve 10s/dt=.001/writeInterval=100 and base run; verify native cadence and diagnostic coverage, no claim until actual run. No mesh/time study before baseline diagnostic parity if researcher prioritizes fidelity.",
+    "new_run_executed": false
   }
 }
