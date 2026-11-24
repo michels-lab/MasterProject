@@ -497,22 +497,48 @@ def inspect_occupied_copy(case: Path, copy: Path,
     if seen != set(TASK_ORDER):
         result["reason"] = "Only some native groups were recorded in final report."
         return result
-    groups_passed = [x["group"] for x in groups if x["passed"]]
-    groups_failed = [x["group"] for x in groups if not x["passed"]]
-    if (prior.get("native_groups_passed") != groups_passed or
-        prior.get("native_groups_failed") != groups_failed):
-        result["reason"] = "Native passed/failed rollups contradict individual exit codes."
+    declared_passed = [x["group"] for x in groups if x["passed"]]
+    declared_failed = [x["group"] for x in groups if not x["passed"]]
+    if (prior.get("native_groups_passed") != declared_passed or
+        prior.get("native_groups_failed") != declared_failed):
+        result["reason"] = "Native passed/failed rollups contradict recorded group status."
         return result
+    semantic = {}
+    for item in groups:
+        group = item["group"]
+        signal = fatal_openfoam_log(
+            copy / ("log.C14_3D_postprocess_solverBacked_" + group))
+        semantic[group] = {
+            "original_report_passed": item["passed"],
+            "os_exit_code": item["exit_code"],
+            "semantically_passed": item["exit_code"] == 0 and not signal["foam_fatal_present"],
+            **signal,
+        }
+    groups_passed = [g for g in TASK_ORDER if semantic[g]["semantically_passed"]]
+    groups_failed = [g for g in TASK_ORDER if not semantic[g]["semantically_passed"]]
+    false_positive = any(
+        x["original_report_passed"] and not x["semantically_passed"]
+        for x in semantic.values()
+    )
     result.update({
-        "status": "EXISTING_COMPLETE_NATIVE_POSTPROCESS_REPORT_REUSED_NO_NEW_RUN",
+        "status": (
+            "EXISTING_COMPLETE_REPORT_WITH_NATIVE_FATALS_PRESERVED"
+            if false_positive else
+            "EXISTING_COMPLETE_NATIVE_POSTPROCESS_REPORT_REUSED_NO_NEW_RUN"
+        ),
+        "original_report_groups_passed_by_exit_code_only": declared_passed,
+        "semantic_group_results": semantic,
+        "prior_report_false_positive_success_detected": false_positive,
         "final_report_sha_verified": True,
         "native_groups_passed": groups_passed,
         "native_groups_failed": groups_failed,
         "surface_energy": prior.get("surface_energy"),
         "native_validation_verified": False,
         "reason": (
-            "The prior six-group run is finished and its identities/logs "
-            "match. This is NOT evidence of physical/global energy validation."
+            "The original six-log and report SHA identities match. "
+            "Native FOAM FATAL markers override any exit-code-only PASS; "
+            "no source/workcopy changes or CFD occurred. "
+            "This is NOT physical/global energy validation."
         ),
     })
     return result
