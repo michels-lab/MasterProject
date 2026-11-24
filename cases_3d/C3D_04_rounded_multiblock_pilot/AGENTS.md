@@ -1,3 +1,9 @@
+## 24-11-2026 C3D04-A _03 F14 cellZones STILL MISSING AT RUNTIME — do not create _04 blindly
+
+Real WSL _03 inspector authenticated six logs; core/energy/flow/momentum have exactly 100 FATAL IO Cannot find cellZone metal despite copied-zone fix. phase alpha1=0.897245 at t10, profiles line_y10/20/30 have 80 finite samples, vertical x20 has 27 INCOMPLETE. Each of 3 energy face tables has 1 row t0, zero scientific energy closure. No false PASS. Do not rerun CFD or native 101-state postProcess until exact F14 active zone instance is determined. Execute read-only audit_c14_stage07_active_cellzone.py in worktree A: compare original and _03 constant/polyMesh cellZones, 8960 exact-cell zone, SHA mesh connectivity, time-local polyMesh overrides, prior run zone metadata; **NO WRITES OR FOAM COMMANDS**. Separate B and FS untouched; 7/10 stages, 6/10=60% milestones. [Scientific record](../../docs/C3D04_A_STAGE07_03_ACTIVE_MESH_FORENSICS_20261124_ES.md).
+
+---
+
 ## 23-11-2026 Caso A native offline F14: missing metal cellZone caused false success
 
 Real WSL _02: six exit0 reports but core/energy/flow/momentum logs contain FOAM FATAL IO ERROR Cannot find cellZone metal, Available cellZones: 0(). The new runner scans complete logs (FATAL overrides returncode0). It verifies original 8960 metal cell count plus geometry hashes before creating full all-metal zone ONLY in explicit fresh _03, preserves prior _01/_02 and entire original C14 CFD; B/FS untouched. Audits primitive profiles 80 finite points and native 100/101 snapshot face-power timings, no global conservation or QuickCup claim. [Protocol](../../docs/C3D04_A_STAGE07_NATIVE_METAL_CELLZONE_RECOVERY_20261123_ES.md). Stage 7/10, 6/10 milestones 60%.
