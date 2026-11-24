@@ -31,6 +31,9 @@ protected:
     virtual void pressureCorrector() override;
     virtual void thermophysicalPredictor() override;
 
+    // Called after ALL PIMPLE iterations: audit completed CFD step.
+    virtual void postSolve() override;
+
 public:
     TypeName("fsC08ConservativeVoF");
 
