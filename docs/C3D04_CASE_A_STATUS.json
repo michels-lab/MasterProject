@@ -118,7 +118,7 @@
       "No demonstrated solver-step discrete conservation or grid/time independence",
       "No experimental validation or GUI opening observed"
     ],
-    "next": "Run one native offline 2D-3D comparison, open generated HTML and compare cooling curves/profiles before further CFD."
+    "next": "Multidirectional 3D-A spatial analysis plus pending C14 2D homologous comparison, before numerical verification."
   },
   "stage06_preflight_integrity": {
     "date": "2026-11-20",
@@ -1035,5 +1035,24 @@
       "three horizontal and one central vertical profiles, temperature/velocity/pressure/alpha/gradT",
       "coverage and RMSE CSV, volume means, preserved 2D native probe files"
     ]
+  },
+  "stage09_multidirectional_3D": {
+    "status": "PUBLISHED_CODE_NOT_EXECUTED_WSL",
+    "entrypoint": "cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/analyze_c14_a_multidirectional.py",
+    "commit": "acdf8625bdb9eff327471a31ba298fdfb18b0ad4",
+    "doc": "docs/C3D04_A_STAGE09_MULTIDIRECTIONAL_20261124_ES.md",
+    "source": "~/OpenFOAM/C3D04_A_C14_VISUALIZATION_01",
+    "output": "~/OpenFOAM/C3D04_A_C14_MULTIDIRECTIONAL_01",
+    "saved_times_requested": 101,
+    "diameters": 12,
+    "vertical_lines": 5,
+    "radial_angular_samples": 8,
+    "section_midpoint_grid": [
+      41,
+      41
+    ],
+    "section_area_exact": false,
+    "source_solver_rerun": false,
+    "notes": "Existing 2D comparison still separate and pending actual reference; no CFD or manual tests. Radial velocity projections and coverage recorded; no extrapolation."
   }
 }
