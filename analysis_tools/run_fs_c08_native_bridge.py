@@ -13,6 +13,7 @@ from datetime import datetime, timezone
 import hashlib
 import json
 import os
+import re
 from pathlib import Path
 import shutil
 import subprocess
@@ -59,7 +60,26 @@ def case_inputs(case: Path) -> dict[str, str]:
     return checksums
 
 
-def execute_checked(
+def compiler_error_excerpt(log: Path, *, limit: int = 8) -> str:
+    """Extract real compiler diagnostics instead of guessing from exit code."""
+    if not log.is_file():
+        return "(compiler log unavailable)"
+    text = log.read_text(encoding="utf-8", errors="replace")
+    if not text.strip():
+        return "(compiler log empty)"
+    lines = text.splitlines()
+    errors = [
+        line.strip() for line in lines
+        if re.search(
+            r"fatal error:|(?<!\w)error:|undefined reference"
+            r"|No rule to make target|\\*\\*\\*.*Error [0-9]+",
+            line, re.IGNORECASE,
+        )
+    ]
+    chosen = errors[:limit] if errors else lines[-limit:]
+    return "\n".join(chosen)
+
+
     argv: list[str], cwd: Path, timeout_seconds: int, log: Path,
 ) -> subprocess.CompletedProcess:
     with log.open("w", encoding="utf-8") as sink:
@@ -73,8 +93,10 @@ def execute_checked(
                 "Command timeout; see preserved log " + str(log)
             )
     if run.returncode != 0:
+        excerpt = compiler_error_excerpt(log)
         raise ValueError(
             f"External command returned {run.returncode}; preserved log: {log}"
+            f"\nFirst compiler/error diagnostics (or last log lines):\n{excerpt}"
         )
     return run
 
