@@ -1,3 +1,46 @@
+## Actualización confirmada: error exacto en `interpolate(kappa)` y corrección aislada
+
+**WSL REAL del investigador (24 de noviembre de 2026):** ejecutó `--diagnose-attempt` con `git pull` y la herramienta recuperó el contenido íntegro del primer `FOAM FATAL IO ERROR` después de la compilación nativa F14 exitosa:
+
+```text
+Selecting momentum transport model type laminar
+    Selecting laminar stress model Stokes
+Selecting thermophysical transport type laminar
+    Selecting default laminar thermophysical transport model unityLewisFourier
+Selecting default solid thermophysical transport model isotropic
+
+--> FOAM FATAL IO ERROR:
+Cannot find scheme for interpolate(kappa) in dictionary "$FOAM_CASE/system/mold/fvSchemes!interpolationSchemes"
+file: .../C3D05_B_C14_FLUID_SOLID_FULL_10S_01/system/mold/fvSchemes!interpolationSchemes at line 41.
+```
+
+**Causa concreta confirmada:** la llamada `solidThermophysicalTransportModel::q()` para el MOLDE requiere una regla explícita de interpolación de `kappa`, mientras que el archivo original C14 (verificado en el repositorio) declara `interpolate((kappa|Cv)) harmonic;`. La búsqueda de OpenFOAM Foundation14 del término `interpolate(kappa)` no queda satisfecha por esa expresión en la ejecución observada. **No es una falla de malla, CFD ni de las propiedades materiales.**
+
+**Código nuevo YA implementado en GitHub, ejecución WSL todavía pendiente:**
+
+- El ejecutor `run_existing_case_b_c14_native_flux.py` implementa `prepare_isolated_c14_flux_case()`. Nunca modifica `C3D05_B_C14_FLUID_SOLID_FULL_10S_01/system/mold/fvSchemes` ni otro archivo del CFD real.
+- Construye un `shadow_postrun_case` dentro del directorio .ATTEMPT privado y separado. Copia `system/`; solo en **la copia** de `system/mold/fvSchemes` añade, dentro de `interpolationSchemes`, la línea:
+  `interpolate(kappa) harmonic; // POSTPROCESSING ONLY, original C14 harmonic scheme`
+- Requiere que la regla **original** `interpolate((kappa|Cv)) harmonic;` exista y rechaza cualquier esquema distinto, duplicado, diccionario inseguro o escritura en una carpeta sombra previa.
+- Crea **101 directorios reales de tiempo** y los subdirectorios `metal/` y `mold/`, con enlaces simbólicos a **todos los campos archivados originales**. Esto permite que `timeSelector` enumere los tiempos sin duplicar ni mover campos y sin editar el original. `constant/` se enlaza al original, `system/` es una copia; el código nativo solamente los lee.
+- Conserva SHA del `fvSchemes` original antes y después, y agrega SHA del diccionario exclusivamente modificado y un JSON de procedencia al informe final, si la extracción llega a pasar.
+- 4 regresiones nuevas para copias aisladas, 101 tiempos, SHA y esquemas prohibidos: **14 pruebas en código** (8 de extracción, 2 de diagnóstico, 4 de sombra); **no ejecutadas aún en WSL tras esta edición**. El último resultado real sigue siendo 8/8 del extractor original, preflight aprobado y compilación realizada, sin `q` publicado.
+
+**Comando recomendado desde el directorio `~/OpenFOAM/MasterProject`** — NO vuelve a ejecutar CFD:
+
+```bash
+git pull --ff-only && \
+python3 -B -m unittest discover \
+  -s cases_3d/C3D_05_step_gmsh_conformal/c14_physics/tests \
+  -p "test_existing_case_b_c14_native_flux.py" -v && \
+python3 -B cases_3d/C3D_05_step_gmsh_conformal/c14_physics/run_existing_case_b_c14_native_flux.py --preflight && \
+bash -lc 'source /opt/openfoam14/etc/bashrc && python3 -B cases_3d/C3D_05_step_gmsh_conformal/c14_physics/run_existing_case_b_c14_native_flux.py --extract'
+```
+
+Aun si se extraen flujos, será `q()` conductivo calculado con una **regla armónica explícita añadida solo para el posprocesamiento** (su intención coincide con el diccionario original), no una historia de flujos integrada por los pasos nativos de `foamMultiRun`. El reporte guardará esta distinción. **La suma referencial -1352.944 J NO es un error de energía ni fuga medida**. Mantener G3-G7 abiertos, etapa 3/7 y 2/7 hitos técnicos aceptados.
+
+---
+
 ## Actualización WSL — 24 nov 2026: compilación PASÓ, ejecución detuvo FOAM FATAL IO
 
 **Evidencia real observada:** `git pull --ff-only` completó la actualización; **8/8 pruebas de auditoría del extractor PASS** (`Ran 8 tests in 1.178s, OK`); `--preflight` confirmó C14 original 10 s, 101 estados, metal-fluido/molde-sólido, hash SHA de la malla/reporte/log y ninguna reejecución CFD.
