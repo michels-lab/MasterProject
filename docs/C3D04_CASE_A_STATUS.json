@@ -755,7 +755,21 @@
       "fallback": "Per-time native processes with consolidated data if grouped recovery cannot be justified or does not pass.",
       "source": "https://cpp.openfoam.org/v14/generatedCellZone_8C_source.html",
       "native_test_executed": false,
-      "code_implemented": false
+      "code_implemented": true,
+      "delivery_commit": "5017ec57e96f74dcdf2172fa572eb6a2dafd62fd",
+      "entrypoint": "cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/run_c14_stage07_grouped_native_recovery.py",
+      "regressions_added": 5,
+      "gates": [
+        "Exact full metal membership and source/probe hashes",
+        "Three native rho*h values compared at 0,0.1,10 with relative/absolute tolerances 1e-6",
+        "Seven grouped passes each over all saved times (no individual time loop)",
+        "101 finite scalar rows and exact time axes; 80-point final profiles; face-power reconciliation; source hashes unchanged"
+      ],
+      "limitations": [
+        "Only copy fvModels selection changed from metal to all; original CFD untouched",
+        "No observed WSL grouped execution or CI result yet",
+        "Vertical sampling geometry may still be incomplete; no global energy balance or QuickCup"
+      ]
     }
   }
 }
