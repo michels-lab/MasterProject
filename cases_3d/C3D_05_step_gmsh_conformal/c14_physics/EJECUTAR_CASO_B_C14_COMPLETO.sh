@@ -127,157 +127,44 @@ EOF
 fi
 
 [[ -f "$OUT/10/metal/T" && -f "$OUT/10/mold/T" && -f "$OUT/$LOG" ]] || {
-  echo "La nueva corrida C14 todavia no termino en t10; no postprocesar." >&2
+  echo "La nueva corrida no tiene t10 ni log. No postprocesar." >&2
   exit 4
 }
-# The solver log must contain a true final Time=10s and End, not merely
-# output files left from a crashed/incomplete solver execution.
-grep -Eq '^[[:space:]]*Time[[:space:]]*=[[:space:]]*10([.]0+)?s[[:space:]]*
-
-# A successful post stage receives a .DONE marker. A partial failed post
-# log is PRESERVED with a suffix and can be retried by --post-only without
-# ever repeating the CFD solver.
-run_post() {
-  local log="$1"; shift
-  if [[ -f "$log.DONE" ]]; then
-    echo "Ya completado: $log (no repetir)."
-    return 0
-  fi
-  if [[ -e "$log" || -L "$log" ]]; then
-    local previous="$log.INCOMPLETE_$(date +%Y%m%d_%H%M%S)"
-    mv -- "$log" "$previous"
-    echo "Log anterior conservado: $previous"
-  fi
-  set -o pipefail
-  "$@" 2>&1 | tee "$log"
-  touch "$log.DONE"
-}
-
-# These commands are taken from the C14 original Allrun, after the solver.
-# No new solve in --post-only mode.
-echo "Procesando momentum y solidificationMelting C14 original..."
-run_post log.foamPostProcess.C14.momentum \
-  foamPostProcess -case "$OUT" -region metal \
-    -dict "$OUT/system/momentumPostProcessing" -time '0:' \
-    -fields '(phaseChangeSolidFraction phaseChangeDarcyCoeff phaseChangeModelDeltaT phaseChangeDarcyAcceleration phaseChangeBuoyancyAcceleration pRghAcceleration magPhaseChangeDarcyAcceleration magPhaseChangeBuoyancyAcceleration magPRghAcceleration phaseChangeDragToBuoyancy phaseChangeDragToPressure)'
-
-echo "Extrayendo residuales, continuidad y Courant del log C14..."
-run_post log.foamLog.C14 foamLog "$LOG"
-
-echo "Procesando la cara superior metalTop C14 original..."
-run_post log.foamPostProcess.C14.topSurfaceFlow \
-  foamPostProcess -case "$OUT" -region metal \
-    -dict "$OUT/system/topSurfaceFlowPostProcessing" -time '0:' \
-    -fields '(U T p_rgh rho phi phaseChangeSource:alpha1)'
-
-touch "$OUT/C3D05_B_C14_FUNCIONES_COMPLETAS.foam"
-printf '\n%s\n' \
-  "FINALIZADO: Nueva solucion C14 10s con funciones originales y postproceso." \
-  "Salida: $OUT" \
-  "ParaView: paraview --data=$OUT/C3D05_B_C14_FUNCIONES_COMPLETAS.foam" \
-  "Sondas: $OUT/postProcessing/temperatureProbe/" \
-  "Perfiles: $OUT/postProcessing/horizontalProfiles/ y verticalProfiles/" \
-  "Momentum y topFlow: $OUT/postProcessing/" \
-  "CFD original inalterado: $SRC"
- "$OUT/$LOG" || {
-  echo "Falta evidencia de tiempo 10s en log CFD nuevo; no postprocesar." >&2
+grep -Eq '^[[:space:]]*Time[[:space:]]*=[[:space:]]*10([.]0+)?s[[:space:]]*$' "$OUT/$LOG" || {
+  echo "Falta Time = 10s en log nuevo; no postprocesar." >&2
   exit 4
 }
-grep -Eq '^[[:space:]]*End[[:space:]]*
-
-# A successful post stage receives a .DONE marker. A partial failed post
-# log is PRESERVED with a suffix and can be retried by --post-only without
-# ever repeating the CFD solver.
-run_post() {
-  local log="$1"; shift
-  if [[ -f "$log.DONE" ]]; then
-    echo "Ya completado: $log (no repetir)."
-    return 0
-  fi
-  if [[ -e "$log" || -L "$log" ]]; then
-    local previous="$log.INCOMPLETE_$(date +%Y%m%d_%H%M%S)"
-    mv -- "$log" "$previous"
-    echo "Log anterior conservado: $previous"
-  fi
-  set -o pipefail
-  "$@" 2>&1 | tee "$log"
-  touch "$log.DONE"
-}
-
-# These commands are taken from the C14 original Allrun, after the solver.
-# No new solve in --post-only mode.
-echo "Procesando momentum y solidificationMelting C14 original..."
-run_post log.foamPostProcess.C14.momentum \
-  foamPostProcess -case "$OUT" -region metal \
-    -dict "$OUT/system/momentumPostProcessing" -time '0:' \
-    -fields '(phaseChangeSolidFraction phaseChangeDarcyCoeff phaseChangeModelDeltaT phaseChangeDarcyAcceleration phaseChangeBuoyancyAcceleration pRghAcceleration magPhaseChangeDarcyAcceleration magPhaseChangeBuoyancyAcceleration magPRghAcceleration phaseChangeDragToBuoyancy phaseChangeDragToPressure)'
-
-echo "Extrayendo residuales, continuidad y Courant del log C14..."
-run_post log.foamLog.C14 foamLog "$LOG"
-
-echo "Procesando la cara superior metalTop C14 original..."
-run_post log.foamPostProcess.C14.topSurfaceFlow \
-  foamPostProcess -case "$OUT" -region metal \
-    -dict "$OUT/system/topSurfaceFlowPostProcessing" -time '0:' \
-    -fields '(U T p_rgh rho phi phaseChangeSource:alpha1)'
-
-touch "$OUT/C3D05_B_C14_FUNCIONES_COMPLETAS.foam"
-printf '\n%s\n' \
-  "FINALIZADO: Nueva solucion C14 10s con funciones originales y postproceso." \
-  "Salida: $OUT" \
-  "ParaView: paraview --data=$OUT/C3D05_B_C14_FUNCIONES_COMPLETAS.foam" \
-  "Sondas: $OUT/postProcessing/temperatureProbe/" \
-  "Perfiles: $OUT/postProcessing/horizontalProfiles/ y verticalProfiles/" \
-  "Momentum y topFlow: $OUT/postProcessing/" \
-  "CFD original inalterado: $SRC"
- "$OUT/$LOG" || {
-  echo "Solver nuevo no llego a End; no postprocesar ni declarar exito." >&2
+grep -Eq '^[[:space:]]*End[[:space:]]*$' "$OUT/$LOG" || {
+  echo "Falta End del solver nuevo; no postprocesar." >&2
   exit 4
 }
 cd "$OUT"
 
-# A successful post stage receives a .DONE marker. A partial failed post
-# log is PRESERVED with a suffix and can be retried by --post-only without
-# ever repeating the CFD solver.
-run_post() {
-  local log="$1"; shift
-  if [[ -f "$log.DONE" ]]; then
-    echo "Ya completado: $log (no repetir)."
+post_once() {
+  local logfile="$1"; shift
+  if [[ -f "$logfile.DONE" ]]; then
+    echo "Etapa completada: $logfile"
     return 0
   fi
-  if [[ -e "$log" || -L "$log" ]]; then
-    local previous="$log.INCOMPLETE_$(date +%Y%m%d_%H%M%S)"
-    mv -- "$log" "$previous"
-    echo "Log anterior conservado: $previous"
+  if [[ -e "$logfile" ]]; then
+    mv -- "$logfile" "$logfile.INCOMPLETE_$(date +%Y%m%d_%H%M%S)"
   fi
-  set -o pipefail
-  "$@" 2>&1 | tee "$log"
-  touch "$log.DONE"
+  "$@" 2>&1 | tee "$logfile"
+  touch "$logfile.DONE"
 }
 
-# These commands are taken from the C14 original Allrun, after the solver.
-# No new solve in --post-only mode.
-echo "Procesando momentum y solidificationMelting C14 original..."
-run_post log.foamPostProcess.C14.momentum \
+post_once log.foamPostProcess.C14.momentum \
   foamPostProcess -case "$OUT" -region metal \
     -dict "$OUT/system/momentumPostProcessing" -time '0:' \
     -fields '(phaseChangeSolidFraction phaseChangeDarcyCoeff phaseChangeModelDeltaT phaseChangeDarcyAcceleration phaseChangeBuoyancyAcceleration pRghAcceleration magPhaseChangeDarcyAcceleration magPhaseChangeBuoyancyAcceleration magPRghAcceleration phaseChangeDragToBuoyancy phaseChangeDragToPressure)'
-
-echo "Extrayendo residuales, continuidad y Courant del log C14..."
-run_post log.foamLog.C14 foamLog "$LOG"
-
-echo "Procesando la cara superior metalTop C14 original..."
-run_post log.foamPostProcess.C14.topSurfaceFlow \
+post_once log.foamLog.C14 foamLog "$LOG"
+post_once log.foamPostProcess.C14.topSurfaceFlow \
   foamPostProcess -case "$OUT" -region metal \
     -dict "$OUT/system/topSurfaceFlowPostProcessing" -time '0:' \
     -fields '(U T p_rgh rho phi phaseChangeSource:alpha1)'
-
 touch "$OUT/C3D05_B_C14_FUNCIONES_COMPLETAS.foam"
 printf '\n%s\n' \
-  "FINALIZADO: Nueva solucion C14 10s con funciones originales y postproceso." \
-  "Salida: $OUT" \
+  "TERMINADO: nueva corrida C14 con posprocesamiento original" \
+  "Directorio: $OUT" \
   "ParaView: paraview --data=$OUT/C3D05_B_C14_FUNCIONES_COMPLETAS.foam" \
-  "Sondas: $OUT/postProcessing/temperatureProbe/" \
-  "Perfiles: $OUT/postProcessing/horizontalProfiles/ y verticalProfiles/" \
-  "Momentum y topFlow: $OUT/postProcessing/" \
-  "CFD original inalterado: $SRC"
+  "Caso B 10s original preservado: $SRC"
