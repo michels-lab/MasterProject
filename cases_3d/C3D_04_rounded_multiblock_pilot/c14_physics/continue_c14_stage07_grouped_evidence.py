@@ -64,7 +64,7 @@ def longest_sample_interval(coords,lo,hi,count):
             runs.append([idx])
     best=max(runs,key=len)
     need(len(best)>=3,"native scan has no contiguous three-point interior")
-    # Exclude one sampled spacing at each end, use exact supported grid coordinates.
+    # Move half a sampled spacing inward at each end; native resampling verifies the chord.
     a,b=lo+best[0]*step+step*.5,lo+best[-1]*step-step*.5
     need(b>a,"degenerate interior chord")
     return {"start_y_m":a,"end_y_m":b,"length_m":b-a,
@@ -241,12 +241,16 @@ def execute(source,work,out):
     need(not out.is_relative_to(Path(__file__).resolve().parents[3]),"output inside repository")
     r=evidence_gate(source,work)
     before=grouped.snapshot_hashes(source)
-    previous=grouped.snapshot_hashes(work) if (work/"log.foamMultiRun").is_file() else None
-    # grouped copy does not include original solver log; authenticate all relevant
-    # input fields and original group report in all cases.
     files=[work/grouped.REPORT]
-    files.extend(work/t/"metal"/field for t in NAMES for field in PRIMITIVE+MOMENTUM)
-    identities={str(p):recovery.sha(p) for p in files if p.is_file()}
+    for n in ("system","constant","postProcessing",*NAMES):
+        folder=work/n
+        need(folder.is_dir() and not folder.is_symlink(),"grouped input missing "+n)
+        for p in sorted(folder.rglob("*")):
+            need(not p.is_symlink(),"grouped input symlink "+str(p))
+            if p.is_file():
+                files.append(p)
+    files.extend(work/item["log"] for item in r["groups"].values())
+    identities={str(p):recovery.sha(p) for p in files}
     out.mkdir()
     result={"schema":"C3D04_A_GROUPED_STAGE07_CONTINUATION_V1","stage":"07/10","milestones_done":"6/10",
             "source":str(source),"grouped_input":str(work),"source_solver_rerun":False,
@@ -259,8 +263,6 @@ def execute(source,work,out):
             result[name]={"status":"BLOCKED_PRESERVED","error":str(exc)}
     result["source_hashes_unchanged"]=grouped.snapshot_hashes(source)==before
     result["grouped_input_hashes_unchanged"]=all(recovery.sha(Path(p))==h for p,h in identities.items())
-    if previous is not None:
-        result["grouped_input_hashes_unchanged"] &= grouped.snapshot_hashes(work)==previous
     result["report"]=str(out/REPORT)
     (out/REPORT).write_text(json.dumps(result,indent=2)+"\n",encoding="utf-8")
     return result
