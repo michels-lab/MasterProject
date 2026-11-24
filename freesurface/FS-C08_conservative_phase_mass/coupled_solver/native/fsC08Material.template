@@ -26,9 +26,17 @@ Tmin_K <SUPPORTED_MIN_TEMPERATURE_K>;
 Tmax_K <SUPPORTED_MAX_TEMPERATURE_K>;
 metalPresenceThreshold <MATERIAL_TRACE_VOF_THRESHOLD>;
 
-// This relaxes a real equilibrium solid MASS fraction and introduces
-// numerical kinetic lag. It needs physical/experimental justification.
-phaseRelaxation <CALIBRATED_KINETIC_RELAXATION_0_TO_1>;
+// Select an EXPLICIT physical closure. No arbitrary per-deltaT factor:
+// - equilibrium: evaluate f_s,mass(T) at each CFD time step
+// - kineticRelaxation: use physical tau(T) in seconds, from measured data
+phaseChangeClosure <equilibrium_OR_kineticRelaxation>;
+
+// Required ONLY with kineticRelaxation, do NOT add for equilibrium:
+// tauPhaseChangeT table
+// (
+//     (<T_1_K> <TAU_1_S_FROM_EXPERIMENT>)
+//     (<T_2_K> <TAU_2_S_FROM_EXPERIMENT>)
+// );
 
 rhoLiquidT table
 (
