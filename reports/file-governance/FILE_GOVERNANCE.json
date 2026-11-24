@@ -29,8 +29,8 @@
     "POTENTIAL_UNLOGGED_CHANGES": 2
   },
   "finding_total": 9,
-  "inventory_fingerprint": "a129451a6fd1ffe0c00a9dc636057b396342e46232a8e9c8d2299707622a66ae",
-  "evidence_fingerprint": "4b4c69a4f6eb4174e39d42b981f76d5f302e09afb8e12e4d07c8cc95816fcf6d",
+  "inventory_fingerprint": "ce9836b52d9380627be7a17fe8cd084e06d1d6b8630fcfd2cf992a04176be95c",
+  "evidence_fingerprint": "1b69c497b499644fa84a3312ec9df81c80a37ebc4d87c4e8ba07f194243d6054",
   "files": [
     {
       "path": ".github/agents/openfoam-solidification.agent.md",
@@ -2193,7 +2193,7 @@
       "role": "test",
       "purpose": "code/test implementation",
       "certainty": "rule",
-      "blob": "ed730bca6bdaa528bc679fd782dd72f3152d4826"
+      "blob": "38393c2c00524e4de5668c8cb0bbd9b4dafa8220"
     },
     {
       "path": "cases_3d/C3D_05_step_gmsh_conformal/c14_physics/tests/test_existing_case_b_c14_phase_timeline.py",
@@ -272680,7 +272680,7 @@
       "role": "config",
       "purpose": "machine-readable configuration",
       "certainty": "rule",
-      "blob": "b4bfae5c100e7122bb6e23ea37b355b4d4e1acb5"
+      "blob": "e9f817a68afeff8bcefb248e1ca0f3efb3b4425f"
     },
     {
       "path": "docs/REGLA_INSTRUCCIONES_UNIFICADAS_ES.md",
@@ -272750,7 +272750,7 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "6eb1380212c12d98bfe47f454498dae0091879f9"
+      "blob": "9d96e1c9e4e1c9accc992f873e6c6384eecf3a63"
     },
     {
       "path": "docs/granada/C3D05_B_C14_INVENTARIO_CONJUNTO_101_ESTADOS_WSL_20261124_ES.md",
@@ -273688,11 +273688,11 @@
       "state": "REVIEW_REQUIRED"
     },
     {
-      "id": "a112824c4b04ce2a",
+      "id": "f192e0f3afc0d25a",
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_ES.md",
-      "observation": "1 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_05_step_gmsh_conformal/c14_physics/run_existing_case_b_c14_native_flux.py",
+      "observation": "3 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_05_step_gmsh_conformal/c14_physics/run_existing_case_b_c14_native_flux.py, cases_3d/C3D_05_step_gmsh_conformal/c14_physics/tests/test_existing_case_b_c14_native_flux.py, docs/PROJECT_STAGE_STATUS.json",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     }
