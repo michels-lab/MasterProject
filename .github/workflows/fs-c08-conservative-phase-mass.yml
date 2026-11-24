@@ -1,0 +1,71 @@
+name: FS-C08 conservative mass, energy, and phase-change prototype (synthetic NO CFD)
+
+on:
+  push:
+    branches:
+      - research/fs-c08-conservative-phase-mass-20261123
+    paths:
+      - 'analysis_tools/fs_c08_conservative_reference.py'
+      - 'analysis_tools/test_fs_c08_conservative_reference.py'
+      - 'freesurface/FS-C08_conservative_phase_mass/**'
+      - '.github/workflows/fs-c08-conservative-phase-mass.yml'
+  pull_request:
+    paths:
+      - 'analysis_tools/fs_c08_conservative_reference.py'
+      - 'analysis_tools/test_fs_c08_conservative_reference.py'
+      - 'freesurface/FS-C08_conservative_phase_mass/**'
+      - '.github/workflows/fs-c08-conservative-phase-mass.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  fs-c08-conservative-reference:
+    name: Mass/Gamma/enthalpy/pressure diagnostic, NO OpenFOAM CFD
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Syntax check and eighteen synthetic regression tests
+        run: |
+          python3 -B -m py_compile analysis_tools/fs_c08_conservative_reference.py analysis_tools/test_fs_c08_conservative_reference.py
+          python3 -B -m unittest discover -s analysis_tools -p 'test_fs_c08_conservative_reference.py' -v
+      - name: Execute synthetic two-cell FV flux ledger, assert conservation
+        run: |
+          python3 -B analysis_tools/fs_c08_conservative_reference.py             freesurface/FS-C08_conservative_phase_mass/fixtures/SYNTHETIC_TWO_CELL_REFERENCE.json > /tmp/fs_c08_two_cell.json
+          python3 - <<'PY'
+          import json
+          p=json.load(open('/tmp/fs_c08_two_cell.json'))
+          a=p['audit']
+          assert p['case_purpose']=='SYNTHETIC_TEST_ONLY'
+          assert a['is_full_OpenFOAM_3D_CFD_solver'] is False
+          assert p['physical_3d_shrinkage_validated'] is False
+          assert p['openfoam_14_solver_executed'] is False
+          assert all(abs(x)<1e-12 for x in a['phase_mass_residual_kg'].values())
+          assert abs(a['metal_mass_residual_kg'])<1e-12
+          assert abs(a['global_energy_residual_J'])<1e-8
+          assert a['geometric_metal_volume_delta_m3']<0
+          print('FS-C08 2-cell synthetic conservative flux ledger: PASS')
+          PY
+      - name: Execute synthetic closed-cell mushy equilibrium, assert Gamma and energy
+        run: |
+          python3 -B analysis_tools/fs_c08_conservative_reference.py             --mode closed-cell-mushy-equilibrium             freesurface/FS-C08_conservative_phase_mass/fixtures/SYNTHETIC_ONE_CELL_MUSHY_EQUILIBRIUM.json > /tmp/fs_c08_equilibrium.json
+          python3 - <<'PY'
+          import json
+          p=json.load(open('/tmp/fs_c08_equilibrium.json'))
+          a=p['audit']
+          assert p['case_purpose']=='SYNTHETIC_TEST_ONLY'
+          assert p['physical_3d_shrinkage_validated'] is False
+          assert p['openfoam_14_solver_executed'] is False
+          assert a['phase_mass_fraction_law']=='LINEAR_MUSHY_EQUILIBRIUM_TEST_ONLY'
+          assert a['phase_transfer_liquid_to_solid_kg']>0
+          assert a['implied_gamma_kg_m3_s']>0
+          assert abs(a['total_metal_mass_residual_kg'])<1e-12
+          assert abs(a['energy_residual_J'])<1e-8
+          assert a['geometry_metal_volume_delta_m3']<0
+          print('FS-C08 1-cell synthetic enthalpy-derived Gamma equilibrium: PASS')
+          PY
