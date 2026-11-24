@@ -1,0 +1,10 @@
+# Foundation14 actual fvMesh shadow step, C++17 conservative mass network.
+EXE_INC = \
+    -std=c++17 \
+    -I$(LIB_SRC)/finiteVolume/lnInclude \
+    -I$(LIB_SRC)/meshTools/lnInclude
+
+EXE_LIBS = \
+    -lfiniteVolume \
+    -lmeshTools \
+    -lOpenFOAM
