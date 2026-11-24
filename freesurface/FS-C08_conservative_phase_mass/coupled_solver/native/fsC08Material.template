@@ -1,6 +1,6 @@
 /* FS-C08 material dictionary template — NON-EXECUTABLE until calibrated.
  * File to install in a STAGED CASE: constant/fluid/fsC08Material
- * T in K, rho in kg/m3; latentHeat in J/kg; cvSolid in J/(kg K) at CONSTANT VOLUME.
+ * T in K, rho in kg/m3; latentHeat in J/kg; cvLiquidT/cvSolidT in J/(kg K) at CONSTANT VOLUME.
  * Phase fraction curve is SOLID MASS FRACTION (not volume fraction).
  * Use separate source records for each CE/S composition. NO defaults.
  *
@@ -60,7 +60,23 @@ solidMassFractionT table
     (<T_2_K> <FS_MASS_FRACTION_2>)
 );
 
-// The Cv parameter is NOT interchangeable with experimental Cp.
-// Derive consistent Cv(T) or justify Cp≈Cv before claiming energy closure.
-latentHeat [0 2 -2 0 0 0 0] <LATENT_J_PER_KG>;
-cvSolid [0 2 -2 -1 0 0 0] <SOLID_CP_J_PER_KG_K>;
+// Thermal internal-energy integration, NOT an effective constant-Cv
+// approximation: u_s(Tref)=0; u_l(Tref)=latentHeat; both Cv(T) curves
+// are integrated between Tref and the current local mixture T.
+// Latent heat appears ONLY as the u_l-u_s reference difference.
+// This reference is a thermal bookkeeping convention, not a fitted peak.
+energyReferenceT_K <SOURCED_REFERENCE_TEMPERATURE_K>;
+latentHeat [0 2 -2 0 0 0 0] <PHASE_INTERNAL_ENERGY_DIFFERENCE_AT_TREF_J_PER_KG>;
+
+// Cv(T) != Cp(T) in general; provide thermodynamically consistent Cv.
+// Use explicit source, units Kelvin and J/(kg K). NO synthetic defaults.
+cvLiquidT table
+(
+    (<T_1_K> <CV_LIQUID_1_J_PER_KG_K>)
+    (<T_2_K> <CV_LIQUID_2_J_PER_KG_K>)
+);
+cvSolidT table
+(
+    (<T_1_K> <CV_SOLID_1_J_PER_KG_K>)
+    (<T_2_K> <CV_SOLID_2_J_PER_KG_K>)
+);
