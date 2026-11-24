@@ -18,6 +18,10 @@ class fsC08ConservativeVoF : public compressibleVoF
 {
     autoPtr<fsC08::PhaseMassTransport> phaseMass_;
 
+    // Persistent effective metal density from actual conserved phase masses.
+    // Must own oldTime() for the native compressible pressure ddt terms.
+    volScalarField rhoMetalEffective_;
+
     // Restore mixture mass from actual liquid+solid inventories, not
     // alpha.metal * rho_liquid alone. Gas remains native compressibleVoF.
     void reconcileMixtureDensity();
