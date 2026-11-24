@@ -1,3 +1,5 @@
+- C3D04-A native real WSL 2026-11-23: False positive exit0 in core/energy/flow/momentum F14 logs, absent metal cellZone; full verified metal-zone only in separate _03, 100/101 face-power table and final 80-pt profile audits. docs/C3D04_A_STAGE07_NATIVE_METAL_CELLZONE_RECOVERY_20261123_ES.md. Scientific stage 7/10, 6/10 milestones.
+
 - [**C3D04-A · occupied solver-backed workcopy `_02` — read-only completed-vs-partial forensic and no destructive retries (23 Nov 2026)**](C3D04_A_STAGE07_F14_SOLVER_BACKED_NATIVE_RECOVERY_20261123_ES.md) — actual WSL preflight blocked existing output before any new foamPostProcess; verifiable six-log/native summary, preserve partial/active. 6/10 hitos =60%.
 
 - [**C3D04-A · corrección Foundation14 de Field rho not found mediante -solver fluid: recuperación nativa de 6 grupos en copia aislada nueva sin repetir CFD (23-nov-2026)**](C3D04_A_STAGE07_F14_SOLVER_BACKED_NATIVE_RECOVERY_20261123_ES.md) — evidencia auténtica de fallos c14_functions y potencias; QA sintética / nativa de 27 celdas, resultados WSL V4/T02 pendientes. Etapa 7/10, 6/10=60% hitos.
