@@ -61,10 +61,11 @@ def native_flux_analysis(sumfile:Path,facefile:Path)->dict:
             "must have 404 original 101 x 4 patch rows")
     bytime:dict[float,dict[tuple[str,str],dict]]={}
     for r in raw:
-        t=float_field(r,"time_s")
+        measured_t=float_field(r,"time_s")
+        t=round(measured_t,9)
         key=(r["region"],r["patch"])
         require(key in PATCHES,"C14 actual patch not recognized: "+repr(key))
-        require(round(t,9)==t and 0<=t<=10,
+        require(abs(measured_t-t)<1e-9 and 0<=t<=10,
                 "native stored time outside [0,10] or not exact 0.1s")
         count=int(r["nFaces"])
         expected=PATCHES[key]
