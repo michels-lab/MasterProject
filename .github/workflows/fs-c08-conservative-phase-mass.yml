@@ -1,34 +1,6 @@
-name: FS-C08 native-mesh Gamma network and energy ledger (synthetic NO CFD)
+name: FS-C08 legacy synthetic reference (manual only, historical)
 
 on:
-  push:
-    branches:
-      - research/fs-c08-conservative-phase-mass-20261123
-    paths:
-      - 'analysis_tools/fs_c08_conservative_reference.py'
-      - 'analysis_tools/test_fs_c08_conservative_reference.py'
-      - 'analysis_tools/verify_fs_c08_openfoam_inventory.py'
-      - 'analysis_tools/test_verify_fs_c08_openfoam_inventory.py'
-      - 'analysis_tools/run_fs_c08_native_bridge.py'
-      - 'analysis_tools/test_run_fs_c08_native_bridge.py'
-      - 'analysis_tools/verify_fs_c08_native_shadow.py'
-      - 'analysis_tools/run_fs_c08_native_shadow.py'
-      - 'analysis_tools/test_fs_c08_native_shadow.py'
-      - 'freesurface/FS-C08_conservative_phase_mass/**'
-      - '.github/workflows/fs-c08-conservative-phase-mass.yml'
-  pull_request:
-    paths:
-      - 'analysis_tools/fs_c08_conservative_reference.py'
-      - 'analysis_tools/test_fs_c08_conservative_reference.py'
-      - 'analysis_tools/verify_fs_c08_openfoam_inventory.py'
-      - 'analysis_tools/test_verify_fs_c08_openfoam_inventory.py'
-      - 'analysis_tools/run_fs_c08_native_bridge.py'
-      - 'analysis_tools/test_run_fs_c08_native_bridge.py'
-      - 'analysis_tools/verify_fs_c08_native_shadow.py'
-      - 'analysis_tools/run_fs_c08_native_shadow.py'
-      - 'analysis_tools/test_fs_c08_native_shadow.py'
-      - 'freesurface/FS-C08_conservative_phase_mass/**'
-      - '.github/workflows/fs-c08-conservative-phase-mass.yml'
   workflow_dispatch:
 
 permissions:
@@ -36,7 +8,7 @@ permissions:
 
 jobs:
   fs-c08-conservative-reference:
-    name: Real-fvMesh shadow source static contract, native C++17 FV network, NO OpenFOAM CFD
+    name: Historical synthetic reference — manual only, not a physical solver gate
     runs-on: ubuntu-latest
     timeout-minutes: 6
     steps:
