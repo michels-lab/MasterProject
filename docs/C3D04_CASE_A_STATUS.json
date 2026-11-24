@@ -636,5 +636,37 @@
     "new_tool": "cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/audit_c14_stage07_active_cellzone.py",
     "stage07_complete": false,
     "milestone_progress_unchanged": "6/10 = 60%"
+  },
+  "stage07_F14_multitime_registry_evidence_real_WSL_20261124": {
+    "date": "2026-11-24",
+    "source": "Investigador: terminal WSL real audit_c14_stage07_active_cellzone.py",
+    "original_C14_10s_no_CFD_rerun": true,
+    "original_and_03_valid_8960_metal_zone_SHA": "e0826b5fa0f3dac433d239dceee10896f251b97f1e950dd224406381e8baa89e",
+    "source_copy_mesh_points_faces_owner_neighbour_boundary_identical": true,
+    "original_saved_time_directories": 101,
+    "time_local_mesh_directories_found": 0,
+    "failed_F14_native_multi_time_groups": {
+      "core": 100,
+      "energy": 100,
+      "flow": 100,
+      "momentum": 100
+    },
+    "phase_liquid_fraction_volume_mean_t10": 0.897245,
+    "valid_horizontal_profiles_t10": 3,
+    "requested_horizontal_profiles_t10": 3,
+    "vertical_profile_t10_saved_points": 27,
+    "vertical_profile_t10_target_points": 80,
+    "native_face_power_top_contact_total_row_count_each": 1,
+    "native_face_power_only_time_s": 0,
+    "actual_global_energy_conservation_verified": false,
+    "root_cause_hypothesis": "Foundation14 foamPostProcess.C reinitializes solver per saved time and clears mesh.objectRegistry, possibly invalidating zone registry in 0.1..10; only single vs multiple saved times direct controlled comparison can confirm symptom; no proven C++ root cause",
+    "official_F14_source": "https://cpp.openfoam.org/v14/foamPostProcess_8C_source.html",
+    "new_native_diagnostic": "cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/probe_c14_native_f14_single_vs_multi_time.py",
+    "next_probe_real_WSL_executed": false,
+    "test_scope": "Real 0,0.1,10 independent vs same 3 combined; creates four NEW minimal physical copies only, not 101-state re-postprocess",
+    "old_CFD_or_postprocess_modified": false,
+    "stage": "7/10",
+    "milestones": "6/10",
+    "percent_operational": 60
   }
 }
