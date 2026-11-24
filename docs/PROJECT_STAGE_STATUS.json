@@ -631,7 +631,7 @@
     },
     {
       "case_id": "C3D-04 Caso A",
-      "status": "Faithful native results published and analyzed: 10001 probe samples, 101 saved-state metal energy diagnostic, 3D-A .1–10s residual inventory 1.514 J.",
+      "status": "Real WSL exact reproduction 606 primary field files; bilateral saved-state nominal energy residual +0.03052 J (0.1–10s), -6.421 J (0–10s). A3/A4 saved-state diagnostics complete.",
       "evidence": "docs/C3D04_CASE_A_STATUS.json",
       "progress_ref": "docs/C3D04_CASE_A_STATUS.json",
       "stage": "9/10 — conservation and discretization verification",
@@ -640,9 +640,9 @@
       "percent_hitos": 80,
       "percentage_scope": "SOLO_HITOS_OPERATIVOS_DEL_CASO_A_NO_VALIDACION_FISICA",
       "primary_contract": "cases_3d/C3D_04_rounded_multiblock_pilot/AGENTS.md",
-      "next_integrated_milestone": "Read-only local same-mesh primary field comparison and bilateral mold/metal energy diagnostic.",
-      "blocker": "Full saved primary fields and mold flux not archived; local audit published not yet executed. Discrete energy conservation and grid/time independence unverified.",
-      "CI_status": "REAL_GIT_NATIVE_THERMAL_AND_METAL_ENERGY_DIAGNOSTICS_ANALYZED",
+      "next_integrated_milestone": "Same-geometry sensitivity plan and discrete energy accounting; archive local audit CSV.",
+      "blocker": "Discrete conservation, mesh/time independence, QuickCup validation pending; local audit CSV not yet archived.",
+      "CI_status": "REAL_WSL_EXACT_REPRODUCTION_AND_BILATERAL_SAVED_STATE_DIAGNOSTIC_READY",
       "CI_evidence": "docs/C3D04_A_STAGE09_FAITHFUL_NATIVE_ANALYSIS_20261124_ES.md",
       "git_archive": "cases_3d/C3D_04_rounded_multiblock_pilot/C14_3D_A_faithful"
     },
