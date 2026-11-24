@@ -54,3 +54,31 @@ python3 -B "$P/audit_faithful_a_fields_and_energy.py"
 ```
  
 A3 comparaciones archivadas y A4 balance diagnóstico del metal completos en Git; campo volumétrico y balance bilateral de réplica pendientes WSL. No afirmar cierre discreto, independencia ni QuickCup. Etapa 09/10, 8/10=80%.
+
+## Evidencia real WSL — auditoría de campos primarios y balance bilateral, 24-11-2026
+Salida del investigador tras fast-forward 4b2ee3eec..432582252: FAITHFUL_FIELDS_AND_BILATERAL_ENERGY_DIAGNOSTIC_READY. Malla/entradas físicas idénticas, 606 archivos primarios (T,U,p,p_rgh,alpha metal y T molde en 101 estados) idénticos byte a byte, todos los RMSE volumétricos y diferencias máximas cero. Ambas fuentes intactas, sin CFD. La réplica fiel es referencia preferente. Reproducibilidad de campos guardados, no exactitud física ni independencia numérica.
+
+- V metal 4.7921447006662436e-5 m³, V molde 0.00010287540036379159 m³.
+- t10 metal T min/media volumétrica/max = 1401.91/1450.7091627651344/1471.07 K; molde 300.006/481.7459413749073/918.764 K. La media directa de T sustituye la estimación reconstruida 1450.727323 K, sin borrar esta última.
+- Alpha media 0.8972449752706615; sólido 0.1027550247293385. Todo el volumen bajo liquidus, 4.829521188% bajo solidus, todo alpha<0.999999. Velocidad media 0.0018239872269224997 m/s, máxima 0.006013589646581922 m/s a t10; máximo entre los estados 0.025338494975605794 m/s a 2.8 s. p_rgh t10 99999.8–100000 Pa. Primera detección guardada de alpha<0.999999 a 0.3 s: volumen 9.551793953438362e-5 del total, sólido medio 6.611357225017045e-7. No identificar nucleación metalúrgica con este umbral.
+- Molde mínimo 298.207 K en estado t2.8 s pese a T inicial/ambiente 300 K: investigar posible undershoot numérico o BC; no certificar causa con este único dato.
+
+### Balance bilateral nominal (J)
+| Término | 0–10 s | 0.1–10 s |
+|---|---:|---:|
+| Metal contacto, saliente |19617.3097345597|19462.897313016172|
+| Molde contacto, saliente |−19616.84680008763|−19462.487618875242|
+| Desajuste firmado interfaz |0.46293447207228855|0.4096941409349939|
+| Metal superficie libre, saliente |1213.7042422909408|1207.2580929086996|
+| Molde exterior, saliente |142.46332993366747|142.45895897494808|
+| Delta H sensible nativa metal |−13317.6|−12991.2|
+| Delta inventario latente nominal |−7677.03441644834|−7677.03441644834|
+| Delta sensible nominal molde |19632.045807609673|19318.54788041526|
+| Residual metal (inventario) |−164.09061644837857|1.5140835516431252|
+| Residual metal (potencia latente) |−168.53346470003817|−2.9287647000164725|
+| Residual molde |157.6623374557094|−1.4807794850352707|
+| Residual combinado nominal |−6.421036614093225|0.03051585055555961|
+
+Residual combinado = delta H + delta L + delta sensible molde + Q top + Q exterior molde. Respecto a calor externo combinado: −0.4734692634% (0–10 s), +0.00226090724% (0.1–10 s). La compensación de residuos regionales en el primer intervalo impide interpretar por sí sola la pequeña discrepancia global como cierre discreto. El desajuste interfaz 0.1–10 s es 0.002105% del calor saliente metal contacto. q reutilizado de la reconstrucción anterior por identidad exacta de campos y entradas: reporte SHA256 1d3a262d3bc073f2bdbe58cba7efd76f33d0fc66d7721f340382372ddbeaf176; integrated.csv b37d2dc12fa1f6638b79d12c395b2b737cdd21f99d382599fb018d553db08f04; last_faces.csv d85a02f8ee0108f63c8b5d65a561026850e6eeaf57d804d57a1e31b882941368. Fuente: stdout WSL entregado por investigador; CSV locales de auditoría aún no publicados.
+
+A3 y A4 diagnóstico sobre estados guardados completados. Conservación discreta por paso de solver, sensibilidad malla/tiempo y QuickCup siguen abiertos. Etapa09/10, 8/10=80% hitos operativos. Próximo: plan de sensibilidad con geometría/BC constantes y análisis del transitorio inicial; no repetir CFD base ni auditoría exitosa.
