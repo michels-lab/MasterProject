@@ -26,11 +26,11 @@
   },
   "finding_counts": {
     "BROKEN_RELATIVE_LINK": 7,
-    "POTENTIAL_UNLOGGED_CHANGES": 2
+    "POTENTIAL_UNLOGGED_CHANGES": 1
   },
-  "finding_total": 9,
-  "inventory_fingerprint": "286777efb8d3dd0a0d349652846b9b767e66ace14a936014d2033b8b922a9974",
-  "evidence_fingerprint": "b79990b33ea336d0304924ce0ff5c1ff0af49d41fecfbef2e2d4d1aa6c21b6c8",
+  "finding_total": 8,
+  "inventory_fingerprint": "f7f6d9766b9d99a803ac343da8d731b7758e5ec2f4be1c7c087ab5a979754e69",
+  "evidence_fingerprint": "97c7d2d64bb8013a2f92c9268ea7c38ea0b1fd0e9f42aadaa1425820478e7f8b",
   "files": [
     {
       "path": ".github/agents/openfoam-solidification.agent.md",
@@ -114,7 +114,7 @@
       "role": "workflow",
       "purpose": "GitHub Actions automation",
       "certainty": "rule",
-      "blob": "e833ba2e828575ee990dcde601c4f464d06260dd"
+      "blob": "dad2b126f5bf3449b8a644bd12479fccf69f0a51"
     },
     {
       "path": ".github/workflows/c3d05-foundation14-energy-smoke.yml",
@@ -415,14 +415,14 @@
       "role": "bitacora",
       "purpose": "technical/audit change history",
       "certainty": "rule",
-      "blob": "b28b3ff18e22fc835320ca70ac00c3d39583ebfd"
+      "blob": "616b4be056e286fa25dc8f8d430c8ce9dafcf2b8"
     },
     {
       "path": "README.md",
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "c71056789b391124fe56a5c1c77c6d39f1ad57a3"
+      "blob": "259dac2484fed415cdfbb147d1be8f9974071ca6"
     },
     {
       "path": "RUN_CASE_REGISTRY.csv",
@@ -2144,7 +2144,7 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "80cb7516cd67740c19e7d37e0c70dce9af01904b"
+      "blob": "4dc022e7c35d180e68c05c2cd672ceaa14af9557"
     },
     {
       "path": "cases_3d/C3D_05_step_gmsh_conformal/c14_physics/analyze_existing_case_b_c14.py",
@@ -272722,7 +272722,7 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "ab3bfb0469b73e85530b3ad763720ad72dbf8049"
+      "blob": "a86234d181038255c4809e507f6188120edeed1a"
     },
     {
       "path": "docs/DOCUMENT_SYNC_20261110_ES.md",
@@ -272771,7 +272771,7 @@
       "role": "config",
       "purpose": "machine-readable configuration",
       "certainty": "rule",
-      "blob": "86dd183cb2854955511e8cf2bc68ed9bd697510b"
+      "blob": "2e711ae465dea89d615926c375cc26d8636cbcf0"
     },
     {
       "path": "docs/REGLA_INSTRUCCIONES_UNIFICADAS_ES.md",
@@ -273789,15 +273789,6 @@
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_EN.md",
       "observation": "27 implementation/config paths changed since this log's last commit; examples: .github/workflows/c3d04-a-c14-native-fluid-solid.yml, .github/workflows/c3d04-a-c14-postprocessing-parity.yml, .github/workflows/c3d05-b-c14-native-fluid-solid-q.yml, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/continue_c14_stage07_grouped_evidence.py, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/native_bilateral_flux/c3d04C14FluidSolidFlux.C, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/probe_c14_native_f14_single_vs_multi_time.py",
-      "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "e1c4ed87b65908bb",
-      "code": "POTENTIAL_UNLOGGED_CHANGES",
-      "severity": "review",
-      "path": "PROJECT_AUDIT_LOG_ES.md",
-      "observation": "3 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_05_step_gmsh_conformal/c14_physics/audit_existing_case_b_c14_energy_closure_readiness.py, cases_3d/C3D_05_step_gmsh_conformal/c14_physics/tests/test_existing_case_b_c14_energy_closure_readiness.py, docs/PROJECT_STAGE_STATUS.json",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     }
