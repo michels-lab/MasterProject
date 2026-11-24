@@ -1,0 +1,44 @@
+COMMAND: /opt/openfoam14/platforms/linux64GccDPInt32Opt/bin/foamDictionary /home/michel/OpenFOAM/.C3D04_A_C14_FAITHFUL_RUNTIME_10S_01.staging.gh4_e9q2/candidate/constant/mold/materials/silica
+RC: 0
+STDOUT:
+FoamFile
+{
+    format          ascii;
+    class           dictionary;
+    object          physicalProperties;
+}
+
+thermoType
+{
+    type            heSolidThermo;
+    mixture         pureMixture;
+    transport       constIsoSolid;
+    thermo          eConst;
+    equationOfState rhoConst;
+    specie          specie;
+    energy          sensibleInternalEnergy;
+}
+
+mixture
+{
+    specie
+    {
+        nMoles          1;
+        molWeight       28;
+    }
+    transport
+    {
+        kappa           2;
+    }
+    thermodynamics
+    {
+        hf              0;
+        Cv              700;
+    }
+    equationOfState
+    {
+        rho             1500;
+    }
+}
+
+STDERR:

@@ -1,0 +1,3 @@
+#!/usr/bin/env sh
+echo "Immutable scientific archive: no tracked postProcessing, logs or inputs are deleted."
+echo "Use a fresh out-of-tree directory for each new run."

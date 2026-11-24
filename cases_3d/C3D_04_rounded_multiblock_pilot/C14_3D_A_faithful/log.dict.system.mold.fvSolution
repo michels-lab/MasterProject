@@ -1,0 +1,34 @@
+COMMAND: /opt/openfoam14/platforms/linux64GccDPInt32Opt/bin/foamDictionary /home/michel/OpenFOAM/.C3D04_A_C14_FAITHFUL_RUNTIME_10S_01.staging.gh4_e9q2/candidate/system/mold/fvSolution
+RC: 0
+STDOUT:
+FoamFile
+{
+    format          ascii;
+    class           dictionary;
+    object          fvSolution;
+}
+
+solvers
+{
+    "(h|e)"
+    {
+        solver          PCG;
+        preconditioner  DIC;
+        tolerance       1e-06;
+        relTol          0.05;
+    }
+    "(h|e)Final"
+    {
+        $h              ;
+        relTol          0;
+    }
+}
+
+PIMPLE
+{
+    nOuterCorrectors 1;
+    nCorrectors     2;
+    nNonOrthogonalCorrectors 0;
+}
+
+STDERR:

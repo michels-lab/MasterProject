@@ -1,0 +1,45 @@
+COMMAND: /opt/openfoam14/platforms/linux64GccDPInt32Opt/bin/foamDictionary /home/michel/OpenFOAM/.C3D04_A_C14_FAITHFUL_RUNTIME_10S_01.staging.gh4_e9q2/candidate/constant/metal/materials/castIron
+RC: 0
+STDOUT:
+FoamFile
+{
+    format          ascii;
+    class           dictionary;
+    location        "constant";
+    object          physicalProperties;
+}
+
+thermoType
+{
+    type            heRhoThermo;
+    mixture         pureMixture;
+    transport       const;
+    thermo          hConst;
+    equationOfState rhoConst;
+    specie          specie;
+    energy          sensibleEnthalpy;
+}
+
+mixture
+{
+    specie
+    {
+        molWeight       56;
+    }
+    equationOfState
+    {
+        rho             6820;
+    }
+    thermodynamics
+    {
+        Cp              827;
+        hf              0;
+    }
+    transport
+    {
+        mu              0.0055;
+        Pr              0.14;
+    }
+}
+
+STDERR:

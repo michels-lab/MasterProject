@@ -1,0 +1,30 @@
+COMMAND: /opt/openfoam14/platforms/linux64GccDPInt32Opt/bin/foamDictionary /home/michel/OpenFOAM/.C3D04_A_C14_FAITHFUL_RUNTIME_10S_01.staging.gh4_e9q2/candidate/constant/metal/fvModels
+RC: 0
+STDOUT:
+FoamFile
+{
+    format          ascii;
+    class           dictionary;
+    object          fvModels;
+}
+
+phaseChangeSource
+{
+    type            solidificationMeltingSource;
+    libs            ( fvModels );
+    selectionMode   cellZone;
+    cellZone        metal;
+    thermoMode      thermo;
+    beta            0.000113;
+    rhoRef          6820;
+    energy          h;
+    Tsol            1423;
+    Tliq            1473;
+    L               228600;
+    alpha1e         0.8;
+    relax           0.1;
+    Cu              100000;
+    q               0.001;
+}
+
+STDERR:

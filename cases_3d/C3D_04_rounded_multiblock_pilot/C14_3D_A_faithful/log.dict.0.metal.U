@@ -1,0 +1,29 @@
+COMMAND: /opt/openfoam14/platforms/linux64GccDPInt32Opt/bin/foamDictionary /home/michel/OpenFOAM/.C3D04_A_C14_FAITHFUL_RUNTIME_10S_01.staging.gh4_e9q2/candidate/0/metal/U
+RC: 0
+STDOUT:
+FoamFile
+{
+    version         2;
+    format          ascii;
+    class           volVectorField;
+    location        "0/metal";
+    object          U;
+}
+
+dimensions      [ 0 1 -1 0 0 0 0 ];
+
+internalField   uniform ( 0 0 0 );
+
+boundaryField
+{
+    metalTop
+    {
+        type            slip;
+    }
+    metal_to_mold
+    {
+        type            noSlip;
+    }
+}
+
+STDERR:

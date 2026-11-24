@@ -1,0 +1,53 @@
+COMMAND: /opt/openfoam14/platforms/linux64GccDPInt32Opt/bin/foamDictionary /home/michel/OpenFOAM/.C3D04_A_C14_FAITHFUL_RUNTIME_10S_01.staging.gh4_e9q2/candidate/system/controlDict
+RC: 0
+STDOUT:
+FoamFile
+{
+    format          ascii;
+    class           dictionary;
+    object          controlDict;
+}
+
+application     foamMultiRun;
+
+regionSolvers
+{
+    metal           fluid;
+    mold            solid;
+}
+
+startFrom       startTime;
+
+startTime       0;
+
+stopAt          endTime;
+
+endTime         10;
+
+deltaT          0.001;
+
+writeControl    timeStep;
+
+writeInterval   100;
+
+purgeWrite      0;
+
+writeFormat     ascii;
+
+writePrecision  6;
+
+writeCompression off;
+
+timeFormat      general;
+
+timePrecision   6;
+
+runTimeModifiable true;
+
+adjustTimeStep  no;
+
+maxCo           0.25;
+
+maxDeltaT       0.1;
+
+STDERR:

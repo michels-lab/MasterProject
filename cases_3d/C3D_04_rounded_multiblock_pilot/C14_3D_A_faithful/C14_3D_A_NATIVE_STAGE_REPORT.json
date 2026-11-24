@@ -1,0 +1,104 @@
+{
+  "status": "C3D04_A_C14_FLUID_SOLID_STAGED_F14_DICTS_PARSED_NOT_CFD",
+  "accepted_native_mesh_read_only": "/home/michel/OpenFOAM/C3D04_V4_TRANSITION_REPAIR_01/T02",
+  "native_geometry_gate": {
+    "case": "/home/michel/OpenFOAM/C3D04_V4_TRANSITION_REPAIR_01/T02",
+    "gate": {
+      "source": "/home/michel/OpenFOAM/C3D04_V4_TRANSITION_REPAIR_01/T02",
+      "native_volumes_m3_from_preserved_tsv": {
+        "metal": 4.792144701e-05,
+        "mold": 0.0001028754004
+      },
+      "native_mesh_quality_and_contact_from_saved_evidence": true,
+      "expected_regions": [
+        "metal",
+        "mold"
+      ],
+      "expected_external_patch_names": {
+        "metal": [
+          "metalTop"
+        ],
+        "mold": [
+          "moldTop",
+          "moldExterior",
+          "moldBottom",
+          "moldRecessWall",
+          "moldRecessRoof"
+        ]
+      },
+      "severe_face_counts_from_logs": {
+        "parent": 572,
+        "metal": 276,
+        "mold": 232
+      },
+      "no_new_checkMesh_or_CFD": true
+    },
+    "counts": {
+      "metal": {
+        "nCells": 8960,
+        "ownerFaces": 28256,
+        "internalFaces": 25504,
+        "region": "metal",
+        "basis": "actual polyMesh owner+neighbour"
+      },
+      "mold": {
+        "nCells": 12352,
+        "ownerFaces": 40448,
+        "internalFaces": 33664,
+        "region": "mold",
+        "basis": "actual polyMesh owner+neighbour"
+      }
+    },
+    "preexisting_full_metal_cellZone": true,
+    "pRefCell": 0,
+    "pRefValue": 100000
+  },
+  "mesh_topology_hashes_source_equals_copy": {
+    "constant/metal/polyMesh/points": "a29b59f64b2686f19bfa6419c9e61be8002b4cddc5018866784f8191d21bea01",
+    "constant/metal/polyMesh/faces": "24b6775559641430ca9731759e1a1207c89a15646b866169c2a370efcd93efb8",
+    "constant/metal/polyMesh/owner": "91936426fe217da4e7fa181b5ac844451c77c4bd0394698ac0c88e8aa475d6a2",
+    "constant/metal/polyMesh/neighbour": "dfa4a8fc3571a3fe4a9fc16572dd1cb9d128606bd2e66eb6aac4e83a5e7b79aa",
+    "constant/metal/polyMesh/boundary": "a9053347a2a25743ca7832bfce0875ee5de87d8bc2a575bf1e287e6b92d1ff25",
+    "constant/mold/polyMesh/points": "3917e9a3225fd3c42b059ca4233c578a0c3a4cf5c20bb0b1bec57a61022c2fc0",
+    "constant/mold/polyMesh/faces": "a0766c93e97f28ef358037996cf9eae2384b0d9e2cab4da489f186e575a4f846",
+    "constant/mold/polyMesh/owner": "ef21f3cb3714296020b6fef8231eb4ff28dc0c609a665dace7c9451419e2263a",
+    "constant/mold/polyMesh/neighbour": "b3bc694f2d0d355f4b6a9a4ffbb150f2c82e6db8f28ced14f0e7d240beb7faf1",
+    "constant/mold/polyMesh/boundary": "8e3fe885c0f21d5c75661b640eef5d884dbe2ba2b13dee3cdd0dec49e5f29356"
+  },
+  "pressure_gauge_adaptation": "2D point -> existing regional cell index 0",
+  "pRefCell": 0,
+  "pRefValue_Pa_original_C14": 100000,
+  "phase_source": "Original C14 solidificationMeltingSource, all metal cells",
+  "physics": "metal fluid heRhoThermo hConst sensibleEnthalpy; mold solid eConst",
+  "Cp_to_Cv_metal_substitution": false,
+  "files_count": 22,
+  "parsed_dicts": [
+    "0/metal/T",
+    "0/metal/U",
+    "0/metal/latentHeat",
+    "0/metal/p",
+    "0/metal/p_rgh",
+    "0/metal/phaseChangeSolidFraction",
+    "0/metal/phaseChangeSource:alpha1",
+    "0/mold/T",
+    "constant/metal/fvModels",
+    "constant/metal/g",
+    "constant/metal/materials/castIron",
+    "constant/metal/momentumTransport",
+    "constant/metal/pRef",
+    "constant/metal/physicalProperties",
+    "constant/mold/materials/silica",
+    "constant/mold/physicalProperties",
+    "system/controlDict",
+    "system/fvSolution",
+    "system/metal/fvSchemes",
+    "system/metal/fvSolution",
+    "system/mold/fvSchemes",
+    "system/mold/fvSolution"
+  ],
+  "smoke_time_only_changes": false,
+  "native_solver_run": false,
+  "physical_validation": false,
+  "source_C14_git_blob_validation": true,
+  "output": "/home/michel/OpenFOAM/C3D04_A_C14_FAITHFUL_RUNTIME_10S_01"
+}

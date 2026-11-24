@@ -1,3 +1,5 @@
+> **Case A scientific archive:** faithful C14 3D inputs, postProcessing, logs and SHA evidence under 2D Git policy. Generated mesh and calculated volume fields preserved locally. No CFD. Stage09/10, 8/10=80%.
+
 > **2026-11-24 | C3D04-A original native WSL _03 HAS PERSISTENT METAL-ZONE FAILURES:** original solver log + _03 report SHA authentic; core/energy/flow/momentum have 100 FOAM FATAL IO events each: Cannot find cellZone metal, available 0. Phase native t10 alpha1 volume mean=0.897245. Horizontal lines 10/20/30mm each PASS 80 finite points, vertical x20mm 27 points (INCOMPLETE). 3 C14 energy face tables each contain ONLY t0 row; no 100/101 series. Do not assume copied zone file is active F14 zone registry or start _04 blindly. Added read-only 8960-zone and constant/time-region polyMesh forensics tool for user WSL. No original CFD alteration, native re-run, energy closure, QuickCup or milestone increase; stage 7/10, 6/10=60%. [Protocol](docs/C3D04_A_STAGE07_03_ACTIVE_MESH_FORENSICS_20261124_ES.md).
 
 > **2026-11-23 | C3D04-A original F14 metal cellZone root cause of native FALSE PASSES:** WSL _02 SHA-attested native six-group report had exit0 and claimed all PASS but 4 logs contained FOAM FATAL IO ERROR Cannot find cellZone metal. Fix semantic log gate and precise full metal zone metadata only inside fresh _03 after native 8960-cell count and mesh SHA. Native synthetic 27+27 two-step F14 case reproduced exit0 fatal when zone removed then produced valid rho*h table after new-copy cellzone recovery. Never overwrite original CFD/_01/_02 or B/FS; native 100/101 saved-time energy not global conservation. Stage 7/10 6/10=60%. [Scientific report](docs/C3D04_A_STAGE07_NATIVE_METAL_CELLZONE_RECOVERY_20261123_ES.md).
@@ -157,7 +159,8 @@ The working methodology was defined as:
 4. Real castings / Quick-Cup thermal curves.
 5. Numerical–experimental comparison and model adjustment.
 
-JMatPro was intended to supply quantities such as (c_p(T)), (k(T)), (ho(T)), liquidus (T_L), solidus (T_S), latent heat and liquid-fraction information for the OpenFOAM model.
+JMatPro was intended to supply quantities such as (c_p(T)), (k(T)), (
+ho(T)), liquidus (T_L), solidus (T_S), latent heat and liquid-fraction information for the OpenFOAM model.
 
 ## 2026-07-28 — Initial numerical architecture
 **[CHAT-RECOVERED]**
@@ -219,7 +222,8 @@ Recovered interpretation rule:
 For a future kinetic formulation, the latent-heat source was written as
 
 [
-S_L=-ho Lrac{partial f_l}{partial t}
+S_L=-
+ho Lrac{partial f_l}{partial t}
 ]
 
 with required units of W/m³.
@@ -522,7 +526,8 @@ Region counts remained:
 Source inspection confirmed that `solidificationMelting` adds an explicit thermal-buoyancy contribution of the form
 
 [
-S_b=ho_{ref},mathbf g,eta,Delta T
+S_b=
+ho_{ref},mathbf g,eta,Delta T
 ]
 
 (recovered reference: `solidificationMelting.C`, around line 379 in the inspected source).
@@ -556,7 +561,8 @@ Historical controlled case: `B_icoTabulated_only`.
 
 Configuration:
 
-- `icoTabulated` / tabulated (ho(T)) active,
+- `icoTabulated` / tabulated (
+ho(T)) active,
 - `beta = 0` in `solidificationMeltingSource`,
 - mushy drag and latent heat remain active,
 - Boussinesq source from the phase-change model disabled.
@@ -579,7 +585,8 @@ Historical controlled case: `C_Boussinesq_only`.
 Configuration:
 
 - `rhoConst`,
-- (ho = 6930) kg/m³,
+- (
+ho = 6930) kg/m³,
 - `beta = 1.13e-4 1/K` in `solidificationMeltingSource`,
 - temperature-dependent-density buoyancy route disabled,
 - Boussinesq phase-change-source buoyancy active.
@@ -626,7 +633,8 @@ Recovered maximum curve differences:
 All A/B/C formulations showed an extremely fast initial cooling from approximately:
 
 [
-1500 	ext{K} ightarrow 1473 	ext{K}
+1500 	ext{K} 
+ightarrow 1473 	ext{K}
 ]
 
 in about **0.009 s**.
@@ -781,8 +789,10 @@ Representative C2 log values around (tapprox0.1) s included:
 
 Recovered B2 end-of-run evidence:
 
-- metal energy approximately (4.68	imes10^{-5}ightarrow1.42	imes10^{-11}),
-- mold energy approximately (3.73	imes10^{-5}ightarrow3.69	imes10^{-10}),
+- metal energy approximately (4.68	imes10^{-5}
+ightarrow1.42	imes10^{-11}),
+- mold energy approximately (3.73	imes10^{-5}
+ightarrow3.69	imes10^{-10}),
 - cumulative continuity error approximately (-1.7486	imes10^{-7}),
 - run terminated with `End`.
 
@@ -916,7 +926,8 @@ All other corresponding tracked files are identical across their SHA groups.
 Current B5 configuration preserves:
 
 - `equationOfState icoTabulated`,
-- tabulated (ho(T)),
+- tabulated (
+ho(T)),
 - `beta 0` in `solidificationMeltingSource`,
 - (g=(0,-9.81,0)),
 - laminar momentum model,
@@ -927,7 +938,8 @@ Current B5 configuration preserves:
 Current C5 configuration preserves:
 
 - `equationOfState rhoConst`,
-- (ho=6930) kg/m³,
+- (
+ho=6930) kg/m³,
 - `beta 1.13e-04` in `solidificationMeltingSource`,
 - same gravitational acceleration,
 - metal-top external heat-transfer coefficient (h=50) W/(m²·K).
@@ -1022,8 +1034,10 @@ at matched sampled locations.
 
 Potential center lines of the 40 × 40 mm metal section include:
 
-- horizontal: ((0,0.020,0.005)ightarrow(0.040,0.020,0.005))
-- vertical: ((0.020,0,0.005)ightarrow(0.020,0.040,0.005))
+- horizontal: ((0,0.020,0.005)
+ightarrow(0.040,0.020,0.005))
+- vertical: ((0.020,0,0.005)
+ightarrow(0.020,0.040,0.005))
 
 **Status:** 🟡 requested; implementation not yet added.
 

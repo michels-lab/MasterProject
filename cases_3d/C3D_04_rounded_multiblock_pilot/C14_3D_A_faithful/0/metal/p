@@ -1,0 +1,23 @@
+FoamFile
+{
+    version 2.0;
+    format ascii;
+    class volScalarField;
+    location "0/metal";
+    object p;
+}
+dimensions [1 -1 -2 0 0 0 0];
+internalField uniform 100000;
+boundaryField
+{
+    metalTop
+    {
+        type calculated;
+        value $internalField;
+    }
+    metal_to_mold
+    {
+        type calculated;
+        value $internalField;
+    }
+}

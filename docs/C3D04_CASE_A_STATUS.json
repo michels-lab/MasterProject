@@ -320,9 +320,9 @@
     "native_postrun_continuity_global_max_abs": 4.21562e-18,
     "native_postrun_continuity_cumulative_last": -6.5319e-14,
     "native_postrun_max_FINAL_residual_h": 0.000265533,
-    "native_postrun_max_FINAL_residual_e": 0.0000431133,
+    "native_postrun_max_FINAL_residual_e": 4.31133e-05,
     "native_postrun_max_FINAL_residual_p_rgh": 0.00776125,
-    "native_postrun_last_FINAL_residual_p_rgh": 5.19776e-8,
+    "native_postrun_last_FINAL_residual_p_rgh": 5.19776e-08,
     "metal_initial_T_K": 1500,
     "final_metal_T_min_K": 1401.91,
     "final_metal_T_cell_mean_K": 1444.7184787946428,
@@ -806,7 +806,7 @@
         "contact": 1524.644,
         "total": 1641.923
       },
-      "maximum_relative_surface_power_reconciliation_discrepancy": 4.7503433312219475e-7,
+      "maximum_relative_surface_power_reconciliation_discrepancy": 4.7503433312219475e-07,
       "profiles_passed": 7,
       "profiles_requested": 9,
       "vertical_primitive_points": 27,
@@ -836,7 +836,7 @@
         "tests_passed": 5,
         "source_hashes_unchanged": true,
         "grouped_input_hashes_unchanged": true,
-        "metal_volume_m3": 0.000047921447006662436,
+        "metal_volume_m3": 4.7921447006662436e-05,
         "mold_volume_m3": 0.00010287540036379159,
         "reference_s": 0.1,
         "final_s": 10,
@@ -849,7 +849,7 @@
         "total_metal_energy_out_J": 20670.15745,
         "net_metal_boundary_advective_integral_J": 0,
         "metal_nominal_residual_J": 2.023033551624394,
-        "metal_nominal_residual_relative_to_outward_energy": 0.00009787218875898762,
+        "metal_nominal_residual_relative_to_outward_energy": 9.787218875898762e-05,
         "metal_to_mold_minus_mold_inventory_J": 144.34651958475297,
         "vertical": {
           "x_m": 0.02,
@@ -864,7 +864,7 @@
           ],
           "corrected_y_m": [
             -0.014750105000000001,
-            -0.00005039899999999763
+            -5.039899999999763e-05
           ],
           "native_scan_valid_points": 149,
           "native_scan_requested_points": 401,
@@ -892,8 +892,8 @@
         "interface_faces_each": 2496,
         "paired_geometry_faces_at_10s": 2496,
         "matched_face_abs_interface_power_residual_W": 1.7034725937727646,
-        "max_metal_contact_relative_difference_vs_grouped_heatFlux": 4.773058032783712e-7,
-        "max_metal_top_relative_difference_vs_grouped_heatFlux": 0.000004748334299565785,
+        "max_metal_contact_relative_difference_vs_grouped_heatFlux": 4.773058032783712e-07,
+        "max_metal_top_relative_difference_vs_grouped_heatFlux": 4.748334299565785e-06,
         "final_patch_q_out_W": {
           "metal/metalTop": 117.27868049840006,
           "metal/metal_to_mold": 1524.6443291594894,
@@ -960,7 +960,7 @@
         "Darcy_max_s_inv": 100000000,
         "liquidlike_speed_mean_m_s": 0.003206989541665255,
         "mixed_speed_mean_m_s": 0.0018208106637875765,
-        "solidlike_speed_mean_m_s": 6.102217022810532e-7
+        "solidlike_speed_mean_m_s": 6.102217022810532e-07
       },
       "first_observed_solid_increase_s": [
         0.2,
@@ -1010,7 +1010,7 @@
       "z_m": 0.00829925,
       "y_m": [
         -0.014750105,
-        -0.000050399
+        -5.0399e-05
       ],
       "points": 80,
       "complete_times": 101,
@@ -1275,6 +1275,15 @@
     "foamLog_rc": 0,
     "missing_or_incomplete": [],
     "preferred_reference_for_future_analysis": true,
-    "provenance": "Actual researcher WSL stdout, not direct retrieval of new run field values."
+    "provenance": "Actual researcher WSL stdout, not direct retrieval of new run field values.",
+    "git_archive": {
+      "status": "SCIENTIFIC_ARCHIVE_INCLUDED_IN_PUBLICATION_COMMIT",
+      "path": "cases_3d/C3D_04_rounded_multiblock_pilot/C14_3D_A_faithful",
+      "manifest": "cases_3d/C3D_04_rounded_multiblock_pilot/C14_3D_A_faithful/analysis_results/GIT_PUBLICATION_MANIFEST.json",
+      "files": 3726,
+      "bytes": 176484972,
+      "excluded_calculated_volume_times": true,
+      "excluded_generated_mesh": true
+    }
   }
 }

@@ -1,0 +1,44 @@
+COMMAND: /opt/openfoam14/platforms/linux64GccDPInt32Opt/bin/foamDictionary /home/michel/OpenFOAM/C3D04_A_C14_FAITHFUL_RUNTIME_10S_01/system/functions
+RC: 0
+STDOUT:
+FoamFile
+{
+    format          ascii;
+    class           dictionary;
+    location        "system";
+    object          functions;
+}
+
+temperatureProbe
+{
+    type            probes;
+    libs            ( "libfieldFunctionObjects.so" );
+    region          metal;
+    fields          ( U T p_rgh rho phaseChangeSource:alpha1 );
+    probeLocations  ( ( 0.0259 -0.02 0.0259 ) );
+    executeControl  timeStep;
+    executeInterval 1;
+    writeControl    timeStep;
+    writeInterval   1;
+    writeToFile     true;
+}
+
+topFlow
+{
+    type            surfaceFieldValue;
+    libs            ( "libfieldFunctionObjects.so" );
+    region          metal;
+    patch           metalTop;
+    surfaceFormat   raw;
+    writeControl    writeTime;
+    writeToFile     true;
+    log             true;
+    operation       none;
+    writeFields     true;
+    fields          ( U phi );
+}
+
+#include        "researchDiagnostics"
+#include        "lineProfiles"
+#include        "additional3DProfiles"
+STDERR:

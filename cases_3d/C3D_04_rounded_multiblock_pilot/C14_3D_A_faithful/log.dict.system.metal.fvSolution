@@ -1,0 +1,71 @@
+COMMAND: /opt/openfoam14/platforms/linux64GccDPInt32Opt/bin/foamDictionary /home/michel/OpenFOAM/.C3D04_A_C14_FAITHFUL_RUNTIME_10S_01.staging.gh4_e9q2/candidate/system/metal/fvSolution
+RC: 0
+STDOUT:
+FoamFile
+{
+    format          ascii;
+    class           dictionary;
+    location        "system";
+    object          fvSolution;
+}
+
+solvers
+{
+    "rho.*"
+    {
+        solver          diagonal;
+    }
+    p_rgh
+    {
+        solver          GAMG;
+        tolerance       1e-07;
+        relTol          0.01;
+        smoother        DICGaussSeidel;
+    }
+    p_rghFinal
+    {
+        $p_rgh          ;
+        relTol          0;
+    }
+    U
+    {
+        solver          PBiCGStab;
+        preconditioner  DILU;
+        tolerance       1e-08;
+        relTol          0.05;
+    }
+    UFinal
+    {
+        $U              ;
+        relTol          0;
+    }
+    _scalarSettings
+    {
+        solver          PBiCGStab;
+        preconditioner  DILU;
+        tolerance       1e-09;
+        relTol          0.05;
+    }
+    "(h|k|epsilon|omega)"
+    {
+        $_scalarSettings ;
+    }
+    "(h|k|epsilon|omega)Final"
+    {
+        $_scalarSettings ;
+        relTol          0;
+    }
+}
+
+PIMPLE
+{
+    momentumPredictor no;
+    nOuterCorrectors 1;
+    nCorrectors     2;
+    nNonOrthogonalCorrectors 0;
+    nEnergyCorrectors 2;
+    pRefCell        0;
+    pRefValue       100000;
+}
+
+STDERR:

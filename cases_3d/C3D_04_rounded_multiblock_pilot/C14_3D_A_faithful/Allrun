@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+set -eo pipefail
+HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+if [[ "$#" -ne 1 ]]; then
+  echo "Usage: bash Allrun /absolute/path/to/new/OpenFOAM_case" >&2; exit 2
+fi
+if [[ "${WM_PROJECT_VERSION:-}" != 14 ]]; then source /opt/openfoam14/etc/bashrc; fi
+export HWLOC_COMPONENTS=-gl
+python3 -B "$HERE/../c14_physics/run_c14_a_faithful_runtime.py" --out "$1"

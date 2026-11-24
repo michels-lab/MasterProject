@@ -1,0 +1,156 @@
+additional3DProfiles
+{
+    type            sets;
+    libs            ("libsampling.so");
+
+    // Sample only the fluid metal region
+    region          metal;
+
+    // Write profiles at the case write times
+    writeControl    writeTime;
+
+    interpolationScheme cellPoint;
+    setFormat       raw;
+
+    // U is written as a vector, so the raw profile contains Ux, Uy and Uz.
+    // |U| is derived exactly during analysis from the sampled components.
+    fields
+    (
+        U
+        T
+        p_rgh
+        rho
+        phaseChangeSource:alpha1
+
+        // Flow topology
+        vorticity
+        flowType
+        magSqrDevGradU
+
+        // Thermal-gradient and cooling diagnostics
+        gradT
+        magGradT
+        dTdt
+        coolingRate
+
+        // Density-gradient / buoyancy diagnostics
+        gradRho
+        magGradRho
+
+        // Phase-change-rate diagnostics
+        dAlphaLdt
+        solidificationRate
+        latentHeatRateVol
+
+        // Numerical field
+        CoCell
+    );
+
+    sets
+    {
+        height10_angle45
+        {
+            type lineUniform;
+            axis x;
+            start (0.0119346410716 -0.03 0.0119346410716);
+            end (0.0398653589284 -0.03 0.0398653589284);
+            nPoints 80;
+        }
+        height10_angle90
+        {
+            type lineUniform;
+            axis z;
+            start (0.0259 -0.03 0.00615);
+            end (0.0259 -0.03 0.04565);
+            nPoints 80;
+        }
+        height10_angle135
+        {
+            type lineUniform;
+            axis x;
+            start (0.0119346410716 -0.03 0.0398653589284);
+            end (0.0398653589284 -0.03 0.0119346410716);
+            nPoints 80;
+        }
+        height20_angle45
+        {
+            type lineUniform;
+            axis x;
+            start (0.0119346410716 -0.02 0.0119346410716);
+            end (0.0398653589284 -0.02 0.0398653589284);
+            nPoints 80;
+        }
+        height20_angle90
+        {
+            type lineUniform;
+            axis z;
+            start (0.0259 -0.02 0.00615);
+            end (0.0259 -0.02 0.04565);
+            nPoints 80;
+        }
+        height20_angle135
+        {
+            type lineUniform;
+            axis x;
+            start (0.0119346410716 -0.02 0.0398653589284);
+            end (0.0398653589284 -0.02 0.0119346410716);
+            nPoints 80;
+        }
+        height30_angle45
+        {
+            type lineUniform;
+            axis x;
+            start (0.0119346410716 -0.01 0.0119346410716);
+            end (0.0398653589284 -0.01 0.0398653589284);
+            nPoints 80;
+        }
+        height30_angle90
+        {
+            type lineUniform;
+            axis z;
+            start (0.0259 -0.01 0.00615);
+            end (0.0259 -0.01 0.04565);
+            nPoints 80;
+        }
+        height30_angle135
+        {
+            type lineUniform;
+            axis x;
+            start (0.0119346410716 -0.01 0.0398653589284);
+            end (0.0398653589284 -0.01 0.0119346410716);
+            nPoints 80;
+        }
+        vertical_xplus10
+        {
+            type lineUniform;
+            axis y;
+            start (0.0359 -0.03975 0.0259);
+            end (0.0359 -0.00025 0.0259);
+            nPoints 80;
+        }
+        vertical_xminus10
+        {
+            type lineUniform;
+            axis y;
+            start (0.0159 -0.03975 0.0259);
+            end (0.0159 -0.00025 0.0259);
+            nPoints 80;
+        }
+        vertical_zplus10
+        {
+            type lineUniform;
+            axis y;
+            start (0.0259 -0.03975 0.0359);
+            end (0.0259 -0.00025 0.0359);
+            nPoints 80;
+        }
+        vertical_zminus10
+        {
+            type lineUniform;
+            axis y;
+            start (0.0259 -0.03975 0.0159);
+            end (0.0259 -0.00025 0.0159);
+            nPoints 80;
+        }
+    }
+}
