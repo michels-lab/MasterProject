@@ -491,15 +491,32 @@
     "case_b_c14_native_C14_fluid_solid_q_101_time_integral_comparison_script_committed": true,
     "case_b_c14_native_C14_fluid_solid_q_101_time_integral_comparison_source": "cases_3d/C3D_05_step_gmsh_conformal/c14_physics/compare_existing_case_b_c14_native_q_and_storage.py",
     "case_b_c14_native_C14_fluid_solid_q_101_time_integral_comparison_test_source_count": 12,
-    "case_b_c14_native_C14_fluid_solid_q_101_time_integral_comparison_tests_WSL_pass_observed": false,
-    "case_b_c14_native_C14_fluid_solid_q_101_time_integral_comparison_WSL_executed": false,
-    "case_b_c14_native_C14_fluid_solid_q_101_time_integral_comparison_real_integrated_q_values_observed": false,
+    "case_b_c14_native_C14_fluid_solid_q_101_time_integral_comparison_tests_WSL_pass_observed": true,
+    "case_b_c14_native_C14_fluid_solid_q_101_time_integral_comparison_WSL_executed": true,
+    "case_b_c14_native_C14_fluid_solid_q_101_time_integral_comparison_real_integrated_q_values_observed": true,
     "case_b_c14_native_C14_fluid_solid_q_101_time_integral_comparison_expected_output": "~/OpenFOAM/C3D05_B_C14_Q_VS_REFERENCE_STORAGE_01",
     "case_b_c14_native_C14_fluid_solid_q_101_time_integral_comparison_note": "docs/granada/C3D05_B_C14_FLUJOS_NATIVOS_101_ESTADOS_Y_CRUCE_ENERGETICO_20261124_ES.md",
     "case_b_c14_native_C14_fluid_solid_q_101_time_integral_comparison_saved_time_dt_s": 0.1,
     "case_b_c14_native_C14_fluid_solid_q_101_time_integral_comparison_original_solver_dt_s": 0.001,
     "case_b_c14_native_C14_fluid_solid_q_101_time_integral_comparison_full_energy_closure_verified": false,
-    "case_b_c14_native_C14_fluid_solid_q_101_time_integral_comparison_fvModel_source_integral_verified": false
+    "case_b_c14_native_C14_fluid_solid_q_101_time_integral_comparison_fvModel_source_integral_verified": false,
+    "case_b_c14_native_C14_fluid_solid_q_101_time_integral_comparison_tests_WSL_passed": 12,
+    "case_b_c14_native_C14_fluid_solid_q_101_time_integral_comparison_tests_WSL_failed": 0,
+    "case_b_c14_native_C14_fluid_solid_q_101_time_integral_comparison_output_observed": "/home/michel/OpenFOAM/C3D05_B_C14_Q_VS_REFERENCE_STORAGE_01",
+    "case_b_c14_native_C14_fluid_solid_q_101_time_integral_comparison_status": "C3D05_B_C14_101_SAVED_Q_VS_REFERENCE_STORAGE_DIAGNOSTIC_NOT_ENERGY_CLOSURE",
+    "case_b_c14_native_C14_fluid_solid_q_101_time_integral_metal_to_mold_J": 20283.45236535595,
+    "case_b_c14_native_C14_fluid_solid_q_101_time_integral_mold_to_metal_J": -20283.567648522097,
+    "case_b_c14_native_C14_fluid_solid_q_101_time_integral_interface_sum_J": -0.11528316616279427,
+    "case_b_c14_native_C14_fluid_solid_q_101_time_integral_metal_top_J": 1212.0952906419318,
+    "case_b_c14_native_C14_fluid_solid_q_101_time_integral_mold_exterior_J": 129.41261637931336,
+    "case_b_c14_native_C14_fluid_solid_q_101_time_integral_exterior_total_J": 1341.5079070212457,
+    "case_b_c14_native_C14_fluid_solid_q_101_time_reference_combined_delta_J": -1352.9442013308708,
+    "case_b_c14_native_C14_fluid_solid_q_101_time_partial_storage_plus_exterior_J": -11.436294309625055,
+    "case_b_c14_native_C14_fluid_solid_q_101_time_partial_storage_plus_exterior_pct_exterior": 0.8524954828644137,
+    "case_b_c14_native_C14_fluid_solid_q_101_time_partial_sum_energy_closure": false,
+    "case_b_c14_native_C14_fluid_solid_q_101_time_original_solver_dt_integral_available": false,
+    "case_b_c14_native_C14_fluid_solid_q_101_time_original_fvModel_source_integral_available": false,
+    "case_b_c14_native_C14_fluid_solid_q_101_time_QuickCup_validated": false
   },
   "other_cases": [
     {
@@ -539,7 +556,7 @@
       "evidence": "docs/granada/C3D05_B_C14_WSL_EJECUCION_REAL_EN_CURSO_20261123_ES.md"
     }
   ],
-  "blocker": "Original F14 real C14 Case B 10s/101 native states and metal+mold reference 101-time thermal inventories verified in WSL. NEW native fluid-metal solid-mold conduction q extractor 14/14 regression tests PASS, SHA preflight PASS, output 101x4 patch flux time records + per-face t10 map COMPLETE. At t10 +1581.564663W metal→mold, -1581.538327W mold→metal, interface mismatch +0.0263364314W (8.3261378e-6 relative), 12636 matched interface faces each side, facewise absolute signed mismatches 1.870336W; outer metalTop 117.062925W and mold outer 34.386288W, total 151.449213W. q-only harmonic interpolate(kappa) added to shadow copied fvSchemes, NOT original solver. NEW SHA-verifying 101-state q(t)/reference storage join source +12 tests committed but never WSL run; integrals not yet observed. q patch flux + model reference storage are NOT full CFD energy conservation. True fvModels latent energy source/advective transport/work, external radiation/convection and solver-dt integral, grid/dt convergence, JMatPro/QuickCup and shrinkage OPEN. G3-G7 remain open, 2/7.",
-  "next_integrated_delivery": "User can git pull latest MasterProject, run 12 tests then read-only python3 -B cases_3d/C3D_05_step_gmsh_conformal/c14_physics/compare_existing_case_b_c14_native_q_and_storage.py. This joins SHA-qualified native B 101x4 q stored data and SHA-qualified mold+metal 101 model-reference storage; computes 0.1s saved-time trapezoid for each patch and interior/outside with explicit NOT_SOLVER_DT labels. No CFD or native q rerun. If successful, investigate missing native fvModel, advection/work, boundary/exterior terms and dt-convergent true conservation. 14/14 q tests already pass WSL, 12 join tests are source only awaiting WSL.",
-  "science": "CASE_B_C14_F14_NATIVE_Q_101X4_WSL_DONE_14TESTS_PASS_101STATE_SHA_Q_STORAGE_JOIN_SCRIPT_PLUS12TESTS_STAGED_NO_ENERGY_CLOSURE"
+  "blocker": "User real WSL Case B C14 postrun: 12/12 new SHA q+storage temporal join unit tests PASSED and 101-state archived original q(t) vs metal/mold reference storage join COMPLETED. Saved 0.1s trapezoids: metal_to_mold +20283.452365J, mold_to_metal -20283.567649J, interface signed sum -0.115283166J, top outward +1212.095291J, mold outer outward +129.412616J, both outer +1341.507907J. Combined reference inventory change -1352.944201J. Comparison storage + exterior trapezoid = -11.436294J (~0.8525% of integrated outer conduction), NOT an energy-conservation residual nor missing heat. Model liquid latent-content proxy, q-only copied harmonic FVScheme, coarse saved 0.1s vs solver 0.001s; no native fvModels latent source integral, advective enthalpy/pressure work, boundary external additional energy terms, exact scheme effects or QuickCup/JMatPro/dt-mesh convergence. G3-G7 remain open, stage3/7 2/7 technical gates.",
+  "next_integrated_delivery": "Next science: separate metal vs mold source-only reference storage+patch-q partial diagnostic and investigate true source-faithful F14 C14 fvModels latent h energy-term and advective/pressure work, external BC treatment; do NOT call -11.436J a conservation error. Original 101 saved state q and storage outputs are immutable, no solver rerun. Compare actual original C14 region dictionaries and solver equations before writing any true energy closure code.",
+  "science": "CASE_B_F14_REAL_Q_101x4_WSL_14Q_TESTS_PLUS12_JOIN_TESTS_PASS_101_STATE_TRAPEZOID_OUT_1341_507907_J_REFERENCE_DELTA_NEG1352_944201_J_PARTIAL_MINUS11_436294_J_NOT_ENERGY_CLOSURE"
 }
