@@ -108,8 +108,8 @@
   "cpp_mass_phase_update_gamma_and_volume_closure": true,
   "cpp_pressure_velocity_energy_or_cht": false,
   "CI_cxx_compile_step_declared": true,
-  "last_work": "2026-11-24 17:xx America/Monterrey: user directed freeze on new functions and focus entirely on real build and one physical CFD. GitHub Actions previous failure was shell setup ZSH_NAME unbound; fixed. Native C++ first actual compilation failure was nonexistent fvcInterpolate.H included by three sources; replaced with Foundation14 fvc.H. Actual OpenFOAM Foundation14 Ubuntu24.04 wmake libso SUCCESS verified by GitHub Actions run #45510107662 at SHA 219c1daf83e0fd885c82ae1ce2156b829bc0e565, compiling five native C++ translation units and linking libfsC08ConservativeVoF.so. Then added runtime ELF dependency check (ldd -r) plus actual Python ctypes.CDLL dlopen in CI. Full new CI run #45510557677 job #138856890374 at SHA 20b847c9d18a80383267bc9ab545f1957ab2cfc4 completed SUCCESS and emitted both native markers FS_C08_REAL_OPENFOAM14_SOLVER_LIBRARY_WMAKE_PASS__NO_CFD_RUN and FS_C08_FOUNDATION14_USER_LIBRARY_DLOPEN_PASS__NO_CFD_RUN. This proves build and loader compatibility only: foamMultiRun has not initialized real solver, no alloy data to run real CFD, and no metal/energy/gas/feeding/rechupe validation.",
-  "next_scientific_stage": "Await scientifically sourced composition-specific fsC08Material with actual Function1 tables for all initial metal/interface temperatures, then execute ONE isolated native foamMultiRun FS_C08_COUPLED_* on WSL. Audit numerical 3-phase mass and energy budgets plus pressure/surface motion; physically validate before declaring shrinkage. No more shadow tests.",
+  "last_work": "2026-11-24 17:xx America/Monterrey: actual OpenFOAM14 phase conservation code corrected to propagate all strictly positive trace metal (liquid face flux, effective metal density, mushy drag). Real-CFD runner hardened against stale success logs/nonfinite mass-energy budgets and premature clean-stop before endTime. Nine contract tests added; CI latest head pending. No new physical CFD executed; no sourced JMatPro phase properties versioned. Last confirmed prior native library build/dlopen success: #45510557677.",
+  "next_scientific_stage": "Obtain actual composition-specific, phase-resolved thermophysical curves with citation provenance; confirm single-temperature metal-gas interface validity; stage untouched FS-C07 t=0 into independent FS_C08_COUPLED_* and run ONE real Foundation14 foamMultiRun until controlDict endTime, verify actual metal+gas budgets and energy before claiming physical shrinkage.",
   "Wsl_tests_runner": "python3 -B -m unittest discover -s analysis_tools -p 'test_fs_c08_conservative_reference.py' -v",
   "Wsl_tests_summary": "Ran 18 tests in 0.072s; OK",
   "Wsl_tests_source_head": "eddacd6e9",
@@ -522,5 +522,16 @@
   "real_cfd_runner_budget_tests_added": 7,
   "real_cfd_runner_native_foamMultiRun_WSL_executed": false,
   "real_cfd_runner_CI_unit_tests_verified": false,
-  "latest_execution_gate_work": "2026-11-24: harden actual FS-C08 foamMultiRun runner: parse numerical metal/gas/energy/volume budget per step, refuse nonfinite/missing and stale PASS, require physical conservation and thermal gate at the final saved CFD time, preserve energy as unvalidated numerical diagnostic; add 7 real-run report tests and CI step. No alloy data, native CFD, QuickCup or shrinkage validation fabricated."
+  "latest_execution_gate_work": "2026-11-24: harden actual FS-C08 foamMultiRun runner: parse numerical metal/gas/energy/volume budget per step, refuse nonfinite/missing and stale PASS, require physical conservation and thermal gate at the final saved CFD time, preserve energy as unvalidated numerical diagnostic; add 7 real-run report tests and CI step. No alloy data, native CFD, QuickCup or shrinkage validation fabricated.",
+  "native_recent_trace_vof_threshold_removed": true,
+  "native_positive_trace_metal_transport_ratio_gate": "alphaMetalFromMass>0; do not artificially erase nonzero liquid metal share",
+  "native_positive_trace_metal_rho_effective_gate": "alpha.metal>0; effective density computed for every positive metal volume fraction",
+  "native_positive_trace_metal_mushy_drag_gate": "alphaLiquid+alphaSolid>0; no arbitrary 1e-12 suppression",
+  "native_actual_cfd_runner_requires_last_saved_time_endtime": true,
+  "native_actual_cfd_runner_requires_numeric_metal_gas_energy_records": true,
+  "native_actual_cfd_runner_numeric_records_expected_status": "Not real CFD completed until endTime and numerical budgets match last saved snapshot; physical shrinkage remains unvalidated",
+  "native_real_cfd_report_checks_count": 9,
+  "native_real_cfd_report_checks_last_ci": "GitHub Actions full new head pending; earlier run #45512376413 failed at controlDict regex; escaped regex corrected at commit 7f9e836c20f3776ae3359602a5e84d564e2099a0.",
+  "jmatpro_repository_raw_exports_present": false,
+  "jmatpro_repo_material_source_check": "thermodynamics/jmatpro/ only contains README_ES.md, BRIDGE_USAGE_ES.md, JMATPRO_EXPORT_TEMPLATE.csv (empty values); phase-specific rho_l/rho_s(T), Cv_l/Cv_s(T), f_s,mass(T), k_l/k_s(T), L, Darcy Cu/q with provenance not available in versioned repository."
 }
