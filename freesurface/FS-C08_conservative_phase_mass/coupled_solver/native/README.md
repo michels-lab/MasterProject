@@ -1,5 +1,8 @@
 # FS-C08 — Integración de física en el solver CFD, no shadow
 
+> **24-11-2026 — NUEVA ENERGÍA POR FASE, PENDIENTE DE COMPILACIÓN NATIVA.** [`fsC08ThermophysicalPredictor.C`](fsC08ThermophysicalPredictor.C) **reemplaza** el esquema de `Cv` medio + fuente `ΓL` por una ecuación FV iterativa para el inventario `E = rhoAlpha.liquid * u_l(T) + rhoAlpha.solid * u_s(T) + alphaGas*rhoGas*uGas(p,T)`. Para cada metal, `u_s(T)=integral(Tref,T) Cv_s(θ) dθ` y `u_l(T)=L+integral(Tref,T) Cv_l(θ) dθ`. Así el latente aparece en la **diferencia de energías**, **sin** otra fuente `ΓL`. Conserva el término de trabajo de presión/energía cinética y el flujo interno por las caras físicas del líquido y del gas. Además, la conductividad molecular se reemplaza por `alphaLiquid*kappaLiquidT(T)+alphaSolid*kappaSolidT(T)`; la conducción del gas y el realce turbulento nativo permanecen, **sin dar por validado todavía el transporte turbulento en el sólido**. [`fsC08Material.template`](fsC08Material.template) exige curvas de `Cv_l(T)`, `Cv_s(T)`, `k_l(T)`, `k_s(T)`, `Tref`, `L`, densidades, ley f_s(T) y Cu/q de Darcy, con fuente por composición. Se registra `internalEnergy.fsC08` [J/m³], inventario global J y flujo energético por las fronteras [W]. **NO hay cierre de energía certificado:** falta verificar `wmake`, convergencia real, trabajo mecánico y calor a través de las paredes; tampoco está comprobada la continuidad del gas. No se ha ejecutado CFD de contracción ni otro shadow.
+
+
 > **CONTRATO DE ENERGÍA ACTUALIZADO:** la variable del material se llama `cvSolid` (energía específica por masa y temperatura a volumen constante), no `cpSolid`. Se corrigieron los dos archivos C++ de masa/energía, el esquema de material y el preparador de caso. Esto **no garantiza que una tabla externa corresponda realmente a Cv**: su procedencia sigue siendo responsabilidad de los datos experimentales/JMatPro. La ecuación energética actual sigue siendo una aproximación de Cv efectivo + ΓL, **no** un cierre conservativo por entalpías separadas; una nueva simulación física debe esperar a completar ese cierre. 
 
 
@@ -31,7 +34,7 @@ El programa analysis_tools/stage_fs_c08_coupled.py crea una COPIA independiente 
 
 1. No se ha compilado este nuevo módulo en Foundation14, ni validado que sus condiciones de frontera e integración PIMPLE sean correctas en WSL.
 2. La mezcla metálica usa masas distintas pero la compresibilidad psi y termo1 continúan aproximados por el líquido. Falta presión termodinámicamente consistente de líquido+sólido+gas.
-3. El calor latente está una vez, pero la ecuación entálpica estrictamente conservativa requiere h_liquid(T), h_solid(T), cp(T) integrales, términos p*dV y cierre térmico global.
+3. Las integrales de Cv(T) por fase ya están codificadas y el calor latente reside una sola vez en u_l-u_s. La formulación de energía aún NO tiene compilación nativa ni auditoría global cerrada de trabajo de presión, CHT y gas compresible; no se ha validado un balance experimental.
 4. La selección de cinética por relajación de fracción sólida a equilibrio requiere calibración para austenita primaria y eutéctico, no basta un número C14. Temperaturas menores de Tmin en aire/trazas VOF no deben generar Gamma.
 5. Alimentación, permeabilidad mushy, volumen real de rechupe, efecto del grafito y validación con ocho fundiciones y QuickCup siguen pendientes.
 6. Ni la variación anterior de alpha.metal FS-C07 ni la nueva Svol algebraica demuestran contracción de la pieza sin una CFD conservativa y validación física.
