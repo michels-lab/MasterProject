@@ -36,6 +36,22 @@ solvers::fsC08ConservativeVoF::fsC08ConservativeVoF(fvMesh& mesh)
         zeroGradientFvPatchScalarField::typeName
     )
 {
+    // The density curves rhoLiquid(T), rhoSolid(T) have no pressure
+    // argument. Thus, within this first EOS closure, metal psi MUST
+    // be zero (pressure-incompressible). Gas retains its native
+    // compressible EOS. Never combine independent rho(T) with nonzero
+    // liquid psi(p,T) in the same pressure equation.
+    if (!mixture_.thermo1().incompressible())
+    {
+        FatalErrorInFunction
+            << "FS-C08 rhoLiquidT(T) and rhoSolidT(T) require a "
+            << "pressure-incompressible METAL thermo package in this "
+            << "implementation. The gas may remain compressible. "
+            << "Nonzero metal psi would violate the chosen equation "
+            << "of state; use a fully p,T-dependent phase EOS first."
+            << exit(FatalError);
+    }
+
     // Refuse the inherited VoFSolidificationMelting energy source.
     // This solver owns the single Gamma*L source: two latent terms
     // would violate the first law, regardless of solver convergence.
