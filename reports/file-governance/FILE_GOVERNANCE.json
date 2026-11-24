@@ -28,7 +28,7 @@
     "BROKEN_RELATIVE_LINK": 7
   },
   "finding_total": 7,
-  "inventory_fingerprint": "cd54e35b9faed875a4523e94e46c0acb2bc32c222fdcb810307b8346182a5947",
+  "inventory_fingerprint": "c724620f8f08c925761093479c3a5835af1104ae7a17dea68cf2e406cc79a3e9",
   "evidence_fingerprint": "a38cca05722cc62f2a19d8787a386e132771345cc8472199f5e39f915b2e8a45",
   "files": [
     {
@@ -414,14 +414,14 @@
       "role": "bitacora",
       "purpose": "technical/audit change history",
       "certainty": "rule",
-      "blob": "f751a38ebfc1a87b4ab0baa44afe7a6a863faa46"
+      "blob": "a12264b4a5c59c74a6a8023d230a6a2d1ab62c81"
     },
     {
       "path": "PROJECT_AUDIT_LOG_ES.md",
       "role": "bitacora",
       "purpose": "technical/audit change history",
       "certainty": "rule",
-      "blob": "13f1bcc78a17671c70ebf2a3a76e933b98f1798d"
+      "blob": "1eaee9420fcbc255dcfee9303365aa3925473f8a"
     },
     {
       "path": "README.md",
@@ -298768,7 +298768,7 @@
       "role": "config",
       "purpose": "machine-readable configuration",
       "certainty": "rule",
-      "blob": "fbe6a468f8d9643c70c4dea46333e2afcbba8e51"
+      "blob": "960497b9dc4e64f1537139015de3500278983846"
     },
     {
       "path": "docs/C3D_01_ESTADO_REAL_20261110_ES.md",
@@ -299055,7 +299055,7 @@
       "role": "config",
       "purpose": "machine-readable configuration",
       "certainty": "rule",
-      "blob": "d21540457604473eb4583e440cd7ca6859978625"
+      "blob": "d475206c274038cf8b159cdc8f375f8bba894e93"
     },
     {
       "path": "docs/REGLA_INSTRUCCIONES_UNIFICADAS_ES.md",
@@ -299356,14 +299356,14 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "387947db09c486fd0a666ed730c137360333c764"
+      "blob": "c203a269995c994ed9a4068d546216bd2ac9ba87"
     },
     {
       "path": "docs/granada/MAESTRIA_ESTADO_INTEGRADO_20261124_ES.md",
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "b0351de234cbb9e82f87b6080e524a15f888be57"
+      "blob": "02c44d1299819dceab03a99358785e9bb629b1fa"
     },
     {
       "path": "docs/granada/OPENFOAM_HUB_READ_ACCESS_20261021.md",
