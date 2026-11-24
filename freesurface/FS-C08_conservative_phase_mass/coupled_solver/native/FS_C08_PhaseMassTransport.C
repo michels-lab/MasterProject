@@ -33,6 +33,11 @@ PhaseMassTransport::PhaseMassTransport
     tauPhaseChangeT_(),
     latentHeat_(dimensionedScalar("latentHeat",dimEnergy/dimMass,material_)),
     cpSolid_(dimensionedScalar("cpSolid",dimEnergy/dimMass/dimTemperature,material_)),
+    mushyDarcyCu_
+    (
+        dimensionedScalar("mushyDarcyCu",dimless/dimTime,material_)
+    ),
+    mushyDarcyQ_(material_.lookup<scalar>("mushyDarcyQ")),
     mLiquid_(IOobject("rhoAlpha.liquid",mesh.time().name(),mesh,
                       IOobject::READ_IF_PRESENT,IOobject::AUTO_WRITE),
              mesh,dimensionedScalar(dimDensity,0),
@@ -101,7 +106,11 @@ PhaseMassTransport::PhaseMassTransport
         || !std::isfinite(metalPresenceThreshold_)
         || metalPresenceThreshold_<=0 || metalPresenceThreshold_>=0.5
         || !std::isfinite(latentHeat_.value()) || latentHeat_.value()<=0
-        || !std::isfinite(cpSolid_.value()) || cpSolid_.value()<=0)
+        || !std::isfinite(cpSolid_.value()) || cpSolid_.value()<=0
+        || !std::isfinite(mushyDarcyCu_.value())
+        || mushyDarcyCu_.value()<=0
+        || !std::isfinite(mushyDarcyQ_)
+        || mushyDarcyQ_<=0 || mushyDarcyQ_>1)
     {
         FatalErrorInFunction
           << "FS-C08 requires sourced alloy properties, valid temperature "
