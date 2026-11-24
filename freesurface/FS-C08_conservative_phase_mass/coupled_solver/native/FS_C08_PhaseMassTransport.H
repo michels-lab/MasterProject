@@ -40,7 +40,6 @@ class PhaseMassTransport
     // Either equilibrium fs(T), or physically sourced kinetic timescale.
     // No arbitrary per-CFD-timestep relaxation factor.
     word phaseChangeClosure_;
-    scalar metalPresenceThreshold_;
 
     autoPtr<Function1<scalar>> rhoLiquidT_;
     autoPtr<Function1<scalar>> rhoSolidT_;
@@ -95,8 +94,8 @@ class PhaseMassTransport
 
     void checkAndUpdateProperties(const volScalarField& T, const volScalarField& metal);
     void initializeIfRequired(const volScalarField& alphaMetal, const volScalarField& T);
-    void evaluateGamma(const volScalarField& T, const volScalarField& metal);
-    void updateVolumeSources(const volScalarField& T, const volScalarField& metal);
+    void evaluateGamma(const volScalarField& T);
+    void updateVolumeSources(const volScalarField& T);
     void reconstructFractions();
 
 public:
