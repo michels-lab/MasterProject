@@ -81,6 +81,17 @@ class TestNativeOpenFOAMBridgeContract(unittest.TestCase):
         self.assertIn("IOobject::NO_WRITE",cpp_no_comments)
         self.assertIn("ConservativePhaseExchange.H",cpp_no_comments)
 
+    def test_native_build_contract_is_wmake_and_explicit_CPP17(self):
+        folder=(v.ROOT/"freesurface/FS-C08_conservative_phase_mass/native_openfoam/Make")
+        files=(folder/"files").read_text()
+        options=(folder/"options").read_text()
+        self.assertIn("fsC08NativeInventory.C",files)
+        self.assertIn("$(FOAM_USER_APPBIN)/fsC08NativeInventory",files)
+        self.assertIn("-std=c++17",options)
+        self.assertIn("$(LIB_SRC)/finiteVolume/lnInclude",options)
+        self.assertIn("-lfiniteVolume",options)
+        self.assertIn("-lOpenFOAM",options)
+
 
 if __name__ == "__main__":
     unittest.main()
