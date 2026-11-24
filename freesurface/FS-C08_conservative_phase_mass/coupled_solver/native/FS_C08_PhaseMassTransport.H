@@ -90,6 +90,7 @@ class PhaseMassTransport
     void checkAndUpdateProperties(const volScalarField& T, const volScalarField& metal);
     void initializeIfRequired(const volScalarField& alphaMetal, const volScalarField& T);
     void evaluateGamma(const volScalarField& T, const volScalarField& metal);
+    void updateVolumeSources(const volScalarField& T, const volScalarField& metal);
     void reconstructFractions();
 
 public:
@@ -109,6 +110,15 @@ public:
         const volScalarField& T,
         const volScalarField& alphaMetal,
         const surfaceScalarField& alphaPhiMetal
+    );
+
+    // The energy solve follows phase transport within PIMPLE.
+    // Recompute rho(T) and material volume (without transporting
+    // or converting mass for a second time) BEFORE pressure.
+    void refreshAfterEnergy
+    (
+        const volScalarField& T,
+        const volScalarField& alphaMetal
     );
 
     const volScalarField& liquidMass() const { return mLiquid_; }
