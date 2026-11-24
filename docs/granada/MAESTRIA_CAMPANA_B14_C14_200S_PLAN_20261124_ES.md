@@ -1,3 +1,5 @@
+> **24-11-2026 | Campaña 200 s: preparación WSL 6/6 confirmada.** Consola del investigador, HEAD 3ffe0b56a: las seis variantes PREPARED_NOT_RUN, ALL_SIX_PREPARED_NO_CFD. Proyección con margen: 677717076556 bytes; espacio libre reportado por WSL: 931037851648 bytes; all_six_fit_estimate=true. Confirmar también espacio físico del volumen Windows que aloja el VHDX; la estimación no garantiza capacidad real. 3DB 270788 HEX8, 12636 caras de contacto por lado, 1826 caras no ortogonales severas (advertencia conservada). 0/6 CFD ejecutados; A 8/10=80%, B 2/7=29% hitos. Prioridad actual A C14-3DA-200s según registro A, usar ejecutor específico sobre caso ya preparado, sin repetir preparación. [Plan](https://github.com/michels-lab/MasterProject/blob/main/docs/granada/MAESTRIA_CAMPANA_B14_C14_200S_PLAN_20261124_ES.md).
+
 # Campaña de 200 s — plan acordado 24-11-2026
 
 ## Propósito científico

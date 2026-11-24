@@ -1323,7 +1323,7 @@
   "planned_200s_campaign": {
     "date": "2026-11-24",
     "priority": "C14-3DA-200s first; temporal/spatial sensitivity deferred by researcher",
-    "status": "PREPARER_PUBLISHED_WSL_MATERIALIZATION_NOT_OBSERVED",
+    "status": "WSL_ALL_SIX_PREPARED_NO_CFD",
     "plan": "docs/granada/MAESTRIA_CAMPANA_B14_C14_200S_PLAN_20261124_ES.md",
     "original_10s_preserved": true,
     "physical_validation": false,
@@ -1334,7 +1334,7 @@
     "storage_and_runtime_audit_required": true,
     "preparer": "tools/prepare_campaign_200s.py",
     "preparer_commit": "988cc07539577a597d589ae3a70bcc07253ba0c2",
-    "prepared_observed": 0,
+    "prepared_observed": 6,
     "run_observed": 0,
     "total_planned": 6,
     "case_A_priority_status": "TARGETED_EXECUTOR_PUBLISHED_WSL_PENDING",
@@ -1344,7 +1344,24 @@
     "case_A_steps": 200000,
     "case_A_saved_times": 2001,
     "case_A_probe_samples_per_field": 200001,
-    "case_A_new_run_observed": false
+    "case_A_new_run_observed": false,
+    "source_head_reported": "3ffe0b56a",
+    "resource_evidence": {
+      "basis": "investigator supplied WSL stdout, not direct access to laptop",
+      "per_case_projected_bytes": {
+        "C14-2D-200s": 15093610368,
+        "B14-2D-200s": 15093610368,
+        "C14-3DA-200s": 23622314768,
+        "B14-3DA-200s": 23622314768,
+        "C14-3DB-200s": 300142613142,
+        "B14-3DB-200s": 300142613142
+      },
+      "projected_total_bytes": 677717076556,
+      "free_bytes_WSL": 931037851648,
+      "all_six_fit_estimate": true,
+      "windows_host_volume_free_verified": false
+    },
+    "next": "Run C14-3DA-200s using targeted priority executor after host disk check; preserve all others."
   },
   "stage09_temporal_sensitivity": {
     "status": "DEFERRED_BY_RESEARCHER_PRIORITY_200S",
