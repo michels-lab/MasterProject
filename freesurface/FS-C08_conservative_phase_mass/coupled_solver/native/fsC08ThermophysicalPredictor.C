@@ -1,9 +1,24 @@
-/* FS-C08: GPL-3.0 adaptation of Foundation14 thermophysicalPredictor.C.
- * New: mass-effective metal Cv(T) and ONE Gamma L latent source.
- * The old VoFSolidificationMelting energy model MUST NOT also be loaded.
- * Solid enthalpy convection (zero solid velocity), p*dV and advanced
- * thermodynamic consistency are still unverified, no physical validation.
- * Original upstream license header retained below.
+/*
+ * FS-C08 | Phase-resolved internal-energy transport for real OpenFOAM14 CFD.
+ *
+ * Conserved thermal energy per CELL VOLUME:
+ * E = rhoAlpha.liquid*u_l(T) + rhoAlpha.solid*u_s(T)
+ *     + alpha.air*rho.air*u.air(p,T)                              [J/m3]
+ *
+ * The liquid carries its OWN real FV mass flux, the solid is stationary,
+ * and the gas uses the native compressibleVoF face mass flux. The
+ * material u_l/u_s curves are exact integrals of sourced Cv(T) functions,
+ * with u_l(Tref)-u_s(Tref)=L exactly ONCE. NO separate Gamma L source.
+ *
+ * A nonlinear Picard/Newton linearisation of E(T) solves the true energy
+ * inventory, not the old effective Cv + separate latent approximation.
+ * Pressure-work/kinetic terms and conduction are inherited from the
+ * Foundation14 total-internal-energy equation.
+ *
+ * NOTES: This is as yet UNCOMPILED on researcher's Foundation14 WSL.
+ * Physical validation, full gas continuity, feeding, consistent thermal
+ * EOS and p*dV closure still require checks; no shrinkage prediction claim.
+ * Modification Copyright 2026 Michel's Lab, GPL-3.0-or-later.
  */
 /*---------------------------------------------------------------------------*\
   =========                 |
@@ -33,120 +48,284 @@ License
 #include "fsC08ConservativeVoF.H"
 #include "fvcMeshPhi.H"
 #include "fvcDdt.H"
+#include "fvcDiv.H"
 #include "fvcInterpolate.H"
-#include "fvmDiv.H"
 #include "fvmSup.H"
 #include "fvmLaplacian.H"
+#include "zeroGradientFvPatchFields.H"
+#include "PstreamReduceOps.H"
 
-// * * * * * * * * * * * * * * Member Functions  * * * * * * * * * * * * * * //
+#include <cmath>
 
 void Foam::solvers::fsC08ConservativeVoF::thermophysicalPredictor()
 {
-    const volScalarField& rho1(rhoMetalEffective_);
-    const volScalarField& rho2(mixture.rho2());
-
-    const volScalarField& e1(mixture.thermo1().he());
-    const volScalarField& e2(mixture.thermo2().he());
-
-    const fvScalarMatrix e1Source(fvModels().source(alpha1, rho1, e1));
-    const fvScalarMatrix e2Source(fvModels().source(alpha2, rho2, e2));
-
-    // EFFECTIVE mass-specific metal heat capacity, from conserved phase
-    // masses. First-order sensible heat approximation. Do not declare
-    // thermodynamically exact until the separate solid enthalpy closure.
-    volScalarField cvMetal("CvMetal.fsC08",mixture.thermo1().Cv());
-    const auto& ml=phaseMass_->liquidMass().primitiveField();
-    const auto& ms=phaseMass_->solidMass().primitiveField();
-    auto& cv=cvMetal.primitiveFieldRef();
-    const scalar cvS=phaseMass_->cvSolid().value();
-    forAll(cv,celli)
+    // We explicitly transport INTERNAL energies with a pressure-work term.
+    // A mixture configured for total enthalpy would require a distinct
+    // pressure-work formulation, and MUST NOT be run with this equation.
+    if (!mixture.totalInternalEnergy())
     {
-        const scalar M=ml[celli]+ms[celli];
-        if (M>1e-20)
-            cv[celli]=(ml[celli]*cv[celli]+ms[celli]*cvS)/M;
+        FatalErrorInFunction
+            << "FS-C08 u_l(T)/u_s(T) internal-energy transport requires "
+            << "totalInternalEnergy true. Refusing an enthalpy-mode "
+            << "temperature equation with inconsistent p*dV."
+            << exit(FatalError);
     }
-    cvMetal.correctBoundaryConditions();
 
-    volScalarField& T = mixture_.T();
+    volScalarField& T=mixture_.T();
+    T.oldTime();
+    alpha2.oldTime();
 
-    fvScalarMatrix TEqn
+    const volScalarField& mL=phaseMass_->liquidMass();
+    const volScalarField& mS=phaseMass_->solidMass();
+    const volScalarField& rhoG=mixture_.rho2();
+
+    // Explicitly retrieve old native phase masses and old gas internal
+    // energy. The same oldTime reference is used throughout PIMPLE.
+    const auto& mL0=mL.oldTime().primitiveField();
+    const auto& mS0=mS.oldTime().primitiveField();
+    const auto& TG0=T.oldTime().primitiveField();
+    const auto& aG0=alpha2.oldTime().primitiveField();
+    const auto& rhoG0=rhoG.oldTime().primitiveField();
+    const auto& uG0=mixture_.thermo2().he().oldTime().primitiveField();
+    const auto& V=mesh.V();
+
+    const scalar dt=runTime.deltaTValue();
+    if (!std::isfinite(dt) || dt<=0)
+        FatalErrorInFunction
+            << "FS-C08 invalid CFD dt in internal-energy transport"
+            << exit(FatalError);
+
+    // The thermal energy reference is defined by u_s(Tref)=0 and
+    // u_l(Tref)=latentHeat. This reference has no separate Gamma L.
+    volScalarField Eold
     (
-        correction
+        IOobject
         (
-            cvMetal
-           *(
-                fvm::ddt(alpha1, rho1, T) + fvm::div(alphaRhoPhi1, T)
-              - (
-                    e1Source.hasDiag()
-                  ? fvm::Sp(contErr1(), T) + fvm::Sp(e1Source.A(), T)
-                  : fvm::Sp(contErr1(), T)
-                )
-            )
-          + mixture.thermo2().Cv()()
-           *(
-                fvm::ddt(alpha2, rho2, T) + fvm::div(alphaRhoPhi2, T)
-              - (
-                    e2Source.hasDiag()
-                  ? fvm::Sp(contErr2(), T) + fvm::Sp(e2Source.A(), T)
-                  : fvm::Sp(contErr2(), T)
-                )
-            )
-        )
+            "FS_C08_Eold",runTime.name(),mesh,
+            IOobject::NO_READ,IOobject::NO_WRITE
+        ),
+        mesh,dimensionedScalar(dimEnergy/dimVolume,0),
+        zeroGradientFvPatchScalarField::typeName
+    );
+    auto& E0=Eold.primitiveFieldRef();
+    forAll(E0,i)
+    {
+        scalar l=0,s=0;
+        if (mL0[i]>0 || mS0[i]>0)
+        {
+            l=phaseMass_->liquidInternalEnergy(TG0[i]);
+            s=phaseMass_->solidInternalEnergy(TG0[i]);
+        }
+        E0[i]=mL0[i]*l + mS0[i]*s + aG0[i]*rhoG0[i]*uG0[i];
+        if (!std::isfinite(E0[i]))
+            FatalErrorInFunction
+                << "FS-C08 nonfinite old mixture internal energy cell "
+                << i << exit(FatalError);
+    }
+    Eold.correctBoundaryConditions();
 
-      + fvc::ddt(alpha1, rho1, e1) + fvc::div(alphaRhoPhi1, e1)
-      - contErr1()*e1
-      + fvc::ddt(alpha2, rho2, e2) + fvc::div(alphaRhoPhi2, e2)
-      - contErr2()*e2
-
-      - fvm::laplacian(thermophysicalTransport.kappaEff(), T)
-
-      + (
-            mixture.totalInternalEnergy()
-          ?
-            fvc::div(fvc::absolute(phi, U), p)()()
-          + (fvc::ddt(rho, K) + fvc::div(rhoPhi, K))()()
-          - (U()&(fvModels().source(rho, U)&U)()) - (contErr1() + contErr2())*K
-          :
-            p*fvc::div(fvc::absolute(phi, U))()()
-        )
-     ==
-        (e1Source&e1)
-      + (e2Source&e2)
-      + phaseMass_->latentHeat()*phaseMass_->gamma()
+    volScalarField Eguess
+    (
+        IOobject
+        (
+            "FS_C08_Eguess",runTime.name(),mesh,
+            IOobject::NO_READ,IOobject::NO_WRITE
+        ),
+        mesh,dimensionedScalar(dimEnergy/dimVolume,0),
+        zeroGradientFvPatchScalarField::typeName
+    );
+    volScalarField CVvol
+    (
+        IOobject
+        (
+            "FS_C08_CVvol",runTime.name(),mesh,
+            IOobject::NO_READ,IOobject::NO_WRITE
+        ),
+        mesh,
+        dimensionedScalar(dimEnergy/dimVolume/dimTemperature,0),
+        zeroGradientFvPatchScalarField::typeName
+    );
+    volScalarField uLiquid
+    (
+        IOobject
+        (
+            "FS_C08_uLiquid",runTime.name(),mesh,
+            IOobject::NO_READ,IOobject::NO_WRITE
+        ),
+        mesh,dimensionedScalar(dimEnergy/dimMass,0),
+        zeroGradientFvPatchScalarField::typeName
     );
 
-    TEqn.relax();
+    // Purely numerical nonlinear solver controls; these are NOT material
+    // constants or kinetic coefficients and cannot validate cast iron.
+    const label maxEnergyCorrectors=18;
+    const scalar energyToleranceK=1e-6;
+    scalar lastDeltaT=GREAT;
+    bool converged=false;
 
-    fvConstraints().constrain(TEqn);
+    for (label corrector=0;corrector<maxEnergyCorrectors;++corrector)
+    {
+        mixture_.correctThermo();
 
-    TEqn.solve();
+        const tmp<volScalarField> tGasCv=mixture_.thermo2().Cv();
+        const volScalarField& gasCv=tGasCv();
+        const auto& ug=mixture_.thermo2().he().primitiveField();
+        const auto& gasC=gasCv.primitiveField();
+        const auto& aG=alpha2.primitiveField();
+        const auto& rg=rhoG.primitiveField();
+        const auto& ml=mL.primitiveField();
+        const auto& ms=mS.primitiveField();
+        const auto& temp=T.primitiveField();
 
-    fvConstraints().constrain(T);
+        auto& e=Eguess.primitiveFieldRef();
+        auto& c=CVvol.primitiveFieldRef();
+        auto& ul=uLiquid.primitiveFieldRef();
+
+        forAll(temp,i)
+        {
+            scalar ul_i=phaseMass_->liquidInternalEnergy
+            (
+                phaseMass_->alphaMetal().primitiveField()[i]>0
+                ? temp[i] : phaseMass_->energyReferenceT()
+            );
+            scalar us_i=0;
+            scalar cvL=0,cvS=0;
+            if (ml[i]>0 || ms[i]>0)
+            {
+                ul_i=phaseMass_->liquidInternalEnergy(temp[i]);
+                us_i=phaseMass_->solidInternalEnergy(temp[i]);
+                cvL=phaseMass_->liquidCv(temp[i]);
+                cvS=phaseMass_->solidCv(temp[i]);
+            }
+            ul[i]=ul_i;
+
+            // CURRENT exact internal-energy inventory at Tguess.
+            e[i]=ml[i]*ul_i+ms[i]*us_i+aG[i]*rg[i]*ug[i];
+            c[i]=ml[i]*cvL+ms[i]*cvS+aG[i]*rg[i]*gasC[i];
+            if (!std::isfinite(e[i]) || !std::isfinite(c[i])
+                || c[i]<=0)
+            {
+                FatalErrorInFunction
+                    << "FS-C08 nonfinite/nonpositive thermodynamic Cv "
+                    << "or energy in cell " << i
+                    << exit(FatalError);
+            }
+        }
+        Eguess.correctBoundaryConditions();
+        CVvol.correctBoundaryConditions();
+        uLiquid.correctBoundaryConditions();
+
+        // Liquid enthalpy at a real metal inflow must be determined by
+        // the boundary temperature. Zero-gradient interior values are
+        // NOT silently substituted for prescribed inlet temperatures.
+        forAll(uLiquid.boundaryField(),patchi)
+        {
+            const auto& flux=alphaRhoPhi1.boundaryField()[patchi];
+            const auto& boundaryT=T.boundaryField()[patchi];
+            auto& boundaryU=uLiquid.boundaryFieldRef()[patchi];
+            forAll(flux,facei)
+            {
+                if (mag(flux[facei])>SMALL)
+                    boundaryU[facei]=
+                        phaseMass_->liquidInternalEnergy
+                        (
+                            boundaryT[facei]
+                        );
+            }
+        }
+
+        // Same native face flux to owner AND neighbour => exact
+        // cancellation of internal advective energy at global level.
+        const surfaceScalarField internalEnergyFlux
+        (
+            "FS_C08_internalEnergyFlux",
+            phaseMass_->liquidMassFlux()*fvc::interpolate(uLiquid)
+          + alphaRhoPhi2*fvc::interpolate(mixture_.thermo2().he())
+        );
+
+        const scalarField T_before(T.primitiveField());
+
+        // Newton/Picard linearisation of E(T):
+        // E(T) ≈ Eguess + CVvol*(T-Tguess).
+        // At convergence: ddt(E)+div(F_E)-laplacian(k,T)+W_pK=0.
+        //
+        // Foundation14 pressure and kinetic-energy work is retained
+        // from the native totalInternalEnergy predictor (NOT dropped).
+        fvScalarMatrix TEqn
+        (
+            fvm::Sp(CVvol/runTime.deltaT(),T)
+          - fvm::laplacian(thermophysicalTransport.kappaEff(),T)
+          + (
+                fvc::div(fvc::absolute(phi,U),p)()()
+              + (fvc::ddt(rho,K)+fvc::div(rhoPhi,K))()()
+              - (U()&(fvModels().source(rho,U)&U)())
+              - (contErr1()+contErr2())*K
+            )
+         ==
+            (Eold-Eguess+CVvol*T)/runTime.deltaT()
+          - fvc::div(internalEnergyFlux)
+        );
+
+        TEqn.relax();
+        fvConstraints().constrain(TEqn);
+        TEqn.solve();
+        fvConstraints().constrain(T);
+
+        lastDeltaT=0;
+        const auto& Tnew=T.primitiveField();
+        forAll(Tnew,i)
+        {
+            if (!std::isfinite(Tnew[i]) || Tnew[i]<=0)
+                FatalErrorInFunction
+                    << "FS-C08 invalid energy-corrected T in cell "
+                    << i << exit(FatalError);
+
+            lastDeltaT=max(lastDeltaT,mag(Tnew[i]-T_before[i]));
+        }
+        reduce(lastDeltaT,maxOp<scalar>());
+        if (lastDeltaT<=energyToleranceK)
+        {
+            converged=true;
+            break;
+        }
+    }
+    if (!converged)
+    {
+        FatalErrorInFunction
+            << "FS-C08 phase-resolved nonlinear energy predictor "
+            << "did not converge after " << maxEnergyCorrectors
+            << " correctors. MaxDeltaT=" << lastDeltaT
+            << " K. No thermodynamic validation claim."
+            << exit(FatalError);
+    }
 
     mixture_.correctThermo();
     mixture_.correct();
 
-    // Pressure correction follows this energy solve inside PIMPLE.
-    // rho_l(T), rho_s(T) and hence alphaMetal must be refreshed NOW,
-    // not a full physical time step later. No second Gamma conversion.
-    phaseMass_->refreshAfterEnergy(mixture_.T(),alpha1);
-    alpha1 = phaseMass_->alphaMetal();
-    alpha2 = scalar(1)-alpha1;
+    // Energy solve must update rho_l(T), rho_s(T), and thus occupied
+    // VOF volume BEFORE native PIMPLE pressure. Never apply Gamma twice.
+    phaseMass_->refreshAfterEnergy(T,alpha1);
+    alpha1=phaseMass_->alphaMetal();
+    alpha2=scalar(1)-alpha1;
     alpha1.correctBoundaryConditions();
     alpha2.correctBoundaryConditions();
     correctInterface();
 
-    // Mass flux remains the CONSERVED liquid flux from transport.
-    // Face VOLUME flux changes with the new liquid density.
     alphaRhoPhi1=phaseMass_->liquidMassFlux();
-    alphaPhi1=
-        alphaRhoPhi1/fvc::interpolate(phaseMass_->liquidDensity());
+    alphaPhi1=alphaRhoPhi1/
+        fvc::interpolate(phaseMass_->liquidDensity());
     alphaPhi2=phi-alphaPhi1;
     alphaRhoPhi2=fvc::interpolate(mixture_.rho2())*alphaPhi2;
     rhoPhi=alphaRhoPhi1+alphaRhoPhi2;
-
     reconcileMixtureDensity();
+
+    Info<< "FS_C08_NATIVE_PHASE_RESOLVED_INTERNAL_ENERGY"
+        << " time_s=" << runTime.value()
+        << " nonlinearDeltaT_K=" << lastDeltaT
+        << " correctors_converged=1"
+        << " phaseInternalEnergiesCvIntegral=1"
+        << " singleLatentReferenceOffset=1"
+        << " originalVoFSolidificationMeltingMustBeDisabled=1"
+        << " globalEnergyBalanceNotYetValidated=1" << nl;
 }
-
-
 // ************************************************************************* //
