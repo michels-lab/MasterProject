@@ -73,6 +73,16 @@ solvers::fsC08ConservativeVoF::fsC08ConservativeVoF(fvMesh& mesh)
         mesh,dimensionedScalar(dimPower/dimVolume,0),
         zeroGradientFvPatchScalarField::typeName
     ),
+    mushyDarcyResistance_
+    (
+        IOobject
+        (
+            "mushyDarcyResistance.fsC08",mesh.time().name(),mesh,
+            IOobject::NO_READ,IOobject::AUTO_WRITE
+        ),
+        mesh,dimensionedScalar(dimDensity/dimTime,0),
+        zeroGradientFvPatchScalarField::typeName
+    ),
     mushyDarcyDissipation_
     (
         IOobject
@@ -267,6 +277,22 @@ void solvers::fsC08ConservativeVoF::postSolve()
 
     // Now include the actual corrected gas p/rho/u state.
     updatePhaseInternalEnergy();
+    // Darcy dissipation must use the velocity AFTER the final native
+    // momentum/pressure correction. The old predictor U used when
+    // assembling fvm::Sp(R,U) would misstate physical energy loss.
+    const auto& R=mushyDarcyResistance_.primitiveField();
+    const auto& finalU=U.primitiveField();
+    auto& dragHeat=mushyDarcyDissipation_.primitiveFieldRef();
+    forAll(dragHeat,i)
+    {
+        dragHeat[i]=R[i]*magSqr(finalU[i]);
+        if (!std::isfinite(dragHeat[i]) || dragHeat[i]<0)
+            FatalErrorInFunction
+                << "FS-C08 nonfinite final PIMPLE Darcy dissipation cell "
+                << i << exit(FatalError);
+    }
+    mushyDarcyDissipation_.correctBoundaryConditions();
+
     // Runtime budget from REAL CFD state, all fluid cells and all
     // fluid boundary patches. Gamma cancels in total metal mass.
     // This is a physical conservation metric, NOT a synthetic test.
