@@ -1,0 +1,40 @@
+name: FS-C06 VOF solidification compatibility (synthetic, NO CFD)
+
+on:
+  push:
+    branches:
+      - research/fs-c02-metal-air-vof-20261117
+    paths:
+      - 'analysis_tools/stage_fs_c06_vof_solidification.py'
+      - 'analysis_tools/test_stage_fs_c06_vof_solidification.py'
+      - 'analysis_tools/screen_fs_c06_density_contraction.py'
+      - 'analysis_tools/test_screen_fs_c06_density_contraction.py'
+      - 'freesurface/FS-C06_vof_solidification/**'
+      - '.github/workflows/fs-c06-static.yml'
+  pull_request:
+    paths:
+      - 'analysis_tools/stage_fs_c06_vof_solidification.py'
+      - 'analysis_tools/test_stage_fs_c06_vof_solidification.py'
+      - 'analysis_tools/screen_fs_c06_density_contraction.py'
+      - 'analysis_tools/test_screen_fs_c06_density_contraction.py'
+      - 'freesurface/FS-C06_vof_solidification/**'
+      - '.github/workflows/fs-c06-static.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  fs-c06-synthetic:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - name: FS-C06 native shell gate syntax (no solver)
+        run: bash -n freesurface/FS-C06_vof_solidification/run_native_gate.sh
+      - name: FS-C06 compile (no solver)
+        run: python3 -m py_compile analysis_tools/stage_fs_c06_vof_solidification.py analysis_tools/test_stage_fs_c06_vof_solidification.py analysis_tools/screen_fs_c06_density_contraction.py analysis_tools/test_screen_fs_c06_density_contraction.py
+      - name: FS-C06 physics and isolation guards (no solver)
+        run: |
+          python3 -m unittest discover -s analysis_tools -p test_stage_fs_c06_vof_solidification.py -v
+          python3 -m unittest discover -s analysis_tools -p test_screen_fs_c06_density_contraction.py -v
