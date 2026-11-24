@@ -312,7 +312,19 @@ void PhaseMassTransport::solve
     const surfaceScalarField& alphaPhiMetal
 )
 {
-    if (lastSolvedTimeIndex_==mesh_.time().timeIndex()) return;
+    // PIMPLE may call prePredictor multiple times in a single physical dt.
+    // Recompute from n each outer corrector, not cumulatively from a
+    // previous n+1 phase-change update. fvm::ddt(mLiquid_) always uses
+    // mLiquid_.oldTime() as the n state; restore solid mass to the
+    // same n state before calculating a new Gamma(T) predictor.
+    mLiquid_.oldTime();
+    mSolid_.oldTime();
+    if (lastSolvedTimeIndex_==mesh_.time().timeIndex())
+    {
+        mSolid_.primitiveFieldRef() =
+            mSolid_.oldTime().primitiveField();
+        mSolid_.correctBoundaryConditions();
+    }
     checkAndUpdateProperties(T,alphaMetal);
     initializeIfRequired(alphaMetal,T);
     reconstructFractions();
