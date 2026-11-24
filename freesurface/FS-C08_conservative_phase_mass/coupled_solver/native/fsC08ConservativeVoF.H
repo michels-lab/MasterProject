@@ -26,6 +26,14 @@ class fsC08ConservativeVoF : public compressibleVoF
     // m_l*u_l(T) + m_s*u_s(T) + m_g*u_g(p,T).
     volScalarField phaseInternalEnergy_;
 
+    // Signed per-face thermal/internal energy flux [W] used in the
+    // ACTUAL energy solve (not reconstructed from post-pressure phi).
+    surfaceScalarField phaseEnergyPhi_;
+
+    // Signed outward conductive heat flux [W] at native fluid FV faces.
+    // At fluid-mold wall: positive value = heat leaving fluid to mold.
+    surfaceScalarField phaseHeatPhi_;
+
     // Restore mixture mass from actual liquid+solid inventories, not
     // alpha.metal * rho_liquid alone. Gas remains native compressibleVoF.
     void reconcileMixtureDensity();
