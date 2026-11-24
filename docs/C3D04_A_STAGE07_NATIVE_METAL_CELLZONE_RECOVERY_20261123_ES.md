@@ -22,6 +22,17 @@ El código `cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/run_c14_stage07
 4. **Cobertura de salidas:** comprueba la presencia de las tres tablas de potencia de superficie, sus verdaderas cantidades de filas y extremos temporales, así como cuatro perfiles primitivos a t10 con 80 puntos finitos cada uno. Permite reconciliar las potencias top/contact/total en **101 tiempos** (0–10s) o **100 tiempos** (0.1–10s) sin falsificar la potencia inicial t=0. Rechaza 99 o menos tiempos o ejes temporales incompatibles. Ninguna suma de fronteras del metal constituye conservación global metal+arena ni validación QuickCup.
 5. **Seis grupos nativos aislados:** core, energy, phase, flow, profiles, momentum. Fallos individuales no bloquean la recopilación de errores de otros grupos y nunca declaran éxito por mero código de salida; las derivadas C14 originales `ddt(T)`, `ddt(alpha1)` no pueden recuperarse desde 0.1s.
 
+## Prueba Foundation14 NATIVA: causa reproducida y corregida (PASS)
+
+**GitHub Actions [F14 smoke 45318181439](https://github.com/michels-lab/MasterProject/actions/runs/45318181439) — SUCCESS.** Se preparó un caso C14 sintético completado de **27 celdas metálicas y 27 del molde** (dos pasos hasta 0.002 s) y una copia independiente sin zona `metal`:
+
+- En la copia sin zona, `foamPostProcess -region metal -solver fluid -latestTime` devolvió efectivamente `exit_code=0` **a pesar** de imprimir `FOAM FATAL IO ERROR: Cannot find cellZone metal; Available cellZones: 0()`. Esto reproduce el mismo falso positivo que observamos en la WSL real.
+- Se ejecutó el generador original de zona, escribiendo `cellZones` **solo en un clon nuevo**, con cobertura exacta de las 27 celdas sintéticas, sin cambiar la conectividad del mesh.
+- La siguiente ejecución nativa `foamPostProcess` resultó **sin errores fatales**, exit 0, y produjo el `volFieldValue.dat` de `metalSensibleEnthalpy` original C14. El expediente sintético inicial quedó intacto.
+- **Límite:** se validó funcionalidad del mecanismo y de las comprobaciones del código, no se ha reejecutado sobre V4/T02 de 8960 celdas ni aceptado energía de metal + arena.
+
+Las regresiones Python de la rama también aprobaron la clasificación de cuatro falsos PASS reales, rechazan materializar zonas en origen, verifican SHA del polyMesh y aceptan 100 o 101 estados guardados **solo con marca de tiempo exacta**.
+
 ## Regla de ejecución
 
 `_02` es evidencia histórica **protegida**. Para analizarla de nuevo solo leer, usar el ejecutor sin `--out`; este no escribirá ni modificará nada. Para ejecutar la corrección en datos reales, el destino **debe ser NUEVO y explícito**: `~/OpenFOAM/C3D04_A_C14_SOLVER_BACKED_POSTPROCESS_03`:
