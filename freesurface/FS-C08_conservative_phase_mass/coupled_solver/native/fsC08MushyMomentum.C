@@ -25,7 +25,7 @@ Foam::solvers::fsC08ConservativeVoF::divDevTau(volVectorField& U)
     forAll(R,i)
     {
         const scalar aMetal=aL[i]+aS[i];
-        if (aMetal<=1e-12)
+        if (aMetal<=0)
         {
             R[i]=0;
             continue;

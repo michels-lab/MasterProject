@@ -169,7 +169,7 @@ void solvers::fsC08ConservativeVoF::reconcileMixtureDensity()
     auto& rMetal=rhoMetalEffective_.primitiveFieldRef();
     forAll(rMetal,i)
     {
-        rMetal[i]=metal[i]>1e-12
+        rMetal[i]=metal[i]>0
             ? (ml[i]+ms[i])/metal[i]
             : rL[i];
     }

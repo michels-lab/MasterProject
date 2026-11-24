@@ -531,7 +531,7 @@ void PhaseMassTransport::solve
     auto& f=liquidShare.primitiveFieldRef();
     const auto& aL=alphaLiquid_.primitiveField();
     const auto& aM=alphaMetalFromMass_.primitiveField();
-    forAll(f,i) f[i]=aM[i]>1e-12 ? aL[i]/aM[i] : 0;
+    forAll(f,i) f[i]=aM[i]>0 ? aL[i]/aM[i] : 0;
     liquidShare.correctBoundaryConditions();
 
     // Real MULES-limited metal flux on ALL CFD mesh faces and boundaries.
