@@ -111,14 +111,14 @@
     "stage_completed": "08_SOLIDIFICATION_T1",
     "current_stage": "09_VERIFICATION_AND_GRID",
     "operational_completion": "8/10=80%",
-    "status": "REAL_WSL_FAITHFUL_C14_RUNTIME_READY",
-    "evidence_report": "docs/C3D04_A_STAGE09_FAITHFUL_C14_RUNTIME_20261124_ES.md",
+    "status": "REAL_GIT_NATIVE_THERMAL_AND_METAL_ENERGY_DIAGNOSTICS_ANALYZED",
+    "evidence_report": "docs/C3D04_A_STAGE09_FAITHFUL_NATIVE_ANALYSIS_20261124_ES.md",
     "scientific_limits": [
-      "Native diagnostic coverage verified; new field values not independently inspected",
-      "Discrete conservation and same-geometry grid/time independence not established",
-      "QuickCup validation and FoamLens import not observed"
+      "Native Git probe, profiles and reductions analyzed; full 3D primary field equivalence not verified",
+      "0.1s quadrature and nominal latent inventory not discrete conservation",
+      "Mold-side energy balance of faithful run pending local audit; grid/time independence and QuickCup pending"
     ],
-    "next": "Compare primary fields between same-mesh baseline and faithful replica, native 2D/3D probe histories at .001 s, and runtime thermal/phase reductions; no new CFD until evidence assessed."
+    "next": "Run read-only same-mesh primary field comparison and bilateral saved-state energy audit; no CFD rerun."
   },
   "stage06_preflight_integrity": {
     "date": "2026-11-20",
@@ -320,9 +320,9 @@
     "native_postrun_continuity_global_max_abs": 4.21562e-18,
     "native_postrun_continuity_cumulative_last": -6.5319e-14,
     "native_postrun_max_FINAL_residual_h": 0.000265533,
-    "native_postrun_max_FINAL_residual_e": 4.31133e-05,
+    "native_postrun_max_FINAL_residual_e": 0.0000431133,
     "native_postrun_max_FINAL_residual_p_rgh": 0.00776125,
-    "native_postrun_last_FINAL_residual_p_rgh": 5.19776e-08,
+    "native_postrun_last_FINAL_residual_p_rgh": 5.19776e-8,
     "metal_initial_T_K": 1500,
     "final_metal_T_min_K": 1401.91,
     "final_metal_T_cell_mean_K": 1444.7184787946428,
@@ -806,7 +806,7 @@
         "contact": 1524.644,
         "total": 1641.923
       },
-      "maximum_relative_surface_power_reconciliation_discrepancy": 4.7503433312219475e-07,
+      "maximum_relative_surface_power_reconciliation_discrepancy": 4.7503433312219475e-7,
       "profiles_passed": 7,
       "profiles_requested": 9,
       "vertical_primitive_points": 27,
@@ -836,7 +836,7 @@
         "tests_passed": 5,
         "source_hashes_unchanged": true,
         "grouped_input_hashes_unchanged": true,
-        "metal_volume_m3": 4.7921447006662436e-05,
+        "metal_volume_m3": 0.000047921447006662436,
         "mold_volume_m3": 0.00010287540036379159,
         "reference_s": 0.1,
         "final_s": 10,
@@ -849,7 +849,7 @@
         "total_metal_energy_out_J": 20670.15745,
         "net_metal_boundary_advective_integral_J": 0,
         "metal_nominal_residual_J": 2.023033551624394,
-        "metal_nominal_residual_relative_to_outward_energy": 9.787218875898762e-05,
+        "metal_nominal_residual_relative_to_outward_energy": 0.00009787218875898762,
         "metal_to_mold_minus_mold_inventory_J": 144.34651958475297,
         "vertical": {
           "x_m": 0.02,
@@ -864,7 +864,7 @@
           ],
           "corrected_y_m": [
             -0.014750105000000001,
-            -5.039899999999763e-05
+            -0.00005039899999999763
           ],
           "native_scan_valid_points": 149,
           "native_scan_requested_points": 401,
@@ -892,8 +892,8 @@
         "interface_faces_each": 2496,
         "paired_geometry_faces_at_10s": 2496,
         "matched_face_abs_interface_power_residual_W": 1.7034725937727646,
-        "max_metal_contact_relative_difference_vs_grouped_heatFlux": 4.773058032783712e-07,
-        "max_metal_top_relative_difference_vs_grouped_heatFlux": 4.748334299565785e-06,
+        "max_metal_contact_relative_difference_vs_grouped_heatFlux": 4.773058032783712e-7,
+        "max_metal_top_relative_difference_vs_grouped_heatFlux": 0.000004748334299565785,
         "final_patch_q_out_W": {
           "metal/metalTop": 117.27868049840006,
           "metal/metal_to_mold": 1524.6443291594894,
@@ -960,7 +960,7 @@
         "Darcy_max_s_inv": 100000000,
         "liquidlike_speed_mean_m_s": 0.003206989541665255,
         "mixed_speed_mean_m_s": 0.0018208106637875765,
-        "solidlike_speed_mean_m_s": 6.102217022810532e-07
+        "solidlike_speed_mean_m_s": 6.102217022810532e-7
       },
       "first_observed_solid_increase_s": [
         0.2,
@@ -1010,7 +1010,7 @@
       "z_m": 0.00829925,
       "y_m": [
         -0.014750105,
-        -5.0399e-05
+        -0.000050399
       ],
       "points": 80,
       "complete_times": 101,
@@ -1284,6 +1284,27 @@
       "bytes": 176484972,
       "excluded_calculated_volume_times": true,
       "excluded_generated_mesh": true
+    },
+    "native_analysis": {
+      "status": "ARCHIVED_NATIVE_THERMAL_FLOW_AND_METAL_ENERGY_ANALYZED_LOCAL_FIELD_BILATERAL_AUDIT_PENDING",
+      "doc": "docs/C3D04_A_STAGE09_FAITHFUL_NATIVE_ANALYSIS_20261124_ES.md",
+      "thermal_energy_csv": "cases_3d/C3D_04_rounded_multiblock_pilot/C14_3D_A_faithful/analysis_results/faithful_native_analysis_20261124/thermal_energy_101.csv",
+      "native_probe_temperature_rmse_K": 6.7058704356831935,
+      "probe_T_final_2D_K": 1464.19,
+      "probe_T_final_3D_K": 1466.36,
+      "probe_first_below_liquidus_3D_s": 3.451,
+      "probe_first_below_liquidus_2D_s": 4.72,
+      "volume_mean_T_reconstructed_3D_K": 1450.727322911963,
+      "solid_fraction_final_3D": 0.102755,
+      "latent_peak_native_W": 1038.793,
+      "latent_peak_time_s": 7.3,
+      "metal_energy_residual_inventory_0p1_to_10_J": 1.5140835516422158,
+      "metal_energy_residual_power_0p1_to_10_J": -2.9287647000164725,
+      "metal_energy_residual_inventory_0_to_10_J": -164.09061644837948,
+      "metal_energy_residual_power_0_to_10_J": -168.53346470003817,
+      "local_audit_entrypoint": "cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/audit_faithful_a_fields_and_energy.py",
+      "local_audit_executed": false,
+      "discrete_conservation_verified": false
     }
   }
 }
