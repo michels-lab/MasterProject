@@ -29,6 +29,8 @@ PhaseMassTransport::PhaseMassTransport
         Function1<scalar>::New("solidMassFractionT",dimTemperature,
                                units::fraction,material_)
     ),
+    latentHeat_(dimensionedScalar("latentHeat",dimEnergy/dimMass,material_)),
+    cpSolid_(dimensionedScalar("cpSolid",dimEnergy/dimMass/dimTemperature,material_)),
     mLiquid_(IOobject("rhoAlpha.liquid",mesh.time().name(),mesh,
                       IOobject::READ_IF_PRESENT,IOobject::AUTO_WRITE),
              mesh,dimensionedScalar(dimDensity,0),
@@ -93,7 +95,9 @@ PhaseMassTransport::PhaseMassTransport
         || !std::isfinite(Tmin_K_) || !std::isfinite(Tmax_K_)
         || Tmin_K_<=0 || Tmax_K_<=Tmin_K_
         || !std::isfinite(phaseRelaxation_)
-        || phaseRelaxation_<=0 || phaseRelaxation_>1)
+        || phaseRelaxation_<=0 || phaseRelaxation_>1
+        || !std::isfinite(latentHeat_.value()) || latentHeat_.value()<=0
+        || !std::isfinite(cpSolid_.value()) || cpSolid_.value()<=0)
     {
         FatalErrorInFunction
           << "FS-C08 requires sourced alloy properties, valid temperature "
