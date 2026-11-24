@@ -550,6 +550,24 @@
       "energy_conservation_verified": false,
       "all_results_are_postprocessing_of_existing_10s_CFD": true,
       "original_case_and_02_modified_by_readonly_inspector": false
+    },
+    "native_C14_missing_metal_zone_synthetic_ci": {
+      "date": "2026-11-23",
+      "native_F14_workflow": "https://github.com/michels-lab/MasterProject/actions/runs/45318181439",
+      "status": "SUCCESS",
+      "fixture": "C14 two-step 27 metal + 27 mold, not real V4/T02",
+      "negative_exit_code": 0,
+      "negative_log_markers": [
+        "FOAM FATAL IO ERROR",
+        "Cannot find cellZone metal",
+        "Available cellZones: 0()"
+      ],
+      "new_copy_metal_cellZones_created": true,
+      "source_synthetic_CFD_modified": false,
+      "positive_native_postprocess_exit_zero_no_FOAM_FATAL": true,
+      "positive_metalSensibleEnthalpy_volFieldValue_table_created": true,
+      "real_C3D04_A_WSL_8960_cell_recovery_executed": false,
+      "milestones_incremented": false
     }
   }
 }
