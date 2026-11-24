@@ -111,14 +111,14 @@
     "stage_completed": "08_SOLIDIFICATION_T1",
     "current_stage": "09_VERIFICATION_AND_GRID",
     "operational_completion": "8/10=80%",
-    "status": "TEMPORAL_SENSITIVITY_EXECUTOR_PUBLISHED_WSL_PENDING",
-    "evidence_report": "docs/C3D04_A_STAGE09_TEMPORAL_SENSITIVITY_20261124_ES.md",
+    "status": "C14_3DA_200S_PRIORITY_EXECUTOR_PUBLISHED_WSL_PENDING",
+    "evidence_report": "docs/C3D04_A_C14_200S_PRIORITY_20261124_ES.md",
     "scientific_limits": [
-      "No new CFD observed",
-      "Provisional screening criteria, not approved validation tolerances",
-      "Spatial independence, discrete conservation and QuickCup pending; A3/A4 audit CSV local"
+      "200s run not yet observed",
+      "Local disk audit required",
+      "No discrete conservation, grid/time independence or QuickCup validation"
     ],
-    "next": "Run two isolated temporal refinements at fixed V4/T02, compare three levels, then select spatial refinement and dt."
+    "next": "Execute C14-3DA-200s only, with original dt and native diagnostic cadence. Defer sensitivity studies."
   },
   "stage06_preflight_integrity": {
     "date": "2026-11-20",
@@ -1322,7 +1322,7 @@
   },
   "planned_200s_campaign": {
     "date": "2026-11-24",
-    "priority": "C14 solidification; B14 shrinkage reference; six-run campaign accepted",
+    "priority": "C14-3DA-200s first; temporal/spatial sensitivity deferred by researcher",
     "status": "PREPARER_PUBLISHED_WSL_MATERIALIZATION_NOT_OBSERVED",
     "plan": "docs/granada/MAESTRIA_CAMPANA_B14_C14_200S_PLAN_20261124_ES.md",
     "original_10s_preserved": true,
@@ -1336,10 +1336,18 @@
     "preparer_commit": "988cc07539577a597d589ae3a70bcc07253ba0c2",
     "prepared_observed": 0,
     "run_observed": 0,
-    "total_planned": 6
+    "total_planned": 6,
+    "case_A_priority_status": "TARGETED_EXECUTOR_PUBLISHED_WSL_PENDING",
+    "case_A_priority_doc": "docs/C3D04_A_C14_200S_PRIORITY_20261124_ES.md",
+    "case_A_priority_command": "tools/prepare_campaign_200s.py --prepare-run C14-3DA-200s",
+    "case_A_target": "~/OpenFOAM/CAMPAIGN_200S_01/C14-3DA-200s",
+    "case_A_steps": 200000,
+    "case_A_saved_times": 2001,
+    "case_A_probe_samples_per_field": 200001,
+    "case_A_new_run_observed": false
   },
   "stage09_temporal_sensitivity": {
-    "status": "THREE_LEVEL_TEMPORAL_EXECUTOR_PUBLISHED_WSL_PENDING",
+    "status": "DEFERRED_BY_RESEARCHER_PRIORITY_200S",
     "doc": "docs/C3D04_A_STAGE09_TEMPORAL_SENSITIVITY_20261124_ES.md",
     "entrypoint": "cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/run_c14_a_temporal_sensitivity.py",
     "dt_s": [
