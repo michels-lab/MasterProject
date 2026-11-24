@@ -1,5 +1,8 @@
 # FS-C08 — Cambio de rumbo: solver físico, no más shadow tests
 
+> **EVOLUCIÓN DE FUENTE 24-11-2026:** el módulo [native](native/README.md) ya incorpora advección FV líquida por todas las caras seguida de conversión fuente conservativa `±Gamma`, reevaluación en PIMPLE desde el `oldTime` correcto, Darcy en la ecuación de momento (no el viejo modelo latente), metal incompresible respecto a presión y gas EOS compresible, y dos modos de cierre de fase: `equilibrium` con f_s,mass(T) tabulada o `kineticRelaxation` con τ(T) físico, sin relajación arbitraria dependiente del paso. **El texto original de arquitectura describe el diseño al comienzo de esta etapa; el código actual se mantiene en los archivos C++ y [STATUS.json](../STATUS.json).** No hay `wmake`, corrida CFD ni predicción de rechupe validada todavía.
+
+
 > **ACTUALIZACIÓN 24-11-2026:** La arquitectura de este documento ya pasó de diseño a código parcial de solver: [módulo CFD nativo real](native/README.md), [stager aislado](../../../analysis_tools/stage_fs_c08_coupled.py) y [estado actual](../STATUS.json). Ya existen continuidad líquido/sólido y enlaces a PIMPLE/energía en fuente. **No se ha compilado ni validado en Foundation14 WSL; propiedades metálicas reales, EOS, balance entálpico exacto y feeding están pendientes.** Los párrafos originales que decían «no implementado» reflejan el estado anterior a estos commits.
 
 
