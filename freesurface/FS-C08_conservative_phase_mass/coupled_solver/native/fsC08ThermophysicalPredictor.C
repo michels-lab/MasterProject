@@ -183,10 +183,11 @@ void Foam::solvers::fsC08ConservativeVoF::thermophysicalPredictor()
 
         forAll(temp,i)
         {
+            // Pure gas has no iron u(T); use the reference solely
+            // to construct an inert zero-mass liquid energy face field.
             scalar ul_i=phaseMass_->liquidInternalEnergy
             (
-                phaseMass_->alphaMetal().primitiveField()[i]>0
-                ? temp[i] : phaseMass_->energyReferenceT()
+                phaseMass_->energyReferenceT()
             );
             scalar us_i=0;
             scalar cvL=0,cvS=0;
