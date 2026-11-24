@@ -121,6 +121,14 @@ def snapshots(case: Path, names: list[str], cells: int, out: Path) -> dict:
         need((folder/"metal/T").is_file() and (folder/"metal/U").is_file(),
              "selected saved time missing metal T/U: " + n)
         source_files.append(folder/"metal/T")
+    # Validate EVERY selected directory before mkdir on the fresh output.
+    # A single external symlink must NOT leave an occupied partial workcopy.
+    for name in ("constant","system",*names):
+        directory=case/name
+        need(directory.is_dir() and not directory.is_symlink(),
+             "source snapshot directory missing: "+name)
+        need(not any(p.is_symlink() for p in directory.rglob("*")),
+             "source has unexpected external symlink: "+name)
     digests={str(p.relative_to(case)):sha(p) for p in source_files}
     return {"case":case,"out":out,"names":names,"cells":cells,
             "nCells_native_mesh":geometry["nCells"],
