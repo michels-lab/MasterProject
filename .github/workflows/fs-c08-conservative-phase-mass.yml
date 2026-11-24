@@ -9,6 +9,8 @@ on:
       - 'analysis_tools/test_fs_c08_conservative_reference.py'
       - 'analysis_tools/verify_fs_c08_openfoam_inventory.py'
       - 'analysis_tools/test_verify_fs_c08_openfoam_inventory.py'
+      - 'analysis_tools/run_fs_c08_native_bridge.py'
+      - 'analysis_tools/test_run_fs_c08_native_bridge.py'
       - 'freesurface/FS-C08_conservative_phase_mass/**'
       - '.github/workflows/fs-c08-conservative-phase-mass.yml'
   pull_request:
@@ -17,6 +19,8 @@ on:
       - 'analysis_tools/test_fs_c08_conservative_reference.py'
       - 'analysis_tools/verify_fs_c08_openfoam_inventory.py'
       - 'analysis_tools/test_verify_fs_c08_openfoam_inventory.py'
+      - 'analysis_tools/run_fs_c08_native_bridge.py'
+      - 'analysis_tools/test_run_fs_c08_native_bridge.py'
       - 'freesurface/FS-C08_conservative_phase_mass/**'
       - '.github/workflows/fs-c08-conservative-phase-mass.yml'
   workflow_dispatch:
@@ -36,9 +40,10 @@ jobs:
           python-version: '3.12'
       - name: Syntax check and eighteen synthetic regression tests
         run: |
-          python3 -B -m py_compile analysis_tools/fs_c08_conservative_reference.py analysis_tools/test_fs_c08_conservative_reference.py analysis_tools/verify_fs_c08_openfoam_inventory.py analysis_tools/test_verify_fs_c08_openfoam_inventory.py
+          python3 -B -m py_compile analysis_tools/fs_c08_conservative_reference.py analysis_tools/test_fs_c08_conservative_reference.py analysis_tools/verify_fs_c08_openfoam_inventory.py analysis_tools/test_verify_fs_c08_openfoam_inventory.py analysis_tools/run_fs_c08_native_bridge.py analysis_tools/test_run_fs_c08_native_bridge.py
           python3 -B -m unittest discover -s analysis_tools -p 'test_fs_c08_conservative_reference.py' -v
           python3 -B -m unittest discover -s analysis_tools -p 'test_verify_fs_c08_openfoam_inventory.py' -v
+          python3 -B -m unittest discover -s analysis_tools -p 'test_run_fs_c08_native_bridge.py' -v
       - name: Compile native-language C++17 Gamma phase-mass kernel and run fail-closed tests (not wmake)
         run: |
           c++ -std=c++17 -O2 -Wall -Wextra -Werror -pedantic \
