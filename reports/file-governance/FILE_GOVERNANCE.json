@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "audit_kind": "deterministic_full_tracked_tree",
-  "tracked_files_total": 39054,
-  "classified_files_total": 39049,
+  "tracked_files_total": 39055,
+  "classified_files_total": 39050,
   "docs_content_inspected": 196,
   "large_docs_skipped": 1,
   "excluded_reports": 5,
@@ -19,7 +19,7 @@
     "simulation_input": 2683,
     "simulation_log": 3155,
     "simulation_output": 32615,
-    "source": 129,
+    "source": 130,
     "test": 60,
     "web_ui": 1,
     "workflow": 32
@@ -29,8 +29,8 @@
     "POTENTIAL_UNLOGGED_CHANGES": 2
   },
   "finding_total": 9,
-  "inventory_fingerprint": "67b5fd2da8727729842a3dc986380874e47c20a1944fa1491b5ff122f2d92605",
-  "evidence_fingerprint": "1d68b7716a10b92b4a27405ab6a50c54dc3de128860d98a40a118667ea8b2cf7",
+  "inventory_fingerprint": "0c4c31e292d86e7e500c1c2110bb101515ea9b36cecb7e14a735cf0ede0d0c07",
+  "evidence_fingerprint": "63c02bcd35d54f4ba1ba33083f136daa972f20ce845e1eb0621a4fb5f15e9bee",
   "files": [
     {
       "path": ".github/agents/openfoam-solidification.agent.md",
@@ -2033,6 +2033,13 @@
       "purpose": "navigation/onboarding",
       "certainty": "rule",
       "blob": "3321063b426c9bb6f1ec19fbc4e8a9b0f1c973d2"
+    },
+    {
+      "path": "cases_3d/C3D_05_step_gmsh_conformal/c14_physics/analyze_existing_case_b_c14.py",
+      "role": "source",
+      "purpose": "code/test implementation",
+      "certainty": "rule",
+      "blob": "6b382451d5ddf131762348dab5391a83f906fda8"
     },
     {
       "path": "cases_3d/C3D_05_step_gmsh_conformal/c14_physics/run_case_b_c14_native.sh",
@@ -273441,20 +273448,20 @@
       "state": "REVIEW_REQUIRED"
     },
     {
-      "id": "29b1239b306df57d",
+      "id": "12cd72cfe19d561a",
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_EN.md",
-      "observation": "1 implementation/config paths changed since this log's last commit; examples: docs/PROJECT_STAGE_STATUS.json",
+      "observation": "2 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_05_step_gmsh_conformal/c14_physics/analyze_existing_case_b_c14.py, docs/PROJECT_STAGE_STATUS.json",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     },
     {
-      "id": "b7e85c814cfe1fac",
+      "id": "a20ec7b7cad8379e",
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_ES.md",
-      "observation": "1 implementation/config paths changed since this log's last commit; examples: docs/PROJECT_STAGE_STATUS.json",
+      "observation": "2 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_05_step_gmsh_conformal/c14_physics/analyze_existing_case_b_c14.py, docs/PROJECT_STAGE_STATUS.json",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     }
