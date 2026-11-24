@@ -273,7 +273,14 @@
     "case_b_c14_real_native_solver_phase_source_model_selection_message": "Selecting solidificationMeltingSource with name phaseChangeSource",
     "case_b_c14_completed_native_status": "C3D05_B_C14_ORIGINAL_FLUID_SOLID_FULL_10S_NATIVE_COMPLETED_NOT_PHYSICALLY_VALIDATED",
     "case_b_c14_completed_native_stage_report": "/home/michel/OpenFOAM/C3D05_B_C14_FLUID_SOLID_FULL_10S_01/C3D05_B_C14_FLUID_SOLID_STAGE_REPORT.json",
-    "case_b_c14_completed_scientific_validation": false
+    "case_b_c14_completed_scientific_validation": false,
+    "case_b_c14_10s_existing_native_postrun_analyzer_source_committed": true,
+    "case_b_c14_10s_existing_native_postrun_analyzer": "cases_3d/C3D_05_step_gmsh_conformal/c14_physics/analyze_existing_case_b_c14.py",
+    "case_b_c14_10s_existing_native_postrun_regression_test_source_committed": 9,
+    "case_b_c14_10s_existing_native_postrun_expected_output": "~/OpenFOAM/C3D05_B_C14_FLUID_SOLID_10S_ANALYSIS_01",
+    "case_b_c14_10s_existing_native_postrun_wsl_executed": false,
+    "case_b_c14_10s_existing_native_postrun_alpha1_result": null,
+    "case_b_c14_10s_existing_native_postrun_Report": "docs/granada/C3D05_B_C14_10S_CFD_REAL_COMPLETADO_Y_ANALISIS_SOLO_LECTURA_20261123_ES.md"
   },
   "other_cases": [
     {
@@ -313,7 +320,7 @@
       "evidence": "docs/granada/C3D05_B_C14_WSL_EJECUCION_REAL_EN_CURSO_20261123_ES.md"
     }
   ],
-  "blocker": "Case B real WSL C14 fluid-solid source-faithful native foamMultiRun COMPLETED full 10s on accepted 270788 HEX8, as reported by real stage JSON (native_C14_F14_solver_run=true, completion status C3D05_B_C14_ORIGINAL_FLUID_SOLID_FULL_10S_NATIVE_COMPLETED_NOT_PHYSICALLY_VALIDATED). Phase source selection confirmed; actual alpha1(t) / latent heat / energy balance / QuickCup-JMatPro physical validation not yet analyzed. G3-G7 remain open pending trustworthy physics/calibration, convergence, contraction.",
-  "next_integrated_delivery": "Read-only existing Case B 10s C14 postrun: verify stage JSON, source integrity, native 10s/End log, full Courant/residual history, native 0..10s temperature, alpha1, p_rgh and phase-onset brackets; report non-volume-weighted limitations. Never rerun or overwrite completed CFD.",
+  "blocker": "User-shared native WSL Case B C14 FULL 10s fluid+solid CFD completed and stage report native_C14_F14_solver_run=true. Original C14 phase source selected, but native alpha1(t), latent heat/energy and material/experimental validity not yet evaluated. Source for strict read-only postrun B analyzer and nine regression cases committed; WSL analyzer NOT executed yet. G3/G4/G5 material/latent validity and G6/G7 remain open, 2/7=29% technical milestones.",
+  "next_integrated_delivery": "RUN READ-ONLY native C3D05_B_C14 10s post-processing (NO CFD): git pull --ff-only && python3 -B cases_3d/C3D_05_step_gmsh_conformal/c14_physics/analyze_existing_case_b_c14.py. This validates original source/input/stage/mesh/final field hashes and log End/10s, then summarizes T/alpha1/p_rgh over all archived times and first saved phase fraction changes. Requires user WSL run; never rerun CFD. Assess latent heat/energy flux and numerical/QuickCup validity only with separate evidence.",
   "science": "WSL_REAL_CASE_B_C14_FLUID_SOLID_10S_COMPLETED_PHASE_SOURCE_SELECTED_POSTRUN_ALPHA1_AND_PHYSICAL_ACCEPTANCE_PENDING"
 }
