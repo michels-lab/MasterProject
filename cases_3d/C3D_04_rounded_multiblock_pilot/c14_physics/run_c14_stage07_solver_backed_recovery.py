@@ -209,6 +209,9 @@ def original_case_gate(case: Path, failed: Path, recovery: Path,
     need(file_ok(case/"10/metal/T") and file_ok(case/"10/metal/U")
          and file_ok(case/"10/metal/phaseChangeSource:alpha1"),
          "original genuine C14 terminal 10-second state is missing")
+    mesh_cells = stage.region_cells(case,"metal",stage.EXPECTED["metal"])
+    original_has_zone = stage.audit_existing_zone(
+        case/"constant/metal/polyMesh/cellZones",mesh_cells["nCells"])
     return {
         "case": str(case), "failed_workcopy": str(failed),
         "recovery_report_sha256": sha(recovery/"C3D04_A_STAGE07_RECOVERY_REPORT.json"),
@@ -218,6 +221,8 @@ def original_case_gate(case: Path, failed: Path, recovery: Path,
         "original_10s_solver_log_sha256": original_log,
         "prior_failed_copy_solver_log_sha256": sha(failed/"log.foamMultiRun"),
         "original_final_alpha1_sha256": sha(case/"10/metal/phaseChangeSource:alpha1"),
+        "native_metal_mesh_cell_count": mesh_cells["nCells"],
+        "original_CFD_contains_full_metal_cellZone": original_has_zone,
     }
 
 
