@@ -315,10 +315,29 @@
     "case_b_c14_volume_weighted_phase_source_committed": true,
     "case_b_c14_volume_weighted_phase_source": "cases_3d/C3D_05_step_gmsh_conformal/c14_physics/volume_weighted_existing_case_b_c14.py",
     "case_b_c14_volume_weighted_phase_tests_source_count": 8,
-    "case_b_c14_volume_weighted_phase_native_WSL_executed": false,
+    "case_b_c14_volume_weighted_phase_native_WSL_executed": true,
     "case_b_c14_volume_weighted_phase_native_CI_pass_confirmed": false,
     "case_b_c14_volume_weighted_phase_output_expected": "~/OpenFOAM/C3D05_B_C14_VOLUME_WEIGHTED_PHASE_01",
-    "case_b_c14_volume_weighted_phase_result_observed": null
+    "case_b_c14_volume_weighted_phase_result_observed": null,
+    "case_b_c14_volume_weighted_phase_tests_passed_user_WSL": 8,
+    "case_b_c14_volume_weighted_phase_tests_failed_user_WSL": 0,
+    "case_b_c14_volume_weighted_phase_status": "C3D05_B_C14_NATIVE_HEX8_VOLUME_WEIGHTED_ALPHA1_NOT_PHYSICALLY_VALIDATED",
+    "case_b_c14_volume_weighted_phase_output_observed": "/home/michel/OpenFOAM/C3D05_B_C14_VOLUME_WEIGHTED_PHASE_01",
+    "case_b_c14_volume_weighted_phase_native_metal_cells": 92200,
+    "case_b_c14_volume_weighted_phase_native_metal_faces": 283389,
+    "case_b_c14_volume_weighted_phase_native_metal_internal_faces": 269811,
+    "case_b_c14_volume_weighted_phase_native_metal_points": 106529,
+    "case_b_c14_volume_weighted_phase_reconstructed_metal_volume_m3": 0.00004797539547720032,
+    "case_b_c14_volume_weighted_phase_checkmesh_metal_volume_m3": 0.0000479754032229,
+    "case_b_c14_volume_weighted_phase_relative_total_volume_mismatch": 1.6145147646629957e-7,
+    "case_b_c14_volume_weighted_phase_min_cell_volume_m3": 6.174996903303957e-11,
+    "case_b_c14_volume_weighted_phase_max_cell_volume_m3": 4.3881731333931845e-9,
+    "case_b_c14_volume_weighted_phase_first_alpha1_below_0_999_saved_s": 0.3,
+    "case_b_c14_volume_weighted_phase_first_fully_solid_cell_saved_s": 5.1,
+    "case_b_c14_volume_weighted_phase_liquid_at_10s": 0.8917029860767621,
+    "case_b_c14_volume_weighted_phase_solid_complement_at_10s": 0.10829701392323787,
+    "case_b_c14_volume_weighted_phase_unweighted_solid_complement_at_10s": 0.1575794367375163,
+    "case_b_c14_volume_weighted_phase_output_physical_validation": false
   },
   "other_cases": [
     {
@@ -358,7 +377,7 @@
       "evidence": "docs/granada/C3D05_B_C14_WSL_EJECUCION_REAL_EN_CURSO_20261123_ES.md"
     }
   ],
-  "blocker": "C3D05 Case B REAL F14 C14 10s CFD and 101 snapshots plus phase timeline complete in user WSL; 9 phase-timeline regressions PASSED. First model alpha1<.999 saved t=0.3s (prior .2s), first any alpha1=0 saved t=5.1s (prior 5.0s), unweighted solid complement at 10s=0.1575794367375163; native max Courant=0.267133. NEW native HEX8 volume-based alpha1-only analysis SOURCE COMMITTED with eight test files, NOT run/confirmed WSL; no true volume-weighted result known. Energy flux/latent balance, QuickCup/JMatPro calibration, nonorth sensitivity, mesh/time convergence, shrinkage not verified. Physical G3-G7 OPEN.",
-  "next_integrated_delivery": "From ORIGINAL completed Case B C14 10s and SHA-verified 101-state existing analysis, compute 92200 real metal HEX8 per-cell polyMesh volumes with signed oriented face geometry and strict native checkMesh closure; then volume-weight alpha1(t) in NEW isolated folder, NO CFD rerun. Command: python3 -B cases_3d/C3D_05_step_gmsh_conformal/c14_physics/volume_weighted_existing_case_b_c14.py. Source/8 synthetic geometry regressions published but WSL run remains pending. Then develop quantified sensible/latent storage and true interface/exterior energy flux comparison without claiming physical QuickCup acceptance.",
-  "science": "CASE_B_WSL_101_SNAPSHOTS_PHASE_TIMELINE_COMPLETE_9_TESTS_PASS_FIRST_FULLY_SOLID_CELL_5_0_TO_5_1S_WEIGHTED_PHASE_CODE_STAGED_NO_PHYSICAL_VALIDATION"
+  "blocker": "Real WSL Caso B C14 full 10s/101 states COMPLETE. Original phase chronology 9/9 tests PASS, first alpha1<.999 saved t=.3s, first alpha1=0 t=5.1s. Native polyMesh 92200 HEX8 cell volume reconstruction 8/8 tests PASS and real WSL output: sum V=4.797539547720032e-05m3, relative mismatch to native checkMesh=1.6145147646629957e-7. At 10s volume-weighted alpha1=0.8917029860767621, complement solid=0.10829701392323787 (10.8297%), different from unweighted cell mean solid=0.1575794367375163 (15.7579%). Real native results, NOT physical QuickCup/JMatPro nor validated latent heat energy, nonplanar cell-volume crosscheck/energy flux, mesh/time convergence, shrinkage. Maintain G3-G7 OPEN.",
+  "next_integrated_delivery": "Use completed B C14 fluid-solid 10s, native 92200-cell HEX8 volumes and 101 T/alpha1 fields to quantify SOURCE-CONTRACT sensible T inventory versus t0 and rho*L*volume-solid-complement latent-equivalent inventory; do NOT call it solver-integrated energy balance or physical released heat. After that independently recover/verify mold storage, interface/exterior flux and complete numerical energy/latent conservation, then JMatPro/QuickCup and convergence.",
+  "science": "CASE_B_REAL_WSL_101_STATES_VOLUME_WEIGHTED_ALPHA1_VALIDATED_POSTRUN_NO_LATENT_ENERGY_BALANCE_OR_QUICKCUP"
 }
