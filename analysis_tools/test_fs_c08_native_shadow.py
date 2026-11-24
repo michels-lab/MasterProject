@@ -65,6 +65,14 @@ class ShadowNativeOutputTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError,"metal global conservation"):
             v.verify_shadow_stdout(bad)
 
+    def test_local_nonzero_gamma_can_have_zero_net_transfer(self):
+        # Volume-weighted melting and solidification can cancel globally.
+        text=synthetic_stdout().replace(
+            "gamma_transferred_kg=3e-07",
+            "gamma_transferred_kg=0"
+        )
+        self.assertEqual(v.verify_shadow_stdout(text)["status"],"PASS")
+
     def test_rejects_unphysical_missing_gamma(self):
         bad=synthetic_stdout().replace("GammaOwner_kg_m3_s=200",
                                        "GammaOwner_kg_m3_s=0")
