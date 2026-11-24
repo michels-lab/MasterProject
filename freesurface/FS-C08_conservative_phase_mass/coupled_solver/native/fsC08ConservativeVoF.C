@@ -5,7 +5,7 @@
 #include "addToRunTimeSelectionTable.H"
 #include "fvcDdt.H"
 #include "fvcDiv.H"
-#include "fvcInterpolate.H"
+#include "fvc.H"
 #include "zeroGradientFvPatchFields.H"
 #include "PstreamReduceOps.H"
 #include <cmath>
