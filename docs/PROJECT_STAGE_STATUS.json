@@ -292,7 +292,17 @@
     "case_b_c14_10s_existing_native_postrun_minimum_alpha1_over_archived_times": 0,
     "case_b_c14_10s_existing_native_postrun_max_Courant_full_log": 0.267133,
     "case_b_c14_native_phase_model_evolution_observed": true,
-    "case_b_c14_latent_heat_balance_verified": false
+    "case_b_c14_latent_heat_balance_verified": false,
+    "case_b_c14_101_states_original_C14_alpha1_source_observation_documented": true,
+    "case_b_c14_101_states_original_C14_alpha1_source_observation_document": "docs/granada/C3D05_B_C14_101_ESTADOS_ALPHA1_OBSERVADO_Y_TIMELINE_20261123_ES.md",
+    "case_b_c14_10s_phase_timeline_source_committed": true,
+    "case_b_c14_10s_phase_timeline_source": "cases_3d/C3D_05_step_gmsh_conformal/c14_physics/summarize_existing_case_b_c14_phase_timeline.py",
+    "case_b_c14_10s_phase_timeline_regression_test_source_committed": 9,
+    "case_b_c14_10s_phase_timeline_wsl_executed": false,
+    "case_b_c14_10s_phase_timeline_ci_pass_confirmed": false,
+    "case_b_c14_10s_phase_timeline_output_expected": "~/OpenFOAM/C3D05_B_C14_PHASE_TIMELINE_01",
+    "case_b_c14_10s_phase_timeline_first_alpha1_zero_time_known": false,
+    "case_b_c14_10s_phase_timeline_physical_volume_weighting_confirmed": false
   },
   "other_cases": [
     {
@@ -332,7 +342,7 @@
       "evidence": "docs/granada/C3D05_B_C14_WSL_EJECUCION_REAL_EN_CURSO_20261123_ES.md"
     }
   ],
-  "blocker": "Real WSL Case B original C14 fluid-solid 10s completed; 101 archived native snapshots READONLY analyzed PASS, model alpha1 first below .999 at saved t=0.3s (previous t=.2s), final unweighted mean liquid fraction .8424205632624837 (unweighted mean solid complement .1575794), min alpha1 over snapshots zero, log max Courant .267133. Model solidification numerically observed; NO volume/mass weighted physical fraction, no latent heat/boundary energy conservation, no JMatPro/QuickCup, convergence, contraction. G3-G7 not promoted; stage3/7 2/7 technical.",
-  "next_integrated_delivery": "Publish read-only C3D05_B original C14 phase timeline from already generated native postrun CSV+JSON+SHA. Quantify phase-change time windows and cell-mean kinetics without rerunning CFD; next substantive physical verification is mass-/volume-weighted alpha1 and interface/exterior energy flux including latent heat, followed by numerical sensitivity and QuickCup/JMatPro calibration.",
+  "blocker": "Real Case B C14 native fluid-solid 10s + 101 snapshot read-only WSL PASS. Modeled alpha1<.999 first saved t=.3s (previous .2s), t10 cell-mean alpha1=.8424205633, min over saved times=0, max Courant .267133. Source-only phase timeline+9 tests now committed, NOT yet executed in WSL/confirmed CI. Volume/mass-weighted fraction, latent heat and interface/exterior conservation, physical alloy JMatPro QuickCup, convergence and contraction still unvalidated; G3-G7 OPEN.",
+  "next_integrated_delivery": "Existing B original C14 101-state native alpha1 audit PASSED with first modeled phase at saved t=.3s and mean alpha1(t10)=.8424205633. Next run SOURCE-only verified timeline on ALREADY archived analysis (NO CFD): python3 -B cases_3d/C3D_05_step_gmsh_conformal/c14_physics/summarize_existing_case_b_c14_phase_timeline.py. Then mass-/volume-weighted alpha and energy/latent/boundary balance from real cell volumes/fluxes, mesh-dt sensitivity and QuickCup material calibration. G3-G7 remain open.",
   "science": "CASE_B_WSL_REAL_C14_10S_101_NATIVE_SNAPSHOTS_ALPHA1_PHASE_EVOLUTION_CONFIRMED_NUMERIC_NOT_PHYSICAL"
 }
