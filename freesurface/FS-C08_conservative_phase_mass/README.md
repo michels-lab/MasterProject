@@ -1,5 +1,8 @@
 # FS-C08 — Primer núcleo conservativo líquido–sólido–gas
 
+> **24-11-2026 — FS-C08: ENERGÍA POR FASE Y CONDUCCIÓN POR FASE EN EL SOLVER REAL.** El predictor térmico [nativo](coupled_solver/native/README.md) ya está reformulado en código como inventario conservativo de energías internas de líquido, sólido y gas; integra Cv_l(T)/Cv_s(T) de fuentes materiales, coloca calor latente solo en u_l(Tref)-u_s(Tref), transporta energía líquida/gaseosa por caras FV y retiene conducción CHT y trabajo de presión. Además corrige las conductividades moleculares k_l(T)/k_s(T) en celdas y superficies con molde. Hay campos de energía J/m³ y flujos energéticos frontera W, y se sincroniza el gas tras el corrector de presión. **CÓDIGO EN GITHUB, NO COMPILADO en Foundation14 WSL, NO CFD ejecutada ni balances gas/energía o rechupe validados.** No volver a pedir pruebas shadow.
+
+
 > **AVANCE REAL DE ECUACIONES — 24-11-2026:** el [nuevo módulo CFD](coupled_solver/native/README.md) ahora ordena advección líquida → fuente Γ exactamente conservativa, reinicia cada corrector PIMPLE desde `oldTime` para evitar dobles conversiones, traslada los balances a `postSolve`, rechaza reinicios parciales, obliga a un EOS metálico coherente (incompresible respecto a presión, ρ_l(T)/ρ_s(T)) y recupera [Darcy de zona pastosa dentro de momento](coupled_solver/native/fsC08MushyMomentum.C). **El cierre de solidificación ya no usa un factor por Δt**: se elige equilibrio de fracción sólida por masa o cinética física con `tauPhaseChangeT(T)`; todas las propiedades, Cu y q requieren procedencia. **Aún NO está compilado con `wmake` ni validado como CFD de contracción.** Persisten pendientes el cierre exacto de entalpía/gas y la alimentación metalúrgica. No repetir las pruebas shadow/lectura.
 
 
