@@ -38,6 +38,7 @@ class PhaseMassTransport
     scalar Tmin_K_;
     scalar Tmax_K_;
     scalar phaseRelaxation_;
+    scalar metalPresenceThreshold_;
 
     autoPtr<Function1<scalar>> rhoLiquidT_;
     autoPtr<Function1<scalar>> rhoSolidT_;
@@ -73,9 +74,9 @@ class PhaseMassTransport
     bool initialized_;
     label lastSolvedTimeIndex_;
 
-    void checkAndUpdateProperties(const volScalarField& T);
+    void checkAndUpdateProperties(const volScalarField& T, const volScalarField& metal);
     void initializeIfRequired(const volScalarField& alphaMetal, const volScalarField& T);
-    void evaluateGamma(const volScalarField& T);
+    void evaluateGamma(const volScalarField& T, const volScalarField& metal);
     void reconstructFractions();
 
 public:
