@@ -6,6 +6,7 @@ No solver in CI. No writes in source cases or existing CFD. Foundation 14 WSL.
 from __future__ import annotations
 import argparse
 import hashlib
+import fcntl
 import json
 import math
 import os
@@ -114,6 +115,20 @@ def estimate(g,case):
     return {"cells":n,"field_estimate_bytes":field_bytes,"diagnostic_estimate_bytes":diag_bytes,
             "projected_bytes_with_50pct_margin":math.ceil(1.5*(field_bytes+diag_bytes)),
             "method":"local empirical 10s snapshots; scale 2001 writes and 20x diagnostics; 50% margin; not guaranteed bound"}
+def map_auxiliary(source,dest,g):
+    # Apply the same bottom-relative mapping to every original momentum line
+    # and near-top sampling line. Avoid the previous out-of-domain 3D mistake.
+    def map_text(text):
+        def transform(m):
+            x,y,z=(float(m[i]) for i in (1,2,3))
+            return runtime.vec((g["cx"]+x-.02,g["lo"][1]+y,g["cz"]+z-.005))
+        return re.sub(r"\(\s*(0\.(?:00025|03975|020))\s+(0\.(?:010|020|030|00025|03975))\s+(0\.005)\s*\)",transform,text)
+    momentum=(source/"system/momentumPostProcessing").read_text()
+    top=(ROOT/"analysis_tools/topSurfaceFlowPostProcessing").read_text()
+    mapped_momentum=map_text(momentum);mapped_top=map_text(top)
+    need(mapped_momentum!=momentum and mapped_top!=top,"auxiliary 3D mapping missing")
+    (dest/"system/momentumPostProcessing").write_text(mapped_momentum)
+    (dest/"system/topSurfaceFlowPostProcessing").write_text(mapped_top)
 def prepare(name,dest,hashes):
     f,g,_=name.split("-")
     need(not dest.exists() and not dest.is_symlink(),"existing case; no overwrite "+str(dest))
@@ -126,6 +141,7 @@ def prepare(name,dest,hashes):
             p=dest/"0"/rel;p.parent.mkdir(parents=True,exist_ok=True);shutil.copy2(source/"0"/rel,p)
         run_cmd(dest,"log.blockMesh",["blockMesh"])
         run_cmd(dest,"log.splitMeshRegions",["splitMeshRegions","-cellZones","all"])
+        shutil.copy2(ROOT/"analysis_tools/topSurfaceFlowPostProcessing",dest/"system/topSurfaceFlowPostProcessing")
         mapping={"probe_xyz_m":[.02,.02,.005],"original_profiles":{"line_y10mm":{},"line_y20mm":{},"line_y30mm":{},"line_x20mm":{}},"additional_3D_profiles":{}}
     else:
         stage=sa if g=="3DA" else sb
@@ -137,13 +153,13 @@ def prepare(name,dest,hashes):
         geo=geometry.mesh(dest)
         need(geo["n"]==(8960 if g=="3DA" else 92200),"unexpected metal cells")
         mapping=runtime.sampling_dicts(dest,geo)
-        shutil.copy2(source/"system/momentumPostProcessing",dest/"system/momentumPostProcessing")
+        map_auxiliary(source,dest,geo)
         need(mesh_hashes(dest)==mesh_hashes(BASELINES[g]),"accepted mesh differs from original completed CFD")
     for rel in PHYSICS:need(sha(dest/rel)==hashes[f][rel],"material transplant mismatch "+rel)
     # Check identical original 2D system diagnostics before geometry mapping.
     need(sha(dest/"system/researchDiagnostics")==hashes[f]["system/researchDiagnostics"],"diagnostic drift")
     edit_end(dest/"system/controlDict")
-    for rel in ("system/controlDict","system/functions","constant/metal/physicalProperties","constant/metal/fvModels"):
+    for rel in ("system/controlDict","system/functions","system/momentumPostProcessing","system/topSurfaceFlowPostProcessing","constant/metal/physicalProperties","constant/metal/fvModels"):
         run_cmd(dest,"log.campaign.parse."+rel.replace("/","."),["foamDictionary",str(dest/rel)])
     tracked={str(p.relative_to(dest)):sha(p) for d in ("0","constant","system") for p in (dest/d).rglob("*") if p.is_file()}
     report={"status":"PREPARED_NOT_RUN","case":name,"formulation":f,"geometry":g,
@@ -151,9 +167,11 @@ def prepare(name,dest,hashes):
             "source_sha256":hashes[f],"input_sha256":tracked,"mesh_sha256":mesh_hashes(dest),
             "sampling":mapping,"end_s":200,"dt_s":.001,"saved_dt_s":.1,
             "solver_completed":False,"physical_validation":False}
+    report["status"]="PREPARED_RESOURCE_AUDIT_PENDING"
     write_json(dest/REPORT,report)
     (dest/(name+".foam")).touch()
     report["disk_projection"]=estimate(g,dest)
+    report["status"]="PREPARED_NOT_RUN"
     write_json(dest/REPORT,report)
     return report
 def data_rows(p):
@@ -193,7 +211,7 @@ def audit(case,report):
                 for t in TIMES:
                     p=pp/group/format(t,"g")/(line+".xy")
                     with p.open() as f:header=f.readline().lstrip("#").split()
-                    need(len(header)==len(CANON)+1 and header[0] in "xyz" and header[1:7]==CANON[:6],"unexpected profile header "+str(p))
+                    need(len(header)==len(CANON)+1 and header[0] in ("x","y","z") and header[1:7]==CANON[:6],"unexpected profile header "+str(p))
                     for a,b in zip(header[1:],CANON):
                         need(a==b or (a.endswith("...") and b.startswith(a[:-3])),"column mismatch "+str(p))
                     rows=list(data_rows(p))
@@ -257,7 +275,7 @@ def execute(case):
         r["optional_offline_postprocessing"]={"momentum":"pending","topSurfaceFlow":"pending"}
         for key,dct,fields in (
           ("momentum",case/"system/momentumPostProcessing","(phaseChangeSolidFraction phaseChangeDarcyCoeff phaseChangeModelDeltaT phaseChangeDarcyAcceleration phaseChangeBuoyancyAcceleration pRghAcceleration magPhaseChangeDarcyAcceleration magPhaseChangeBuoyancyAcceleration magPRghAcceleration phaseChangeDragToBuoyancy phaseChangeDragToPressure)"),
-          ("topSurfaceFlow",ROOT/"analysis_tools/topSurfaceFlowPostProcessing","(U T p_rgh rho phi phaseChangeSource:alpha1)")):
+          ("topSurfaceFlow",case/"system/topSurfaceFlowPostProcessing","(U T p_rgh rho phi phaseChangeSource:alpha1)")):
             try:
                 run_cmd(case,"log.campaign."+key,["foamPostProcess","-region","metal","-dict",str(dct),"-time","0.1:200","-fields",fields])
                 r["optional_offline_postprocessing"][key]="process completed; output coverage not certified"
@@ -276,7 +294,13 @@ def main():
     root=args.root.expanduser().absolute()
     need(root.parent.resolve()==HOME.resolve() and not root.is_symlink(),"isolated campaign sibling under ~/OpenFOAM required")
     need(not root.exists() or root.is_dir(),"invalid campaign root")
-    if args.run:execute(root/args.run);return
+    if args.run:
+        need(root.is_dir(),"campaign not prepared")
+        with (root/".execution.lock").open("a") as lock:
+            try:fcntl.flock(lock,fcntl.LOCK_EX|fcntl.LOCK_NB)
+            except BlockingIOError:raise ValueError("another campaign run holds the disk reservation; run sequentially")
+            execute(root/args.run)
+        return
     need(not root.exists(),"campaign already exists; preserve it")
     hashes=verify_family()
     root.mkdir()
