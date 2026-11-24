@@ -148,6 +148,8 @@ class CaseBC14TrueFluidSolidFluxAudit(unittest.TestCase):
         self.assertIn("metalTop",code)
         self.assertIn("moldOuterUnclassified",code)
         self.assertIn("dirs.size()!=101",code)
+        self.assertIn('#include "surfaceInterpolate.H"',code)
+        self.assertNotIn('#include "linearInterpolate.H"',code)
         self.assertNotIn("autoPtr<solidThermo> tm",code)
 
     def test_no_CFD_solver_or_old_case_mutation_runner(self):
