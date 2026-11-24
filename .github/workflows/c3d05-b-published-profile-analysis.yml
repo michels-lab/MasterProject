@@ -1,0 +1,38 @@
+name: C3D05 B published profile analysis
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - analysis_tools/analyze_c3d05_b_corrected_profiles.py
+      - .github/workflows/c3d05-b-published-profile-analysis.yml
+permissions:
+  contents: read
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: reference
+          sparse-checkout: |
+            analysis_tools
+            cases_controlled_buoyancy/C14_topFixedFlux_explicitRef/postProcessing/metal
+      - uses: actions/checkout@v4
+        with:
+          ref: results/c3d05-b-c14-corrected-20261124-162048
+          path: published
+          sparse-checkout: |
+            analysis_results/C3D05_B_C14/corrected-20261124-162048
+      - name: Analyze real published data only
+        run: |
+          python3 reference/analysis_tools/analyze_c3d05_b_corrected_profiles.py \
+            --b published/analysis_results/C3D05_B_C14/corrected-20261124-162048 \
+            --ref reference/cases_controlled_buoyancy/C14_topFixedFlux_explicitRef \
+            --out output
+      - uses: actions/upload-artifact@v4
+        with:
+          name: C3D05-B-directional-analysis
+          path: output/
+          if-no-files-found: error
