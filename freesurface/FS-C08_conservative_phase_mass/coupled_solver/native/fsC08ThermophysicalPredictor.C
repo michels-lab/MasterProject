@@ -50,6 +50,7 @@ License
 #include "fvcDdt.H"
 #include "fvcDiv.H"
 #include "fvcInterpolate.H"
+#include "fvcSnGrad.H"
 #include "fvmSup.H"
 #include "fvmLaplacian.H"
 #include "zeroGradientFvPatchFields.H"
@@ -244,6 +245,11 @@ void Foam::solvers::fsC08ConservativeVoF::thermophysicalPredictor()
           + alphaRhoPhi2*fvc::interpolate(mixture_.thermo2().he())
         );
 
+        // Retain exactly the FV face energy flux used by TEqn.
+        // Pressure may change phi later; recomputation at postSolve
+        // would NOT reproduce the equation that was actually solved.
+        phaseEnergyPhi_=internalEnergyFlux;
+
         // Native thermal transport still uses a ONE-PHASE metal k(T).
         // Replace its MOLECULAR metal contribution with real
         // alpha_liquid*k_liquid(T) + alpha_solid*k_solid(T).
@@ -333,6 +339,14 @@ void Foam::solvers::fsC08ConservativeVoF::thermophysicalPredictor()
         fvConstraints().constrain(TEqn);
         TEqn.solve();
         fvConstraints().constrain(T);
+
+        // Outward-positive conductive energy flux W on all faces,
+        // especially the fluid-mold CHT interface.
+        // This uses the same phase conductivity that was assembled in
+        // the nonlinear TEqn. q = -k grad(T) dot outward normal.
+        phaseHeatPhi_=
+            -fvc::interpolate(kappaFsC08)
+            *fvc::snGrad(T)*mesh.magSf();
 
         lastDeltaT=0;
         const auto& Tnew=T.primitiveField();
