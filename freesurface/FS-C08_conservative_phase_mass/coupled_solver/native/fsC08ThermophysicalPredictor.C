@@ -318,18 +318,24 @@ void Foam::solvers::fsC08ConservativeVoF::thermophysicalPredictor()
         // E(T) ≈ Eguess + CVvol*(T-Tguess).
         // At convergence: ddt(E)+div(F_E)-laplacian(k,T)+W_pK=0.
         //
-        // Foundation14 pressure and kinetic-energy work is retained
-        // from the native totalInternalEnergy predictor (NOT dropped).
+        // IMPORTANT: this is the EXACT volumetric mechanical-work
+        // density assembled in the native internal-energy equation.
+        // Retaining it lets the later postSolve budget account for
+        // pressure and kinetic-energy work with its actual sign.
+        // The Darcy resistance already changes K; it is NOT inserted
+        // a second time as an artificial Gamma/Darcy heat source.
+        mechanicalWorkDensity_.primitiveFieldRef() =
+              fvc::div(fvc::absolute(phi,U),p)()()
+            + (fvc::ddt(rho,K)+fvc::div(rhoPhi,K))()()
+            - (U()&(fvModels().source(rho,U)&U)())
+            - (contErr1()+contErr2())*K;
+        mechanicalWorkDensity_.correctBoundaryConditions();
+
         fvScalarMatrix TEqn
         (
             fvm::Sp(CVvol/runTime.deltaT(),T)
           - fvm::laplacian(kappaFsC08,T)
-          + (
-                fvc::div(fvc::absolute(phi,U),p)()()
-              + (fvc::ddt(rho,K)+fvc::div(rhoPhi,K))()()
-              - (U()&(fvModels().source(rho,U)&U)())
-              - (contErr1()+contErr2())*K
-            )
+          + mechanicalWorkDensity_
          ==
             (Eold-Eguess+CVvol*T)/runTime.deltaT()
           - fvc::div(internalEnergyFlux)
