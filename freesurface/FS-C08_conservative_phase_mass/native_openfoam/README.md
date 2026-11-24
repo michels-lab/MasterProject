@@ -24,7 +24,14 @@ wmake
 # Variante 1: sin densidades, puro inventario VOF/solid (NO usa Γ ni masa).
 fsC08NativeInventory \
   -case ~/OpenFOAM/FS_C07_RUNS/FS_C07_THERMAL_20261123T183217Z_72da1bf4 \
-  -region fluid -time '0.2,0.4,1'
+  -region fluid -time '0.2,0.4,1' \
+  | tee /tmp/FS_C08_NATIVE_INVENTORY.log
+
+# Comparar DIRECTAMENTE con los conteos e integrales originales 20/20.
+# Ejecutar desde la raíz del worktree FS-C08:
+cd ~/OpenFOAM/FS_C08_WORKTREE
+python3 -B analysis_tools/verify_fs_c08_openfoam_inventory.py \
+  --log /tmp/FS_C08_NATIVE_INVENTORY.log --times 0.2 0.4 1.0
 
 # Variante 2: comprobar la interoperabilidad con núcleo C++17 con parámetros
 # puramente SINTÉTICOS: no representan rho_l/rho_s de hierro real.
@@ -36,7 +43,7 @@ fsC08NativeInventory \
 
 **Importante:** el ejecutable exige `-latestTime` o `-time` explícito para no iterar por los más de diez mil directorios de tiempo creados por monitores. No hay `runTime.write()`, `mesh.write()` ni `field.write()`, no se invoca `foamMultiRun`. Si `fvMesh` encuentra un tiempo sin `alpha.metal.solid`, el programa debe fallar y no reemplazarlo con ceros.
 
-El inventario OpenFOAM nativo tiene que reproducir, por ejemplo:
+El inventario OpenFOAM nativo tiene que reproducir, por ejemplo, los siguientes valores; el verificador independiente compara los conteos y excesos con el JSON real de FS-C07:
 
 | t [s] | `V_metal_raw` [m³] | `V_solid_raw` [m³] | `V_exceso` [m³] | celdas fuera de 1e-8 |
 |---|---:|---:|---:|---:|
@@ -55,3 +62,9 @@ Los valores 0.20/0.40 de las dos primeras columnas son **aproximaciones de la tr
 - No cuenta una variación de `V_metal` como contracción por cambio de densidad.
 
 Este puente establece la primera barrera técnica **Foundation14 wmake → fvMesh/fields → kernel C++17**, necesaria antes de escribir un módulo conservativo `compressibleVoF` auténtico. La siguiente barrera será el transporte de masa por fase con `±Γ` y fuentes en las ecuaciones de presión y energía sobre un caso nuevo aislado.
+
+## Aceptación automatizada sin corrida de CFD
+
+[`verify_fs_c08_openfoam_inventory.py`](../../../analysis_tools/verify_fs_c08_openfoam_inventory.py) compara **independientemente** el log del ejecutable `wmake` con [20 estados nativos registrados](../../FS-C07_thermal_transition/evidence/FS_C07_PHASE_ALLOCATION_20_NATIVE_STATES_20261123.json); rechaza duplicados, faltantes, error en conteos/volúmenes, final metal/sólido y ausencia de un pie de log de solo lectura. Sus [seis tests sintéticos](../../../analysis_tools/test_verify_fs_c08_openfoam_inventory.py) están añadidos al CI, sin afirmar que la utilidad `wmake` haya compilado en WSL.
+
+La salida con estado `PASS` **solo significa** que una utilidad OpenFOAM14 leyó sin alteración los campos y las integrales de FS-C07. **No** significa que exista `Γ` nativa distinta de cero, contracción física, cierre de energía ni movimiento de metal líquido.
