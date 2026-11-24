@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
   "audit_kind": "deterministic_full_tracked_tree",
-  "tracked_files_total": 39072,
-  "classified_files_total": 39067,
-  "docs_content_inspected": 202,
+  "tracked_files_total": 39074,
+  "classified_files_total": 39069,
+  "docs_content_inspected": 203,
   "large_docs_skipped": 1,
   "excluded_reports": 5,
   "roles": {
@@ -12,7 +12,7 @@
     "bitacora": 5,
     "config": 17,
     "data": 32,
-    "document": 164,
+    "document": 165,
     "index": 34,
     "license": 1,
     "simulation_case_file": 117,
@@ -20,7 +20,7 @@
     "simulation_log": 3155,
     "simulation_output": 32615,
     "source": 136,
-    "test": 65,
+    "test": 66,
     "web_ui": 1,
     "workflow": 32
   },
@@ -29,8 +29,8 @@
     "POTENTIAL_UNLOGGED_CHANGES": 2
   },
   "finding_total": 9,
-  "inventory_fingerprint": "6b181a0536cff1005d83359b828da463e898437119bd723c142332f6ef90483b",
-  "evidence_fingerprint": "164a4469cf8f3be48e96c48697faa6516f65488e11dafd22ca0db05059ce00d7",
+  "inventory_fingerprint": "855cde15f660aed73c3f50bb3c569fee37bd6a6774c30c879cfd8eb8f5a01d5d",
+  "evidence_fingerprint": "e616841240ebc711de1f31a299c6964dc3adfa087b9afba4f7629fa27422ce6f",
   "files": [
     {
       "path": ".github/agents/openfoam-solidification.agent.md",
@@ -415,7 +415,7 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "28e293c0a7b697d151615536bb9e647e06c9313b"
+      "blob": "be536fd168a68879d6d8d140764703f949e3188f"
     },
     {
       "path": "RUN_CASE_REGISTRY.csv",
@@ -2110,6 +2110,13 @@
       "purpose": "code/test implementation",
       "certainty": "rule",
       "blob": "9e70e7dc2dcc23df21a59e661a489657e5155e05"
+    },
+    {
+      "path": "cases_3d/C3D_05_step_gmsh_conformal/c14_physics/tests/test_existing_case_b_c14_mold_and_combined_inventory.py",
+      "role": "test",
+      "purpose": "code/test implementation",
+      "certainty": "rule",
+      "blob": "95b9e9a75c73a3dd727e47bc54c7c04120579e64"
     },
     {
       "path": "cases_3d/C3D_05_step_gmsh_conformal/c14_physics/tests/test_existing_case_b_c14_phase_timeline.py",
@@ -272589,7 +272596,7 @@
       "role": "config",
       "purpose": "machine-readable configuration",
       "certainty": "rule",
-      "blob": "7a7f071f625ef09aa3ebca8837c8adaabb9e5594"
+      "blob": "3b25b6052c7d5759f1d00f1efef6226fdc85db47"
     },
     {
       "path": "docs/REGLA_INSTRUCCIONES_UNIFICADAS_ES.md",
@@ -272667,6 +272674,13 @@
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
       "blob": "b8373ea7235fd028c9bd9d225b0510361cc9ccba"
+    },
+    {
+      "path": "docs/granada/C3D05_B_C14_WSL_INVENTARIO_METAL_Y_ARENA_PREPARADO_20261124_ES.md",
+      "role": "document",
+      "purpose": "manual/decision/report/historical note",
+      "certainty": "inferred",
+      "blob": "7f6bd24aa3544ea3758ea77b4f93f4a4055aa4a3"
     },
     {
       "path": "docs/granada/C3D05_B_Q_ESPACIAL_REAL_6_TIEMPOS_Y_CONTRASTE_ENERGIA_20261123_ES.md",
@@ -273567,20 +273581,20 @@
       "state": "REVIEW_REQUIRED"
     },
     {
-      "id": "beed08a959d06041",
+      "id": "5f892f352fbdd3e9",
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_EN.md",
-      "observation": "4 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_05_step_gmsh_conformal/c14_physics/quantify_existing_case_b_c14_energy_inventory.py, cases_3d/C3D_05_step_gmsh_conformal/c14_physics/quantify_existing_case_b_c14_mold_and_combined_inventory.py, cases_3d/C3D_05_step_gmsh_conformal/c14_physics/tests/test_existing_case_b_c14_energy_inventory.py, docs/PROJECT_STAGE_STATUS.json",
+      "observation": "5 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_05_step_gmsh_conformal/c14_physics/quantify_existing_case_b_c14_energy_inventory.py, cases_3d/C3D_05_step_gmsh_conformal/c14_physics/quantify_existing_case_b_c14_mold_and_combined_inventory.py, cases_3d/C3D_05_step_gmsh_conformal/c14_physics/tests/test_existing_case_b_c14_energy_inventory.py, cases_3d/C3D_05_step_gmsh_conformal/c14_physics/tests/test_existing_case_b_c14_mold_and_combined_inventory.py, docs/PROJECT_STAGE_STATUS.json",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     },
     {
-      "id": "1b6e4705c979045f",
+      "id": "2fc0aef01fc2b087",
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_ES.md",
-      "observation": "2 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_05_step_gmsh_conformal/c14_physics/quantify_existing_case_b_c14_mold_and_combined_inventory.py, docs/PROJECT_STAGE_STATUS.json",
+      "observation": "3 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_05_step_gmsh_conformal/c14_physics/quantify_existing_case_b_c14_mold_and_combined_inventory.py, cases_3d/C3D_05_step_gmsh_conformal/c14_physics/tests/test_existing_case_b_c14_mold_and_combined_inventory.py, docs/PROJECT_STAGE_STATUS.json",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     }
