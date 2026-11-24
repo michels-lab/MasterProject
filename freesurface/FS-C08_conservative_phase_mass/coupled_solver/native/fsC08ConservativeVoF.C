@@ -212,6 +212,12 @@ void solvers::fsC08ConservativeVoF::postSolve()
         << " boundaryMetalOut_kg_s=" << boundaryMassRate
         << " metalMassResidual_kg=" << metalResidual
         << " gasConservationNotYetCertified=1"
+        << " thermalVolumeSourceMean_s_1="
+        << phaseMass_->thermalVolumeSource()
+              .weightedAverage(mesh.V()).value()
+        << " combinedMaterialVolumeSourceMean_s_1="
+        << phaseMass_->materialVolumeSource()
+              .weightedAverage(mesh.V()).value()
         << " phaseChangeVolumeSourceMean_s_1="
         << phaseMass_->phaseVolumeSource()
               .weightedAverage(mesh.V()).value()
