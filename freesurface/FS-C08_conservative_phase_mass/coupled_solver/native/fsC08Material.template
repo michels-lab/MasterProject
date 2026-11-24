@@ -1,0 +1,50 @@
+/* FS-C08 material dictionary template — NON-EXECUTABLE until calibrated.
+ * File to install in a STAGED CASE: constant/fluid/fsC08Material
+ * T in K, rho in kg/m3; latentHeat in J/kg; cpSolid in J/(kg K).
+ * Phase fraction curve is SOLID MASS FRACTION (not volume fraction).
+ * Use separate source records for each CE/S composition. NO defaults.
+ *
+ * Do NOT copy FS-C07's numerical (1423,1473) model as experimental data.
+ * These placeholders are mandatory; the stager must refuse the template.
+ */
+FoamFile
+{
+    version 2.0;
+    format ascii;
+    class dictionary;
+    location "constant/fluid";
+    object fsC08Material;
+}
+
+materialId <ALLOY_COMPOSITION_ID_REQUIRED>;
+propertySource <JMATPRO_OR_EXPERIMENTAL_SOURCE_ID_REQUIRED>;
+
+// Valid interval for every iron-containing CFD cell.
+// The computational metal/air trace cutoff below is a numerical parameter,
+// NOT an allowed excuse to neglect metal mass conservation.
+Tmin_K <SUPPORTED_MIN_TEMPERATURE_K>;
+Tmax_K <SUPPORTED_MAX_TEMPERATURE_K>;
+metalPresenceThreshold <MATERIAL_TRACE_VOF_THRESHOLD>;
+
+// This relaxes a real equilibrium solid MASS fraction and introduces
+// numerical kinetic lag. It needs physical/experimental justification.
+phaseRelaxation <CALIBRATED_KINETIC_RELAXATION_0_TO_1>;
+
+rhoLiquidT table
+(
+    (<T_1_K> <RHO_L_1_KG_PER_M3>)
+    (<T_2_K> <RHO_L_2_KG_PER_M3>)
+);
+rhoSolidT table
+(
+    (<T_1_K> <RHO_S_1_KG_PER_M3>)
+    (<T_2_K> <RHO_S_2_KG_PER_M3>)
+);
+solidMassFractionT table
+(
+    (<T_1_K> <FS_MASS_FRACTION_1>)
+    (<T_2_K> <FS_MASS_FRACTION_2>)
+);
+
+latentHeat [0 2 -2 0 0 0 0] <LATENT_J_PER_KG>;
+cpSolid [0 2 -2 -1 0 0 0] <SOLID_CP_J_PER_KG_K>;
