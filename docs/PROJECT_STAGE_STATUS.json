@@ -631,7 +631,7 @@
     },
     {
       "case_id": "C3D-04 Caso A",
-      "status": "Real WSL 101-state visualization and solidification/flow analysis ready; stage08 operational DONE.",
+      "status": "Real WSL archived C14 2D–3D A comparison complete: 101 times, 3 central histories, 12 diameters and central vertical.",
       "evidence": "docs/C3D04_CASE_A_STATUS.json",
       "progress_ref": "docs/C3D04_CASE_A_STATUS.json",
       "stage": "9/10 — conservation and discretization verification",
@@ -640,10 +640,10 @@
       "percent_hitos": 80,
       "percentage_scope": "SOLO_HITOS_OPERATIVOS_DEL_CASO_A_NO_VALIDACION_FISICA",
       "primary_contract": "cases_3d/C3D_04_rounded_multiblock_pilot/AGENTS.md",
-      "next_integrated_milestone": "Real archived 2D C14 reference recovered, initial global comparison complete; join archived profiles and existing A sweeps without CFD or sampling replay.",
-      "blocker": "Local A sweep CSV and spatial join not observed; no discrete conservation, grid/time independence or QuickCup validation.",
-      "CI_status": "REAL_WSL_VISUALIZATION_AND_SOLIDIFICATION_READY",
-      "CI_evidence": "docs/C3D04_A_STAGE08_SOLIDIFICATION_REAL_20261124_ES.md"
+      "next_integrated_milestone": "Same-geometry discretization sensitivity and discrete energy conservation; no repetition of existing CFD/comparison.",
+      "blocker": "No discrete energy closure, same-geometry grid/time independence or QuickCup validation. FoamLens sweep import not observed.",
+      "CI_status": "REAL_WSL_ARCHIVED_C14_2D_3D_COMPARISON_READY",
+      "CI_evidence": "docs/C3D04_A_STAGE09_ARCHIVED_C14_COMPARISON_20261124_ES.md"
     },
     {
       "case_id": "C3D-05 Caso B",
