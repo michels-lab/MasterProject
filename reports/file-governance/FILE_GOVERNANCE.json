@@ -29,8 +29,8 @@
     "POTENTIAL_UNLOGGED_CHANGES": 2
   },
   "finding_total": 9,
-  "inventory_fingerprint": "2251a280f5e1fc674b0fde3c2fa82cd2ac2413572fc66e6ca436d22937dea867",
-  "evidence_fingerprint": "2bfb313b7955e330bc4850c64b416ca3eca6225ab9992c69bf4eab4515922610",
+  "inventory_fingerprint": "353aed01e873a63042b0facbf55aa220fc9c5b2c58637ca54eed3f81c2aefdac",
+  "evidence_fingerprint": "e769beb96c21f0625e724a1d7ae0e420ad66bfb92eef94a9af385db105640397",
   "files": [
     {
       "path": ".github/agents/openfoam-solidification.agent.md",
@@ -2109,7 +2109,7 @@
       "role": "source",
       "purpose": "code/test implementation",
       "certainty": "rule",
-      "blob": "3f26a6cec12f81743f8376327591b4520db07a2f"
+      "blob": "bd2cf130e03c43d15ee643305dc9ce1a631eb141"
     },
     {
       "path": "cases_3d/C3D_05_step_gmsh_conformal/c14_physics/quantify_existing_case_b_c14_energy_inventory.py",
@@ -272666,7 +272666,7 @@
       "role": "config",
       "purpose": "machine-readable configuration",
       "certainty": "rule",
-      "blob": "7be807a9e0607fc414e3f2b323aff58bd9dbbb5b"
+      "blob": "620b11a17074f745e4bbf5d61721e5e5e465d160"
     },
     {
       "path": "docs/REGLA_INSTRUCCIONES_UNIFICADAS_ES.md",
@@ -273674,11 +273674,11 @@
       "state": "REVIEW_REQUIRED"
     },
     {
-      "id": "617b9228fc656b17",
+      "id": "01e45dbed7347df7",
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_ES.md",
-      "observation": "1 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_05_step_gmsh_conformal/c14_physics/tests/test_existing_case_b_c14_native_flux.py",
+      "observation": "3 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_05_step_gmsh_conformal/c14_physics/native_flux/c3d05C14FluidSolidFlux.C, cases_3d/C3D_05_step_gmsh_conformal/c14_physics/tests/test_existing_case_b_c14_native_flux.py, docs/PROJECT_STAGE_STATUS.json",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     }
