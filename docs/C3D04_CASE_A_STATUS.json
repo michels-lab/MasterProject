@@ -111,14 +111,14 @@
     "stage_completed": "08_SOLIDIFICATION_T1",
     "current_stage": "09_VERIFICATION_AND_GRID",
     "operational_completion": "8/10=80%",
-    "status": "REAL_WSL_EXACT_REPRODUCTION_AND_BILATERAL_SAVED_STATE_DIAGNOSTIC_READY",
-    "evidence_report": "docs/C3D04_A_STAGE09_FAITHFUL_NATIVE_ANALYSIS_20261124_ES.md",
+    "status": "TEMPORAL_SENSITIVITY_EXECUTOR_PUBLISHED_WSL_PENDING",
+    "evidence_report": "docs/C3D04_A_STAGE09_TEMPORAL_SENSITIVITY_20261124_ES.md",
     "scientific_limits": [
-      "Saved-state primary fields identical; no assertion of physical accuracy",
-      "Nominal bilateral balance on 0.1s states, not discrete closure",
-      "Local audit CSV publication, grid/time independence and QuickCup pending"
+      "No new CFD observed",
+      "Provisional screening criteria, not approved validation tolerances",
+      "Spatial independence, discrete conservation and QuickCup pending; A3/A4 audit CSV local"
     ],
-    "next": "Plan same-geometry mesh and time-step sensitivity; investigate initial pressure/thermal transient and discrete energy accounting. Preserve reference and publish existing audit CSV when available."
+    "next": "Run two isolated temporal refinements at fixed V4/T02, compare three levels, then select spatial refinement and dt."
   },
   "stage06_preflight_integrity": {
     "date": "2026-11-20",
@@ -1337,5 +1337,31 @@
     "prepared_observed": 0,
     "run_observed": 0,
     "total_planned": 6
+  },
+  "stage09_temporal_sensitivity": {
+    "status": "THREE_LEVEL_TEMPORAL_EXECUTOR_PUBLISHED_WSL_PENDING",
+    "doc": "docs/C3D04_A_STAGE09_TEMPORAL_SENSITIVITY_20261124_ES.md",
+    "entrypoint": "cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/run_c14_a_temporal_sensitivity.py",
+    "dt_s": [
+      0.001,
+      0.0005,
+      0.00025
+    ],
+    "write_intervals": [
+      100,
+      200,
+      400
+    ],
+    "same_saved_times": 101,
+    "native_probe_samples": [
+      10001,
+      20001,
+      40001
+    ],
+    "mesh": "V4/T02 unchanged",
+    "new_runs_executed": false,
+    "spatial_plan": "Refine actual T02 blockMeshDict without geometry changes; levels not selected or generated",
+    "independence_verified": false,
+    "discrete_conservation_verified": false
   }
 }
