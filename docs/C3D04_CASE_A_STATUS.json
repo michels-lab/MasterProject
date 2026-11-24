@@ -26,7 +26,8 @@
     "20-11-2026 original C14 full 10s on ACTUAL V4/T02 WSL: terminal evidence of 101 states t0,t0.1,...t10, native report native_solver_run=true, Time=10s, End, h/e/p_rgh solved; 23-11-2026 investigator terminal upload. See docs/C3D_04_C14_V4_T02_REAL_10S_20261123_ES.md. Original accepted mesh preserved.",
     "23-11-2026 ACTUAL WSL REAL V4/T02 existing C14 10s 101-state native ASCII postrun: all 8960 metal cells below 1473 K, 1158 below 1423 K, alpha1 mean 0.8367355017427456 min0 max0.992311; all-log max Co 0.0240415 across 10000 steps; energy balance NOT verified. docs/C3D_04_C14_V4_T02_REAL_10S_PHASE_NUMERICAL_RESULTS_20261123_ES.md",
     "23-11-2026 investigator WSL real 101-state saved-volume kinetic analysis completed with original C14 10s fields unchanged, source volume CSV+JSON found, first saved model alpha1 decrease between 0.2 and 0.3 s, nominal peak latent release 1038.8813 W over 7.2-7.3 s, final volume-mean metal T 1450.70916 K and nominal solid inventory 0.0335828358 kg. Native copy source provenance PASSED, but native commands NOT fully verified; energy closure/QuickCup NOT verified.",
-    "24-11-2026 WSL real grouped recovery: cellZone all only in isolated copy, 7/7 native groups no FATAL, five scalar series 101/101, rho*h equal at 0/0.1/10 to printed precision, three surface powers reconcile (max relative 4.7503433312219475e-7); 7/9 final profiles pass, both vertical 27/80. Source hashes unchanged. No energy/QuickCup validation."
+    "24-11-2026 WSL real grouped recovery: cellZone all only in isolated copy, 7/7 native groups no FATAL, five scalar series 101/101, rho*h equal at 0/0.1/10 to printed precision, three surface powers reconcile (max relative 4.7503433312219475e-7); 7/9 final profiles pass, both vertical 27/80. Source hashes unchanged. No energy/QuickCup validation.",
+    "24-Nov-2026 WSL real grouped continuation: 5/5 regressions, both vertical families 101x80 on native-supported fixed x/z interior chord of 14.699706 mm, not full 2D height. Metal nominal saved-state energy residual 2.02303355 J / 20670.15745 J outward from 0.1 to 10s (0.009787%); mold inventory 19318.54788 J, metal-to-mold integral 19462.8944 J; no bilateral mold flux or discrete solver balance yet."
   ],
   "nonnegotiable_blockers": [
     "C14 numeric metal/arena parameters and 2D boundary reference NOW sourced directly in T0; they are constant C14-model inputs, NOT independently measured T-dependent iron/sand functions.",
@@ -841,10 +842,56 @@
       "code": "cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/continue_c14_stage07_grouped_evidence.py",
       "commit": "0fd379152277b1d38d687045a1c4edb1702e641b",
       "regressions_added": 5,
-      "regressions_observed": false,
-      "WSL_executed": false,
+      "regressions_observed": true,
+      "WSL_executed": true,
       "scope": "Integrate native heat/advective/total power, nominal latent inventory, mold sensible inventory, all 101 states; native 401-point scan along fixed x/z, followed by 80-point primitive and momentum sampling of supported interior chord in a single grouped 101-state pass; never equate shortened chord with full original 2D line. Original and grouped evidence SHA protected; no CFD.",
-      "remaining": "Mold exterior and mold-side interface flux, discretized fvModel source, full vertical extent comparison, grid/time independence, QuickCup."
+      "remaining": "Mold exterior and mold-side interface flux, discretized fvModel source, full vertical extent comparison, grid/time independence, QuickCup.",
+      "real_result": {
+        "source": "Investigator-pasted WSL stdout 24-Nov-2026; local JSON/CSV not independently downloaded",
+        "source_commit": "ffeaef5ea",
+        "report": "~/OpenFOAM/C3D04_A_C14_ENERGY_VERTICAL_01/C3D04_A_GROUPED_ENERGY_AND_VERTICAL_REPORT.json",
+        "tests_passed": 5,
+        "source_hashes_unchanged": true,
+        "grouped_input_hashes_unchanged": true,
+        "metal_volume_m3": 0.000047921447006662436,
+        "mold_volume_m3": 0.00010287540036379159,
+        "reference_s": 0.1,
+        "final_s": 10,
+        "alpha1_volume_mean": 0.897245,
+        "metal_native_enthalpy_delta_J": -12991.100000000035,
+        "metal_nominal_liquid_latent_delta_J": -7677.03441644834,
+        "mold_nominal_sensible_delta_J": 19318.54788041526,
+        "top_heat_out_J": 1207.263105,
+        "metal_to_mold_heat_out_J": 19462.894400000012,
+        "total_metal_energy_out_J": 20670.15745,
+        "net_metal_boundary_advective_integral_J": 0,
+        "metal_nominal_residual_J": 2.023033551624394,
+        "metal_nominal_residual_relative_to_outward_energy": 0.00009787218875898762,
+        "metal_to_mold_minus_mold_inventory_J": 144.34651958475297,
+        "vertical": {
+          "x_m": 0.02,
+          "z_m": 0.00829925,
+          "mesh_y_extent_m": [
+            -0.04,
+            0
+          ],
+          "original_requested_y_m": [
+            -0.03725,
+            -0.003888888888888886
+          ],
+          "corrected_y_m": [
+            -0.014750105000000001,
+            -0.00005039899999999763
+          ],
+          "native_scan_valid_points": 149,
+          "native_scan_requested_points": 401,
+          "primitive_complete_101_by_80": true,
+          "momentum_complete_101_by_80": true,
+          "original_2D_coverage_equivalent": false
+        },
+        "global_energy_conservation_verified": false,
+        "quickcup_validated": false
+      }
     }
   }
 }
