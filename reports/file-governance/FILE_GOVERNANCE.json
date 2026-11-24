@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
   "audit_kind": "deterministic_full_tracked_tree",
-  "tracked_files_total": 39074,
-  "classified_files_total": 39069,
-  "docs_content_inspected": 203,
+  "tracked_files_total": 39075,
+  "classified_files_total": 39070,
+  "docs_content_inspected": 204,
   "large_docs_skipped": 1,
   "excluded_reports": 5,
   "roles": {
@@ -12,7 +12,7 @@
     "bitacora": 5,
     "config": 17,
     "data": 32,
-    "document": 165,
+    "document": 166,
     "index": 34,
     "license": 1,
     "simulation_case_file": 117,
@@ -26,11 +26,11 @@
   },
   "finding_counts": {
     "BROKEN_RELATIVE_LINK": 7,
-    "POTENTIAL_UNLOGGED_CHANGES": 2
+    "POTENTIAL_UNLOGGED_CHANGES": 1
   },
-  "finding_total": 9,
-  "inventory_fingerprint": "28c93a12504300609878e1feb3c283b84703c39fbe0b4a5d54ea70b8be1febed",
-  "evidence_fingerprint": "5693c6370a40c392fc4e688c11bbb3fe5bd3fd10e4a909c3e85ea58dc76eb99c",
+  "finding_total": 8,
+  "inventory_fingerprint": "1963a091a78c6c425c8775bc9bc3f9dab8dba32fda7fc44e7e190677d9c48430",
+  "evidence_fingerprint": "f423ff9d58fe13de4a1079842c3e57e5451bd1a884c01cfce91670722fe1b882",
   "files": [
     {
       "path": ".github/agents/openfoam-solidification.agent.md",
@@ -408,14 +408,14 @@
       "role": "bitacora",
       "purpose": "technical/audit change history",
       "certainty": "rule",
-      "blob": "f7cb4954f7ca12d7a10e638307d7c361e4054e42"
+      "blob": "f4e39f2139e2cb7a5eb5543421936d36cdb7b044"
     },
     {
       "path": "README.md",
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "be536fd168a68879d6d8d140764703f949e3188f"
+      "blob": "f61caef236d8c33c19d39c9fa8c38578a68447ed"
     },
     {
       "path": "RUN_CASE_REGISTRY.csv",
@@ -2053,7 +2053,7 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "2dd8f6b622b32c19babb259d0eb9577c48c63fa2"
+      "blob": "06d7bfa10e652b33a76ece41dfffd0bf9bef6306"
     },
     {
       "path": "cases_3d/C3D_05_step_gmsh_conformal/c14_physics/analyze_existing_case_b_c14.py",
@@ -272547,7 +272547,7 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "7f35fd033a113a1fe4a54c14871f8d7a1ff15224"
+      "blob": "1f88eff5e587600cdb8a2b9050d7e22687a604fd"
     },
     {
       "path": "docs/DOCUMENT_SYNC_20261110_ES.md",
@@ -272660,6 +272660,13 @@
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
       "blob": "761d70176b0f3e8220d1dfaeb437b0d80c49c32d"
+    },
+    {
+      "path": "docs/granada/C3D05_B_C14_INVENTARIO_CONJUNTO_101_ESTADOS_WSL_20261124_ES.md",
+      "role": "document",
+      "purpose": "manual/decision/report/historical note",
+      "certainty": "inferred",
+      "blob": "57c78959adb262ba8c12ba9731947d3b0901696b"
     },
     {
       "path": "docs/granada/C3D05_B_C14_SOLIDIFICACION_3D_FASE_FISICA_20261123_ES.md",
@@ -273586,15 +273593,6 @@
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_EN.md",
       "observation": "5 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_05_step_gmsh_conformal/c14_physics/quantify_existing_case_b_c14_energy_inventory.py, cases_3d/C3D_05_step_gmsh_conformal/c14_physics/quantify_existing_case_b_c14_mold_and_combined_inventory.py, cases_3d/C3D_05_step_gmsh_conformal/c14_physics/tests/test_existing_case_b_c14_energy_inventory.py, cases_3d/C3D_05_step_gmsh_conformal/c14_physics/tests/test_existing_case_b_c14_mold_and_combined_inventory.py, docs/PROJECT_STAGE_STATUS.json",
-      "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "b7e85c814cfe1fac",
-      "code": "POTENTIAL_UNLOGGED_CHANGES",
-      "severity": "review",
-      "path": "PROJECT_AUDIT_LOG_ES.md",
-      "observation": "1 implementation/config paths changed since this log's last commit; examples: docs/PROJECT_STAGE_STATUS.json",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     }
