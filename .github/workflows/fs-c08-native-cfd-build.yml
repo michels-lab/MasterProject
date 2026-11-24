@@ -44,10 +44,10 @@ jobs:
         id: native-build
         shell: bash
         run: |
+          # setup-openfoam already exported the active Foundation14
+          # environment. Re-sourcing bashrc under nounset fails on
+          # unbound ZSH_NAME *before wmake starts*. Do not source again.
           set -euo pipefail
-          if [ -f /opt/openfoam14/etc/bashrc ]; then
-            . /opt/openfoam14/etc/bashrc
-          fi
           test "${WM_PROJECT_VERSION:-}" = '14'
           command -v wmake
           test -n "${FOAM_MODULES:-}"
