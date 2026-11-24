@@ -69,6 +69,12 @@ class PhaseMassTransport
     // s^-1, local volume creation/consumption ONLY due to phase conversion
     volScalarField SvolPhaseChange_;
 
+    // Fixed-metal-mass thermal contraction/expansion rate [1/s].
+    volScalarField SvolThermal_;
+
+    // Combined local material volume rate [1/s], not a net metal sink.
+    volScalarField SvolMaterial_;
+
     // Absolute fractions of cell volume, not conditional metal fractions
     volScalarField alphaLiquid_;
     volScalarField alphaSolid_;
@@ -120,6 +126,14 @@ public:
     const volScalarField& phaseVolumeSource() const
     {
         return SvolPhaseChange_;
+    }
+    const volScalarField& thermalVolumeSource() const
+    {
+        return SvolThermal_;
+    }
+    const volScalarField& materialVolumeSource() const
+    {
+        return SvolMaterial_;
     }
     const volScalarField& alphaLiquid() const { return alphaLiquid_; }
     const volScalarField& alphaSolid() const { return alphaSolid_; }
