@@ -17,12 +17,16 @@ on:
 
 permissions:
   contents: read
+  statuses: write
 
 jobs:
   compile-native-fs-c08-solver:
     name: wmake libso Foundation14 — actual coupled fluid solver, NO synthetic CFD
     runs-on: ubuntu-24.04
     timeout-minutes: 30
+    concurrency:
+      group: fs-c08-foundation14-${{ github.ref }}
+      cancel-in-progress: true
     steps:
       - name: Checkout MasterProject research code
         uses: actions/checkout@v4
@@ -37,6 +41,7 @@ jobs:
           cache: true
 
       - name: Compile ACTUAL native FS-C08 CFD solver with OpenFOAM14 wmake
+        id: native-build
         shell: bash
         run: |
           set -euo pipefail
@@ -61,3 +66,31 @@ jobs:
           path: ${{ runner.temp }}/fs-c08-native-wmake.log
           if-no-files-found: warn
           retention-days: 30
+
+      - name: Publish machine-readable Foundation14 compiler status on commit
+        if: always()
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+          BUILD_OUTCOME: ${{ steps.native-build.outcome }}
+        shell: bash
+        run: |
+          set -uo pipefail
+          log="${RUNNER_TEMP}/fs-c08-native-wmake.log"
+          case "${BUILD_OUTCOME:-skipped}" in
+            success) state=success; summary="Real OpenFOAM14 wmake libso PASS; no physical CFD run" ;;
+            *) state=failure
+               summary="Native OpenFOAM14 build did not pass"
+               if test -f "${log}"; then
+                 first_error=$(grep -m 1 -E 'fatal error:|error:|undefined reference|make: \*\*\*' "${log}" || true)
+                 if test -n "${first_error}"; then summary="${first_error}"; fi
+               fi ;;
+          esac
+          summary="${summary:0:135}"
+          gh api -X POST \
+            "repos/${GITHUB_REPOSITORY}/statuses/${GITHUB_SHA}" \
+            -f state="${state}" \
+            -f context="fs-c08/foundation14-wmake" \
+            -f description="${summary}" \
+            -f target_url="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}" \
+            --silent
