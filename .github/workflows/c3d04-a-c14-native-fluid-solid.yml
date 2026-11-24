@@ -55,6 +55,13 @@ jobs:
           PYTHONDONTWRITEBYTECODE=1 python3 -B \
             cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/native_c14_solver_backed_offline_smoke.py \
             --case "$RUNNER_TEMP/C3D04_A_C14_ORIGINAL_FLUID_SOLID_SYNTHETIC/actual_C14_fluid_solid_2step"
+      - name: Real Foundation14 synthetic missing-metal-cellZone negative then repaired copy positive
+        run: |
+          set -euo pipefail
+          PYTHONDONTWRITEBYTECODE=1 python3 -B \
+            cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/native_c14_missing_metal_cellzone_smoke.py \
+            --case "$RUNNER_TEMP/C3D04_A_C14_ORIGINAL_FLUID_SOLID_SYNTHETIC/actual_C14_fluid_solid_2step" \
+            --out "$RUNNER_TEMP/C3D04_A_C14_ORIGINAL_FLUID_SOLID_SYNTHETIC/zone_repair_native_smoke_01"
       - name: ZIP logs including original colon-bearing phaseChangeSource fields (even on failure)
         if: always()
         run: |
