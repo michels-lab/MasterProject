@@ -58,6 +58,25 @@ jobs:
           test -f "${FOAM_USER_LIBBIN}/libfsC08ConservativeVoF.so"
           echo 'FS_C08_REAL_OPENFOAM14_SOLVER_LIBRARY_WMAKE_PASS__NO_CFD_RUN'
 
+      - name: Resolve and load FS-C08 user library against native Foundation14
+        id: native-runtime-load
+        shell: bash
+        run: |
+          set -euo pipefail
+          lib="${FOAM_USER_LIBBIN}/libfsC08ConservativeVoF.so"
+          test -f "${lib}"
+          ldd -r "${lib}" 2>&1 | tee "${RUNNER_TEMP}/fs-c08-native-loader.log"
+          if grep -Eq 'not found|undefined symbol' "${RUNNER_TEMP}/fs-c08-native-loader.log"; then
+            echo 'FS-C08: unresolved native runtime shared-library dependency' >&2
+            exit 1
+          fi
+          # Real ELF dlopen of the library; not a synthetic transport test.
+          python3 - "${lib}" <<'PY'
+          import ctypes
+          import sys
+          ctypes.CDLL(sys.argv[1], mode=ctypes.RTLD_GLOBAL)
+          print('FS_C08_FOUNDATION14_USER_LIBRARY_DLOPEN_PASS__NO_CFD_RUN')
+          PY
       - name: Retain REAL native compiler diagnostics on failure or success
         if: always()
         uses: actions/upload-artifact@v4
