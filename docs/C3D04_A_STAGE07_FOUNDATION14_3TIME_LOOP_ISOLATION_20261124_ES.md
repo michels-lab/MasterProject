@@ -42,6 +42,12 @@ Antes de crear una carpeta valida fuente física, `controlDict` original (8960 c
 
 El reporte nuevo será `C3D04_A_F14_NATIVE_SINGLE_VS_MULTITIME_PROBE_REPORT.json`, sin sobrescribir resultados previos. Este diagnóstico **no corre los 101 estados**, ni reclama conservación global, independencia de malla/tiempo o validación QuickCup.
 
+## QA nativa: corrección de una ruta de ejecución incorrecta
+
+La primera corrida sintética Foundation14 de tres tiempos ([run 45350301865](https://github.com/michels-lab/MasterProject/actions/runs/45350301865)) NO proporciona evidencia sobre el registro multitemporal: el primer ejecutor construía la ruta de trabajo con la carpeta del diccionario `system/` en vez de la raíz del caso. La traza real decía `Case: .../combined_three_times/system` y `cannot find file .../system/system/controlDict`. Por tanto, el resultado `SINGLE_TIME_NATIVE_FAILURE_PRESENT_NOT_ONLY_MULTITIME` de esa corrida se **descarta para inferencias físicas**; el error era del propio diagnosticador, no del caso C14.
+
+La herramienta se corrigió para usar `trial_case = dictionary.parent.parent` (directorio raíz de la copia), y sus regresiones ahora exigen la presencia de `system/controlDict` y `constant/metal/polyMesh/cellZones` desde el cwd real del subproceso. La siguiente corrida de CI y cualquier diagnóstico WSL usarán este ejecutor corregido. **No atribuir un error de ruta a cellZone ni a foamPostProcess.**
+
 ## Evidencia Foundation14 sintética
 
 Se añadió al workflow original C14 F14 nativo una prueba reutilizando el caso 27+27 celdas, dos pasos de solver ya terminados en CI. **Solo después de terminar** esos dos pasos sintéticos, prueba `0`, `0.001`, `0.002` por separado y juntos mediante postproceso C14, conservando logs de todos los experimentos. Las regresiones Python prueban además un error fatal que aparece exclusivamente en multitiempo y protegen el expediente original. La CI sintética y la WSL real son experimentos distintos; no presentar la primera como prueba del V4/T02.
