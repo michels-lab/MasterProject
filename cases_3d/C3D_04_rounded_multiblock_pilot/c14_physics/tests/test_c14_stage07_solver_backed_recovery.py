@@ -99,6 +99,13 @@ class NativeSolverBackedStage07Tests(unittest.TestCase):
                 self.assertNotIn("-solver",args)
 
     def test_existing_CFD_failed_copy_and_forensics_are_SHA_bound(self):
+        # Synthetic log/controlDict-only fixture omits native 8960-cell mesh.
+        # Mesh topology is tested independently by fresh-zone regression.
+        mocked_mesh=mock.patch.object(
+            sut.stage,"region_cells",return_value={
+                "nCells":sut.stage.EXPECTED["metal"]})
+        mocked_mesh.start()
+        self.addCleanup(mocked_mesh.stop)
         ca=self.root/"CANONICAL_C14"
         (ca/"system").mkdir(parents=True)
         (ca/"system/controlDict").write_text("AUTHENTIC C14\n")
