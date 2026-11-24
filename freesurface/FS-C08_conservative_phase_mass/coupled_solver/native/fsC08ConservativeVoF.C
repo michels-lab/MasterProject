@@ -448,7 +448,7 @@ void solvers::fsC08ConservativeVoF::postSolve()
         << " gasAdvectedEnergyOut_W=" << gasEnergyOut_W
         << " deltaInternalPlusAdvectedEnergy_J="
         << E-E0+dt*(liquidEnergyOut_W+gasEnergyOut_W)
-        << " energyBudgetPressureAndCHTNotYetClosed=1"
+        << " globalEnergyBudgetPendingNativeCFDValidation=1"
         << " nativeGasInventory_kg=" << Mgas
         << " previousGasInventory_kg=" << Mgas0
         << " gasBoundaryOut_kg_s=" << gasBoundaryOut
