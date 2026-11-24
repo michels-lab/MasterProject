@@ -60,6 +60,20 @@ solidMassFractionT table
     (<T_2_K> <FS_MASS_FRACTION_2>)
 );
 
+// Conductivity of LIQUID and SOLID metal from the same sourced alloy.
+// Values k in W/(m K), temperatures in K. The gas k and turbulent
+// contribution remain from native compressibleVoF thermo-transport.
+kappaLiquidT table
+(
+    (<T_1_K> <K_LIQUID_1_W_PER_M_K>)
+    (<T_2_K> <K_LIQUID_2_W_PER_M_K>)
+);
+kappaSolidT table
+(
+    (<T_1_K> <K_SOLID_1_W_PER_M_K>)
+    (<T_2_K> <K_SOLID_2_W_PER_M_K>)
+);
+
 // Thermal internal-energy integration, NOT an effective constant-Cv
 // approximation: u_s(Tref)=0; u_l(Tref)=latentHeat; both Cv(T) curves
 // are integrated between Tref and the current local mixture T.
