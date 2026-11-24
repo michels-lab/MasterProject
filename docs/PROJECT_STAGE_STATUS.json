@@ -341,13 +341,22 @@
     "case_b_c14_101_state_sensible_latent_equivalent_source_committed": true,
     "case_b_c14_101_state_sensible_latent_equivalent_source": "cases_3d/C3D_05_step_gmsh_conformal/c14_physics/quantify_existing_case_b_c14_energy_inventory.py",
     "case_b_c14_101_state_sensible_latent_equivalent_tests_committed": 9,
-    "case_b_c14_101_state_sensible_latent_equivalent_wsl_executed": false,
-    "case_b_c14_101_state_sensible_latent_equivalent_WSL_tests_passed_observed": false,
+    "case_b_c14_101_state_sensible_latent_equivalent_wsl_executed": true,
+    "case_b_c14_101_state_sensible_latent_equivalent_WSL_tests_passed_observed": true,
     "case_b_c14_101_state_sensible_latent_equivalent_source_CI_pass_observed": false,
     "case_b_c14_101_state_sensible_latent_equivalent_expected_output": "~/OpenFOAM/C3D05_B_C14_SENSIBLE_LATENT_EQUIVALENT_01",
     "case_b_c14_101_state_sensible_latent_equivalent_ledger": "docs/granada/C3D05_B_C14_ALFA_V_PONDERADA_CONFIRMADA_Y_ENERGIA_INVENTARIO_20261124_ES.md",
     "case_b_c14_native_fvModel_latent_heat_source_integrated": false,
-    "case_b_c14_metal_sand_exterior_energy_closure_verified": false
+    "case_b_c14_metal_sand_exterior_energy_closure_verified": false,
+    "case_b_c14_101_state_sensible_latent_equivalent_WSL_tests_count_passed": 9,
+    "case_b_c14_101_state_sensible_latent_equivalent_WSL_tests_count_failed": 0,
+    "case_b_c14_101_state_sensible_latent_equivalent_status": "C3D05_B_C14_REAL_METAL_C14_SENSIBLE_LATENT_EQUIVALENT_INVENTORY_NO_ENERGY_CLOSURE",
+    "case_b_c14_101_state_sensible_latent_equivalent_output_observed": "/home/michel/OpenFOAM/C3D05_B_C14_SENSIBLE_LATENT_EQUIVALENT_01",
+    "case_b_c14_101_state_sensible_delta_at_10s_J": -13576.397936155232,
+    "case_b_c14_101_state_latent_equivalent_solid_change_at_10s_J": 8100.198210984614,
+    "case_b_c14_101_state_energy_inventory_at_10s_weighted_liquid": 0.8917029860767621,
+    "case_b_c14_101_state_fvModel_source_integral_verified": false,
+    "case_b_c14_101_state_interface_and_exterior_energy_closure_verified": false
   },
   "other_cases": [
     {
@@ -387,7 +396,7 @@
       "evidence": "docs/granada/C3D05_B_C14_WSL_EJECUCION_REAL_EN_CURSO_20261123_ES.md"
     }
   ],
-  "blocker": "Real Case B original C14 10s 101 archived states, SHA-verified 9/9 phase timeline and real HEX8 8/8 volume-weighting PASS. t10 alpha1_V=0.8917029861 (solid complement 0.1082970139); geometry total volume matches checkMesh relative 1.6145147646629957e-7. Source-only metal C14 sensible delta and model latent-equivalent stored inventory (101 times) plus 9 tests is now committed but NEVER WSL RUN or physically validated. Native fvModel-integrated latent heat, metal-mold-exterior q and energy closure, JMatPro QuickCup 8 alloys, severe nonorth sensitivity, mesh/dt convergence and contraction are OPEN. Do not promote G3-G7.",
-  "next_integrated_delivery": "Confirm the user WSL REAL native 92200-cell volume-weighted alpha1 output (8/8 tests pass, final alpha1_V=.8917029861, 1-alpha1_V=.1082970139) is now recorded; NEW SOURCE-only 101-state original C14 METAL sensible delta vs t0 and modeled latent-equivalent inventory with nine tests is committed, not run on WSL. Run python3 -B -m unittest discover -s cases_3d/C3D_05_step_gmsh_conformal/c14_physics/tests -p 'test_existing_case_b_c14_energy_inventory.py' -v && python3 -B cases_3d/C3D_05_step_gmsh_conformal/c14_physics/quantify_existing_case_b_c14_energy_inventory.py. This is not true solver-fvModel latent release or conservation. Next independent native interface/exterior q + mold energy and CFD flux budget, sensitivity and QuickCup/JMatPro validation.",
-  "science": "CASE_B_REAL_10S_101_STATES_VOLUME_WEIGHTED_ALPHA1_V_0_891702986_8_TESTS_PASS_SENSIBLE_LATENT_PROXY_CODE_COMMITTED_NOT_RUN_G3_G7_OPEN"
+  "blocker": "Real user WSL: Case B C14 original F14 CFD 10s + 101 snapshots, 9/9 phase timeline, 8/8 native HEX8 volume-weighted alpha and NOW 9/9 C14 metal energy-inventory tests PASS, 101-state proxy completed with metal sensible delta t10=-13576.397936155232 J and MODEL latent-equivalent solid-complement increase=+8100.198210984614 J. This is NOT the actual fvModel latent-energy integral, NOT an energy balance and NOT experimentally validated. t10 alpha1 volume weighted=.8917029860767621. Sand 101-state volumetric sensible energy, boundary/interfacial q, native energy/continuity closure, JMatPro/QuickCup, severe nonorth effects, grid/time convergence and shrinkage are still open. G3-G7 remain open 2/7 milestones.",
+  "next_integrated_delivery": "From independently preserved 101 real T/mold and metal inventories, derive mold sensible storage on the real 178588-cell original HEX8 mold mesh, cross-check native checkMesh mold volume 0.000102843380345 m3, then compare with metal sensible and phase latent-liquid content changes over 101 times. This is a reference storage accounting only, NO native fvModel source or interface/exterior flux budget. Later true q closure and JMatPro/QuickCup/convergence.",
+  "science": "CASE_B_C14_10S_101_STATES_WSL_SENSIBLE_DELTA_NEG_13576_40J_LATENT_EQUIV_POS_8100_20J_MODEL_ONLY_NO_ENERGY_BALANCE"
 }
