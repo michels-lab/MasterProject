@@ -79,8 +79,11 @@ def reference_values(source, directory):
         need(log.resolve().is_relative_to(directory) and recovery.sha(log)==item["log_sha256"],
              "reference native log hash mismatch")
         root=directory/label
+        time_name=str(int(time)) if time.is_integer() else str(time)
         for rel in ("system/controlDict","constant/metal/fvModels",
-                    "constant/metal/polyMesh/cellZones"):
+                    "constant/metal/polyMesh/cellZones",
+                    *["constant/metal/polyMesh/"+n for n in stage.MESH],
+                    *[time_name+"/metal/"+n for n in ("T","U","phaseChangeSource:alpha1")]):
             need(recovery.sha(root/rel)==recovery.sha(source/rel),
                  "reference model mismatch: "+rel)
         name=next(iter(item["native_rho_h_tables"]))
@@ -215,7 +218,12 @@ def main():
         brief["group_pass"]={k:v["passed"] for k,v in result["groups"].items()}
         brief["report"]=str(a.out/REPORT)
         print(json.dumps(brief,indent=2))
-        return 0 if result["status"]=="GROUPED_POSTPROCESS_ATTEMPT_COMPLETE" else 2
+        if result["status"]!="GROUPED_POSTPROCESS_ATTEMPT_COMPLETE":
+            return 2
+        return 0 if (result["all_groups_without_fatal"] and
+                     result["all_required_scalar_series_101"] and
+                     result["all_final_profiles_80"] and
+                     result["surface_energy"]["nominal_metal_surface_power_reconciled"]) else 3
     except (OSError,ValueError,RuntimeError,KeyError,TypeError) as exc:
         print("GROUPED_RECOVERY_BLOCKED:",exc,file=sys.stderr)
         return 2
