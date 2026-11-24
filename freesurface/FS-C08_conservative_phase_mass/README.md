@@ -1,5 +1,8 @@
 # FS-C08 — Primer núcleo conservativo líquido–sólido–gas
 
+> **24-11-2026 — AVANCE OPERATIVO REAL:** [nuevo workflow de compilación física Foundation14](../../.github/workflows/fs-c08-native-cfd-build.yml), no otro test sintético; auditoría de energía por las fronteras (advección y calor hacia la arena) en [solver nativo](coupled_solver/native/README.md), con etiqueta explícita de **balance parcial** hasta integrar trabajo de presión/energía cinética y gas. Reparado el preparador que tenía regex inválidas para seleccionar equilibrio/cinética. **No hay confirmación de build, CFD ni rechupe real.**
+
+
 > **24-11-2026 — FS-C08: ENERGÍA POR FASE Y CONDUCCIÓN POR FASE EN EL SOLVER REAL.** El predictor térmico [nativo](coupled_solver/native/README.md) ya está reformulado en código como inventario conservativo de energías internas de líquido, sólido y gas; integra Cv_l(T)/Cv_s(T) de fuentes materiales, coloca calor latente solo en u_l(Tref)-u_s(Tref), transporta energía líquida/gaseosa por caras FV y retiene conducción CHT y trabajo de presión. Además corrige las conductividades moleculares k_l(T)/k_s(T) en celdas y superficies con molde. Hay campos de energía J/m³ y flujos energéticos frontera W, y se sincroniza el gas tras el corrector de presión. **CÓDIGO EN GITHUB, NO COMPILADO en Foundation14 WSL, NO CFD ejecutada ni balances gas/energía o rechupe validados.** No volver a pedir pruebas shadow.
 
 
