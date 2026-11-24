@@ -33,6 +33,7 @@ License
 #include "fsC08ConservativeVoF.H"
 #include "fvcMeshPhi.H"
 #include "fvcDdt.H"
+#include "fvcInterpolate.H"
 #include "fvmDiv.H"
 #include "fvmSup.H"
 #include "fvmLaplacian.H"
@@ -124,6 +125,26 @@ void Foam::solvers::fsC08ConservativeVoF::thermophysicalPredictor()
 
     mixture_.correctThermo();
     mixture_.correct();
+
+    // Pressure correction follows this energy solve inside PIMPLE.
+    // rho_l(T), rho_s(T) and hence alphaMetal must be refreshed NOW,
+    // not a full physical time step later. No second Gamma conversion.
+    phaseMass_->refreshAfterEnergy(mixture_.T(),alpha1);
+    alpha1 = phaseMass_->alphaMetal();
+    alpha2 = scalar(1)-alpha1;
+    alpha1.correctBoundaryConditions();
+    alpha2.correctBoundaryConditions();
+    correctInterface();
+
+    // Mass flux remains the CONSERVED liquid flux from transport.
+    // Face VOLUME flux changes with the new liquid density.
+    alphaRhoPhi1=phaseMass_->liquidMassFlux();
+    alphaPhi1=
+        alphaRhoPhi1/fvc::interpolate(phaseMass_->liquidDensity());
+    alphaPhi2=phi-alphaPhi1;
+    alphaRhoPhi2=fvc::interpolate(mixture_.rho2())*alphaPhi2;
+    rhoPhi=alphaRhoPhi1+alphaRhoPhi2;
+
     reconcileMixtureDensity();
 }
 
