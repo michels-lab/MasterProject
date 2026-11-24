@@ -337,7 +337,17 @@
     "case_b_c14_volume_weighted_phase_liquid_at_10s": 0.8917029860767621,
     "case_b_c14_volume_weighted_phase_solid_complement_at_10s": 0.10829701392323787,
     "case_b_c14_volume_weighted_phase_unweighted_solid_complement_at_10s": 0.1575794367375163,
-    "case_b_c14_volume_weighted_phase_output_physical_validation": false
+    "case_b_c14_volume_weighted_phase_output_physical_validation": false,
+    "case_b_c14_101_state_sensible_latent_equivalent_source_committed": true,
+    "case_b_c14_101_state_sensible_latent_equivalent_source": "cases_3d/C3D_05_step_gmsh_conformal/c14_physics/quantify_existing_case_b_c14_energy_inventory.py",
+    "case_b_c14_101_state_sensible_latent_equivalent_tests_committed": 9,
+    "case_b_c14_101_state_sensible_latent_equivalent_wsl_executed": false,
+    "case_b_c14_101_state_sensible_latent_equivalent_WSL_tests_passed_observed": false,
+    "case_b_c14_101_state_sensible_latent_equivalent_source_CI_pass_observed": false,
+    "case_b_c14_101_state_sensible_latent_equivalent_expected_output": "~/OpenFOAM/C3D05_B_C14_SENSIBLE_LATENT_EQUIVALENT_01",
+    "case_b_c14_101_state_sensible_latent_equivalent_ledger": "docs/granada/C3D05_B_C14_ALFA_V_PONDERADA_CONFIRMADA_Y_ENERGIA_INVENTARIO_20261124_ES.md",
+    "case_b_c14_native_fvModel_latent_heat_source_integrated": false,
+    "case_b_c14_metal_sand_exterior_energy_closure_verified": false
   },
   "other_cases": [
     {
@@ -377,7 +387,7 @@
       "evidence": "docs/granada/C3D05_B_C14_WSL_EJECUCION_REAL_EN_CURSO_20261123_ES.md"
     }
   ],
-  "blocker": "Real WSL Caso B C14 full 10s/101 states COMPLETE. Original phase chronology 9/9 tests PASS, first alpha1<.999 saved t=.3s, first alpha1=0 t=5.1s. Native polyMesh 92200 HEX8 cell volume reconstruction 8/8 tests PASS and real WSL output: sum V=4.797539547720032e-05m3, relative mismatch to native checkMesh=1.6145147646629957e-7. At 10s volume-weighted alpha1=0.8917029860767621, complement solid=0.10829701392323787 (10.8297%), different from unweighted cell mean solid=0.1575794367375163 (15.7579%). Real native results, NOT physical QuickCup/JMatPro nor validated latent heat energy, nonplanar cell-volume crosscheck/energy flux, mesh/time convergence, shrinkage. Maintain G3-G7 OPEN.",
-  "next_integrated_delivery": "Use completed B C14 fluid-solid 10s, native 92200-cell HEX8 volumes and 101 T/alpha1 fields to quantify SOURCE-CONTRACT sensible T inventory versus t0 and rho*L*volume-solid-complement latent-equivalent inventory; do NOT call it solver-integrated energy balance or physical released heat. After that independently recover/verify mold storage, interface/exterior flux and complete numerical energy/latent conservation, then JMatPro/QuickCup and convergence.",
-  "science": "CASE_B_REAL_WSL_101_STATES_VOLUME_WEIGHTED_ALPHA1_VALIDATED_POSTRUN_NO_LATENT_ENERGY_BALANCE_OR_QUICKCUP"
+  "blocker": "Real Case B original C14 10s 101 archived states, SHA-verified 9/9 phase timeline and real HEX8 8/8 volume-weighting PASS. t10 alpha1_V=0.8917029861 (solid complement 0.1082970139); geometry total volume matches checkMesh relative 1.6145147646629957e-7. Source-only metal C14 sensible delta and model latent-equivalent stored inventory (101 times) plus 9 tests is now committed but NEVER WSL RUN or physically validated. Native fvModel-integrated latent heat, metal-mold-exterior q and energy closure, JMatPro QuickCup 8 alloys, severe nonorth sensitivity, mesh/dt convergence and contraction are OPEN. Do not promote G3-G7.",
+  "next_integrated_delivery": "Confirm the user WSL REAL native 92200-cell volume-weighted alpha1 output (8/8 tests pass, final alpha1_V=.8917029861, 1-alpha1_V=.1082970139) is now recorded; NEW SOURCE-only 101-state original C14 METAL sensible delta vs t0 and modeled latent-equivalent inventory with nine tests is committed, not run on WSL. Run python3 -B -m unittest discover -s cases_3d/C3D_05_step_gmsh_conformal/c14_physics/tests -p 'test_existing_case_b_c14_energy_inventory.py' -v && python3 -B cases_3d/C3D_05_step_gmsh_conformal/c14_physics/quantify_existing_case_b_c14_energy_inventory.py. This is not true solver-fvModel latent release or conservation. Next independent native interface/exterior q + mold energy and CFD flux budget, sensitivity and QuickCup/JMatPro validation.",
+  "science": "CASE_B_REAL_10S_101_STATES_VOLUME_WEIGHTED_ALPHA1_V_0_891702986_8_TESTS_PASS_SENSIBLE_LATENT_PROXY_CODE_COMMITTED_NOT_RUN_G3_G7_OPEN"
 }
