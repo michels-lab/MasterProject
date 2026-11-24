@@ -24,7 +24,7 @@ MODEL=ROOT/"freesurface/FS-C06_vof_solidification/native/constant/fluid/fvModels
 BASE_MODULE=ROOT/"freesurface/FS-C08_conservative_phase_mass/coupled_solver/native"
 REQUIRED_MATERIAL=(
     "materialId", "propertySource","Tmin_K","Tmax_K",
-    "phaseChangeClosure","metalPresenceThreshold","rhoLiquidT",
+    "phaseChangeClosure","metalPresenceThreshold","mushyDarcyCu","mushyDarcyQ","rhoLiquidT",
     "rhoSolidT","solidMassFractionT","latentHeat","cpSolid",
 )
 
@@ -130,6 +130,7 @@ def stage(source: Path, material: Path, output: Path) -> dict:
     for need in (
         "FS_C08_PhaseMassTransport.C",
         "fsC08ConservativeVoF.C",
+        "fsC08MushyMomentum.C",
         "fsC08PressureCorrector.C",
         "fsC08ThermophysicalPredictor.C",
         "Make/files","Make/options",
