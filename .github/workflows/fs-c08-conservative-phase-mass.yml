@@ -34,6 +34,12 @@ jobs:
         run: |
           python3 -B -m py_compile analysis_tools/fs_c08_conservative_reference.py analysis_tools/test_fs_c08_conservative_reference.py
           python3 -B -m unittest discover -s analysis_tools -p 'test_fs_c08_conservative_reference.py' -v
+      - name: Compile native-language C++17 Gamma phase-mass kernel and run fail-closed tests (not wmake)
+        run: |
+          c++ -std=c++17 -O2 -Wall -Wextra -Werror -pedantic \
+            -o /tmp/fs_c08_cpp_exchange_test \
+            freesurface/FS-C08_conservative_phase_mass/native_cpp/test_ConservativePhaseExchange.C
+          /tmp/fs_c08_cpp_exchange_test
       - name: Execute synthetic two-cell FV flux ledger, assert conservation
         run: |
           python3 -B analysis_tools/fs_c08_conservative_reference.py             freesurface/FS-C08_conservative_phase_mass/fixtures/SYNTHETIC_TWO_CELL_REFERENCE.json > /tmp/fs_c08_two_cell.json
