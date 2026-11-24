@@ -5,12 +5,12 @@
   "updated_local_date": "2026-11-24",
   "source_of_truth": "AGENTS.md + cases_3d/C3D_04_rounded_multiblock_pilot/AGENTS.md",
   "reference_mesh": "~/OpenFOAM/C3D04_V4_TRANSITION_REPAIR_01/T02",
-  "current_stage": "07_THERMAL_T0_EXECUTION",
-  "current_stage_label": "Etapa 7/10 — analizar CFD REAL V4/T02 original C14 fluido-sólido ejecutado de 0 a 10 s: temperaturas, alpha1, energía y calidad numérica",
+  "current_stage": "08_SOLIDIFICATION_T1",
+  "current_stage_label": "Análisis de solidificación y flujo de la corrida C14 real",
   "progress_definition": "10 hitos operativos de igual peso; un hito solo cuenta DONE con evidencia observada. No es porcentaje de validación física ni de trabajo restante en horas.",
-  "progress_count_done": 6,
+  "progress_count_done": 7,
   "progress_count_total": 10,
-  "progress_percent": 60,
+  "progress_percent": 70,
   "numerical_accuracy_validated": false,
   "physical_validation": false,
   "grid_independence": false,
@@ -27,7 +27,8 @@
     "23-11-2026 ACTUAL WSL REAL V4/T02 existing C14 10s 101-state native ASCII postrun: all 8960 metal cells below 1473 K, 1158 below 1423 K, alpha1 mean 0.8367355017427456 min0 max0.992311; all-log max Co 0.0240415 across 10000 steps; energy balance NOT verified. docs/C3D_04_C14_V4_T02_REAL_10S_PHASE_NUMERICAL_RESULTS_20261123_ES.md",
     "23-11-2026 investigator WSL real 101-state saved-volume kinetic analysis completed with original C14 10s fields unchanged, source volume CSV+JSON found, first saved model alpha1 decrease between 0.2 and 0.3 s, nominal peak latent release 1038.8813 W over 7.2-7.3 s, final volume-mean metal T 1450.70916 K and nominal solid inventory 0.0335828358 kg. Native copy source provenance PASSED, but native commands NOT fully verified; energy closure/QuickCup NOT verified.",
     "24-11-2026 WSL real grouped recovery: cellZone all only in isolated copy, 7/7 native groups no FATAL, five scalar series 101/101, rho*h equal at 0/0.1/10 to printed precision, three surface powers reconcile (max relative 4.7503433312219475e-7); 7/9 final profiles pass, both vertical 27/80. Source hashes unchanged. No energy/QuickCup validation.",
-    "24-Nov-2026 WSL real grouped continuation: 5/5 regressions, both vertical families 101x80 on native-supported fixed x/z interior chord of 14.699706 mm, not full 2D height. Metal nominal saved-state energy residual 2.02303355 J / 20670.15745 J outward from 0.1 to 10s (0.009787%); mold inventory 19318.54788 J, metal-to-mold integral 19462.8944 J; no bilateral mold flux or discrete solver balance yet."
+    "24-Nov-2026 WSL real grouped continuation: 5/5 regressions, both vertical families 101x80 on native-supported fixed x/z interior chord of 14.699706 mm, not full 2D height. Metal nominal saved-state energy residual 2.02303355 J / 20670.15745 J outward from 0.1 to 10s (0.009787%); mold inventory 19318.54788 J, metal-to-mold integral 19462.8944 J; no bilateral mold flux or discrete solver balance yet.",
+    "2026-11-24: WSL native bilateral q compiled/executed, 808 patch rows, 2496 paired interface faces, nominal combined residual 0.1305158505 J over 0.1–10 s. Stage07 operational completion only; discrete conservation/independence/experiment remain stage09/10."
   ],
   "nonnegotiable_blockers": [
     "C14 numeric metal/arena parameters and 2D boundary reference NOW sourced directly in T0; they are constant C14-model inputs, NOT independently measured T-dependent iron/sand functions.",
@@ -80,13 +81,13 @@
     {
       "id": "07_THERMAL_T0_EXECUTION",
       "label": "Primera corrida C14 fluido-sólido sobre V4/T02 con U/p_rgh/h/e y balances, incluyendo estabilidad numérica; ID histórico retenido",
-      "status": "IN_PROGRESS",
-      "evidence": null
+      "status": "DONE",
+      "evidence": "docs/C3D04_A_STAGE07_BILATERAL_Q_COMPLETE_20261124_ES.md"
     },
     {
       "id": "08_SOLIDIFICATION_T1",
       "label": "Demostrar y analizar evolución real de solidificación C14 en 3D (alpha1e, Tsol/Tliq, calor latente, Darcy), no sólo carga del fvModel",
-      "status": "PENDING",
+      "status": "IN_PROGRESS",
       "evidence": null
     },
     {
@@ -105,37 +106,18 @@
   "response_rule": "Every update about this case must explicitly display: Etapa N/10; avance general completed/total (%) using this manifest, physical/CFD status, what changed, what remains; never imply false precision. Recompute on changes.",
   "execution_rule": "Integrate validations into one cohesive milestone; no one-script-per-subproblem loops, no rerun already closed V4/T02 audits; one user command only at a meaningful end-to-end delivery; preserve case and audit evidence.",
   "last_integrated_delivery": {
-    "date": "2026-11-23",
-    "stage_completed": "06_THERMAL_T0_PREFLIGHT_NATIVE",
-    "current_stage": "07_THERMAL_T0_EXECUTION",
-    "operational_completion": "6/10=60%",
-    "status": "REAL_V4_T02_ORIGINAL_C14_10S_NUMERICAL_AND_PHASE_FIELDS_AUDITED__ENERGY_AND_VALIDATION_PENDING",
-    "evidence_report": "docs/C3D_04_C14_V4_T02_REAL_10S_20261123_ES.md",
-    "source": "Investigator-pasted stdout of read-only existing 10s native 101-state/10k-step inspector",
-    "run_date": "2026-11-20",
-    "reference_case": "~/OpenFOAM/C3D04_V4_TRANSITION_REPAIR_01/T02",
-    "separate_output": "~/OpenFOAM/C3D04_A_C14_FLUID_SOLID_FULL_10S_RUN_01",
-    "native_final_time_s": 10,
-    "native_ClockTime_s": 839,
-    "observed_final_Courant_max": 0.00450431,
-    "continuity_cumulative": -6.5319e-14,
+    "date": "2026-11-24",
+    "stage_completed": "07_THERMAL_T0_EXECUTION",
+    "current_stage": "08_SOLIDIFICATION_T1",
+    "operational_completion": "7/10=70%",
+    "status": "REAL_WSL_BILATERAL_Q_AND_NOMINAL_INVENTORY_COMPLETE",
+    "evidence_report": "docs/C3D04_A_STAGE07_BILATERAL_Q_COMPLETE_20261124_ES.md",
     "scientific_limits": [
-      "No native T/alpha field extrema/averages computed for this WSL case yet",
-      "No energy balance or time/mesh independence yet",
+      "No exact solver-step discrete energy closure",
+      "No grid/time-step independence",
       "No QuickCup validation"
     ],
-    "postrun_report": "docs/C3D_04_C14_V4_T02_REAL_10S_PHASE_NUMERICAL_RESULTS_20261123_ES.md",
-    "observed_full_Courant_max": 0.0240415,
-    "observed_final_metal_cell_mean_T_K": 1444.7184787946428,
-    "observed_final_metal_fraction_below_Tliq": 1,
-    "observed_final_metal_fraction_below_Tsol": 0.12924107142857144,
-    "observed_final_unweighted_alpha1_mean": 0.8367355017427456,
-    "unverified": [
-      "Energy conservation/latent-heat flux and volumetric cell mean",
-      "Time first onset of liquid fraction under C14 Tliq (CSV exists in user WSL)",
-      "Grid and time-step independence",
-      "QuickCup comparison"
-    ]
+    "next": "Publish standalone visualization case and analyze solidification/flow across 101 states."
   },
   "stage06_preflight_integrity": {
     "date": "2026-11-20",
@@ -897,10 +879,54 @@
       "entrypoint": "cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/run_c14_stage07_bilateral_native_flux.py",
       "commit": "fb966ba1dba4954dabb4d957f2b1a9e570f0253b",
       "scope": "101 x 8 native patch heat-flux values, independent metal and mold q(), 2496 interface faces each, five mold exterior patches; compare metal q with prior grouped heatFlux and nominal inventories from 0.1 to 10s; isolated explicit harmonic kappa scheme only if needed.",
-      "native_compile_observed": false,
-      "WSL_execution_observed": false,
+      "native_compile_observed": true,
+      "WSL_execution_observed": true,
       "regressions_added": 4,
-      "global_energy_conservation_verified": false
+      "global_energy_conservation_verified": false,
+      "real_WSL_result": {
+        "source": "Investigator terminal stdout 2026-11-24, commit 8d1b635ba; raw local files not independently retrieved",
+        "report": "~/OpenFOAM/C3D04_A_C14_BILATERAL_NATIVE_Q_01/C3D04_A_C14_BILATERAL_NATIVE_Q_REPORT.json",
+        "saved_times": 101,
+        "patch_rows": 808,
+        "interface_faces_each": 2496,
+        "paired_geometry_faces_at_10s": 2496,
+        "matched_face_abs_interface_power_residual_W": 1.7034725937727646,
+        "max_metal_contact_relative_difference_vs_grouped_heatFlux": 4.773058032783712e-7,
+        "max_metal_top_relative_difference_vs_grouped_heatFlux": 0.000004748334299565785,
+        "final_patch_q_out_W": {
+          "metal/metalTop": 117.27868049840006,
+          "metal/metal_to_mold": 1524.6443291594894,
+          "mold/moldBottom": 0.0002873468917828769,
+          "mold/moldExterior": 25.71095410637199,
+          "mold/moldRecessRoof": 0.05857628212831006,
+          "mold/moldRecessWall": 0.00627536944699741,
+          "mold/moldTop": 10.168323345978045,
+          "mold/mold_to_metal": -1524.670518304915
+        },
+        "integrals_since_0p1s_J": {
+          "metal_contact": 19462.897313016172,
+          "mold_contact": -19462.487618875242,
+          "metal_top": 1207.2580929086996,
+          "mold_exterior": 142.45895897494808
+        },
+        "interface_signed_integral_J": 0.40969414092978695,
+        "nominal_mold_inventory_plus_outward_q_J": -1.4807794850352707,
+        "nominal_combined_inventory_plus_exterior_q_J": 0.13051585053227654,
+        "original_source_hashes_unchanged": true,
+        "previous_report_hash_unchanged": true,
+        "source_solver_rerun": false,
+        "isolated_mold_scheme_overlay_applied": true,
+        "global_energy_conservation_verified": false,
+        "native_dt_latent_source_verified": false
+      }
+    },
+    "stage07_completed_operationally": true,
+    "stage08_visualization": {
+      "entrypoint": "cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/publish_c14_a_visualization_and_solidification.py",
+      "commit": "33daf35888e98190320a34bce10fc3eaf6c3ccc7",
+      "status": "CODE_PUBLISHED_WSL_OUTPUT_NOT_YET_CREATED",
+      "scope": "standalone .foam case from 101 grouped saved states, corrected vertical profiles, original native log, bilateral CSV/face data, 101-state volume-weighted phase and momentum analysis. No new CFD or native replay.",
+      "user_handoff": "single functional execution; no manual unit tests"
     }
   }
 }
