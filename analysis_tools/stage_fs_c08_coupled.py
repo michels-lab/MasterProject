@@ -27,6 +27,7 @@ REQUIRED_MATERIAL=(
     "phaseChangeClosure","metalPresenceThreshold","mushyDarcyCu","mushyDarcyQ","rhoLiquidT",
     "rhoSolidT","solidMassFractionT","latentHeat",
     "energyReferenceT_K","cvLiquidT","cvSolidT",
+    "kappaLiquidT","kappaSolidT",
 )
 
 
