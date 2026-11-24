@@ -99,7 +99,9 @@ raw solver logs and scientific evidence. Calculated volume directories
 original WSL run unchanged. analysis_results/GIT_PUBLICATION_MANIFEST.json
 records file hashes, mesh hashes and provenance. Import this folder in
 FoamLens for spatial/temporal data; full 3D visualization needs local
-native mesh and calculated fields.
+native mesh and calculated fields. If available, the previous baseline
+comparison with C14 2D is archived in analysis_results/previous_A_baseline_vs_C14_2D,
+explicitly distinct from this new faithful run.
 
 ## Reproduction
 Allrun uses the parent faithful runtime executor with accepted V4/T02 and
@@ -170,6 +172,19 @@ def execute(source):
             p=dest/filename;p.write_text(body,encoding="utf-8")
             if filename.startswith("All"):p.chmod(0o755)
             inventory[filename]={"bytes":p.stat().st_size,"sha256":sha(p)}
+        # The already completed 2D-vs-A comparison concerns the previous
+        # same-mesh baseline, not the new faithful runtime. Archive it as
+        # distinct provenance, never as new-run native results.
+        previous=HOME/"C3D04_A_C14_VISUALIZATION_01/analysis/C14_2D_3D_ARCHIVED_COMPARISON_01"
+        prior_status="not_present_locally"
+        if previous.is_dir():
+            report=load(previous/"C14_ARCHIVED_COMPARISON_REPORT.json")
+            need(report["status"]=="ARCHIVED_C14_2D_3D_COMPARISON_READY","prior comparison not accepted")
+            for name in ("C14_ARCHIVED_COMPARISON_REPORT.json","cooling_curves_101.csv","global_thermal_101.csv","spatial_profiles_common_grid.csv","profile_metrics.csv"):
+                p=previous/name
+                rel="analysis_results/previous_A_baseline_vs_C14_2D/"+name
+                inventory[rel]=copy_one(p,dest/rel);originals[rel]=p
+            prior_status="included_separately_not_faithful_runtime"
         mesh={k:v for k,v in r["input_sha256"].items() if "/polyMesh/" in k}
         need(all(f"constant/{reg}/polyMesh/{name}" in mesh for reg in ("metal","mold")
                  for name in ("points","faces","owner","neighbour","boundary")),"missing mesh hashes")
@@ -177,7 +192,7 @@ def execute(source):
            "source_report_sha256":sha(source/REPORT),"solver_log_sha256":r["solver"]["log_sha256"],
            "source_native_control_sha256":r["sampling"]["runtime_hashes"]["controlDict"],
            "mesh_sha256_not_versioned":mesh,"native_saved_times":101,"probe_samples_per_field":10001,
-           "canonical_profiles":1717,"file_count":len(inventory),"total_bytes":sum(v["bytes"] for v in inventory.values()),
+           "canonical_profiles":1717,"prior_baseline_comparison":prior_status,"file_count":len(inventory),"total_bytes":sum(v["bytes"] for v in inventory.values()),
            "files":inventory,"volume_states_stay_local":True,"generated_mesh_stays_local":True,
            "no_solver_rerun":True,"physical_validation":False}
         save(dest/MANIFEST,m)
@@ -188,6 +203,13 @@ def execute(source):
         expected={str(REL/k) for k in inventory}|{str(REL/MANIFEST)}
         need(actual==expected,"Git policy mismatch: missing="+str(sorted(expected-actual)[:20])+" extra="+str(sorted(actual-expected)[:20]))
         need(staged<=expected|set(notes),"unrelated staged changes")
+        # Verify staged blob identity too; detect line-ending or clean-filter changes.
+        indexed={}
+        for line in git(wt,"ls-files","--stage","--",REL).splitlines():
+            meta,name=line.split("\t",1);indexed[name]=meta.split()[1]
+        ordered=sorted(expected)
+        hashed=subprocess.run(["git","hash-object","--no-filters","--stdin-paths"],cwd=wt,input="\n".join(ordered)+"\n",capture_output=True,text=True,check=True).stdout.splitlines()
+        need(len(hashed)==len(ordered) and all(indexed[k]==h for k,h in zip(ordered,hashed)),"staged blob differs from exact archive bytes")
         need(all(sha(dest/k)==v["sha256"] for k,v in inventory.items()),"copied file changed")
         need(all(sha(p)==inventory[k]["sha256"] for k,p in originals.items()),"source changed during archive")
         print("Archivos: "+str(m["file_count"])+"; bytes: "+str(m["total_bytes"]),flush=True)
