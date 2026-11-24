@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "audit_kind": "deterministic_full_tracked_tree",
-  "tracked_files_total": 39100,
-  "classified_files_total": 39095,
+  "tracked_files_total": 39101,
+  "classified_files_total": 39096,
   "docs_content_inspected": 208,
   "large_docs_skipped": 1,
   "excluded_reports": 5,
@@ -19,7 +19,7 @@
     "simulation_input": 2683,
     "simulation_log": 3155,
     "simulation_output": 32615,
-    "source": 146,
+    "source": 147,
     "test": 72,
     "web_ui": 1,
     "workflow": 33
@@ -29,8 +29,8 @@
     "POTENTIAL_UNLOGGED_CHANGES": 2
   },
   "finding_total": 9,
-  "inventory_fingerprint": "d9174eabe649f60325557d50ecd859fa24fafeb2d3d27a71709b88b778776c08",
-  "evidence_fingerprint": "b898a983302f9d7c5ddab1514360c57e8f391d511ddd544c95037868b886d37d",
+  "inventory_fingerprint": "fdb652535ac5870eb4a80786be2a8683c50a8b86b549f5750197d67a231b7d91",
+  "evidence_fingerprint": "02752716c30588da139ebb0a598a5e8ae1b36457c639e09811d25f54464fd1d8",
   "files": [
     {
       "path": ".github/agents/openfoam-solidification.agent.md",
@@ -2159,6 +2159,13 @@
       "purpose": "code/test implementation",
       "certainty": "rule",
       "blob": "02bb267870b29021555025bc1f9e12f8962405e9"
+    },
+    {
+      "path": "cases_3d/C3D_05_step_gmsh_conformal/c14_physics/audit_existing_case_b_c14_energy_closure_readiness.py",
+      "role": "source",
+      "purpose": "code/test implementation",
+      "certainty": "rule",
+      "blob": "fc97202a3a78838fd199b6132521cc4b3b34e1e0"
     },
     {
       "path": "cases_3d/C3D_05_step_gmsh_conformal/c14_physics/compare_existing_case_b_c14_native_q_and_storage.py",
@@ -273763,20 +273770,20 @@
       "state": "REVIEW_REQUIRED"
     },
     {
-      "id": "2bc81fca5f4c50b0",
+      "id": "aacc8eb4c0091c20",
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_EN.md",
-      "observation": "25 implementation/config paths changed since this log's last commit; examples: .github/workflows/c3d04-a-c14-native-fluid-solid.yml, .github/workflows/c3d04-a-c14-postprocessing-parity.yml, .github/workflows/c3d05-b-c14-native-fluid-solid-q.yml, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/continue_c14_stage07_grouped_evidence.py, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/native_bilateral_flux/c3d04C14FluidSolidFlux.C, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/probe_c14_native_f14_single_vs_multi_time.py",
+      "observation": "26 implementation/config paths changed since this log's last commit; examples: .github/workflows/c3d04-a-c14-native-fluid-solid.yml, .github/workflows/c3d04-a-c14-postprocessing-parity.yml, .github/workflows/c3d05-b-c14-native-fluid-solid-q.yml, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/continue_c14_stage07_grouped_evidence.py, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/native_bilateral_flux/c3d04C14FluidSolidFlux.C, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/probe_c14_native_f14_single_vs_multi_time.py",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     },
     {
-      "id": "b7e85c814cfe1fac",
+      "id": "adefbbd1ceeced8f",
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_ES.md",
-      "observation": "1 implementation/config paths changed since this log's last commit; examples: docs/PROJECT_STAGE_STATUS.json",
+      "observation": "2 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_05_step_gmsh_conformal/c14_physics/audit_existing_case_b_c14_energy_closure_readiness.py, docs/PROJECT_STAGE_STATUS.json",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     }
