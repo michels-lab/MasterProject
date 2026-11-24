@@ -1,6 +1,6 @@
 # FS-C08 — Primer núcleo conservativo líquido–sólido–gas
 
-**Estado:** implementación ejecutable de **referencia de volúmenes finitos**, probada localmente en el contenedor del asistente (12/12 tests sintéticos). **Todavía NO es un módulo del solver OpenFOAM Foundation14**, NO ha sido compilada con `wmake` en WSL, NO es una corrida de contracción 3D de QuickCup ni fue alimentada con tablas reales JMatPro. Separación explícita de los hitos de código y de la validación física.
+**Estado:** implementación ejecutable de **referencia de volúmenes finitos**, probada localmente en el contenedor del asistente (18/18 tests sintéticos). **Todavía NO es un módulo del solver OpenFOAM Foundation14**, NO ha sido compilada con `wmake` en WSL, NO es una corrida de contracción 3D de QuickCup ni fue alimentada con tablas reales JMatPro. Separación explícita de los hitos de código y de la validación física.
 
 **Rama:** `research/fs-c08-conservative-phase-mass-20261123`, creada desde `research/fs-c02-metal-air-vof-20261117`. **FS-C07 y sus campos originales permanecen intactos**. No relanzar el antiguo `foamMultiRun` para validar este prototipo.
 
@@ -51,7 +51,7 @@ python3 -B analysis_tools/fs_c08_conservative_reference.py \
 
 La configuración de ejemplo está marcada **`purpose=SYNTHETIC_TEST_ONLY`**; `rho_l=7000`, `rho_s=7300 kg/m³`, `L=200000 J/kg` y `Γ=[120,80] kg/(m³·s)` son **números arbitrarios de prueba, NO propiedades de tu hierro, NINGÚN dato JMatPro ni coeficientes físicos validados**. La salida debe preservar los límites `physical_3d_shrinkage_validated=false`, `openfoam_14_solver_executed=false`.
 
-**Ejecución real en el contenedor del asistente (2026-11-23):** `python3 -m unittest discover` informó 12 pruebas, todas `OK`, duración ≈0.02 s. La ejecución del escenario sintético con CLI produjo balances relativos a errores de punto flotante:
+**Ejecución real en el contenedor del asistente (2026-11-23):** `python3 -m unittest discover` informó 18 pruebas, todas `OK`, duración ≈0.03 s. La ejecución del escenario sintético con CLI produjo balances relativos a errores de punto flotante:
 
 ```text
 initial metal mass = 0.042 kg
@@ -64,15 +64,56 @@ enthalpy residual  ≈ 2.91e-12 J
 
 Los números anteriores son resultados de **prueba de software**, no evidencia de colada real ni contracción QuickCup.
 
+## Segundo modo implementado: equilibrio térmico con Γ implícita
+
+Además del ledger con fuentes y flujos prescritos, el núcleo FV contiene **`LinearMushyMassClosure`** y **`solve_closed_cell_mushy_equilibrium`**: para **una celda cerrada sin advección** se determina simultáneamente `T`, `m_s` y `Γ=(m_s^(n+1)-m_s^n)/(V Δt)` a partir de un presupuesto de entalpía y un modelo explícito de fracción sólida **por masa**:
+
+```text
+f_s(T) = 1                       si T <= T_solidus
+       = (T_liquidus - T) / (T_liquidus - T_solidus)
+                                 si T_solidus < T < T_liquidus
+       = 0                       si T >= T_liquidus
+
+E(T,f_s) = m_metal [(1-f_s) h_l(T) + f_s h_s(T)] + m_g h_g(T)
+E(T^(n+1), f_s^(n+1)) = E^n + Q Δt
+Γ = (m_s^(n+1)-m_s^n) / (V Δt)
+```
+
+No se adiciona `ΓL` otra vez: `h_l` **ya incorpora `L`**. El método revisa monotonicidad energética, rechaza solidus/liquidus fuera de tablas y limita el uso del modelo a una celda sin transporte (todavía no ofrece el cierre discreto de energía de la solución CFD con advección, presión y trabajo mecánico).
+
+**ATENCIÓN:** la interpolación lineal `f_s(T)` es una **ley artificial para pruebas**, no la ruta de austenita proeutéctica, grafito/ledeburita ni un diagrama termodinámico calibrado para tus ocho composiciones CE/S. El ejemplo no debe describirse como solidificación real de hierro, aunque su contabilidad de masa y entalpía es conservativa.
+
+```bash
+cd ~/OpenFOAM/FS_C08_WORKTREE
+python3 -B analysis_tools/fs_c08_conservative_reference.py \
+  --mode closed-cell-mushy-equilibrium \
+  freesurface/FS-C08_conservative_phase_mass/fixtures/SYNTHETIC_ONE_CELL_MUSHY_EQUILIBRIUM.json
+```
+
+Resultados **verificados localmente en escenario sintético** con calor extraído `Q=-3000 W` por 1 s, y valores totalmente ilustrativos:
+
+```text
+m_metal inicial = 0.042 kg; m_metal final = 0.042 kg
+m_solid final = 0.008049301974720929 kg
+T_final = 1463.4174976491418 K
+f_s (de masa metálica) = 0.1916500470  [19.165 %, NO valor de hierro real]
+Γ inferida = 804.9301974720928 kg/(m3 s)   [synthetic only]
+E_final - E_target = -5.82077e-11 J
+ΔV_metal = -4.72561759768e-8 m³  [synthetic only, ≈ -0.0472562 mm³]
+```
+
+También se comprobaron en **18 tests sintéticos locales** inversión adiabática del proceso, **refusión** con `Γ<0`, expansión por `ρ_s<ρ_l`, dos celdas con caras internas, fronteras abiertas, propiedades `ρ(T),cp(T)` y bloqueos de entradas inválidas. El **workflow GitHub Actions** los ejecutará en la rama nueva, pero el estado de CI aún debe verificarse; sin `wmake` ni `foamMultiRun` para FS-C08.
+
 ## Bloques pendientes: paso de ledger a CFD Foundation14
 
 | Hito | Estado |
 |---|---|
-| Ledger por celda de `m_l/m_s/m_g` y fuentes `±Γ` | **IMPLEMENTADO + 12 pruebas sintéticas locales OK** |
+| Ledger por celda de `m_l/m_s/m_g` y fuentes `±Γ` | **IMPLEMENTADO + 18 pruebas sintéticas locales OK** |
 | Transporte entre celdas y flujos abiertos con entalpía | **IMPLEMENTADO en referencia FV** |
 | `ρ_l(T),ρ_s(T),cp(T)` tabulados y rechazo de extrapolaciones | **IMPLEMENTADO en referencia FV** |
 | Volumen de vacío/gas y EOS idealizada | **DIAGNÓSTICO implementado** |
-| Flujos `Γ` a partir de nucleación, solidificación real y mediciones | **PENDIENTE** |
+| Cierre de equilibrio lineal pastoso con `Γ` derivada de entalpía | **IMPLEMENTADO SOLO PARA UNA CELDA SINTÉTICA CERRADA** |
+| Flujos `Γ` para hierro real (nucleación, austenita/grafito, composiciones y datos experimentales) | **PENDIENTE** |
 | Propiedades por CE/S/JMatPro y trazabilidad de composición | **PENDIENTE: no inventar valores** |
 | 3D `compressibleVoF` + nueva ecuación `α_sρ_s` con transporte conservativo | **PENDIENTE: no compilado/integrado** |
 | Presión/velocidad/free-surface, `p,dV`, alimentación/porosidad | **PENDIENTE** |
