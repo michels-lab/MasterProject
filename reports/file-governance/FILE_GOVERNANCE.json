@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
   "audit_kind": "deterministic_full_tracked_tree",
-  "tracked_files_total": 39063,
-  "classified_files_total": 39058,
-  "docs_content_inspected": 199,
+  "tracked_files_total": 39068,
+  "classified_files_total": 39063,
+  "docs_content_inspected": 201,
   "large_docs_skipped": 1,
   "excluded_reports": 5,
   "roles": {
@@ -12,25 +12,24 @@
     "bitacora": 5,
     "config": 17,
     "data": 32,
-    "document": 161,
+    "document": 163,
     "index": 34,
     "license": 1,
     "simulation_case_file": 117,
     "simulation_input": 2683,
     "simulation_log": 3155,
     "simulation_output": 32615,
-    "source": 133,
-    "test": 62,
+    "source": 134,
+    "test": 64,
     "web_ui": 1,
     "workflow": 32
   },
   "finding_counts": {
-    "BROKEN_RELATIVE_LINK": 7,
-    "POTENTIAL_UNLOGGED_CHANGES": 2
+    "BROKEN_RELATIVE_LINK": 7
   },
-  "finding_total": 9,
-  "inventory_fingerprint": "89c2bf11e76a8220f1a3fc04591515641b0fb601865004d6dfd1d9ea915407de",
-  "evidence_fingerprint": "b747b9e45300220a903294f8b6928490a5cb4a4762ac1e9e65a13457fba7a607",
+  "finding_total": 7,
+  "inventory_fingerprint": "69d82542a75dfd0b38cd3813f14ca45c54dd27aa0b34509dcf5b5ae73e138ea5",
+  "evidence_fingerprint": "a38cca05722cc62f2a19d8787a386e132771345cc8472199f5e39f915b2e8a45",
   "files": [
     {
       "path": ".github/agents/openfoam-solidification.agent.md",
@@ -93,7 +92,7 @@
       "role": "workflow",
       "purpose": "GitHub Actions automation",
       "certainty": "rule",
-      "blob": "22158841296f787e141f1f8bef240e1d76afe6fe"
+      "blob": "06b86c26e85d146cb5c1b5c8dfe74ded7023554f"
     },
     {
       "path": ".github/workflows/c3d04-a-c14-real-10s-postrun-readonly.yml",
@@ -401,21 +400,21 @@
       "role": "bitacora",
       "purpose": "technical/audit change history",
       "certainty": "rule",
-      "blob": "f16a0c937ed74d071f5dd45a6b9bcf29fc36b39e"
+      "blob": "3ad3b31400553e60248fc7bd2d7445d67e45e40f"
     },
     {
       "path": "PROJECT_AUDIT_LOG_ES.md",
       "role": "bitacora",
       "purpose": "technical/audit change history",
       "certainty": "rule",
-      "blob": "ff57df9071a7184883297de0cf074f0f0b4ad07e"
+      "blob": "50f19cd93d6ab5bafa3da3021cf3ff73e5e7fac4"
     },
     {
       "path": "README.md",
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "c2622d9dd967b9cac9d12121d01121948c713334"
+      "blob": "9e1d6140423325b32299d8d8c793b4d12a5f3651"
     },
     {
       "path": "RUN_CASE_REGISTRY.csv",
@@ -1556,7 +1555,7 @@
       "role": "agent",
       "purpose": "assistant role/instructions",
       "certainty": "rule",
-      "blob": "19e7a56cdf66affd6649b945f3f7edfad8b096be"
+      "blob": "356c6b7d98dfcfbe3fa903fc5741588486607648"
     },
     {
       "path": "cases_3d/C3D_04_rounded_multiblock_pilot/Allmesh",
@@ -1592,6 +1591,13 @@
       "purpose": "code/test implementation",
       "certainty": "rule",
       "blob": "f9f6501dc2abf26892e4ec4fe3a9d672cf985fa9"
+    },
+    {
+      "path": "cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/audit_c14_stage07_active_cellzone.py",
+      "role": "source",
+      "purpose": "code/test implementation",
+      "certainty": "rule",
+      "blob": "e8a9a303f3cf4b61c58590b1ffd8c6cfad75cb71"
     },
     {
       "path": "cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/audit_existing_native_c14_stage07.py",
@@ -1668,7 +1674,7 @@
       "role": "source",
       "purpose": "code/test implementation",
       "certainty": "rule",
-      "blob": "0e2a27b2908ed72a4d544b33e3344afa3fb3bf05"
+      "blob": "d8b19cab0dc9e71cadafd942af4c684731c6030e"
     },
     {
       "path": "cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/stage_c14_3d_case_a.py",
@@ -1713,11 +1719,18 @@
       "blob": "b9458c0e64c55f1ab10999468c5c8bfa0012c383"
     },
     {
+      "path": "cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/tests/test_c14_stage07_active_zone_audit.py",
+      "role": "test",
+      "purpose": "code/test implementation",
+      "certainty": "rule",
+      "blob": "b8d169bfef4488ffec1d44eaa132c79361d0f2f5"
+    },
+    {
       "path": "cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/tests/test_c14_stage07_solver_backed_recovery.py",
       "role": "test",
       "purpose": "code/test implementation",
       "certainty": "rule",
-      "blob": "4b55f1dca2b317487bf2f0698f58241fe415b376"
+      "blob": "0000dbb44317ed9c0e2237f7af7533897455544a"
     },
     {
       "path": "cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/tests/test_existing_c14_3d_results.py",
@@ -2039,7 +2052,7 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "95e33fc028fb51f50d63dc44e1c35d5b7d609dda"
+      "blob": "accabc784a46c1476b6e93c0c175c50669f0d445"
     },
     {
       "path": "cases_3d/C3D_05_step_gmsh_conformal/c14_physics/analyze_existing_case_b_c14.py",
@@ -2089,6 +2102,13 @@
       "purpose": "code/test implementation",
       "certainty": "rule",
       "blob": "0e00bdfe79ed4991dc484098cdd6b3acba7e31c0"
+    },
+    {
+      "path": "cases_3d/C3D_05_step_gmsh_conformal/c14_physics/tests/test_volume_weighted_existing_case_b_c14.py",
+      "role": "test",
+      "purpose": "code/test implementation",
+      "certainty": "rule",
+      "blob": "a50a873a22ca792fe91152f5dcb77be2545873f5"
     },
     {
       "path": "cases_3d/C3D_05_step_gmsh_conformal/c14_physics/volume_weighted_existing_case_b_c14.py",
@@ -272221,6 +272241,13 @@
       "blob": "f5476dc1e47e3aa90fe60ae77eb920fe795f0c86"
     },
     {
+      "path": "docs/C3D04_A_STAGE07_03_ACTIVE_MESH_FORENSICS_20261124_ES.md",
+      "role": "document",
+      "purpose": "manual/decision/report/historical note",
+      "certainty": "inferred",
+      "blob": "f0f586adf4eb02ff92f8cf8b2cc4dcb7b1067dd7"
+    },
+    {
       "path": "docs/C3D04_A_STAGE07_F14_SOLVER_BACKED_NATIVE_RECOVERY_20261123_ES.md",
       "role": "document",
       "purpose": "manual/decision/report/historical note",
@@ -272253,7 +272280,7 @@
       "role": "config",
       "purpose": "machine-readable configuration",
       "certainty": "rule",
-      "blob": "19b1f5700b14b68e05701dac1a5640ab1f161d27"
+      "blob": "0a5cd99fa43c74ca5180c72a025c04d47ca92fd2"
     },
     {
       "path": "docs/C3D_01_ESTADO_REAL_20261110_ES.md",
@@ -272491,7 +272518,7 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "53a0fe015b79d182753f18981d27e8380063888d"
+      "blob": "35061fce5012c0380bcfaf324613585bbebb8d13"
     },
     {
       "path": "docs/DOCUMENT_SYNC_20261110_ES.md",
@@ -272540,7 +272567,7 @@
       "role": "config",
       "purpose": "machine-readable configuration",
       "certainty": "rule",
-      "blob": "d98f58590161b4f96ef88dd8f1f18ce18b129cd0"
+      "blob": "8726a4b4274da364a6e9940da776a5e7755a6ce1"
     },
     {
       "path": "docs/REGLA_INSTRUCCIONES_UNIFICADAS_ES.md",
@@ -272618,6 +272645,13 @@
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
       "blob": "7afccc112c7b3658c80415c9a3fa70ba6240bbf7"
+    },
+    {
+      "path": "docs/granada/C3D05_B_VOL_PONDERADO_ALPHA1_HEX8_Y_RESULTADOS_CRONOLOGIA_20261124_ES.md",
+      "role": "document",
+      "purpose": "manual/decision/report/historical note",
+      "certainty": "inferred",
+      "blob": "cd550963c948a212a4b3d11f6edf059f64130dd5"
     },
     {
       "path": "docs/granada/C3D05_C14_NUMERICAL_ONE_SHOT_20261119_ES.md",
@@ -273501,24 +273535,6 @@
       "path": "docs/granada/C3D05_T0_README_HISTORICAL_BEFORE_SINGLE_FLOW_20261120.md",
       "observation": "Missing: outside-repo",
       "recommendation": "Fix link or restore target",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "22986598dcb8660c",
-      "code": "POTENTIAL_UNLOGGED_CHANGES",
-      "severity": "review",
-      "path": "PROJECT_AUDIT_LOG_EN.md",
-      "observation": "4 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_05_step_gmsh_conformal/c14_physics/summarize_existing_case_b_c14_phase_timeline.py, cases_3d/C3D_05_step_gmsh_conformal/c14_physics/tests/test_existing_case_b_c14_phase_timeline.py, cases_3d/C3D_05_step_gmsh_conformal/c14_physics/volume_weighted_existing_case_b_c14.py, docs/PROJECT_STAGE_STATUS.json",
-      "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "6b122bb9140e3d23",
-      "code": "POTENTIAL_UNLOGGED_CHANGES",
-      "severity": "review",
-      "path": "PROJECT_AUDIT_LOG_ES.md",
-      "observation": "4 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_05_step_gmsh_conformal/c14_physics/summarize_existing_case_b_c14_phase_timeline.py, cases_3d/C3D_05_step_gmsh_conformal/c14_physics/tests/test_existing_case_b_c14_phase_timeline.py, cases_3d/C3D_05_step_gmsh_conformal/c14_physics/volume_weighted_existing_case_b_c14.py, docs/PROJECT_STAGE_STATUS.json",
-      "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     }
   ],
