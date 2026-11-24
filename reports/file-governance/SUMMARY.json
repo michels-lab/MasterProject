@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
   "audit_kind": "deterministic_full_tracked_tree",
-  "tracked_files_total": 39118,
-  "classified_files_total": 39113,
-  "docs_content_inspected": 215,
+  "tracked_files_total": 39119,
+  "classified_files_total": 39114,
+  "docs_content_inspected": 216,
   "large_docs_skipped": 1,
   "excluded_reports": 5,
   "roles": {
@@ -12,7 +12,7 @@
     "bitacora": 5,
     "config": 17,
     "data": 32,
-    "document": 177,
+    "document": 178,
     "index": 34,
     "license": 1,
     "simulation_case_file": 121,
@@ -29,8 +29,8 @@
     "POTENTIAL_UNLOGGED_CHANGES": 2
   },
   "finding_total": 9,
-  "inventory_fingerprint": "3ed813e089def13a17e9dd1e174f60b50d6097a33c8acad86151cfeb88f538ca",
-  "evidence_fingerprint": "12545031f2199afacc62465614cdf2afc610f3483586811e35502f9d3cd1ed7b",
+  "inventory_fingerprint": "26545447275653625752eb0362ba541137583d06642e6564db60475115bf1eb0",
+  "evidence_fingerprint": "8c04ade72c3d9d7aefe992aff9838273cb5cb79dab6d887a85d35ee54ab27718",
   "untracked_audited": false,
   "ignored_audited": false,
   "binary_contents_audited": false,
