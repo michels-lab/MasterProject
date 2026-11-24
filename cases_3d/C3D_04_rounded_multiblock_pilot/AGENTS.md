@@ -1,3 +1,9 @@
+## 23-11-2026 Caso A native offline F14: missing metal cellZone caused false success
+
+Real WSL _02: six exit0 reports but core/energy/flow/momentum logs contain FOAM FATAL IO ERROR Cannot find cellZone metal, Available cellZones: 0(). The new runner scans complete logs (FATAL overrides returncode0). It verifies original 8960 metal cell count plus geometry hashes before creating full all-metal zone ONLY in explicit fresh _03, preserves prior _01/_02 and entire original C14 CFD; B/FS untouched. Audits primitive profiles 80 finite points and native 100/101 snapshot face-power timings, no global conservation or QuickCup claim. [Protocol](../../docs/C3D04_A_STAGE07_NATIVE_METAL_CELLZONE_RECOVERY_20261123_ES.md). Stage 7/10, 6/10 milestones 60%.
+
+---
+
 ## 23-11-2026 — WSL C3D04-A DESTINO NATIVO _02 EXISTENTE: PROHIBIDO BORRAR O RERUN A CIEGAS
 
 Una invocación real WSL del ejecutor solver-backed informó `new isolated copy output occupied` **antes de copiar o ejecutar foamPostProcess**: `~/OpenFOAM/C3D04_A_C14_SOLVER_BACKED_POSTPROCESS_02` ya existía. El contenido interior NO está certificado. Ejecutar la versión actualizada de `run_c14_stage07_solver_backed_recovery.py` en el worktree A: cuando `--out` existe ejecuta exclusivamente `inspect_occupied_copy` en lectura, valida C14/controlDict, logs fuente y copia, informe final de 6 grupos y sus hashes, y clasifica `EXISTING_COMPLETE_NATIVE_POSTPROCESS_REPORT_REUSED_NO_NEW_RUN` o `EXISTING_COPY_PARTIAL_OR_POSSIBLY_ACTIVE_PRESERVED`. Ninguna clasificación permite sobrescribir. No programar otro `_03` ni borrar `_02` sin verificar que no haya otra función nativa ejecutándose. La inspección no valida física/energía. Estado científico etapa 07/10, 6/10=60% hitos.
