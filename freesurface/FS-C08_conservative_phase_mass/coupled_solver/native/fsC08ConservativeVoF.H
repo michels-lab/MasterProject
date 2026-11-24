@@ -28,6 +28,8 @@ class fsC08ConservativeVoF : public compressibleVoF
 
 protected:
     virtual void prePredictor() override;
+    // Actual mushy-zone momentum resistance derived from conserved solid.
+    virtual tmp<fvVectorMatrix> divDevTau(volVectorField& U) override;
     virtual void pressureCorrector() override;
     virtual void thermophysicalPredictor() override;
 
