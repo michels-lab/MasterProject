@@ -1,0 +1,243 @@
+{
+  "schema": "masterproject-fs-c07-native-phase-allocation-20-snapshots-v1",
+  "source": "Real WSL stdout provided by researcher from analysis_tools/locate_fs_c07_phase_violation.py --all-saved --compact, NOT rerun or independently fetched native fields",
+  "source_pasted_text_sha256": "3c0f797708826a58c2fd40bc2c9f0575bc490eb2141d2ede0816d74ed32fb258",
+  "source_case": "/home/michel/OpenFOAM/FS_C07_RUNS/FS_C07_THERMAL_20261123T183217Z_72da1bf4",
+  "source_head_at_forensic": "e960fb6c0",
+  "solver": "OpenFOAM Foundation 14 / foamMultiRun",
+  "tested_native_times_count": 20,
+  "native_cells_per_time": 34368,
+  "threshold_absolute_solid_minus_metal": 1e-8,
+  "metric": "alpha.metal.solid-alpha.metal>1e-8; count is cell-time incidences, not number of unique cells",
+  "by_alpha": {
+    "0_to_1e-6": "0<alpha.metal<1e-6",
+    "1e-6_to_1e-3": "1e-6<=alpha.metal<1e-3",
+    "1e-3_to_0p5": "1e-3<=alpha.metal<0.5",
+    "core": "alpha.metal>=0.5"
+  },
+  "time_series": [
+    {
+      "time_s": 0.05,
+      "n_gt_1e8": 39,
+      "n_metal_alpha_0_to_1e6": 0,
+      "n_metal_alpha_1e6_to_1e3": 39,
+      "n_metal_alpha_1e3_to_0p5": 0,
+      "n_core_metal_alpha_ge_0p5": 0,
+      "raw_positive_solid_over_metal_volume_m3": 6.215066730703393e-14,
+      "max_solid_over_metal_fraction": 1.1243134329999986e-7
+    },
+    {
+      "time_s": 0.1,
+      "n_gt_1e8": 65,
+      "n_metal_alpha_0_to_1e6": 0,
+      "n_metal_alpha_1e6_to_1e3": 65,
+      "n_metal_alpha_1e3_to_0p5": 0,
+      "n_core_metal_alpha_ge_0p5": 0,
+      "raw_positive_solid_over_metal_volume_m3": 2.9912668241925303e-13,
+      "max_solid_over_metal_fraction": 5.397061800000043e-7
+    },
+    {
+      "time_s": 0.15,
+      "n_gt_1e8": 211,
+      "n_metal_alpha_0_to_1e6": 15,
+      "n_metal_alpha_1e6_to_1e3": 196,
+      "n_metal_alpha_1e3_to_0p5": 0,
+      "n_core_metal_alpha_ge_0p5": 0,
+      "raw_positive_solid_over_metal_volume_m3": 8.071424630403249e-13,
+      "max_solid_over_metal_fraction": 0.000001260693869999975
+    },
+    {
+      "time_s": 0.2,
+      "n_gt_1e8": 187,
+      "n_metal_alpha_0_to_1e6": 62,
+      "n_metal_alpha_1e6_to_1e3": 123,
+      "n_metal_alpha_1e3_to_0p5": 2,
+      "n_core_metal_alpha_ge_0p5": 0,
+      "raw_positive_solid_over_metal_volume_m3": 2.9743834396168837e-12,
+      "max_solid_over_metal_fraction": 0.000006181342900000129
+    },
+    {
+      "time_s": 0.25,
+      "n_gt_1e8": 550,
+      "n_metal_alpha_0_to_1e6": 213,
+      "n_metal_alpha_1e6_to_1e3": 337,
+      "n_metal_alpha_1e3_to_0p5": 0,
+      "n_core_metal_alpha_ge_0p5": 0,
+      "raw_positive_solid_over_metal_volume_m3": 4.114027897639446e-12,
+      "max_solid_over_metal_fraction": 0.0000043752025485000006
+    },
+    {
+      "time_s": 0.3,
+      "n_gt_1e8": 612,
+      "n_metal_alpha_0_to_1e6": 233,
+      "n_metal_alpha_1e6_to_1e3": 378,
+      "n_metal_alpha_1e3_to_0p5": 1,
+      "n_core_metal_alpha_ge_0p5": 0,
+      "raw_positive_solid_over_metal_volume_m3": 5.701691076928439e-12,
+      "max_solid_over_metal_fraction": 0.000005036649330000071
+    },
+    {
+      "time_s": 0.35,
+      "n_gt_1e8": 641,
+      "n_metal_alpha_0_to_1e6": 217,
+      "n_metal_alpha_1e6_to_1e3": 420,
+      "n_metal_alpha_1e3_to_0p5": 4,
+      "n_core_metal_alpha_ge_0p5": 0,
+      "raw_positive_solid_over_metal_volume_m3": 6.044621068130437e-12,
+      "max_solid_over_metal_fraction": 0.0000031767650964000005
+    },
+    {
+      "time_s": 0.4,
+      "n_gt_1e8": 598,
+      "n_metal_alpha_0_to_1e6": 217,
+      "n_metal_alpha_1e6_to_1e3": 377,
+      "n_metal_alpha_1e3_to_0p5": 4,
+      "n_core_metal_alpha_ge_0p5": 0,
+      "raw_positive_solid_over_metal_volume_m3": 6.1272893715684775e-12,
+      "max_solid_over_metal_fraction": 0.000004066648530900001
+    },
+    {
+      "time_s": 0.45,
+      "n_gt_1e8": 390,
+      "n_metal_alpha_0_to_1e6": 150,
+      "n_metal_alpha_1e6_to_1e3": 231,
+      "n_metal_alpha_1e3_to_0p5": 9,
+      "n_core_metal_alpha_ge_0p5": 0,
+      "raw_positive_solid_over_metal_volume_m3": 1.9625631592776685e-12,
+      "max_solid_over_metal_fraction": 9.130090390799996e-7
+    },
+    {
+      "time_s": 0.5,
+      "n_gt_1e8": 423,
+      "n_metal_alpha_0_to_1e6": 203,
+      "n_metal_alpha_1e6_to_1e3": 220,
+      "n_metal_alpha_1e3_to_0p5": 0,
+      "n_core_metal_alpha_ge_0p5": 0,
+      "raw_positive_solid_over_metal_volume_m3": 1.4313876721631012e-12,
+      "max_solid_over_metal_fraction": 5.348821102899998e-7
+    },
+    {
+      "time_s": 0.55,
+      "n_gt_1e8": 420,
+      "n_metal_alpha_0_to_1e6": 205,
+      "n_metal_alpha_1e6_to_1e3": 207,
+      "n_metal_alpha_1e3_to_0p5": 8,
+      "n_core_metal_alpha_ge_0p5": 0,
+      "raw_positive_solid_over_metal_volume_m3": 1.7101917362052834e-12,
+      "max_solid_over_metal_fraction": 4.743344644400001e-7
+    },
+    {
+      "time_s": 0.6,
+      "n_gt_1e8": 462,
+      "n_metal_alpha_0_to_1e6": 176,
+      "n_metal_alpha_1e6_to_1e3": 286,
+      "n_metal_alpha_1e3_to_0p5": 0,
+      "n_core_metal_alpha_ge_0p5": 0,
+      "raw_positive_solid_over_metal_volume_m3": 1.883539632303144e-12,
+      "max_solid_over_metal_fraction": 5.795414149100003e-7
+    },
+    {
+      "time_s": 0.65,
+      "n_gt_1e8": 439,
+      "n_metal_alpha_0_to_1e6": 156,
+      "n_metal_alpha_1e6_to_1e3": 282,
+      "n_metal_alpha_1e3_to_0p5": 1,
+      "n_core_metal_alpha_ge_0p5": 0,
+      "raw_positive_solid_over_metal_volume_m3": 1.8564884599396097e-12,
+      "max_solid_over_metal_fraction": 5.604956727000002e-7
+    },
+    {
+      "time_s": 0.7,
+      "n_gt_1e8": 376,
+      "n_metal_alpha_0_to_1e6": 141,
+      "n_metal_alpha_1e6_to_1e3": 223,
+      "n_metal_alpha_1e3_to_0p5": 12,
+      "n_core_metal_alpha_ge_0p5": 0,
+      "raw_positive_solid_over_metal_volume_m3": 1.8193256225398728e-12,
+      "max_solid_over_metal_fraction": 5.356152812300002e-7
+    },
+    {
+      "time_s": 0.75,
+      "n_gt_1e8": 368,
+      "n_metal_alpha_0_to_1e6": 160,
+      "n_metal_alpha_1e6_to_1e3": 208,
+      "n_metal_alpha_1e3_to_0p5": 0,
+      "n_core_metal_alpha_ge_0p5": 0,
+      "raw_positive_solid_over_metal_volume_m3": 1.6958448114947889e-12,
+      "max_solid_over_metal_fraction": 6.033274279300001e-7
+    },
+    {
+      "time_s": 0.8,
+      "n_gt_1e8": 360,
+      "n_metal_alpha_0_to_1e6": 155,
+      "n_metal_alpha_1e6_to_1e3": 204,
+      "n_metal_alpha_1e3_to_0p5": 1,
+      "n_core_metal_alpha_ge_0p5": 0,
+      "raw_positive_solid_over_metal_volume_m3": 1.6271213859007586e-12,
+      "max_solid_over_metal_fraction": 5.352085637199998e-7
+    },
+    {
+      "time_s": 0.85,
+      "n_gt_1e8": 349,
+      "n_metal_alpha_0_to_1e6": 137,
+      "n_metal_alpha_1e6_to_1e3": 212,
+      "n_metal_alpha_1e3_to_0p5": 0,
+      "n_core_metal_alpha_ge_0p5": 0,
+      "raw_positive_solid_over_metal_volume_m3": 1.6859703632662097e-12,
+      "max_solid_over_metal_fraction": 5.738968938000016e-7
+    },
+    {
+      "time_s": 0.9,
+      "n_gt_1e8": 424,
+      "n_metal_alpha_0_to_1e6": 166,
+      "n_metal_alpha_1e6_to_1e3": 250,
+      "n_metal_alpha_1e3_to_0p5": 8,
+      "n_core_metal_alpha_ge_0p5": 0,
+      "raw_positive_solid_over_metal_volume_m3": 1.7986257513824136e-12,
+      "max_solid_over_metal_fraction": 5.770887014600002e-7
+    },
+    {
+      "time_s": 0.95,
+      "n_gt_1e8": 400,
+      "n_metal_alpha_0_to_1e6": 161,
+      "n_metal_alpha_1e6_to_1e3": 239,
+      "n_metal_alpha_1e3_to_0p5": 0,
+      "n_core_metal_alpha_ge_0p5": 0,
+      "raw_positive_solid_over_metal_volume_m3": 1.65527720748857e-12,
+      "max_solid_over_metal_fraction": 5.162640844600001e-7
+    },
+    {
+      "time_s": 1,
+      "n_gt_1e8": 378,
+      "n_metal_alpha_0_to_1e6": 171,
+      "n_metal_alpha_1e6_to_1e3": 200,
+      "n_metal_alpha_1e3_to_0p5": 7,
+      "n_core_metal_alpha_ge_0p5": 0,
+      "raw_positive_solid_over_metal_volume_m3": 1.7680724185913683e-12,
+      "max_solid_over_metal_fraction": 4.967126381099997e-7
+    }
+  ],
+  "aggregate": {
+    "total_cell_time_incidences_gt_1e8": 7692,
+    "incidences_metal_alpha_0_to_1e6": 2938,
+    "incidences_metal_alpha_1e6_to_1e3": 4697,
+    "incidences_metal_alpha_1e3_to_0p5": 57,
+    "incidences_core_metal_alpha_ge_0p5": 0,
+    "incidences_alpha_metal_below_1e3": 7635,
+    "fraction_of_incidences_below_alpha_metal_1e3": 0.9925897035881436,
+    "all_saved_times_have_zero_significant_solid_excess_in_core": true,
+    "peak_count_time_s": 0.35,
+    "peak_count": 641,
+    "peak_integrated_excess_time_s": 0.4,
+    "peak_integrated_excess_m3": 6.1272893715684775e-12,
+    "peak_fraction_violation_time_s": 0.2,
+    "peak_fraction_violation": 0.000006181342900000129
+  },
+  "source_reported_flags": {
+    "case_modified": false,
+    "solver_rerun": false,
+    "no_global_phase_boundedness_claim": true,
+    "not_a_geometric_interface_classification": true
+  },
+  "scientific_conclusion": "All 20 sampled native states have no solid>metal excess above 1e-8 at alpha.metal>=0.5; significant errors remain in low-VOF cells so global phase-allocation gate FAIL. The source order fvModels.correct before alphaPredictor is a plausible, not uniquely proven, explanation. No conservative shrinkage or feeding has been validated."
+}
