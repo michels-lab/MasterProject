@@ -32,7 +32,7 @@ PhaseMassTransport::PhaseMassTransport
     ),
     tauPhaseChangeT_(),
     latentHeat_(dimensionedScalar("latentHeat",dimEnergy/dimMass,material_)),
-    cpSolid_(dimensionedScalar("cpSolid",dimEnergy/dimMass/dimTemperature,material_)),
+    cvSolid_(dimensionedScalar("cvSolid",dimEnergy/dimMass/dimTemperature,material_)),
     mushyDarcyCu_
     (
         dimensionedScalar("mushyDarcyCu",dimless/dimTime,material_)
@@ -120,7 +120,7 @@ PhaseMassTransport::PhaseMassTransport
         || !std::isfinite(metalPresenceThreshold_)
         || metalPresenceThreshold_<=0 || metalPresenceThreshold_>=0.5
         || !std::isfinite(latentHeat_.value()) || latentHeat_.value()<=0
-        || !std::isfinite(cpSolid_.value()) || cpSolid_.value()<=0
+        || !std::isfinite(cvSolid_.value()) || cvSolid_.value()<=0
         || !std::isfinite(mushyDarcyCu_.value())
         || mushyDarcyCu_.value()<=0
         || !std::isfinite(mushyDarcyQ_)
