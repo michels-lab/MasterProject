@@ -1,3 +1,5 @@
+> **2026-11-24 | Case A 200s priority:** researcher defers sensitivity; faithful C14 V4/T02, only endTime changed. Targeted executor published, WSL pending; stage9/10, 8/10=80%. [Evidence](docs/C3D04_A_C14_200S_PRIORITY_20261124_ES.md).
+
 > **2026-11-24 | Case A A5.1:** fixed-mesh temporal sensitivity runner published; dt=.001/.0005/.00025 s, common saved cadence .1s, reference unchanged. Two new WSL runs pending; no independence claim. Stage09/10, 8/10=80%. [Protocolo](docs/C3D04_A_STAGE09_TEMPORAL_SENSITIVITY_20261124_ES.md).
 
 > **2026-11-24 | Case A actual WSL audit:** 606 primary field files identical, RMSE=0; combined nominal residual +0.030516 J (0.1–10s), -6.421037 J (0–10s). Saved-state A3/A4 diagnostic complete; no CFD rerun or discrete closure. Stage09/10, 8/10=80%. [Evidence](docs/C3D04_A_STAGE09_FAITHFUL_NATIVE_ANALYSIS_20261124_ES.md).
