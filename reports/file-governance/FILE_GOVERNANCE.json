@@ -26,11 +26,11 @@
   },
   "finding_counts": {
     "BROKEN_RELATIVE_LINK": 7,
-    "POTENTIAL_UNLOGGED_CHANGES": 1
+    "POTENTIAL_UNLOGGED_CHANGES": 2
   },
-  "finding_total": 8,
-  "inventory_fingerprint": "159eef71f01da996b4bc7d15e5d0d4151ea6f59649714f4300d80a019712923f",
-  "evidence_fingerprint": "d155ac8d649e4a850dda83f6177d8aef6ecd808a891f6fe689f518ec73df8a45",
+  "finding_total": 9,
+  "inventory_fingerprint": "67982f46724ff43bce6184846140d8e9c0437e41a5b501dae5e6704b89ec7928",
+  "evidence_fingerprint": "726758d567b50c2f5ac63ae0e5211d04ca2b4bb1bbac8217e0e8efac3a7a518c",
   "files": [
     {
       "path": ".github/agents/openfoam-solidification.agent.md",
@@ -272582,7 +272582,7 @@
       "role": "config",
       "purpose": "machine-readable configuration",
       "certainty": "rule",
-      "blob": "7022e58f5bc92278efa1ce9cb565d790c61c35e6"
+      "blob": "7a7f071f625ef09aa3ebca8837c8adaabb9e5594"
     },
     {
       "path": "docs/REGLA_INSTRUCCIONES_UNIFICADAS_ES.md",
@@ -273565,6 +273565,15 @@
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_EN.md",
       "observation": "3 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_05_step_gmsh_conformal/c14_physics/quantify_existing_case_b_c14_energy_inventory.py, cases_3d/C3D_05_step_gmsh_conformal/c14_physics/tests/test_existing_case_b_c14_energy_inventory.py, docs/PROJECT_STAGE_STATUS.json",
+      "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
+      "state": "REVIEW_REQUIRED"
+    },
+    {
+      "id": "b7e85c814cfe1fac",
+      "code": "POTENTIAL_UNLOGGED_CHANGES",
+      "severity": "review",
+      "path": "PROJECT_AUDIT_LOG_ES.md",
+      "observation": "1 implementation/config paths changed since this log's last commit; examples: docs/PROJECT_STAGE_STATUS.json",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     }
