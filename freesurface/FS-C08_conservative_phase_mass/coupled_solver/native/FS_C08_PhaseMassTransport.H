@@ -51,6 +51,10 @@ class PhaseMassTransport
     dimensionedScalar latentHeat_;
     dimensionedScalar cpSolid_;
 
+    // Darcy mushy drag: magnitude calibrated for alloy/coherency conditions.
+    dimensionedScalar mushyDarcyCu_;
+    scalar mushyDarcyQ_;
+
     // kg/m3 physical masses per unit mesh volume: conserved variables
     volScalarField mLiquid_;
     volScalarField mSolid_;
@@ -108,6 +112,11 @@ public:
     const volScalarField& gamma() const { return Gamma_; }
     const dimensionedScalar& latentHeat() const { return latentHeat_; }
     const dimensionedScalar& cpSolid() const { return cpSolid_; }
+    const dimensionedScalar& mushyDarcyCu() const
+    {
+        return mushyDarcyCu_;
+    }
+    scalar mushyDarcyQ() const { return mushyDarcyQ_; }
     const volScalarField& phaseVolumeSource() const
     {
         return SvolPhaseChange_;
