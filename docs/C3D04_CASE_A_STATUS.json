@@ -1053,6 +1053,19 @@
     ],
     "section_area_exact": false,
     "source_solver_rerun": false,
-    "notes": "Existing 2D comparison still separate and pending actual reference; no CFD or manual tests. Radial velocity projections and coverage recorded; no extrapolation."
+    "notes": "Existing 2D comparison still separate and pending actual reference; no CFD or manual tests. Radial velocity projections and coverage recorded; no extrapolation.",
+    "foamlens_export": {
+      "status": "CODE_PUBLISHED_LOCAL_EXPORT_PENDING",
+      "entrypoint": "cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/publish_c14_a_foamlens_sweeps.py",
+      "commit": "f726fce3804b0843dc554dc0ef45553d19b980b7",
+      "destination": "~/OpenFOAM/C3D04_A_C14_VISUALIZATION_01/postProcessing/metal/FoamLensSweeps",
+      "profile_files": 2929,
+      "section_series_files": 3,
+      "source_CSV_preserved": true,
+      "source_solver_rerun": false,
+      "native_sampling_rerun": false,
+      "compatibility_basis": "FoamLens frontend index.html profileHeaderTokens, parseSpatialProfileFile, profileTimeFromFile, profileOutputPathFromFile, fastOpenFOAMKind, parseFile; runtime import not observed",
+      "user_preference": "Persist data directly in case for FoamLens; HTML secondary only"
+    }
   }
 }
