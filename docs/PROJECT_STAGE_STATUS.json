@@ -487,7 +487,19 @@
     "case_b_c14_native_C14_fluid_solid_q_WSL_t10_facewise_abs_mismatch_W": 1.8703362871771045,
     "case_b_c14_native_C14_fluid_solid_q_WSL_original_CFD_rerun": false,
     "case_b_c14_native_C14_fluid_solid_q_WSL_native_latent_source_integrated": false,
-    "case_b_c14_native_C14_fluid_solid_q_WSL_energy_closure_verified": false
+    "case_b_c14_native_C14_fluid_solid_q_WSL_energy_closure_verified": false,
+    "case_b_c14_native_C14_fluid_solid_q_101_time_integral_comparison_script_committed": true,
+    "case_b_c14_native_C14_fluid_solid_q_101_time_integral_comparison_source": "cases_3d/C3D_05_step_gmsh_conformal/c14_physics/compare_existing_case_b_c14_native_q_and_storage.py",
+    "case_b_c14_native_C14_fluid_solid_q_101_time_integral_comparison_test_source_count": 12,
+    "case_b_c14_native_C14_fluid_solid_q_101_time_integral_comparison_tests_WSL_pass_observed": false,
+    "case_b_c14_native_C14_fluid_solid_q_101_time_integral_comparison_WSL_executed": false,
+    "case_b_c14_native_C14_fluid_solid_q_101_time_integral_comparison_real_integrated_q_values_observed": false,
+    "case_b_c14_native_C14_fluid_solid_q_101_time_integral_comparison_expected_output": "~/OpenFOAM/C3D05_B_C14_Q_VS_REFERENCE_STORAGE_01",
+    "case_b_c14_native_C14_fluid_solid_q_101_time_integral_comparison_note": "docs/granada/C3D05_B_C14_FLUJOS_NATIVOS_101_ESTADOS_Y_CRUCE_ENERGETICO_20261124_ES.md",
+    "case_b_c14_native_C14_fluid_solid_q_101_time_integral_comparison_saved_time_dt_s": 0.1,
+    "case_b_c14_native_C14_fluid_solid_q_101_time_integral_comparison_original_solver_dt_s": 0.001,
+    "case_b_c14_native_C14_fluid_solid_q_101_time_integral_comparison_full_energy_closure_verified": false,
+    "case_b_c14_native_C14_fluid_solid_q_101_time_integral_comparison_fvModel_source_integral_verified": false
   },
   "other_cases": [
     {
@@ -527,7 +539,7 @@
       "evidence": "docs/granada/C3D05_B_C14_WSL_EJECUCION_REAL_EN_CURSO_20261123_ES.md"
     }
   ],
-  "blocker": "C3D05-B original 10s C14 101 real saved states; SHA-verified postrun volume-weighted alpha1, metal+mold energy proxies and NEW REAL Foundation14 fluid/solid native conduction q COMPLETE in USER WSL! 14/14 QA tests PASS; native shadow harmonic fvSchemes-only overlay, 101/101 q snapshots, 4 patches, 12,636 interface faces each paired. t10 outward metal→mold=+1581.564663 W, mold→metal=-1581.538327 W, instantaneous net interface mismatch=0.0263364314 W (relative 8.326e-6); exterior metalTop=+117.062925 W, moldOuter=+34.386288 W, total exterior=+151.449213 W. 12,636 matched face centers, opposite normals, matched areas; facewise absolute paired power mismatch=1.870336 W (not zero). Important: q derived via C14 postrun-specific additional harmonic interpolate(kappa) on COPIED fvSchemes only, 101 saved 0.1s times NOT 0.001s solver-integrated flux, metal fluid and mold solid. No native fvModel time-integral/advective/pressure source, radiation/convection verified separately, no full energy conservation or QuickCup/JMatPro, no convergence/contraccion. G3-G7 OPEN, 2/7 milestones.",
-  "next_integrated_delivery": "Without rerunning CFD, analytically JOIN SHA-verified published original Case B 101-time metal+mold reference stored-energy CSV with SHA-verified 101x4 native FLUID/SOLID conduction q output: compute signed patch trapezoid at saved 0.1s, interface mismatch accumulation and selected-time reference storage vs exterior-only conduction q comparisons. Clearly LABEL this a partial diagnostic, NEVER true energy closure or a measured missing-energy residual; needs native fvModel source, boundary convection/radiation, mass/enthalpy advection, pressure work and timestep fidelity. Preserve all prior q/CFD outputs.",
-  "science": "CASE_B_NATIVE_FOUNDATION14_FLUID_SOLID_CONDUCTION_Q_101x4_WSL_COMPLETE_14of14_TESTS_PASS_t10_INTERFACE_NET_0_026336W_REL_8_326e-6_EXTERIOR_151_449W_NO_ENERGY_CLOSURE"
+  "blocker": "Original F14 real C14 Case B 10s/101 native states and metal+mold reference 101-time thermal inventories verified in WSL. NEW native fluid-metal solid-mold conduction q extractor 14/14 regression tests PASS, SHA preflight PASS, output 101x4 patch flux time records + per-face t10 map COMPLETE. At t10 +1581.564663W metal→mold, -1581.538327W mold→metal, interface mismatch +0.0263364314W (8.3261378e-6 relative), 12636 matched interface faces each side, facewise absolute signed mismatches 1.870336W; outer metalTop 117.062925W and mold outer 34.386288W, total 151.449213W. q-only harmonic interpolate(kappa) added to shadow copied fvSchemes, NOT original solver. NEW SHA-verifying 101-state q(t)/reference storage join source +12 tests committed but never WSL run; integrals not yet observed. q patch flux + model reference storage are NOT full CFD energy conservation. True fvModels latent energy source/advective transport/work, external radiation/convection and solver-dt integral, grid/dt convergence, JMatPro/QuickCup and shrinkage OPEN. G3-G7 remain open, 2/7.",
+  "next_integrated_delivery": "User can git pull latest MasterProject, run 12 tests then read-only python3 -B cases_3d/C3D_05_step_gmsh_conformal/c14_physics/compare_existing_case_b_c14_native_q_and_storage.py. This joins SHA-qualified native B 101x4 q stored data and SHA-qualified mold+metal 101 model-reference storage; computes 0.1s saved-time trapezoid for each patch and interior/outside with explicit NOT_SOLVER_DT labels. No CFD or native q rerun. If successful, investigate missing native fvModel, advection/work, boundary/exterior terms and dt-convergent true conservation. 14/14 q tests already pass WSL, 12 join tests are source only awaiting WSL.",
+  "science": "CASE_B_C14_F14_NATIVE_Q_101X4_WSL_DONE_14TESTS_PASS_101STATE_SHA_Q_STORAGE_JOIN_SCRIPT_PLUS12TESTS_STAGED_NO_ENERGY_CLOSURE"
 }
