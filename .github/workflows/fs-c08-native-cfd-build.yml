@@ -7,11 +7,15 @@ on:
     paths:
       - 'freesurface/FS-C08_conservative_phase_mass/coupled_solver/native/**'
       - 'analysis_tools/stage_fs_c08_coupled.py'
+      - 'analysis_tools/run_fs_c08_real_cfd.py'
+      - 'analysis_tools/test_run_fs_c08_real_cfd.py'
       - '.github/workflows/fs-c08-native-cfd-build.yml'
   pull_request:
     paths:
       - 'freesurface/FS-C08_conservative_phase_mass/coupled_solver/native/**'
       - 'analysis_tools/stage_fs_c08_coupled.py'
+      - 'analysis_tools/run_fs_c08_real_cfd.py'
+      - 'analysis_tools/test_run_fs_c08_real_cfd.py'
       - '.github/workflows/fs-c08-native-cfd-build.yml'
   workflow_dispatch:
 
@@ -30,6 +34,12 @@ jobs:
     steps:
       - name: Checkout MasterProject research code
         uses: actions/checkout@v4
+
+      - name: Validate real-CFD numerical-budget evidence gate (NO CFD run)
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -B -m unittest discover -s analysis_tools -p 'test_run_fs_c08_real_cfd.py' -v
 
       # Public setup-openfoam action supports the Foundation org version 14
       # on ubuntu-24.04. It installs the actual headers and shared libraries,
