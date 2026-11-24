@@ -29,8 +29,8 @@
     "POTENTIAL_UNLOGGED_CHANGES": 2
   },
   "finding_total": 9,
-  "inventory_fingerprint": "45468d551eb2d1b4f40a13e123ff0adc2ce2aca6baaa1662ade4f4b9e43dc8d8",
-  "evidence_fingerprint": "14860aa2344bc5f8a833ce3fed6825e22e0c63a33f37ab4dbb00189929715542",
+  "inventory_fingerprint": "1b38a01a4a5c71fa0d6b2c5d7210be5ebd0bd699acbdd56a321ac2b301e98115",
+  "evidence_fingerprint": "b378f6a3329c08ee7d6b60f5f498a2b6644b5eae4f703939805ea73559cb8e7e",
   "files": [
     {
       "path": ".github/agents/openfoam-solidification.agent.md",
@@ -415,7 +415,7 @@
       "role": "bitacora",
       "purpose": "technical/audit change history",
       "certainty": "rule",
-      "blob": "098c813605289c9ac2c6d73dec94ebb65a6a250a"
+      "blob": "f83ef076b04e8f7fa22e8fbf62805a98effc1eeb"
     },
     {
       "path": "README.md",
@@ -272589,7 +272589,7 @@
       "role": "config",
       "purpose": "machine-readable configuration",
       "certainty": "rule",
-      "blob": "17af0ca862e1037accfa405755c6868db9350c43"
+      "blob": "33214adff0d77116636b7ea8d4a3cfdb26540933"
     },
     {
       "path": "docs/C3D_01_ESTADO_REAL_20261110_ES.md",
@@ -272876,7 +272876,7 @@
       "role": "config",
       "purpose": "machine-readable configuration",
       "certainty": "rule",
-      "blob": "18f0bd15b71149d6cebdb205b0bafff9936e8248"
+      "blob": "64f15c5a06903c36425471cfd46657ced854f265"
     },
     {
       "path": "docs/REGLA_INSTRUCCIONES_UNIFICADAS_ES.md",
@@ -273926,11 +273926,11 @@
       "state": "REVIEW_REQUIRED"
     },
     {
-      "id": "b3fe62df0ba36026",
+      "id": "0be9242e70c28482",
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_ES.md",
-      "observation": "1 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_05_step_gmsh_conformal/c14_physics/POSTPROCESAR_CASO_B_C14_EXISTENTE.py",
+      "observation": "1 implementation/config paths changed since this log's last commit; examples: docs/C3D04_CASE_A_STATUS.json",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     }
