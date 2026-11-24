@@ -73,14 +73,14 @@ class RealCFDBudgetEvidenceTests(unittest.TestCase):
     def test_requested_end_time_parsed_from_actual_control_dict(self):
         with TemporaryDirectory() as temp:
             path = Path(temp) / "controlDict"
-            path.write_text("startTime 0;\\nendTime 1;\\n")
+            path.write_text("startTime 0;\nendTime 1;\n")
             self.assertEqual(require_native_end_time(path), 1.0)
 
     def test_missing_or_duplicate_end_time_blocked(self):
         with TemporaryDirectory() as temp:
             path = Path(temp) / "controlDict"
-            for data in ("startTime 0;\\n",
-                         "endTime 0.5;\\nendTime 1;\\n"):
+            for data in ("startTime 0;\n",
+                         "endTime 0.5;\nendTime 1;\n"):
                 path.write_text(data)
                 with self.assertRaisesRegex(RuntimeError, "exactly one"):
                     require_native_end_time(path)
