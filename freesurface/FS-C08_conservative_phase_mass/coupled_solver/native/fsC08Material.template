@@ -24,7 +24,8 @@ propertySource <JMATPRO_OR_EXPERIMENTAL_SOURCE_ID_REQUIRED>;
 // NOT an allowed excuse to neglect metal mass conservation.
 Tmin_K <SUPPORTED_MIN_TEMPERATURE_K>;
 Tmax_K <SUPPORTED_MAX_TEMPERATURE_K>;
-metalPresenceThreshold <MATERIAL_TRACE_VOF_THRESHOLD>;
+// No metal-volume-fraction cutoff is allowed in physical phase equations.
+// Even very small positive metal masses retain sourced rho/Cv/k/fs(T).
 
 // Darcy drag for mushy-region momentum, calibrated or separately sourced.
 // Cu units [1/s]; q is a positive dimensionless regularizer (0<q<=1).
