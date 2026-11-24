@@ -227,6 +227,34 @@ void Foam::solvers::fsC08ConservativeVoF::pressureCorrector()
         p_rgh.correctBoundaryConditions();
     }
 
+    // Native pressure correction has changed phi and gas density.
+    // The LIQUID conserved mass flux was fixed by the preceding FV
+    // phase-mass solve; reconstruct its volume flux with rho_l(T).
+    // The remaining total volume flux is gas: solid skeleton U_s=0.
+    // Without this update, gas continuity and next-step momentum/energy
+    // incorrectly use stale pre-pressure face fluxes.
+    alphaRhoPhi1=phaseMass_->liquidMassFlux();
+    alphaPhi1=
+        alphaRhoPhi1/fvc::interpolate(phaseMass_->liquidDensity());
+    alphaPhi2=phi-alphaPhi1;
+    alphaRhoPhi2=fvc::interpolate(mixture_.rho2())*alphaPhi2;
+    rhoPhi=alphaRhoPhi1+alphaRhoPhi2;
+
+    // Recalculate per-phase residuals from POST-PRESSURE mass fluxes,
+    // not from the initial provisional MULES predictor.
+    contErr1 =
+    (
+        fvc::ddt(phaseMass_->liquidMass())()()
+      + fvc::ddt(phaseMass_->solidMass())()()
+      + fvc::div(alphaRhoPhi1)()()
+    );
+    contErr2 =
+    (
+        fvc::ddt(alpha2,mixture_.rho2())()()
+      + fvc::div(alphaRhoPhi2)()()
+      - (fvModels().source(alpha2,mixture_.rho2())&mixture_.rho2())()
+    );
+
     // Correct Uf if the mesh is moving
     fvc::correctUf(Uf, U, fvc::absolute(phi, U), MRF);
 
