@@ -49,6 +49,22 @@ PhaseMassTransport::PhaseMassTransport
             material_
         )
     ),
+    kappaLiquidT_
+    (
+        Function1<scalar>::New
+        (
+            "kappaLiquidT",dimTemperature,
+            dimPower/dimLength/dimTemperature,material_
+        )
+    ),
+    kappaSolidT_
+    (
+        Function1<scalar>::New
+        (
+            "kappaSolidT",dimTemperature,
+            dimPower/dimLength/dimTemperature,material_
+        )
+    ),
     mushyDarcyCu_
     (
         dimensionedScalar("mushyDarcyCu",dimless/dimTime,material_)
@@ -160,13 +176,17 @@ PhaseMassTransport::PhaseMassTransport
         (
             !std::isfinite(cvLiquidT_->value(temp))
          || !std::isfinite(cvSolidT_->value(temp))
+         || !std::isfinite(kappaLiquidT_->value(temp))
+         || !std::isfinite(kappaSolidT_->value(temp))
          || cvLiquidT_->value(temp)<=0
          || cvSolidT_->value(temp)<=0
+         || kappaLiquidT_->value(temp)<=0
+         || kappaSolidT_->value(temp)<=0
         )
         {
             FatalErrorInFunction
-                << "FS-C08 liquid/solid Cv(T) must remain finite and "
-                << "strictly positive across the sourced alloy range."
+                << "FS-C08 liquid/solid Cv(T) and kappa(T) must remain "
+                << "finite and strictly positive in the alloy range."
                 << " Bad T=" << temp << " K."
                 << exit(FatalError);
         }
@@ -605,5 +625,25 @@ scalar PhaseMassTransport::solidInternalEnergy(const scalar T) const
 
     return cvSolidT_->integral(energyReferenceT_K_,T);
 }
+
+
+scalar PhaseMassTransport::liquidKappa(const scalar T) const
+{
+    if (!std::isfinite(T) || T<Tmin_K_ || T>Tmax_K_)
+        FatalErrorInFunction
+            << "FS-C08 liquid k(T) outside sourced T range: "
+            << T << exit(FatalError);
+    return kappaLiquidT_->value(T);
+}
+
+scalar PhaseMassTransport::solidKappa(const scalar T) const
+{
+    if (!std::isfinite(T) || T<Tmin_K_ || T>Tmax_K_)
+        FatalErrorInFunction
+            << "FS-C08 solid k(T) outside sourced T range: "
+            << T << exit(FatalError);
+    return kappaSolidT_->value(T);
+}
+
 
 }} // Foam::fsC08
