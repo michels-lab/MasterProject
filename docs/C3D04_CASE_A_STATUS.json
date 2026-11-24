@@ -636,5 +636,51 @@
     "new_tool": "cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/audit_c14_stage07_active_cellzone.py",
     "stage07_complete": false,
     "milestone_progress_unchanged": "6/10 = 60%"
+  },
+  "stage07_active_mesh_real_WSL_20261124": {
+    "date": "2026-11-24",
+    "source": "Investigator provided audit_c14_stage07_active_cellzone.py stdout from isolated A worktree",
+    "native_case": "C3D04_A_C14_FLUID_SOLID_FULL_10S_RUN_01",
+    "protected_native_copy": "C3D04_A_C14_SOLVER_BACKED_POSTPROCESS_03",
+    "original_and_copy_metal_zone_SHA": "e0826b5fa0f3dac433d239dceee10896f251b97f1e950dd224406381e8baa89e",
+    "original_zone_exact_c14_metal_cells": 8960,
+    "copied_zone_exact_c14_metal_cells": 8960,
+    "all_five_polyMesh_geometry_and_connectivity_SHA_identical": true,
+    "saved_states_count": 101,
+    "time_local_polyMesh_instances_found": 0,
+    "originally_materialized_in_copy": false,
+    "existing_CFD_metal_zone_already_valid": true,
+    "source_CFD_modified": false,
+    "copied_evidence_modified": false,
+    "native_postProcess_executed_by_this_audit": false,
+    "failed_groups": {
+      "core": 100,
+      "energy": 100,
+      "flow": 100,
+      "momentum": 100
+    },
+    "successful_nonfatal_groups": [
+      "phase",
+      "profiles"
+    ],
+    "last_phase_liquid_fraction_volMean": 0.897245,
+    "profile_data_points_at_t10": {
+      "line_y10mm": 80,
+      "line_y20mm": 80,
+      "line_y30mm": 80,
+      "line_x20mm": 27
+    },
+    "face_power_table_rows_each": 1,
+    "face_power_tables_only_time": "0",
+    "native_F14_success_by_group_is_not_physical_validation": true,
+    "native_case_energy_conservation_verified": false,
+    "clinical_or_research_accuracy_unverified": true,
+    "triage": "CONSTANT_METAL_ZONE_VALID_BUT_F14_REGISTRY_EMPTY_ROOT_CAUSE_UNRESOLVED",
+    "next_research_hypothesis": "Foundation14 foamPostProcess -solver fluid loops all 101 saved times creating solver per time and clearing mesh.objectRegistry after every iteration; test fresh process per time vs combined identical 3 snapshots, without CFD rerun",
+    "native_source_reference": "https://cpp.openfoam.org/v14/foamPostProcess_8C_source.html",
+    "diagnostic_tool": "cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/probe_c14_native_f14_single_vs_multi_time.py",
+    "proposed_real_WSL_probe_isolated_output": "~/OpenFOAM/C3D04_A_C14_F14_THREE_TIME_ISOLATION_PROBE_01",
+    "real_WSL_three_time_probe_executed": false,
+    "scientific_progress_unchanged": "7/10 stage and 6/10 milestones = 60 percent"
   }
 }
