@@ -25,7 +25,7 @@ BASE_MODULE=ROOT/"freesurface/FS-C08_conservative_phase_mass/coupled_solver/nati
 REQUIRED_MATERIAL=(
     "materialId", "propertySource","Tmin_K","Tmax_K",
     "phaseChangeClosure","metalPresenceThreshold","mushyDarcyCu","mushyDarcyQ","rhoLiquidT",
-    "rhoSolidT","solidMassFractionT","latentHeat","cpSolid",
+    "rhoSolidT","solidMassFractionT","latentHeat","cvSolid",
 )
 
 
