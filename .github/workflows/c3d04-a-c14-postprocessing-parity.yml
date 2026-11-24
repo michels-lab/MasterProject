@@ -31,13 +31,15 @@ jobs:
             cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/audit_existing_native_c14_stage07.py \
             cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/run_c14_stage07_solver_backed_recovery.py \
             cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/audit_c14_stage07_active_cellzone.py \
+            cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/probe_c14_native_f14_single_vs_multi_time.py \
             cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/tests/test_c14_3d_postprocess_parity.py \
             cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/tests/test_native_complete_postprocess.py \
             cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/tests/test_c14_3d_native_energy_closure.py \
             cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/tests/test_c14_3d_stage07_recovery.py \
             cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/tests/test_c14_3d_native_stage07_forensics.py \
             cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/tests/test_c14_stage07_solver_backed_recovery.py \
-            cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/tests/test_c14_stage07_active_zone_audit.py
+            cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/tests/test_c14_stage07_active_zone_audit.py \
+            cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/tests/test_c14_f14_single_vs_multi_time_probe.py
       - name: Synthetic native-polyMesh and C14 diagnostic fidelity tests
         run: |
           python -m unittest discover \
@@ -80,6 +82,22 @@ jobs:
           python -m unittest discover \
             -s cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/tests \
             -p 'test_c14_stage07_active_zone_audit.py' -v
+      - name: C14 original three-snapshot F14 standalone vs combined native process isolation regression
+        run: |
+          python -m unittest discover \
+            -s cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/tests \
+            -p 'test_c14_f14_single_vs_multi_time_probe.py' -v
+      - name: Source file SHA and independent process safety gates
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          src=Path("cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/probe_c14_native_f14_single_vs_multi_time.py").read_text()
+          assert "foamPostProcess" in src
+          assert "foamMultiRun" not in src.split("def native_probe_trial")[1].split("def execute")[0]
+          assert "source_SHA256_unchanged" in src
+          assert "original_solver_rerun" in src
+          print("3 standalone vs multi-time probe never launches CFD or mutates source.")
+          PY
       - name: Ensure _03 evidence audit cannot launch subprocesses or mutate prior CFD
         run: |
           python - <<'PY'
