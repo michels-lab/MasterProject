@@ -1,3 +1,5 @@
+> **24-11-2026 | Caso A A5.1:** ejecutor de sensibilidad temporal publicado; dt=.001/.0005/.00025 s, malla V4/T02 y frecuencia física .1s intactas. Dos nuevas corridas WSL pendientes; no independencia acreditada. Etapa09/10, 8/10=80%. [Protocolo](../../docs/C3D04_A_STAGE09_TEMPORAL_SENSITIVITY_20261124_ES.md).
+
 > **24-11-2026 | ESTADO VIGENTE — SINCRONIZACIÓN MAESTRÍA:** Etapa 9/10 · 8/10=80% operativo: réplica C14 fiel nativa de 10 s, 10,000 pasos, 10,001 muestras por sonda, 101 estados y 1,717 perfiles; archivo científico en C14_3D_A_faithful. Aún pendientes conservación discreta, independencia de malla/tiempo, QuickCup e importación FoamLens. Comparar campos publicados sin nuevo CFD. [Registro integrado](https://github.com/michels-lab/MasterProject/blob/main/docs/granada/MAESTRIA_ESTADO_INTEGRADO_20261124_ES.md).
 
 > **Archivo científico C14 3D-A:** [C14_3D_A_faithful](C14_3D_A_faithful/README.md), entradas y resultados nativos según política 2D. Etapa09/10, 8/10=80%; validación pendiente.
