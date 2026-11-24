@@ -1,0 +1,52 @@
+{
+  "schema": "C3D05_B_C14_HEX8_NATIVE_VOLUME_WEIGHTED_ALPHA1_V1",
+  "status": "C3D05_B_C14_NATIVE_HEX8_VOLUME_WEIGHTED_ALPHA1_NOT_PHYSICALLY_VALIDATED",
+  "original_case_CFD_read_only": "/home/michel/OpenFOAM/C3D05_B_C14_FLUID_SOLID_FULL_10S_01",
+  "source_postrun_read_only": "/home/michel/OpenFOAM/C3D05_B_C14_FLUID_SOLID_10S_ANALYSIS_01",
+  "geometry": {
+    "source": "REAL_ORIGINAL_POLYMESH_QUAD_FACE_ORIENTED_TRIANGLE_PYRAMID_DIVERGENCE",
+    "volume_method": "owner_plus_neighbor_minus_signed_face_6_volume",
+    "nCells": 92200,
+    "nFaces": 283389,
+    "nInternalFaces": 269811,
+    "nPoints": 106529,
+    "cell_volume_min_m3": 6.174996903303957e-11,
+    "cell_volume_max_m3": 4.3881731333931845e-09,
+    "total_volume_m3": 4.797539547720032e-05,
+    "native_checkMesh_total_volume_m3": 4.79754032229e-05,
+    "relative_discrepancy_vs_checkMesh": 1.6145147646629957e-07,
+    "nonplanar_quad_triangulation_difference_possible": true
+  },
+  "saved_states": 101,
+  "C14_phase_liquidus_solidus_source": "original historical C14 physical reference",
+  "first_volume_with_alpha1_below_0_999_saved_time": {
+    "first_saved_s": 0.3,
+    "previous_saved_s": 0.2
+  },
+  "first_fully_solid_volume_saved_time": {
+    "first_saved_s": 5.1,
+    "previous_saved_s": 5.0
+  },
+  "last": {
+    "time_s": 10.0,
+    "mean_liquid_fraction_cell_unweighted": 0.8424205632624837,
+    "mean_liquid_fraction_volume_weighted": 0.8917029860767621,
+    "mean_solid_complement_volume_weighted": 0.10829701392323787,
+    "volume_with_alpha1_below_0_999_m3": 4.797539547720032e-05,
+    "volume_with_alpha1_below_0_999_fraction": 1.0,
+    "volume_fully_solid_alpha1_zero_m3": 6.259520361049834e-07
+  },
+  "final_volume_weighted_solid_complement_is_not_measured_shrinkage": true,
+  "C14_constant_density_means_mass_and_volume_mean_equivalent_in_model": true,
+  "physical_validity_QuickCup_JMatPro": false,
+  "latent_energy_flux_balance_verified": false,
+  "mesh_and_timestep_convergence_verified": false,
+  "volume_weighting_calculated_from_real_hex8_geometry": true,
+  "notes": [
+    "This is C14 model liquid fraction weighted by real HEX8 cell volume, NOT a measurement of physical solid mass.",
+    "Volume extraction triangulates native quad faces, so an independent comparison with actual OpenFOAM cell-volume field remains desirable.",
+    "The 10s original native CFD is never rerun or modified.",
+    "Original C14 hConst/rhoConst does not represent temperature-dependent eight QuickCup casts.",
+    "No enthalpy, latent heat, external q balance, recalescence, shrinkage or feeding acceptance."
+  ]
+}

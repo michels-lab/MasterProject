@@ -1,0 +1,12 @@
+{
+  "source_CFD_original_stage_SHA256": "e3b9d8af78fa9ca1be82e7f99384c44db2bc31bd38b295d42804873db67af416",
+  "source_CFD_original_log_SHA256": "f50b79cd2a411ab15dd366d9d6068ef042baba4af999f40887e8d05c761c1e20",
+  "source_C14_exact_contract_SHA256": "8f0021763502cb58f33a12d39e08cb8c00808dc3e4b6d6ecadacd18ba8455f85",
+  "source_original_HEX8_owner_SHA256": "f5058ae5b343f15f48a6d0640a3e54303df187217bfe94a3300db0539f74edd0",
+  "source_original_HEX8_face_list_SHA256": "60201270d902d912b3f288668e1d7b59141a71052bb6dbbfff89e8a2aa693fdf",
+  "original_100_rho_phi_input_digests_SHA256": "a4d0fd23f4e5ddf27cfd608e8c7448dc2c511465cbe4f0bb094cf3c21acf0208",
+  "mass_phi_101_time_csv_SHA256": "eaf8318f176c2a0964ab7eb170cec843d35c26ab39b6e458634387291a160d73",
+  "mass_phi_report_SHA256": "4c9e043c06c1cac6edd608cd2031a3a3288cce6c9338ac23024985a2c86a0be6",
+  "all_original_CFD_and_q_archives_immutable": true,
+  "no_solver_or_postprocess_q_reexecution": true
+}

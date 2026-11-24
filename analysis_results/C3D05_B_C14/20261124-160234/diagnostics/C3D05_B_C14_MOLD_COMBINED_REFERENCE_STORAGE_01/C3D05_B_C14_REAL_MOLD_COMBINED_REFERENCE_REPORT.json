@@ -1,0 +1,66 @@
+{
+  "schema": "C3D05_B_C14_REAL_MOLD_PLUS_METAL_REFERENCE_STORAGE_101_STATES_V1",
+  "status": "C3D05_B_C14_REAL_MOLD_AND_METAL_REFERENCE_STORAGE_ONLY_NOT_ENERGY_CLOSURE",
+  "original_native_C14_run_readonly": "/home/michel/OpenFOAM/C3D05_B_C14_FLUID_SOLID_FULL_10S_01",
+  "original_metal_reference_inventory_readonly": "/home/michel/OpenFOAM/C3D05_B_C14_SENSIBLE_LATENT_EQUIVALENT_01",
+  "mold_C14_constant_reference": {
+    "rho_mold_kg_m3": 1500.0,
+    "Cv_mold_J_kgK": 700.0,
+    "C14_contract_sha256": "8f0021763502cb58f33a12d39e08cb8c00808dc3e4b6d6ecadacd18ba8455f85",
+    "metal_C14_inventory_status": "C3D05_B_C14_REAL_METAL_C14_SENSIBLE_LATENT_EQUIVALENT_INVENTORY_NO_ENERGY_CLOSURE"
+  },
+  "real_mold_HEX8_geometry": {
+    "native_mold_hex8_cells": 178588,
+    "points": 211219,
+    "faces": 553893,
+    "internal_faces": 517635,
+    "total_reconstructed_mold_volume_m3": 0.00010284340553162189,
+    "native_checkMesh_mold_volume_m3": 0.000102843380345,
+    "relative_total_volume_discrepancy": 2.4490270351713404e-07,
+    "min_cell_volume_m3": 3.8391302052481435e-11,
+    "max_cell_volume_m3": 3.895640983437516e-09,
+    "native_per_cell_V_directly_verified": false,
+    "warped_quad_triangulation_approximation_possible": true
+  },
+  "saved_states": 101,
+  "initial": {
+    "time_s": 0.0,
+    "mold_volume_weighted_mean_T_K": 300.0,
+    "mold_sensible_change_from_t0_J": 0.0,
+    "metal_sensible_change_from_t0_J": 0.0,
+    "metal_liquid_latent_content_change_from_t0_J": -0.0,
+    "metal_latent_solid_equivalent_increase_from_t0_J": 0.0,
+    "combined_model_thermal_storage_change_from_t0_J_NOT_CLOSED_ENERGY": 0.0,
+    "mold_sensible_rate_saved_interval_W": null,
+    "combined_storage_rate_saved_interval_W": null
+  },
+  "final": {
+    "time_s": 10.0,
+    "mold_volume_weighted_mean_T_K": 488.2070988990838,
+    "mold_sensible_change_from_t0_J": 20323.651945808975,
+    "metal_sensible_change_from_t0_J": -13576.397936155232,
+    "metal_liquid_latent_content_change_from_t0_J": -8100.198210984614,
+    "metal_latent_solid_equivalent_increase_from_t0_J": 8100.198210984614,
+    "combined_model_thermal_storage_change_from_t0_J_NOT_CLOSED_ENERGY": -1352.9442013308708,
+    "mold_sensible_rate_saved_interval_W": 1550.0258987383186,
+    "combined_storage_rate_saved_interval_W": -151.21478028592773
+  },
+  "mold_energy_is_rho_Cv_deltaT_reference_only": true,
+  "metal_latent_liquid_content_delta_is_negative_solid_equivalent": true,
+  "combined_change_is_NOT_calibrated_energy_leak_or_conservation": true,
+  "native_fvModel_latent_heat_source_integral_verified": false,
+  "native_mappedWall_interface_flux_integrated": false,
+  "native_exterior_fluid_solid_flux_integrated": false,
+  "native_convection_and_work_terms_verified": false,
+  "overall_sensible_latent_energy_conservation_verified": false,
+  "JMatPro_QuickCup_experimental_validation": false,
+  "contraction_or_feeding_physics_enabled": false,
+  "notes": [
+    "Positive solid equivalent +rho L delta(1-alpha) is a loss of LIQUID latent stored content; combined reference delta uses its negative.",
+    "Changing metal, mold or phase inventory is NOT a measured interfacial heat flux or true fvModel latent source time integral.",
+    "Mold sensible delta uses original C14 rho=1500 kg/m3 and Cv=700 J/kg/K, not temperature-dependent experimental data.",
+    "Distorted HEX8 nonplanar face geometry and 1826 severe nonorth faces remain unresolved for per-cell native volume equivalence.",
+    "Without boundary q, radiation/convection, source terms and transport, combined stored-energy change is NOT a closure error.",
+    "All previous native CFD and three postrun analysis archives preserved, no CFD executed."
+  ]
+}

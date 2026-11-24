@@ -1,0 +1,26 @@
+FoamFile
+{
+    version         2;
+    format          ascii;
+    class           volScalarField;
+    location        "0/metal";
+    object          phaseChangeSolidFraction;
+}
+
+dimensions      [ 0 0 0 0 0 0 0 ];
+
+internalField   uniform 0;
+
+boundaryField
+{
+    metalTop
+    {
+        type            calculated;
+        value           uniform 0;
+    }
+    metal_to_mold
+    {
+        type            calculated;
+        value           uniform 0;
+    }
+}

@@ -1,0 +1,18 @@
+{
+  "schema": "C3D05_B_C14_ISOLATED_Q_ONLY_MOLD_INTERPOLATION_OVERLAY_V1",
+  "original_CFD_source_unchanged": "/home/michel/OpenFOAM/C3D05_B_C14_FLUID_SOLID_FULL_10S_01",
+  "original_mold_fvSchemes_SHA256": "b238619957aa2117e2b3763605ad97f43bb47dd99bce2390fe1dee4dc82582f5",
+  "temporary_overlay_mold_fvSchemes_SHA256": "07f96beeca3b24f27ebedc8c09a08d51edbb35741d92750779399e82a8aa4488",
+  "original_mold_scheme": "interpolate((kappa|Cv)) harmonic;",
+  "explicit_shadow_only_scheme": "interpolate(kappa) harmonic;",
+  "saved_real_time_directories_reconstructed": 101,
+  "each_region_file_symlinked_to_original_read_only_intent": true,
+  "constant_linked_read_only_intent": true,
+  "system_copied_and_ONLY_mold_fvSchemes_amended": true,
+  "original_CFD_not_remeshed_or_resolved": true,
+  "notes": [
+    "One explicit F14 interpolate(kappa) harmonic entry is added to isolated q-only fvSchemes.",
+    "This exact postprocessing scheme was NOT in original solver dictionary; the postrun q reconstruction is not a solver-dt native flux history.",
+    "The source CFD case's original thermos, fvModels, archived fields and mesh are unchanged."
+  ]
+}

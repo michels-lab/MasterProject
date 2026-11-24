@@ -1,0 +1,104 @@
+{
+  "Cp_to_Cv_substitution": false,
+  "contraction_model_activated": false,
+  "energy_balance_validated": false,
+  "experimentally_validated": false,
+  "final_10s_native_fields_sha256": {
+    "10/metal/T": "a58276992ddb5d32050bcbd50259c096f5b53254d8fc8ed66ca58623574c0dcb",
+    "10/metal/U": "b929ac9db6df33485d6601d615c317a6057eaeb7f32aa996d56f8e3954db25f5",
+    "10/metal/p_rgh": "b24ff36eb863fe4359e0d2ad49bd9c203012dbba6af5e5e399fdd90bc984084c",
+    "10/metal/phaseChangeSource:alpha1": "6899fbab67fa4f2ea1ecfd061b696ef923cfef3bd3158be9cf754d9891bdb295",
+    "10/mold/T": "e52eb28088ea75dbca5ea46a45a81f1ad5b0f5dab8515390983993836c48ccca"
+  },
+  "five_native_mesh_files_per_region_SHA256": {
+    "constant/metal/polyMesh/boundary": "f9f51979fa89c4c0ba8816b5684cf07ada329852d0abd187cab506bb998e9a06",
+    "constant/metal/polyMesh/faces": "60201270d902d912b3f288668e1d7b59141a71052bb6dbbfff89e8a2aa693fdf",
+    "constant/metal/polyMesh/neighbour": "5a82837472c0a8346342be20532a2977a9436347b86bd9c329d743781182d48f",
+    "constant/metal/polyMesh/owner": "f5058ae5b343f15f48a6d0640a3e54303df187217bfe94a3300db0539f74edd0",
+    "constant/metal/polyMesh/points": "f68092dd078b0ea6a5c9e614eab8aea229c59eb35b2fb1d04bee1cf05b26c7fa",
+    "constant/mold/polyMesh/boundary": "f58828c450cdfffcf9b1dc121c77997f9b61bd22a7d7061f9ca53765780e5928",
+    "constant/mold/polyMesh/faces": "a260e227848302289e943f91e12398a7223b055397a1f6a415cc54a0d6e71eda",
+    "constant/mold/polyMesh/neighbour": "2df2745f0d7415543f2391f9e4baefdefdac1c5065ef250472a0be9d49d22aed",
+    "constant/mold/polyMesh/owner": "36d071bb122253c5583ceafdc9926cc02a0c6ec50f84f3d6e6fb30a6e4980fc5",
+    "constant/mold/polyMesh/points": "52660bb8b202913f7ccd9f97094fad0a58b61f1e4d04432c1af995bfa29d1018"
+  },
+  "geometry_gate": {
+    "C14_source_contract_passed": true,
+    "Case_B_real_HEX8_acceptance": true,
+    "coupled_faces_each": 12636,
+    "metal_full_cellZone_exists": true,
+    "nCells": {
+      "metal": 92200,
+      "mold": 178588
+    },
+    "original_metal_cell_zone_state": "FULL",
+    "region_patches": {
+      "metal": [
+        "metalTop",
+        "metal_to_mold"
+      ],
+      "mold": [
+        "moldOuterUnclassified",
+        "mold_to_metal"
+      ]
+    },
+    "severe_nonorth_faces_total": 1826,
+    "source_polyMesh_SHA256_fingerprint": "c9625346da2558a2a8f84f17957fda33cbd72740041e6d7170e8b1e0d09d9925"
+  },
+  "grid_independence_validated": false,
+  "metal_thermo": "heRhoThermo/hConst/sensibleEnthalpy (fluid)",
+  "mold_thermo": "heSolidThermo/eConst/sensibleInternalEnergy (solid)",
+  "native_foundation14_dicts_parsed_sha256": {
+    "0/metal/T": "51638d81f9605b9d577020b2a6b0df5e8ac32591a34e61de92ed7e0d538241d5",
+    "0/metal/U": "b87f0370752e856e450a09cb14e24bc6b6d87a692de872a94216cc474b3b9211",
+    "0/metal/latentHeat": "23f67520aea128260a5504d4885d01439510e7361d316e505e580cb62b500c56",
+    "0/metal/p": "5035dbfb3934929ee579cac4c8ff05ce7bb019fb80c0ff9b728aaf2495bdbe8f",
+    "0/metal/p_rgh": "695d0f2f33bfb99835b319aab4f01701c6ba023c7fc2e0baa0fd74d7179fb931",
+    "0/metal/phaseChangeSolidFraction": "d78b852d8abff670ca8814b740a2b2e1e29cf0bc2c5d8a7e7e95d551cc1df3ab",
+    "0/metal/phaseChangeSource:alpha1": "0274c7cede8d81da086a4e861b4f24a5d3b37084739b8e5fa30ec550de9c2d11",
+    "0/mold/T": "c3297badda5fdbf132687cbb57edfd747d75572f476f6b4900cdf8ae1ce5037e",
+    "constant/metal/fvModels": "d3d39cd14fda027bc9a1e4771e00a400f20843fc31ef57e6ba99e2c2974a0613",
+    "constant/metal/g": "50f3c74be7632f1063f270b4d5e6f5f5afe38a22d69c00743970670e02ff0893",
+    "constant/metal/materials/castIron": "6983f7a2b78d98529523176483897b3e1b0b0f174c5b665e496f3658fe214218",
+    "constant/metal/momentumTransport": "d2eb231ac310a7b3d5b9f82ba060babecf7b535427f6b236940d6ab8b4f967a0",
+    "constant/metal/pRef": "87c9cb5303ebe66b5ce3b2eb179d89a32ca86866215f29e6490c70eaa693eded",
+    "constant/metal/physicalProperties": "845f1918f2406936b0acd1bc63edb4af7b22e3c3cc3dd2e5a217f32f07b5e609",
+    "constant/mold/materials/silica": "adc5c76407e214b6425262c570d4a65f9028647bdcba3fda8596535feb52eed0",
+    "constant/mold/physicalProperties": "e75c450603471e049a6200dc9e399c5d43eb83fa30da16ddb13b6a0cbb73b1ad",
+    "system/controlDict": "6c9e8094f4b51602bca79d2003751bbf326f0912a6490ee5e4e2149f1eeda284",
+    "system/fvSolution": "ff44be85084afc5b53eaaaf7c3964f691ac760544bc2bf2da76aa033e7df78b8",
+    "system/metal/fvSchemes": "539998932fd16cca4f8f22e0fa035fe6c27459005cc3a990c6048abde5d0ad4d",
+    "system/metal/fvSolution": "4ae89f01f04687fe430a75d59bcb9d571676227e9dc370f92c56e9fff57c1fdd",
+    "system/mold/fvSchemes": "5d9772adfcff557ae1955a57d48fb4f354c5099bd8c65985f4027ec091c3f680",
+    "system/mold/fvSolution": "ac94a9286a9718f83b01f10324a8f404bd79aa986fe6d84f215106367954c1b9"
+  },
+  "native_solver_run": true,
+  "original_C14_controlDict_sha256": "c6db4389d758c31259285e18c8b3cef9fe945767ace1ee3fe147a8e286d7a9ec",
+  "original_C14_controlDict_unchanged": true,
+  "original_C14_deltaT_s": 0.001,
+  "original_C14_endTime_s": 10,
+  "original_C14_phase_model": "solidificationMeltingSource (all real metal cells)",
+  "output": "/home/michel/OpenFOAM/C3D05_B_C14_FLUID_SOLID_FULL_10S_01",
+  "same_C14_2D_physics_not_JMatPro_or_QuickCup": true,
+  "schema": "C3D05_B_C14_EXACT_SOURCE_3D_V1",
+  "solidification_observed": false,
+  "solver_log_sha256": "f50b79cd2a411ab15dd366d9d6068ef042baba4af999f40887e8d05c761c1e20",
+  "source_C14_3D_only_adaptations": [
+    "mold exterior five equivalent C14 thermal BC patches -> moldOuterUnclassified",
+    "2D pRefPoint -> validated pRefCell 0 in real 92,200-cell metal region",
+    "create full 92,200-cell metal cellZone on isolated copy if original lacks it"
+  ],
+  "source_C14_model_selected": {
+    "End": true,
+    "Time10": true,
+    "e": true,
+    "fluid": true,
+    "h": true,
+    "p_rgh": true,
+    "phase": true,
+    "solid": true
+  },
+  "source_fingerprint": "c9625346da2558a2a8f84f17957fda33cbd72740041e6d7170e8b1e0d09d9925",
+  "source_real_accepted_C3D05_HEX8": "/home/michel/OpenFOAM/C3D05_STEP_GMSH_HEX_SUBDIV_COARSE_02",
+  "status": "C3D05_B_C14_ORIGINAL_FLUID_SOLID_FULL_10S_NATIVE_COMPLETED_NOT_PHYSICALLY_VALIDATED"
+}

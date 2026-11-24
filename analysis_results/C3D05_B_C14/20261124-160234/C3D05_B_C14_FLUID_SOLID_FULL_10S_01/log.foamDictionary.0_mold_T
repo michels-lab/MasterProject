@@ -1,0 +1,29 @@
+FoamFile
+{
+    version         2;
+    format          ascii;
+    class           volScalarField;
+    location        "0/mold";
+    object          T;
+}
+
+dimensions      [ 0 0 0 1 0 0 0 ];
+
+internalField   uniform 300;
+
+boundaryField
+{
+    moldOuterUnclassified
+    {
+        type            externalTemperature;
+        h               uniform 10;
+        Ta              constant 300;
+        emissivity      0.5;
+        value           $internalField;
+    }
+    mold_to_metal
+    {
+        type            coupledTemperature;
+        value           $internalField;
+    }
+}

@@ -1,0 +1,33 @@
+FoamFile
+{
+    version 2.0;
+    format ascii;
+    class dictionary;
+    object C14_B_density_gradient;
+}
+
+densityGradient
+{
+    type            grad;
+    libs            ("libfieldFunctionObjects.so");
+    region          metal;
+
+    field           rho;
+    result          gradRho;
+
+    executeControl  writeTime;
+    writeControl    writeTime;
+}
+
+densityGradientMagnitude
+{
+    type            mag;
+    libs            ("libfieldFunctionObjects.so");
+    region          metal;
+
+    field           gradRho;
+    result          magGradRho;
+
+    executeControl  writeTime;
+    writeControl    writeTime;
+}

@@ -1,0 +1,12 @@
+{
+  "original_native_q_report_SHA256": "8d54a4c5de3c8cb4dfad6930696b722f6935f426f248b39dad70bd7c4f8392a4",
+  "original_native_q_101_CSV_SHA256": "f9ad736148967687dd0d4c7dcea21267a9e1f82878392b0c231c5d849506c5a3",
+  "original_storage_report_SHA256": "42c80034d60aa09e945f6f3ea7d8889b55a082c93dc046f9e164e59599afa4ac",
+  "original_storage_CSV_SHA256": "610b6b1fd3d2fe8461379eee0eb878e776f6d410ba050a39d3a3c687c7231e9d",
+  "original_CFD_stage_SHA256": "e3b9d8af78fa9ca1be82e7f99384c44db2bc31bd38b295d42804873db67af416",
+  "original_CFD_log_SHA256": "f50b79cd2a411ab15dd366d9d6068ef042baba4af999f40887e8d05c761c1e20",
+  "joined_reference_101_CSV_SHA256": "032ddfeb56eafe728f55bc6eb1bb4b2a9c434dff2cf8c47e658b1f7e8beb2ef9",
+  "joined_report_SHA256": "ccab5f890ccf3cc17415ba963214a3b1e04199d4a60e039be1e5d677c88d5de7",
+  "all_original_archives_preserved": true,
+  "no_recalculated_CFD_or_native_thermal_q": true
+}

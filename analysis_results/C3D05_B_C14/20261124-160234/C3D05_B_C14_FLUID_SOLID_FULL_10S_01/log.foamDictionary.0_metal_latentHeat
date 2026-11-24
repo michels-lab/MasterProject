@@ -1,0 +1,26 @@
+FoamFile
+{
+    version         2;
+    format          ascii;
+    class           volScalarField;
+    location        "0/metal";
+    object          latentHeat;
+}
+
+dimensions      [ 0 2 -2 0 0 0 0 ];
+
+internalField   uniform 228600;
+
+boundaryField
+{
+    metalTop
+    {
+        type            calculated;
+        value           $internalField;
+    }
+    metal_to_mold
+    {
+        type            calculated;
+        value           $internalField;
+    }
+}

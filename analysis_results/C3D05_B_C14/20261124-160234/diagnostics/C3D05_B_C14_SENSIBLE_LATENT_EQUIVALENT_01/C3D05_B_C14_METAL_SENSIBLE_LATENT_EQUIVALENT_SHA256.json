@@ -1,0 +1,10 @@
+{
+  "source_C14_contract_SHA256": "8f0021763502cb58f33a12d39e08cb8c00808dc3e4b6d6ecadacd18ba8455f85",
+  "source_native_CFD_report_SHA256": "e3b9d8af78fa9ca1be82e7f99384c44db2bc31bd38b295d42804873db67af416",
+  "source_native_CFD_log_SHA256": "f50b79cd2a411ab15dd366d9d6068ef042baba4af999f40887e8d05c761c1e20",
+  "source_original_postrun_CSV_SHA256": "2c9e6513ea494318a2b3fd573c6831d06a4013431f82b2e55d7718717dccd1b5",
+  "source_original_volume_weighted_CSV_SHA256": "f261cf940a896798b7a1c7f463ecaa6b862185f0cabc6e2526c2d177c1b0a4eb",
+  "result_CSV_SHA256": "15d9a91c8aa3aa06a8627d3910117d3ca5a9fcbd80c8d4945abf70a87e25eb5f",
+  "result_JSON_SHA256": "70109b5435d93a8329cf9b3d01d9c1f29c7385918f23700a13676999b09e658a",
+  "archived_CFD_and_existing_analyses_never_modified": true
+}

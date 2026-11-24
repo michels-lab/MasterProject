@@ -1,0 +1,348 @@
+{
+  "status": "CASE_B_C14_OFFLINE_101_SAVED_STATES_NO_CFD_RERUN",
+  "original_CFD_readonly": "/home/michel/OpenFOAM/C3D05_B_C14_FLUID_SOLID_FULL_10S_01",
+  "output": "/home/michel/OpenFOAM/C3D05_B_C14_POSTPROCESAMIENTO_C14_101_TIEMPOS_01",
+  "original_saved_times": 101,
+  "original_solver_dt_s": 0.001,
+  "saved_field_dt_s": 0.1,
+  "original_solver_rerun": false,
+  "sample_locations_C14_2D_original_not_geometry_adjusted": true,
+  "reference_C14_FO_SHA256": {
+    "functions": "adbefd65a71f796ec724b016a879b849ecaad720dc69aef3a6fda2dcc3d86d7f",
+    "researchDiagnostics": "58cf0db3e07fce65ba7b2cb797ef9cb62949dc233a716ad63d64af491a6d1ff3",
+    "lineProfiles": "b3c9e99e54aefd757a11537da7fce02f77d8c08807d1d85f265c6dfbe019ca74",
+    "momentumPostProcessing": "d603f39e1c4ce63dcc63bcb25cf0a362137f2156c16b0348e71648f107baadd0",
+    "topSurfaceFlowPostProcessing": "3e4b47828e0cc78ea04692783635cda50c28e86a1fa844a0823241385fac7cf5"
+  },
+  "source_controlDict_SHA256": "c6db4389d758c31259285e18c8b3cef9fe945767ace1ee3fe147a8e286d7a9ec",
+  "source_solver_log_SHA256": "f50b79cd2a411ab15dd366d9d6068ef042baba4af999f40887e8d05c761c1e20",
+  "source_10_metal_T_SHA256": "a58276992ddb5d32050bcbd50259c096f5b53254d8fc8ed66ca58623574c0dcb",
+  "runtime_only_original_C14_objects_unrecoverable_sorted": [
+    "coolingRate",
+    "latentHeatField",
+    "latentHeatRateDensity",
+    "liquidFractionTimeDerivative",
+    "metalLatentHeatPower",
+    "metalMeanCoolingRate",
+    "metalMeanSolidificationRate",
+    "solidificationMeltingMomentumDiagnostics",
+    "solidificationRate",
+    "temperatureTimeDerivative"
+  ],
+  "native_function_output_not_assumed_present": true,
+  "stages": {
+    "01_velocity": {
+      "name": "01_velocity",
+      "result": "COMPLETE",
+      "exit_code": 0,
+      "log": "/home/michel/OpenFOAM/C3D05_B_C14_POSTPROCESAMIENTO_C14_101_TIEMPOS_01/log.C14B.01_velocity",
+      "cmd": [
+        "foamPostProcess",
+        "-case",
+        "/home/michel/OpenFOAM/C3D05_B_C14_POSTPROCESAMIENTO_C14_101_TIEMPOS_01",
+        "-region",
+        "metal",
+        "-dict",
+        "/home/michel/OpenFOAM/C3D05_B_C14_POSTPROCESAMIENTO_C14_101_TIEMPOS_01/system/C14_B_OFFLINE/C14_B_velocity",
+        "-time",
+        "0:10",
+        "-fields",
+        "(T U p_rgh phaseChangeSource:alpha1)"
+      ]
+    },
+    "02_thermal": {
+      "name": "02_thermal",
+      "result": "COMPLETE",
+      "exit_code": 0,
+      "log": "/home/michel/OpenFOAM/C3D05_B_C14_POSTPROCESAMIENTO_C14_101_TIEMPOS_01/log.C14B.02_thermal",
+      "cmd": [
+        "foamPostProcess",
+        "-case",
+        "/home/michel/OpenFOAM/C3D05_B_C14_POSTPROCESAMIENTO_C14_101_TIEMPOS_01",
+        "-region",
+        "metal",
+        "-dict",
+        "/home/michel/OpenFOAM/C3D05_B_C14_POSTPROCESAMIENTO_C14_101_TIEMPOS_01/system/C14_B_OFFLINE/C14_B_thermal",
+        "-time",
+        "0:10",
+        "-fields",
+        "(T U p_rgh phaseChangeSource:alpha1)"
+      ]
+    },
+    "03_phase_summary": {
+      "name": "03_phase_summary",
+      "result": "COMPLETE",
+      "exit_code": 0,
+      "log": "/home/michel/OpenFOAM/C3D05_B_C14_POSTPROCESAMIENTO_C14_101_TIEMPOS_01/log.C14B.03_phase_summary",
+      "cmd": [
+        "foamPostProcess",
+        "-case",
+        "/home/michel/OpenFOAM/C3D05_B_C14_POSTPROCESAMIENTO_C14_101_TIEMPOS_01",
+        "-region",
+        "metal",
+        "-dict",
+        "/home/michel/OpenFOAM/C3D05_B_C14_POSTPROCESAMIENTO_C14_101_TIEMPOS_01/system/C14_B_OFFLINE/C14_B_phase_summary",
+        "-time",
+        "0:10",
+        "-fields",
+        "(T U p_rgh phaseChangeSource:alpha1)"
+      ]
+    },
+    "04_thermal_max": {
+      "name": "04_thermal_max",
+      "result": "COMPLETE",
+      "exit_code": 0,
+      "log": "/home/michel/OpenFOAM/C3D05_B_C14_POSTPROCESAMIENTO_C14_101_TIEMPOS_01/log.C14B.04_thermal_max",
+      "cmd": [
+        "foamPostProcess",
+        "-case",
+        "/home/michel/OpenFOAM/C3D05_B_C14_POSTPROCESAMIENTO_C14_101_TIEMPOS_01",
+        "-region",
+        "metal",
+        "-dict",
+        "/home/michel/OpenFOAM/C3D05_B_C14_POSTPROCESAMIENTO_C14_101_TIEMPOS_01/system/C14_B_OFFLINE/C14_B_thermal_max",
+        "-time",
+        "0:10",
+        "-fields",
+        "(T U p_rgh phaseChangeSource:alpha1)"
+      ]
+    },
+    "05_probes_101": {
+      "name": "05_probes_101",
+      "result": "COMPLETE",
+      "exit_code": 0,
+      "log": "/home/michel/OpenFOAM/C3D05_B_C14_POSTPROCESAMIENTO_C14_101_TIEMPOS_01/log.C14B.05_probes_101",
+      "cmd": [
+        "foamPostProcess",
+        "-case",
+        "/home/michel/OpenFOAM/C3D05_B_C14_POSTPROCESAMIENTO_C14_101_TIEMPOS_01",
+        "-region",
+        "metal",
+        "-dict",
+        "/home/michel/OpenFOAM/C3D05_B_C14_POSTPROCESAMIENTO_C14_101_TIEMPOS_01/system/C14_B_OFFLINE/C14_B_probe_101",
+        "-time",
+        "0:10",
+        "-fields",
+        "(T U p_rgh phaseChangeSource:alpha1)"
+      ]
+    },
+    "06_profiles_101": {
+      "name": "06_profiles_101",
+      "result": "COMPLETE",
+      "exit_code": 0,
+      "log": "/home/michel/OpenFOAM/C3D05_B_C14_POSTPROCESAMIENTO_C14_101_TIEMPOS_01/log.C14B.06_profiles_101",
+      "cmd": [
+        "foamPostProcess",
+        "-case",
+        "/home/michel/OpenFOAM/C3D05_B_C14_POSTPROCESAMIENTO_C14_101_TIEMPOS_01",
+        "-region",
+        "metal",
+        "-dict",
+        "/home/michel/OpenFOAM/C3D05_B_C14_POSTPROCESAMIENTO_C14_101_TIEMPOS_01/system/C14_B_OFFLINE/C14_B_profiles",
+        "-time",
+        "0:10",
+        "-fields",
+        "(T U p_rgh phaseChangeSource:alpha1)"
+      ]
+    },
+    "07_density_gradient": {
+      "name": "07_density_gradient",
+      "result": "COMPLETE",
+      "exit_code": 0,
+      "log": "/home/michel/OpenFOAM/C3D05_B_C14_POSTPROCESAMIENTO_C14_101_TIEMPOS_01/log.C14B.07_density_gradient",
+      "cmd": [
+        "foamPostProcess",
+        "-case",
+        "/home/michel/OpenFOAM/C3D05_B_C14_POSTPROCESAMIENTO_C14_101_TIEMPOS_01",
+        "-region",
+        "metal",
+        "-dict",
+        "/home/michel/OpenFOAM/C3D05_B_C14_POSTPROCESAMIENTO_C14_101_TIEMPOS_01/system/C14_B_OFFLINE/C14_B_density_gradient",
+        "-time",
+        "0.1:10",
+        "-fields",
+        "(rho phi U)"
+      ]
+    },
+    "08_density_courant": {
+      "name": "08_density_courant",
+      "result": "COMPLETE",
+      "exit_code": 0,
+      "log": "/home/michel/OpenFOAM/C3D05_B_C14_POSTPROCESAMIENTO_C14_101_TIEMPOS_01/log.C14B.08_density_courant",
+      "cmd": [
+        "foamPostProcess",
+        "-case",
+        "/home/michel/OpenFOAM/C3D05_B_C14_POSTPROCESAMIENTO_C14_101_TIEMPOS_01",
+        "-region",
+        "metal",
+        "-dict",
+        "/home/michel/OpenFOAM/C3D05_B_C14_POSTPROCESAMIENTO_C14_101_TIEMPOS_01/system/C14_B_OFFLINE/C14_B_density_courant",
+        "-time",
+        "0.1:10",
+        "-fields",
+        "(rho phi U)"
+      ]
+    },
+    "09_density_summary": {
+      "name": "09_density_summary",
+      "result": "COMPLETE",
+      "exit_code": 0,
+      "log": "/home/michel/OpenFOAM/C3D05_B_C14_POSTPROCESAMIENTO_C14_101_TIEMPOS_01/log.C14B.09_density_summary",
+      "cmd": [
+        "foamPostProcess",
+        "-case",
+        "/home/michel/OpenFOAM/C3D05_B_C14_POSTPROCESAMIENTO_C14_101_TIEMPOS_01",
+        "-region",
+        "metal",
+        "-dict",
+        "/home/michel/OpenFOAM/C3D05_B_C14_POSTPROCESAMIENTO_C14_101_TIEMPOS_01/system/C14_B_OFFLINE/C14_B_density_summary",
+        "-time",
+        "0.1:10",
+        "-fields",
+        "(rho phi U)"
+      ]
+    },
+    "10_probes_rho": {
+      "name": "10_probes_rho",
+      "result": "COMPLETE",
+      "exit_code": 0,
+      "log": "/home/michel/OpenFOAM/C3D05_B_C14_POSTPROCESAMIENTO_C14_101_TIEMPOS_01/log.C14B.10_probes_rho",
+      "cmd": [
+        "foamPostProcess",
+        "-case",
+        "/home/michel/OpenFOAM/C3D05_B_C14_POSTPROCESAMIENTO_C14_101_TIEMPOS_01",
+        "-region",
+        "metal",
+        "-dict",
+        "/home/michel/OpenFOAM/C3D05_B_C14_POSTPROCESAMIENTO_C14_101_TIEMPOS_01/system/C14_B_OFFLINE/C14_B_probe_rho_100",
+        "-time",
+        "0.1:10",
+        "-fields",
+        "(T U p_rgh rho phaseChangeSource:alpha1)"
+      ]
+    },
+    "11_profiles_rho": {
+      "name": "11_profiles_rho",
+      "result": "COMPLETE",
+      "exit_code": 0,
+      "log": "/home/michel/OpenFOAM/C3D05_B_C14_POSTPROCESAMIENTO_C14_101_TIEMPOS_01/log.C14B.11_profiles_rho",
+      "cmd": [
+        "foamPostProcess",
+        "-case",
+        "/home/michel/OpenFOAM/C3D05_B_C14_POSTPROCESAMIENTO_C14_101_TIEMPOS_01",
+        "-region",
+        "metal",
+        "-dict",
+        "/home/michel/OpenFOAM/C3D05_B_C14_POSTPROCESAMIENTO_C14_101_TIEMPOS_01/system/C14_B_OFFLINE/C14_B_profiles_rho",
+        "-time",
+        "0.1:10",
+        "-fields",
+        "(T U p_rgh rho phaseChangeSource:alpha1)"
+      ]
+    },
+    "12_topSurface": {
+      "name": "12_topSurface",
+      "result": "COMPLETE",
+      "exit_code": 0,
+      "log": "/home/michel/OpenFOAM/C3D05_B_C14_POSTPROCESAMIENTO_C14_101_TIEMPOS_01/log.C14B.12_topSurface",
+      "cmd": [
+        "foamPostProcess",
+        "-case",
+        "/home/michel/OpenFOAM/C3D05_B_C14_POSTPROCESAMIENTO_C14_101_TIEMPOS_01",
+        "-region",
+        "metal",
+        "-dict",
+        "/home/michel/OpenFOAM/C3D05_B_C14_POSTPROCESAMIENTO_C14_101_TIEMPOS_01/system/C14_B_OFFLINE/C14_B_topSurface",
+        "-time",
+        "0.1:10",
+        "-fields",
+        "(T U p_rgh rho phaseChangeSource:alpha1 phi)"
+      ]
+    },
+    "13_energy_optional": {
+      "name": "13_energy_optional",
+      "result": "COMPLETE",
+      "exit_code": 0,
+      "log": "/home/michel/OpenFOAM/C3D05_B_C14_POSTPROCESAMIENTO_C14_101_TIEMPOS_01/log.C14B.13_energy_optional",
+      "cmd": [
+        "foamPostProcess",
+        "-case",
+        "/home/michel/OpenFOAM/C3D05_B_C14_POSTPROCESAMIENTO_C14_101_TIEMPOS_01",
+        "-region",
+        "metal",
+        "-dict",
+        "/home/michel/OpenFOAM/C3D05_B_C14_POSTPROCESAMIENTO_C14_101_TIEMPOS_01/system/C14_B_OFFLINE/C14_B_energy_optional",
+        "-time",
+        "0.1:10",
+        "-fields",
+        "(T U p_rgh rho phaseChangeSource:alpha1 phi)"
+      ]
+    },
+    "14_momentum_optional": {
+      "name": "14_momentum_optional",
+      "result": "COMPLETE",
+      "exit_code": 0,
+      "log": "/home/michel/OpenFOAM/C3D05_B_C14_POSTPROCESAMIENTO_C14_101_TIEMPOS_01/log.C14B.14_momentum_optional",
+      "cmd": [
+        "foamPostProcess",
+        "-case",
+        "/home/michel/OpenFOAM/C3D05_B_C14_POSTPROCESAMIENTO_C14_101_TIEMPOS_01",
+        "-region",
+        "metal",
+        "-dict",
+        "/home/michel/OpenFOAM/C3D05_B_C14_POSTPROCESAMIENTO_C14_101_TIEMPOS_01/system/C14_B_OFFLINE/C14_B_momentum",
+        "-time",
+        "0.1:10",
+        "-fields",
+        "(T U p_rgh rho phaseChangeSource:alpha1 phi)"
+      ]
+    },
+    "foamLog": {
+      "name": "foamLog",
+      "result": "COMPLETE",
+      "exit_code": 0,
+      "log": "/home/michel/OpenFOAM/C3D05_B_C14_POSTPROCESAMIENTO_C14_101_TIEMPOS_01/log.C14B.foamLog"
+    }
+  },
+  "original_solved_fields_untouched": true,
+  "physical_energy_conservation_verified": false,
+  "model_contraction_validated": false,
+  "quickcup_or_JMatPro_validated": false,
+  "outcomes": {
+    "postProcessing_folders_and_file_counts": {
+      "metal": 118,
+      "metal/horizontalProfiles": 0,
+      "metal/metalMaxCourant": 1,
+      "metal/metalMaxDensityGradient": 1,
+      "metal/metalMaxThermalGradient": 1,
+      "metal/metalMeanLiquidFraction": 1,
+      "metal/metalTopPhiSum": 1,
+      "metal/momentumHorizontalProfiles": 0,
+      "metal/momentumVerticalProfiles": 0,
+      "metal/nearTopInternalLine": 0,
+      "metal/temperatureProbe": 9,
+      "metal/topPatchFaceFields": 100,
+      "metal/topPhiAbsolute": 1,
+      "metal/topPhiMaximum": 1,
+      "metal/topPhiMinimum": 1,
+      "metal/topPhiNet": 1,
+      "metal/verticalProfiles": 0
+    },
+    "actual_derived_fields_saved_count_101": {
+      "vorticity": 101,
+      "flowType": 101,
+      "gradT": 101,
+      "magGradT": 101,
+      "gradRho": 100,
+      "magGradRho": 100,
+      "CoCell": 100
+    }
+  },
+  "updated_utc": "2026-11-24T21:57:12.387498+00:00",
+  "failed_or_unavailable_stages": [],
+  "all_recoverable_stages_native_success": true,
+  "probe_101_data_points_are_saved_time_only_NOT_solver_10000_steps": true,
+  "original_C14_0_001s_temporal_probes_recovered": false,
+  "original_energy_flux_conservation_physically_verified": false,
+  "original_C14_solver_fvModels_source_integrated": false
+}

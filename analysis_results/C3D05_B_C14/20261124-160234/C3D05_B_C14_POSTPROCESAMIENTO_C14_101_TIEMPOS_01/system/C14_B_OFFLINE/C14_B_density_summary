@@ -1,0 +1,51 @@
+FoamFile
+{
+    version 2.0;
+    format ascii;
+    class dictionary;
+    object C14_B_density_summary;
+}
+
+metalMaxDensityGradient
+{
+    type            volFieldValue;
+    libs            ("libfieldFunctionObjects.so");
+    region          metal;
+
+    log             true;
+    executeControl  writeTime;
+    writeControl    writeTime;
+
+    writeFields     false;
+    writeLocation   true;
+    cellZone        all;
+    operation       max;
+
+    fields
+    (
+        magGradRho
+    );
+}
+
+metalTopPhiSum
+{
+    type            surfaceFieldValue;
+    libs            ("libfieldFunctionObjects.so");
+    region          metal;
+
+    log             true;
+    executeControl  writeTime;
+    executeInterval 1;
+    writeControl    writeTime;
+    writeInterval   1;
+
+    writeFields     false;
+    surfaceFormat   none;
+    patch           metalTop;
+    operation       sum;
+
+    fields
+    (
+        phi
+    );
+}

@@ -1,0 +1,69 @@
+{
+  "schema": "C3D05_B_C14_EXISTING_NATIVE_PHASE_TIMELINE_V1",
+  "status": "C3D05_B_C14_ARCHIVED_PHASE_TIMELINE_NUMERICAL_ONLY",
+  "real_C14_B_native_CFD_10s_completed": true,
+  "saved_snapshots": 101,
+  "first_observed_events_only_bracketed_by_saved_states": {
+    "first_any_cell_T_below_C14_Tliq": {
+      "first_saved_s": 0.3,
+      "previous_saved_s": 0.2,
+      "exact_onset_unknown": true
+    },
+    "first_any_cell_T_below_C14_Tsol": {
+      "first_saved_s": 2.8,
+      "previous_saved_s": 2.7,
+      "exact_onset_unknown": true
+    },
+    "first_any_cell_alpha1_below_0_999": {
+      "first_saved_s": 0.3,
+      "previous_saved_s": 0.2,
+      "exact_onset_unknown": true
+    },
+    "first_mean_alpha1_below_0_999": {
+      "first_saved_s": 0.7,
+      "previous_saved_s": 0.6,
+      "exact_onset_unknown": true
+    },
+    "first_any_cell_alpha1_zero": {
+      "first_saved_s": 5.1,
+      "previous_saved_s": 5.0,
+      "exact_onset_unknown": true
+    },
+    "first_cell_mean_solid_complement_above_5pct": {
+      "first_saved_s": 4.3,
+      "previous_saved_s": 4.2,
+      "exact_onset_unknown": true
+    },
+    "first_cell_mean_solid_complement_above_10pct": {
+      "first_saved_s": 7.1,
+      "previous_saved_s": 7.0,
+      "exact_onset_unknown": true
+    },
+    "first_cell_mean_solid_complement_above_20pct": null
+  },
+  "original_C14_phase_reference": {
+    "Tsol_K": 1423.0,
+    "Tliq_K": 1473.0,
+    "L_J_kg": 228600.0,
+    "provenance": "unchanged source C14 contract, NOT JMatPro for QuickCup casts"
+  },
+  "alpha1_final_unweighted_cell_mean": 0.8424205632624837,
+  "one_minus_alpha1_final_unweighted_cell_mean": 0.1575794367375163,
+  "minimum_saved_alpha1": 0.0,
+  "max_cells_below_alpha1_0_999": 92200,
+  "max_Courant_over_original_full_native_log": 0.267133,
+  "peak_saved_mean_alpha1_drop_per_s": 0.019715118823210205,
+  "peak_saved_mean_metal_cooling_K_per_s": 20.98608459869638,
+  "notes": [
+    "This is C14 ORIGINAL numerical phase evolution, NOT real QuickCup calibration.",
+    "First event is bracketed within a saved interval, never precise onset.",
+    "Cell-unweighted 1-mean(alpha1) is NOT volume/mass-weighted solid fraction.",
+    "Rates are finite differences across saved 0.1s states, NOT true latent heat rate.",
+    "No CFD solver, no remesh, no source modification or synthetic alpha1."
+  ],
+  "physical_volume_weighted_fraction_verified": false,
+  "latent_heat_energy_and_interface_flux_verified": false,
+  "QuickCup_JMatPro_validation": false,
+  "grid_time_convergence": false,
+  "contraction_feeding_verified": false
+}

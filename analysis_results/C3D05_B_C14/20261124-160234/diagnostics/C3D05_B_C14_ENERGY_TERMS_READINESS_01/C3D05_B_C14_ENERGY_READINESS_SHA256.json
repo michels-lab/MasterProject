@@ -1,0 +1,10 @@
+{
+  "source_original_CFD_stage_SHA256": "e3b9d8af78fa9ca1be82e7f99384c44db2bc31bd38b295d42804873db67af416",
+  "source_original_CFD_solver_log_SHA256": "f50b79cd2a411ab15dd366d9d6068ef042baba4af999f40887e8d05c761c1e20",
+  "source_join_101_CSV_SHA256": "032ddfeb56eafe728f55bc6eb1bb4b2a9c434dff2cf8c47e658b1f7e8beb2ef9",
+  "source_join_report_SHA256": "ccab5f890ccf3cc17415ba963214a3b1e04199d4a60e039be1e5d677c88d5de7",
+  "source_original_C14_fvModels_SHA256": "a4747af8974998e3fe69e3931b80f6d82f92d3ee4d19f471d5179936fa8e6525",
+  "q_quadrature_sensitivity_CSV_SHA256": "95ad2e95b610f0d79968dd2cb6c8f971ee50d26629d6b481573c72f4f5c50d2c",
+  "energy_terms_readiness_JSON_SHA256": "1c85db4c688942f74a2d9ae5468139cdced3ea49f606a499ef30e55f6626b3ba",
+  "NO_CFD_REEXECUTION_AND_NO_SOURCE_MUTATION": true
+}

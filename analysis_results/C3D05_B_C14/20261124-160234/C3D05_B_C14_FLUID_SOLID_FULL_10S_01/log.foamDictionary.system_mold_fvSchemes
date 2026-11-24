@@ -1,0 +1,38 @@
+FoamFile
+{
+    format          ascii;
+    class           dictionary;
+    object          fvSchemes;
+}
+
+ddtSchemes
+{
+    default         Euler;
+}
+
+gradSchemes
+{
+    default         Gauss linear;
+    grad(T)         Gauss linear;
+}
+
+divSchemes
+{
+    default         none;
+}
+
+laplacianSchemes
+{
+    default         none;
+    laplacian(kappa,T) Gauss linear corrected;
+}
+
+interpolationSchemes
+{
+    interpolate((kappa|Cv)) harmonic;
+}
+
+snGradSchemes
+{
+    default         corrected;
+}

@@ -1,0 +1,42 @@
+FoamFile
+{
+    version 2.0;
+    format ascii;
+    class dictionary;
+    object C14_B_density_courant;
+}
+
+cellCourantNumber
+{
+    type            CourantNo;
+    libs            ("libfieldFunctionObjects.so");
+    region          metal;
+
+    phi             phi;
+    rho             rho;
+    result          CoCell;
+
+    executeControl  writeTime;
+    writeControl    writeTime;
+}
+
+metalMaxCourant
+{
+    type            volFieldValue;
+    libs            ("libfieldFunctionObjects.so");
+    region          metal;
+
+    log             true;
+    executeControl  writeTime;
+    writeControl    writeTime;
+
+    writeFields     false;
+    writeLocation   true;
+    cellZone        all;
+    operation       max;
+
+    fields
+    (
+        CoCell
+    );
+}

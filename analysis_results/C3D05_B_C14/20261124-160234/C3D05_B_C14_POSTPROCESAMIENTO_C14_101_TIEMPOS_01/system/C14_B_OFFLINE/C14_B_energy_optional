@@ -1,0 +1,141 @@
+FoamFile
+{
+    version 2.0;
+    format ascii;
+    class dictionary;
+    object C14_B_energy_optional;
+}
+
+energyAdvectiveFlux
+{
+    type            energyAdvectiveFlux;
+    libs            ("libfieldFunctionObjects.so");
+    region          metal;
+
+    executeControl  writeTime;
+    executeInterval 1;
+    writeControl    writeTime;
+    writeInterval   1;
+}
+
+heatFlux
+{
+    type            heatFlux;
+    libs            ("libfieldFunctionObjects.so");
+    region          metal;
+
+    executeControl  writeTime;
+    executeInterval 1;
+    writeControl    writeTime;
+    writeInterval   1;
+}
+
+energyFlux
+{
+    type            energyFlux;
+    libs            ("libfieldFunctionObjects.so");
+    region          metal;
+
+    executeControl  writeTime;
+    executeInterval 1;
+    writeControl    writeTime;
+    writeInterval   1;
+}
+
+metalTopEnergyPower
+{
+    type            surfaceFieldValue;
+    libs            ("libfieldFunctionObjects.so");
+    region          metal;
+
+    log             true;
+    executeControl  writeTime;
+    executeInterval 1;
+    writeControl    writeTime;
+    writeInterval   1;
+
+    writeFields     false;
+    surfaceFormat   none;
+    patch           metalTop;
+    operation       sum;
+
+    fields
+    (
+        energyAdvectiveFlux
+        heatFlux
+        energyFlux
+    );
+}
+
+metalMoldEnergyPower
+{
+    type            surfaceFieldValue;
+    libs            ("libfieldFunctionObjects.so");
+    region          metal;
+
+    log             true;
+    executeControl  writeTime;
+    executeInterval 1;
+    writeControl    writeTime;
+    writeInterval   1;
+
+    writeFields     false;
+    surfaceFormat   none;
+    patch           metal_to_mold;
+    operation       sum;
+
+    fields
+    (
+        energyAdvectiveFlux
+        heatFlux
+        energyFlux
+    );
+}
+
+metalBoundaryEnergyPower
+{
+    type            surfaceFieldValue;
+    libs            ("libfieldFunctionObjects.so");
+    region          metal;
+
+    log             true;
+    executeControl  writeTime;
+    executeInterval 1;
+    writeControl    writeTime;
+    writeInterval   1;
+
+    writeFields     false;
+    surfaceFormat   none;
+    patches         (metalTop metal_to_mold);
+    operation       sum;
+
+    fields
+    (
+        energyAdvectiveFlux
+        heatFlux
+        energyFlux
+    );
+}
+
+metalSensibleEnthalpy
+{
+    type            volFieldValue;
+    libs            ("libfieldFunctionObjects.so");
+    region          metal;
+
+    log             true;
+    executeControl  writeTime;
+    executeInterval 1;
+    writeControl    writeTime;
+    writeInterval   1;
+
+    writeFields     false;
+    cellZone        all;
+    operation       volIntegrate;
+    weightField     rho;
+
+    fields
+    (
+        h
+    );
+}

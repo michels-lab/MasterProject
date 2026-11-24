@@ -1,0 +1,43 @@
+FoamFile
+{
+    version 2.0;
+    format ascii;
+    class dictionary;
+    object C14_B_probe_rho_100;
+}
+
+temperatureProbe
+{
+    type            probes;
+    libs            ("libfieldFunctionObjects.so");
+
+    // Región donde se encuentra el probe
+    region          metal;
+
+    // Campos registrados
+    fields
+    (
+        T
+        U
+        p_rgh
+        rho
+        phaseChangeSource:alpha1
+    );
+
+    // Posición del probe [m]
+    probeLocations
+    (
+        (0.02 0.02 0.005)
+    );
+
+    // Evaluar en cada paso de tiempo
+    executeControl  timeStep;
+    executeInterval 1;
+
+    // Escribir en cada paso de tiempo
+    writeControl    timeStep;
+    writeInterval   1;
+
+    // Guardar resultados en postProcessing
+    writeToFile     true;
+}

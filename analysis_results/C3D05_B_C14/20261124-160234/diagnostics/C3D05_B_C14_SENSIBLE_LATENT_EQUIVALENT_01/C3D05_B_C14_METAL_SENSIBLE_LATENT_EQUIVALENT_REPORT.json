@@ -1,0 +1,69 @@
+{
+  "schema": "C3D05_B_C14_REAL_10S_METAL_REFERENCE_INVENTORY_V1",
+  "status": "C3D05_B_C14_REAL_METAL_C14_SENSIBLE_LATENT_EQUIVALENT_INVENTORY_NO_ENERGY_CLOSURE",
+  "reference_C14_metal_constants": {
+    "rho_metal_kg_m3": 6820.0,
+    "Cp_metal_J_kgK": 827.0,
+    "L_metal_J_kg": 228600.0,
+    "reference_initial_temperature_K": 1500.0,
+    "source_sha256": "8f0021763502cb58f33a12d39e08cb8c00808dc3e4b6d6ecadacd18ba8455f85",
+    "provenance": "ORIGINAL C14 archive, NOT QuickCup/JMatPro calibrated"
+  },
+  "real_native_metal_hex8_geometry": {
+    "source": "REAL_ORIGINAL_POLYMESH_QUAD_FACE_ORIENTED_TRIANGLE_PYRAMID_DIVERGENCE",
+    "volume_method": "owner_plus_neighbor_minus_signed_face_6_volume",
+    "nCells": 92200,
+    "nFaces": 283389,
+    "nInternalFaces": 269811,
+    "nPoints": 106529,
+    "cell_volume_min_m3": 6.174996903303957e-11,
+    "cell_volume_max_m3": 4.3881731333931845e-09,
+    "total_volume_m3": 4.797539547720032e-05,
+    "native_checkMesh_total_volume_m3": 4.79754032229e-05,
+    "relative_discrepancy_vs_checkMesh": 1.6145147646629957e-07,
+    "nonplanar_quad_triangulation_difference_possible": true
+  },
+  "real_native_archive_used": "/home/michel/OpenFOAM/C3D05_B_C14_FLUID_SOLID_FULL_10S_01",
+  "real_native_101_state_postrun_used": "/home/michel/OpenFOAM/C3D05_B_C14_FLUID_SOLID_10S_ANALYSIS_01",
+  "real_native_101_state_volume_weighted_phase_used": "/home/michel/OpenFOAM/C3D05_B_C14_VOLUME_WEIGHTED_PHASE_01",
+  "nStates": 101,
+  "start_s": 0.0,
+  "end_s": 10.0,
+  "initial": {
+    "time_s": 0.0,
+    "mean_metal_temperature_volume_weighted_K": 1500.0,
+    "mean_liquid_fraction_volume_weighted": 1.0,
+    "mean_solid_complement_volume_weighted": 0.0,
+    "metal_sensible_change_from_t0_J": 0.0,
+    "metal_latent_equivalent_solid_complement_change_from_t0_J": 0.0,
+    "latent_equivalent_instantaneous_inventory_J": 0.0,
+    "metal_sensible_change_rate_saved_interval_W": null,
+    "metal_latent_equivalent_change_rate_saved_interval_W": null
+  },
+  "final": {
+    "time_s": 10.0,
+    "mean_metal_temperature_volume_weighted_K": 1449.8263020052098,
+    "mean_liquid_fraction_volume_weighted": 0.8917029860767621,
+    "mean_solid_complement_volume_weighted": 0.10829701392323787,
+    "metal_sensible_change_from_t0_J": -13576.397936155232,
+    "metal_latent_equivalent_solid_complement_change_from_t0_J": 8100.198210984614,
+    "latent_equivalent_instantaneous_inventory_J": 8100.198210984614,
+    "metal_sensible_change_rate_saved_interval_W": -639.9048882686498,
+    "metal_latent_equivalent_change_rate_saved_interval_W": 1061.3357907555967
+  },
+  "absolute_energy_stored_J_computed": false,
+  "native_solver_latent_fvModels_integral_computed": false,
+  "solidification_heat_actually_released_J_verified": false,
+  "metal_sand_exterior_energy_balance_verified": false,
+  "mass_or_momentum_flux_accounting_verified": false,
+  "material_properties_JMatPro_QuickCup_calibrated": false,
+  "mesh_and_time_step_convergence": false,
+  "notes": [
+    "rho_C14 Cp_C14 sum Vi*(T(t)-T(0)) is a REFERENCE metal sensible difference, not full OpenFOAM enthalpy conservation.",
+    "rho_C14 L_C14 sum Vi*(alpha(0)-alpha(t)) is a MODEL LATENT-EQUIVALENT phase-change proxy, NOT native fvModel integrated latent heat release.",
+    "A positive latent proxy is not a measured transfer of energy across metal-to-mold interface; do not sum with sand heating or claim closure.",
+    "Closed energy conservation needs time-resolved native enthalpy source, metal-mold interface and exterior fluxes, other terms and spatial/time convergence.",
+    "Model C14 rho/Cp/L are constant historical inputs, not calibrated for the eight real QuickCup alloys.",
+    "Original research CFD, 101 postrun fields and previous weighted analysis are never overwritten or recalculated with foamMultiRun."
+  ]
+}

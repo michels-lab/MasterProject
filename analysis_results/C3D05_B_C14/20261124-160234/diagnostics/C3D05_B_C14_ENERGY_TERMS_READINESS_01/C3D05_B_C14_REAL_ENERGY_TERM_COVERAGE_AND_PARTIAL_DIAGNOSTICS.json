@@ -1,0 +1,326 @@
+{
+  "schema": "C3D05_B_C14_F14_REAL_ENERGY_TERMS_READINESS_V1",
+  "status": "C3D05_B_C14_REAL_C14_ENERGY_TERM_COVERAGE_AND_SAVED_Q_QUADRATURE_NOT_CLOSURE",
+  "source_original_C14_10s_CFD_read_only": "/home/michel/OpenFOAM/C3D05_B_C14_FLUID_SOLID_FULL_10S_01",
+  "source_101_native_q_storage_join_read_only": "/home/michel/OpenFOAM/C3D05_B_C14_Q_VS_REFERENCE_STORAGE_01",
+  "source_SHA256": {
+    "joined_101_CSV_SHA256": "032ddfeb56eafe728f55bc6eb1bb4b2a9c434dff2cf8c47e658b1f7e8beb2ef9",
+    "joined_report_SHA256": "ccab5f890ccf3cc17415ba963214a3b1e04199d4a60e039be1e5d677c88d5de7",
+    "original_101_state_q_CSV_SHA256": "f9ad736148967687dd0d4c7dcea21267a9e1f82878392b0c231c5d849506c5a3",
+    "original_101_state_storage_CSV_SHA256": "610b6b1fd3d2fe8461379eee0eb878e776f6d410ba050a39d3a3c687c7231e9d",
+    "original_CFD_log_SHA256": "f50b79cd2a411ab15dd366d9d6068ef042baba4af999f40887e8d05c761c1e20",
+    "original_CFD_stage_SHA256": "e3b9d8af78fa9ca1be82e7f99384c44db2bc31bd38b295d42804873db67af416"
+  },
+  "source_C14_fvModels_SHA256": "a4747af8974998e3fe69e3931b80f6d82f92d3ee4d19f471d5179936fa8e6525",
+  "source_C14_energy_h_solidification_model_declaration_verified": true,
+  "saved_states": 101,
+  "q_native_101_times_success": true,
+  "source_fields_availability": {
+    "metal_T": {
+      "original_relative_field": "metal/T",
+      "saved_states_with_field": 101,
+      "expected_states": 101,
+      "all_101_states_available": true,
+      "first_saved_time_s": 0.0,
+      "last_saved_time_s": 10.0,
+      "sample_missing_time_labels": [],
+      "values_not_loaded_or_guessed": true
+    },
+    "metal_U": {
+      "original_relative_field": "metal/U",
+      "saved_states_with_field": 101,
+      "expected_states": 101,
+      "all_101_states_available": true,
+      "first_saved_time_s": 0.0,
+      "last_saved_time_s": 10.0,
+      "sample_missing_time_labels": [],
+      "values_not_loaded_or_guessed": true
+    },
+    "metal_h": {
+      "original_relative_field": "metal/h",
+      "saved_states_with_field": 0,
+      "expected_states": 101,
+      "all_101_states_available": false,
+      "first_saved_time_s": null,
+      "last_saved_time_s": null,
+      "sample_missing_time_labels": [
+        "0",
+        "0.1",
+        "0.2",
+        "0.3"
+      ],
+      "values_not_loaded_or_guessed": true
+    },
+    "metal_he": {
+      "original_relative_field": "metal/he",
+      "saved_states_with_field": 0,
+      "expected_states": 101,
+      "all_101_states_available": false,
+      "first_saved_time_s": null,
+      "last_saved_time_s": null,
+      "sample_missing_time_labels": [
+        "0",
+        "0.1",
+        "0.2",
+        "0.3"
+      ],
+      "values_not_loaded_or_guessed": true
+    },
+    "metal_rho": {
+      "original_relative_field": "metal/rho",
+      "saved_states_with_field": 100,
+      "expected_states": 101,
+      "all_101_states_available": false,
+      "first_saved_time_s": 0.1,
+      "last_saved_time_s": 10.0,
+      "sample_missing_time_labels": [
+        "0"
+      ],
+      "values_not_loaded_or_guessed": true
+    },
+    "metal_phi": {
+      "original_relative_field": "metal/phi",
+      "saved_states_with_field": 100,
+      "expected_states": 101,
+      "all_101_states_available": false,
+      "first_saved_time_s": 0.1,
+      "last_saved_time_s": 10.0,
+      "sample_missing_time_labels": [
+        "0"
+      ],
+      "values_not_loaded_or_guessed": true
+    },
+    "metal_p": {
+      "original_relative_field": "metal/p",
+      "saved_states_with_field": 101,
+      "expected_states": 101,
+      "all_101_states_available": true,
+      "first_saved_time_s": 0.0,
+      "last_saved_time_s": 10.0,
+      "sample_missing_time_labels": [],
+      "values_not_loaded_or_guessed": true
+    },
+    "metal_p_rgh": {
+      "original_relative_field": "metal/p_rgh",
+      "saved_states_with_field": 101,
+      "expected_states": 101,
+      "all_101_states_available": true,
+      "first_saved_time_s": 0.0,
+      "last_saved_time_s": 10.0,
+      "sample_missing_time_labels": [],
+      "values_not_loaded_or_guessed": true
+    },
+    "metal_alpha1": {
+      "original_relative_field": "metal/phaseChangeSource:alpha1",
+      "saved_states_with_field": 101,
+      "expected_states": 101,
+      "all_101_states_available": true,
+      "first_saved_time_s": 0.0,
+      "last_saved_time_s": 10.0,
+      "sample_missing_time_labels": [],
+      "values_not_loaded_or_guessed": true
+    },
+    "mold_T": {
+      "original_relative_field": "mold/T",
+      "saved_states_with_field": 101,
+      "expected_states": 101,
+      "all_101_states_available": true,
+      "first_saved_time_s": 0.0,
+      "last_saved_time_s": 10.0,
+      "sample_missing_time_labels": [],
+      "values_not_loaded_or_guessed": true
+    },
+    "mold_e": {
+      "original_relative_field": "mold/e",
+      "saved_states_with_field": 0,
+      "expected_states": 101,
+      "all_101_states_available": false,
+      "first_saved_time_s": null,
+      "last_saved_time_s": null,
+      "sample_missing_time_labels": [
+        "0",
+        "0.1",
+        "0.2",
+        "0.3"
+      ],
+      "values_not_loaded_or_guessed": true
+    },
+    "mold_he": {
+      "original_relative_field": "mold/he",
+      "saved_states_with_field": 0,
+      "expected_states": 101,
+      "all_101_states_available": false,
+      "first_saved_time_s": null,
+      "last_saved_time_s": null,
+      "sample_missing_time_labels": [
+        "0",
+        "0.1",
+        "0.2",
+        "0.3"
+      ],
+      "values_not_loaded_or_guessed": true
+    },
+    "mold_rho": {
+      "original_relative_field": "mold/rho",
+      "saved_states_with_field": 0,
+      "expected_states": 101,
+      "all_101_states_available": false,
+      "first_saved_time_s": null,
+      "last_saved_time_s": null,
+      "sample_missing_time_labels": [
+        "0",
+        "0.1",
+        "0.2",
+        "0.3"
+      ],
+      "values_not_loaded_or_guessed": true
+    }
+  },
+  "original_thermal_BC_dictionary_source_evidence": {
+    "metal/metalTop": {
+      "source_initial_T_field_SHA256": "f63c9f62ce0fd7b804a28fa50d7d99de716a6de8bbed73876dc55742474e7f6b",
+      "patch_name_confirmed": true,
+      "source_thermal_BC_types_observed": [
+        "coupledTemperature",
+        "externalTemperature"
+      ],
+      "potential_radiation_model_mentions_emissivity": true,
+      "separate_convection_radiation_flux_integral_not_verified": true
+    },
+    "metal/metal_to_mold": {
+      "source_initial_T_field_SHA256": "f63c9f62ce0fd7b804a28fa50d7d99de716a6de8bbed73876dc55742474e7f6b",
+      "patch_name_confirmed": true,
+      "source_thermal_BC_types_observed": [
+        "coupledTemperature",
+        "externalTemperature"
+      ],
+      "potential_radiation_model_mentions_emissivity": true,
+      "separate_convection_radiation_flux_integral_not_verified": true
+    },
+    "mold/mold_to_metal": {
+      "source_initial_T_field_SHA256": "706e6655b12928ff9ee426abaab7d34c7ba194e53a7b751c2f80345e5f62b8be",
+      "patch_name_confirmed": true,
+      "source_thermal_BC_types_observed": [
+        "coupledTemperature",
+        "externalTemperature"
+      ],
+      "potential_radiation_model_mentions_emissivity": true,
+      "separate_convection_radiation_flux_integral_not_verified": true
+    },
+    "mold/moldOuterUnclassified": {
+      "source_initial_T_field_SHA256": "706e6655b12928ff9ee426abaab7d34c7ba194e53a7b751c2f80345e5f62b8be",
+      "patch_name_confirmed": true,
+      "source_thermal_BC_types_observed": [
+        "coupledTemperature",
+        "externalTemperature"
+      ],
+      "potential_radiation_model_mentions_emissivity": true,
+      "separate_convection_radiation_flux_integral_not_verified": true
+    }
+  },
+  "region_reference_storage_plus_saved_time_conduction_partial_diagnostics": {
+    "metal": {
+      "reference_storage_change_J": -21676.596147139848,
+      "outward_conductive_q_saved_trapezoid_J": 21495.547655997885,
+      "sum_reference_storage_plus_outward_conduction_J_NOT_ENERGY_RESIDUAL": -181.0484911419626
+    },
+    "mold": {
+      "reference_storage_change_J": 20323.651945808975,
+      "outward_conductive_q_saved_trapezoid_J": -20154.155032142786,
+      "sum_reference_storage_plus_outward_conduction_J_NOT_ENERGY_RESIDUAL": 169.49691366618936
+    },
+    "summed_region_partials_including_internal_q_J_NOT_ENERGY_RESIDUAL": -11.551577475773229,
+    "internal_interface_signed_q_saved_trapezoid_J": -0.11528316616279427,
+    "domain_exterior_only_reference_comparison_J_NOT_ENERGY_RESIDUAL": -11.436294309626874
+  },
+  "saved_time_trapezoid_subsampling_sensitivity": [
+    {
+      "saved_time_step_s": 0.1,
+      "count_saved_snapshots": 101,
+      "source_is_101_real_saved_snapshots": true,
+      "not_original_solver_dt_integral": true,
+      "metal_to_mold_q_out_J_SAVED_TIME_TRAPEZOID": 20283.452365355944,
+      "mold_to_metal_q_out_J_SAVED_TIME_TRAPEZOID": -20283.56764852211,
+      "interface_sum_outward_J_SAVED_TIME_TRAPEZOID": -0.11528316616279424,
+      "metalTop_q_out_J_SAVED_TIME_TRAPEZOID": 1212.0952906419323,
+      "moldOuterUnclassified_q_out_J_SAVED_TIME_TRAPEZOID": 129.4126163793134,
+      "external_total_q_out_J_SAVED_TIME_TRAPEZOID": 1341.5079070212455,
+      "metal_to_mold_q_out_J_SAVED_TIME_TRAPEZOID_difference_vs_0_1s_J": 0.0,
+      "mold_to_metal_q_out_J_SAVED_TIME_TRAPEZOID_difference_vs_0_1s_J": 0.0,
+      "interface_sum_outward_J_SAVED_TIME_TRAPEZOID_difference_vs_0_1s_J": 0.0,
+      "metalTop_q_out_J_SAVED_TIME_TRAPEZOID_difference_vs_0_1s_J": 0.0,
+      "moldOuterUnclassified_q_out_J_SAVED_TIME_TRAPEZOID_difference_vs_0_1s_J": 0.0,
+      "external_total_q_out_J_SAVED_TIME_TRAPEZOID_difference_vs_0_1s_J": 0.0
+    },
+    {
+      "saved_time_step_s": 0.2,
+      "count_saved_snapshots": 51,
+      "source_is_101_real_saved_snapshots": true,
+      "not_original_solver_dt_integral": true,
+      "metal_to_mold_q_out_J_SAVED_TIME_TRAPEZOID": 20117.566965912683,
+      "mold_to_metal_q_out_J_SAVED_TIME_TRAPEZOID": -20117.678636654615,
+      "interface_sum_outward_J_SAVED_TIME_TRAPEZOID": -0.11167074193140247,
+      "metalTop_q_out_J_SAVED_TIME_TRAPEZOID": 1205.6460272627658,
+      "moldOuterUnclassified_q_out_J_SAVED_TIME_TRAPEZOID": 129.42401937699745,
+      "external_total_q_out_J_SAVED_TIME_TRAPEZOID": 1335.0700466397634,
+      "metal_to_mold_q_out_J_SAVED_TIME_TRAPEZOID_difference_vs_0_1s_J": -165.88539944326112,
+      "mold_to_metal_q_out_J_SAVED_TIME_TRAPEZOID_difference_vs_0_1s_J": 165.88901186749354,
+      "interface_sum_outward_J_SAVED_TIME_TRAPEZOID_difference_vs_0_1s_J": 0.00361242423139177,
+      "metalTop_q_out_J_SAVED_TIME_TRAPEZOID_difference_vs_0_1s_J": -6.449263379166496,
+      "moldOuterUnclassified_q_out_J_SAVED_TIME_TRAPEZOID_difference_vs_0_1s_J": 0.011402997684058391,
+      "external_total_q_out_J_SAVED_TIME_TRAPEZOID_difference_vs_0_1s_J": -6.437860381482096
+    },
+    {
+      "saved_time_step_s": 0.5,
+      "count_saved_snapshots": 21,
+      "source_is_101_real_saved_snapshots": true,
+      "not_original_solver_dt_integral": true,
+      "metal_to_mold_q_out_J_SAVED_TIME_TRAPEZOID": 19638.643214316347,
+      "mold_to_metal_q_out_J_SAVED_TIME_TRAPEZOID": -19638.744337133256,
+      "interface_sum_outward_J_SAVED_TIME_TRAPEZOID": -0.10112281690885538,
+      "metalTop_q_out_J_SAVED_TIME_TRAPEZOID": 1186.3396829402436,
+      "moldOuterUnclassified_q_out_J_SAVED_TIME_TRAPEZOID": 129.5026682184771,
+      "external_total_q_out_J_SAVED_TIME_TRAPEZOID": 1315.8423511587207,
+      "metal_to_mold_q_out_J_SAVED_TIME_TRAPEZOID_difference_vs_0_1s_J": -644.809151039597,
+      "mold_to_metal_q_out_J_SAVED_TIME_TRAPEZOID_difference_vs_0_1s_J": 644.8233113888527,
+      "interface_sum_outward_J_SAVED_TIME_TRAPEZOID_difference_vs_0_1s_J": 0.014160349253938859,
+      "metalTop_q_out_J_SAVED_TIME_TRAPEZOID_difference_vs_0_1s_J": -25.755607701688632,
+      "moldOuterUnclassified_q_out_J_SAVED_TIME_TRAPEZOID_difference_vs_0_1s_J": 0.09005183916372062,
+      "external_total_q_out_J_SAVED_TIME_TRAPEZOID_difference_vs_0_1s_J": -25.665555862524798
+    },
+    {
+      "saved_time_step_s": 1.0,
+      "count_saved_snapshots": 11,
+      "source_is_101_real_saved_snapshots": true,
+      "not_original_solver_dt_integral": true,
+      "metal_to_mold_q_out_J_SAVED_TIME_TRAPEZOID": 18882.28930514811,
+      "mold_to_metal_q_out_J_SAVED_TIME_TRAPEZOID": -18882.38636936207,
+      "interface_sum_outward_J_SAVED_TIME_TRAPEZOID": -0.09706421395526377,
+      "metalTop_q_out_J_SAVED_TIME_TRAPEZOID": 1154.4168794691411,
+      "moldOuterUnclassified_q_out_J_SAVED_TIME_TRAPEZOID": 129.78093256812068,
+      "external_total_q_out_J_SAVED_TIME_TRAPEZOID": 1284.1978120372619,
+      "metal_to_mold_q_out_J_SAVED_TIME_TRAPEZOID_difference_vs_0_1s_J": -1401.163060207833,
+      "mold_to_metal_q_out_J_SAVED_TIME_TRAPEZOID_difference_vs_0_1s_J": 1401.1812791600387,
+      "interface_sum_outward_J_SAVED_TIME_TRAPEZOID_difference_vs_0_1s_J": 0.018218952207530476,
+      "metalTop_q_out_J_SAVED_TIME_TRAPEZOID_difference_vs_0_1s_J": -57.67841117279113,
+      "moldOuterUnclassified_q_out_J_SAVED_TIME_TRAPEZOID_difference_vs_0_1s_J": 0.36831618880728456,
+      "external_total_q_out_J_SAVED_TIME_TRAPEZOID_difference_vs_0_1s_J": -57.31009498398362
+    }
+  ],
+  "saved_time_quadrature_at_0_1s_is_NOT_solver_0_001s_flux_integral": true,
+  "no_native_fvModels_internal_time_integral": true,
+  "no_original_enthalpy_transport_pressure_work_source_integral": true,
+  "no_separately_integrated_radiation_convection_boundary_terms": true,
+  "overall_F14_solver_energy_conservation_verified": false,
+  "C14_reference_properties_not_JMatPro_or_QuickCup_calibrated": true,
+  "severe_nonorthogonal_geometry_and_dt_sensitivity_unresolved": true,
+  "NO_SOLVER_NO_POSTRUN_Q_REEXECUTION": true,
+  "notes": [
+    "All comparisons are source-only reference inventories and patch conductive flux; no physical leak or conservation residual is computed.",
+    "The source uses metal fluid sensibleEnthalpy h and solid mold sensibleInternalEnergy e.",
+    "C14 latent h source fvModels was identified from exact original dictionary, NOT integrated from native solver energy equation.",
+    "Field coverage checks existence, not calibrated thermodynamic fidelity or physical values.",
+    "Quadrature sensitivity at saved times 0.1/0.2/0.5/1.0s cannot bound error against original 0.001s CFD time stepping.",
+    "Original q-only shadow has separate interpolate(kappa) harmonic in COPIED mold fvSchemes; source CFD not changed."
+  ]
+}

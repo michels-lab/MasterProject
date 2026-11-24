@@ -1,0 +1,10 @@
+{
+  "input_source_read_only": "/home/michel/OpenFOAM/C3D05_B_C14_FLUID_SOLID_10S_ANALYSIS_01",
+  "verified_source": {
+    "csv_sha256": "2c9e6513ea494318a2b3fd573c6831d06a4013431f82b2e55d7718717dccd1b5",
+    "json_sha256": "dee087b42264cdaca7c873e866c023f8e0263d09db0ae0bca9406b26d4945f56",
+    "manifest_sha256": "b490d8c01a92037d07f94ffaa08266e23800118bf953c6f579c4cd8f3666035f"
+  },
+  "derivative_json_sha256": "917708bb3bc48dd7c415a469ddd2833ad6ca5c95f5111768b39cacefc24dd91a",
+  "interval_csv_sha256": "b6106cd14dc60b34c54c7e93a2dbdc5e55c3e4476299f142a7c269f2b0b42b8c"
+}

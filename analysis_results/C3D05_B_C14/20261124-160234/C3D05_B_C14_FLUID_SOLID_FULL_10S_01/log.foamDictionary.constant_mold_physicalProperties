@@ -1,0 +1,9 @@
+FoamFile
+{
+    format          ascii;
+    class           dictionary;
+    location        "constant";
+    object          physicalProperties;
+}
+
+#include        "materials/silica"

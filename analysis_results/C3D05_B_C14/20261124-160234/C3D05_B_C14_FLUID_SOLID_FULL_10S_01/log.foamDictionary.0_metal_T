@@ -1,0 +1,35 @@
+FoamFile
+{
+    version         2;
+    format          ascii;
+    class           volScalarField;
+    location        "0/metal";
+    object          T;
+}
+
+dimensions      [ 0 0 0 1 0 0 0 ];
+
+internalField   uniform 1500;
+
+boundaryField
+{
+    metalTop
+    {
+        type            externalTemperature;
+        h               uniform 10;
+        Ta              constant 300;
+        emissivity      0.3;
+        value           $internalField;
+    }
+    metal_to_mold
+    {
+        type            coupledTemperature;
+        h
+        {
+            type            wallLayersHeatTransferCoefficient;
+            thicknessLayers ( 0.0002 );
+            kappaLayers     ( 0.1 );
+        }
+        value           $internalField;
+    }
+}

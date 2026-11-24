@@ -1,0 +1,26 @@
+{
+  "status": "C3D05_B_C14_OPENFOAM_PARAVIEW_READY_FOR_MANUAL_REVIEW",
+  "source_original_CFD_read_only": "/home/michel/OpenFOAM/C3D05_B_C14_FLUID_SOLID_FULL_10S_01",
+  "original_saved_times": 101,
+  "original_CFD_last_time_s": 10.0,
+  "native_metal_cells": 92200,
+  "native_mold_cells": 178588,
+  "native_faces_contact_each_side": 12636,
+  "field_symlinks": 908,
+  "linked_original_CSV": [
+    "01_C14_temperature_time_series.csv",
+    "02_volume_weighted_phase_101.csv",
+    "03_native_q_4patches_101x4.csv",
+    "04_native_q_time_series_101.csv",
+    "05_native_q_facewise_at_10s.csv",
+    "06_q_vs_reference_storage_101.csv",
+    "07_q_sampling_sensitivity.csv",
+    "08_rho_phi_mass_if_already_available.csv"
+  ],
+  "not_yet_existing_optional_CSV": [],
+  "foam": "/home/michel/OpenFOAM/C3D05_B_C14_PARAVIEW_REVIEW/OPEN_IN_PARAVIEW/CASE_B_C14_10S.foam",
+  "NO_CFD_RERUN": true,
+  "NO_NEW_TESTS": true,
+  "source_files_copied": false,
+  "full_energy_conservation_or_experimental_validation": false
+}
