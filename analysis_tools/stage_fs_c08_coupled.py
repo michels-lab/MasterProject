@@ -24,7 +24,7 @@ MODEL=ROOT/"freesurface/FS-C06_vof_solidification/native/constant/fluid/fvModels
 BASE_MODULE=ROOT/"freesurface/FS-C08_conservative_phase_mass/coupled_solver/native"
 REQUIRED_MATERIAL=(
     "materialId", "propertySource","Tmin_K","Tmax_K",
-    "phaseRelaxation","metalPresenceThreshold","rhoLiquidT",
+    "phaseChangeClosure","metalPresenceThreshold","rhoLiquidT",
     "rhoSolidT","solidMassFractionT","latentHeat","cpSolid",
 )
 
@@ -75,6 +75,18 @@ def stage(source: Path, material: Path, output: Path) -> dict:
             and "PLACEHOLDER" not in mt and "TODO" not in mt
             and re.search(r"<[A-Z][^>]*>",mt) is None,
             "no synthetic or unfilled material properties allowed")
+    # Explicit physical closure, never an arbitrary per-step gamma multiplier.
+    closure_matches=re.findall(
+        r"(?m)^\\s*phaseChangeClosure\\s+(equilibrium|kineticRelaxation)\\s*;",
+        mt
+    )
+    require(len(closure_matches)==1,
+            "phaseChangeClosure must be exactly equilibrium or "
+            "kineticRelaxation")
+    if closure_matches[0]=="kineticRelaxation":
+        require(re.search(r"(?m)^\\s*tauPhaseChangeT\\s+",mt) is not None,
+                "kineticRelaxation requires sourced tauPhaseChangeT(T) [s]")
+
     ctrl=(source/"system/controlDict").read_text(encoding="utf-8")
     old=r"(?m)^(\s*fluid\s+)compressibleVoF(\s*;)"
     require(len(re.findall(old,ctrl))==1,
