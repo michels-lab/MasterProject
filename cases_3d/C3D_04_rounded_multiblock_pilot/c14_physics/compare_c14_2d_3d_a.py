@@ -265,7 +265,7 @@ function redraw(){let k=$("cv").value,st=$("station").value,rs=st==="mean"?D.mea
 for(let id of ["station","cv","time","pv"])$(id).onchange=redraw;redraw();</script></html>"""
     (out/"Comparacion_C14_2D_3D.html").write_text(html.replace("__DATA__",data),encoding="utf-8")
 
-def execute(case2d,case3d,out):
+def execute(case2d,case3d,out,make_html=True):
     case2d,case3d=case2d.resolve(),case3d.resolve()
     out=out.expanduser().absolute()
     need(not out.exists() and not out.is_symlink() and not out.is_relative_to(ROOT)
@@ -313,7 +313,8 @@ def execute(case2d,case3d,out):
         m.append(r)
     csvwrite(out/"volume_means.csv",m)
     probes=save_native_probe(case2d,out)
-    dashboard(out,profiles,curves,m,common)
+    if make_html:
+        dashboard(out,profiles,curves,m,common)
     result={"status":"COMPARISON_READY" if complete_coverage and len(common)==101 else "COMPARISON_READY_PARTIAL_COVERAGE","case_2D":str(case2d),"case_3D_A":str(case3d),
             "reference_provenance":provenance,"common_saved_times":common,
             "full_101_time_coverage":len(common)==101,"full_spatial_coverage":complete_coverage,
@@ -325,7 +326,7 @@ def execute(case2d,case3d,out):
             "final_cooling_stations":[r for r in curves if r["time_s"]==common[-1]],
             "final_volume_means":m[-1],"preserved_native_2D_temperature_probe_files":probes,
             "solver_rerun":False,"original_cases_written":False,"grid_independence_verified":False,
-            "experimental_validation":False,"dashboard":str(out/"Comparacion_C14_2D_3D.html")}
+            "experimental_validation":False,"dashboard":str(out/"Comparacion_C14_2D_3D.html") if make_html else None}
     (out/REPORT).write_text(json.dumps(result,indent=2)+"\n",encoding="utf-8")
     return result
 
