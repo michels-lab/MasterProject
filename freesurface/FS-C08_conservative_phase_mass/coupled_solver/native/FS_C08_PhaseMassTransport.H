@@ -48,8 +48,12 @@ class PhaseMassTransport
     autoPtr<Function1<scalar>> tauPhaseChangeT_;
 
     // Composition-specific enthalpy closure; no legacy fvModel latent source.
+    // u_s(Tref)=0; u_l(Tref)=latentHeat; both u(T) use exact
+    // Function1 Cv(T) integral, never Cv*T with mismatched references.
     dimensionedScalar latentHeat_;
-    dimensionedScalar cvSolid_;
+    scalar energyReferenceT_K_;
+    autoPtr<Function1<scalar>> cvLiquidT_;
+    autoPtr<Function1<scalar>> cvSolidT_;
 
     // Darcy mushy drag: magnitude calibrated for alloy/coherency conditions.
     dimensionedScalar mushyDarcyCu_;
@@ -127,7 +131,14 @@ public:
     const volScalarField& solidDensity() const { return rhoSolid_; }
     const volScalarField& gamma() const { return Gamma_; }
     const dimensionedScalar& latentHeat() const { return latentHeat_; }
-    const dimensionedScalar& cvSolid() const { return cvSolid_; }
+
+    // Signed phase internal energies J/kg, referenced to same Tref.
+    // Current liquid energy includes latent heat through its reference.
+    scalar liquidInternalEnergy(const scalar T) const;
+    scalar solidInternalEnergy(const scalar T) const;
+    scalar liquidCv(const scalar T) const;
+    scalar solidCv(const scalar T) const;
+    scalar energyReferenceT() const { return energyReferenceT_K_; }
     const dimensionedScalar& mushyDarcyCu() const
     {
         return mushyDarcyCu_;
