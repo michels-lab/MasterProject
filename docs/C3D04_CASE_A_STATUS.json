@@ -2,7 +2,7 @@
   "schema": "C3D04_CASE_A_PROGRESS_V1",
   "project": "MasterProject",
   "scope": "CASE_A_C3D_04_V4_T02_ONLY",
-  "updated_local_date": "2026-11-23",
+  "updated_local_date": "2026-11-24",
   "source_of_truth": "AGENTS.md + cases_3d/C3D_04_rounded_multiblock_pilot/AGENTS.md",
   "reference_mesh": "~/OpenFOAM/C3D04_V4_TRANSITION_REPAIR_01/T02",
   "current_stage": "07_THERMAL_T0_EXECUTION",
@@ -659,10 +659,10 @@
     "native_face_power_top_contact_total_row_count_each": 1,
     "native_face_power_only_time_s": 0,
     "actual_global_energy_conservation_verified": false,
-    "root_cause_hypothesis": "Foundation14 foamPostProcess.C reinitializes solver per saved time and clears mesh.objectRegistry, possibly invalidating zone registry in 0.1..10; only single vs multiple saved times direct controlled comparison can confirm symptom; no proven C++ root cause",
+    "root_cause_hypothesis": "Real WSL controlled comparison reproduces time-loop-dependent registry symptom. Exact C++ cause (mesh.readUpdate or objectRegistry::clear or another lifecycle issue) not established.",
     "official_F14_source": "https://cpp.openfoam.org/v14/foamPostProcess_8C_source.html",
     "new_native_diagnostic": "cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/probe_c14_native_f14_single_vs_multi_time.py",
-    "next_probe_real_WSL_executed": false,
+    "next_probe_real_WSL_executed": true,
     "test_scope": "Real 0,0.1,10 independent vs same 3 combined; creates four NEW minimal physical copies only, not 101-state re-postprocess",
     "old_CFD_or_postprocess_modified": false,
     "stage": "7/10",
@@ -714,6 +714,48 @@
       "real_WSL_V4_T02_three_time_executed": false,
       "no_original_CFD_recompute": true,
       "no_energy_global_conservation_claim": true
+    },
+    "real_WSL_V4_T02_three_time_result": {
+      "source": "Investigator pasted WSL stdout, 2026-11-24; local JSON not independently fetched",
+      "report": "~/OpenFOAM/C3D04_A_C14_F14_THREE_TIME_ISOLATION_PROBE_01/C3D04_A_F14_NATIVE_SINGLE_VS_MULTITIME_PROBE_REPORT.json",
+      "verdict": "REPRODUCED_NATIVE_MULTITIME_REGISTRY_FAILURE_IN_SAME_SAVED_C14_FIELDS",
+      "individual_times_s": [
+        0,
+        0.1,
+        10
+      ],
+      "individual_pass": [
+        true,
+        true,
+        true
+      ],
+      "individual_fatal_counts": [
+        0,
+        0,
+        0
+      ],
+      "individual_native_rows": [
+        1,
+        1,
+        1
+      ],
+      "combined_pass": false,
+      "combined_fatal_count": 2,
+      "combined_native_rows": 1,
+      "combined_native_row_times_s": [
+        0
+      ],
+      "error": "Cannot find cellZone metal; Available cellZones: 0()",
+      "original_solver_rerun": false,
+      "original_controlDict_untouched": true,
+      "global_energy_conservation_verified": false
+    },
+    "next_integrated_strategy": {
+      "preferred": "Test native grouped multi-time recovery in isolated postprocessing only; F14 generatedCellZone supports cellZone all, equivalent cell membership only if original zone covers every regional metal cell. Compare authentic saved outputs and verify unchanged source; do not alter original fvModels or claim equivalence until measured.",
+      "fallback": "Per-time native processes with consolidated data if grouped recovery cannot be justified or does not pass.",
+      "source": "https://cpp.openfoam.org/v14/generatedCellZone_8C_source.html",
+      "native_test_executed": false,
+      "code_implemented": false
     }
   }
 }
