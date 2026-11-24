@@ -26,11 +26,11 @@
   },
   "finding_counts": {
     "BROKEN_RELATIVE_LINK": 7,
-    "POTENTIAL_UNLOGGED_CHANGES": 1
+    "POTENTIAL_UNLOGGED_CHANGES": 2
   },
-  "finding_total": 8,
-  "inventory_fingerprint": "a72e76cb3bff3418569b1983fa2bcf4ba2dff2a189ab0b69405573070ead0be5",
-  "evidence_fingerprint": "b869c002afa1cd6a11467cfd65366fd30a7a7abcc0a51c08e0eb5a2835f51de0",
+  "finding_total": 9,
+  "inventory_fingerprint": "63961e3f13fadabc9971837444c9bbe97c09d5e0acaf77c79ecdac95e71880b6",
+  "evidence_fingerprint": "176176cfe231be58dece7bb432a1c368d4beac1599673282e0a76e1a6d82c555",
   "files": [
     {
       "path": ".github/agents/openfoam-solidification.agent.md",
@@ -272505,7 +272505,7 @@
       "role": "config",
       "purpose": "machine-readable configuration",
       "certainty": "rule",
-      "blob": "12e1d1afe405c86a85fe5d3824e5155d041fae14"
+      "blob": "1ae5f89bb7d64fa79d98ae8ab80d0956c1ed10ee"
     },
     {
       "path": "docs/C3D_01_ESTADO_REAL_20261110_ES.md",
@@ -273817,6 +273817,15 @@
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_EN.md",
       "observation": "29 implementation/config paths changed since this log's last commit; examples: .github/workflows/c3d04-a-c14-native-fluid-solid.yml, .github/workflows/c3d04-a-c14-postprocessing-parity.yml, .github/workflows/c3d05-b-c14-native-fluid-solid-q.yml, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/continue_c14_stage07_grouped_evidence.py, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/native_bilateral_flux/c3d04C14FluidSolidFlux.C, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/probe_c14_native_f14_single_vs_multi_time.py",
+      "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
+      "state": "REVIEW_REQUIRED"
+    },
+    {
+      "id": "0be9242e70c28482",
+      "code": "POTENTIAL_UNLOGGED_CHANGES",
+      "severity": "review",
+      "path": "PROJECT_AUDIT_LOG_ES.md",
+      "observation": "1 implementation/config paths changed since this log's last commit; examples: docs/C3D04_CASE_A_STATUS.json",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     }
