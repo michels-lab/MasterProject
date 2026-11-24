@@ -376,6 +376,12 @@ void solvers::fsC08ConservativeVoF::postSolve()
     const scalar dt=runTime.deltaTValue();
     const scalar metalResidual=M-M0+dt*boundaryMassRate;
     const scalar gasContinuityDefect=Mgas-Mgas0+dt*gasBoundaryOut;
+    // This numerical tolerance is dimensionless and independent of
+    // the material. A pressure/VOF update that destroys gas inventory
+    // must NOT be reported as a valid shrinkage calculation.
+    const scalar gasRelativeTolerance=1e-6;
+    const scalar gasTolerance_kg=
+        gasRelativeTolerance*max(SMALL,max(Mgas,Mgas0));
     Info<< "FS_C08_REAL_CFD_MASS_BUDGET"
         << " time_s=" << runTime.value()
         << " liquidSolidMetalMass_kg=" << M
@@ -402,7 +408,8 @@ void solvers::fsC08ConservativeVoF::postSolve()
         << " gasContinuityDefect_kg=" << gasContinuityDefect
         << " boundaryMetalOut_kg_s=" << boundaryMassRate
         << " metalMassResidual_kg=" << metalResidual
-        << " gasConservationNotYetCertified=1"
+        << " gasMassBudgetTolerance_kg=" << gasTolerance_kg
+        << " gasBudgetAcceptancePendingCheck=1"
         << " thermalVolumeSourceMean_s_1="
         << phaseMass_->thermalVolumeSource()
               .weightedAverage(mesh.V()).value()
@@ -425,6 +432,27 @@ void solvers::fsC08ConservativeVoF::postSolve()
             << "to call this a physical shrinkage result. Residual="
             << metalResidual << " kg" << exit(FatalError);
     }
+    if
+    (
+        !std::isfinite(gasContinuityDefect)
+     || !std::isfinite(Mgas)
+     || Mgas<0
+     || mag(gasContinuityDefect)>gasTolerance_kg
+    )
+    {
+        FatalErrorInFunction
+            << "FS-C08 native GAS mass balance fails across PIMPLE "
+            << "and the real boundary mass fluxes. Defect="
+            << gasContinuityDefect << " kg, allowed="
+            << gasTolerance_kg << " kg. No gas mass clipping or "
+            << "invented gas pressure sources allowed."
+            << exit(FatalError);
+    }
+    Info<< "FS_C08_NATIVE_METAL_AND_GAS_CONSERVATION_GATES_PASSED"
+        << " time_s=" << runTime.value()
+        << " gasResidual_kg=" << gasContinuityDefect
+        << " metalResidual_kg=" << metalResidual
+        << " energyNotYetValidated=1" << nl;
 }
 
 } // namespace Foam
