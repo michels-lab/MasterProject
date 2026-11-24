@@ -1,5 +1,8 @@
 # FS-C08 — Cambio de rumbo: solver físico, no más shadow tests
 
+> **ACTUALIZACIÓN 24-11-2026:** La arquitectura de este documento ya pasó de diseño a código parcial de solver: [módulo CFD nativo real](native/README.md), [stager aislado](../../../analysis_tools/stage_fs_c08_coupled.py) y [estado actual](../STATUS.json). Ya existen continuidad líquido/sólido y enlaces a PIMPLE/energía en fuente. **No se ha compilado ni validado en Foundation14 WSL; propiedades metálicas reales, EOS, balance entálpico exacto y feeding están pendientes.** Los párrafos originales que decían «no implementado» reflejan el estado anterior a estos commits.
+
+
 **Fecha:** 2026-11-24. **Prioridad:** resolver conservación de masa por fase, diferencia de densidades, presión y VOF en la CFD de hierro/aire real.
 
 ## Evidencia que queda cerrada
