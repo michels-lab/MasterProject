@@ -5,7 +5,7 @@ No file is auto-deleted or declared unused.
 
 ## Coverage
 
-Tracked: 39110; classified: 39105; readable documents: 212; above read cap: 1; findings: 8.
+Tracked: 39111; classified: 39106; readable documents: 212; above read cap: 1; findings: 9.
 
 ## File roles
 
@@ -23,7 +23,7 @@ Tracked: 39110; classified: 39105; readable documents: 212; above read cap: 1; f
 | simulation_input | 2683 |
 | simulation_log | 3155 |
 | simulation_output | 32615 |
-| source | 150 |
+| source | 151 |
 | test | 74 |
 | web_ui | 1 |
 | workflow | 33 |
@@ -37,7 +37,8 @@ Tracked: 39110; classified: 39105; readable documents: 212; above read cap: 1; f
 - **CONFIRMED / BROKEN_RELATIVE_LINK** docs/granada/C3D05_T0_README_HISTORICAL_BEFORE_SINGLE_FLOW_20261120.md: Missing: outside-repo. Next: Fix link or restore target (ID 2fa56a22be90f045)
 - **CONFIRMED / BROKEN_RELATIVE_LINK** docs/granada/C3D05_T0_README_HISTORICAL_BEFORE_SINGLE_FLOW_20261120.md: Missing: outside-repo. Next: Fix link or restore target (ID 2fa56a22be90f045)
 - **CONFIRMED / BROKEN_RELATIVE_LINK** docs/granada/C3D05_T0_README_HISTORICAL_BEFORE_SINGLE_FLOW_20261120.md: Missing: outside-repo. Next: Fix link or restore target (ID 2fa56a22be90f045)
-- **REVIEW / POTENTIAL_UNLOGGED_CHANGES** PROJECT_AUDIT_LOG_EN.md: 31 implementation/config paths changed since this log's last commit; examples: .github/workflows/c3d04-a-c14-native-fluid-solid.yml, .github/workflows/c3d04-a-c14-postprocessing-parity.yml, .github/workflows/c3d05-b-c14-native-fluid-solid-q.yml, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/continue_c14_stage07_grouped_evidence.py, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/native_bilateral_flux/c3d04C14FluidSolidFlux.C, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/probe_c14_native_f14_single_vs_multi_time.py. Next: Inspect diffs and reconcile only meaningful decisions/results in the canonical log (ID 72bab834f476f257)
+- **REVIEW / POTENTIAL_UNLOGGED_CHANGES** PROJECT_AUDIT_LOG_EN.md: 32 implementation/config paths changed since this log's last commit; examples: .github/workflows/c3d04-a-c14-native-fluid-solid.yml, .github/workflows/c3d04-a-c14-postprocessing-parity.yml, .github/workflows/c3d05-b-c14-native-fluid-solid-q.yml, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/compare_c14_2d_3d_a.py, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/continue_c14_stage07_grouped_evidence.py, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/native_bilateral_flux/c3d04C14FluidSolidFlux.C. Next: Inspect diffs and reconcile only meaningful decisions/results in the canonical log (ID 97209d557812109a)
+- **REVIEW / POTENTIAL_UNLOGGED_CHANGES** PROJECT_AUDIT_LOG_ES.md: 1 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/compare_c14_2d_3d_a.py. Next: Inspect diffs and reconcile only meaningful decisions/results in the canonical log (ID 0f0c718d52a7542f)
 
 Complete path → purpose/role/certainty list lives in FILE_GOVERNANCE.json. SUMMARY.json has counts only for master polling.
 A dated file, duplicate, or suspicious name is an **investigation candidate**, not unwanted material.
