@@ -34,13 +34,13 @@ using namespace Foam;
 
 static label namedPatch(const fvMesh& mesh, const word& name, const label expected)
 {
-    const label i = mesh.boundaryMesh().findPatchID(name);
+    const label i = mesh.poly().boundary().findIndex(name);
     if (i < 0)
     {
         FatalErrorInFunction << "Original C14 Case B patch absent: "
             << mesh.name() << '/' << name << exit(FatalError);
     }
-    const label n = mesh.boundaryMesh()[i].size();
+    const label n = mesh.poly().boundary()[i].size();
     if (n <= 0 || (expected > 0 && n != expected))
     {
         FatalErrorInFunction << "Original C14 patch face count mismatch: "
@@ -64,7 +64,7 @@ static void writeFlux
     const fvsPatchScalarField& qb=q.boundaryField()[patchi];
     const fvsPatchVectorField& sf=mesh.Sf().boundaryField()[patchi];
     const fvsPatchVectorField& cf=mesh.Cf().boundaryField()[patchi];
-    const word name=mesh.boundaryMesh()[patchi].name();
+    const word name=mesh.poly().boundary()[patchi].name();
     if (qb.size()!=sf.size() || qb.size()!=cf.size())
     {
         FatalErrorInFunction << "C14 native patch q/face data count mismatch"
@@ -153,7 +153,7 @@ int main(int argc,char* argv[])
     const label mt=namedPatch(metal,"metalTop",-1);
     const label dp=namedPatch(mold,"mold_to_metal",12636);
     const label de=namedPatch(mold,"moldOuterUnclassified",-1);
-    if (metal.boundaryMesh().size()!=2 || mold.boundaryMesh().size()!=2)
+    if (metal.poly().boundary().size()!=2 || mold.poly().boundary().size()!=2)
     {
         FatalErrorInFunction << "Unexpected additional patch on original C14 B"
             << exit(FatalError);
