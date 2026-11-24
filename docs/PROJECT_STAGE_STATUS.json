@@ -571,10 +571,33 @@
     "case_b_c14_3d_manual_paraview_handoff_101_state_source_linked": true,
     "case_b_c14_3d_manual_paraview_handoff_field_report_links_original_only": true,
     "case_b_c14_3d_manual_paraview_handoff_source_does_no_solver_or_unit_tests": true,
-    "case_b_c14_3d_manual_paraview_handoff_WSL_executed_observed": false,
-    "case_b_c14_3d_manual_paraview_handoff_GUI_opened_observed": false,
+    "case_b_c14_3d_manual_paraview_handoff_WSL_executed_observed": true,
+    "case_b_c14_3d_manual_paraview_handoff_GUI_opened_observed": true,
     "case_b_c14_3d_manual_paraview_handoff_user_manual_review_completed": false,
-    "case_b_c14_3d_manual_paraview_handoff_physical_validation_not_claimed": true
+    "case_b_c14_3d_manual_paraview_handoff_physical_validation_not_claimed": true,
+    "case_b_c14_3d_manual_paraview_handoff_user_said_visual_quality_good": true,
+    "case_b_c14_research_original_C14_inrun_postprocessing_same_time_dicts_implemented": true,
+    "case_b_c14_research_original_C14_inrun_postprocessing_launcher": "cases_3d/C3D_05_step_gmsh_conformal/c14_physics/EJECUTAR_CASO_B_C14_COMPLETO.sh",
+    "case_b_c14_research_original_C14_inrun_postprocessing_old_CFD_preserved": true,
+    "case_b_c14_research_original_C14_inrun_postprocessing_output_expected": "~/OpenFOAM/C3D05_B_C14_FUNCIONES_C14_COMPLETAS_10S_01",
+    "case_b_c14_research_original_C14_inrun_postprocessing_WSL_CFD_run_observed": false,
+    "case_b_c14_research_original_C14_inrun_postprocessing_WSL_all_function_objects_completed": false,
+    "case_b_c14_research_original_C14_inrun_postprocessing_C14_controlDict_byte_preserved": true,
+    "case_b_c14_research_original_C14_inrun_postprocessing_C14_functions_byte_preserved": true,
+    "case_b_c14_research_original_C14_inrun_postprocessing_C14_researchDiagnostics_byte_preserved": true,
+    "case_b_c14_research_original_C14_inrun_postprocessing_C14_lineProfiles_byte_preserved": true,
+    "case_b_c14_research_original_C14_inrun_postprocessing_C14_momentumPostProcessing_byte_preserved": true,
+    "case_b_c14_research_original_C14_inrun_postprocessing_C14_topSurfaceFlow_byte_preserved": true,
+    "case_b_c14_research_original_C14_inrun_postprocessing_solver_dt_s": 0.001,
+    "case_b_c14_research_original_C14_inrun_postprocessing_saved_field_dt_s": 0.1,
+    "case_b_c14_research_original_C14_inrun_postprocessing_probe_write_interval_steps": 1,
+    "case_b_c14_research_original_C14_inrun_postprocessing_expected_CFD_t0_to_10_s": 10,
+    "case_b_c14_research_original_C14_inrun_postprocessing_geometry": "3D C3D05 B original accepted HEX8, no new mesh",
+    "case_b_c14_research_original_C14_inrun_postprocessing_exact_C14_sample_coordinates_kept": true,
+    "case_b_c14_research_original_C14_inrun_postprocessing_exact_C14_spatial_sample_inside_B_verified": false,
+    "case_b_c14_research_original_C14_inrun_postprocessing_postonly_retries_not_solver": true,
+    "case_b_c14_research_original_C14_inrun_postprocessing_unit_tests_added": 0,
+    "case_b_c14_research_original_C14_inrun_postprocessing_experimental_validation": false
   },
   "other_cases": [
     {
@@ -614,7 +637,7 @@
       "evidence": "docs/granada/C3D05_B_C14_WSL_EJECUCION_REAL_EN_CURSO_20261123_ES.md"
     }
   ],
-  "blocker": "Original real Case B C14 F14 10s 101-state fluid+solid CFD completed, 14 native q QA, 12 q/storage QA and 9 readiness QA all user WSL PASS. Metal/mold native fields present and thermal q evaluated; missing stored metal h/he, mold e/he/rho; metal rho/phi 100/101. User expressly requested STOP expanding test suites and DIRECT DELIVERY FOR OWN OPENFOAM/PARAVIEW MANUAL REVIEW. Turnkey visual review launcher published in MasterProject main, 101-time multi-region symlink workspace + q/phase CSV, no solver/test code calls. The user's ParaView GUI has NOT yet been observed running from the new launcher. Science still not validated (latent FV source, advective/pressure/external energy terms, dt+mesh convergence, JMatPro/QuickCup and shrinkage) -> 2/7 scientific gates.",
-  "next_integrated_delivery": "PRIORITY CHANGED by user: do not waste cycles on more test suites; user wants to inspect already-complete C14 B original 10s 101 state CFD in OpenFOAM/ParaView personally. New ABRIR_CASO_B.sh + open_case_b_review.py published: user git pull and run shell launcher; it creates separate ~/OpenFOAM/C3D05_B_C14_PARAVIEW_REVIEW/OPEN_IN_PARAVIEW/CASE_B_C14_10S.foam with 101 actual dirs and symlinks to original CFD data, existing thermal q/alpha CSV report links, and opens GUI if available. NO CFD, NO tests, NO CFD modifications. WSL GUI launch and manual check NOT YET OBSERVED. Real F14 10s solver and q+storage analysis completed; scientific G3-G7 still open.",
-  "science": "CASE_B_C14_REAL_10S_101_STATES_Q_STORAGE_COMPLETE_GUI_PARAVIEW_HANDOFF_1COMMAND_PUBLISHED_USER_VISUAL_CHECK_PENDING_NO_NEW_TESTS"
+  "blocker": "Old Case B original F14 10s 101-state CFD and q+storage complete; user manually opened native B in ParaView and reports it looks good. FULL parity with original C14 in-run probes every timeStep and researchDiagnostics was NOT generated in old B run: archived 0.1s snapshots cannot reconstruct true 0.001s probes. User NOW explicitly authorizes new full 10s C14-function run, while refusing extra test suites. Separate isolated CFD launcher published preserving original 3D accepted mesh/material and C14 temporal control; original C14 function dictionaries unmodified. New native run still requires user WSL execution; not yet performed, no new postProcessing observed. Literal original 2D C14 probe/line coords might not intersect B mesh, must check output. Still no global energy closure, experimental QuickCup/JMatPro, mesh/dt independence or shrinkage. Scientific 2/7.",
+  "next_integrated_delivery": "User visual opened Caso B ParaView successfully and liked appearance; then specifically requested ejecutar C3D05 B with FULL C14 ORIGINAL functionObject diagnostic timing incl actual native probes every 0.001s. New GitHub launch script EJECUTAR_CASO_B_C14_COMPLETO.sh committed: creates separate real isolated 0+constant+system copy of ORIGINAL B 3D HEX8, byte-identical original C14 controlDict with dt=.001, endTime=10, writeInterval=100 and original system/functions, researchDiagnostics, lineProfiles, momentumPostProcessing, topSurfaceFlow. Launches actual Foundation14 foamMultiRun 10s and ALL original C14 postrun momentum, foamLog, metalTop commands. NO blockMesh/splitMeshRegions (3D real mesh already accepted), no tests, no edits to old C3D05_B_C14_FLUID_SOLID_FULL_10S_01 or its ParaView. WSL execution CANNOT be invoked by GitHub and HAS NOT BEEN OBSERVED. Run from ~/OpenFOAM/MasterProject: git pull --ff-only && bash cases_3d/C3D_05_step_gmsh_conformal/c14_physics/EJECUTAR_CASO_B_C14_COMPLETO.sh . If post stage fails after 10s completed, --post-only resumes native postprocessing without rerunning CFD; original C14 2D probe/line coordinates unmodified and may not lie inside B 3D mesh. Keep gates 2/7 until scientific validation.",
+  "science": "CASE_B_C14_OLD_PARAVIEW_GUI_USER_CONFIRMED_NEW_FULL_F14_10S_C14_NATIVE_FOS_LAUNCHER_PUBLISHED_PROBES_0_001S_WSL_RUN_PENDING_KEEP_CFD_AND_GATES"
 }
