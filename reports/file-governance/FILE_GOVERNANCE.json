@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "audit_kind": "deterministic_full_tracked_tree",
-  "tracked_files_total": 39076,
-  "classified_files_total": 39071,
+  "tracked_files_total": 39078,
+  "classified_files_total": 39073,
   "docs_content_inspected": 204,
   "large_docs_skipped": 1,
   "excluded_reports": 5,
@@ -15,7 +15,7 @@
     "document": 166,
     "index": 34,
     "license": 1,
-    "simulation_case_file": 117,
+    "simulation_case_file": 119,
     "simulation_input": 2683,
     "simulation_log": 3155,
     "simulation_output": 32615,
@@ -29,7 +29,7 @@
     "POTENTIAL_UNLOGGED_CHANGES": 2
   },
   "finding_total": 9,
-  "inventory_fingerprint": "c09ec9bedbb01910bfeaf74a53b46c9e04bf185b397d954151b0a1c194a423de",
+  "inventory_fingerprint": "191f898d36417e1d49ce36f2d6e382a18409ef333a1eb1d3d6bcdc9798ff2713",
   "evidence_fingerprint": "010a318bd604a6a9b76079d3a36e5ff8bbcf923fb3479c4dc39a94210b562ccf",
   "files": [
     {
@@ -2063,11 +2063,25 @@
       "blob": "1c212e60dcd32c933327c373c3e5a5592daae09c"
     },
     {
+      "path": "cases_3d/C3D_05_step_gmsh_conformal/c14_physics/native_flux/Make/files",
+      "role": "simulation_case_file",
+      "purpose": "OpenFOAM case-specific support artifact",
+      "certainty": "inferred",
+      "blob": "f6e27a183a7a9bca41fd36b2e566d882a6f3aff3"
+    },
+    {
+      "path": "cases_3d/C3D_05_step_gmsh_conformal/c14_physics/native_flux/Make/options",
+      "role": "simulation_case_file",
+      "purpose": "OpenFOAM case-specific support artifact",
+      "certainty": "inferred",
+      "blob": "d25f734c0843e83a2fb6c0378c87154ec7f48af4"
+    },
+    {
       "path": "cases_3d/C3D_05_step_gmsh_conformal/c14_physics/native_flux/c3d05C14FluidSolidFlux.C",
       "role": "source",
       "purpose": "code/test implementation",
       "certainty": "rule",
-      "blob": "d0d01575b9a06bf832e00fc733345c2df876a895"
+      "blob": "3f26a6cec12f81743f8376327591b4520db07a2f"
     },
     {
       "path": "cases_3d/C3D_05_step_gmsh_conformal/c14_physics/quantify_existing_case_b_c14_energy_inventory.py",
