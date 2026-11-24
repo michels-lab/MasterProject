@@ -125,28 +125,41 @@ fi
 }
 cd "$OUT"
 
-# The ORIGINAL C14 Allrun also runs these after solver success.
-# --post-only continues these steps if solver already finished; never re-runs CFD.
-if [[ ! -e log.foamPostProcess.C14.momentum ]]; then
-  echo "Calculando campos/salidas momentum C14 desde solucion nueva..."
+# A successful post stage receives a .DONE marker. A partial failed post
+# log is PRESERVED with a suffix and can be retried by --post-only without
+# ever repeating the CFD solver.
+run_post() {
+  local log="$1"; shift
+  if [[ -f "$log.DONE" ]]; then
+    echo "Ya completado: $log (no repetir)."
+    return 0
+  fi
+  if [[ -e "$log" || -L "$log" ]]; then
+    local previous="$log.INCOMPLETE_$(date +%Y%m%d_%H%M%S)"
+    mv -- "$log" "$previous"
+    echo "Log anterior conservado: $previous"
+  fi
+  set -o pipefail
+  "$@" 2>&1 | tee "$log"
+  touch "$log.DONE"
+}
+
+# These commands are taken from the C14 original Allrun, after the solver.
+# No new solve in --post-only mode.
+echo "Procesando momentum y solidificationMelting C14 original..."
+run_post log.foamPostProcess.C14.momentum \
   foamPostProcess -case "$OUT" -region metal \
     -dict "$OUT/system/momentumPostProcessing" -time '0:' \
-    -fields '(phaseChangeSolidFraction phaseChangeDarcyCoeff phaseChangeModelDeltaT phaseChangeDarcyAcceleration phaseChangeBuoyancyAcceleration pRghAcceleration magPhaseChangeDarcyAcceleration magPhaseChangeBuoyancyAcceleration magPRghAcceleration phaseChangeDragToBuoyancy phaseChangeDragToPressure)' \
-    2>&1 | tee log.foamPostProcess.C14.momentum
-fi
+    -fields '(phaseChangeSolidFraction phaseChangeDarcyCoeff phaseChangeModelDeltaT phaseChangeDarcyAcceleration phaseChangeBuoyancyAcceleration pRghAcceleration magPhaseChangeDarcyAcceleration magPhaseChangeBuoyancyAcceleration magPRghAcceleration phaseChangeDragToBuoyancy phaseChangeDragToPressure)'
 
-if [[ ! -e log.foamLog.C14 ]]; then
-  echo "Extrayendo residuales/Courant/continuidad con foamLog..."
-  foamLog "$LOG" 2>&1 | tee log.foamLog.C14
-fi
+echo "Extrayendo residuales, continuidad y Courant del log C14..."
+run_post log.foamLog.C14 foamLog "$LOG"
 
-if [[ ! -e log.foamPostProcess.C14.topSurfaceFlow ]]; then
-  echo "Calculando flujo superficial metalTop original C14..."
+echo "Procesando la cara superior metalTop C14 original..."
+run_post log.foamPostProcess.C14.topSurfaceFlow \
   foamPostProcess -case "$OUT" -region metal \
     -dict "$OUT/system/topSurfaceFlowPostProcessing" -time '0:' \
-    -fields '(U T p_rgh rho phi phaseChangeSource:alpha1)' \
-    2>&1 | tee log.foamPostProcess.C14.topSurfaceFlow
-fi
+    -fields '(U T p_rgh rho phi phaseChangeSource:alpha1)'
 
 touch "$OUT/C3D05_B_C14_FUNCIONES_COMPLETAS.foam"
 printf '\n%s\n' \
