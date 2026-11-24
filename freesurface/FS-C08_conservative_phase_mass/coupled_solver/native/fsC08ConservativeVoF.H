@@ -42,6 +42,9 @@ class fsC08ConservativeVoF : public compressibleVoF
     // only: existing native ddt(rho,K) already converts that kinetic
     // energy into thermal energy in the TOTAL-energy conservation.
     // Adding this again as a heat source would double-count it.
+    // Darcy coefficient from the last native momentum matrix [kg/(m3 s)].
+    // Retain it to compute dissipation with final pressure-corrected U.
+    volScalarField mushyDarcyResistance_;
     volScalarField mushyDarcyDissipation_;
 
     // Restore mixture mass from actual liquid+solid inventories, not
