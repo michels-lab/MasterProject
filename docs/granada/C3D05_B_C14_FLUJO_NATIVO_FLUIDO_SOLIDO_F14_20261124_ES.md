@@ -1,3 +1,33 @@
+## Actualización WSL — 24 nov 2026: compilación PASÓ, ejecución detuvo FOAM FATAL IO
+
+**Evidencia real observada:** `git pull --ff-only` completó la actualización; **8/8 pruebas de auditoría del extractor PASS** (`Ran 8 tests in 1.178s, OK`); `--preflight` confirmó C14 original 10 s, 101 estados, metal-fluido/molde-sólido, hash SHA de la malla/reporte/log y ninguna reejecución CFD.
+
+**Avance técnico significativo:** el cambio del encabezado C++ a `#include "linear.H"` desbloqueó `wmake`: el programa nativo fue compilado y alcanzó la fase de ejecución, pero terminó allí con `FOAM FATAL IO ERROR` y `rc=1`. **El terminal mostró únicamente la cabecera** porque la función `invoke()` imprimía solo líneas con la cadena `FOAM FATAL` y ocultaba las siguientes líneas que explican el archivo/diccionario o keyword causante. La causa específica es **DESCONOCIDA** y no se debe deducir a partir de la cabecera.
+
+**Registro de error conservado (NO BORRAR):**
+
+```text
+/home/michel/OpenFOAM/.C3D05_B_C14_NATIVE_FLUID_SOLID_PATCH_Q_01.ATTEMPT_1lg4hihv/log.C3D05_B_C14_NATIVE_FLUX
+```
+
+**Correctivo publicado en GitHub:** `run_existing_case_b_c14_native_flux.py` ahora tiene `--diagnose-attempt`, lectura restringida y estrictamente **solo lectura** del intento anterior. Extrae el contexto de `FOAM FATAL IO ERROR` de las líneas relevantes. Además `invoke()` mostrará el tramo final íntegro de futuros errores sin ocultar sus causas. Se añadieron 2 pruebas sintéticas a las 8 previas: **10 pruebas en el código, aún no ejecutadas en WSL** después de este cambio.
+
+**Siguiente comando único. No ejecutar extractor nuevo, wmake ni foamMultiRun hasta leer la causa:**
+
+```bash
+cd ~/OpenFOAM/MasterProject && git pull --ff-only && python3 -B cases_3d/C3D_05_step_gmsh_conformal/c14_physics/run_existing_case_b_c14_native_flux.py --diagnose-attempt "$HOME/OpenFOAM/.C3D05_B_C14_NATIVE_FLUID_SOLID_PATCH_Q_01.ATTEMPT_1lg4hihv"
+```
+
+Alternativa sin `git pull` ni cambios de código, para mostrar **inmediatamente** el error desde la bitácora original:
+
+```bash
+sed -n '/FOAM FATAL IO ERROR/,+35p' "$HOME/OpenFOAM/.C3D05_B_C14_NATIVE_FLUID_SOLID_PATCH_Q_01.ATTEMPT_1lg4hihv/log.C3D05_B_C14_NATIVE_FLUX"
+```
+
+No hay `q(t)` autenticado, no hay informe térmico de las cuatro fronteras, no se puede inferir error de conservación por el inventario referencial -1352.9442013308708 J, y el Caso B sigue **3/7, 2/7=29% hitos aceptados**, G3–G7 físicos sin cerrar.
+
+---
+
 # Caso B C3D-05 — extractor térmico NATIVO C14 Foundation14: fluido + sólido, sin repetir CFD
 
 **24 de noviembre de 2026.** **NUEVO CÓDIGO IMPLEMENTADO EN MASTERPROJECT, TODAVÍA NO COMPILADO NI EJECUTADO EN WSL REAL.** El anterior CFD F14, sus 101 estados y sus múltiples postprocesamientos **sí** se completaron en WSL. Evitar confundir estas dos afirmaciones.
