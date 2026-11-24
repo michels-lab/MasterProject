@@ -232,8 +232,9 @@ def audit(case,report):
             n=sum((case/format(t,"g")/r/f).is_file() for t in TIMES)
             counts["saved/"+r+"/"+f]=n
             if n!=len(TIMES):errors.append("saved coverage "+r+"/"+f)
-    counts["topFlow_time_dirs"]=len([x for x in (pp/"topFlow").glob("*") if x.is_dir()])
-    if counts["topFlow_time_dirs"]<2000:errors.append("topFlow time coverage")
+    top_times=[t for t in TIMES[1:] if (p:=pp/"topFlow"/format(t,"g")/"patch(metalTop).xy").is_file() and p.stat().st_size>0]
+    counts["topFlow_positive_saved_times"]=len(top_times)
+    if len(top_times)!=2000:errors.append("topFlow positive saved-time coverage")
     return {"counts":counts,"errors":errors,"native_runtime_coverage_complete":not errors}
 def execute(case):
     r=json.loads((case/REPORT).read_text())
@@ -311,6 +312,14 @@ def main():
             result[name]={"status":"PREPARATION_BLOCKED_PRESERVED","error":str(e)}
         write_json(root/"CAMPAIGN_INDEX.json",result)
         print(name,result[name]["status"],flush=True)
-    if any(r["status"]!="PREPARED_NOT_RUN" for r in result.values()):sys.exit(2)
+    ready={k:r["disk_projection"]["projected_bytes_with_50pct_margin"] for k,r in result.items() if r["status"]=="PREPARED_NOT_RUN"}
+    free=shutil.disk_usage(root).free
+    summary={"prepared_cases":len(ready),"expected_cases":len(CASES),"per_case_projected_bytes":ready,
+             "projected_total_bytes":sum(ready.values()),"free_bytes":free,
+             "all_six_fit_estimate":len(ready)==6 and free>=sum(ready.values())+10*1024**3,
+             "solver_executed":False,"note":"Empirical planning estimate, not guaranteed upper bound. Serial run checks disk again."}
+    write_json(root/"CAMPAIGN_RESOURCES.json",summary)
+    print(json.dumps(summary,indent=2),flush=True)
+    if len(ready)!=6:sys.exit(2)
     print("ALL_SIX_PREPARED_NO_CFD",flush=True)
 if __name__=="__main__":main()
