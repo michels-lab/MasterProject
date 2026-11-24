@@ -280,7 +280,13 @@ def audit(case:Path,out:Path) -> dict:
             "log does not prove complete 10s original C14 fluid-solid solution")
     time_labels=saved_times(case)
     tsol,tliq,latent=thresholds()
-    rows=[native_snapshot_row(case,t,label,tsol,tliq) for t,label in time_labels]
+    rows=[]
+    for i,(t,label) in enumerate(time_labels,1):
+        rows.append(native_snapshot_row(case,t,label,tsol,tliq))
+        if i==1 or i%10==0 or i==len(time_labels):
+            print(f"C3D05_B_POSTRUN_READONLY_PROGRESS: {i}/{len(time_labels)} "
+                  f"saved times audited; latest t={t:g}s; NO_CFD_NO_REWRITE",
+                  flush=True)
     report=build_summary(rows,log_data,verified,case,out,tsol,tliq,latent)
     out.parent.mkdir(parents=True,exist_ok=True)
     with tempfile.TemporaryDirectory(
