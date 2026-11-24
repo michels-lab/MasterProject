@@ -484,10 +484,22 @@ def inspect_occupied_copy(case: Path, copy: Path,
         seen.add(group)
         native_log = result["per_group_logs"][group]
         exit_code = item.get("exit_code")
+        # Earlier V1 reports recorded OS return code only. New six-group
+        # reports persist the fatal-log semantic gate as well. Authenticate
+        # the matching log before accepting either version.
+        has_new_semantics = isinstance(item.get("foam_fatal_present"), bool)
+        expected_pass = (exit_code == 0) if isinstance(exit_code, int) else False
+        actual_fatal = fatal_openfoam_log(
+            copy / ("log.C14_3D_postprocess_solverBacked_" + group)
+        ) if native_log.get("present") else {"foam_fatal_present": False}
+        if has_new_semantics:
+            expected_pass = expected_pass and not actual_fatal["foam_fatal_present"]
         if (not native_log.get("present") or
             item.get("log_sha256") != native_log.get("sha256") or
             not isinstance(exit_code, int) or isinstance(exit_code, bool) or
-            item.get("passed") is not (exit_code == 0) or
+            (has_new_semantics and
+             item["foam_fatal_present"] is not actual_fatal["foam_fatal_present"]) or
+            item.get("passed") is not expected_pass or
             item.get("log") !=
                 "log.C14_3D_postprocess_solverBacked_" + group):
             result["reason"] = (
