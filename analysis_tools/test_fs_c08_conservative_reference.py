@@ -226,5 +226,42 @@ class LinearMushyEquilibriumReferenceTests(unittest.TestCase):
                 dt_s=1.,applied_heat_W=-1e9)
 
 
+    def test_equilibrium_CLI_fixture_solves_gamma_without_external_gamma(self):
+        import contextlib
+        import io
+        scenario=(Path(__file__).resolve().parents[1]/
+                  "freesurface/FS-C08_conservative_phase_mass/fixtures/SYNTHETIC_ONE_CELL_MUSHY_EQUILIBRIUM.json")
+        stdout=io.StringIO()
+        with contextlib.redirect_stdout(stdout):
+            status=m.main(["--mode","closed-cell-mushy-equilibrium",str(scenario)])
+        self.assertEqual(status,0)
+        data=json.loads(stdout.getvalue())
+        self.assertEqual(data["schema"],"masterproject-fs-c08-closed-cell-mushy-v1")
+        self.assertGreater(data["audit"]["implied_gamma_kg_m3_s"],0.)
+        self.assertAlmostEqual(data["audit"]["total_metal_mass_residual_kg"],0.,places=15)
+        self.assertLess(abs(data["audit"]["energy_residual_J"]),1e-8)
+        self.assertFalse(data["physical_3d_shrinkage_validated"])
+        self.assertFalse(data["openfoam_14_solver_executed"])
+        self.assertEqual(data["case_purpose"],"SYNTHETIC_TEST_ONLY")
+
+    def test_possible_graphite_like_expansion_only_when_solid_density_is_lower(self):
+        base=material()
+        expanded=m.Thermo(
+            rho_liquid=base.rho_liquid,
+            rho_solid=curve(6750),
+            cp_liquid=base.cp_liquid,
+            cp_solid=base.cp_solid,
+            cp_gas=base.cp_gas,
+            latent_liquid_minus_solid_J_kg=base.latent_liquid_minus_solid_J_kg,
+            gas_R_J_kg_K=base.gas_R_J_kg_K,
+            T_reference_K=base.T_reference_K,
+            provenance="SYNTHETIC_EXPANSION_ONLY_NOT_CAST_IRON",
+        )
+        c=cells(expanded)[0]
+        result=m.advance((c,),expanded,m.Step(.1,(50.,)))
+        check(result)
+        self.assertGreater(result["audit"]["geometric_metal_volume_delta_m3"],0.)
+
+
 if __name__=="__main__":
     unittest.main()
