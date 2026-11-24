@@ -640,10 +640,10 @@
       "percent_hitos": 80,
       "percentage_scope": "SOLO_HITOS_OPERATIVOS_DEL_CASO_A_NO_VALIDACION_FISICA",
       "primary_contract": "cases_3d/C3D_04_rounded_multiblock_pilot/AGENTS.md",
-      "next_integrated_milestone": "A5.1: two new isolated temporal refinements dt .0005/.00025 s, same V4/T02, 101 common states; runner published.",
-      "blocker": "Temporal WSL execution pending; no spatial independence, discrete conservation or QuickCup validation.",
-      "CI_status": "TEMPORAL_SENSITIVITY_EXECUTOR_PUBLISHED_WSL_PENDING",
-      "CI_evidence": "docs/C3D04_A_STAGE09_TEMPORAL_SENSITIVITY_20261124_ES.md",
+      "next_integrated_milestone": "Priority C14-3DA-200s, same faithful A physics and mesh; targeted preparer+runner published; sensitivity deferred.",
+      "blocker": "200s WSL execution and storage audit pending; independence and discrete conservation remain deferred/unverified.",
+      "CI_status": "C14_3DA_200S_PRIORITY_EXECUTOR_PUBLISHED_WSL_PENDING",
+      "CI_evidence": "docs/C3D04_A_C14_200S_PRIORITY_20261124_ES.md",
       "git_archive": "cases_3d/C3D_04_rounded_multiblock_pilot/C14_3D_A_faithful"
     },
     {
