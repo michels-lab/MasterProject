@@ -203,7 +203,8 @@ def prepare_isolated_c14_flux_case(
     which does not satisfy F14 solidTransport.q() exact lookup
         interpolate(kappa).
     We ADD this explicit harmonic entry ONLY to the COPIED system file. All
-    101 original time directories and constant are symlinked READ-ONLY-INTENT
+    101 real time/region directories are recreated with field-file symlinks;
+    constant is symlinked READ-ONLY-INTENT
     to original source (the extractor has NO write to input). Never insert
     this into the thesis CFD's real fvSchemes or rewrite archived fields.
     """
@@ -267,7 +268,32 @@ def prepare_isolated_c14_flux_case(
         original_dir=original/label
         require(original_dir.is_dir() and not original_dir.is_symlink(),
                 "missing/nonregular original archived time directory: "+label)
-        (shadow/label).symlink_to(original_dir,target_is_directory=True)
+        # OpenFOAM Time::findTimes enumerates real directories; symlinked
+        # TOP-LEVEL time directories may not be enumerated as saved times.
+        # Create real time/region directories containing READ-ONLY-INTENT
+        # symlinks to ORIGINAL FIELD FILES, not to time directories.
+        shadow_time=shadow/label
+        shadow_time.mkdir()
+        for region in ("metal","mold"):
+            source_region=original_dir/region
+            require(source_region.is_dir() and not source_region.is_symlink(),
+                    "missing original time/region: "+label+"/"+region)
+            shadow_region=shadow_time/region
+            shadow_region.mkdir()
+            for entry in source_region.iterdir():
+                require(not entry.is_symlink() and
+                        (entry.is_file() or entry.is_dir()),
+                        "unsafe original C14 region entry: "+str(entry))
+                (shadow_region/entry.name).symlink_to(
+                    entry,target_is_directory=entry.is_dir())
+        for entry in original_dir.iterdir():
+            if entry.name in ("metal","mold"):
+                continue
+            require(not entry.is_symlink() and
+                    (entry.is_file() or entry.is_dir()),
+                    "unsafe original CFD time directory entry: "+str(entry))
+            (shadow_time/entry.name).symlink_to(
+                entry,target_is_directory=entry.is_dir())
     require(sha(source_schemes)==original_sha,
             "original mold fvSchemes SHA altered during shadow creation")
     require(sha(target)!=original_sha,
@@ -279,7 +305,8 @@ def prepare_isolated_c14_flux_case(
         "temporary_overlay_mold_fvSchemes_SHA256":sha(target),
         "original_mold_scheme":"interpolate((kappa|Cv)) harmonic;",
         "explicit_shadow_only_scheme":"interpolate(kappa) harmonic;",
-        "saved_real_time_directories_linked":len(saved),
+        "saved_real_time_directories_reconstructed":len(saved),
+        "each_region_file_symlinked_to_original_read_only_intent":True,
         "constant_linked_read_only_intent":True,
         "system_copied_and_ONLY_mold_fvSchemes_amended":True,
         "original_CFD_not_remeshed_or_resolved":True,
@@ -318,7 +345,8 @@ def run(case:Path,output:Path)->dict:
     staging=work/"published"
     staging.mkdir()
     # Shadow contains COPIED system dictionaries (only mold interpolate(kappa)
-    # added) + 101 symlinks to IMMUTABLE archived time fields and constant.
+    # added) + real 101 time/region dirs with symlinks to archived original
+    # field files; original constant stays linked read-only-intent.
     # Never insert a scheme into ORIGINAL $HOME/OpenFOAM/.../system/mold/fvSchemes.
     saved=native.saved_times(case)
     overlay=prepare_isolated_c14_flux_case(
