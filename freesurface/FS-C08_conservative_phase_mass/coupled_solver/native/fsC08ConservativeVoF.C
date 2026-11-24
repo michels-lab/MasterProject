@@ -275,6 +275,40 @@ void solvers::fsC08ConservativeVoF::postSolve()
     }
     reduce(gasBoundaryOut,sumOp<scalar>());
 
+    // Energy crossing ACTUAL fluid boundary faces. This is not yet a
+    // closed total-energy residual, since wall heat and mechanical
+    // work must also enter with correct signs.
+    scalar liquidEnergyOut_W=0;
+    scalar gasEnergyOut_W=0;
+    const auto& liquidBoundary=
+        phaseMass_->liquidMassFlux().boundaryField();
+    const auto& gasBoundary=alphaRhoPhi2.boundaryField();
+    const auto& temperatureBoundary=mixture_.T().boundaryField();
+    const auto& gasEnergyBoundary=
+        mixture_.thermo2().he().boundaryField();
+    forAll(liquidBoundary,patchi)
+    {
+        forAll(liquidBoundary[patchi],facei)
+        {
+            const scalar fL=liquidBoundary[patchi][facei];
+            if (mag(fL)>SMALL)
+            {
+                // Check real boundary phase temperature against sourced
+                // material curves; no imaginary inlet energy at air T.
+                liquidEnergyOut_W+=fL*
+                    phaseMass_->liquidInternalEnergy
+                    (
+                        temperatureBoundary[patchi][facei]
+                    );
+            }
+            gasEnergyOut_W+=
+                gasBoundary[patchi][facei]
+               *gasEnergyBoundary[patchi][facei];
+        }
+    }
+    reduce(liquidEnergyOut_W,sumOp<scalar>());
+    reduce(gasEnergyOut_W,sumOp<scalar>());
+
     const scalar dt=runTime.deltaTValue();
     const scalar metalResidual=M-M0+dt*boundaryMassRate;
     const scalar gasContinuityDefect=Mgas-Mgas0+dt*gasBoundaryOut;
@@ -285,6 +319,10 @@ void solvers::fsC08ConservativeVoF::postSolve()
         << " phaseResolvedInternalEnergy_J=" << E
         << " previousInternalEnergy_J=" << E0
         << " deltaInternalEnergy_J=" << E-E0
+        << " liquidAdvectedEnergyOut_W=" << liquidEnergyOut_W
+        << " gasAdvectedEnergyOut_W=" << gasEnergyOut_W
+        << " deltaInternalPlusAdvectedEnergy_J="
+        << E-E0+dt*(liquidEnergyOut_W+gasEnergyOut_W)
         << " energyBudgetPressureAndCHTNotYetClosed=1"
         << " nativeGasInventory_kg=" << Mgas
         << " previousGasInventory_kg=" << Mgas0
