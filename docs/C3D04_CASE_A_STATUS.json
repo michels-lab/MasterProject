@@ -836,6 +836,15 @@
       "global_energy_conservation_verified": false,
       "quickcup_validated": false,
       "remaining": "Investigate vertical sampling geometry on native mesh; audit additional outputs; integrate fluxes and metal/mold inventories, bilateral interface flux and discrete phase source before balance; no CFD rerun for existing snapshots."
+    },
+    "next_integrated_continuation": {
+      "code": "cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/continue_c14_stage07_grouped_evidence.py",
+      "commit": "0fd379152277b1d38d687045a1c4edb1702e641b",
+      "regressions_added": 5,
+      "regressions_observed": false,
+      "WSL_executed": false,
+      "scope": "Integrate native heat/advective/total power, nominal latent inventory, mold sensible inventory, all 101 states; native 401-point scan along fixed x/z, followed by 80-point primitive and momentum sampling of supported interior chord in a single grouped 101-state pass; never equate shortened chord with full original 2D line. Original and grouped evidence SHA protected; no CFD.",
+      "remaining": "Mold exterior and mold-side interface flux, discretized fvModel source, full vertical extent comparison, grid/time independence, QuickCup."
     }
   }
 }
