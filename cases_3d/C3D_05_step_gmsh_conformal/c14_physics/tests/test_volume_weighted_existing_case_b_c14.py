@@ -81,9 +81,9 @@ class VolumeWeightedNativeB(unittest.TestCase):
                  patch.object(S,"CHECKMESH_METAL_VOLUME_M3",100.0):
                 with self.assertRaisesRegex(ValueError,"checkMesh total"):
                     S.calculate_native_metal_cell_volumes(poly)
-            # Flip every first cube exterior face -> nonpositive cell volume
+            # Flip outer x=2 quad of second cube -> negative cell volume
             source=(poly/"faces").read_text()
-            (poly/"faces").write_text(source.replace("4(0 3 2 1)","4(0 1 2 3)"))
+            (poly/"faces").write_text(source.replace("4(8 9 10 11)","4(8 11 10 9)"))
             with patch.object(S,"EXPECTED_CELLS",2),\
                  patch.object(S,"CHECKMESH_METAL_VOLUME_M3",2.0):
                 with self.assertRaisesRegex(ValueError,"nonpositive|checkMesh total"):
