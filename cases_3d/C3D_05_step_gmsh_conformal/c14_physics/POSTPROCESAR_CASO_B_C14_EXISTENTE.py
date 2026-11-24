@@ -188,6 +188,12 @@ def stage(source,work,saved):
         shutil.copy2(source/SOLVERLOG,temp/"log.foamMultiRun")
         fo=temp/"system"/"C14_B_OFFLINE"
         fo.mkdir()
+        # A source case may already contain system/functions. We preserve
+        # that unmodified INSIDE the copy but disable its implicit loading:
+        # only our selected, explicit offline -dict objects may run.
+        userfunctions=temp/"system"/"functions"
+        if userfunctions.is_file():
+            userfunctions.rename(fo/"PRESERVED_INPUT_system_functions")
         original_hashes={}
         for n in ("functions","researchDiagnostics","lineProfiles","momentumPostProcessing"):
             src=C14/"system"/n
@@ -367,6 +373,17 @@ def main():
              "activa OpenFOAM Foundation14 antes de ejecutar")
         need(shutil.which("foamPostProcess") and shutil.which("foamLog"),
              "falta foamPostProcess/foamLog Foundation14")
+        # Count real rho/phi on the actual saved labels, never infer from a
+        # 100/101 summary which exact time is absent.
+        rho_phi_times=[(t,n) for t,n in saved
+                       if all((source/n/"metal"/name).is_file()
+                              for name in ("rho","phi"))]
+        rho_phi_on_all_saved_after_t0=(
+            len(rho_phi_times)==100 and
+            len([t for t,n in rho_phi_times if t>0])==100 and
+            all(abs(t-i*.1)<1e-8 for i,(t,n)
+                in enumerate(rho_phi_times,1))
+        )
         if args.resume:
             need(work.is_dir() and (work/REPORT).is_file(),
                  "no existe copia previa para reanudar")
@@ -382,18 +399,29 @@ def main():
         steps.append(native(work,"02_probes_101","C14_B_probe_101","0:10",BASIC))
         steps.append(native(work,"03_profiles_101","C14_B_profiles","0:10",BASIC))
         # rho and phi were archived only for 100 snapshots; never invent t0.
-        steps.append(native(work,"04_density","C14_B_density","0.1:10",
-                            ("rho","phi","U")))
-        steps.append(native(work,"05_probes_rho","C14_B_probe_rho_100","0.1:10",RHO))
-        steps.append(native(work,"06_profiles_rho","C14_B_profiles_rho","0.1:10",RHO))
-        steps.append(native(work,"07_topSurface","C14_B_topSurface","0.1:10",RHO+("phi",)))
-        # The next two stages are optional: archived h and original
-        # solidification momentum source are not present at all saved times.
-        # Native OpenFOAM may reconstruct or reject them; log truthfully.
-        steps.append(native(work,"08_energy_optional","C14_B_energy_optional",
-                            "0.1:10",RHO+("phi",)))
-        steps.append(native(work,"09_momentum_optional","C14_B_momentum",
-                            "0.1:10",RHO+("phi",)))
+        if rho_phi_on_all_saved_after_t0:
+            steps.append(native(work,"04_density","C14_B_density","0.1:10",
+                                ("rho","phi","U")))
+            steps.append(native(work,"05_probes_rho","C14_B_probe_rho_100","0.1:10",RHO))
+            steps.append(native(work,"06_profiles_rho","C14_B_profiles_rho","0.1:10",RHO))
+            steps.append(native(work,"07_topSurface","C14_B_topSurface","0.1:10",RHO+("phi",)))
+        else:
+            for label in ("04_density","05_probes_rho","06_profiles_rho",
+                          "07_topSurface"):
+                steps.append({"name":label,
+                              "result":"UNAVAILABLE_NONCONTIGUOUS_OR_MISSING_RHO_PHI",
+                              "available_joint_rho_phi_times":[x for x,n in rho_phi_times]})
+        # These optional original C14 objects need transport h or native
+        # momentum fvModels not archived. Try only on real rho/phi snapshots;
+        # they are NOT grounds to call a partial postprocess complete.
+        if rho_phi_on_all_saved_after_t0:
+            steps.append(native(work,"08_energy_optional","C14_B_energy_optional",
+                                "0.1:10",RHO+("phi",)))
+            steps.append(native(work,"09_momentum_optional","C14_B_momentum",
+                                "0.1:10",RHO+("phi",)))
+        else:
+            steps.extend(({"name":"08_energy_optional","result":"UNAVAILABLE_RHO_PHI"},
+                          {"name":"09_momentum_optional","result":"UNAVAILABLE_RHO_PHI"}))
         steps.append(run_foam_log(work))
         finish(work,doc,steps)
         if not args.no_open:
