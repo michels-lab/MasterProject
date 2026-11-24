@@ -59,6 +59,25 @@ Foam::solvers::fsC08ConservativeVoF::divDevTau(volVectorField& U)
     }
     mushyResistance.correctBoundaryConditions();
 
+    // A positive Darcy drag removes mechanical kinetic energy.
+    // In the native TOTAL-energy equation, the fvc::ddt(rho,K)
+    // contribution already transfers that change to internal energy.
+    // This field is a DIAGNOSTIC, not an additional Gamma/Darcy heat
+    // source: adding R*|U|^2 again would double count dissipation.
+    auto& dissipation=mushyDarcyDissipation_.primitiveFieldRef();
+    const auto& velocity=U.primitiveField();
+    forAll(dissipation,i)
+    {
+        dissipation[i]=R[i]*magSqr(velocity[i]);
+        if (!std::isfinite(dissipation[i]) || dissipation[i]<0)
+        {
+            FatalErrorInFunction
+                << "FS-C08 nonfinite Darcy kinetic-energy dissipation "
+                << "at cell " << i << exit(FatalError);
+        }
+    }
+    mushyDarcyDissipation_.correctBoundaryConditions();
+
     // Positive implicit Sp on the momentum LHS => dissipative drag.
     return tBase + fvm::Sp(mushyResistance,U);
 }
