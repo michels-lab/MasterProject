@@ -115,7 +115,7 @@ PhaseMassTransport::PhaseMassTransport
                           IOobject::NO_READ,IOobject::AUTO_WRITE),
                  mesh,dimensionedScalar(dimless,0),
                  zeroGradientFvPatchScalarField::typeName),
-    alphaSolid_(IOobject("alphaSolid.fsC08",mesh.time().name(),mesh,
+    alphaSolid_(IOobject("alpha.metal.solid",mesh.time().name(),mesh,
                          IOobject::NO_READ,IOobject::AUTO_WRITE),
                 mesh,dimensionedScalar(dimless,0),
                 zeroGradientFvPatchScalarField::typeName),
