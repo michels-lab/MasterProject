@@ -27,6 +27,7 @@ import shutil
 import sys
 
 import run_c14_3d_complete_postprocess as old
+import stage_c14_3d_case_a as stage
 import c14_3d_native_energy_closure as energy
 import audit_existing_native_c14_stage07 as forensic
 
@@ -208,6 +209,9 @@ def original_case_gate(case: Path, failed: Path, recovery: Path,
     need(file_ok(case/"10/metal/T") and file_ok(case/"10/metal/U")
          and file_ok(case/"10/metal/phaseChangeSource:alpha1"),
          "original genuine C14 terminal 10-second state is missing")
+    mesh_cells = stage.region_cells(case,"metal",stage.EXPECTED["metal"])
+    original_has_zone = stage.audit_existing_zone(
+        case/"constant/metal/polyMesh/cellZones",mesh_cells["nCells"])
     return {
         "case": str(case), "failed_workcopy": str(failed),
         "recovery_report_sha256": sha(recovery/"C3D04_A_STAGE07_RECOVERY_REPORT.json"),
@@ -217,7 +221,81 @@ def original_case_gate(case: Path, failed: Path, recovery: Path,
         "original_10s_solver_log_sha256": original_log,
         "prior_failed_copy_solver_log_sha256": sha(failed/"log.foamMultiRun"),
         "original_final_alpha1_sha256": sha(case/"10/metal/phaseChangeSource:alpha1"),
+        "native_metal_mesh_cell_count": mesh_cells["nCells"],
+        "original_CFD_contains_full_metal_cellZone": original_has_zone,
     }
+
+
+
+def verify_or_add_metal_zone_in_new_copy(case: Path, copy: Path) -> dict:
+    """Repair only zone lookup metadata, not mesh connectivity or physical model.
+
+    Real WSL copy _02 showed FOAM FATAL IO ERROR: Cannot find cellZone metal;
+    C14 source's solidificationMeltingSource references an all-metal cellZone.
+    This function must NEVER run against an existing/occupied copy.
+    """
+    case = case.expanduser().resolve()
+    copy = copy.expanduser().absolute()
+    need(copy.is_dir() and not copy.is_symlink(),
+         "new workcopy is not a regular directory")
+    need(case != copy and case not in copy.parents and copy not in case.parents,
+         "no changes inside original research CFD case")
+    real = stage.region_cells(case, "metal", stage.EXPECTED["metal"])
+    copied = stage.region_cells(copy, "metal", stage.EXPECTED["metal"])
+    n = real["nCells"]
+    need(copied["nCells"] == n, "copy metal region cell count differs")
+    for name in stage.MESH:
+        rel = Path("constant/metal/polyMesh") / name
+        need(sha(case / rel) == sha(copy / rel),
+             "source and copy mesh geometry/connectivity differ: " + name)
+    original_zone = case / "constant/metal/polyMesh/cellZones"
+    copied_zone = copy / "constant/metal/polyMesh/cellZones"
+    if stage.audit_existing_zone(original_zone, n):
+        need(file_ok(copied_zone), "original C14 metal zone missing in clone")
+        need(sha(original_zone) == sha(copied_zone),
+             "new clone changed pre-existing C14 full metal zone")
+        return {
+            "status": "SOURCE_FULL_METAL_CELLZONE_PRESENT_PRESERVED",
+            "metal_cells": n,
+            "copy_cellZones_sha256": sha(copied_zone),
+            "added_to_copy_only": False,
+            "geometry_connectivity_unchanged": True,
+        }
+    need(not copied_zone.exists() and not copied_zone.is_symlink(),
+         "missing source metal cellZone but clone contains unexpected zone")
+    copied_zone.write_text(stage.whole_region_zone(n), encoding="utf-8")
+    need(stage.audit_existing_zone(copied_zone, n),
+         "new metal zone is not all real native cells")
+    need(not original_zone.exists() and not original_zone.is_symlink(),
+         "original C14 mesh source zone unexpectedly changed")
+    return {
+        "status": "FULL_METAL_CELLZONE_CREATED_ONLY_IN_FRESH_COPY",
+        "metal_cells": n,
+        "copy_cellZones_sha256": sha(copied_zone),
+        "added_to_copy_only": True,
+        "original_CFD_cellZones_created": False,
+        "geometry_connectivity_unchanged": True,
+    }
+
+
+def fatal_openfoam_log(log: Path, limit: int = 5) -> dict:
+    """Native F14 can exit 0 while writing FOAM FATAL IO ERROR several times."""
+    need(file_ok(log), "native subprocess log missing: " + str(log))
+    pattern = re.compile(r"\bFOAM\s+FATAL(?:\s+IO)?\s+ERROR\b|\bFOAM aborting\b", re.I)
+    found = []
+    count = 0
+    with log.open(encoding="utf-8", errors="replace") as stream:
+        for line_no, line in enumerate(stream, 1):
+            if pattern.search(line):
+                count += 1
+                if len(found) < limit:
+                    found.append({"line": line_no, "text": line.strip()[:240]})
+    return {
+        "foam_fatal_present": count > 0,
+        "foam_fatal_occurrence_count": count,
+        "first_foam_fatal_markers": found,
+    }
+
 
 
 def native_group(copy: Path, group: str, dictionary: Path) -> dict:
@@ -236,8 +314,13 @@ def native_group(copy: Path, group: str, dictionary: Path) -> dict:
     executed = old.run_native(copy,"solverBacked_"+group,args)
     log = copy/executed["log"]
     errors = forensic.error_excerpt(log, limit=8)
+    fatal = fatal_openfoam_log(log)
+    # OpenFOAM may report FOAM FATAL IO with OS exit code 0.
+    semantically_passed = executed["exit_code"] == 0 and not fatal["foam_fatal_present"]
     return {
-        **executed, "group": group,
+        **executed, "group": group, "passed": semantically_passed,
+        "os_exit_code_zero": executed["exit_code"] == 0,
+        **fatal,
         "read_model": "fluid_solver_registry_no_FV_solve"
                       if group in ("core","energy","flow","momentum")
                       else "only_explicit_saved_fields",
@@ -247,47 +330,129 @@ def native_group(copy: Path, group: str, dictionary: Path) -> dict:
     }
 
 
+def saved_native_power_table(path: Path) -> tuple[list[str], list[dict[str, float]]]:
+    """Strict 101 states or complete 100 intervals excluding 0s startup.
+
+    Source C14 native functionObjects may not write an initialized t=0 table.
+    0.1..10.0 is not the same dataset as 0..10.0; document the distinction.
+    No extrapolation or fabricated initial power.
+    """
+    need(file_ok(path), "missing native face-power table " + str(path))
+    header = None
+    data = []
+    with path.open(encoding="utf-8", errors="replace") as stream:
+        for line in stream:
+            if line.startswith("# Time"):
+                need(header is None, "duplicate native table header " + str(path))
+                header = line[1:].split()
+            elif not line.strip() or line.lstrip().startswith("#"):
+                continue
+            else:
+                need(header is not None, "native power data before header")
+                parts = line.split()
+                need(len(parts) == len(header), "native power columns do not match header")
+                try:
+                    values = [float(x) for x in parts]
+                except ValueError as exc:
+                    raise Blocked("native power table contains nonnumeric entries") from exc
+                need(all(math.isfinite(x) for x in values),
+                     "native power table includes nonfinite values")
+                data.append(dict(zip(header, values)))
+    need(header is not None and "Time" in header and "sum(energyFlux)" in header,
+         "native face table lacks Time/sum(energyFlux) columns")
+    n = len(data)
+    need(n in (100, 101),
+         "native face-power time-series has " + str(n) +
+         " rows; need all saved times 0..10 or 0.1..10")
+    first = 0.0 if n == 101 else 0.1
+    need(all(math.isclose(row["Time"],first+i*0.1,abs_tol=1e-8,rel_tol=0)
+             for i,row in enumerate(data)),
+         "native face-power times not exact consecutive saved 0.1s states")
+    return header, data
+
+
+def native_surface_table_coverage(copy: Path) -> dict:
+    """Show real row counts even if incomplete, never invent times."""
+    output = {}
+    for family in ("metalTopEnergyPower","metalMoldEnergyPower",
+                   "metalBoundaryEnergyPower"):
+        path=copy/"postProcessing/metal"/family/"0/surfaceFieldValue.dat"
+        if not file_ok(path):
+            output[family]={"present":False}
+            continue
+        data_lines = []
+        with path.open(encoding="utf-8",errors="replace") as stream:
+            for ln in stream:
+                if ln.strip() and not ln.lstrip().startswith("#"):
+                    data_lines.append(ln.strip())
+        first = data_lines[0].split()[0] if data_lines else None
+        last = data_lines[-1].split()[0] if data_lines else None
+        output[family]={"present":True,"sha256":sha(path),
+                        "numeric_data_row_count":len(data_lines),
+                        "first_recorded_time_text":first,
+                        "last_recorded_time_text":last}
+    return output
+
+
+def primitive_profile_coverage(copy: Path) -> dict:
+    """Original 3D sample locations: 80 finite points per saved final profile."""
+    all_profiles = old.profile_coverage(copy)
+    names = ("horizontalProfiles/line_y10mm",
+             "horizontalProfiles/line_y20mm",
+             "horizontalProfiles/line_y30mm",
+             "verticalProfiles/line_x20mm")
+    return {name:all_profiles[name] for name in names}
+
+
 def surface_energy_summary(copy: Path) -> dict:
-    """Native metal-side *face power* check, NEVER global energy closure."""
-    base = copy / "postProcessing/metal"
+    """Face-power reconciliation is not metal+mold energy conservation."""
+    base = copy/"postProcessing/metal"
     names = {
         "top":"metalTopEnergyPower",
         "contact":"metalMoldEnergyPower",
         "total":"metalBoundaryEnergyPower",
     }
-    rows = {}
-    for key, folder in names.items():
-        try:
-            header,table = energy.parse_table(
-                base/folder/"0"/"surfaceFieldValue.dat"
-            )
-        except (ValueError, OSError, KeyError) as err:
-            return {"status":"NATIVE_SURFACE_POWER_TABLES_MISSING_OR_INCOMPATIBLE",
-                    "reason":str(err)[:900],
-                    "nominal_metal_surface_power_reconciled":False,
-                    "global_energy_conservation_verified":False}
-        field = "sum(energyFlux)"
-        if field not in header:
-            return {"status":"NATIVE_ENERGY_POWER_COLUMN_MISSING",
-                    "missing_in":key,"available":header,
-                    "nominal_metal_surface_power_reconciled":False,
-                    "global_energy_conservation_verified":False}
-        rows[key] = table
-    discrepancy = []
-    for i in range(101):
-        top=rows["top"][i]["sum(energyFlux)"]
-        interface=rows["contact"][i]["sum(energyFlux)"]
-        total=rows["total"][i]["sum(energyFlux)"]
+    tables={}
+    try:
+        for key, family in names.items():
+            _,rows = saved_native_power_table(
+                base/family/"0"/"surfaceFieldValue.dat")
+            tables[key]=rows
+        first_times = [r["Time"] for r in tables["top"]]
+        need(all(len(tables[k])==len(first_times)
+                 and all(math.isclose(r["Time"], t, abs_tol=1e-8, rel_tol=0)
+                         for r,t in zip(tables[k],first_times))
+                 for k in names),
+             "three native face-power time axes are inconsistent")
+    except (Blocked, ValueError, OSError, KeyError) as err:
+        return {
+            "status":"NATIVE_SURFACE_POWER_TABLES_MISSING_OR_INCOMPATIBLE",
+            "reason":str(err)[:900],
+            "native_time_series":native_surface_table_coverage(copy),
+            "nominal_metal_surface_power_reconciled":False,
+            "global_energy_conservation_verified":False,
+        }
+    discrepancy=[]
+    for i in range(len(first_times)):
+        top=tables["top"][i]["sum(energyFlux)"]
+        interface=tables["contact"][i]["sum(energyFlux)"]
+        total=tables["total"][i]["sum(energyFlux)"]
         err=total-top-interface
         scale=max(1,abs(total),abs(top)+abs(interface))
         discrepancy.append(abs(err)/scale)
-    final = {k: rows[k][-1]["sum(energyFlux)"] for k in names}
+    final={k:tables[k][-1]["sum(energyFlux)"] for k in names}
     return {
-        "status":"METAL_SURFACE_POWER_101_STATES_DIAGNOSTIC",
+        "status":"NATIVE_METAL_SURFACE_POWER_SAVED_STATES_DIAGNOSTIC",
+        "saved_times_count":len(first_times),
+        "first_saved_time_s":first_times[0],
+        "last_saved_time_s":first_times[-1],
+        "t0_native_power_available":math.isclose(first_times[0],0,abs_tol=1e-9),
+        "t0_native_flux_fabricated":False,
         "final_energy_power_out_W":final,
         "maximum_relative_top_plus_contact_vs_total_discrepancy":max(discrepancy),
         "nominal_metal_surface_power_reconciled":max(discrepancy)<5e-5,
-        "energy_flux_direction":"outward positive (C14 native surfaceFieldValue convention)",
+        "native_time_series":native_surface_table_coverage(copy),
+        "energy_flux_direction":"outward positive (original C14 native surfaceFieldValue convention)",
         "global_energy_conservation_verified":False,
         "mold_side_flux_compared":False,
         "phase_change_source_discretization_verified":False,
@@ -406,10 +571,22 @@ def inspect_occupied_copy(case: Path, copy: Path,
         seen.add(group)
         native_log = result["per_group_logs"][group]
         exit_code = item.get("exit_code")
+        # Earlier V1 reports recorded OS return code only. New six-group
+        # reports persist the fatal-log semantic gate as well. Authenticate
+        # the matching log before accepting either version.
+        has_new_semantics = isinstance(item.get("foam_fatal_present"), bool)
+        expected_pass = (exit_code == 0) if isinstance(exit_code, int) else False
+        actual_fatal = fatal_openfoam_log(
+            copy / ("log.C14_3D_postprocess_solverBacked_" + group)
+        ) if native_log.get("present") else {"foam_fatal_present": False}
+        if has_new_semantics:
+            expected_pass = expected_pass and not actual_fatal["foam_fatal_present"]
         if (not native_log.get("present") or
             item.get("log_sha256") != native_log.get("sha256") or
             not isinstance(exit_code, int) or isinstance(exit_code, bool) or
-            item.get("passed") is not (exit_code == 0) or
+            (has_new_semantics and
+             item["foam_fatal_present"] is not actual_fatal["foam_fatal_present"]) or
+            item.get("passed") is not expected_pass or
             item.get("log") !=
                 "log.C14_3D_postprocess_solverBacked_" + group):
             result["reason"] = (
@@ -419,22 +596,52 @@ def inspect_occupied_copy(case: Path, copy: Path,
     if seen != set(TASK_ORDER):
         result["reason"] = "Only some native groups were recorded in final report."
         return result
-    groups_passed = [x["group"] for x in groups if x["passed"]]
-    groups_failed = [x["group"] for x in groups if not x["passed"]]
-    if (prior.get("native_groups_passed") != groups_passed or
-        prior.get("native_groups_failed") != groups_failed):
-        result["reason"] = "Native passed/failed rollups contradict individual exit codes."
+    declared_passed = [x["group"] for x in groups if x["passed"]]
+    declared_failed = [x["group"] for x in groups if not x["passed"]]
+    if (prior.get("native_groups_passed") != declared_passed or
+        prior.get("native_groups_failed") != declared_failed):
+        result["reason"] = "Native passed/failed rollups contradict recorded group status."
         return result
+    semantic = {}
+    for item in groups:
+        group = item["group"]
+        signal = fatal_openfoam_log(
+            copy / ("log.C14_3D_postprocess_solverBacked_" + group))
+        semantic[group] = {
+            "original_report_passed": item["passed"],
+            "os_exit_code": item["exit_code"],
+            "semantically_passed": item["exit_code"] == 0 and not signal["foam_fatal_present"],
+            **signal,
+        }
+    groups_passed = [g for g in TASK_ORDER if semantic[g]["semantically_passed"]]
+    groups_failed = [g for g in TASK_ORDER if not semantic[g]["semantically_passed"]]
+    false_positive = any(
+        x["original_report_passed"] and not x["semantically_passed"]
+        for x in semantic.values()
+    )
     result.update({
-        "status": "EXISTING_COMPLETE_NATIVE_POSTPROCESS_REPORT_REUSED_NO_NEW_RUN",
+        "read_only_existing_native_surface_table_coverage":
+            native_surface_table_coverage(copy),
+        "read_only_existing_primitive_profile_coverage":
+            primitive_profile_coverage(copy),
+        "status": (
+            "EXISTING_COMPLETE_REPORT_WITH_NATIVE_FATALS_PRESERVED"
+            if false_positive else
+            "EXISTING_COMPLETE_NATIVE_POSTPROCESS_REPORT_REUSED_NO_NEW_RUN"
+        ),
+        "original_report_groups_passed_by_exit_code_only": declared_passed,
+        "semantic_group_results": semantic,
+        "prior_report_false_positive_success_detected": false_positive,
         "final_report_sha_verified": True,
         "native_groups_passed": groups_passed,
         "native_groups_failed": groups_failed,
         "surface_energy": prior.get("surface_energy"),
         "native_validation_verified": False,
         "reason": (
-            "The prior six-group run is finished and its identities/logs "
-            "match. This is NOT evidence of physical/global energy validation."
+            "The original six-log and report SHA identities match. "
+            "Native FOAM FATAL markers override any exit-code-only PASS; "
+            "no source/workcopy changes or CFD occurred. "
+            "This is NOT physical/global energy validation."
         ),
     })
     return result
@@ -465,6 +672,7 @@ def main() -> int:
             source,opt.failed_copy,opt.recovery,opt.forensic,out)
         # Any failure from this point forward touches only the new copy.
         shutil.copytree(source,out,symlinks=False)
+        zone_meta=verify_or_add_metal_zone_in_new_copy(source,out)
         prior=out/"postProcessing"
         if prior.exists():
             need(not (out/"_original_postProcessing_preserved").exists(),
@@ -496,13 +704,20 @@ def main() -> int:
             "original_C14_postprocess_source_hashes":original_fo_hashes,
             "isolated_new_workcopy":str(out),
             "geometry_sampling":geometry,
+            "metal_cellZone_copy_only_recovery":zone_meta,
             "group_dictionary_SHA256":dict_audit,
             "native_groups":steps,
             "native_groups_passed":[s["group"] for s in steps if s["passed"]],
             "native_groups_failed":[s["group"] for s in steps if not s["passed"]],
             "surface_energy":energy_result,
+            "native_surface_table_coverage":native_surface_table_coverage(out),
+            "primitive_profile_coverage_at_10s":primitive_profile_coverage(out),
+            "native_energy_group_without_fatal":
+                any(x["group"]=="energy" and x["passed"] for x in steps),
             "original_solver_reexecuted":False,
-            "mesh_changed":False,
+            "original_CFD_mesh_changed":False,
+            "new_copy_cellZone_metadata_added":zone_meta["added_to_copy_only"],
+            "new_copy_mesh_geometry_connectivity_changed":False,
             "original_C14_physics_or_controlDict_changed":False,
             "other_A_old_workcopy_B_FS_modified":False,
             "in_run_ddt_fields_recovered":False,
@@ -528,6 +743,7 @@ def main() -> int:
             "new_copy":str(out),"solver_rerun":False,
             "groups_passed":final["native_groups_passed"],
             "groups_failed":final["native_groups_failed"],
+            "original_C14_metal_cellZone":zone_meta,
             "failed_group_last_24_lines":{
                 s["group"]:s["log_last_24_lines"] for s in steps if not s["passed"]},
             "native_energy_power":energy_result,
