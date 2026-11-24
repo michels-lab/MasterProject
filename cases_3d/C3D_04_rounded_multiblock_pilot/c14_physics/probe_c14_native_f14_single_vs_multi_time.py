@@ -161,15 +161,18 @@ def copy_one_trial(source: Path, folder: Path, times: list[str]) -> Path:
 
 def native_probe_trial(work: Path, label: str, selector: str, times: list[str]) -> dict:
     d=copy_one_trial(work["case"],work["out"]/label,times)
+    trial_case=d.parent.parent  # dictionary resides in <case>/system; cwd MUST be <case>
+    need((trial_case/"system/controlDict").is_file(),
+         "native F14 subprocess working directory lacks system/controlDict")
     arguments=["foamPostProcess","-region","metal","-solver","fluid",
                "-dict","system/"+d.name,"-time",selector]
-    process=old.run_native(d.parent,"f14TimeIsolation_"+label,arguments)
-    log=d.parent/process["log"]
+    process=old.run_native(trial_case,"f14TimeIsolation_"+label,arguments)
+    log=trial_case/process["log"]
     fatal=recovery.fatal_openfoam_log(log)
     errors=recovery.forensic.error_excerpt(log,limit=5)
-    root=d.parent/"postProcessing/metal"/GROUP
+    root=trial_case/"postProcessing/metal"/GROUP
     table_files=sorted(root.rglob("volFieldValue.dat")) if root.is_dir() else []
-    tables={str(p.relative_to(d.parent)):nrows_native(p) for p in table_files}
+    tables={str(p.relative_to(trial_case)):nrows_native(p) for p in table_files}
     valid_rows=all(v["valid_numeric_data"] for v in tables.values())
     return {
         "label":label, "selector":selector,
