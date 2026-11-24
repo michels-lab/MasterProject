@@ -348,6 +348,111 @@ def advance(cells:tuple[Cell,...],th:Thermo,step:Step)->dict[str,Any]:
     }
 
 
+
+@dataclass(frozen=True)
+class LinearMushyMassClosure:
+    """TEST-ONLY provisional equilibrium f_s(T), NOT a cast-iron phase diagram.
+
+    This is a mass fraction of ALL METAL, not a VOF or volume fraction.
+    Every endpoint MUST be supplied by the researcher; never inferred from
+    C14, CE or sulfur composition without explicit calibration.
+    """
+    T_solidus_K: float
+    T_liquidus_K: float
+    provenance: str
+
+    def __post_init__(self) -> None:
+        finite_positive(self.T_solidus_K, "solidus K")
+        finite_positive(self.T_liquidus_K, "liquidus K")
+        if self.T_solidus_K >= self.T_liquidus_K:
+            raise ValueError("Solidus must be below liquidus")
+        if not self.provenance or not isinstance(self.provenance, str):
+            raise ValueError("Phase-diagram provenance must be explicit")
+
+    def solid_mass_fraction(self, temperature_K: float) -> float:
+        if not math.isfinite(temperature_K):
+            raise ValueError("Finite temperature needed")
+        return min(1.0,max(0.0,
+               (self.T_liquidus_K-temperature_K)
+               /(self.T_liquidus_K-self.T_solidus_K)))
+
+
+def solve_closed_cell_mushy_equilibrium(
+    cell: Cell, th: Thermo, closure: LinearMushyMassClosure,
+    *, dt_s: float, applied_heat_W: float = 0.0,
+) -> dict[str,Any]:
+    """Implicit ENTHALPY equilibrium for one CLOSED cell (no mass flux).
+
+    Finds T and mass fractions simultaneously from exact total enthalpy.
+    No independent Gamma guess, no latent double counting. Boundary heat
+    is supplied; pressure-work and interface movement are NOT solved.
+    """
+    finite_positive(dt_s, "dt_s")
+    if not math.isfinite(applied_heat_W):
+        raise ValueError("Nonfinite external heat power")
+    if closure.T_solidus_K < th.common_min_K or closure.T_liquidus_K > th.common_max_K:
+        raise ValueError("Solidus/liquidus outside tabulated thermo support")
+    geometry(cell,th)
+    total_metal=cell.m_liquid_kg+cell.m_solid_kg
+    if total_metal<=0:
+        raise ValueError("Mushy solidification requires positive metal mass")
+    e_target=energy(cell,th)+dt_s*applied_heat_W
+
+    def mass_at_T(T:float)->dict[str,float]:
+        ms=total_metal*closure.solid_mass_fraction(T)
+        return {"liquid":total_metal-ms,"solid":ms,"gas":cell.m_gas_kg}
+
+    def equilibrium_energy(T:float)->float:
+        ms=mass_at_T(T)
+        return math.fsum(ms[p]*th.phase_h(p,T) for p in PHASES)
+
+    # cp>0 and positive liquid-solid latent enthalpy should give monotone
+    # E_eq(T); check rather than silently assuming it for exotic input cp.
+    a,b=th.common_min_K,th.common_max_K
+    energies=[equilibrium_energy(a+(b-a)*i/64) for i in range(65)]
+    if any(y<=x for x,y in zip(energies,energies[1:])):
+        raise ValueError("Nonmonotonic E(T) for supplied mushy equilibrium; reject closure")
+    tolerance=1e-10*max(1.,abs(e_target),abs(energies[0]),abs(energies[-1]))
+    if e_target<energies[0]-tolerance or e_target>energies[-1]+tolerance:
+        raise ValueError("Heat budget demands T outside property/phase equilibrium tables")
+    for _ in range(110):
+        m=(a+b)/2
+        if equilibrium_energy(m)<e_target:
+            a=m
+        else:
+            b=m
+    T=(a+b)/2
+    masses=mass_at_T(T)
+    after=Cell(cell.V_m3,masses["liquid"],masses["solid"],masses["gas"],T)
+    geo=geometry(after,th)
+    converted=after.m_solid_kg-cell.m_solid_kg
+    energy_residual=geo.E_J-e_target
+    initial_geo=geometry(cell,th)
+    return {
+        "initial_cell":cell,
+        "final_cell":after,
+        "initial_geometry":initial_geo,
+        "final_geometry":geo,
+        "audit":{
+            "phase_transfer_liquid_to_solid_kg":converted,
+            "implied_gamma_kg_m3_s":converted/(cell.V_m3*dt_s),
+            "final_solid_mass_fraction_of_metal":after.m_solid_kg/total_metal,
+            "total_metal_mass_residual_kg":
+                (after.m_liquid_kg+after.m_solid_kg)-total_metal,
+            "energy_target_J":e_target,
+            "energy_residual_J":energy_residual,
+            "geometry_metal_volume_delta_m3":
+                (geo.V_liquid_m3+geo.V_solid_m3)
+                -(initial_geo.V_liquid_m3+initial_geo.V_solid_m3),
+            "phase_mass_fraction_law":"LINEAR_MUSHY_EQUILIBRIUM_TEST_ONLY",
+            "phase_diagram_provenance":closure.provenance,
+            "is_OpenFOAM_3D_CFD":False,
+            "pressure_work_and_moving_interface_solved":False,
+            "experimental_validation":False,
+        },
+    }
+
+
 def parse_curve(obj:Any,name:str)->Curve:
     if not isinstance(obj,list):raise ValueError(f"{name}: expected [[T_K,value],...] list")
     return Curve(tuple(tuple(map(float,p)) for p in obj))
