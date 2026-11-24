@@ -54,6 +54,8 @@ class PhaseMassTransport
     scalar energyReferenceT_K_;
     autoPtr<Function1<scalar>> cvLiquidT_;
     autoPtr<Function1<scalar>> cvSolidT_;
+    autoPtr<Function1<scalar>> kappaLiquidT_;
+    autoPtr<Function1<scalar>> kappaSolidT_;
 
     // Darcy mushy drag: magnitude calibrated for alloy/coherency conditions.
     dimensionedScalar mushyDarcyCu_;
@@ -138,6 +140,8 @@ public:
     scalar solidInternalEnergy(const scalar T) const;
     scalar liquidCv(const scalar T) const;
     scalar solidCv(const scalar T) const;
+    scalar liquidKappa(const scalar T) const;
+    scalar solidKappa(const scalar T) const;
     scalar energyReferenceT() const { return energyReferenceT_K_; }
     const dimensionedScalar& mushyDarcyCu() const
     {
