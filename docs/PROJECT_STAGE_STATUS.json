@@ -245,7 +245,7 @@
     "case_b_c14_original_fluid_solid_mesh_source": "~/OpenFOAM/C3D05_STEP_GMSH_HEX_SUBDIV_COARSE_02",
     "case_b_c14_original_fluid_solid_native_output": "~/OpenFOAM/C3D05_B_C14_FLUID_SOLID_FULL_10S_01",
     "case_b_c14_original_fluid_solid_3d_case_materialized_in_user_WSL": true,
-    "case_b_c14_original_fluid_solid_native_solver_run": false,
+    "case_b_c14_original_fluid_solid_native_solver_run": true,
     "case_b_c14_original_fluid_solid_alpha1_observed": false,
     "case_b_c14_original_fluid_solid_source_hypothesis": "exact C14 2D physical/numeric source (hConst metal fluid + solidificationMeltingSource, eConst mold solid); B geometry-only 3D patch/pRefCell/cellZone mapping; NOT measured JMatPro/QuickCup conditions",
     "case_b_c14_original_fluid_solid_full_reference_dt_s": 0.001,
@@ -258,19 +258,22 @@
     "case_b_c14_source_wrapper_nounset_bashrc_fix_committed": true,
     "case_b_c14_source_wrapper_nounset_regression_ci_source_committed": true,
     "case_b_c14_wrapper_fixed_source_WSL_rerun_observed": true,
-    "case_b_c14_real_native_solver_process_observed_running": true,
-    "case_b_c14_real_native_solver_observed_time_s": 2.249,
+    "case_b_c14_real_native_solver_process_observed_running": false,
+    "case_b_c14_real_native_solver_observed_time_s": 10,
     "case_b_c14_real_native_solver_target_time_s": 10,
     "case_b_c14_real_native_solver_observed_Courant_mean": 0.0138185,
     "case_b_c14_real_native_solver_observed_Courant_max": 0.184568,
     "case_b_c14_real_native_solver_observed_log": "~/OpenFOAM/C3D05_B_C14_FLUID_SOLID_FULL_10S_01/log.foamMultiRun.C3D05_B_C14_10S",
     "case_b_c14_real_native_solver_observed_h_e_p_rgh": true,
-    "case_b_c14_real_native_solver_physical_time_progress_fraction": 0.2249,
-    "case_b_c14_real_native_solver_finished_observed": false,
+    "case_b_c14_real_native_solver_physical_time_progress_fraction": 1,
+    "case_b_c14_real_native_solver_finished_observed": true,
     "case_b_c14_real_native_solver_phase_source_startup_seen_in_excerpt": true,
     "case_b_c14_real_native_solver_observation_report": "docs/granada/C3D05_B_C14_WSL_EJECUCION_REAL_EN_CURSO_20261123_ES.md",
     "case_b_c14_real_native_solver_observed_clockTime_s": 1978,
-    "case_b_c14_real_native_solver_phase_source_model_selection_message": "Selecting solidificationMeltingSource with name phaseChangeSource"
+    "case_b_c14_real_native_solver_phase_source_model_selection_message": "Selecting solidificationMeltingSource with name phaseChangeSource",
+    "case_b_c14_completed_native_status": "C3D05_B_C14_ORIGINAL_FLUID_SOLID_FULL_10S_NATIVE_COMPLETED_NOT_PHYSICALLY_VALIDATED",
+    "case_b_c14_completed_native_stage_report": "/home/michel/OpenFOAM/C3D05_B_C14_FLUID_SOLID_FULL_10S_01/C3D05_B_C14_FLUID_SOLID_STAGE_REPORT.json",
+    "case_b_c14_completed_scientific_validation": false
   },
   "other_cases": [
     {
@@ -310,7 +313,7 @@
       "evidence": "docs/granada/C3D05_B_C14_WSL_EJECUCION_REAL_EN_CURSO_20261123_ES.md"
     }
   ],
-  "blocker": "WSL real C3D05 B native C14 270788-HEX8 foamMultiRun executed to last user-observed Time=2.249s/10s; actual solver log confirmed 'Selecting solidificationMeltingSource with name phaseChangeSource' (phase source ACTIVATED). 10s/End and alpha1 evolution still NOT observed; leave native process undisturbed. Physical JMatPro/QuickCup materials, latent heat effect/conservation, nonorth sensitivity, contraction and comparison pending; G3-G7 not promoted.",
-  "next_integrated_delivery": "Allow native 10-second CFD B simulation to finish. On completion verify End, 10s, original C14 model selections, h/e/p_rgh, temperatures, alpha1(t), sensible/latent energy and Courant/residual extrema. Do not rerun active CFD or claim physical experimental validation.",
-  "science": "WSL_REAL_CASE_B_C14_FLUID_SOLID_NATIVE_FOAMMULTIRUN_ACTIVE_AT_1_417_OF_10_SECONDS_NOT_COMPLETED_NOT_VALIDATED"
+  "blocker": "Case B real WSL C14 fluid-solid source-faithful native foamMultiRun COMPLETED full 10s on accepted 270788 HEX8, as reported by real stage JSON (native_C14_F14_solver_run=true, completion status C3D05_B_C14_ORIGINAL_FLUID_SOLID_FULL_10S_NATIVE_COMPLETED_NOT_PHYSICALLY_VALIDATED). Phase source selection confirmed; actual alpha1(t) / latent heat / energy balance / QuickCup-JMatPro physical validation not yet analyzed. G3-G7 remain open pending trustworthy physics/calibration, convergence, contraction.",
+  "next_integrated_delivery": "Read-only existing Case B 10s C14 postrun: verify stage JSON, source integrity, native 10s/End log, full Courant/residual history, native 0..10s temperature, alpha1, p_rgh and phase-onset brackets; report non-volume-weighted limitations. Never rerun or overwrite completed CFD.",
+  "science": "WSL_REAL_CASE_B_C14_FLUID_SOLID_10S_COMPLETED_PHASE_SOURCE_SELECTED_POSTRUN_ALPHA1_AND_PHYSICAL_ACCEPTANCE_PENDING"
 }
