@@ -39,17 +39,13 @@ TIME_RE=re.compile(r"\d+(?:\.\d+)?")
 BASIC=("T","U","p_rgh","phaseChangeSource:alpha1")
 RHO=("T","U","p_rgh","rho","phaseChangeSource:alpha1")
 C14_RESEARCH={
-    "geometry":(
-        "vorticityField","flowTopology",
-        "temperatureGradient","temperatureGradientMagnitude",
-        "metalMeanLiquidFraction",
-        "metalMaxThermalGradient",
-    ),
-    "density":(
-        "densityGradient","densityGradientMagnitude",
-        "cellCourantNumber","metalMaxCourant","metalMaxDensityGradient",
-        "metalTopPhiSum",
-    ),
+    "velocity":("vorticityField","flowTopology"),
+    "thermal":("temperatureGradient","temperatureGradientMagnitude"),
+    "phase_summary":("metalMeanLiquidFraction",),
+    "thermal_max":("metalMaxThermalGradient",),
+    "density_gradient":("densityGradient","densityGradientMagnitude"),
+    "density_courant":("cellCourantNumber","metalMaxCourant"),
+    "density_summary":("metalMaxDensityGradient","metalTopPhiSum"),
     "energy_optional":(
         "energyAdvectiveFlux","heatFlux","energyFlux",
         "metalTopEnergyPower","metalMoldEnergyPower",
@@ -268,7 +264,11 @@ def native(work,stage_name,dict_name,time_label,fields):
     if done.is_file():
         return {"name":stage_name,"result":"PREVIOUSLY_COMPLETED",
                 "exit_code":0,"log":str(log)}
-    need(not log.exists(),"etapa previa incompleta; log preservado "+str(log))
+    if log.exists():
+        # Never overwrite a failed native OpenFOAM log. Continue with all
+        # independent remaining stages, including on --resume.
+        return {"name":stage_name,"result":"PREVIOUS_INCOMPLETE_LOG_PRESERVED",
+                "log":str(log),"exit_code":None}
     cmd=["foamPostProcess","-case",str(work),"-region","metal",
          "-dict",str(work/"system/C14_B_OFFLINE"/dict_name),
          "-time",time_label]
@@ -395,19 +395,27 @@ def main():
         steps=[]
         # Source selected from ORIGINAL C14 objects, not new invented fluid
         # models; basic fields available even at t=0.
-        steps.append(native(work,"01_geometry","C14_B_geometry","0:10",BASIC))
-        steps.append(native(work,"02_probes_101","C14_B_probe_101","0:10",BASIC))
-        steps.append(native(work,"03_profiles_101","C14_B_profiles","0:10",BASIC))
+        steps.append(native(work,"01_velocity","C14_B_velocity","0:10",BASIC))
+        steps.append(native(work,"02_thermal","C14_B_thermal","0:10",BASIC))
+        steps.append(native(work,"03_phase_summary","C14_B_phase_summary","0:10",BASIC))
+        steps.append(native(work,"04_thermal_max","C14_B_thermal_max","0:10",BASIC))
+        steps.append(native(work,"05_probes_101","C14_B_probe_101","0:10",BASIC))
+        steps.append(native(work,"06_profiles_101","C14_B_profiles","0:10",BASIC))
         # rho and phi were archived only for 100 snapshots; never invent t0.
         if rho_phi_on_all_saved_after_t0:
-            steps.append(native(work,"04_density","C14_B_density","0.1:10",
+            steps.append(native(work,"07_density_gradient","C14_B_density_gradient","0.1:10",
                                 ("rho","phi","U")))
-            steps.append(native(work,"05_probes_rho","C14_B_probe_rho_100","0.1:10",RHO))
-            steps.append(native(work,"06_profiles_rho","C14_B_profiles_rho","0.1:10",RHO))
-            steps.append(native(work,"07_topSurface","C14_B_topSurface","0.1:10",RHO+("phi",)))
+            steps.append(native(work,"08_density_courant","C14_B_density_courant","0.1:10",
+                                ("rho","phi","U")))
+            steps.append(native(work,"09_density_summary","C14_B_density_summary","0.1:10",
+                                ("rho","phi","U")))
+            steps.append(native(work,"10_probes_rho","C14_B_probe_rho_100","0.1:10",RHO))
+            steps.append(native(work,"11_profiles_rho","C14_B_profiles_rho","0.1:10",RHO))
+            steps.append(native(work,"12_topSurface","C14_B_topSurface","0.1:10",RHO+("phi",)))
         else:
-            for label in ("04_density","05_probes_rho","06_profiles_rho",
-                          "07_topSurface"):
+            for label in ("07_density_gradient","08_density_courant",
+                          "09_density_summary","10_probes_rho","11_profiles_rho",
+                          "12_topSurface"):
                 steps.append({"name":label,
                               "result":"UNAVAILABLE_NONCONTIGUOUS_OR_MISSING_RHO_PHI",
                               "available_joint_rho_phi_times":[x for x,n in rho_phi_times]})
@@ -415,13 +423,13 @@ def main():
         # momentum fvModels not archived. Try only on real rho/phi snapshots;
         # they are NOT grounds to call a partial postprocess complete.
         if rho_phi_on_all_saved_after_t0:
-            steps.append(native(work,"08_energy_optional","C14_B_energy_optional",
+            steps.append(native(work,"13_energy_optional","C14_B_energy_optional",
                                 "0.1:10",RHO+("phi",)))
-            steps.append(native(work,"09_momentum_optional","C14_B_momentum",
+            steps.append(native(work,"14_momentum_optional","C14_B_momentum",
                                 "0.1:10",RHO+("phi",)))
         else:
-            steps.extend(({"name":"08_energy_optional","result":"UNAVAILABLE_RHO_PHI"},
-                          {"name":"09_momentum_optional","result":"UNAVAILABLE_RHO_PHI"}))
+            steps.extend(({"name":"13_energy_optional","result":"UNAVAILABLE_RHO_PHI"},
+                          {"name":"14_momentum_optional","result":"UNAVAILABLE_RHO_PHI"}))
         steps.append(run_foam_log(work))
         finish(work,doc,steps)
         if not args.no_open:
