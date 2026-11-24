@@ -104,11 +104,27 @@ E_final - E_target = -5.82077e-11 J
 
 También se comprobaron en **18 tests sintéticos locales** inversión adiabática del proceso, **refusión** con `Γ<0`, expansión por `ρ_s<ρ_l`, dos celdas con caras internas, fronteras abiertas, propiedades `ρ(T),cp(T)` y bloqueos de entradas inválidas. El **workflow GitHub Actions** los ejecutará en la rama nueva, pero el estado de CI aún debe verificarse; sin `wmake` ni `foamMultiRun` para FS-C08.
 
+## Núcleo C++17 probado: transición hacia implementación nativa
+
+Se añadieron [`native_cpp/ConservativePhaseExchange.H`](native_cpp/ConservativePhaseExchange.H) y [su programa de pruebas](native_cpp/test_ConservativePhaseExchange.C). Es **C++17 compilable sin dependencias externas** que recibe masas por fase, densidades, volumen de control, `Γ`, flujos salientes y `Δt`, y produce `m_l,m_s,m_g`, volumen líquido, sólido y gas, `ΔV_metal` y residuo de masa:
+
+```bash
+cd ~/OpenFOAM/FS_C08_WORKTREE
+c++ -std=c++17 -O2 -Wall -Wextra -Werror -pedantic \
+    -o /tmp/fs_c08_cpp_exchange_test \
+    freesurface/FS-C08_conservative_phase_mass/native_cpp/test_ConservativePhaseExchange.C
+/tmp/fs_c08_cpp_exchange_test
+```
+
+**Validación real hecha en el contenedor Linux del asistente:** el compilador `g++ 14.2.0` emitió un binario y el test imprimió `PASS (synthetic only, NOT OpenFOAM CFD)`. Comprueba conservación local/global de metal bajo conversión, fusionar de nuevo el sólido, flujo entre dos celdas, flujo saliente al exterior, expansión cuando `ρ_s<ρ_l` y bloqueos de estados inválidos. El workflow FS-C08 vuelve a compilar y probarlo en CI; **CI y WSL todavía no comprobados**.
+
+El núcleo C++ deliberadamente **NO** incluye presión, temperatura ni energía: esas partes existen en la versión de referencia Python y hay que integrarlas en una sola formulación nativa de `compressibleVoF` con `fvModel` y continuidad propia antes de una corrida real. El nombre del directorio `native_cpp` indica el lenguaje, **no un ejecutable OpenFOAM certificado**. No se proporciona `Make/files`/`Make/options` para fingir que ya puede compilarse con `wmake`.
+
 ## Bloques pendientes: paso de ledger a CFD Foundation14
 
 | Hito | Estado |
 |---|---|
-| Ledger por celda de `m_l/m_s/m_g` y fuentes `±Γ` | **IMPLEMENTADO + 18 pruebas sintéticas locales OK** |
+| Ledger por celda de `m_l/m_s/m_g` y fuentes `±Γ` | **IMPLEMENTADO + 18 pruebas Python locales OK; kernel C++17 compilado y probado** |
 | Transporte entre celdas y flujos abiertos con entalpía | **IMPLEMENTADO en referencia FV** |
 | `ρ_l(T),ρ_s(T),cp(T)` tabulados y rechazo de extrapolaciones | **IMPLEMENTADO en referencia FV** |
 | Volumen de vacío/gas y EOS idealizada | **DIAGNÓSTICO implementado** |
