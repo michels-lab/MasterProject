@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
   "audit_kind": "deterministic_full_tracked_tree",
-  "tracked_files_total": 39099,
-  "classified_files_total": 39094,
-  "docs_content_inspected": 207,
+  "tracked_files_total": 39100,
+  "classified_files_total": 39095,
+  "docs_content_inspected": 208,
   "large_docs_skipped": 1,
   "excluded_reports": 5,
   "roles": {
@@ -12,7 +12,7 @@
     "bitacora": 5,
     "config": 17,
     "data": 32,
-    "document": 169,
+    "document": 170,
     "index": 34,
     "license": 1,
     "simulation_case_file": 121,
@@ -29,8 +29,8 @@
     "POTENTIAL_UNLOGGED_CHANGES": 2
   },
   "finding_total": 9,
-  "inventory_fingerprint": "62a055c11cf28864b932164d4fe0665524114a982876f3f0310a18d443d263b1",
-  "evidence_fingerprint": "49f8e36562650e8bdf67242c2be4d68a709251121047a467d54fe6fc011e2444",
+  "inventory_fingerprint": "d9174eabe649f60325557d50ecd859fa24fafeb2d3d27a71709b88b778776c08",
+  "evidence_fingerprint": "b898a983302f9d7c5ddab1514360c57e8f391d511ddd544c95037868b886d37d",
   "files": [
     {
       "path": ".github/agents/openfoam-solidification.agent.md",
@@ -415,7 +415,7 @@
       "role": "bitacora",
       "purpose": "technical/audit change history",
       "certainty": "rule",
-      "blob": "f4492991bb4f4f25e4c0c048549f45565d8a0b44"
+      "blob": "b28b3ff18e22fc835320ca70ac00c3d39583ebfd"
     },
     {
       "path": "README.md",
@@ -1563,7 +1563,7 @@
       "role": "agent",
       "purpose": "assistant role/instructions",
       "certainty": "rule",
-      "blob": "356c6b7d98dfcfbe3fa903fc5741588486607648"
+      "blob": "de4daf4b24940d11dd0b7ebf4ace54ace275ff09"
     },
     {
       "path": "cases_3d/C3D_04_rounded_multiblock_pilot/Allmesh",
@@ -272424,6 +272424,13 @@
       "blob": "f0f586adf4eb02ff92f8cf8b2cc4dcb7b1067dd7"
     },
     {
+      "path": "docs/C3D04_A_STAGE07_BILATERAL_Q_COMPLETE_20261124_ES.md",
+      "role": "document",
+      "purpose": "manual/decision/report/historical note",
+      "certainty": "inferred",
+      "blob": "161a7510ebc616338982c03fcfc56119856095a2"
+    },
+    {
       "path": "docs/C3D04_A_STAGE07_F14_SOLVER_BACKED_NATIVE_RECOVERY_20261123_ES.md",
       "role": "document",
       "purpose": "manual/decision/report/historical note",
@@ -272463,7 +272470,7 @@
       "role": "config",
       "purpose": "machine-readable configuration",
       "certainty": "rule",
-      "blob": "66c6ed2ff47e63992bd4acf6632978f399c38606"
+      "blob": "a03087bde845f2e2e11f938e6e56b9b0e6624c82"
     },
     {
       "path": "docs/C3D_01_ESTADO_REAL_20261110_ES.md",
@@ -272750,7 +272757,7 @@
       "role": "config",
       "purpose": "machine-readable configuration",
       "certainty": "rule",
-      "blob": "6ccd6cebe83d3686df625b8df6997c65336999e8"
+      "blob": "86dd183cb2854955511e8cf2bc68ed9bd697510b"
     },
     {
       "path": "docs/REGLA_INSTRUCCIONES_UNIFICADAS_ES.md",
@@ -273765,11 +273772,11 @@
       "state": "REVIEW_REQUIRED"
     },
     {
-      "id": "ee97c7b1d89b27cb",
+      "id": "b7e85c814cfe1fac",
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_ES.md",
-      "observation": "1 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/publish_c14_a_visualization_and_solidification.py",
+      "observation": "1 implementation/config paths changed since this log's last commit; examples: docs/PROJECT_STAGE_STATUS.json",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     }
