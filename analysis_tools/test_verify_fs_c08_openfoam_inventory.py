@@ -81,6 +81,12 @@ class TestNativeOpenFOAMBridgeContract(unittest.TestCase):
         self.assertIn("IOobject::NO_WRITE",cpp_no_comments)
         self.assertIn("ConservativePhaseExchange.H",cpp_no_comments)
 
+    def test_native_precision_manipulator_has_own_foundation14_header(self):
+        cpp=(v.ROOT/"freesurface/FS-C08_conservative_phase_mass/native_openfoam/fsC08NativeInventory.C").read_text()
+        self.assertIn('#include "IOmanip.H"',cpp)
+        self.assertIn("Info<< setprecision(16);",cpp)
+        self.assertNotIn("Info.precision(",cpp)
+
     def test_native_build_contract_is_wmake_and_explicit_CPP17(self):
         folder=(v.ROOT/"freesurface/FS-C08_conservative_phase_mass/native_openfoam/Make")
         files=(folder/"files").read_text()
