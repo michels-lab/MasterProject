@@ -174,7 +174,7 @@ class NativeSolverBackedStage07Tests(unittest.TestCase):
             (d/"surfaceFieldValue.dat").write_text("\n".join(rows)+"\n")
         result=sut.surface_energy_summary(self.newcopy)
         self.assertEqual(result["status"],
-                         "METAL_SURFACE_POWER_101_STATES_DIAGNOSTIC")
+                         "NATIVE_METAL_SURFACE_POWER_SAVED_STATES_DIAGNOSTIC")
         self.assertEqual(result["final_energy_power_out_W"],
                          {"top":200.0,"contact":300.0,"total":500.0})
         self.assertTrue(result["nominal_metal_surface_power_reconciled"])
@@ -185,6 +185,42 @@ class NativeSolverBackedStage07Tests(unittest.TestCase):
         changed=sut.surface_energy_summary(self.newcopy)
         self.assertFalse(changed["nominal_metal_surface_power_reconciled"])
         self.assertFalse(changed["global_energy_conservation_verified"])
+
+    def test_native_power_100_complete_saved_states_excluding_t0_not_fabricated(self):
+        base=self.newcopy/"postProcessing/metal"
+        for name,fac in (("metalTopEnergyPower",2),
+                         ("metalMoldEnergyPower",3),
+                         ("metalBoundaryEnergyPower",5)):
+            folder=base/name/"0"
+            folder.mkdir(parents=True)
+            with (folder/"surfaceFieldValue.dat").open("w") as stream:
+                stream.write("# Time sum(energyFlux)\n")
+                for i in range(1,101):
+                    stream.write(f"{i/10:g} {i*fac:g}\n")
+        out=sut.surface_energy_summary(self.newcopy)
+        self.assertTrue(out["nominal_metal_surface_power_reconciled"])
+        self.assertEqual(out["saved_times_count"],100)
+        self.assertAlmostEqual(out["first_saved_time_s"],0.1)
+        self.assertFalse(out["t0_native_power_available"])
+        self.assertFalse(out["t0_native_flux_fabricated"])
+        self.assertFalse(out["global_energy_conservation_verified"])
+        self.assertEqual(out["native_time_series"][
+            "metalBoundaryEnergyPower"]["numeric_data_row_count"],100)
+
+    def test_native_power_only_99_states_is_blocked_without_guessing(self):
+        base=self.newcopy/"postProcessing/metal"
+        for name in ("metalTopEnergyPower","metalMoldEnergyPower",
+                     "metalBoundaryEnergyPower"):
+            path=base/name/"0"
+            path.mkdir(parents=True)
+            (path/"surfaceFieldValue.dat").write_text(
+                "# Time sum(energyFlux)\n"+
+                "\n".join(f"{i/10:g} {i:g}" for i in range(2,101))+"\n")
+        out=sut.surface_energy_summary(self.newcopy)
+        self.assertEqual(out["status"],
+                         "NATIVE_SURFACE_POWER_TABLES_MISSING_OR_INCOMPATIBLE")
+        self.assertIn("99 rows",out["reason"])
+        self.assertFalse(out["nominal_metal_surface_power_reconciled"])
 
     def test_missing_energy_table_is_reported_without_fabrication(self):
         result=sut.surface_energy_summary(self.newcopy)
@@ -247,7 +283,7 @@ class ExistingNewCopyNonDestructiveInspectionTests(unittest.TestCase):
             "native_groups":self.groups,
             "native_groups_passed":[x["group"] for x in self.groups if x["passed"]],
             "native_groups_failed":[x["group"] for x in self.groups if not x["passed"]],
-            "surface_energy":{"status":"METAL_SURFACE_POWER_101_STATES_DIAGNOSTIC",
+            "surface_energy":{"status":"NATIVE_METAL_SURFACE_POWER_SAVED_STATES_DIAGNOSTIC",
                               "global_energy_conservation_verified":False},
         }))
 
