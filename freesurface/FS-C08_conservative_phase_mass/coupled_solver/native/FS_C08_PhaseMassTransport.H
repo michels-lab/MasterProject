@@ -67,6 +67,7 @@ class PhaseMassTransport
 
     bool massFieldsRestarted_;
     bool initialized_;
+    label lastSolvedTimeIndex_;
 
     void checkAndUpdateProperties(const volScalarField& T);
     void initializeIfRequired(const volScalarField& alphaMetal, const volScalarField& T);
