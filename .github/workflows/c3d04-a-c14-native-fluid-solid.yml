@@ -62,6 +62,14 @@ jobs:
             cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/native_c14_missing_metal_cellzone_smoke.py \
             --case "$RUNNER_TEMP/C3D04_A_C14_ORIGINAL_FLUID_SOLID_SYNTHETIC/actual_C14_fluid_solid_2step" \
             --out "$RUNNER_TEMP/C3D04_A_C14_ORIGINAL_FLUID_SOLID_SYNTHETIC/zone_repair_native_smoke_01"
+      - name: Foundation14 actual C14 rho*h three standalone saved times versus sequential mesh registry
+        run: |
+          set -euo pipefail
+          PYTHONDONTWRITEBYTECODE=1 python3 -B \
+            cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/probe_c14_native_f14_single_vs_multi_time.py \
+            --case "$RUNNER_TEMP/C3D04_A_C14_ORIGINAL_FLUID_SOLID_SYNTHETIC/actual_C14_fluid_solid_2step" \
+            --out "$RUNNER_TEMP/C3D04_A_C14_ORIGINAL_FLUID_SOLID_SYNTHETIC/multi_time_registry_native_01" \
+            --times 0 0.001 0.002 --metal-cells 27
       - name: ZIP logs including original colon-bearing phaseChangeSource fields (even on failure)
         if: always()
         run: |
