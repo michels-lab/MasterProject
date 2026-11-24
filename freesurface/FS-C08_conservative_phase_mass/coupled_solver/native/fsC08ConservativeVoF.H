@@ -34,6 +34,16 @@ class fsC08ConservativeVoF : public compressibleVoF
     // At fluid-mold wall: positive value = heat leaving fluid to mold.
     surfaceScalarField phaseHeatPhi_;
 
+    // Signed physical mechanical-work density used by the exact
+    // finite-volume internal-energy predictor [W/m3].
+    volScalarField mechanicalWorkDensity_;
+
+    // Positive Darcy kinetic-energy dissipation [W/m3], diagnostic
+    // only: existing native ddt(rho,K) already converts that kinetic
+    // energy into thermal energy in the TOTAL-energy conservation.
+    // Adding this again as a heat source would double-count it.
+    volScalarField mushyDarcyDissipation_;
+
     // Restore mixture mass from actual liquid+solid inventories, not
     // alpha.metal * rho_liquid alone. Gas remains native compressibleVoF.
     void reconcileMixtureDensity();
