@@ -5,7 +5,7 @@ No file is auto-deleted or declared unused.
 
 ## Coverage
 
-Tracked: 39060; classified: 39055; readable documents: 198; above read cap: 1; findings: 9.
+Tracked: 39063; classified: 39058; readable documents: 199; above read cap: 1; findings: 9.
 
 ## File roles
 
@@ -16,15 +16,15 @@ Tracked: 39060; classified: 39055; readable documents: 198; above read cap: 1; f
 | bitacora | 5 |
 | config | 17 |
 | data | 32 |
-| document | 160 |
+| document | 161 |
 | index | 34 |
 | license | 1 |
 | simulation_case_file | 117 |
 | simulation_input | 2683 |
 | simulation_log | 3155 |
 | simulation_output | 32615 |
-| source | 132 |
-| test | 61 |
+| source | 133 |
+| test | 62 |
 | web_ui | 1 |
 | workflow | 32 |
 
@@ -37,8 +37,8 @@ Tracked: 39060; classified: 39055; readable documents: 198; above read cap: 1; f
 - **CONFIRMED / BROKEN_RELATIVE_LINK** docs/granada/C3D05_T0_README_HISTORICAL_BEFORE_SINGLE_FLOW_20261120.md: Missing: outside-repo. Next: Fix link or restore target (ID 2fa56a22be90f045)
 - **CONFIRMED / BROKEN_RELATIVE_LINK** docs/granada/C3D05_T0_README_HISTORICAL_BEFORE_SINGLE_FLOW_20261120.md: Missing: outside-repo. Next: Fix link or restore target (ID 2fa56a22be90f045)
 - **CONFIRMED / BROKEN_RELATIVE_LINK** docs/granada/C3D05_T0_README_HISTORICAL_BEFORE_SINGLE_FLOW_20261120.md: Missing: outside-repo. Next: Fix link or restore target (ID 2fa56a22be90f045)
-- **REVIEW / POTENTIAL_UNLOGGED_CHANGES** PROJECT_AUDIT_LOG_EN.md: 2 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_05_step_gmsh_conformal/c14_physics/summarize_existing_case_b_c14_phase_timeline.py, docs/PROJECT_STAGE_STATUS.json. Next: Inspect diffs and reconcile only meaningful decisions/results in the canonical log (ID c74e91a9fb6b40c8)
-- **REVIEW / POTENTIAL_UNLOGGED_CHANGES** PROJECT_AUDIT_LOG_ES.md: 2 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_05_step_gmsh_conformal/c14_physics/summarize_existing_case_b_c14_phase_timeline.py, docs/PROJECT_STAGE_STATUS.json. Next: Inspect diffs and reconcile only meaningful decisions/results in the canonical log (ID 5125f250562db0bc)
+- **REVIEW / POTENTIAL_UNLOGGED_CHANGES** PROJECT_AUDIT_LOG_EN.md: 4 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_05_step_gmsh_conformal/c14_physics/summarize_existing_case_b_c14_phase_timeline.py, cases_3d/C3D_05_step_gmsh_conformal/c14_physics/tests/test_existing_case_b_c14_phase_timeline.py, cases_3d/C3D_05_step_gmsh_conformal/c14_physics/volume_weighted_existing_case_b_c14.py, docs/PROJECT_STAGE_STATUS.json. Next: Inspect diffs and reconcile only meaningful decisions/results in the canonical log (ID 22986598dcb8660c)
+- **REVIEW / POTENTIAL_UNLOGGED_CHANGES** PROJECT_AUDIT_LOG_ES.md: 4 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_05_step_gmsh_conformal/c14_physics/summarize_existing_case_b_c14_phase_timeline.py, cases_3d/C3D_05_step_gmsh_conformal/c14_physics/tests/test_existing_case_b_c14_phase_timeline.py, cases_3d/C3D_05_step_gmsh_conformal/c14_physics/volume_weighted_existing_case_b_c14.py, docs/PROJECT_STAGE_STATUS.json. Next: Inspect diffs and reconcile only meaningful decisions/results in the canonical log (ID 6b122bb9140e3d23)
 
 Complete path → purpose/role/certainty list lives in FILE_GOVERNANCE.json. SUMMARY.json has counts only for master polling.
 A dated file, duplicate, or suspicious name is an **investigation candidate**, not unwanted material.
