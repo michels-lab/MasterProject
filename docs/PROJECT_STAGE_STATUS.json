@@ -385,7 +385,35 @@
     "case_b_c14_101_state_metal_liquid_latent_content_delta_confirmed_J": -8100.198210984614,
     "case_b_c14_101_state_combined_reference_storage_is_energy_leak": false,
     "case_b_c14_101_state_native_interface_exterior_energy_balance_verified": false,
-    "case_b_c14_101_state_physical_validation": false
+    "case_b_c14_101_state_physical_validation": false,
+    "case_b_c14_native_C14_fluid_solid_q_CPP_source_committed": true,
+    "case_b_c14_native_C14_fluid_solid_q_CPP_source": "cases_3d/C3D_05_step_gmsh_conformal/c14_physics/native_flux/c3d05C14FluidSolidFlux.C",
+    "case_b_c14_native_C14_fluid_solid_q_Make_files_options_committed": true,
+    "case_b_c14_native_C14_fluid_solid_q_WSL_runner_committed": true,
+    "case_b_c14_native_C14_fluid_solid_q_WSL_runner": "cases_3d/C3D_05_step_gmsh_conformal/c14_physics/run_existing_case_b_c14_native_flux.py",
+    "case_b_c14_native_C14_fluid_solid_q_auditor_committed": true,
+    "case_b_c14_native_C14_fluid_solid_q_auditor": "cases_3d/C3D_05_step_gmsh_conformal/c14_physics/analyze_existing_case_b_c14_native_flux.py",
+    "case_b_c14_native_C14_fluid_solid_q_static_regressions_source_count": 8,
+    "case_b_c14_native_C14_fluid_solid_q_native_CI_workflow_committed": true,
+    "case_b_c14_native_C14_fluid_solid_q_native_CI_workflow": ".github/workflows/c3d05-b-c14-native-fluid-solid-q.yml",
+    "case_b_c14_native_C14_fluid_solid_q_native_CI_compile_pass_confirmed": false,
+    "case_b_c14_native_C14_fluid_solid_q_WSL_preflight_pass_confirmed": false,
+    "case_b_c14_native_C14_fluid_solid_q_WSL_compile_pass_confirmed": false,
+    "case_b_c14_native_C14_fluid_solid_q_WSL_extractor_executed": false,
+    "case_b_c14_native_C14_fluid_solid_q_WSL_q_measured": false,
+    "case_b_c14_native_C14_fluid_solid_q_final_report": null,
+    "case_b_c14_native_C14_fluid_solid_q_target_101_times": true,
+    "case_b_c14_native_C14_fluid_solid_q_target_regions_patches": [
+      "metal/metal_to_mold",
+      "metal/metalTop",
+      "mold/mold_to_metal",
+      "mold/moldOuterUnclassified"
+    ],
+    "case_b_c14_native_C14_fluid_solid_q_target_12636_mappedWall_faces_each": true,
+    "case_b_c14_native_C14_fluid_solid_q_expected_output": "~/OpenFOAM/C3D05_B_C14_NATIVE_FLUID_SOLID_PATCH_Q_01",
+    "case_b_c14_native_C14_fluid_solid_q_stage_note": "docs/granada/C3D05_B_C14_FLUJO_NATIVO_FLUIDO_SOLIDO_F14_20261124_ES.md",
+    "case_b_c14_native_interface_thermal_flux_conservation_verified": false,
+    "case_b_c14_native_solidification_fvModel_integrated_latent_source_verified": false
   },
   "other_cases": [
     {
@@ -425,7 +453,7 @@
       "evidence": "docs/granada/C3D05_B_C14_WSL_EJECUCION_REAL_EN_CURSO_20261123_ES.md"
     }
   ],
-  "blocker": "C3D05 B REAL original Foundation14 C14 metal-fluid/mold-solid 10s run, 101 native states and all data-only postrun PASSED. Latest WSL mold+combined reference inventory 8/8 tests PASS; mold (178588 HEX8) reconstructed volume=0.00010284340553162189m3, checkMesh relative difference=2.4490270351713404e-7; mold sensible delta t10=+20323.651945808975 J; metal sensible=-13576.397936155232 J; liquid latent content delta=-8100.198210984614 J; combined MODEL reference stored energy change=-1352.9442013308708 J. This combined delta IS NOT lost heat, error, conservation residual or actual native fvModel source. Need true per-face source-faithful fluid/solid heat q, interface exterior, advection/work, source integration, grid/dt sensitivity, JMatPro QuickCup validation and shrinkage. 2/7 gate count remains.",
-  "next_integrated_delivery": "Prepare a SOURCE-SPECIFIC native C14 boundary thermal-transport inspection and real heat-flux extraction plan from existing 101 saved fields: fluid metal requires fluidThermophysicalTransportModel (not T0 solid-isotropic q), sand solidTransport q, mappedWall coupling 12636 faces/side, metalTop + moldOuterUnclassified. Extract and validate source-faithful q per patch with original fvModels/advection if possible; only compare signed time-resolved flux integrals with reference stored-energy change when all terms available. Never run foamMultiRun or overwrite original CFD. No claims of energy closure until verified.",
-  "science": "CASE_B_C14_REAL_WSL_METAL_MOLD_101_REFERENCE_STORAGES_PASSED_8_TESTS_MOLD_PLUS_20_323KJ_METAL_SENS_NEG_13_576KJ_LIQUID_LATENT_NEG_8_100KJ_COMBINED_NEG_1_353KJ_NOT_CLOSURE"
+  "blocker": "Real C14 Case B CFD 10s and 101 archived snapshots + native model alpha1 + volume-weighted phase + separate metal/mold reference inventory all WSL executed, with 8 mold inventory tests PASS. Combined source-referenced delta at t10 = -1352.9442013308708 J, NOT energy leakage or conservation error. NEW source-faithful C14 F14 q extractor committed with real fluidThermoThermophysicalTransportModel metal and solidThermophysicalTransportModel mold, target 101x4 saved-time patch integrated conduction q plus last-state face q; isolated wmake, SHA, 8 synthetic tests and compile CI. WSL/CI actual q extractor NOT compiled/executed/verified, q values unknown. Need real interface/exterior q, advective/pressure work and native phase source, time-resolved closure, material JMatPro/QuickCup and convergence/contraccion before promoting G3-G7. 2/7.",
+  "next_integrated_delivery": "Run existing Case B F14 native FLUID-SOLID q SOURCE-only workflow: first 8 synthetic CSV QA tests, strict read-only preflight (original 10s C14 phase-stage+field+mesh SHA), then compile wmake in independent attempt directory and extract 101x4 q patch records, all face q at t10, validate SHA/geometry/paired interfaces; NO foamMultiRun. Observe real WSL compile outcome and q before any scientific inference. CI F14 source build workflow committed, outcome not yet verified. Never equate saved-time trapezoid to solver-dt true energy integral.",
+  "science": "CASE_B_NATIVE_C14_10S_CFD_AND_REFERENCE_METAL_MOLD_ENERGY_WSL_DONE_FLUID_SOLID_TRUE_F14_Q_CPP_RUNNER_CODE_STAGED_NATIVE_WSL_COMPILE_PENDING_NO_PHYSICAL_CLOSURE"
 }
