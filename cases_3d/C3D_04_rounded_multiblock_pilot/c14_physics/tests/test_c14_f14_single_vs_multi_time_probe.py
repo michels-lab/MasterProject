@@ -39,6 +39,10 @@ class Foundation14ThreeTimeProbeTests(unittest.TestCase):
 
     def fake_native(self, multi_has_fatal: bool):
         def runner(folder: Path, label: str, args: list[str]) -> dict:
+            self.assertTrue((folder/"system/controlDict").is_file())
+            self.assertTrue((folder/"constant/metal/polyMesh/cellZones").is_file())
+            self.assertNotEqual(folder.name,"system")
+            self.assertEqual(folder.parent,self.out)
             selector=args[-1]
             tlist=selector.split(",")
             log=folder/("log.C14_3D_postprocess_"+label)
