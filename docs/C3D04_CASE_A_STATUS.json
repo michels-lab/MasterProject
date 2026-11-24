@@ -5,12 +5,12 @@
   "updated_local_date": "2026-11-24",
   "source_of_truth": "AGENTS.md + cases_3d/C3D_04_rounded_multiblock_pilot/AGENTS.md",
   "reference_mesh": "~/OpenFOAM/C3D04_V4_TRANSITION_REPAIR_01/T02",
-  "current_stage": "08_SOLIDIFICATION_T1",
-  "current_stage_label": "Análisis de solidificación y flujo de la corrida C14 real",
+  "current_stage": "09_VERIFICATION_AND_GRID",
+  "current_stage_label": "Verificación de conservación y sensibilidad de discretización",
   "progress_definition": "10 hitos operativos de igual peso; un hito solo cuenta DONE con evidencia observada. No es porcentaje de validación física ni de trabajo restante en horas.",
-  "progress_count_done": 7,
+  "progress_count_done": 8,
   "progress_count_total": 10,
-  "progress_percent": 70,
+  "progress_percent": 80,
   "numerical_accuracy_validated": false,
   "physical_validation": false,
   "grid_independence": false,
@@ -28,7 +28,8 @@
     "23-11-2026 investigator WSL real 101-state saved-volume kinetic analysis completed with original C14 10s fields unchanged, source volume CSV+JSON found, first saved model alpha1 decrease between 0.2 and 0.3 s, nominal peak latent release 1038.8813 W over 7.2-7.3 s, final volume-mean metal T 1450.70916 K and nominal solid inventory 0.0335828358 kg. Native copy source provenance PASSED, but native commands NOT fully verified; energy closure/QuickCup NOT verified.",
     "24-11-2026 WSL real grouped recovery: cellZone all only in isolated copy, 7/7 native groups no FATAL, five scalar series 101/101, rho*h equal at 0/0.1/10 to printed precision, three surface powers reconcile (max relative 4.7503433312219475e-7); 7/9 final profiles pass, both vertical 27/80. Source hashes unchanged. No energy/QuickCup validation.",
     "24-Nov-2026 WSL real grouped continuation: 5/5 regressions, both vertical families 101x80 on native-supported fixed x/z interior chord of 14.699706 mm, not full 2D height. Metal nominal saved-state energy residual 2.02303355 J / 20670.15745 J outward from 0.1 to 10s (0.009787%); mold inventory 19318.54788 J, metal-to-mold integral 19462.8944 J; no bilateral mold flux or discrete solver balance yet.",
-    "2026-11-24: WSL native bilateral q compiled/executed, 808 patch rows, 2496 paired interface faces, nominal combined residual 0.1305158505 J over 0.1–10 s. Stage07 operational completion only; discrete conservation/independence/experiment remain stage09/10."
+    "2026-11-24: WSL native bilateral q compiled/executed, 808 patch rows, 2496 paired interface faces, nominal combined residual 0.1305158505 J over 0.1–10 s. Stage07 operational completion only; discrete conservation/independence/experiment remain stage09/10.",
+    "Real WSL visualization ready: 101 states, volume-weighted alpha and phase/flow analysis, corrected profiles, 29 common metal fields, 21 postprocessing families, source hashes unchanged. Stage08 operational DONE."
   ],
   "nonnegotiable_blockers": [
     "C14 numeric metal/arena parameters and 2D boundary reference NOW sourced directly in T0; they are constant C14-model inputs, NOT independently measured T-dependent iron/sand functions.",
@@ -38,7 +39,7 @@
     "STL surface fit distances are sample-only, not rigorous Hausdorff to exact STEP.",
     "El Caso A de TESIS debe tener metal=fluid heRhoThermo/Cp/enthalpy + solidificationMeltingSource del C14 original; T0 dos sólidos es sólo ensayo auxiliar. El sintético nativo F14 de 27 celdas por región PASÓ pero NO es el CFD V4/T02 y no confirma onset ni conservación.",
     "Original C14 material values and time controls must remain byte-preserved; NEVER introduce temperature-dependent properties or new numerical settings without researcher's explicit approval.",
-    "Observed real C14 3D phaseChangeSource:alpha1 changes across saved states and final fields (alpha1 min0 avg0.8367 max0.9923 at t10). All-step max Co=0.02404. These DO NOT verify latent heat/energy balance, numerical independence, or experiment; stage07 remains IN_PROGRESS.",
+    "Observed real C14 3D phaseChangeSource:alpha1 changes across saved states and final fields (alpha1 min0 avg0.8367 max0.9923 at t10). All-step max Co=0.02404. These DO NOT verify latent heat/energy balance, numerical independence, or experiment; stage07 and stage08 operationally complete; stage09 verification remains open.",
     "El postprocesamiento completo 3D-A debe igualar todo el C14 original: probes, perfiles x/y, campos térmicos/flujo, phi top, Darcy/buoyancy, gradientes, calor latente, energyFlux/heatFlux, power integrals, momentum y foamLog; mantener distinción entre datos existentes de 0.1s y probes C14 de 0.001s."
   ],
   "milestones": [
@@ -87,13 +88,13 @@
     {
       "id": "08_SOLIDIFICATION_T1",
       "label": "Demostrar y analizar evolución real de solidificación C14 en 3D (alpha1e, Tsol/Tliq, calor latente, Darcy), no sólo carga del fvModel",
-      "status": "IN_PROGRESS",
-      "evidence": null
+      "status": "DONE",
+      "evidence": "docs/C3D04_A_STAGE08_SOLIDIFICATION_REAL_20261124_ES.md"
     },
     {
       "id": "09_VERIFICATION_AND_GRID",
       "label": "Verificación de conservación, sensibilidad a discretización e independencia de malla",
-      "status": "PENDING",
+      "status": "IN_PROGRESS",
       "evidence": null
     },
     {
@@ -107,17 +108,17 @@
   "execution_rule": "Integrate validations into one cohesive milestone; no one-script-per-subproblem loops, no rerun already closed V4/T02 audits; one user command only at a meaningful end-to-end delivery; preserve case and audit evidence.",
   "last_integrated_delivery": {
     "date": "2026-11-24",
-    "stage_completed": "07_THERMAL_T0_EXECUTION",
-    "current_stage": "08_SOLIDIFICATION_T1",
-    "operational_completion": "7/10=70%",
-    "status": "REAL_WSL_BILATERAL_Q_AND_NOMINAL_INVENTORY_COMPLETE",
-    "evidence_report": "docs/C3D04_A_STAGE07_BILATERAL_Q_COMPLETE_20261124_ES.md",
+    "stage_completed": "08_SOLIDIFICATION_T1",
+    "current_stage": "09_VERIFICATION_AND_GRID",
+    "operational_completion": "8/10=80%",
+    "status": "REAL_WSL_VISUALIZATION_AND_SOLIDIFICATION_READY",
+    "evidence_report": "docs/C3D04_A_STAGE08_SOLIDIFICATION_REAL_20261124_ES.md",
     "scientific_limits": [
-      "No exact solver-step discrete energy closure",
-      "No grid/time-step independence",
-      "No QuickCup validation"
+      "Nominal saved-state energy balance only",
+      "No demonstrated solver-step discrete conservation or grid/time independence",
+      "No experimental validation or GUI opening observed"
     ],
-    "next": "Publish standalone visualization case and analyze solidification/flow across 101 states."
+    "next": "Use visual case for investigator inspection; plan controlled same-geometry spatial/temporal verification without repeating base diagnostics."
   },
   "stage06_preflight_integrity": {
     "date": "2026-11-20",
@@ -924,9 +925,58 @@
     "stage08_visualization": {
       "entrypoint": "cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/publish_c14_a_visualization_and_solidification.py",
       "commit": "33daf35888e98190320a34bce10fc3eaf6c3ccc7",
-      "status": "CODE_PUBLISHED_WSL_OUTPUT_NOT_YET_CREATED",
+      "status": "REAL_WSL_VISUALIZATION_AND_SOLIDIFICATION_READY",
       "scope": "standalone .foam case from 101 grouped saved states, corrected vertical profiles, original native log, bilateral CSV/face data, 101-state volume-weighted phase and momentum analysis. No new CFD or native replay.",
-      "user_handoff": "single functional execution; no manual unit tests"
+      "user_handoff": "single functional execution; no manual unit tests",
+      "source_commit": "d9cddf895",
+      "output": "~/OpenFOAM/C3D04_A_C14_VISUALIZATION_01",
+      "foam_file": "C3D04_A_C14.foam",
+      "source_hashes_unchanged": true,
+      "source_solver_rerun": false,
+      "field_inventory": {
+        "metal_common_all_101": 29,
+        "mold_common_all_101": [
+          "T"
+        ],
+        "metal_phi_and_rho_not_common_all_101": true,
+        "postprocessing_families": 21
+      },
+      "final": {
+        "time_s": 10,
+        "metal_T_min_K": 1401.91,
+        "metal_T_volume_mean_K": 1450.7091627651344,
+        "metal_T_max_K": 1471.07,
+        "mold_T_volume_mean_K": 481.7459413749073,
+        "alpha_liquid": 0.8972449752706615,
+        "alpha_solid": 0.1027550247293385,
+        "solid_mass_kg": 0.03358283580064463,
+        "nominal_latent_J": 7677.036264027362,
+        "volume_below_Tsol": 0.04829521188062701,
+        "volume_between_Tsol_Tliq": 0.9517047881193729,
+        "volume_at_or_above_Tliq": 0,
+        "speed_mean_m_s": 0.0018239872269224997,
+        "speed_max_m_s": 0.006013589646581923,
+        "Darcy_mean_s_inv": 1052742.209637602,
+        "Darcy_max_s_inv": 100000000,
+        "liquidlike_speed_mean_m_s": 0.003206989541665255,
+        "mixed_speed_mean_m_s": 0.0018208106637875765,
+        "solidlike_speed_mean_m_s": 6.102217022810532e-7
+      },
+      "first_observed_solid_increase_s": [
+        0.2,
+        0.3
+      ],
+      "peak_nominal_latent_W": 1038.8813013739582,
+      "peak_nominal_latent_interval_s": [
+        7.2,
+        7.3
+      ],
+      "max_saved_speed_m_s": 0.025338494975605794,
+      "max_saved_speed_time_s": 2.8,
+      "global_discrete_energy_conservation_verified": false,
+      "quickcup_validated": false,
+      "GUI_open_observed": false,
+      "provenance": "User supplied WSL stdout; raw local CSVs and files not independently retrieved"
     }
   }
 }
