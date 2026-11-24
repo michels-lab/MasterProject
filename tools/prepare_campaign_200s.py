@@ -344,6 +344,13 @@ def prepare_a_priority(case,ref,r):
     (case/"C14-3DA-200s.foam").touch(exist_ok=False)
     return result
 
+def update_priority_index(root,case):
+    if not (case/REPORT).is_file():return
+    index=root/"CAMPAIGN_INDEX.json"
+    rows=json.loads(index.read_text()) if index.is_file() else {}
+    rows["C14-3DA-200s"]=json.loads((case/REPORT).read_text())
+    write_json(index,rows)
+
 def priority_a(root):
     # Share the campaign lock even if only A is prepared. Never create or run
     # B14, 2D, 3DB or FS variants from this entrypoint.
@@ -363,14 +370,20 @@ def priority_a(root):
         a_fidelity(case,ref,reference)
         need(report["sampling"]==reference["sampling"] or report["sampling"].get("probe_xyz_m")==reference["sampling"]["probe_xyz_m"],"sampling provenance differs")
         if report.get("solver_completed"):
+            update_priority_index(root,case)
             print(json.dumps({"status":report["status"],"case":str(case),"existing_completed_solver_preserved":True,
                               "solver_steps":report.get("solver_steps"),"final_time_s":report.get("final_time_s"),
                               "runtime_audit":report.get("runtime_audit")},indent=2));return
         need(report["status"]=="PREPARED_NOT_RUN","existing attempted/incomplete A run preserved")
+        for rel,body in sa.input_files(8960,smoke=False,existing_zone=True).items():
+            if rel.startswith("0/"):
+                need((case/rel).read_bytes()==body.encode("utf-8"),"initial C14 input drift "+rel)
+        update_priority_index(root,case)
         projection=estimate("3DA",case)
         print(json.dumps({"case":str(case),"reference":str(ref),"projection":projection,
                           "free_bytes":shutil.disk_usage(case).free,"reserve_bytes":10*1024**3},indent=2),flush=True)
-        execute(case,offline=False)
+        try:execute(case,offline=False)
+        finally:update_priority_index(root,case)
         # Check reference's original input/log identity again.
         a_reference()
         a_fidelity(case,ref,reference)
@@ -400,24 +413,34 @@ def main():
             except BlockingIOError:raise ValueError("another campaign run holds the disk reservation; run sequentially")
             execute(root/args.run)
         return
-    need(not root.exists(),"campaign already exists; preserve it")
+    # Later default preparation may fill the remaining five variants without
+    # rematerializing the targeted A or any existing case.
     hashes=verify_family()
-    root.mkdir()
-    result={}
-    for name in CASES:
-        try:result[name]=prepare(name,root/name,hashes)
-        except (ValueError,OSError,subprocess.SubprocessError) as e:
-            result[name]={"status":"PREPARATION_BLOCKED_PRESERVED","error":str(e)}
-        write_json(root/"CAMPAIGN_INDEX.json",result)
-        print(name,result[name]["status"],flush=True)
-    ready={k:r["disk_projection"]["projected_bytes_with_50pct_margin"] for k,r in result.items() if r["status"]=="PREPARED_NOT_RUN"}
-    free=shutil.disk_usage(root).free
-    summary={"prepared_cases":len(ready),"expected_cases":len(CASES),"per_case_projected_bytes":ready,
-             "projected_total_bytes":sum(ready.values()),"free_bytes":free,
-             "all_six_fit_estimate":len(ready)==6 and free>=sum(ready.values())+10*1024**3,
-             "solver_executed":False,"note":"Empirical planning estimate, not guaranteed upper bound. Serial run checks disk again."}
-    write_json(root/"CAMPAIGN_RESOURCES.json",summary)
-    print(json.dumps(summary,indent=2),flush=True)
-    if len(ready)!=6:sys.exit(2)
-    print("ALL_SIX_PREPARED_NO_CFD",flush=True)
+    root.mkdir(exist_ok=True)
+    with (root/".execution.lock").open("a") as lock:
+        try:fcntl.flock(lock,fcntl.LOCK_EX|fcntl.LOCK_NB)
+        except BlockingIOError:raise ValueError("another campaign operation holds the lock")
+        result={}
+        for name in CASES:
+            try:
+                case=root/name
+                if case.exists():
+                    need(not case.is_symlink() and (case/REPORT).is_file(),"existing incomplete case preserved")
+                    result[name]=json.loads((case/REPORT).read_text())
+                    need(result[name]["case"]==name,"existing case identity differs")
+                else:result[name]=prepare(name,case,hashes)
+            except (ValueError,OSError,KeyError,subprocess.SubprocessError) as e:result[name]={"status":"PREPARATION_BLOCKED_PRESERVED","error":str(e)}
+            write_json(root/"CAMPAIGN_INDEX.json",result)
+            print(name,result[name]["status"],flush=True)
+        ready={k:r["disk_projection"]["projected_bytes_with_50pct_margin"] for k,r in result.items() if r["status"]=="PREPARED_NOT_RUN"}
+        done=[k for k,r in result.items() if r.get("solver_completed")]
+        free=shutil.disk_usage(root).free
+        summary={"prepared_cases":len(ready)+len(done),"already_solver_completed":done,"expected_cases":len(CASES),"per_case_projected_bytes":ready,
+                 "projected_total_bytes":sum(ready.values()),"projected_remaining_bytes":sum(ready.values()),"free_bytes":free,
+                 "all_six_fit_estimate":len(ready)+len(done)==6 and free>=sum(ready.values())+10*1024**3,
+                 "solver_executed":False,"note":"Empirical remaining-case planning estimate, not guaranteed upper bound. Serial run checks disk again."}
+        write_json(root/"CAMPAIGN_RESOURCES.json",summary)
+        print(json.dumps(summary,indent=2),flush=True)
+        if len(ready)+len(done)!=6:sys.exit(2)
+        print("ALL_SIX_PREPARED_NO_CFD" if not done else "ALL_SIX_PREPARED_OR_ALREADY_SOLVER_COMPLETED_NO_NEW_CFD",flush=True)
 if __name__=="__main__":main()
