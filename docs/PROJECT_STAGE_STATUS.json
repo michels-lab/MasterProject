@@ -520,14 +520,33 @@
     "case_b_c14_real_101_native_q_vs_reference_storage_readiness_source_committed": true,
     "case_b_c14_real_101_native_q_vs_reference_storage_readiness_source": "cases_3d/C3D_05_step_gmsh_conformal/c14_physics/audit_existing_case_b_c14_energy_closure_readiness.py",
     "case_b_c14_real_101_native_q_vs_reference_storage_readiness_tests_source_count": 9,
-    "case_b_c14_real_101_native_q_vs_reference_storage_readiness_tests_WSL_pass_observed": false,
-    "case_b_c14_real_101_native_q_vs_reference_storage_readiness_WSL_executed": false,
+    "case_b_c14_real_101_native_q_vs_reference_storage_readiness_tests_WSL_pass_observed": true,
+    "case_b_c14_real_101_native_q_vs_reference_storage_readiness_WSL_executed": true,
     "case_b_c14_real_101_native_q_vs_reference_storage_readiness_expected_output": "~/OpenFOAM/C3D05_B_C14_ENERGY_TERMS_READINESS_01",
     "case_b_c14_real_101_native_q_vs_reference_storage_readiness_ledger": "docs/granada/C3D05_B_C14_CRUCE_101_ESTADOS_CONFIRMADO_Y_AUDITORIA_TERMINOS_20261124_ES.md",
     "case_b_c14_real_101_native_q_vs_reference_storage_readiness_goal": "Original F14 101-time field h/e/rho/phi coverage, source fvModels energy h, per-region storage+conductive q partials and 0.1/0.2/0.5/1s saved-sampling quadrature—not dt=0.001 solver integral",
-    "case_b_c14_real_101_native_q_vs_reference_storage_readiness_original_h_e_phi_availability_observed": false,
-    "case_b_c14_real_101_native_q_vs_reference_storage_readiness_time_quadrature_WSL_values_observed": false,
-    "case_b_c14_real_101_native_q_vs_reference_storage_readiness_full_energy_balance_verified": false
+    "case_b_c14_real_101_native_q_vs_reference_storage_readiness_original_h_e_phi_availability_observed": true,
+    "case_b_c14_real_101_native_q_vs_reference_storage_readiness_time_quadrature_WSL_values_observed": true,
+    "case_b_c14_real_101_native_q_vs_reference_storage_readiness_full_energy_balance_verified": false,
+    "case_b_c14_real_101_native_q_vs_reference_storage_readiness_tests_WSL_passed_count": 9,
+    "case_b_c14_real_101_native_q_vs_reference_storage_readiness_tests_WSL_failed_count": 0,
+    "case_b_c14_real_101_native_q_vs_reference_storage_readiness_output_observed": "/home/michel/OpenFOAM/C3D05_B_C14_ENERGY_TERMS_READINESS_01",
+    "case_b_c14_real_101_native_q_vs_reference_storage_readiness_status": "C3D05_B_C14_REAL_C14_ENERGY_TERM_COVERAGE_AND_SAVED_Q_QUADRATURE_NOT_CLOSURE",
+    "case_b_c14_native_metal_h_archived_time_count": 0,
+    "case_b_c14_native_metal_he_archived_time_count": 0,
+    "case_b_c14_native_mold_e_archived_time_count": 0,
+    "case_b_c14_native_mold_he_archived_time_count": 0,
+    "case_b_c14_native_mold_rho_archived_time_count": 0,
+    "case_b_c14_native_metal_rho_archived_time_count": 100,
+    "case_b_c14_native_metal_phi_archived_time_count": 100,
+    "case_b_c14_native_metal_T_U_p_p_rgh_alpha1_archived_time_count_each": 101,
+    "case_b_c14_native_mold_T_archived_time_count": 101,
+    "case_b_c14_saved_sample_q_external_trapezoid_0_1s_J": 1341.5079070212455,
+    "case_b_c14_saved_sample_q_external_trapezoid_0_2s_J": 1335.0700466397634,
+    "case_b_c14_saved_sample_q_external_trapezoid_0_5s_J": 1315.8423511587207,
+    "case_b_c14_saved_sample_q_external_trapezoid_1_0s_J": 1284.1978120372619,
+    "case_b_c14_saved_sample_q_1s_minus_0_1s_J": -57.31009498398362,
+    "case_b_c14_saved_sample_q_subsampling_error_vs_solver_dt_known": false
   },
   "other_cases": [
     {
@@ -567,7 +586,7 @@
       "evidence": "docs/granada/C3D05_B_C14_WSL_EJECUCION_REAL_EN_CURSO_20261123_ES.md"
     }
   ],
-  "blocker": "User WSL REAL C3D05 B C14 F14 10s 101 original states; 14/14 native fluid/solid q tests and q 101x4 output passed, and now 12/12 joined q+storage tests PASSED. 0.1s saved snapshot trapezoid q: metal interface +20283.452365 J, mold interface -20283.567649 J, internal sum -0.115283 J; metalTop +1212.095291 J, moldExterior +129.412616 J, external +1341.507907 J. Metal+mold reference stored energy change -1352.944201 J. Partial outside-only ΔEref + Qout=-11.436294 J (0.8525% of exterior sampled conduction) is NOT heat leakage or a numerical conservation residual. Per-region source-only decomposition metal ~-181.048491 J vs mold +169.496914 J also NOT a residual. New SHA + original field h/e/rho/phi availability and q temporal subsampling code with nine tests published but UNRUN. Need actual original F14 fvModels phase-source integral, advective enthalpy/pressure work, boundaries including radiation/convection and 0.001s solver time-step fidelity; per-cell mesh, JMatPro/QuickCup and shrinkage validation still pending. G3-G7 open; 2/7.",
-  "next_integrated_delivery": "User WSL confirmed 12/12 q-storage SHA join and 101 real saved q+reference storage series. Source-only NEW energy readiness audit has been implemented (+9 tests) but NOT yet executed WSL. Run git pull then test_existing_case_b_c14_energy_closure_readiness.py -v and audit_existing_case_b_c14_energy_closure_readiness.py once: independent per-region partial storage+conduction (not conservation residual), saved-snapshot quadrature sensitivity 0.1/0.2/0.5/1s, and original 101-state h/e/rho/phi field availability + verified C14 h-based fvModels. After observing exact availability, prioritize SOURCE-CORRECT F14 h/e/advection/phase-source term extraction and time-step robust true energy accounting. Never rerun foamMultiRun or overwrite q/storage reports. Physical gates G3-G7 remain open.",
-  "science": "CASE_B_REAL_WSL_Q_STORAGE_101_JOIN_12TESTS_PASS_0_1S_TRAPEZOID_OUT_1341_508J_DEREF_NEG1352_944J_PARTIAL_NEG11_436J_NOT_CLOSURE_NEXT_SOURCE_FVModels_ENTHALPY_FIELD_AVAILABILITY_STAGED"
+  "blocker": "Case B C3D05 F14 actual 10s 101 original saved stages, q(t) and 101-state metal+mold thermal reference join complete: 14 q + 12 join + NOW 9/9 energy readiness QA PASS on real WSL. Readiness actual ORIGINAL fields: metal T,U,p,p_rgh,alpha1 101/101 each; metal rho and phi 100/101 each (no t0), metal h/he 0/101; mold T 101/101 but e/he/rho 0/101. Cannot directly read native h/e history or t0 rho/phi from archived data; do not fabricate them. Source C14 h-based fvModels declared, NOT native solver source integral. Region partial ΔEref+q for metal=-181.048491J, mold=+169.496914J, global exterior-only=-11.436294J, none physically verified conservation residual. Outward q_saved trapezoids 0.1=1341.507907J,0.2=1335.070047J,0.5=1315.842351J,1.0=1284.197812J; coarsening sensitivity NOT error vs true dt=0.001s. Source phi and rho 100 snapshots can support a separate read-only real FLUID mass and boundary flux screening. G3-G7 OPEN, 2/7.",
+  "next_integrated_delivery": "Use original actual saved fluid rho and surface phi (100 snapshots, 0.1..10 s), original HEX8 real per-cell volumes and alpha1 fields to audit metal mass inventory/flow, rho-weighted modeled solid complement and h-based source closure readiness. Missing t0 rho/phi and missing all h/e must remain explicitly unobserved, not replaced by guesses. Review phi dimensions [kg/s] and metalTop/contact patch values; if unsupported binary or missing phi boundary serialization, mark unavailable, do not invent. Then inspect F14 solver discretization and source energy integral requirements. No foamMultiRun/wmake or altering CFD, q or existing archives.",
+  "science": "CASE_B_F14_REAL_101_STATE_ENERGY_READINESS_WSL_9of9_PASS_SOURCE_H_E_NONE_METAL_RHO_PHI_100_NATIVE_SAVED_Q_SAMPLING_COARSE_SENSITIVITY_NOT_SOLVER_DT_ERROR"
 }
