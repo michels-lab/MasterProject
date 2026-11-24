@@ -168,7 +168,7 @@ def execute(source):
         originals={}
         for p,rel in selected(source):
             inventory[str(rel)]=copy_one(p,dest/rel);originals[str(rel)]=p
-        for filename,body in (("README.md",README),("CASE_VARIANT.md",README),("Allrun",ALLRUN),("Allclean",ALLCLEAN)):
+        for filename,body in (("README.md",README),("CASE_VARIANT.md","# C14 3D-A variant\n\nParent: C14_topFixedFlux_explicitRef (2D). Only 3D geometry, patch mapping, pressure reference cell and sampling coordinates differ; original runtime diagnostics retained. See README.md and analysis_results/GIT_PUBLICATION_MANIFEST.json. Native WSL run complete; experimental and discretization validation pending.\n"),("Allrun",ALLRUN),("Allclean",ALLCLEAN)):
             p=dest/filename;p.write_text(body,encoding="utf-8")
             if filename.startswith("All"):p.chmod(0o755)
             inventory[filename]={"bytes":p.stat().st_size,"sha256":sha(p)}
