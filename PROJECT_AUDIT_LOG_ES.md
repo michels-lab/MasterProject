@@ -1,3 +1,5 @@
+> **24-11-2026 | Caso A prioridad 200 s:** investigador pospone sensibilidad; C14-3DA-200s conserva V4/T02 y diagnósticos fieles, cambia solo endTime. Ejecutor específico publicado, WSL pendiente; etapa9/10, 8/10=80%. [Evidence](docs/C3D04_A_C14_200S_PRIORITY_20261124_ES.md).
+
 > **24-11-2026 | Caso A A5.1:** ejecutor de sensibilidad temporal publicado; dt=.001/.0005/.00025 s, malla V4/T02 y frecuencia física .1s intactas. Dos nuevas corridas WSL pendientes; no independencia acreditada. Etapa09/10, 8/10=80%. [Protocolo](docs/C3D04_A_STAGE09_TEMPORAL_SENSITIVITY_20261124_ES.md).
 
 > **24-11-2026 | Caso A auditoría real WSL:** 606 archivos primarios idénticos, RMSE=0; residual combinado nominal +0.030516 J (0.1–10s), −6.421037 J (0–10s). A3/A4 diagnóstico guardado completo; no CFD ni cierre discreto. Etapa09/10, 8/10=80%. [Evidence](docs/C3D04_A_STAGE09_FAITHFUL_NATIVE_ANALYSIS_20261124_ES.md).
