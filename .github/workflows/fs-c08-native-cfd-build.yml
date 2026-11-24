@@ -1,0 +1,63 @@
+name: FS-C08 actual OpenFOAM Foundation14 CFD solver library build
+
+on:
+  push:
+    branches:
+      - research/fs-c08-conservative-phase-mass-20261123
+    paths:
+      - 'freesurface/FS-C08_conservative_phase_mass/coupled_solver/native/**'
+      - 'analysis_tools/stage_fs_c08_coupled.py'
+      - '.github/workflows/fs-c08-native-cfd-build.yml'
+  pull_request:
+    paths:
+      - 'freesurface/FS-C08_conservative_phase_mass/coupled_solver/native/**'
+      - 'analysis_tools/stage_fs_c08_coupled.py'
+      - '.github/workflows/fs-c08-native-cfd-build.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  compile-native-fs-c08-solver:
+    name: wmake libso Foundation14 — actual coupled fluid solver, NO synthetic CFD
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - name: Checkout MasterProject research code
+        uses: actions/checkout@v4
+
+      # Public setup-openfoam action supports the Foundation org version 14
+      # on ubuntu-24.04. It installs the actual headers and shared libraries,
+      # unlike a standalone C++17 proof.
+      - name: Install and activate actual OpenFOAM Foundation14
+        uses: gerlero/setup-openfoam@v1
+        with:
+          openfoam-version: '14'
+          cache: true
+
+      - name: Compile ACTUAL native FS-C08 CFD solver with OpenFOAM14 wmake
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ -f /opt/openfoam14/etc/bashrc ]; then
+            . /opt/openfoam14/etc/bashrc
+          fi
+          test "${WM_PROJECT_VERSION:-}" = '14'
+          command -v wmake
+          test -n "${FOAM_MODULES:-}"
+          echo "WM_PROJECT_VERSION=${WM_PROJECT_VERSION}"
+          echo "FOAM_MODULES=${FOAM_MODULES}"
+          cd freesurface/FS-C08_conservative_phase_mass/coupled_solver/native
+          wmake libso 2>&1 | tee "${RUNNER_TEMP}/fs-c08-native-wmake.log"
+          test -f "${FOAM_USER_LIBBIN}/libfsC08ConservativeVoF.so"
+          echo 'FS_C08_REAL_OPENFOAM14_SOLVER_LIBRARY_WMAKE_PASS__NO_CFD_RUN'
+
+      - name: Retain REAL native compiler diagnostics on failure or success
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: fs-c08-native-openfoam14-wmake-log
+          path: ${{ runner.temp }}/fs-c08-native-wmake.log
+          if-no-files-found: warn
+          retention-days: 30
