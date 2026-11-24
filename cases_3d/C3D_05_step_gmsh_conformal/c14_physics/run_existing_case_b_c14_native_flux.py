@@ -15,6 +15,7 @@ from __future__ import annotations
 
 import argparse
 import csv
+from collections import deque
 import hashlib
 import json
 import os
@@ -122,6 +123,7 @@ def preflight(case:Path,output:Path)->dict:
 def invoke(argv:list[str],cwd:Path,env:dict,log:Path)->None:
     require(not log.exists() and not log.is_symlink(),
             "preserved prior isolated log must never be overwritten")
+    recent=deque(maxlen=80)
     with log.open("x",encoding="utf-8") as fp:
         p=subprocess.Popen(argv,cwd=cwd,env=env,stdout=subprocess.PIPE,
                            stderr=subprocess.STDOUT,bufsize=1,
@@ -129,12 +131,64 @@ def invoke(argv:list[str],cwd:Path,env:dict,log:Path)->None:
         assert p.stdout is not None
         for line in p.stdout:
             fp.write(line)
+            recent.append(line.rstrip("\n"))
             if ("C3D05_B_C14_FLUID_SOLID_NATIVE_Q_READONLY" in line or
                 "Error" in line or "error:" in line or
                 "FAILED" in line or "FOAM FATAL" in line):
                 print(line.rstrip(),flush=True)
         rc=p.wait()
+    if rc:
+        # The original runner printed only "FOAM FATAL IO ERROR" and hid the
+        # essential dictionary/file/line details on following log lines.
+        # Only print preserved stderr log context, NEVER retry the solver.
+        print("C3D05_B_C14_NATIVE_Q_FAILURE_FULL_LOG_TAIL_BEGIN",file=sys.stderr)
+        for line in recent:
+            print(line,file=sys.stderr)
+        print("C3D05_B_C14_NATIVE_Q_FAILURE_FULL_LOG_TAIL_END",file=sys.stderr)
     require(rc==0,"native tool failed rc="+str(rc)+"; preserved log at "+str(log))
+
+
+def diagnose_attempt(attempt:Path)->dict:
+    """READ ONLY: find the actual fatal IO diagnosis from a PRESERVED attempt.
+
+    No source, CFD, compile or q extraction. Reject any unrelated path.
+    """
+    path=attempt.expanduser().resolve(strict=True)
+    home=OUTPUT.parent.resolve(strict=True)
+    require(path.is_dir() and not path.is_symlink()
+            and path.parent==home
+            and path.name.startswith("."+OUTPUT.name+".ATTEMPT_"),
+            "diagnostic path must be an existing isolated C3D05 B q attempt")
+    build=path/LOG_BUILD
+    extract=path/LOG_EXTRACT
+    require(extract.is_file() and not extract.is_symlink(),
+            "native extractor log not present; inspect build log instead")
+    lines=extract.read_text(encoding="utf-8",errors="replace").splitlines()
+    markers=("FOAM FATAL","Fatal IO","FATAL ERROR",
+             "Cannot find","cannot find","Unknown","error:",
+             "Entry","keyword","dictionary")
+    indices=[i for i,line in enumerate(lines)
+             if any(marker in line for marker in markers)]
+    if indices:
+        first=next((i for i in indices if
+                    "FOAM FATAL" in lines[i] or "FATAL ERROR" in lines[i]),
+                   indices[0])
+        start=max(0,first-12)
+        end=min(len(lines),first+36)
+        context=lines[start:end]
+    else:
+        context=lines[-65:]
+    return {
+        "status":"C3D05_B_C14_PRESERVED_FAILED_NATIVE_Q_LOG_DIAGNOSED_ONLY",
+        "attempt":str(path),
+        "build_log":str(build) if build.is_file() else None,
+        "runtime_log":str(extract),
+        "compiled_native_binary_exists":(path/"bin/c3d05C14FluidSolidFlux").is_file(),
+        "native_q_successfully_published":False,
+        "fatal_error_context_lines":context,
+        "original_CFD_untouched":True,
+        "NO_CFD_NO_REBUILD_NO_NEW_EXTRACTION":True,
+    }
 
 
 def run(case:Path,output:Path)->dict:
@@ -213,13 +267,16 @@ def main()->int:
     choice=parser.add_mutually_exclusive_group(required=True)
     choice.add_argument("--preflight",action="store_true")
     choice.add_argument("--extract",action="store_true")
+    choice.add_argument("--diagnose-attempt",type=Path,metavar="EXISTING_DIR")
     parser.add_argument("--case",type=Path,default=CASE)
     parser.add_argument("--out",type=Path,default=OUTPUT)
     args=parser.parse_args()
     try:
-        report=(preflight(args.case,args.out) if args.preflight
+        report=(diagnose_attempt(args.diagnose_attempt)
+                if args.diagnose_attempt is not None else
+                preflight(args.case,args.out) if args.preflight
                 else run(args.case,args.out))
-        if args.preflight:
+        if args.diagnose_attempt is not None or args.preflight:
             print(json.dumps(report,indent=2,ensure_ascii=False))
         else:
             print(json.dumps({
