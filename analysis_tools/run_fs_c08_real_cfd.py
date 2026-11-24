@@ -184,7 +184,7 @@ def require_native_end_time(control_dict: Path) -> float:
     """Read the staged OpenFOAM controlDict's finite requested endTime."""
     data = control_dict.read_text(encoding="utf-8")
     matches = re.findall(
-        r"(?m)^\\s*endTime\\s+([0-9]+(?:\\.[0-9]*)?(?:[eE][+-]?[0-9]+)?)\\s*;",
+        r"(?m)^\s*endTime\s+([0-9]+(?:\.[0-9]*)?(?:[eE][+-]?[0-9]+)?)\s*;",
         data,
     )
     require(len(matches) == 1, "staged case requires exactly one numeric endTime")
