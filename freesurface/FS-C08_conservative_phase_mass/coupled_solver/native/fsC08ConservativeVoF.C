@@ -6,6 +6,7 @@
 #include "fvcDdt.H"
 #include "fvcDiv.H"
 #include "fvcInterpolate.H"
+#include "zeroGradientFvPatchFields.H"
 
 namespace Foam
 {
@@ -21,8 +22,20 @@ solvers::fsC08ConservativeVoF::fsC08ConservativeVoF(fvMesh& mesh)
     phaseMass_
     (
         new fsC08::PhaseMassTransport(mesh,alpha1,mixture_.T())
+    ),
+    rhoMetalEffective_
+    (
+        IOobject
+        (
+            "rhoMetalEffective.fsC08",mesh.time().name(),mesh,
+            IOobject::READ_IF_PRESENT,IOobject::AUTO_WRITE
+        ),
+        mesh,dimensionedScalar(dimDensity,0),
+        zeroGradientFvPatchScalarField::typeName
     )
 {
+    reconcileMixtureDensity();
+    rhoMetalEffective_.oldTime();
     Info<< "FS_C08_COUPLED_SOLVER_MODULE_INSTALLED "
         << "materialId=" << phaseMass_->materialId()
         << " source=" << phaseMass_->propertySource()
@@ -38,6 +51,18 @@ void solvers::fsC08ConservativeVoF::reconcileMixtureDensity()
     // is WRONG with rhoSolid != rhoLiquid. The actual metal mass is
     // rhoAlpha.liquid + rhoAlpha.solid, both kg/m3.
     volScalarField& mixtureDensity = const_cast<volScalarField&>(rho);
+    const auto& ml=phaseMass_->liquidMass().primitiveField();
+    const auto& ms=phaseMass_->solidMass().primitiveField();
+    const auto& rL=phaseMass_->liquidDensity().primitiveField();
+    const auto& metal=alpha1.primitiveField();
+    auto& rMetal=rhoMetalEffective_.primitiveFieldRef();
+    forAll(rMetal,i)
+    {
+        rMetal[i]=metal[i]>1e-12
+            ? (ml[i]+ms[i])/metal[i]
+            : rL[i];
+    }
+    rhoMetalEffective_.correctBoundaryConditions();
     mixtureDensity =
         phaseMass_->liquidMass()
       + phaseMass_->solidMass()
