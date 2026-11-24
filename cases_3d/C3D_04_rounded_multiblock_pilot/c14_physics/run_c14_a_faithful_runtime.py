@@ -14,6 +14,7 @@ import os
 from pathlib import Path
 import re
 import subprocess
+import shutil
 import sys
 
 import stage_c14_3d_case_a as stage
@@ -78,7 +79,7 @@ def xy_rows(path):
     for line in path.read_text(encoding="utf-8").splitlines():
         if not line.strip() or line.lstrip().startswith("#"):continue
         v=[float(x) for x in line.split()]
-        need(len(v)==26 and all(math.isfinite(x) for x in v),"invalid C14 profile column count/values: "+str(path))
+        need(len(v)==27 and all(math.isfinite(x) for x in v),"invalid C14 profile column count/values: "+str(path))
         rows.append(v)
     need(len(rows)>=2 and all(b[0]>a[0] for a,b in zip(rows,rows[1:])),"invalid profile support "+str(path))
     return rows
@@ -167,13 +168,23 @@ def stream_solver(out,tool):
 def audit_outputs(out,mapping):
     pp=out/"postProcessing/metal"
     missing=[];probe={};tables={};profiles={};fields={}
+    canonical_columns="U_x U_y U_z T p_rgh rho phaseChangeSource:alpha1 vorticity_x vorticity_y vorticity_z flowType magSqrDevGradU gradT_x gradT_y gradT_z magGradT dTdt coolingRate gradRho_x gradRho_y gradRho_z magGradRho dAlphaLdt solidificationRate latentHeatRateVol CoCell"
+    canonical_count=0
     for field in NATIVE_FIELDS:
         path=pp/"temperatureProbe/0"/field
         if not path.is_file():missing.append(str(path.relative_to(out)));continue
         observed=native_timing(path)
+        expected_width=4 if field=="U" else 2
+        values_ok=True
+        for line in path.read_text(encoding="utf-8").splitlines():
+            if not line.strip() or line.lstrip().startswith("#"):continue
+            try:
+                vals=[float(x) for x in line.replace("("," ").replace(")"," ").split()]
+                values_ok=values_ok and len(vals)==expected_width and all(math.isfinite(x) for x in vals)
+            except ValueError:values_ok=False
         probe[field]={"samples":len(observed),"first_time_s":observed[0] if observed else None,
-                      "last_time_s":observed[-1] if observed else None,"exact_native_cadence":exact_times(observed,PROBE_TIMES)}
-        if not probe[field]["exact_native_cadence"]:missing.append("native probe cadence "+field)
+                      "last_time_s":observed[-1] if observed else None,"exact_native_cadence":exact_times(observed,PROBE_TIMES),"finite_native_values":values_ok}
+        if not probe[field]["exact_native_cadence"] or not values_ok:missing.append("native probe cadence "+field)
     for name in REDUCTIONS:
         root=pp/name
         paths=sorted(root.glob("0/*.dat"))
@@ -190,6 +201,15 @@ def audit_outputs(out,mapping):
                 path=pp/name/format(t,"g")/(line+".xy")
                 if not path.is_file():continue
                 rows=xy_rows(path);counts.append(len(rows))
+                header=path.read_text(encoding="utf-8").splitlines()[0].lstrip("#").split()
+                need(len(header)==27 and header[0] in ("x","y","z") and header[1:7]==["U_x","U_y","U_z","T","p_rgh","rho"] and header[7].startswith("phaseChang") and header[13:17]==["gradT_x","gradT_y","gradT_z","magGradT"],"unexpected native C14 raw header "+str(path))
+                target=pp/"C14CanonicalProfiles"/name/format(t,"g")/path.name
+                target.parent.mkdir(parents=True,exist_ok=True)
+                # Raw writer abbreviates long column names; keep original and
+                # emit exact-name alias from same rows, no reinterpolation.
+                raw=path.read_text(encoding="utf-8").splitlines(keepends=True)
+                write(target,"# "+header[0]+" "+canonical_columns+"\n"+"".join(raw[1:]))
+                canonical_count+=1
             profiles[name+"/"+line]={"time_files":len(counts),"min_points":min(counts,default=0),"max_points":max(counts,default=0),
                                       "requested_points":80,"partial_spatial_coverage":any(n<80 for n in counts)}
             if len(counts)!=101:missing.append("profile temporal coverage "+name+"/"+line)
@@ -203,7 +223,11 @@ def audit_outputs(out,mapping):
         for region,names in (("metal",("T","U","p","p_rgh","phaseChangeSource:alpha1")),("mold",("T",))):
             for name in names:
                 if not (out/format(t,"g")/region/name).is_file():missing.append("saved field "+format(t,"g")+"/"+region+"/"+name)
+    top=pp/"topFlow"
+    top_files=[p for p in top.rglob("*") if p.is_file()] if top.is_dir() else []
+    if not top_files:missing.append("topFlow native output")
     return {"probe":probe,"reductions":tables,"profiles":profiles,"derived_fields":fields,
+            "canonical_profile_files":canonical_count,"topFlow_native_files":len(top_files),
             "missing_or_incomplete":missing,"native_diagnostic_parity":not missing}
 
 def execute(source,base,out):
@@ -248,6 +272,12 @@ def execute(source,base,out):
         report["solver_completed"]=True
         report["input_hashes_unchanged"]=all(sha(out/k)==v for k,v in tracked.items())
         need(report["input_hashes_unchanged"],"native input modified during run")
+        foamlog=shutil.which("foamLog")
+        if foamlog:
+            with (out/"log.foamLog").open("x",encoding="utf-8") as fl:
+                result=subprocess.run([foamlog,"log.foamMultiRun"],cwd=out,stdout=fl,stderr=subprocess.STDOUT,check=False)
+            report["foamLog"]={"returncode":result.returncode,"logs_directory_exists":(out/"logs").is_dir()}
+        else:report["foamLog"]={"available":False,"raw_solver_log_preserved":True}
         report["coverage"]=audit_outputs(out,mapping)
         report["native_diagnostic_parity"]=report["coverage"]["native_diagnostic_parity"]
         report["status"]="FAITHFUL_C14_RUNTIME_READY" if report["native_diagnostic_parity"] else "SOLVER_COMPLETE_DIAGNOSTIC_COVERAGE_PARTIAL"
