@@ -2,6 +2,7 @@
 """Case B exact fluid+solid C14 boundary q CSV; synthetic native-layout tests ONLY."""
 from __future__ import annotations
 
+import ast
 import csv
 import importlib.util
 import math
@@ -151,8 +152,33 @@ class CaseBC14TrueFluidSolidFluxAudit(unittest.TestCase):
 
     def test_no_CFD_solver_or_old_case_mutation_runner(self):
         source=run_source.read_text(encoding="utf-8")
-        self.assertNotIn("foamMultiRun(",source)
-        self.assertNotIn("subprocess.run(",source)
+        # Inspect executable AST calls rather than searching for a string:
+        # the runner deliberately contains "foamMultiRun(" inside a safety
+        # check against accidental solver execution. That's NOT a solver call.
+        tree=ast.parse(source)
+        run_function=next(n for n in tree.body
+                          if isinstance(n,ast.FunctionDef) and n.name=="run")
+        calls=[node for node in ast.walk(run_function)
+               if isinstance(node,ast.Call)]
+        invocations=[node for node in calls
+                     if isinstance(node.func,ast.Name)
+                     and node.func.id=="invoke"]
+        self.assertEqual(len(invocations),2)
+        compiled=invocations[0].args[0]
+        extracted=invocations[1].args[0]
+        self.assertIsInstance(compiled,ast.List)
+        self.assertIsInstance(extracted,ast.List)
+        self.assertEqual(ast.literal_eval(compiled.elts[0]),"wmake")
+        self.assertEqual(ast.unparse(extracted.elts[0]),"str(binary)")
+        self.assertIn('"foamMultiRun(" not in cpp',source)
+        subprocess_calls=[node for node in ast.walk(tree)
+                           if isinstance(node,ast.Call)
+                           and isinstance(node.func,ast.Attribute)
+                           and isinstance(node.func.value,ast.Name)
+                           and node.func.value.id=="subprocess"]
+        self.assertEqual(len(subprocess_calls),1)
+        self.assertEqual(subprocess_calls[0].func.attr,"Popen")
+        self.assertEqual(ast.unparse(subprocess_calls[0].args[0]),"argv")
         self.assertIn("runTime",cpp_source.read_text())
         self.assertIn("shutil.copytree(SOURCE,source)",source)
         self.assertIn("staging.rename(output)",source)
