@@ -118,7 +118,7 @@
       "No demonstrated solver-step discrete conservation or grid/time independence",
       "No experimental validation or GUI opening observed"
     ],
-    "next": "Use visual case for investigator inspection; plan controlled same-geometry spatial/temporal verification without repeating base diagnostics."
+    "next": "Prioritize physically homologous C14 2D–3D cooling curves and profiles before controlled mesh/time sensitivity; user confirms visual inspection."
   },
   "stage06_preflight_integrity": {
     "date": "2026-11-20",
@@ -978,5 +978,51 @@
       "GUI_open_observed": false,
       "provenance": "User supplied WSL stdout; raw local CSVs and files not independently retrieved"
     }
+  },
+  "stage09_C14_2D_3D_comparison": {
+    "date": "2026-11-24",
+    "priority": "Direct original C14 2D vs C3D04-A cooling curves and spatial profiles before further CFD/mesh changes",
+    "reference_case": "cases_controlled_buoyancy/C14_topFixedFlux_explicitRef",
+    "visual_case": "~/OpenFOAM/C3D04_A_C14_VISUALIZATION_01",
+    "status": "REQUIRED_NOT_YET_COMPARED",
+    "reference_probe_m": [
+      0.02,
+      0.02,
+      0.005
+    ],
+    "reference_horizontal_y_m": [
+      0.01,
+      0.02,
+      0.03
+    ],
+    "reference_vertical": {
+      "x_m": 0.02,
+      "z_m": 0.005,
+      "y_m": [
+        0.00025,
+        0.03975
+      ],
+      "points": 80
+    },
+    "case_A_mapping": "2D y 0..0.04 m vs 3D y -0.04..0 m: nominal bottom-relative heights correspond to y=-0.03,-0.02,-0.01 m; native geometry membership and transverse section must be checked; current fallback profiles not assumed physically equivalent",
+    "current_3D_vertical": {
+      "x_m": 0.02,
+      "z_m": 0.00829925,
+      "y_m": [
+        -0.014750105,
+        -0.000050399
+      ],
+      "points": 80,
+      "complete_times": 101,
+      "original_2D_full_height_equivalent": false
+    },
+    "required_outputs": [
+      "Cooling curves T(t) at physically homologous stations with actual coordinates, plus volume-weighted mean T if 2D data available",
+      "T(x), T(y), U components/magnitude and alpha1 profiles at common stored times and common physical coordinates; normalized position supplementary only",
+      "Compare cooling rate and phase evolution with common 0.1s temporal support; preserve native 2D dt=0.001s probe if present",
+      "Report differences and missing coverage; no extrapolation outside metal or fake 2D data"
+    ],
+    "blocker": "Actual 2D native results in WSL not directly inspected; only exact repository dictionaries verified. No comparison values yet.",
+    "GUI_open_user_confirmed": true
   }
 }
