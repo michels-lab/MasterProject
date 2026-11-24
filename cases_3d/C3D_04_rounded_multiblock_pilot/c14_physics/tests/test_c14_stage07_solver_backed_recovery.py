@@ -270,6 +270,62 @@ class ExistingNewCopyNonDestructiveInspectionTests(unittest.TestCase):
         self.assertFalse(state["global_energy_conservation_verified"])
         self.assertEqual(data,[(p,sut.sha(p)) for p,_ in data])
 
+    def test_real_wsl_exit_zero_four_fatal_groups_reclassified_in_place(self):
+        """All OS passes in prior report; native FATAL for four groups overrides."""
+        record=json.loads(self.report.read_text())
+        for item in record["native_groups"]:
+            group=item["group"]
+            # Simulate the actual _02 report with zero OS exit codes for all.
+            item["exit_code"]=0
+            item["passed"]=True
+            p=self.copy/("log.C14_3D_postprocess_solverBacked_"+group)
+            if group in ("core","energy","flow","momentum"):
+                p.write_text(
+                    "Time = 10s\n--> FOAM FATAL IO ERROR:\n"
+                    "Cannot find cellZone metal\nAvailable cellZones: 0()\nEnd\n")
+            else:
+                p.write_text("Time = 10s\nNative field processing\nEnd\n")
+            item["log_sha256"]=sut.sha(p)
+        record["native_groups_passed"]=list(sut.TASK_ORDER)
+        record["native_groups_failed"]=[]
+        self.report.write_text(json.dumps(record))
+        before=sut.sha(self.report)
+        with mock.patch.object(sut.old,"run_native",
+                               side_effect=AssertionError("NO native rerun")):
+            observed=self.inspect()
+        self.assertEqual(observed["status"],
+                         "EXISTING_COMPLETE_REPORT_WITH_NATIVE_FATALS_PRESERVED")
+        self.assertEqual(observed["native_groups_passed"],["phase","profiles"])
+        self.assertEqual(observed["native_groups_failed"],
+                         ["core","energy","flow","momentum"])
+        self.assertTrue(observed["prior_report_false_positive_success_detected"])
+        self.assertEqual(observed["original_report_groups_passed_by_exit_code_only"],
+                         list(sut.TASK_ORDER))
+        self.assertEqual(sut.sha(self.report),before)
+
+    def test_new_semantic_group_report_with_fatal_exit_zero_is_authenticated(self):
+        """Future _03 must not fail authenticity checks on semantic FAIL/rc=0."""
+        record=json.loads(self.report.read_text())
+        for item in record["native_groups"]:
+            log=self.copy/("log.C14_3D_postprocess_solverBacked_"+item["group"])
+            log.write_text(
+                "--> FOAM FATAL IO ERROR:\n"
+                "Cannot find cellZone metal\nEnd\n"
+                if item["group"]=="core" else "End\n")
+            item["exit_code"]=0
+            item["passed"]=item["group"]!="core"
+            item["foam_fatal_present"]=item["group"]=="core"
+            item["log_sha256"]=sut.sha(log)
+        record["native_groups_passed"]=[x["group"] for x in record["native_groups"]
+                                        if x["passed"]]
+        record["native_groups_failed"]=["core"]
+        self.report.write_text(json.dumps(record))
+        observed=self.inspect()
+        self.assertEqual(observed["status"],
+                         "EXISTING_COMPLETE_NATIVE_POSTPROCESS_REPORT_REUSED_NO_NEW_RUN")
+        self.assertEqual(observed["native_groups_failed"],["core"])
+        self.assertFalse(observed["prior_report_false_positive_success_detected"])
+
     def test_partial_workcopy_no_final_report_preserved_and_not_marked_pass(self):
         self.report.unlink()
         state=self.inspect()
