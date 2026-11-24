@@ -94,10 +94,14 @@ class CaseBC14TrueFluidSolidFluxAudit(unittest.TestCase):
     def test_mismatched_real_face_count_rejected(self):
         with TemporaryDirectory() as path:
             native,faces=fixtures(Path(path))
-            original=native.read_text(encoding="utf-8")
-            native.write_text(original.replace(
-                "metal,metal_to_mold,12636,12636,126360,126360",
-                "metal,metal_to_mold,12635,12636,126360,126360",1))
+            with native.open("r",encoding="utf-8",newline="") as fp:
+                rows=list(csv.DictReader(fp))
+            assert rows[0]["region"]=="metal" and rows[0]["patch"]=="metal_to_mold"
+            rows[0]["nFaces"]="12635"
+            with native.open("w",encoding="utf-8",newline="") as fp:
+                writer=csv.DictWriter(fp,fieldnames=A.SUM_FIELDS)
+                writer.writeheader()
+                writer.writerows(rows)
             with self.assertRaisesRegex(ValueError,"patch count"):
                 A.native_flux_analysis(native,faces)
 
