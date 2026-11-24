@@ -44,6 +44,24 @@ solvers::fsC08ConservativeVoF::fsC08ConservativeVoF(fvMesh& mesh)
         ),
         mesh,dimensionedScalar(dimEnergy/dimVolume,0),
         zeroGradientFvPatchScalarField::typeName
+    ),
+    phaseEnergyPhi_
+    (
+        IOobject
+        (
+            "energyFlux.fsC08",mesh.time().name(),mesh,
+            IOobject::NO_READ,IOobject::NO_WRITE
+        ),
+        mesh,dimensionedScalar(dimPower,0)
+    ),
+    phaseHeatPhi_
+    (
+        IOobject
+        (
+            "heatFlux.fsC08",mesh.time().name(),mesh,
+            IOobject::NO_READ,IOobject::NO_WRITE
+        ),
+        mesh,dimensionedScalar(dimPower,0)
     )
 {
     // This first native phase-mass/energy formulation assumes the
@@ -309,6 +327,26 @@ void solvers::fsC08ConservativeVoF::postSolve()
     reduce(liquidEnergyOut_W,sumOp<scalar>());
     reduce(gasEnergyOut_W,sumOp<scalar>());
 
+    // These are the face fluxes from the ACTUAL last energy
+    // linear solve, not fluxes reconstructed later after p correction.
+    // Sign convention is outward from fluid patch into mold/ambient.
+    scalar energyAdvectionOut_W=0;
+    scalar conductionOut_W=0;
+    const auto& energyPatches=phaseEnergyPhi_.boundaryField();
+    const auto& heatPatches=phaseHeatPhi_.boundaryField();
+    forAll(energyPatches,patchi)
+    {
+        const auto& energyPatch=energyPatches[patchi];
+        const auto& heatPatch=heatPatches[patchi];
+        forAll(energyPatch,facei)
+        {
+            energyAdvectionOut_W+=energyPatch[facei];
+            conductionOut_W+=heatPatch[facei];
+        }
+    }
+    reduce(energyAdvectionOut_W,sumOp<scalar>());
+    reduce(conductionOut_W,sumOp<scalar>());
+
     const scalar dt=runTime.deltaTValue();
     const scalar metalResidual=M-M0+dt*boundaryMassRate;
     const scalar gasContinuityDefect=Mgas-Mgas0+dt*gasBoundaryOut;
@@ -319,6 +357,10 @@ void solvers::fsC08ConservativeVoF::postSolve()
         << " phaseResolvedInternalEnergy_J=" << E
         << " previousInternalEnergy_J=" << E0
         << " deltaInternalEnergy_J=" << E-E0
+        << " nativeEnergySolveAdvectionOut_W=" << energyAdvectionOut_W
+        << " nativeEnergySolveConductionOut_W=" << conductionOut_W
+        << " partialEnergyBalanceIgnoringMechanicalWork_J="
+        << E-E0+dt*(energyAdvectionOut_W+conductionOut_W)
         << " liquidAdvectedEnergyOut_W=" << liquidEnergyOut_W
         << " gasAdvectedEnergyOut_W=" << gasEnergyOut_W
         << " deltaInternalPlusAdvectedEnergy_J="
