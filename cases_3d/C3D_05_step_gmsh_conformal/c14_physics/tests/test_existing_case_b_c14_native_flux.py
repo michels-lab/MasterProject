@@ -64,6 +64,39 @@ def fixtures(root:Path)->tuple[Path,Path]:
     return integral,faces
 
 
+def fixture_real_101_c14_original(root:Path):
+    """Synthetic 101 time labels; never claims to be original CFD source."""
+    case=root/R.CASE.name
+    mold_schemes=case/"system/mold/fvSchemes"
+    mold_schemes.parent.mkdir(parents=True)
+    mold_schemes.write_text(
+        "FoamFile { format ascii; class dictionary; object fvSchemes; }\n"
+        "interpolationSchemes\n{\n"
+        "  //default linear;\n"
+        "  interpolate((kappa|Cv)) harmonic;\n"
+        "}\n",encoding="utf-8")
+    other=case/"system/metal/fvSchemes"
+    other.parent.mkdir(parents=True)
+    other.write_text(
+        "FoamFile { format ascii; class dictionary; object fvSchemes; }\n"
+        "interpolationSchemes { default linear; }\n",encoding="utf-8")
+    (case/"constant/metal/polyMesh").mkdir(parents=True)
+    (case/"constant/mold/polyMesh").mkdir(parents=True)
+    states=[]
+    for i in range(101):
+        t=round(i*.1,1)
+        label=f"{t:g}"
+        states.append((t,label))
+        for region in ("metal","mold"):
+            p=case/label/region
+            p.mkdir(parents=True)
+            (p/"T").write_text(f"original T {region} at {label}\n",
+                               encoding="utf-8")
+            if region=="metal":
+                (p/"U").write_text("native original U\n",encoding="utf-8")
+    return case,mold_schemes,states
+
+
 class CaseBC14TrueFluidSolidFluxAudit(unittest.TestCase):
     def test_exact_101x4_integrated_and_final_4patch_face_values(self):
         with TemporaryDirectory() as path:
@@ -198,6 +231,78 @@ class CaseBC14TrueFluidSolidFluxAudit(unittest.TestCase):
                 missing.mkdir()
                 with self.assertRaisesRegex(ValueError,"extractor log not present"):
                     R.diagnose_attempt(missing)
+
+    def test_native_q_shadow_adds_exact_C14_harmonic_scheme_not_to_real_CFD(self):
+        with TemporaryDirectory() as dirname:
+            root=Path(dirname)
+            original,schemes,states=fixture_real_101_c14_original(root)
+            saved_hash=R.sha(schemes)
+            saved_metal_hash=R.sha(original/"system/metal/fvSchemes")
+            shadow=root/"q_only_shadow"
+            state=R.prepare_isolated_c14_flux_case(original,shadow,states)
+            self.assertEqual(state["saved_real_time_directories_reconstructed"],101)
+            self.assertEqual(state["original_mold_fvSchemes_SHA256"],saved_hash)
+            self.assertTrue(state["system_copied_and_ONLY_mold_fvSchemes_amended"])
+            self.assertEqual(R.sha(schemes),saved_hash)
+            self.assertEqual(R.sha(original/"system/metal/fvSchemes"),saved_metal_hash)
+            a=schemes.read_text(encoding="utf-8")
+            b=(shadow/"system/mold/fvSchemes").read_text(encoding="utf-8")
+            self.assertIn("interpolate((kappa|Cv)) harmonic;",a)
+            self.assertNotIn("interpolate(kappa) harmonic;",a)
+            self.assertIn("interpolate((kappa|Cv)) harmonic;",b)
+            self.assertEqual(b.count("interpolate(kappa) harmonic;"),1)
+            self.assertTrue((shadow/"constant").is_symlink())
+            self.assertTrue((shadow/"0.3").is_dir())
+            self.assertFalse((shadow/"0.3").is_symlink())
+            self.assertFalse((shadow/"0.3/metal").is_symlink())
+            self.assertTrue((shadow/"0.3/metal/T").is_symlink())
+            self.assertEqual(
+                (shadow/"0.3/metal/T").read_text(encoding="utf-8"),
+                (original/"0.3/metal/T").read_text(encoding="utf-8"))
+            self.assertEqual(
+                (shadow/"10/mold/T").read_text(encoding="utf-8"),
+                (original/"10/mold/T").read_text(encoding="utf-8"))
+
+    def test_native_q_shadow_rejects_invented_nonharmonic_C14_scheme(self):
+        with TemporaryDirectory() as dirname:
+            root=Path(dirname)
+            original,schemes,states=fixture_real_101_c14_original(root)
+            schemes.write_text(schemes.read_text().replace(
+                "interpolate((kappa|Cv)) harmonic;",
+                "interpolate((kappa|Cv)) linear;"))
+            shadow=root/"q_only_shadow"
+            with self.assertRaisesRegex(ValueError,"harmonic"):
+                R.prepare_isolated_c14_flux_case(original,shadow,states)
+            self.assertFalse(shadow.exists())
+
+    def test_native_q_shadow_rejects_unexpected_explicit_original_scheme(self):
+        with TemporaryDirectory() as dirname:
+            root=Path(dirname)
+            original,schemes,states=fixture_real_101_c14_original(root)
+            schemes.write_text(schemes.read_text().replace(
+                "interpolate((kappa|Cv)) harmonic;",
+                "interpolate((kappa|Cv)) harmonic;\n"
+                "  interpolate(kappa) harmonic;"))
+            with self.assertRaisesRegex(ValueError,"already specifies"):
+                R.prepare_isolated_c14_flux_case(
+                    original,root/"q_only_shadow",states)
+
+    def test_native_q_shadow_never_replaces_previous_shadow_and_rejects_missing_times(self):
+        with TemporaryDirectory() as dirname:
+            root=Path(dirname)
+            original,schemes,states=fixture_real_101_c14_original(root)
+            shadow=root/"q_only_shadow"
+            with self.assertRaisesRegex(ValueError,"101 original"):
+                R.prepare_isolated_c14_flux_case(original,shadow,states[:100])
+            self.assertFalse(shadow.exists())
+            R.prepare_isolated_c14_flux_case(original,shadow,states)
+            with self.assertRaisesRegex(ValueError,"never replace"):
+                R.prepare_isolated_c14_flux_case(original,shadow,states)
+            self.assertFalse((original/"0.3/metal/T").is_symlink())
+            self.assertEqual(len([
+                p for p in shadow.iterdir()
+                if p.is_dir() and not p.is_symlink() and p.name!="system"
+            ]),101)
 
     def test_no_CFD_solver_or_old_case_mutation_runner(self):
         source=run_source.read_text(encoding="utf-8")
