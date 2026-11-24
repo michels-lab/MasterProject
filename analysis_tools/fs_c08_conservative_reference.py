@@ -506,10 +506,39 @@ def printable(result:dict[str,Any],doc:dict)->dict[str,Any]:
 def main(argv=None)->int:
     a=argparse.ArgumentParser(description=__doc__)
     a.add_argument("scenario",type=Path,help="Explicit synthetic or measured FS-C08 input JSON")
+    a.add_argument("--mode",choices=("flux-ledger","closed-cell-mushy-equilibrium"),
+                   default="flux-ledger",help="Conservative FV mode; neither is OpenFOAM CFD")
     args=a.parse_args(argv)
     try:
         thermo,cells,step,doc=load_scenario(args.scenario)
-        print(json.dumps(printable(advance(cells,thermo,step),doc),indent=2,allow_nan=False))
+        if args.mode=="flux-ledger":
+            result=printable(advance(cells,thermo,step),doc)
+        else:
+            if len(cells)!=1 or step.faces or step.boundaries or len(step.gamma_kg_m3_s)!=1 or step.gamma_kg_m3_s[0]!=0:
+                raise ValueError("Closed-cell mushy mode requires one isolated cell and gamma=0 input")
+            d=doc.get("phase_diagram")
+            if not isinstance(d,dict):
+                raise ValueError("Closed-cell mushy mode requires explicit phase_diagram")
+            diagram=LinearMushyMassClosure(float(d["T_solidus_K"]),
+                float(d["T_liquidus_K"]),str(d["provenance"]))
+            if step.external_heat_W and len(step.external_heat_W)!=1:
+                raise ValueError("Closed-cell heat vector must have exactly one value")
+            q=step.external_heat_W[0] if step.external_heat_W else 0.
+            r=solve_closed_cell_mushy_equilibrium(cells[0],thermo,diagram,
+                dt_s=step.dt_s,applied_heat_W=q)
+            result={
+                "schema":"masterproject-fs-c08-closed-cell-mushy-v1",
+                "case_purpose":doc["purpose"],
+                "material_provenance":doc["provenance"],
+                "initial_cell":vars(r["initial_cell"]),
+                "final_cell":vars(r["final_cell"]),
+                "initial_geometry":vars(r["initial_geometry"]),
+                "final_geometry":vars(r["final_geometry"]),
+                "audit":r["audit"],
+                "physical_3d_shrinkage_validated":False,
+                "openfoam_14_solver_executed":False,
+            }
+        print(json.dumps(result,indent=2,allow_nan=False))
         return 0
     except (ValueError,OSError,TypeError,KeyError,json.JSONDecodeError) as e:
         a.exit(2,"FS-C08 CONSERVATIVE REFERENCE BLOCKED: "+str(e)+"\n")
