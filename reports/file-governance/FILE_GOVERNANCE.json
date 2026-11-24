@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
   "audit_kind": "deterministic_full_tracked_tree",
-  "tracked_files_total": 39111,
-  "classified_files_total": 39106,
-  "docs_content_inspected": 212,
+  "tracked_files_total": 39112,
+  "classified_files_total": 39107,
+  "docs_content_inspected": 213,
   "large_docs_skipped": 1,
   "excluded_reports": 5,
   "roles": {
@@ -12,7 +12,7 @@
     "bitacora": 5,
     "config": 17,
     "data": 32,
-    "document": 174,
+    "document": 175,
     "index": 34,
     "license": 1,
     "simulation_case_file": 121,
@@ -26,11 +26,11 @@
   },
   "finding_counts": {
     "BROKEN_RELATIVE_LINK": 7,
-    "POTENTIAL_UNLOGGED_CHANGES": 2
+    "POTENTIAL_UNLOGGED_CHANGES": 1
   },
-  "finding_total": 9,
-  "inventory_fingerprint": "3309ca58582df57af6c8e6140343d89ec7c3425169679301da3c94ed8049258c",
-  "evidence_fingerprint": "14fd857926cfdf53529644efd1cb9b2893eef765c2479b18f3f907d6b924f343",
+  "finding_total": 8,
+  "inventory_fingerprint": "379043f36d3e55b46d94ff314f20da43ee8a3581dec1c128298d06373203da8a",
+  "evidence_fingerprint": "a0dddf0f2ceaffedb25bddd1f4e2d2490361fdf22a51d2d9c894da145aa4d121",
   "files": [
     {
       "path": ".github/agents/openfoam-solidification.agent.md",
@@ -415,7 +415,7 @@
       "role": "bitacora",
       "purpose": "technical/audit change history",
       "certainty": "rule",
-      "blob": "bf1b9b7db6cefa6c212f955e19311bb30431ceec"
+      "blob": "a787d82b54065747607eea92adb99b60eb66cd6f"
     },
     {
       "path": "README.md",
@@ -1640,7 +1640,7 @@
       "role": "source",
       "purpose": "code/test implementation",
       "certainty": "rule",
-      "blob": "706db0619d088d54b0c2b7e3deccf2d741e42385"
+      "blob": "ba65bfa381873668ee6e66192279756cb6d6cb7b"
     },
     {
       "path": "cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/continue_c14_stage07_grouped_evidence.py",
@@ -272515,6 +272515,13 @@
       "blob": "bb112b188465c38bbaef3fba174b309a0edaac28"
     },
     {
+      "path": "docs/C3D04_A_STAGE09_C14_2D_3D_COMPARISON_20261124_ES.md",
+      "role": "document",
+      "purpose": "manual/decision/report/historical note",
+      "certainty": "inferred",
+      "blob": "521248efe120f465536e58f23b852462270e778c"
+    },
+    {
       "path": "docs/C3D04_CASE_A_MILESTONE_TRACKER.csv",
       "role": "data",
       "purpose": "structured/research data (semantics not validated)",
@@ -272526,7 +272533,7 @@
       "role": "config",
       "purpose": "machine-readable configuration",
       "certainty": "rule",
-      "blob": "1ae5f89bb7d64fa79d98ae8ab80d0956c1ed10ee"
+      "blob": "1f0d6307a0075d1e6ef86d39ff5cb0cca7a98c13"
     },
     {
       "path": "docs/C3D_01_ESTADO_REAL_20261110_ES.md",
@@ -272813,7 +272820,7 @@
       "role": "config",
       "purpose": "machine-readable configuration",
       "certainty": "rule",
-      "blob": "99bf0842d487ba83ac1b580b406c45fc0a9d91f6"
+      "blob": "1a1010a023e4241474020192a0464b60369750ad"
     },
     {
       "path": "docs/REGLA_INSTRUCCIONES_UNIFICADAS_ES.md",
@@ -273845,15 +273852,6 @@
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_EN.md",
       "observation": "32 implementation/config paths changed since this log's last commit; examples: .github/workflows/c3d04-a-c14-native-fluid-solid.yml, .github/workflows/c3d04-a-c14-postprocessing-parity.yml, .github/workflows/c3d05-b-c14-native-fluid-solid-q.yml, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/compare_c14_2d_3d_a.py, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/continue_c14_stage07_grouped_evidence.py, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/native_bilateral_flux/c3d04C14FluidSolidFlux.C",
-      "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "0f0c718d52a7542f",
-      "code": "POTENTIAL_UNLOGGED_CHANGES",
-      "severity": "review",
-      "path": "PROJECT_AUDIT_LOG_ES.md",
-      "observation": "1 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/compare_c14_2d_3d_a.py",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     }
