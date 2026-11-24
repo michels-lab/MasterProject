@@ -1,0 +1,97 @@
+{
+  "schema": "masterproject-fs-c08-conservative-control-volume-v1",
+  "purpose": "SYNTHETIC_TEST_ONLY",
+  "provenance": "SYNTHETIC TEST FIXTURE: illustrative arbitrary properties for code verification; NOT JMatPro, NOT any alloy",
+  "thermo": {
+    "rho_liquid_kg_m3": [
+      [
+        200,
+        7000
+      ],
+      [
+        2000,
+        7000
+      ]
+    ],
+    "rho_solid_kg_m3": [
+      [
+        200,
+        7300
+      ],
+      [
+        2000,
+        7300
+      ]
+    ],
+    "cp_liquid_J_kg_K": [
+      [
+        200,
+        600
+      ],
+      [
+        2000,
+        600
+      ]
+    ],
+    "cp_solid_J_kg_K": [
+      [
+        200,
+        550
+      ],
+      [
+        2000,
+        550
+      ]
+    ],
+    "cp_gas_J_kg_K": [
+      [
+        200,
+        700
+      ],
+      [
+        2000,
+        700
+      ]
+    ],
+    "latent_liquid_minus_solid_J_kg": 200000,
+    "gas_R_J_kg_K": 287,
+    "T_reference_K": 300
+  },
+  "cells": [
+    {
+      "V_m3": 0.00001,
+      "m_liquid_kg": 0.028,
+      "m_solid_kg": 0,
+      "m_gas_kg": 0.000001,
+      "T_K": 1500
+    },
+    {
+      "V_m3": 0.00001,
+      "m_liquid_kg": 0.014,
+      "m_solid_kg": 0,
+      "m_gas_kg": 0.000001,
+      "T_K": 1300
+    }
+  ],
+  "step": {
+    "dt_s": 0.1,
+    "gamma_kg_m3_s": [
+      120,
+      80
+    ],
+    "faces": [
+      {
+        "left": 0,
+        "right": 1,
+        "liquid_kg_s": 0.0008,
+        "gas_kg_s": 0,
+        "heat_W": 5
+      }
+    ],
+    "boundaries": [],
+    "external_heat_W": [
+      0,
+      -2
+    ]
+  }
+}
