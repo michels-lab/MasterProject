@@ -27,6 +27,7 @@ import shutil
 import sys
 
 import run_c14_3d_complete_postprocess as old
+import stage_c14_3d_case_a as stage
 import c14_3d_native_energy_closure as energy
 import audit_existing_native_c14_stage07 as forensic
 
@@ -220,6 +221,78 @@ def original_case_gate(case: Path, failed: Path, recovery: Path,
     }
 
 
+
+def verify_or_add_metal_zone_in_new_copy(case: Path, copy: Path) -> dict:
+    """Repair only zone lookup metadata, not mesh connectivity or physical model.
+
+    Real WSL copy _02 showed FOAM FATAL IO ERROR: Cannot find cellZone metal;
+    C14 source's solidificationMeltingSource references an all-metal cellZone.
+    This function must NEVER run against an existing/occupied copy.
+    """
+    case = case.expanduser().resolve()
+    copy = copy.expanduser().absolute()
+    need(copy.is_dir() and not copy.is_symlink(),
+         "new workcopy is not a regular directory")
+    need(case != copy and case not in copy.parents and copy not in case.parents,
+         "no changes inside original research CFD case")
+    real = stage.region_cells(case, "metal", stage.EXPECTED["metal"])
+    copied = stage.region_cells(copy, "metal", stage.EXPECTED["metal"])
+    n = real["nCells"]
+    need(copied["nCells"] == n, "copy metal region cell count differs")
+    for name in stage.MESH:
+        rel = Path("constant/metal/polyMesh") / name
+        need(sha(case / rel) == sha(copy / rel),
+             "source and copy mesh geometry/connectivity differ: " + name)
+    original_zone = case / "constant/metal/polyMesh/cellZones"
+    copied_zone = copy / "constant/metal/polyMesh/cellZones"
+    if stage.audit_existing_zone(original_zone, n):
+        need(file_ok(copied_zone), "original C14 metal zone missing in clone")
+        need(sha(original_zone) == sha(copied_zone),
+             "new clone changed pre-existing C14 full metal zone")
+        return {
+            "status": "SOURCE_FULL_METAL_CELLZONE_PRESENT_PRESERVED",
+            "metal_cells": n,
+            "copy_cellZones_sha256": sha(copied_zone),
+            "added_to_copy_only": False,
+            "geometry_connectivity_unchanged": True,
+        }
+    need(not copied_zone.exists() and not copied_zone.is_symlink(),
+         "missing source metal cellZone but clone contains unexpected zone")
+    copied_zone.write_text(stage.whole_region_zone(n), encoding="utf-8")
+    need(stage.audit_existing_zone(copied_zone, n),
+         "new metal zone is not all real native cells")
+    need(not original_zone.exists() and not original_zone.is_symlink(),
+         "original C14 mesh source zone unexpectedly changed")
+    return {
+        "status": "FULL_METAL_CELLZONE_CREATED_ONLY_IN_FRESH_COPY",
+        "metal_cells": n,
+        "copy_cellZones_sha256": sha(copied_zone),
+        "added_to_copy_only": True,
+        "original_CFD_cellZones_created": False,
+        "geometry_connectivity_unchanged": True,
+    }
+
+
+def fatal_openfoam_log(log: Path, limit: int = 5) -> dict:
+    """Native F14 can exit 0 while writing FOAM FATAL IO ERROR several times."""
+    need(file_ok(log), "native subprocess log missing: " + str(log))
+    pattern = re.compile(r"\bFOAM\s+FATAL(?:\s+IO)?\s+ERROR\b|\bFOAM aborting\b", re.I)
+    found = []
+    count = 0
+    with log.open(encoding="utf-8", errors="replace") as stream:
+        for line_no, line in enumerate(stream, 1):
+            if pattern.search(line):
+                count += 1
+                if len(found) < limit:
+                    found.append({"line": line_no, "text": line.strip()[:240]})
+    return {
+        "foam_fatal_present": count > 0,
+        "foam_fatal_occurrence_count": count,
+        "first_foam_fatal_markers": found,
+    }
+
+
+
 def native_group(copy: Path, group: str, dictionary: Path) -> dict:
     # Foundation14 user guide: -solver fluid reconstructs thermo/transport
     # model registry for rho,h and energyFlux; does not advance fluid solver.
@@ -236,8 +309,13 @@ def native_group(copy: Path, group: str, dictionary: Path) -> dict:
     executed = old.run_native(copy,"solverBacked_"+group,args)
     log = copy/executed["log"]
     errors = forensic.error_excerpt(log, limit=8)
+    fatal = fatal_openfoam_log(log)
+    # OpenFOAM may report FOAM FATAL IO with OS exit code 0.
+    semantically_passed = executed["exit_code"] == 0 and not fatal["foam_fatal_present"]
     return {
-        **executed, "group": group,
+        **executed, "group": group, "passed": semantically_passed,
+        "os_exit_code_zero": executed["exit_code"] == 0,
+        **fatal,
         "read_model": "fluid_solver_registry_no_FV_solve"
                       if group in ("core","energy","flow","momentum")
                       else "only_explicit_saved_fields",
@@ -465,6 +543,7 @@ def main() -> int:
             source,opt.failed_copy,opt.recovery,opt.forensic,out)
         # Any failure from this point forward touches only the new copy.
         shutil.copytree(source,out,symlinks=False)
+        zone_meta=verify_or_add_metal_zone_in_new_copy(source,out)
         prior=out/"postProcessing"
         if prior.exists():
             need(not (out/"_original_postProcessing_preserved").exists(),
@@ -496,13 +575,16 @@ def main() -> int:
             "original_C14_postprocess_source_hashes":original_fo_hashes,
             "isolated_new_workcopy":str(out),
             "geometry_sampling":geometry,
+            "metal_cellZone_copy_only_recovery":zone_meta,
             "group_dictionary_SHA256":dict_audit,
             "native_groups":steps,
             "native_groups_passed":[s["group"] for s in steps if s["passed"]],
             "native_groups_failed":[s["group"] for s in steps if not s["passed"]],
             "surface_energy":energy_result,
             "original_solver_reexecuted":False,
-            "mesh_changed":False,
+            "original_CFD_mesh_changed":False,
+            "new_copy_cellZone_metadata_added":zone_meta["added_to_copy_only"],
+            "new_copy_mesh_geometry_connectivity_changed":False,
             "original_C14_physics_or_controlDict_changed":False,
             "other_A_old_workcopy_B_FS_modified":False,
             "in_run_ddt_fields_recovered":False,
@@ -528,6 +610,7 @@ def main() -> int:
             "new_copy":str(out),"solver_rerun":False,
             "groups_passed":final["native_groups_passed"],
             "groups_failed":final["native_groups_failed"],
+            "original_C14_metal_cellZone":zone_meta,
             "failed_group_last_24_lines":{
                 s["group"]:s["log_last_24_lines"] for s in steps if not s["passed"]},
             "native_energy_power":energy_result,
