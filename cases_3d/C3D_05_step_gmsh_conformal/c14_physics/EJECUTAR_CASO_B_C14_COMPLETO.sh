@@ -42,7 +42,7 @@ if [[ "$POST_ONLY" == false ]]; then
   [[ -f "$TOP" ]] || { echo "Falta topSurfaceFlow C14 original." >&2; exit 2; }
 fi
 
-if [[ "$WM_PROJECT_VERSION" != "14" ]]; then
+if [[ "$(printenv WM_PROJECT_VERSION || true)" != "14" ]]; then
   if [[ ! -f /opt/openfoam14/etc/bashrc ]]; then
     echo "Activa OpenFOAM Foundation 14 antes de ejecutar." >&2
     exit 2
@@ -51,7 +51,7 @@ if [[ "$WM_PROJECT_VERSION" != "14" ]]; then
   source /opt/openfoam14/etc/bashrc
   set -u
 fi
-[[ "$WM_PROJECT_VERSION" == "14" ]] || {
+[[ "$(printenv WM_PROJECT_VERSION || true)" == "14" ]] || {
   echo "Es obligatorio OpenFOAM Foundation14." >&2; exit 2; }
 for tool in foamMultiRun foamPostProcess foamLog; do
   command -v "$tool" >/dev/null || {
