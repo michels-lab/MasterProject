@@ -29,8 +29,8 @@
     "POTENTIAL_UNLOGGED_CHANGES": 2
   },
   "finding_total": 9,
-  "inventory_fingerprint": "98b1b062be18b3c2b7981a48e12cfc5d6bc39b046870db3922acc237aab1926f",
-  "evidence_fingerprint": "d3cddfc25a97fe3ccadd8201eab7b6b79144327cfd408c771921e4c75acc6b65",
+  "inventory_fingerprint": "34a826d0862128bb52e7d6b560eddc0253de40ab82f5234631f3a8e0e5bf8ef7",
+  "evidence_fingerprint": "469cdfa6518c883ba4f6de1a1a05f059f39dcb07046fad45162dbbf97e79d819",
   "files": [
     {
       "path": ".github/agents/openfoam-solidification.agent.md",
@@ -272666,7 +272666,7 @@
       "role": "config",
       "purpose": "machine-readable configuration",
       "certainty": "rule",
-      "blob": "b42479421dff949c6a70a420f0248866afc8b349"
+      "blob": "7be807a9e0607fc414e3f2b323aff58bd9dbbb5b"
     },
     {
       "path": "docs/REGLA_INSTRUCCIONES_UNIFICADAS_ES.md",
@@ -273674,11 +273674,11 @@
       "state": "REVIEW_REQUIRED"
     },
     {
-      "id": "9bed5bfd9ee2bf3c",
+      "id": "c65399daef83bd69",
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_ES.md",
-      "observation": "10 implementation/config paths changed since this log's last commit; examples: .github/workflows/c3d04-a-c14-native-fluid-solid.yml, .github/workflows/c3d04-a-c14-postprocessing-parity.yml, .github/workflows/c3d05-b-c14-native-fluid-solid-q.yml, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/probe_c14_native_f14_single_vs_multi_time.py, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/tests/test_c14_f14_single_vs_multi_time_probe.py, cases_3d/C3D_05_step_gmsh_conformal/c14_physics/analyze_existing_case_b_c14_native_flux.py",
+      "observation": "11 implementation/config paths changed since this log's last commit; examples: .github/workflows/c3d04-a-c14-native-fluid-solid.yml, .github/workflows/c3d04-a-c14-postprocessing-parity.yml, .github/workflows/c3d05-b-c14-native-fluid-solid-q.yml, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/probe_c14_native_f14_single_vs_multi_time.py, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/tests/test_c14_f14_single_vs_multi_time_probe.py, cases_3d/C3D_05_step_gmsh_conformal/c14_physics/analyze_existing_case_b_c14_native_flux.py",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     }
