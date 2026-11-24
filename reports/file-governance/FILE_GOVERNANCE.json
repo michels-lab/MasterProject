@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "audit_kind": "deterministic_full_tracked_tree",
-  "tracked_files_total": 42856,
-  "classified_files_total": 42851,
+  "tracked_files_total": 42857,
+  "classified_files_total": 42852,
   "docs_content_inspected": 223,
   "large_docs_skipped": 1,
   "excluded_reports": 5,
@@ -19,17 +19,18 @@
     "simulation_input": 2683,
     "simulation_log": 3264,
     "simulation_output": 36203,
-    "source": 160,
+    "source": 161,
     "test": 74,
     "web_ui": 1,
     "workflow": 33
   },
   "finding_counts": {
-    "BROKEN_RELATIVE_LINK": 7
+    "BROKEN_RELATIVE_LINK": 7,
+    "POTENTIAL_UNLOGGED_CHANGES": 2
   },
-  "finding_total": 7,
-  "inventory_fingerprint": "7f294ba6edf1c1df1db2d31b74fd8cde962a3d754bb334c9f5add1dedf08636d",
-  "evidence_fingerprint": "a38cca05722cc62f2a19d8787a386e132771345cc8472199f5e39f915b2e8a45",
+  "finding_total": 9,
+  "inventory_fingerprint": "1d4906e3e86575ef76b6bcfebb2d0a3a664f383f491212cb19398cb53c93fd0c",
+  "evidence_fingerprint": "66ca2d56a847b99b83c6b7e3a99a13c23a9d632382872c3ab7b486cceaaecdb5",
   "files": [
     {
       "path": ".github/agents/openfoam-solidification.agent.md",
@@ -744,6 +745,13 @@
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
       "blob": "636f41b471e29c5d10f2f77c5df3b71755e646ee"
+    },
+    {
+      "path": "analysis_tools/analyze_c3d05_b_corrected_profiles.py",
+      "role": "source",
+      "purpose": "code/test implementation",
+      "certainty": "rule",
+      "blob": "7a194dc4de7c24296796b16cfaedcc362f7eb2fc"
     },
     {
       "path": "analysis_tools/audit_postprocessing_config.py",
@@ -300051,6 +300059,24 @@
       "path": "docs/granada/C3D05_T0_README_HISTORICAL_BEFORE_SINGLE_FLOW_20261120.md",
       "observation": "Missing: outside-repo",
       "recommendation": "Fix link or restore target",
+      "state": "REVIEW_REQUIRED"
+    },
+    {
+      "id": "bb77827e76987166",
+      "code": "POTENTIAL_UNLOGGED_CHANGES",
+      "severity": "review",
+      "path": "PROJECT_AUDIT_LOG_EN.md",
+      "observation": "1 implementation/config paths changed since this log's last commit; examples: analysis_tools/analyze_c3d05_b_corrected_profiles.py",
+      "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
+      "state": "REVIEW_REQUIRED"
+    },
+    {
+      "id": "9bc37ab2d3c8745e",
+      "code": "POTENTIAL_UNLOGGED_CHANGES",
+      "severity": "review",
+      "path": "PROJECT_AUDIT_LOG_ES.md",
+      "observation": "1 implementation/config paths changed since this log's last commit; examples: analysis_tools/analyze_c3d05_b_corrected_profiles.py",
+      "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     }
   ],
