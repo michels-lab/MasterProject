@@ -94,7 +94,7 @@ class C14OriginalMetalStorageInventory(unittest.TestCase):
     def test_old_phase_and_CFD_integrity_required_not_optional(self):
         source=CODE.read_text(encoding="utf-8")
         for phrase in ("source_native_CFD_report_SHA256","source_native_CFD_log_SHA256",
-                       "result_CSV_sha256","source_original_postrun_CSV_SHA256",
+                       "result_CSV_SHA256","source_original_postrun_CSV_SHA256",
                        "weighted alpha from native geometry disagrees",
                        "original archived native postrun SHA changed"):
             if phrase=="source_native_CFD_report_SHA256":
