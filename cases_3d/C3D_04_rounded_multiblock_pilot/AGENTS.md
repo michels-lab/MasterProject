@@ -1,3 +1,5 @@
+## 24-11-2026 C3D04-A _03 F14 cellZones STILL MISSING AT RUNTIME — do not create _04 blindly
+
 ## 23-11-2026 Caso A native offline F14: missing metal cellZone caused false success
 
 Real WSL _02: six exit0 reports but core/energy/flow/momentum logs contain FOAM FATAL IO ERROR Cannot find cellZone metal, Available cellZones: 0(). The new runner scans complete logs (FATAL overrides returncode0). It verifies original 8960 metal cell count plus geometry hashes before creating full all-metal zone ONLY in explicit fresh _03, preserves prior _01/_02 and entire original C14 CFD; B/FS untouched. Audits primitive profiles 80 finite points and native 100/101 snapshot face-power timings, no global conservation or QuickCup claim. [Protocol](../../docs/C3D04_A_STAGE07_NATIVE_METAL_CELLZONE_RECOVERY_20261123_ES.md). Stage 7/10, 6/10 milestones 60%.

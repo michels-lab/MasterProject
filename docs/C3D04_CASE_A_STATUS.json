@@ -569,5 +569,72 @@
       "real_C3D04_A_WSL_8960_cell_recovery_executed": false,
       "milestones_incremented": false
     }
+  },
+  "stage07_solver_backed_occupied_copy_03": {
+    "date": "2026-11-24",
+    "source": "Investigator-provided WSL stdout from run_c14_stage07_solver_backed_recovery.py --out _03",
+    "status": "EXISTING_COMPLETE_NATIVE_POSTPROCESS_REPORT_REUSED_NO_NEW_RUN",
+    "read_only_inspection": true,
+    "source_CFD_modified_by_inspection": false,
+    "native_CFD_rerun": false,
+    "copy_native_log_hashes_verified": true,
+    "native_semantic_passed_groups": [
+      "phase",
+      "profiles"
+    ],
+    "native_semantic_failed_groups": [
+      "core",
+      "energy",
+      "flow",
+      "momentum"
+    ],
+    "each_failed_foam_fatal_occurrence_count": 100,
+    "exact_fatal": "FOAM FATAL IO ERROR: Cannot find cellZone metal; Available cellZones: 0()",
+    "original_report_semantically_rejected": false,
+    "why_original_report_semantically_rejected_false": "This _03 original report already recorded groups as FAILED after semantic log scanning; no false positive claim in this report.",
+    "end_state_native_mean_alpha1_at_10s": 0.897245,
+    "native_profile_80_point_coverage_at_10s": {
+      "horizontalProfiles/line_y10mm": {
+        "status": "PASS",
+        "saved_data_points": 80
+      },
+      "horizontalProfiles/line_y20mm": {
+        "status": "PASS",
+        "saved_data_points": 80
+      },
+      "horizontalProfiles/line_y30mm": {
+        "status": "PASS",
+        "saved_data_points": 80
+      },
+      "verticalProfiles/line_x20mm": {
+        "status": "INCOMPLETE",
+        "saved_data_points": 27
+      }
+    },
+    "native_face_power_rows": {
+      "metalTopEnergyPower": {
+        "rows": 1,
+        "first_time": "0",
+        "last_time": "0"
+      },
+      "metalMoldEnergyPower": {
+        "rows": 1,
+        "first_time": "0",
+        "last_time": "0"
+      },
+      "metalBoundaryEnergyPower": {
+        "rows": 1,
+        "first_time": "0",
+        "last_time": "0"
+      }
+    },
+    "native_metal_energy_closure_verified": false,
+    "confirmed_metal_zone_written_to_constant_mesh": false,
+    "specific_foam_loaded_mesh_instance_verified": false,
+    "source_active_full_zone_file_in_original_cfd_verified": false,
+    "new_next_step": "READ_ONLY inspect original-vs-_03 constant metal cellZones and time-local polyMesh metadata; do not start another bulk copy before narrowing why F14 registry shows 0 zones",
+    "new_tool": "cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/audit_c14_stage07_active_cellzone.py",
+    "stage07_complete": false,
+    "milestone_progress_unchanged": "6/10 = 60%"
   }
 }

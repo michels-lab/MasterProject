@@ -619,11 +619,27 @@ def inspect_occupied_copy(case: Path, copy: Path,
         x["original_report_passed"] and not x["semantically_passed"]
         for x in semantic.values()
     )
+    profile_check=primitive_profile_coverage(copy)
+    valid_profiles=[k for k,v in profile_check.items() if v.get("status")=="PASS"]
+    profile_coverage_complete=(len(valid_profiles)==len(profile_check)==4)
+    power_coverage=native_surface_table_coverage(copy)
+    power_series_count=[v.get("numeric_data_row_count",0)
+                        for v in power_coverage.values()]
+    power_series_complete=(len(power_series_count)==3 and
+                           all(count in (100,101) for count in power_series_count)
+                           and len(set(power_series_count))==1)
     result.update({
-        "read_only_existing_native_surface_table_coverage":
-            native_surface_table_coverage(copy),
-        "read_only_existing_primitive_profile_coverage":
-            primitive_profile_coverage(copy),
+        "read_only_existing_native_surface_table_coverage":power_coverage,
+        "read_only_existing_primitive_profile_coverage":profile_check,
+        "primitive_80point_profiles_valid_count":len(valid_profiles),
+        "primitive_80point_profiles_requested_count":len(profile_check),
+        "primitive_80point_profiles_complete":profile_coverage_complete,
+        "energy_native_three_face_power_series_100_or_101_rows_present":
+            power_series_complete,
+        "stage07_native_scientific_data_complete":(
+            profile_coverage_complete and power_series_complete and
+            all(semantic[g]["semantically_passed"] for g in TASK_ORDER)),
+        "native_group_pass_only_certifies_no_FOAM_FATAL_not_field_completeness":True,
         "status": (
             "EXISTING_COMPLETE_REPORT_WITH_NATIVE_FATALS_PRESERVED"
             if false_positive else
