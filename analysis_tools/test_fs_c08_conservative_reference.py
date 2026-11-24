@@ -174,5 +174,57 @@ class ConservativeControlVolume(unittest.TestCase):
                 m.load_scenario(invalid)
 
 
+class LinearMushyEquilibriumReferenceTests(unittest.TestCase):
+    def test_equilibrium_fraction_mass_endpoints(self):
+        d=m.LinearMushyMassClosure(1423,1473,"SYNTHETIC_ONLY")
+        self.assertEqual(d.solid_mass_fraction(1500),0)
+        self.assertEqual(d.solid_mass_fraction(1473),0)
+        self.assertAlmostEqual(d.solid_mass_fraction(1448),0.5)
+        self.assertEqual(d.solid_mass_fraction(1423),1)
+        self.assertEqual(d.solid_mass_fraction(1200),1)
+
+    def test_advection_free_cooling_solves_gamma_and_latent_implicitly(self):
+        th=material()
+        c=m.Cell(1e-5,0.042,0.,1e-6,1500.)
+        d=m.LinearMushyMassClosure(1423,1473,"SYNTHETIC_ONLY")
+        result=m.solve_closed_cell_mushy_equilibrium(c,th,d,dt_s=1.,applied_heat_W=-3000.)
+        audit=result["audit"]
+        self.assertGreater(audit["implied_gamma_kg_m3_s"],0.)
+        self.assertAlmostEqual(audit["total_metal_mass_residual_kg"],0.,places=14)
+        self.assertAlmostEqual(audit["energy_residual_J"],0.,places=8)
+        self.assertGreater(result["final_cell"].m_solid_kg,0.)
+        self.assertGreater(result["final_cell"].T_K,1423.)
+        self.assertLess(result["final_cell"].T_K,1473.)
+        self.assertLess(audit["geometry_metal_volume_delta_m3"],0.)
+        self.assertFalse(audit["is_OpenFOAM_3D_CFD"])
+
+    def test_equilibrium_heating_remelts_solid_with_opposite_gamma(self):
+        th=material()
+        d=m.LinearMushyMassClosure(1423,1473,"SYNTHETIC_ONLY")
+        # Near-equilibrium initial mixture from a cooling case.
+        a=m.solve_closed_cell_mushy_equilibrium(
+            m.Cell(1e-5,0.042,0.,1e-6,1500.),th,d,
+            dt_s=1.,applied_heat_W=-3000.)
+        b=m.solve_closed_cell_mushy_equilibrium(
+            a["final_cell"],th,d,dt_s=1.,applied_heat_W=3000.)
+        self.assertLess(b["audit"]["implied_gamma_kg_m3_s"],0.)
+        self.assertAlmostEqual(b["audit"]["energy_residual_J"],0.,places=8)
+        self.assertAlmostEqual(b["final_cell"].m_solid_kg,0.,places=13)
+        self.assertAlmostEqual(b["final_cell"].T_K,1500.,places=7)
+
+    def test_phase_closure_rejects_missing_or_inverted_temperature_range(self):
+        with self.assertRaisesRegex(ValueError,"Solidus must"):
+            m.LinearMushyMassClosure(1500,1400,"SYNTHETIC")
+        with self.assertRaisesRegex(ValueError,"outside tabulated"):
+            m.solve_closed_cell_mushy_equilibrium(
+                cells()[0],material(),
+                m.LinearMushyMassClosure(1423,2100,"SYNTHETIC"),dt_s=.1)
+        with self.assertRaisesRegex(ValueError,"outside property"):
+            m.solve_closed_cell_mushy_equilibrium(
+                cells()[0],material(),
+                m.LinearMushyMassClosure(1423,1473,"SYNTHETIC"),
+                dt_s=1.,applied_heat_W=-1e9)
+
+
 if __name__=="__main__":
     unittest.main()
