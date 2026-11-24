@@ -234,7 +234,7 @@ int main(int argc, char *argv[])
 
     Info<< "FS_C08_NATIVE_SHADOW_END"
         << " synthetic_only=1"
-        << " nonzero_gamma=" << (gammaOwner!=0 || gammaNeighbour!=0)
+        << " nonzero_gamma=" << label(gammaOwner!=0 || gammaNeighbour!=0)
         << " native_fvmesh_owner_neighbour=1"
         << " three_phase_internal_flux=1"
         << " closed_domain_no_boundary_flux=1"
