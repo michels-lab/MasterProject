@@ -29,8 +29,8 @@
     "POTENTIAL_UNLOGGED_CHANGES": 2
   },
   "finding_total": 9,
-  "inventory_fingerprint": "aab09f66a47d931428772e3e4590f9b347546dbfef219cb81fc8b8053d058539",
-  "evidence_fingerprint": "064b90401e25f2e95b4513b9e3dd4d37f6645f6f6a16d77bc3edd780eb051f3f",
+  "inventory_fingerprint": "7a87d169b08166272457a45ef3c3a2d7853b31c43e83ff745944cec595aab130",
+  "evidence_fingerprint": "be86086f4894d988228743ef072e4836d62bd314bcb46eed398a038e37920020",
   "files": [
     {
       "path": ".github/agents/openfoam-solidification.agent.md",
@@ -1647,7 +1647,7 @@
       "role": "source",
       "purpose": "code/test implementation",
       "certainty": "rule",
-      "blob": "ba65bfa381873668ee6e66192279756cb6d6cb7b"
+      "blob": "fa1ecabf3fbb32cbf300bc699ac9fbac44d1f7be"
     },
     {
       "path": "cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/continue_c14_stage07_grouped_evidence.py",
@@ -273877,11 +273877,11 @@
       "state": "REVIEW_REQUIRED"
     },
     {
-      "id": "7fa58a96e57a02f2",
+      "id": "71a10b83c0aec280",
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_ES.md",
-      "observation": "2 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/publish_c14_a_foamlens_sweeps.py, docs/C3D04_CASE_A_STATUS.json",
+      "observation": "3 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/compare_c14_2d_3d_a.py, cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/publish_c14_a_foamlens_sweeps.py, docs/C3D04_CASE_A_STATUS.json",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     }
