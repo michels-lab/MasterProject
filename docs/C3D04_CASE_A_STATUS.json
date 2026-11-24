@@ -892,6 +892,15 @@
         "global_energy_conservation_verified": false,
         "quickcup_validated": false
       }
+    },
+    "next_bilateral_flux": {
+      "entrypoint": "cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/run_c14_stage07_bilateral_native_flux.py",
+      "commit": "fb966ba1dba4954dabb4d957f2b1a9e570f0253b",
+      "scope": "101 x 8 native patch heat-flux values, independent metal and mold q(), 2496 interface faces each, five mold exterior patches; compare metal q with prior grouped heatFlux and nominal inventories from 0.1 to 10s; isolated explicit harmonic kappa scheme only if needed.",
+      "native_compile_observed": false,
+      "WSL_execution_observed": false,
+      "regressions_added": 4,
+      "global_energy_conservation_verified": false
     }
   }
 }
