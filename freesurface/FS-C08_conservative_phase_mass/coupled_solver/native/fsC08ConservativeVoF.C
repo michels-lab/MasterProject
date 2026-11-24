@@ -34,6 +34,19 @@ solvers::fsC08ConservativeVoF::fsC08ConservativeVoF(fvMesh& mesh)
         zeroGradientFvPatchScalarField::typeName
     )
 {
+    // Refuse the inherited VoFSolidificationMelting energy source.
+    // This solver owns the single Gamma*L source: two latent terms
+    // would violate the first law, regardless of solver convergence.
+    if (fvModels().addsSupToField(mixture_.thermo1().he().name()))
+    {
+        FatalErrorInFunction
+            << "FS-C08 refuses any inherited metal enthalpy fvModel. "
+            << "Remove old VoFSolidificationMelting (Gamma*L already "
+            << "belongs to fsC08ThermophysicalPredictor). "
+            << "Do not double-count latent heat."
+            << exit(FatalError);
+    }
+
     reconcileMixtureDensity();
     rhoMetalEffective_.oldTime();
     Info<< "FS_C08_COUPLED_SOLVER_MODULE_INSTALLED "
