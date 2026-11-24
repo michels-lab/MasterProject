@@ -397,7 +397,7 @@
     "case_b_c14_native_C14_fluid_solid_q_native_CI_workflow_committed": true,
     "case_b_c14_native_C14_fluid_solid_q_native_CI_workflow": ".github/workflows/c3d05-b-c14-native-fluid-solid-q.yml",
     "case_b_c14_native_C14_fluid_solid_q_native_CI_compile_pass_confirmed": false,
-    "case_b_c14_native_C14_fluid_solid_q_WSL_preflight_pass_confirmed": false,
+    "case_b_c14_native_C14_fluid_solid_q_WSL_preflight_pass_confirmed": true,
     "case_b_c14_native_C14_fluid_solid_q_WSL_compile_pass_confirmed": false,
     "case_b_c14_native_C14_fluid_solid_q_WSL_extractor_executed": false,
     "case_b_c14_native_C14_fluid_solid_q_WSL_q_measured": false,
@@ -420,7 +420,17 @@
     "case_b_c14_native_C14_fluid_solid_q_WSL_qa_first_attempt_failure_kind": "FALSE_POSITIVE_STATIC_STRING_SCAN_SAFETY_GUARD",
     "case_b_c14_native_C14_fluid_solid_q_WSL_qa_false_positive_test_source_fixed": true,
     "case_b_c14_native_C14_fluid_solid_q_WSL_qa_false_positive_test_source_fix_commit": "c706a48487b35f97367ebe7f4078b9d6e448661e",
-    "case_b_c14_native_C14_fluid_solid_q_WSL_qa_after_fix_observed_pass": false
+    "case_b_c14_native_C14_fluid_solid_q_WSL_qa_after_fix_observed_pass": true,
+    "case_b_c14_native_C14_fluid_solid_q_WSL_qa_passed": 8,
+    "case_b_c14_native_C14_fluid_solid_q_WSL_qa_failed": 0,
+    "case_b_c14_native_C14_fluid_solid_q_WSL_first_compilation_attempt_observed": true,
+    "case_b_c14_native_C14_fluid_solid_q_WSL_first_compilation_attempt_success": false,
+    "case_b_c14_native_C14_fluid_solid_q_WSL_first_compilation_attempt_blocker": "FATAL_NO_HEADER_linearInterpolate.H",
+    "case_b_c14_native_C14_fluid_solid_q_WSL_first_compilation_attempt_path": "/home/michel/OpenFOAM/.C3D05_B_C14_NATIVE_FLUID_SOLID_PATCH_Q_01.ATTEMPT_wktw8k7j",
+    "case_b_c14_native_C14_fluid_solid_q_WSL_first_compilation_attempt_log": "/home/michel/OpenFOAM/.C3D05_B_C14_NATIVE_FLUID_SOLID_PATCH_Q_01.ATTEMPT_wktw8k7j/log.wmake.C3D05_B_C14_NATIVE_FLUX",
+    "case_b_c14_native_C14_fluid_solid_q_WSL_C14_header_fix_committed": true,
+    "case_b_c14_native_C14_fluid_solid_q_WSL_C14_header_fix_commit": "8fc1648013acaa8953db3cef7dde66cbc0e6ded3",
+    "case_b_c14_native_C14_fluid_solid_q_WSL_C14_header_regression_fix_commit": "4ca63aaf6ee94e6246c1ade0e5be14c487955771"
   },
   "other_cases": [
     {
@@ -460,7 +470,7 @@
       "evidence": "docs/granada/C3D05_B_C14_WSL_EJECUCION_REAL_EN_CURSO_20261123_ES.md"
     }
   ],
-  "blocker": "User WSL Case B original C14 native q extractor: git pull updated repo; 7/8 synthetic unit tests PASS, one FAILED because test searched string 'foamMultiRun(' in whole runner source but found safety guard require('foamMultiRun(' not in cpp). A FALSE POSITIVE: pipeline && stopped BEFORE preflight, wmake, native C14 q. FIX committed: AST calls audit explicitly wmake + isolated extractor; not yet rerun WSL. All original 10s CFD, 101 snapshots, native weighted alpha and metal+mold model reference thermal inventories preserved. q and energy closure still unobserved/unvalidated; G3-G7 remain open, stage3/7 2/7.",
-  "next_integrated_delivery": "User must pull source fix then rerun ONLY C3D05-B native flux eight tests, preflight and isolated Foundation14 wmake q extraction (NO foamMultiRun): git pull --ff-only && python3 -B -m unittest discover -s cases_3d/C3D_05_step_gmsh_conformal/c14_physics/tests -p 'test_existing_case_b_c14_native_flux.py' -v && python3 -B cases_3d/C3D_05_step_gmsh_conformal/c14_physics/run_existing_case_b_c14_native_flux.py --preflight && bash -lc 'source /opt/openfoam14/etc/bashrc && python3 -B cases_3d/C3D_05_step_gmsh_conformal/c14_physics/run_existing_case_b_c14_native_flux.py --extract'. Treat any new wmake errors as runtime compile evidence; never claim q measured until actual outputs.",
+  "blocker": "Real WSL Case B 10s C14 CFD & 101 native postrun, volume-weighted solidification, metal/mold C14 reference inventories complete. NEW true fluid+solid q extractor: 8/8 synthetic tests PASSED and source/mesh/10s SHA preflight PASSED on user WSL. FIRST wmake failed BEFORE native q due to missing header linearInterpolate.H (real compiler fatal). Source FIX committed official surfaceInterpolate.H preserving native linearInterpolate(rho*U), regression added; corrected CPP not yet WSL compiled/executed, q unknown. Separate failed ATTEMPT log preserved, real CFD untouched. Need user git pull rerun q isolated build; source-specific flux/latent fvModel/advective flux and energy closure still open. Gates 2/7 remains.",
+  "next_integrated_delivery": "Re-pull after source update: 8 native-q tests (regression checks Foundation14 surfaceInterpolate.H), strictly read-only preflight, isolated wmake of true fluid+solid C14 q exporter and 101x4 original patch output. Original StageReport and log SHA confirmed in user WSL. Keep old ATTEMPT_wktw8k7j intact. If subsequent compile errors, preserve log and repair actual F14 API; do NOT rerun CFD or declare flux until binary completes and CSV auditor passes.",
   "science": "CASE_B_NATIVE_C14_10S_CFD_AND_REFERENCE_METAL_MOLD_ENERGY_WSL_DONE_FLUID_SOLID_TRUE_F14_Q_CPP_RUNNER_CODE_STAGED_NATIVE_WSL_COMPILE_PENDING_NO_PHYSICAL_CLOSURE"
 }
