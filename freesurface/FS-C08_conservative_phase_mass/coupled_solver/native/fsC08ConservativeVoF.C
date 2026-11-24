@@ -34,6 +34,16 @@ solvers::fsC08ConservativeVoF::fsC08ConservativeVoF(fvMesh& mesh)
         ),
         mesh,dimensionedScalar(dimDensity,0),
         zeroGradientFvPatchScalarField::typeName
+    ),
+    phaseInternalEnergy_
+    (
+        IOobject
+        (
+            "internalEnergy.fsC08",mesh.time().name(),mesh,
+            IOobject::NO_READ,IOobject::AUTO_WRITE
+        ),
+        mesh,dimensionedScalar(dimEnergy/dimVolume,0),
+        zeroGradientFvPatchScalarField::typeName
     )
 {
     // The density curves rhoLiquid(T), rhoSolid(T) have no pressure
@@ -52,21 +62,29 @@ solvers::fsC08ConservativeVoF::fsC08ConservativeVoF(fvMesh& mesh)
             << exit(FatalError);
     }
 
-    // Refuse the inherited VoFSolidificationMelting energy source.
-    // This solver owns the single Gamma*L source: two latent terms
-    // would violate the first law, regardless of solver convergence.
-    if (fvModels().addsSupToField(mixture_.thermo1().he().name()))
+    // Phase energies now have exactly ONE latent offset in u_l(T).
+    // The old VoFSolidificationMelting source L*ddt(rho,alphaSolid)
+    // would double-count it. The stand-alone total-energy equation
+    // does NOT incorporate arbitrary legacy fluid fvModel heat sources:
+    // reject them instead of silently violating the first law.
+    if
+    (
+        fvModels().addsSupToField(mixture_.thermo1().he().name())
+     || fvModels().addsSupToField(mixture_.thermo2().he().name())
+    )
     {
         FatalErrorInFunction
-            << "FS-C08 refuses any inherited metal enthalpy fvModel. "
-            << "Remove old VoFSolidificationMelting (Gamma*L already "
-            << "belongs to fsC08ThermophysicalPredictor). "
-            << "Do not double-count latent heat."
+            << "FS-C08 rejects inherited fvModel fluid energy sources. "
+            << "Disable legacy VoFSolidificationMelting and supply heat "
+            << "via the native conjugate conduction term. Latent heat "
+            << "is already in u_liquid(Tref)-u_solid(Tref)."
             << exit(FatalError);
     }
 
     reconcileMixtureDensity();
     rhoMetalEffective_.oldTime();
+    updatePhaseInternalEnergy();
+    phaseInternalEnergy_.oldTime();
     Info<< "FS_C08_COUPLED_SOLVER_MODULE_INSTALLED "
         << "materialId=" << phaseMass_->materialId()
         << " source=" << phaseMass_->propertySource()
@@ -100,6 +118,42 @@ void solvers::fsC08ConservativeVoF::reconcileMixtureDensity()
       + alpha2*mixture_.rho2();
     mixtureDensity.correctBoundaryConditions();
 }
+
+void solvers::fsC08ConservativeVoF::updatePhaseInternalEnergy()
+{
+    // Post-processing field in J/m3, carried forward across timesteps.
+    // Uses the EXACT same thermodynamic reference as the nonlinear
+    // energy PDE. Gas internal energy comes from native compressible EOS.
+    const auto& ml=phaseMass_->liquidMass().primitiveField();
+    const auto& ms=phaseMass_->solidMass().primitiveField();
+    const auto& T=mixture_.T().primitiveField();
+    const auto& rhoGas=mixture_.rho2().primitiveField();
+    const auto& alphaGas=alpha2.primitiveField();
+    const auto& uGas=mixture_.thermo2().he().primitiveField();
+    auto& energy=phaseInternalEnergy_.primitiveFieldRef();
+
+    forAll(energy,i)
+    {
+        scalar liquid=0,solid=0;
+        if (ml[i]>0 || ms[i]>0)
+        {
+            liquid=phaseMass_->liquidInternalEnergy(T[i]);
+            solid=phaseMass_->solidInternalEnergy(T[i]);
+        }
+        energy[i]=
+            ml[i]*liquid
+          + ms[i]*solid
+          + alphaGas[i]*rhoGas[i]*uGas[i];
+        if (!std::isfinite(energy[i]))
+        {
+            FatalErrorInFunction
+                << "FS-C08 nonfinite conserved internal-energy inventory "
+                << "in cell " << i << exit(FatalError);
+        }
+    }
+    phaseInternalEnergy_.correctBoundaryConditions();
+}
+
 
 void solvers::fsC08ConservativeVoF::prePredictor()
 {
@@ -149,6 +203,8 @@ void solvers::fsC08ConservativeVoF::prePredictor()
 void solvers::fsC08ConservativeVoF::postSolve()
 {
     compressibleVoF::postSolve();
+    // Update after gas pressure/EOS correction to store full phase energy.
+    updatePhaseInternalEnergy();
     // Runtime budget from REAL CFD state, all fluid cells and all
     // fluid boundary patches. Gamma cancels in total metal mass.
     // This is a physical conservation metric, NOT a synthetic test.
@@ -162,17 +218,24 @@ void solvers::fsC08ConservativeVoF::postSolve()
     const auto& rGas0=mixture_.rho2().oldTime().primitiveField();
     const auto& aGas0=alpha2.oldTime().primitiveField();
     scalar M0=0, M=0, Mgas=0, Mgas0=0;
+    scalar E0=0,E=0;
+    const auto& u=phaseInternalEnergy_.primitiveField();
+    const auto& u0=phaseInternalEnergy_.oldTime().primitiveField();
     forAll(V,i)
     {
         M0+=V[i]*(l0[i]+s0[i]);
         M+=V[i]*(l[i]+s[i]);
         Mgas+=V[i]*aGas[i]*rGas[i];
         Mgas0+=V[i]*aGas0[i]*rGas0[i];
+        E+=V[i]*u[i];
+        E0+=V[i]*u0[i];
     }
     reduce(M0,sumOp<scalar>());
     reduce(M,sumOp<scalar>());
     reduce(Mgas,sumOp<scalar>());
     reduce(Mgas0,sumOp<scalar>());
+    reduce(E0,sumOp<scalar>());
+    reduce(E,sumOp<scalar>());
 
     scalar boundaryMassRate=0;
     const auto& patches=phaseMass_->liquidMassFlux().boundaryField();
@@ -205,6 +268,10 @@ void solvers::fsC08ConservativeVoF::postSolve()
         << " time_s=" << runTime.value()
         << " liquidSolidMetalMass_kg=" << M
         << " previousMetalMass_kg=" << M0
+        << " phaseResolvedInternalEnergy_J=" << E
+        << " previousInternalEnergy_J=" << E0
+        << " deltaInternalEnergy_J=" << E-E0
+        << " energyBudgetPressureAndCHTNotYetClosed=1"
         << " nativeGasInventory_kg=" << Mgas
         << " previousGasInventory_kg=" << Mgas0
         << " gasBoundaryOut_kg_s=" << gasBoundaryOut
