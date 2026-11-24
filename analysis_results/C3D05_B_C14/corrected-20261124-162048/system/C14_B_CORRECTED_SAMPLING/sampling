@@ -1,0 +1,199 @@
+FoamFile
+{
+    version 2.0;
+    format ascii;
+    class dictionary;
+    object sampling;
+}
+
+temperatureProbeB3D
+{
+ type probes;
+ libs ("libfieldFunctionObjects.so");
+ region metal;
+ fields (U T p_rgh phaseChangeSource:alpha1 vorticity flowType gradT magGradT);
+ probeLocations ((0.0259 -0.02 0.0259));
+ executeControl timeStep;
+ executeInterval 1;
+ writeControl timeStep;
+ writeInterval 1;
+ writeToFile true;
+}
+
+horizontalProfilesB3D
+{
+ type sets;
+ libs ("libsampling.so");
+ region metal;
+ writeControl writeTime;
+ interpolationScheme cellPoint;
+ setFormat raw;
+ fields (U T p_rgh phaseChangeSource:alpha1 vorticity flowType gradT magGradT);
+ sets
+ {
+  line_y10mm
+  {
+   type lineUniform;
+   axis x;
+   start (0.00615 -0.03 0.0259);
+   end (0.04565 -0.03 0.0259);
+   nPoints 80;
+  }
+  line_y20mm
+  {
+   type lineUniform;
+   axis x;
+   start (0.00615 -0.02 0.0259);
+   end (0.04565 -0.02 0.0259);
+   nPoints 80;
+  }
+  line_y30mm
+  {
+   type lineUniform;
+   axis x;
+   start (0.00615 -0.01 0.0259);
+   end (0.04565 -0.01 0.0259);
+   nPoints 80;
+  }
+ }
+}
+
+verticalProfilesB3D
+{
+ type sets;
+ libs ("libsampling.so");
+ region metal;
+ writeControl writeTime;
+ interpolationScheme cellPoint;
+ setFormat raw;
+ fields (U T p_rgh phaseChangeSource:alpha1 vorticity flowType gradT magGradT);
+ sets
+ {
+  line_x20mm
+  {
+   type lineUniform;
+   axis y;
+   start (0.0259 -0.03975 0.0259);
+   end (0.0259 -0.00025 0.0259);
+   nPoints 80;
+  }
+ }
+}
+
+additional3DProfilesB
+{
+ type sets;
+ libs ("libsampling.so");
+ region metal;
+ writeControl writeTime;
+ interpolationScheme cellPoint;
+ setFormat raw;
+ fields (U T p_rgh phaseChangeSource:alpha1 vorticity flowType gradT magGradT);
+ sets
+ {
+  height10_angle45
+  {
+   type lineUniform;
+   axis x;
+   start (0.0119346410716 -0.03 0.0119346410716);
+   end (0.0398653589284 -0.03 0.0398653589284);
+   nPoints 80;
+  }
+  height10_angle90
+  {
+   type lineUniform;
+   axis z;
+   start (0.0259 -0.03 0.00615);
+   end (0.0259 -0.03 0.04565);
+   nPoints 80;
+  }
+  height10_angle135
+  {
+   type lineUniform;
+   axis x;
+   start (0.0119346410716 -0.03 0.0398653589284);
+   end (0.0398653589284 -0.03 0.0119346410716);
+   nPoints 80;
+  }
+  height20_angle45
+  {
+   type lineUniform;
+   axis x;
+   start (0.0119346410716 -0.02 0.0119346410716);
+   end (0.0398653589284 -0.02 0.0398653589284);
+   nPoints 80;
+  }
+  height20_angle90
+  {
+   type lineUniform;
+   axis z;
+   start (0.0259 -0.02 0.00615);
+   end (0.0259 -0.02 0.04565);
+   nPoints 80;
+  }
+  height20_angle135
+  {
+   type lineUniform;
+   axis x;
+   start (0.0119346410716 -0.02 0.0398653589284);
+   end (0.0398653589284 -0.02 0.0119346410716);
+   nPoints 80;
+  }
+  height30_angle45
+  {
+   type lineUniform;
+   axis x;
+   start (0.0119346410716 -0.01 0.0119346410716);
+   end (0.0398653589284 -0.01 0.0398653589284);
+   nPoints 80;
+  }
+  height30_angle90
+  {
+   type lineUniform;
+   axis z;
+   start (0.0259 -0.01 0.00615);
+   end (0.0259 -0.01 0.04565);
+   nPoints 80;
+  }
+  height30_angle135
+  {
+   type lineUniform;
+   axis x;
+   start (0.0119346410716 -0.01 0.0398653589284);
+   end (0.0398653589284 -0.01 0.0119346410716);
+   nPoints 80;
+  }
+  vertical_xplus10
+  {
+   type lineUniform;
+   axis y;
+   start (0.0359 -0.03975 0.0259);
+   end (0.0359 -0.00025 0.0259);
+   nPoints 80;
+  }
+  vertical_xminus10
+  {
+   type lineUniform;
+   axis y;
+   start (0.0159 -0.03975 0.0259);
+   end (0.0159 -0.00025 0.0259);
+   nPoints 80;
+  }
+  vertical_zplus10
+  {
+   type lineUniform;
+   axis y;
+   start (0.0259 -0.03975 0.0359);
+   end (0.0259 -0.00025 0.0359);
+   nPoints 80;
+  }
+  vertical_zminus10
+  {
+   type lineUniform;
+   axis y;
+   start (0.0259 -0.03975 0.0159);
+   end (0.0259 -0.00025 0.0159);
+   nPoints 80;
+  }
+ }
+}

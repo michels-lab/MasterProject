@@ -1,0 +1,658 @@
+{
+  "status": "CORRECTED_SAVED_TIME_SAMPLING_VALID",
+  "source": "/home/michel/OpenFOAM/C3D05_B_C14_FLUID_SOLID_FULL_10S_01",
+  "workspace": "/home/michel/OpenFOAM/C3D05_B_C14_POSTPROCESAMIENTO_C14_101_TIEMPOS_01",
+  "source_publication_commit": "2257ac295981c081391a23b318ee9f766bd32145",
+  "probe_xyz_m": [
+    0.0259,
+    -0.02,
+    0.0259
+  ],
+  "profiles": {
+    "horizontalProfilesB3D": {
+      "line_y10mm": {
+        "start": [
+          0.006149999999999999,
+          -0.03,
+          0.0259
+        ],
+        "end": [
+          0.045649999999999996,
+          -0.03,
+          0.0259
+        ],
+        "axis": "x",
+        "requested_points": 80,
+        "height_mm": 10,
+        "angle_deg": 0
+      },
+      "line_y20mm": {
+        "start": [
+          0.006149999999999999,
+          -0.02,
+          0.0259
+        ],
+        "end": [
+          0.045649999999999996,
+          -0.02,
+          0.0259
+        ],
+        "axis": "x",
+        "requested_points": 80,
+        "height_mm": 20,
+        "angle_deg": 0
+      },
+      "line_y30mm": {
+        "start": [
+          0.006149999999999999,
+          -0.010000000000000002,
+          0.0259
+        ],
+        "end": [
+          0.045649999999999996,
+          -0.010000000000000002,
+          0.0259
+        ],
+        "axis": "x",
+        "requested_points": 80,
+        "height_mm": 30,
+        "angle_deg": 0
+      }
+    },
+    "verticalProfilesB3D": {
+      "line_x20mm": {
+        "start": [
+          0.0259,
+          -0.03975,
+          0.0259
+        ],
+        "end": [
+          0.0259,
+          -0.00025,
+          0.0259
+        ],
+        "axis": "y",
+        "requested_points": 80
+      }
+    },
+    "additional3DProfilesB": {
+      "height10_angle45": {
+        "start": [
+          0.011934641071565685,
+          -0.03,
+          0.011934641071565687
+        ],
+        "end": [
+          0.03986535892843431,
+          -0.03,
+          0.03986535892843431
+        ],
+        "axis": "x",
+        "requested_points": 80,
+        "height_mm": 10,
+        "angle_deg": 45
+      },
+      "height10_angle90": {
+        "start": [
+          0.0259,
+          -0.03,
+          0.006149999999999999
+        ],
+        "end": [
+          0.0259,
+          -0.03,
+          0.045649999999999996
+        ],
+        "axis": "z",
+        "requested_points": 80,
+        "height_mm": 10,
+        "angle_deg": 90
+      },
+      "height10_angle135": {
+        "start": [
+          0.011934641071565687,
+          -0.03,
+          0.03986535892843431
+        ],
+        "end": [
+          0.03986535892843431,
+          -0.03,
+          0.011934641071565685
+        ],
+        "axis": "x",
+        "requested_points": 80,
+        "height_mm": 10,
+        "angle_deg": 135
+      },
+      "height20_angle45": {
+        "start": [
+          0.011934641071565685,
+          -0.02,
+          0.011934641071565687
+        ],
+        "end": [
+          0.03986535892843431,
+          -0.02,
+          0.03986535892843431
+        ],
+        "axis": "x",
+        "requested_points": 80,
+        "height_mm": 20,
+        "angle_deg": 45
+      },
+      "height20_angle90": {
+        "start": [
+          0.0259,
+          -0.02,
+          0.006149999999999999
+        ],
+        "end": [
+          0.0259,
+          -0.02,
+          0.045649999999999996
+        ],
+        "axis": "z",
+        "requested_points": 80,
+        "height_mm": 20,
+        "angle_deg": 90
+      },
+      "height20_angle135": {
+        "start": [
+          0.011934641071565687,
+          -0.02,
+          0.03986535892843431
+        ],
+        "end": [
+          0.03986535892843431,
+          -0.02,
+          0.011934641071565685
+        ],
+        "axis": "x",
+        "requested_points": 80,
+        "height_mm": 20,
+        "angle_deg": 135
+      },
+      "height30_angle45": {
+        "start": [
+          0.011934641071565685,
+          -0.010000000000000002,
+          0.011934641071565687
+        ],
+        "end": [
+          0.03986535892843431,
+          -0.010000000000000002,
+          0.03986535892843431
+        ],
+        "axis": "x",
+        "requested_points": 80,
+        "height_mm": 30,
+        "angle_deg": 45
+      },
+      "height30_angle90": {
+        "start": [
+          0.0259,
+          -0.010000000000000002,
+          0.006149999999999999
+        ],
+        "end": [
+          0.0259,
+          -0.010000000000000002,
+          0.045649999999999996
+        ],
+        "axis": "z",
+        "requested_points": 80,
+        "height_mm": 30,
+        "angle_deg": 90
+      },
+      "height30_angle135": {
+        "start": [
+          0.011934641071565687,
+          -0.010000000000000002,
+          0.03986535892843431
+        ],
+        "end": [
+          0.03986535892843431,
+          -0.010000000000000002,
+          0.011934641071565685
+        ],
+        "axis": "x",
+        "requested_points": 80,
+        "height_mm": 30,
+        "angle_deg": 135
+      },
+      "vertical_xplus10": {
+        "start": [
+          0.0359,
+          -0.03975,
+          0.0259
+        ],
+        "end": [
+          0.0359,
+          -0.00025,
+          0.0259
+        ],
+        "axis": "y",
+        "requested_points": 80
+      },
+      "vertical_xminus10": {
+        "start": [
+          0.015899999999999997,
+          -0.03975,
+          0.0259
+        ],
+        "end": [
+          0.015899999999999997,
+          -0.00025,
+          0.0259
+        ],
+        "axis": "y",
+        "requested_points": 80
+      },
+      "vertical_zplus10": {
+        "start": [
+          0.0259,
+          -0.03975,
+          0.0359
+        ],
+        "end": [
+          0.0259,
+          -0.00025,
+          0.0359
+        ],
+        "axis": "y",
+        "requested_points": 80
+      },
+      "vertical_zminus10": {
+        "start": [
+          0.0259,
+          -0.03975,
+          0.015899999999999997
+        ],
+        "end": [
+          0.0259,
+          -0.00025,
+          0.015899999999999997
+        ],
+        "axis": "y",
+        "requested_points": 80
+      }
+    }
+  },
+  "original_solver_dt_s": 0.001,
+  "archived_dt_s": 0.1,
+  "solver_rerun": false,
+  "runtime_1ms_recovered": false,
+  "rho_at_t0_available": false,
+  "axis_note": "Global XYZ in m; diagonal X projection, not radial distance. Height is Y+0.04 m.",
+  "native_source_fields_only": true,
+  "foamLens_import_verified": false,
+  "stage": "3/7",
+  "hitos": "2/7 = 29%",
+  "coverage": {
+    "basic": {
+      "probes": {
+        "U": {
+          "samples": 101,
+          "first": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "last": [
+            10.0,
+            -0.000562983,
+            0.00253731,
+            -0.000178076
+          ]
+        },
+        "T": {
+          "samples": 101,
+          "first": [
+            0.0,
+            1500.0
+          ],
+          "last": [
+            10.0,
+            1467.76
+          ]
+        },
+        "p_rgh": {
+          "samples": 101,
+          "first": [
+            0.0,
+            100000.0
+          ],
+          "last": [
+            10.0,
+            100000.0
+          ]
+        },
+        "phaseChangeSource:alpha1": {
+          "samples": 101,
+          "first": [
+            0.0,
+            1.0
+          ],
+          "last": [
+            10.0,
+            0.979094
+          ]
+        },
+        "vorticity": {
+          "samples": 101,
+          "first": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "last": [
+            10.0,
+            0.560483,
+            -0.260043,
+            -0.516797
+          ]
+        },
+        "flowType": {
+          "samples": 101,
+          "first": [
+            0.0,
+            0.0
+          ],
+          "last": [
+            10.0,
+            0.0303094
+          ]
+        },
+        "gradT": {
+          "samples": 101,
+          "first": [
+            0.0,
+            2.84801e-10,
+            4.53392e-10,
+            -3.57432e-10
+          ],
+          "last": [
+            10.0,
+            422.308,
+            559.956,
+            397.941
+          ]
+        },
+        "magGradT": {
+          "samples": 101,
+          "first": [
+            0.0,
+            6.43765e-10
+          ],
+          "last": [
+            10.0,
+            806.382
+          ]
+        }
+      },
+      "profiles": {
+        "horizontalProfilesB3D/line_y10mm": {
+          "time_files": 101,
+          "min_points": 68,
+          "max_points": 68,
+          "partial_spatial_coverage": true
+        },
+        "horizontalProfilesB3D/line_y20mm": {
+          "time_files": 101,
+          "min_points": 70,
+          "max_points": 70,
+          "partial_spatial_coverage": true
+        },
+        "horizontalProfilesB3D/line_y30mm": {
+          "time_files": 101,
+          "min_points": 72,
+          "max_points": 72,
+          "partial_spatial_coverage": true
+        },
+        "verticalProfilesB3D/line_x20mm": {
+          "time_files": 101,
+          "min_points": 80,
+          "max_points": 80,
+          "partial_spatial_coverage": false
+        },
+        "additional3DProfilesB/height10_angle45": {
+          "time_files": 101,
+          "min_points": 80,
+          "max_points": 80,
+          "partial_spatial_coverage": false
+        },
+        "additional3DProfilesB/height10_angle90": {
+          "time_files": 101,
+          "min_points": 68,
+          "max_points": 68,
+          "partial_spatial_coverage": true
+        },
+        "additional3DProfilesB/height10_angle135": {
+          "time_files": 101,
+          "min_points": 80,
+          "max_points": 80,
+          "partial_spatial_coverage": false
+        },
+        "additional3DProfilesB/height20_angle45": {
+          "time_files": 101,
+          "min_points": 80,
+          "max_points": 80,
+          "partial_spatial_coverage": false
+        },
+        "additional3DProfilesB/height20_angle90": {
+          "time_files": 101,
+          "min_points": 70,
+          "max_points": 70,
+          "partial_spatial_coverage": true
+        },
+        "additional3DProfilesB/height20_angle135": {
+          "time_files": 101,
+          "min_points": 80,
+          "max_points": 80,
+          "partial_spatial_coverage": false
+        },
+        "additional3DProfilesB/height30_angle45": {
+          "time_files": 101,
+          "min_points": 80,
+          "max_points": 80,
+          "partial_spatial_coverage": false
+        },
+        "additional3DProfilesB/height30_angle90": {
+          "time_files": 101,
+          "min_points": 72,
+          "max_points": 72,
+          "partial_spatial_coverage": true
+        },
+        "additional3DProfilesB/height30_angle135": {
+          "time_files": 101,
+          "min_points": 80,
+          "max_points": 80,
+          "partial_spatial_coverage": false
+        },
+        "additional3DProfilesB/vertical_xplus10": {
+          "time_files": 101,
+          "min_points": 80,
+          "max_points": 80,
+          "partial_spatial_coverage": false
+        },
+        "additional3DProfilesB/vertical_xminus10": {
+          "time_files": 101,
+          "min_points": 80,
+          "max_points": 80,
+          "partial_spatial_coverage": false
+        },
+        "additional3DProfilesB/vertical_zplus10": {
+          "time_files": 101,
+          "min_points": 80,
+          "max_points": 80,
+          "partial_spatial_coverage": false
+        },
+        "additional3DProfilesB/vertical_zminus10": {
+          "time_files": 101,
+          "min_points": 80,
+          "max_points": 80,
+          "partial_spatial_coverage": false
+        }
+      }
+    },
+    "Density": {
+      "probes": {
+        "rho": {
+          "samples": 100,
+          "first": [
+            0.1,
+            6820.0
+          ],
+          "last": [
+            10.0,
+            6820.0
+          ]
+        },
+        "gradRho": {
+          "samples": 100,
+          "first": [
+            0.1,
+            1.08154e-09,
+            1.03972e-09,
+            3.01088e-10
+          ],
+          "last": [
+            10.0,
+            1.08154e-09,
+            1.03972e-09,
+            3.01088e-10
+          ]
+        },
+        "magGradRho": {
+          "samples": 100,
+          "first": [
+            0.1,
+            1.53016e-09
+          ],
+          "last": [
+            10.0,
+            1.53016e-09
+          ]
+        },
+        "CoCell": {
+          "samples": 100,
+          "first": [
+            0.1,
+            0.000293567
+          ],
+          "last": [
+            10.0,
+            0.00477049
+          ]
+        }
+      },
+      "profiles": {
+        "horizontalProfilesB3D/line_y10mm": {
+          "time_files": 100,
+          "min_points": 68,
+          "max_points": 68,
+          "partial_spatial_coverage": true
+        },
+        "horizontalProfilesB3D/line_y20mm": {
+          "time_files": 100,
+          "min_points": 70,
+          "max_points": 70,
+          "partial_spatial_coverage": true
+        },
+        "horizontalProfilesB3D/line_y30mm": {
+          "time_files": 100,
+          "min_points": 72,
+          "max_points": 72,
+          "partial_spatial_coverage": true
+        },
+        "verticalProfilesB3D/line_x20mm": {
+          "time_files": 100,
+          "min_points": 80,
+          "max_points": 80,
+          "partial_spatial_coverage": false
+        },
+        "additional3DProfilesB/height10_angle45": {
+          "time_files": 100,
+          "min_points": 80,
+          "max_points": 80,
+          "partial_spatial_coverage": false
+        },
+        "additional3DProfilesB/height10_angle90": {
+          "time_files": 100,
+          "min_points": 68,
+          "max_points": 68,
+          "partial_spatial_coverage": true
+        },
+        "additional3DProfilesB/height10_angle135": {
+          "time_files": 100,
+          "min_points": 80,
+          "max_points": 80,
+          "partial_spatial_coverage": false
+        },
+        "additional3DProfilesB/height20_angle45": {
+          "time_files": 100,
+          "min_points": 80,
+          "max_points": 80,
+          "partial_spatial_coverage": false
+        },
+        "additional3DProfilesB/height20_angle90": {
+          "time_files": 100,
+          "min_points": 70,
+          "max_points": 70,
+          "partial_spatial_coverage": true
+        },
+        "additional3DProfilesB/height20_angle135": {
+          "time_files": 100,
+          "min_points": 80,
+          "max_points": 80,
+          "partial_spatial_coverage": false
+        },
+        "additional3DProfilesB/height30_angle45": {
+          "time_files": 100,
+          "min_points": 80,
+          "max_points": 80,
+          "partial_spatial_coverage": false
+        },
+        "additional3DProfilesB/height30_angle90": {
+          "time_files": 100,
+          "min_points": 72,
+          "max_points": 72,
+          "partial_spatial_coverage": true
+        },
+        "additional3DProfilesB/height30_angle135": {
+          "time_files": 100,
+          "min_points": 80,
+          "max_points": 80,
+          "partial_spatial_coverage": false
+        },
+        "additional3DProfilesB/vertical_xplus10": {
+          "time_files": 100,
+          "min_points": 80,
+          "max_points": 80,
+          "partial_spatial_coverage": false
+        },
+        "additional3DProfilesB/vertical_xminus10": {
+          "time_files": 100,
+          "min_points": 80,
+          "max_points": 80,
+          "partial_spatial_coverage": false
+        },
+        "additional3DProfilesB/vertical_zplus10": {
+          "time_files": 100,
+          "min_points": 80,
+          "max_points": 80,
+          "partial_spatial_coverage": false
+        },
+        "additional3DProfilesB/vertical_zminus10": {
+          "time_files": 100,
+          "min_points": 80,
+          "max_points": 80,
+          "partial_spatial_coverage": false
+        }
+      }
+    }
+  },
+  "checked_original_evidence_unchanged": true
+}
