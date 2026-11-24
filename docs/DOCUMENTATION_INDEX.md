@@ -1,3 +1,5 @@
+- [**Caso A C3D04 — F14 en WSL _03 sigue fallando cellZone metal, auditoría read-only de instancia de malla y metadatos temporales (24-nov-2026)**](C3D04_A_STAGE07_03_ACTIVE_MESH_FORENSICS_20261124_ES.md) — 4x100 errores fatales, fase alpha1=0.897245, horizontal 80pt PASS, vertical 27pt incompleto, tablas energía 1 fila t0 cada una; etapa 7/10, 6/10=60% hitos.
+
 - [**Caso B — C14 10s real con 101 estados: `alpha1` evolucionó; primer estado `alpha1<0.999` 0.3s y última media 0.8424205633 (por celdas)**](granada/C3D05_B_C14_101_ESTADOS_ALPHA1_OBSERVADO_Y_TIMELINE_20261123_ES.md) — evidencia WSL de solidificación numérica, cronología derivada SHA de datos existentes en preparación, todavía NO válida físicamente ni calor latente/energía/QuickCup. Caso B 3/7, 2/7=29% hitos.
 - [**Caso A C3D04 — F14 real cellZone metal no encontrada y falsos PASS por exit0: recuperación solo en nueva copia _03, con 100/101 estados nativos**](C3D04_A_STAGE07_NATIVE_METAL_CELLZONE_RECOVERY_20261123_ES.md) — WSL 4 logs FOAM FATAL IO, CI nativa F14 reprodujo fallo y corrección en 27+27 celdas; etapa 7/10, 6/10 hitos.
 
