@@ -108,7 +108,7 @@
   "cpp_mass_phase_update_gamma_and_volume_closure": true,
   "cpp_pressure_velocity_energy_or_cht": false,
   "CI_cxx_compile_step_declared": true,
-  "last_work": "After FS-C08 native read-only bridge passed in researcher WSL, implemented a DIFFERENT native Foundation14 fvMesh owner/neighbour synthetic in-memory explicit one-step phase transport with nonzero equal/opposite Gamma, 3-phase mass face flux and energy/latent ledger. Local C++17 stand-alone FV network compiled and passed. OpenFOAM wmake of new native executable and associated Python/CI new tests NOT YET verified. Original FS-C07 fields remain untouched; no real 3D cast-iron shrinkage claim.",
+  "last_work": "Created complete separate Foundation14 fvMesh synthetic shadow step using actual cell volumes and owner/neighbour connectivity; code applies nonzero +/-Gamma, three nonzero internal phase mass fluxes, enthalpy/latent donor flux. Reuses locally compiled C++17 FV network PASS. Added independent verifier, safe one-command runner checking six original FS-C07 SHA256, 10 mock tests and CI. Standalone C++ network test genuinely compiled and ran locally; new OpenFOAM14 executable/wmake and new Python tests NOT verified in researcher WSL. Current source corrects false assumption that opposite local Gamma must have nonzero global sum.",
   "next_scientific_stage": "Researcher runs new safe wmake native shadow step and shares report. On native pass, replace prescribed single-face flux with CFD transport fluxes over all internal/boundary faces, use actual thermophysical phase fractions and Gamma(T), couple compressibleVoF pressure/energy/moving interface in a separate case; preserve original native C07.",
   "Wsl_tests_runner": "python3 -B -m unittest discover -s analysis_tools -p 'test_fs_c08_conservative_reference.py' -v",
   "Wsl_tests_summary": "Ran 18 tests in 0.072s; OK",
@@ -223,7 +223,7 @@
   "native_shadow_verifier": "analysis_tools/verify_fs_c08_native_shadow.py",
   "native_shadow_one_command_runner": "analysis_tools/run_fs_c08_native_shadow.py",
   "native_shadow_runner_verifier_tests": "analysis_tools/test_fs_c08_native_shadow.py",
-  "native_shadow_runner_verifier_test_count_declared": 9,
+  "native_shadow_runner_verifier_test_count_declared": 10,
   "native_shadow_gamma_kg_m3_s_nonzero_source_implemented": true,
   "native_shadow_gamma_liquid_and_solid_equal_opposite_mass_source": true,
   "native_shadow_openfoam14_native_fvmesh_owner_neighbour_used": true,
@@ -256,5 +256,6 @@
   "native_shadow_temps_constant_cp_synthetic_only": true,
   "native_shadow_gamma_source_local_owner_positive_neighbour_negative": true,
   "native_shadow_selected_face_all_three_mass_fluxes_nonzero": true,
-  "native_shadow_next_wsl_command": "cd ~/OpenFOAM/FS_C08_WORKTREE && git fetch origin research/fs-c08-conservative-phase-mass-20261123 && git switch --detach FETCH_HEAD && python3 -B analysis_tools/run_fs_c08_native_shadow.py --case ~/OpenFOAM/FS_C07_RUNS/FS_C07_THERMAL_20261123T183217Z_72da1bf4"
+  "native_shadow_next_wsl_command": "cd ~/OpenFOAM/FS_C08_WORKTREE && git fetch origin research/fs-c08-conservative-phase-mass-20261123 && git switch --detach FETCH_HEAD && python3 -B analysis_tools/run_fs_c08_native_shadow.py --case ~/OpenFOAM/FS_C07_RUNS/FS_C07_THERMAL_20261123T183217Z_72da1bf4",
+  "native_shadow_zero_net_gamma_with_nonzero_local_opposite_sign_allowed": true
 }
