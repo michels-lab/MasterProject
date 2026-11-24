@@ -107,9 +107,50 @@ PhaseMassTransport::PhaseMassTransport
           << "range and relaxation in (0,1]. Synthetic fixture refused."
           << exit(FatalError);
     }
+    // Never reinitialize a partially restored physical inventory.
+    // A single saved rhoAlpha field is not a meaningful restart.
+    const bool liquidSaved=
+        typeIOobject<volScalarField>
+        (IOobject("rhoAlpha.liquid",mesh.time().name(),mesh)).headerOk();
+    const bool solidSaved=
+        typeIOobject<volScalarField>
+        (IOobject("rhoAlpha.solid",mesh.time().name(),mesh)).headerOk();
+    if (liquidSaved != solidSaved)
+    {
+        FatalErrorInFunction
+            << "FS-C08 partial restart: rhoAlpha.liquid and rhoAlpha.solid "
+            << "must both exist or both be initialized from the actual "
+            << "initial metal VOF and sourced solid-mass-fraction law."
+            << exit(FatalError);
+    }
+
     checkAndUpdateProperties(T,metal);
     initializeIfRequired(metal,T);
     reconstructFractions();
+
+    // On restart, VOF and masses represent the SAME physical inventory.
+    // Do not silently rewrite an inconsistent saved VOF or clip mass.
+    if (massFieldsRestarted_)
+    {
+        const auto& a=metal.primitiveField();
+        const auto& fromMass=alphaMetalFromMass_.primitiveField();
+        forAll(a,i)
+        {
+            if
+            (
+                !std::isfinite(a[i])
+             || mag(a[i]-fromMass[i])>1e-6
+            )
+            {
+                FatalErrorInFunction
+                    << "FS-C08 restart volume mismatch cell=" << i
+                    << " alphaMetal=" << a[i]
+                    << " alphaFromConservedMass=" << fromMass[i]
+                    << " ; refusing inconsistent restart."
+                    << exit(FatalError);
+            }
+        }
+    }
 }
 
 void PhaseMassTransport::checkAndUpdateProperties
