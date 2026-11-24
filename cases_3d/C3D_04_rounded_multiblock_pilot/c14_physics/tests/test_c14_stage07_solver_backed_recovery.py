@@ -304,5 +304,83 @@ class ExistingNewCopyNonDestructiveInspectionTests(unittest.TestCase):
             sut.inspect_occupied_copy(self.case,alias,self.recovery,self.forensic)
 
 
+class RealWSLFatalAndFullMetalZoneRegression(unittest.TestCase):
+    """Disposable files reproduce the REAL C14 _02 F14 exit-zero fatal IO."""
+
+    def setUp(self):
+        t=tempfile.TemporaryDirectory()
+        self.addCleanup(t.cleanup)
+        self.root=Path(t.name)
+        self.copy=self.root/"NEW_COPY_NOT_ORIGINAL_CFD"
+        (self.copy/"system").mkdir(parents=True)
+
+    def test_native_zero_exit_with_foam_fatal_io_never_counted_pass(self):
+        dic=self.copy/"system/stage07Offline_core"
+        dic.write_text("FoamFile {}")
+        log=self.copy/"log.C14_3D_postprocess_solverBacked_core"
+        def fake_native(case,name,args):
+            log.write_text(
+                "Time = 10s\n"
+                "--> FOAM FATAL IO ERROR:\n"
+                "Cannot find cellZone metal\n"
+                "Available cellZones: 0()\n"
+                "End\n")
+            return {"name":name,"command_without_bootstrap":args,
+                    "exit_code":0,"passed":True,"log":log.name}
+        with mock.patch.object(sut.old,"run_native",side_effect=fake_native):
+            result=sut.native_group(self.copy,"core",dic)
+        self.assertEqual(result["exit_code"],0)
+        self.assertTrue(result["os_exit_code_zero"])
+        self.assertFalse(result["passed"])
+        self.assertTrue(result["foam_fatal_present"])
+        self.assertEqual(result["foam_fatal_occurrence_count"],1)
+        self.assertTrue(sut.fatal_openfoam_log(log)["foam_fatal_present"])
+
+    def test_full_metal_zone_materialized_only_in_separate_copy(self):
+        source=self.root/"C14_ORIGINAL_IMMUTABLE_CFD"
+        clone=self.copy
+        for region in (source,clone):
+            root=region/"constant/metal/polyMesh"
+            root.mkdir(parents=True)
+            for name in sut.stage.MESH:
+                (root/name).write_text("Native source mesh element "+name+"\n")
+        source_checksums={
+            x:sut.sha(source/"constant/metal/polyMesh"/x)
+            for x in sut.stage.MESH}
+        # Use real Foundation14 cellZones formatter + exhaustive audit, but
+        # replace only the mesh cell-count reader (not included in the fixture).
+        with mock.patch.object(sut.stage,"region_cells",
+                               return_value={"nCells":3}):
+            item=sut.verify_or_add_metal_zone_in_new_copy(source,clone)
+        self.assertTrue(item["added_to_copy_only"])
+        self.assertTrue(item["geometry_connectivity_unchanged"])
+        self.assertEqual(item["metal_cells"],3)
+        self.assertFalse((source/"constant/metal/polyMesh/cellZones").exists())
+        self.assertTrue(sut.stage.audit_existing_zone(
+            clone/"constant/metal/polyMesh/cellZones",3))
+        self.assertEqual(source_checksums,{
+            x:sut.sha(source/"constant/metal/polyMesh"/x)
+            for x in sut.stage.MESH})
+        with mock.patch.object(sut.stage,"region_cells",
+                               return_value={"nCells":3}):
+            with self.assertRaisesRegex(sut.Blocked,"unexpected zone"):
+                sut.verify_or_add_metal_zone_in_new_copy(source,clone)
+
+    def test_existing_metal_zone_is_exactly_cloned_not_rewritten(self):
+        source=self.root/"C14_ORIGINAL"
+        for folder in (source,self.copy):
+            root=folder/"constant/metal/polyMesh"
+            root.mkdir(parents=True)
+            for name in sut.stage.MESH:
+                (root/name).write_text("fixture mesh "+name+"\n")
+            (root/"cellZones").write_text(sut.stage.whole_region_zone(4))
+        saved=sut.sha(self.copy/"constant/metal/polyMesh/cellZones")
+        with mock.patch.object(sut.stage,"region_cells",
+                               return_value={"nCells":4}):
+            result=sut.verify_or_add_metal_zone_in_new_copy(source,self.copy)
+        self.assertFalse(result["added_to_copy_only"])
+        self.assertEqual(sut.sha(self.copy/"constant/metal/polyMesh/cellZones"),saved)
+
+
 if __name__=="__main__":
     unittest.main()
