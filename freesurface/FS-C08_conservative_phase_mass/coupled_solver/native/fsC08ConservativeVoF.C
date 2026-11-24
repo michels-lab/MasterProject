@@ -127,6 +127,12 @@ void solvers::fsC08ConservativeVoF::prePredictor()
     mixture_.correct();
     reconcileMixtureDensity();
 
+}
+
+// Audit AFTER the actual gas EOS, pressure corrector and energy solve.
+void solvers::fsC08ConservativeVoF::postSolve()
+{
+    compressibleVoF::postSolve();
     // Runtime budget from REAL CFD state, all fluid cells and all
     // fluid boundary patches. Gamma cancels in total metal mass.
     // This is a physical conservation metric, NOT a synthetic test.
@@ -137,16 +143,20 @@ void solvers::fsC08ConservativeVoF::prePredictor()
     const auto& s0=phaseMass_->solidMass().oldTime().primitiveField();
     const auto& rGas=mixture_.rho2().primitiveField();
     const auto& aGas=alpha2.primitiveField();
-    scalar M0=0, M=0, Mgas=0;
+    const auto& rGas0=mixture_.rho2().oldTime().primitiveField();
+    const auto& aGas0=alpha2.oldTime().primitiveField();
+    scalar M0=0, M=0, Mgas=0, Mgas0=0;
     forAll(V,i)
     {
         M0+=V[i]*(l0[i]+s0[i]);
         M+=V[i]*(l[i]+s[i]);
         Mgas+=V[i]*aGas[i]*rGas[i];
+        Mgas0+=V[i]*aGas0[i]*rGas0[i];
     }
     reduce(M0,sumOp<scalar>());
     reduce(M,sumOp<scalar>());
     reduce(Mgas,sumOp<scalar>());
+    reduce(Mgas0,sumOp<scalar>());
 
     scalar boundaryMassRate=0;
     const auto& patches=phaseMass_->liquidMassFlux().boundaryField();
@@ -159,15 +169,33 @@ void solvers::fsC08ConservativeVoF::prePredictor()
         }
     }
     reduce(boundaryMassRate,sumOp<scalar>());
+
+    // Native air flux is from two-phase mixture. Here it is audited
+    // after pressure correction, rather than being mistaken for a
+    // separately solved three-phase gas continuity equation.
+    scalar gasBoundaryOut=0;
+    const auto& gasPatches=alphaRhoPhi2.boundaryField();
+    forAll(gasPatches,patchi)
+    {
+        const auto& gasFlux=gasPatches[patchi];
+        forAll(gasFlux,facei) gasBoundaryOut+=gasFlux[facei];
+    }
+    reduce(gasBoundaryOut,sumOp<scalar>());
+
     const scalar dt=runTime.deltaTValue();
     const scalar metalResidual=M-M0+dt*boundaryMassRate;
+    const scalar gasContinuityDefect=Mgas-Mgas0+dt*gasBoundaryOut;
     Info<< "FS_C08_REAL_CFD_MASS_BUDGET"
         << " time_s=" << runTime.value()
         << " liquidSolidMetalMass_kg=" << M
         << " previousMetalMass_kg=" << M0
         << " nativeGasInventory_kg=" << Mgas
+        << " previousGasInventory_kg=" << Mgas0
+        << " gasBoundaryOut_kg_s=" << gasBoundaryOut
+        << " gasContinuityDefect_kg=" << gasContinuityDefect
         << " boundaryMetalOut_kg_s=" << boundaryMassRate
         << " metalMassResidual_kg=" << metalResidual
+        << " gasConservationNotYetCertified=1"
         << " phaseChangeVolumeSourceMean_s_1="
         << phaseMass_->phaseVolumeSource()
               .weightedAverage(mesh.V()).value()
