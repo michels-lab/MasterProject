@@ -354,7 +354,7 @@
   ],
   "coupled_solver_gamma_kinetic_option": "only kineticRelaxation mode additionally requires tauPhaseChangeT(T) in seconds",
   "coupled_solver_uses_solid_cv_not_cp": true,
-  "coupled_solver_rejects_cp_in_solid_cv_slot": true,
+  "coupled_solver_rejects_cp_in_solid_cv_slot": "Requires key cvSolid; cannot validate whether supplied experimental numbers are truly Cv rather than relabelled Cp",
   "coupled_solver_energy_cv_solid_input_note": "Current native temperature equation uses Cv. Experimental Cp cannot be silently substituted; source/reference must justify conversion.",
   "coupled_solver_phase_source_volume_from_energy_current_t": true,
   "coupled_solver_pressure_receives_updated_alpha_after_thermal_predictor": true,
