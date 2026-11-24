@@ -135,7 +135,8 @@ def canonical_header(path,axis,fields):
     # Raw writer can truncate long names; only accept matching ordered prefixes.
     need(len(header)==len(expected),f"unexpected raw width: {path}: {header}")
     for observed,target in zip(header,expected):
-        need(observed==target or (len(observed)>=8 and target.startswith(observed)),
+        prefix=observed.removesuffix("...")
+        need(observed==target or (observed.endswith("...") and len(prefix)>=8 and target.startswith(prefix)),
              f"unexpected raw column {observed} vs {target}: {path}")
     return expected
 
@@ -192,6 +193,8 @@ def self_test():
         try: numeric_rows(p,2)
         except ValueError: pass
         else: raise AssertionError("sentinel accepted")
+        p.write_text("# x phaseChang...\n0.01 1\n")
+        need(canonical_header(p,"x",("phaseChangeSource:alpha1",))==["x","phaseChangeSource:alpha1"],"raw header abbreviation")
         p.write_text("# test\n0 1500\n0.1 1499\n")
         need(exact_times(numeric_rows(p,2),[0,.1]),"valid samples rejected")
     print("Sampling mapping and invalid-data regression PASS",flush=True)
@@ -225,10 +228,16 @@ def main():
     p=argparse.ArgumentParser(description=__doc__)
     p.add_argument("--publish",action="store_true")
     p.add_argument("--self-test",action="store_true")
+    p.add_argument("--publish-only",action="store_true",help="retry publication after a successful local audit")
     args=p.parse_args()
     self_test()
     if args.self_test: return 0
     source,work=old.ORIGINAL,old.WORK
+    if args.publish_only:
+        report=json.loads((work/REPORT).read_text())
+        need(report.get("status")=="CORRECTED_SAVED_TIME_SAMPLING_VALID","no accepted correction to publish")
+        publish(work,old.REPO,mapping()[1])
+        return 0
     saved,_=old.existing_states(source)
     need(work.is_dir() and not work.is_symlink(),"offline workspace missing")
     prior=json.loads((work/old.REPORT).read_text())
