@@ -1,3 +1,5 @@
+> **24-11-2026 | ESTADO VIGENTE — SINCRONIZACIÓN MAESTRÍA:** La rama de contracción vigente es research/fs-c08-conservative-phase-mass-20261123; consultar su STATUS.json y PR #79 borrador. FS-C07 completó 1 s pero tiene fallo de asignación de fase a VOF bajo; no aceptar contracción bruta. FS-C08 solver físico en código, compilación nativa/CFD real y propiedades trazadas pendientes. Shadow cerrado. No fusionar ni tocar worktree FS. No hay porcentaje formal común. [Registro integrado](https://github.com/michels-lab/MasterProject/blob/main/docs/granada/MAESTRIA_ESTADO_INTEGRADO_20261124_ES.md).
+
 # freesurface — Casos de prueba
 
 El caso **[FS-C01](FS-C01/)** es el primer banco de referencia de superficie libre de la ruta científica B-FS-01. Usa **agua–aire**, no hierro fundido; su estado es **PREPARED_NOT_MESHED_OR_RUN**, por lo que todavía no hay resultados CFD ni evidencia de contracción.

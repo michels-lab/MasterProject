@@ -1,3 +1,5 @@
+> **24-11-2026 | ESTADO VIGENTE — SINCRONIZACIÓN MAESTRÍA:** ACTUALIZACIÓN: workflow 45504719498 completed/success, logs y artefacto verificados. 17 perfiles × 101 tiempos = 1,717 métricas, 404 comparaciones y 287 eventos directos de signos opuestos, no inversiones globales. Fuente 8f8135876275434363f8cd37a32f73190417f578; referencia 03c543cad38bbc033a44d7d6c62b788f943116ed. Artefacto 14971467688. No se inspeccionaron todos los CSV del ZIP ni importación FoamLens. B 3/7, 2/7=29%. [Registro integrado](https://github.com/michels-lab/MasterProject/blob/main/docs/granada/MAESTRIA_ESTADO_INTEGRADO_20261124_ES.md).
+
 # C3D05 B — Evolución direccional de Uy y velocidad radial/tangencial
 24-11-2026. Etapa 3/7; 2/7 = 29% de hitos técnicos. Sin cambio de validación física.
 

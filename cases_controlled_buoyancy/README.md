@@ -1,3 +1,5 @@
+> **24-11-2026 | ESTADO VIGENTE — SINCRONIZACIÓN MAESTRÍA:** Campaña histórica 26/26 corridas completas, sin perfiles faltantes. C14 verificado, referencia para contrastar A y B. C15/C16 no se declaran ejecutados. Nueva comparación 2D/B: 404 métricas de estaciones comunes en 101 tiempos; no equivale a independencia de malla. [Registro integrado](https://github.com/michels-lab/MasterProject/blob/main/docs/granada/MAESTRIA_ESTADO_INTEGRADO_20261124_ES.md).
+
 # Controlled Buoyancy Comparison Cases
 
 This directory contains the **clean, controlled B/C comparison series** for the QuickCup solidification study.

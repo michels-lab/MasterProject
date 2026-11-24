@@ -1,3 +1,5 @@
+> **24-11-2026 | ESTADO VIGENTE — SINCRONIZACIÓN MAESTRÍA:** C14 continúa como referencia 2D verificada: 10,001 muestras nativas a dt=0.001 s. El análisis comparativo B usa 101 estados a 0.1 s y 404 métricas de estaciones comunes; no equiparar cadencias. No se modifican las entradas originales del C14. [Registro integrado](https://github.com/michels-lab/MasterProject/blob/main/docs/granada/MAESTRIA_ESTADO_INTEGRADO_20261124_ES.md).
+
 > **18-11-2026 — Requisito del primer avance del director:** C14 es la referencia CFD verificada para explicar ecuaciones, BC, `deltaT`, PIMPLE, tolerancias, evolución y **Courant máximo realmente obtenido de logs**. `maxCo=0.25` con `adjustTimeStep=no` no es el máximo observado. La comparación de sensibilidad pendiente es **C14 `phaseChangeSource.relax=0.10` vs C16 `0.25`**; no confundir con `relaxationFactors=1.0`. [Plan de entrega, fuentes y checklist](../../docs/PRIMER_AVANCE_REQUISITOS_DIRECTOR_20261118_ES.md).
 
 # CASE_NOTES — C14_topFixedFlux_explicitRef
