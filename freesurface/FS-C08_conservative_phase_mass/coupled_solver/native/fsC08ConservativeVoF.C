@@ -7,6 +7,8 @@
 #include "fvcDiv.H"
 #include "fvcInterpolate.H"
 #include "zeroGradientFvPatchFields.H"
+#include "PstreamReduceOps.H"
+#include <cmath>
 
 namespace Foam
 {
@@ -124,6 +126,64 @@ void solvers::fsC08ConservativeVoF::prePredictor()
 
     mixture_.correct();
     reconcileMixtureDensity();
+
+    // Runtime budget from REAL CFD state, all fluid cells and all
+    // fluid boundary patches. Gamma cancels in total metal mass.
+    // This is a physical conservation metric, NOT a synthetic test.
+    const auto& V=mesh.V();
+    const auto& l=phaseMass_->liquidMass().primitiveField();
+    const auto& s=phaseMass_->solidMass().primitiveField();
+    const auto& l0=phaseMass_->liquidMass().oldTime().primitiveField();
+    const auto& s0=phaseMass_->solidMass().oldTime().primitiveField();
+    const auto& rGas=mixture_.rho2().primitiveField();
+    const auto& aGas=alpha2.primitiveField();
+    scalar M0=0, M=0, Mgas=0;
+    forAll(V,i)
+    {
+        M0+=V[i]*(l0[i]+s0[i]);
+        M+=V[i]*(l[i]+s[i]);
+        Mgas+=V[i]*aGas[i]*rGas[i];
+    }
+    reduce(M0,sumOp<scalar>());
+    reduce(M,sumOp<scalar>());
+    reduce(Mgas,sumOp<scalar>());
+
+    scalar boundaryMassRate=0;
+    const auto& patches=phaseMass_->liquidMassFlux().boundaryField();
+    forAll(patches,patchi)
+    {
+        const auto& patchFlux=patches[patchi];
+        forAll(patchFlux,facei)
+        {
+            boundaryMassRate+=patchFlux[facei];
+        }
+    }
+    reduce(boundaryMassRate,sumOp<scalar>());
+    const scalar dt=runTime.deltaTValue();
+    const scalar metalResidual=M-M0+dt*boundaryMassRate;
+    Info<< "FS_C08_REAL_CFD_MASS_BUDGET"
+        << " time_s=" << runTime.value()
+        << " liquidSolidMetalMass_kg=" << M
+        << " previousMetalMass_kg=" << M0
+        << " nativeGasInventory_kg=" << Mgas
+        << " boundaryMetalOut_kg_s=" << boundaryMassRate
+        << " metalMassResidual_kg=" << metalResidual
+        << " phaseChangeVolumeSourceMean_s_1="
+        << phaseMass_->phaseVolumeSource()
+              .weightedAverage(mesh.V()).value()
+        << nl;
+
+    if
+    (
+        !std::isfinite(metalResidual)
+     || mag(metalResidual)>1e-7*max(M,M0)
+    )
+    {
+        FatalErrorInFunction
+            << "FS-C08 native METAL mass balance does not close; refuse "
+            << "to call this a physical shrinkage result. Residual="
+            << metalResidual << " kg" << exit(FatalError);
+    }
 }
 
 } // namespace Foam
