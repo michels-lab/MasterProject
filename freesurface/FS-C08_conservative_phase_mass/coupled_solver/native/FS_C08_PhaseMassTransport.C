@@ -250,7 +250,6 @@ void PhaseMassTransport::solve
     checkAndUpdateProperties(T,alphaMetal);
     initializeIfRequired(alphaMetal,T);
     reconstructFractions();
-    evaluateGamma(T,alphaMetal);
     volScalarField liquidShare
     (
         IOobject("fsC08LiquidShare",mesh_.time().name(),mesh_,
@@ -268,14 +267,57 @@ void PhaseMassTransport::solve
     liquidMassPhi_ = alphaPhiMetal*fvc::interpolate(liquidShare)
                     *fvc::interpolate(rhoLiquid_);
 
+    // Step A: transport liquid mass on all genuine CFD faces. The
+    // stationary solid has no advective flux. Physical dimensions of
+    // rhoAlpha.liquid are kg/m3; face rhoPhi.liquid is kg/s.
     fvScalarMatrix lEqn
     (
-        fvm::ddt(mLiquid_) == -fvc::div(liquidMassPhi_) - Gamma_
+        fvm::ddt(mLiquid_) == -fvc::div(liquidMassPhi_)
     );
     lEqn.solve();
 
-    fvScalarMatrix sEqn(fvm::ddt(mSolid_) == Gamma_);
-    sEqn.solve();
+    // Step B: NOW evaluate the equilibrium driving source from the
+    // TRANSPORTED available liquid mass, not its pre-advection value.
+    // This prevents Gamma from consuming mass that has already left
+    // through a real boundary during the current CFD time step.
+    const auto& transportedLiquid=mLiquid_.primitiveField();
+    const auto& initialSolid=mSolid_.primitiveField();
+    forAll(transportedLiquid,i)
+    {
+        if
+        (
+            !std::isfinite(transportedLiquid[i])
+         || !std::isfinite(initialSolid[i])
+         || transportedLiquid[i] < 0
+         || initialSolid[i] < 0
+        )
+        {
+            FatalErrorInFunction
+                << "FS-C08: liquid FV advection created negative/nonfinite "
+                << "mass in cell " << i
+                << "; adjust native CFD Courant / fluxes, no clipping."
+                << exit(FatalError);
+        }
+    }
+
+    evaluateGamma(T,alphaMetal);
+
+    // Step C: equal-and-opposite local mass exchange in the *same*
+    // physical CFD time step. For 0<relax<=1 and 0<=fs<=1,
+    // the bounded target cannot deplete either phase. This update is
+    // exactly conservative to round-off by construction.
+    const scalar dt=mesh_.time().deltaTValue();
+    auto& ml=mLiquid_.primitiveFieldRef();
+    auto& ms=mSolid_.primitiveFieldRef();
+    const auto& g=Gamma_.primitiveField();
+    forAll(ml,i)
+    {
+        const scalar dm=dt*g[i];
+        ml[i]-=dm;
+        ms[i]+=dm;
+    }
+    mLiquid_.correctBoundaryConditions();
+    mSolid_.correctBoundaryConditions();
 
     reconstructFractions();
     lastSolvedTimeIndex_=mesh_.time().timeIndex();
