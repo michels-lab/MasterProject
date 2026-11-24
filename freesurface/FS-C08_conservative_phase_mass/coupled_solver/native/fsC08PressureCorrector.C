@@ -235,6 +235,13 @@ void Foam::solvers::fsC08ConservativeVoF::pressureCorrector()
     Info<< "FS_C08_NATIVE_PRESSURE_WITH_MASS_DENSITY"
         << " SvolMin=" << min(phaseMass_->phaseVolumeSource()).value()
         << " SvolMax=" << max(phaseMass_->phaseVolumeSource()).value()
+        << " SvolThermalMin="
+        << min(phaseMass_->thermalVolumeSource()).value()
+        << " SvolThermalMax="
+        << max(phaseMass_->thermalVolumeSource()).value()
+        << " SvolMaterialMean="
+        << phaseMass_->materialVolumeSource()
+            .weightedAverage(mesh.V()).value()
         << " sourceIsDiagnosticNoFakeMetalSink=1"
         << " liquidThermoCompressibilityApproximation=1" << nl;
 
