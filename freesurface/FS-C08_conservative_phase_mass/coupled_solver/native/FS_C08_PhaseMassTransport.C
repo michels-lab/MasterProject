@@ -21,7 +21,7 @@ PhaseMassTransport::PhaseMassTransport
     propertySource_(material_.lookup<word>("propertySource")),
     Tmin_K_(material_.lookup<scalar>("Tmin_K")),
     Tmax_K_(material_.lookup<scalar>("Tmax_K")),
-    phaseRelaxation_(material_.lookup<scalar>("phaseRelaxation")),
+    phaseChangeClosure_(material_.lookup<word>("phaseChangeClosure")),
     metalPresenceThreshold_(material_.lookup<scalar>("metalPresenceThreshold")),
     rhoLiquidT_(Function1<scalar>::New("rhoLiquidT",dimTemperature,dimDensity,material_)),
     rhoSolidT_(Function1<scalar>::New("rhoSolidT",dimTemperature,dimDensity,material_)),
@@ -30,6 +30,7 @@ PhaseMassTransport::PhaseMassTransport
         Function1<scalar>::New("solidMassFractionT",dimTemperature,
                                units::fraction,material_)
     ),
+    tauPhaseChangeT_(),
     latentHeat_(dimensionedScalar("latentHeat",dimEnergy/dimMass,material_)),
     cpSolid_(dimensionedScalar("cpSolid",dimEnergy/dimMass/dimTemperature,material_)),
     mLiquid_(IOobject("rhoAlpha.liquid",mesh.time().name(),mesh,
@@ -95,8 +96,8 @@ PhaseMassTransport::PhaseMassTransport
         || propertySource_=="SYNTHETIC_ONLY_NOT_JMATPRO"
         || !std::isfinite(Tmin_K_) || !std::isfinite(Tmax_K_)
         || Tmin_K_<=0 || Tmax_K_<=Tmin_K_
-        || !std::isfinite(phaseRelaxation_)
-        || phaseRelaxation_<=0 || phaseRelaxation_>1
+        || (phaseChangeClosure_!="equilibrium"
+            && phaseChangeClosure_!="kineticRelaxation")
         || !std::isfinite(metalPresenceThreshold_)
         || metalPresenceThreshold_<=0 || metalPresenceThreshold_>=0.5
         || !std::isfinite(latentHeat_.value()) || latentHeat_.value()<=0
@@ -122,6 +123,15 @@ PhaseMassTransport::PhaseMassTransport
             << "must both exist or both be initialized from the actual "
             << "initial metal VOF and sourced solid-mass-fraction law."
             << exit(FatalError);
+    }
+
+    if (phaseChangeClosure_=="kineticRelaxation")
+    {
+        // Tau must be sourced by alloy, not fitted to numerical dt.
+        tauPhaseChangeT_=Function1<scalar>::New
+        (
+            "tauPhaseChangeT",dimTemperature,dimTime,material_
+        );
     }
 
     checkAndUpdateProperties(T,metal);
@@ -249,7 +259,22 @@ void PhaseMassTransport::evaluateGamma
         if (!std::isfinite(fs) || fs<0 || fs>1 || ml[i]<0 || ms[i]<0)
             FatalErrorInFunction << "Invalid phase masses / fs at cell "
                                  << i << exit(FatalError);
-        gamma[i]=phaseRelaxation_*(fs*(ml[i]+ms[i])-ms[i])/dt;
+        scalar conversionFactor=1.0;
+        if (phaseChangeClosure_=="kineticRelaxation")
+        {
+            const scalar tau=tauPhaseChangeT_->value(t[i]);
+            if (!std::isfinite(tau) || tau<=0)
+            {
+                FatalErrorInFunction
+                    << "FS-C08 invalid sourced kinetic tau(T) in cell "
+                    << i << " tau=" << tau << " s."
+                    << exit(FatalError);
+            }
+            // 1-exp(-dt/tau): exact positive bounded relaxation
+            // for a constant equilibrium target over this time step.
+            conversionFactor=-std::expm1(-dt/tau);
+        }
+        gamma[i]=conversionFactor*(fs*(ml[i]+ms[i])-ms[i])/dt;
         s[i]=gamma[i]*(1/rs[i]-1/rl[i]);
     }
     Gamma_.correctBoundaryConditions();
