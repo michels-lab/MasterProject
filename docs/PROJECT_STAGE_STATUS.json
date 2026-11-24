@@ -398,7 +398,7 @@
     "case_b_c14_native_C14_fluid_solid_q_native_CI_workflow": ".github/workflows/c3d05-b-c14-native-fluid-solid-q.yml",
     "case_b_c14_native_C14_fluid_solid_q_native_CI_compile_pass_confirmed": false,
     "case_b_c14_native_C14_fluid_solid_q_WSL_preflight_pass_confirmed": true,
-    "case_b_c14_native_C14_fluid_solid_q_WSL_compile_pass_confirmed": false,
+    "case_b_c14_native_C14_fluid_solid_q_WSL_compile_pass_confirmed": true,
     "case_b_c14_native_C14_fluid_solid_q_WSL_extractor_executed": false,
     "case_b_c14_native_C14_fluid_solid_q_WSL_q_measured": false,
     "case_b_c14_native_C14_fluid_solid_q_final_report": null,
@@ -436,7 +436,21 @@
     "case_b_c14_native_C14_fluid_solid_q_WSL_F14_exact_header_source": "https://cpp.openfoam.org/v14/src_2finiteVolume_2interpolation_2surfaceInterpolation_2schemes_2linear_2linear_8H_source.html",
     "case_b_c14_native_C14_fluid_solid_q_WSL_F14_exact_header_fix_commit": "477b886a387e64adb7740684bc2a2fecd28ac519",
     "case_b_c14_native_C14_fluid_solid_q_WSL_F14_exact_header_test_commit": "f2ff22ee29e53cf9d0888635274c59f5153b34e2",
-    "case_b_c14_native_C14_fluid_solid_q_WSL_compilation_retried_after_header_fix": false
+    "case_b_c14_native_C14_fluid_solid_q_WSL_compilation_retried_after_header_fix": false,
+    "case_b_c14_native_C14_fluid_solid_q_WSL_qa_after_exact_header_fix_passed": 8,
+    "case_b_c14_native_C14_fluid_solid_q_WSL_qa_after_exact_header_fix_failed": 0,
+    "case_b_c14_native_C14_fluid_solid_q_WSL_preflight_after_exact_header_fix_passed": true,
+    "case_b_c14_native_C14_fluid_solid_q_WSL_native_wmake_binary_completed": true,
+    "case_b_c14_native_C14_fluid_solid_q_WSL_native_extractor_attempted": true,
+    "case_b_c14_native_C14_fluid_solid_q_WSL_native_extractor_failure_kind": "FOAM_FATAL_IO_ERROR_RUNTIME_DETAILS_IN_ISOLATED_LOG",
+    "case_b_c14_native_C14_fluid_solid_q_WSL_native_extractor_last_attempt": "/home/michel/OpenFOAM/.C3D05_B_C14_NATIVE_FLUID_SOLID_PATCH_Q_01.ATTEMPT_1lg4hihv",
+    "case_b_c14_native_C14_fluid_solid_q_WSL_native_extractor_last_attempt_log": "/home/michel/OpenFOAM/.C3D05_B_C14_NATIVE_FLUID_SOLID_PATCH_Q_01.ATTEMPT_1lg4hihv/log.C3D05_B_C14_NATIVE_FLUX",
+    "case_b_c14_native_C14_fluid_solid_q_WSL_native_IO_fatal_root_cause_confirmed": false,
+    "case_b_c14_native_C14_fluid_solid_q_WSL_native_IO_readonly_diagnostic_tool_committed": true,
+    "case_b_c14_native_C14_fluid_solid_q_WSL_native_IO_readonly_diagnostic_arg": "--diagnose-attempt",
+    "case_b_c14_native_C14_fluid_solid_q_WSL_native_IO_error_context_print_on_next_failure": true,
+    "case_b_c14_native_C14_fluid_solid_q_WSL_native_IO_diagnostic_test_source_count": 10,
+    "case_b_c14_native_C14_fluid_solid_q_WSL_native_IO_diagnostic_tests_WSL_executed": false
   },
   "other_cases": [
     {
@@ -476,7 +490,7 @@
       "evidence": "docs/granada/C3D05_B_C14_WSL_EJECUCION_REAL_EN_CURSO_20261123_ES.md"
     }
   ],
-  "blocker": "User WSL B C14 native fluid+solid patch q: 8/8 tests PASS, real 10s/101 state/mesh SHA preflight PASS; isolated wmake stopped BEFORE execution at 'fatal error: linearInterpolate.H not found'. Exact OpenFOAM Foundation14 API source was verified: Foam::linearInterpolate is defined in finiteVolume interpolation schemes linear/linear.H, final C++ source and regression NOW use #include \"linear.H\". Header-fix code/test committed, NOT WSL recompiled after this change. Existing failed ATTEMPT path/log preserved, CFD untouched. Real native q, energy closure and physics verification still PENDING. Original reference combined energy inventory -1352.9442013308708 J is NOT lost heat. G3-G7 remain open 2/7.",
-  "next_integrated_delivery": "Re-pull latest master and rerun strict eight native flux QA regressions, original Case B 10s SHA preflight, isolated Foundation14 wmake + 101×4 fluid/solid original patch q extraction. Correct header is linear.H (direct API declaration) not linearInterpolate.H or surfaceInterpolate.H. If further compile errors occur, preserve log ATTEMPT and fix actual Foundation14 API; no foamMultiRun and no q claims until real output exists.",
+  "blocker": "Case B REAL native F14 original 10s/101 CFD complete and all metal+molde C14 reference inventories verified previously. Latest WSL native C14 FLUID+SOLID q: 8/8 offline tests PASS, original 10s/101 native preflight SHA PASS; wmake BINARY COMPILED after linear.H fix. Runtime C++ q extractor then emitted FOAM FATAL IO ERROR before any q output passed verification; only error header printed because wrapper filtered out subsequent fatal context. Actual IO root cause UNCONFIRMED until full preserved log is reviewed. ATTEMPT_1lg4hihv and log preserved. New runner --diagnose-attempt reads fatal context from preserved attempt with NO wmake, CFD, new extraction or source mutation; 2 new tests committed, WSL testing pending. No q measured; no energy closure, G3-G7 remain OPEN, 2/7.",
+  "next_integrated_delivery": "DO NOT rerun CFD or native q extractor yet. Read exact preserved native q runtime fatal log via `git pull --ff-only && python3 -B cases_3d/C3D_05_step_gmsh_conformal/c14_physics/run_existing_case_b_c14_native_flux.py --diagnose-attempt /home/michel/OpenFOAM/.C3D05_B_C14_NATIVE_FLUID_SOLID_PATCH_Q_01.ATTEMPT_1lg4hihv`. It prints native error context for IO dictionary/file/field name and does no compiler/CFD work. Then repair true F14 runtime IO issue from actual evidence; rerun isolated extractor only after root cause is known.",
   "science": "CASE_B_NATIVE_C14_10S_CFD_AND_REFERENCE_METAL_MOLD_ENERGY_WSL_DONE_FLUID_SOLID_TRUE_F14_Q_CPP_RUNNER_CODE_STAGED_NATIVE_WSL_COMPILE_PENDING_NO_PHYSICAL_CLOSURE"
 }
