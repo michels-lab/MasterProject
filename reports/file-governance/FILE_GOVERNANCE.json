@@ -29,8 +29,8 @@
     "POTENTIAL_UNLOGGED_CHANGES": 2
   },
   "finding_total": 9,
-  "inventory_fingerprint": "02b103474b5dea2bd713fb5bff31a26e9c8f35b9ef7968559b76b4b9d02be2cb",
-  "evidence_fingerprint": "347ef1e7d7443e11f36801405becda4f7c80b5671bbe2fefb84aae8b85d5184b",
+  "inventory_fingerprint": "6fff35d3e850d23d91b365f79588f9a85c914a7be87efb7bb9ea9fdb264b3dd9",
+  "evidence_fingerprint": "14860aa2344bc5f8a833ce3fed6825e22e0c63a33f37ab4dbb00189929715542",
   "files": [
     {
       "path": ".github/agents/openfoam-solidification.agent.md",
@@ -415,14 +415,14 @@
       "role": "bitacora",
       "purpose": "technical/audit change history",
       "certainty": "rule",
-      "blob": "0e4af77d303a9de9e95f9d3a98fd7199f404c525"
+      "blob": "098c813605289c9ac2c6d73dec94ebb65a6a250a"
     },
     {
       "path": "README.md",
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "86dce156d862e3e7ed47f57b4f16205510b07c82"
+      "blob": "ccaa8ca33cf88a13a8ee2714f3abd444b9e57de0"
     },
     {
       "path": "RUN_CASE_REGISTRY.csv",
@@ -2186,7 +2186,7 @@
       "role": "source",
       "purpose": "code/test implementation",
       "certainty": "rule",
-      "blob": "35c95872e989d50c29ca8a589adc3eff47b28761"
+      "blob": "0c635f59f690bf6865dc950d940e98dd8f7bb02c"
     },
     {
       "path": "cases_3d/C3D_05_step_gmsh_conformal/c14_physics/POSTPROCESAR_CASO_B_C14_EXISTENTE.sh",
@@ -2200,7 +2200,7 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "8176ba27b03b563b437a36db7c42154efaf83c5a"
+      "blob": "49e584a5e12043a4e1a2b6f3786df39bfd97e8e7"
     },
     {
       "path": "cases_3d/C3D_05_step_gmsh_conformal/c14_physics/analyze_existing_case_b_c14.py",
@@ -272827,7 +272827,7 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "cc79cb188f34d4bcb16050f9c51022b28ada2371"
+      "blob": "f9c920a848e15a7c3b8f69ec9c0714c86dad82f3"
     },
     {
       "path": "docs/DOCUMENT_SYNC_20261110_ES.md",
@@ -272876,7 +272876,7 @@
       "role": "config",
       "purpose": "machine-readable configuration",
       "certainty": "rule",
-      "blob": "50f6a5426e27ad8f99036a606aa513b677d78cdd"
+      "blob": "18f0bd15b71149d6cebdb205b0bafff9936e8248"
     },
     {
       "path": "docs/REGLA_INSTRUCCIONES_UNIFICADAS_ES.md",
@@ -273926,11 +273926,11 @@
       "state": "REVIEW_REQUIRED"
     },
     {
-      "id": "adf394141ba3e3d4",
+      "id": "b3fe62df0ba36026",
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_ES.md",
-      "observation": "3 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_05_step_gmsh_conformal/c14_physics/EJECUTAR_CASO_B_C14_COMPLETO.sh, cases_3d/C3D_05_step_gmsh_conformal/c14_physics/POSTPROCESAR_CASO_B_C14_EXISTENTE.py, cases_3d/C3D_05_step_gmsh_conformal/c14_physics/POSTPROCESAR_CASO_B_C14_EXISTENTE.sh",
+      "observation": "1 implementation/config paths changed since this log's last commit; examples: cases_3d/C3D_05_step_gmsh_conformal/c14_physics/POSTPROCESAR_CASO_B_C14_EXISTENTE.py",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     }
