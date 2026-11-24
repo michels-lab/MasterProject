@@ -1,6 +1,6 @@
 /* FS-C08 material dictionary template — NON-EXECUTABLE until calibrated.
  * File to install in a STAGED CASE: constant/fluid/fsC08Material
- * T in K, rho in kg/m3; latentHeat in J/kg; cpSolid in J/(kg K).
+ * T in K, rho in kg/m3; latentHeat in J/kg; cvSolid in J/(kg K) at CONSTANT VOLUME.
  * Phase fraction curve is SOLID MASS FRACTION (not volume fraction).
  * Use separate source records for each CE/S composition. NO defaults.
  *
@@ -60,5 +60,7 @@ solidMassFractionT table
     (<T_2_K> <FS_MASS_FRACTION_2>)
 );
 
+// The Cv parameter is NOT interchangeable with experimental Cp.
+// Derive consistent Cv(T) or justify Cp≈Cv before claiming energy closure.
 latentHeat [0 2 -2 0 0 0 0] <LATENT_J_PER_KG>;
-cpSolid [0 2 -2 -1 0 0 0] <SOLID_CP_J_PER_KG_K>;
+cvSolid [0 2 -2 -1 0 0 0] <SOLID_CP_J_PER_KG_K>;
