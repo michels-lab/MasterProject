@@ -2,7 +2,7 @@
    Material tables REQUIRED. Not a shadow, no fabricated properties.
    SPDX-License-Identifier: GPL-3.0-or-later */
 #include "FS_C08_PhaseMassTransport.H"
-#include "fvcInterpolate.H"
+#include "fvc.H"
 #include "fvmSup.H"
 #include "zeroGradientFvPatchFields.H"
 #include <cmath>
