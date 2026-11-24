@@ -21,6 +21,7 @@
 #include "timeSelector.H"
 #include "fvMesh.H"
 #include "volFields.H"
+#include "IOmanip.H"  // Foam::setprecision (Foundation 14 IOstream manipulator)
 #include "../native_cpp/ConservativePhaseExchange.H"
 
 #include <cmath>
