@@ -1,0 +1,36 @@
+/* FS-C08 standalone mass/enthalpy FV shadow step fixture.
+ * Arbitrary educational numerical quantities, NOT cast-iron JMatPro,
+ * NOT Fe-C liquidus, NOT temperature-dependent density or kinetics.
+ * The original C07 CFD case is loaded solely to borrow fvMesh geometry.
+ */
+materialProvenance SYNTHETIC_ONLY_NOT_JMATPRO;
+internalFaceIndex 0;
+
+rhoLiquid_kg_m3 7000;
+rhoSolid_kg_m3 7300;
+rhoGas_kg_m3 1.2;
+
+initialAlphaLiquid 0.6;
+initialAlphaSolid 0.1;
+
+cpLiquid_J_kg_K 800;
+cpSolid_J_kg_K 700;
+cpGas_J_kg_K 1000;
+latentHeat_J_kg 200000;
+Tref_K 1400;
+
+temperatureBackground_K 1480;
+temperatureOwner_K 1500;
+temperatureNeighbour_K 1460;
+
+dt_s 0.05;
+// + liquid->solid in owner; - solid->liquid (remelt) in neighbour
+gammaOwner_kg_m3_s 200;
+gammaNeighbour_kg_m3_s -50;
+
+// Signed owner->neighbour internal mass transfer (kg/s).
+// Source and flux values kept low to avoid mass depletion in small 3D cells.
+liquidFaceMassFlow_kg_s 0.00001;
+solidFaceMassFlow_kg_s 0.0000005;
+gasFaceMassFlow_kg_s 0.000000001;
+faceHeatFlow_W 0.01;
