@@ -314,8 +314,8 @@ def run(case:Path,join:Path,q:Path,storage:Path,out:Path)->dict:
     cells,geometry=volume.calculate_native_metal_cell_volumes(
         case/"constant/metal/polyMesh")
     C14=inventory.source_C14_constants()
-    latent=float(C14["L_J_kg"])
-    reference_rho=float(C14["rho_kg_m3"])
+    latent=float(C14["L_metal_J_kg"])
+    reference_rho=float(C14["rho_metal_kg_m3"])
     require(geometry["nCells"]==CELL_COUNT,"wrong original 92200 hex cells")
     require(reference_rho>0,"invalid source C14 metal rho reference")
     records=[]
