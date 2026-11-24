@@ -560,7 +560,9 @@
     "case_b_c14_real_C14_native_rho_phi_mass_delta_t0_not_fabricated": true,
     "case_b_c14_real_C14_native_rho_phi_mass_modelled_phase_complement_only": true,
     "case_b_c14_real_C14_native_rho_phi_mass_full_conservation_verified": false,
-    "case_b_c14_real_C14_native_rho_phi_mass_no_fvModels_energy_source_integrated": true
+    "case_b_c14_real_C14_native_rho_phi_mass_no_fvModels_energy_source_integrated": true,
+    "case_b_c14_real_C14_native_rho_phi_mass_scientific_ledger": "docs/granada/C3D05_B_C14_WSL_READINESS_CONFIRMADA_Y_MASA_RHO_PHI_20261124_ES.md",
+    "case_b_c14_real_C14_native_rho_phi_mass_CI_source_tests_staged": true
   },
   "other_cases": [
     {
