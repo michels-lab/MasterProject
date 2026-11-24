@@ -507,7 +507,7 @@
     },
     {
       "case_id": "C3D-04 Caso A",
-      "status": "Real C14 V4/T02 WSL CFD 10 s complete, grouped native postprocessing seven groups without FATAL; five scalar series 101/101 and 3/3 reference enthalpies equal at output precision; two vertical profiles 27/80; no global balance or QuickCup.",
+      "status": "Real WSL 10s CFD and grouped native 7/7; both vertical interior chord profiles 101x80 (not full 2D height); nominal metal residual 2.023 J (0.00979% of outward energy) over 0.1–10s; no global conservation.",
       "evidence": "docs/C3D04_CASE_A_STATUS.json",
       "progress_ref": "docs/C3D04_CASE_A_STATUS.json",
       "stage": "7/10 — CFD and integrated native postprocessing analysis",
@@ -516,9 +516,9 @@
       "percent_hitos": 60,
       "percentage_scope": "SOLO_HITOS_OPERATIVOS_DEL_CASO_A_NO_VALIDACION_FISICA",
       "primary_contract": "cases_3d/C3D_04_rounded_multiblock_pilot/AGENTS.md",
-      "next_integrated_milestone": "Native saved-state energy inventory and same-coordinate interior vertical chord, bilateral flux and discrete energy source audit still needed.",
-      "blocker": "Vertical coverage and energy conservation unresolved, no CFD rerun.",
-      "CI_status": "REAL_WSL_GROUPED_7_OF_7_AND_5_REGRESSIONS_PASS",
+      "next_integrated_milestone": "Native bilateral q on all eight patches, compare previous metal flux, mold exterior and signed interface residual; native discretized energy source and verification remain.",
+      "blocker": "Bilateral q native compilation/execution not observed; global/discrete closure and experimental validation pending.",
+      "CI_status": "REAL_WSL_GROUPED_AND_CONTINUATION_5_OF_5_EACH_PASS",
       "CI_evidence": "reports/case-a-t0/CI_STAGE06_VOLUME_FALLBACK_20261120.json"
     },
     {
