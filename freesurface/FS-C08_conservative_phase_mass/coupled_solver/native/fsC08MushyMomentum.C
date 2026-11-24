@@ -14,24 +14,13 @@ Foam::solvers::fsC08ConservativeVoF::divDevTau(volVectorField& U)
     // The inherited stress and conservative rho/velocity correction remain.
     tmp<fvVectorMatrix> tBase=compressibleVoF::divDevTau(U);
 
-    volScalarField mushyResistance
-    (
-        IOobject
-        (
-            "mushyDarcyResistance.fsC08",runTime.name(),mesh,
-            IOobject::NO_READ,IOobject::NO_WRITE
-        ),
-        mesh,dimensionedScalar(dimDensity/dimTime,0),
-        zeroGradientFvPatchScalarField::typeName
-    );
-
     const scalar Cu=phaseMass_->mushyDarcyCu().value();
     const scalar q=phaseMass_->mushyDarcyQ();
     const auto& aL=phaseMass_->alphaLiquid().primitiveField();
     const auto& aS=phaseMass_->alphaSolid().primitiveField();
     const auto& ml=phaseMass_->liquidMass().primitiveField();
     const auto& ms=phaseMass_->solidMass().primitiveField();
-    auto& R=mushyResistance.primitiveFieldRef();
+    auto& R=mushyDarcyResistance_.primitiveFieldRef();
 
     forAll(R,i)
     {
@@ -57,27 +46,12 @@ Foam::solvers::fsC08ConservativeVoF::divDevTau(volVectorField& U)
                 << " resistance=" << R[i] << exit(FatalError);
         }
     }
-    mushyResistance.correctBoundaryConditions();
+    mushyDarcyResistance_.correctBoundaryConditions();
 
-    // A positive Darcy drag removes mechanical kinetic energy.
-    // In the native TOTAL-energy equation, the fvc::ddt(rho,K)
-    // contribution already transfers that change to internal energy.
-    // This field is a DIAGNOSTIC, not an additional Gamma/Darcy heat
-    // source: adding R*|U|^2 again would double count dissipation.
-    auto& dissipation=mushyDarcyDissipation_.primitiveFieldRef();
-    const auto& velocity=U.primitiveField();
-    forAll(dissipation,i)
-    {
-        dissipation[i]=R[i]*magSqr(velocity[i]);
-        if (!std::isfinite(dissipation[i]) || dissipation[i]<0)
-        {
-            FatalErrorInFunction
-                << "FS-C08 nonfinite Darcy kinetic-energy dissipation "
-                << "at cell " << i << exit(FatalError);
-        }
-    }
-    mushyDarcyDissipation_.correctBoundaryConditions();
+    // The coefficient R is persisted. Actual Darcy dissipation is
+    // computed AFTER momentum and pressure correction using FINAL U
+    // by postSolve(), not the stale U at matrix assembly.
 
     // Positive implicit Sp on the momentum LHS => dissipative drag.
-    return tBase + fvm::Sp(mushyResistance,U);
+    return tBase + fvm::Sp(mushyDarcyResistance_,U);
 }
