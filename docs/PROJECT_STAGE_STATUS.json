@@ -673,7 +673,7 @@
   "planned_200s_campaign": {
     "date": "2026-11-24",
     "priority": "C14 solidification; B14 shrinkage reference; six-run campaign accepted",
-    "status": "PLANNED_NOT_STAGED_NOT_RUN",
+    "status": "PREPARER_PUBLISHED_WSL_MATERIALIZATION_NOT_OBSERVED",
     "plan": "docs/granada/MAESTRIA_CAMPANA_B14_C14_200S_PLAN_20261124_ES.md",
     "original_10s_preserved": true,
     "physical_validation": false,
@@ -681,6 +681,11 @@
     "proposed_dt_s": 0.001,
     "proposed_end_s": 200,
     "proposed_write_interval_steps": 100,
-    "storage_and_runtime_audit_required": true
+    "storage_and_runtime_audit_required": true,
+    "preparer": "tools/prepare_campaign_200s.py",
+    "preparer_commit": "988cc07539577a597d589ae3a70bcc07253ba0c2",
+    "prepared_observed": 0,
+    "run_observed": 0,
+    "total_planned": 6
   }
 }

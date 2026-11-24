@@ -21,3 +21,18 @@ endTime=200, startTime=0, deltaT=.001, adjustTimeStep=no, writeInterval=100: 200
 3. Comparar enfriamiento, fracción sólida/tiempos de liquidus y solidus, velocidad y amortiguamiento, balance térmico y masa/volumen con distinción entre fracciones y contracción física. Validación QuickCup/JMatPro e independencia pendientes.
 
 Estado: PLANNED_NOT_STAGED_NOT_RUN. A etapa 9/10, 8/10=80% operativo; B etapa 3/7, 2/7=29% técnico. No se cierran hitos por planificación. No se ejecutó CFD ni se cambió ningún diccionario en esta entrega.
+
+
+## Entrega del preparador integrado (24-11-2026)
+Publicado `tools/prepare_campaign_200s.py` (988cc0753957). Verifica diferencias de familias en los árboles system/constant (solo castIron y fvModels), conserva campos iniciales primarios idénticos, excluye diagnósticos archivados del t=0. 2D reconstruye las mallas originales con blockMesh/splitMeshRegions en copia; 3D usa los stagers aceptados y coteja hashes de malla con las corridas de 10 s. Transfiere física B14 completa, no solo beta. Conserva dt=.001, escribe cada .1s, cambia endTime a 200; sondas/perfiles nativos y diagnósticos originales, 17 líneas 3D, adapta momentum y nearTop a coordenadas reales. La preparación materializa las seis variantes SIN solver, registra recursos por caso y total mediante estimación de campos/diagnósticos de 10 s reales, margen 50% y reserva de 10 GiB; estimación no es cota garantizada. Ejecución explícita `--run NOMBRE` de una variante preparada, serial por bloqueo, verifica espacio e integridad, preserva parciales y audita tiempos, probes, perfiles, derivados y topFlow. Sin confirmación de compilación Python/ejecución WSL del nuevo preparador aún. No se modifica CFD previo ni rama FS-C08.
+
+```bash
+REPO="$HOME/OpenFOAM/MasterProject"
+DEV="$HOME/OpenFOAM/CAMPAIGN_200S_CODE_01"
+source /opt/openfoam14/etc/bashrc
+git -C "$REPO" fetch origin &&
+git -C "$REPO" worktree add --detach "$DEV" origin/main &&
+python3 -B "$DEV/tools/prepare_campaign_200s.py"
+``
+
+El índice de recursos se escribe en `~/OpenFOAM/CAMPAIGN_200S_01/CAMPAIGN_RESOURCES.json`. Tras confirmar recursos, una ejecución explícita de la referencia principal: `python3 -B "$DEV/tools/prepare_campaign_200s.py" --run C14-2D-200s`. No lanzar otras corridas sin revisar espacio agregado. A 9/10, 8/10=80%; B 3/7, 2/7=29%. Campaña 200 s: código publicado; materialización 0/6 observada, ejecución 0/6 observada.
