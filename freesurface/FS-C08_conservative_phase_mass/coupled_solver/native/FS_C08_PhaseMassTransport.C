@@ -485,9 +485,8 @@ void PhaseMassTransport::reconstructFractions
     const auto& ms=mSolid_.primitiveField();
     const auto& rl=rhoLiquid_.primitiveField();
     const auto& rs=rhoSolid_.primitiveField();
-    auto& al=alphaLiquid_.primitiveFieldRef();
-    auto& as=alphaSolid_.primitiveFieldRef();
-    auto& am=alphaMetalFromMass_.primitiveFieldRef();
+    // Candidate volumes are not published as physical VOF until admissible.
+    scalarField al(ml.size(),0), as(ml.size(),0), am(ml.size(),0);
     label worstCell=-1;
     label overfilledCells=0;
     scalar maximumExcess=0;
@@ -559,6 +558,9 @@ void PhaseMassTransport::reconstructFractions
             << "; no mass clipping; pressure-volume coupling required"
             << exit(FatalError);
     }
+    alphaLiquid_.primitiveFieldRef()=al;
+    alphaSolid_.primitiveFieldRef()=as;
+    alphaMetalFromMass_.primitiveFieldRef()=am;
     alphaLiquid_.correctBoundaryConditions();
     alphaSolid_.correctBoundaryConditions();
     alphaMetalFromMass_.correctBoundaryConditions();
