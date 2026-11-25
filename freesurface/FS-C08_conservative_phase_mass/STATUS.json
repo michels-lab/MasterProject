@@ -6,7 +6,7 @@
   "parent_branch": "research/fs-c02-metal-air-vof-20261117",
   "scientific_project": "Master's research — cast iron solidification and shrinkage using OpenFOAM Foundation14",
   "stage": "FS_C08_REAL_WSL_NATIVE_EXECUTION_DEBUGGING",
-  "status": "FS_C08_FIRST_B14_NATIVE_CFD_ATTEMPT_FAILED_AT_FIRST_PIMPLE_MATRIX_LOOKUP__FIX_COMMITTED_RETRY_PENDING",
+  "status": "FS_C08_SECOND_B14_NATIVE_CFD_ATTEMPT_REACHED_PHASE_MASS_SOLVE__SYMMETRIC_PRECONDITIONER_FIX_COMMITTED",
   "code": "analysis_tools/fs_c08_conservative_reference.py",
   "tests": "analysis_tools/test_fs_c08_conservative_reference.py",
   "test_count_declared": 18,
@@ -108,8 +108,8 @@
   "cpp_mass_phase_update_gamma_and_volume_closure": true,
   "cpp_pressure_velocity_energy_or_cht": false,
   "CI_cxx_compile_step_declared": true,
-  "last_work": "First B14 WSL CFD attempt compiled and instantiated real module; entered first step, MULES ran, failed on missing rhoAlpha.liquidFinal. Both phase fields now have explicit normal/Final solver dictionaries; log parser prefers FOAM fatal details and skips SIGFPE enable banner. No positive-time full step or conservation claim. Native source C++ unchanged.",
-  "next_scientific_stage": "Run isolated B14 case from pristine FS-C07 t=0 with corrected stage; preserve first failed case/logs; diagnose remaining actual numerical/physics failures.",
+  "last_work": "Second native B14 CFD attempt resolved rhoAlpha.liquidFinal and ran diagonal mass equation, then stopped with symmetric matrix DILU incompatibility. Explicit T/TFinal PCG/DIC and both phase mass regular/final entries with diagonal preconditioner now staged; inherited pressure/momentum unchanged. No completed timestep, no mass/energy validation.",
+  "next_scientific_stage": "Retry isolated B14 native CFD using corrected matrix solver configuration; inspect actual thermal predictor convergence and pressure/gas mass budgets. Preserve all old case/logs.",
   "Wsl_tests_runner": "python3 -B -m unittest discover -s analysis_tools -p 'test_fs_c08_conservative_reference.py' -v",
   "Wsl_tests_summary": "Ran 18 tests in 0.072s; OK",
   "Wsl_tests_source_head": "eddacd6e9",
@@ -562,6 +562,22 @@
     "regression_tests_commit": "fe03dddd6ad6ea56e161dca269b214046ab7b3a7",
     "regression_tests_added": 3,
     "new_CI_verified": false,
+    "new_WSL_run_verified": false
+  },
+  "second_B14_CFD_attempt": {
+    "source_commit": "860f5ed423d591a97cb0cb33987e4fdaaaa82e68",
+    "report": "/home/michel/OpenFOAM/FS_C08_DIAGNOSTICS/FS_C08_REAL_CFD_DIAGNOSTICS_20261125T005323Z_fd368539/FS_C08_REAL_CFD_REPORT.json",
+    "wmake_exit_code": 0,
+    "foamMultiRun_exit_code": 1,
+    "timeout": false,
+    "first_time_s": 1.19999904e-7,
+    "liquid_mass_diagonal_solve_observed": true,
+    "initial_gamma_max": 0,
+    "first_run_error": "Unknown symmetric matrix preconditioner DILU",
+    "source_three_tracked_sha256_unchanged": true,
+    "root_cause_inferred": "phase-resolved T equation implicit Sp + scalar laplacian is symmetric; inherited DILU preconditioner likely selected after mass solve",
+    "fix_commit": "4fbaafdd3921aecfeb8be8ee37f380576feb8836",
+    "regression_commit": "e20348ea4fde4993458a9c1edca3236b31abf55c",
     "new_WSL_run_verified": false
   }
 }
