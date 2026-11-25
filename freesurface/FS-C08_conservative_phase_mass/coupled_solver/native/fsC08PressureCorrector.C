@@ -87,6 +87,14 @@ void Foam::solvers::fsC08ConservativeVoF::pressureCorrector()
     if (momentumCoupling!="legacy" && momentumCoupling!="refreshBeforePressure")
         FatalErrorInFunction << "FS-C08 unknown momentumMatrixCoupling "
             << momentumCoupling << exit(FatalError);
+    const word phaseMobility=numerics.found("phasePressureMobility")
+        ? numerics.lookup<word>("phasePressureMobility") : word("separate");
+    if (phaseMobility!="separate" && phaseMobility!="phaseWeighted")
+        FatalErrorInFunction << "FS-C08 unknown phasePressureMobility "
+            << phaseMobility << exit(FatalError);
+    if (phaseMobility=="phaseWeighted" && faceMobility!="linear")
+        FatalErrorInFunction << "FS-C08 phaseWeighted comparison requires linear face mobility"
+            << exit(FatalError);
     // Native PIMPLE assembles UEqn before the thermal predictor. FS-C08
     // changes the independent densities during that predictor. Rebuild
     // UEqn from the updated inventory and conservative fluxes once,
@@ -307,6 +315,71 @@ void Foam::solvers::fsC08ConservativeVoF::pressureCorrector()
             "fsC08GasPressureMobility",
             fvc::interpolate(rG)*fvc::interpolate(wG)*rAUf
         );
+        // Interpolate the product of conditional mobile-phase weight
+        // and cell inverse momentum diagonal, instead of multiplying
+        // two independently interpolated quantities. With a large
+        // density contrast, the separate product couples a metal
+        // weight to the much larger mobility of the neighbouring gas.
+        // For linear interpolation and wL+wG=1, the sum of the two
+        // volume mobilities remains interpolate(rAU). This is a
+        // controlled discretisation experiment, not a phase-slip model.
+        const surfaceScalarField weightedL
+        (
+            "fsC08WeightedLiquidMobility",
+            fvc::interpolate(rL)*fvc::interpolate(wL*rAU())
+        );
+        const surfaceScalarField weightedG
+        (
+            "fsC08WeightedGasMobility",
+            fvc::interpolate(rG)*fvc::interpolate(wG*rAU())
+        );
+        scalar maxCrossPhaseRatio=0,maxSumGap=0;
+        label interfaceFace=-1;
+        const auto& owner=mesh.owner();
+        const auto& neighbour=mesh.neighbour();
+        const surfaceScalarField weightedVolumeL
+        (
+            "fsC08WeightedLiquidVolumeMobility",
+            fvc::interpolate(wL*rAU())
+        );
+        const surfaceScalarField weightedVolumeG
+        (
+            "fsC08WeightedGasVolumeMobility",
+            fvc::interpolate(wG*rAU())
+        );
+        forAll(neighbour,facei)
+        {
+            // Reporting only: select strong phase-contrast faces.
+            // No phase inventory or transport is thresholded.
+            if (mag(wL[owner[facei]]-wL[neighbour[facei]])>0.5
+                && weightedL[facei]>0)
+            {
+                const scalar ratio=liquidMobility[facei]/weightedL[facei];
+                if (std::isfinite(ratio) && ratio>maxCrossPhaseRatio)
+                {
+                    maxCrossPhaseRatio=ratio;
+                    interfaceFace=facei;
+                }
+            }
+            if (rAUf[facei]>0)
+                maxSumGap=max(maxSumGap,mag
+                (
+                    (weightedVolumeL[facei]+weightedVolumeG[facei])
+                    /rAUf[facei]-1
+                ));
+        }
+        if (phaseMobility=="phaseWeighted")
+        {
+            // Keep existing boundary mobilities, including gas-only vent.
+            liquidMobility.primitiveFieldRef()=weightedL.primitiveField();
+            gasMobility.primitiveFieldRef()=weightedG.primitiveField();
+        }
+        Info<< "FS_C08_PHASE_PRESSURE_MOBILITY"
+            << " time_s=" << runTime.value() << " corrector=" << iter
+            << " mode=" << phaseMobility
+            << " maxSeparateToWeightedLiquidRatio=" << maxCrossPhaseRatio
+            << " interfaceFace=" << interfaceFace
+            << " maxWeightedVolumeMobilitySumGap=" << maxSumGap << nl;
         forAll(mesh.boundary(),patchi)
             if (incrementTypes[patchi]=="fixedValue")
                 liquidMobility.boundaryFieldRef()[patchi]=scalar(0);
