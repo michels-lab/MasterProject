@@ -149,7 +149,14 @@ def stage(source: Path, material: Path, output: Path,
           momentum_face_mobility: str = "linear",
           momentum_matrix_coupling: str = "legacy",
           phase_pressure_mobility: str = "separate",
-          momentum_flux_mode: str = "incremental") -> dict:
+          momentum_flux_mode: str = "incremental",
+          energy_donor_mode: str = "legacy") -> dict:
+    require(energy_donor_mode in ("legacy","oldGas","currentLiquid","oldGasCurrentLiquid"),
+            "unknown energy donor mode")
+    require(energy_donor_mode=="legacy" or
+            (laminar_reference and startup_probe_dt is not None and momentum_face_mobility=="linear"
+             and phase_pressure_mobility=="separate" and momentum_flux_mode=="incremental"),
+            "energy donor alternatives require reference flux fixed-step laminar probe")
     require(momentum_flux_mode in ("incremental","totalUpwind","incrementalNoDdtCorr","totalUpwindNoDdtCorr"),
             "unknown momentum flux mode")
     require(momentum_flux_mode=="incremental" or
@@ -310,7 +317,8 @@ def stage(source: Path, material: Path, output: Path,
         f"momentumFaceMobility {momentum_face_mobility};\n"
         f"momentumMatrixCoupling {momentum_matrix_coupling};\n"
         f"phasePressureMobility {phase_pressure_mobility};\n"
-        f"momentumFluxMode {momentum_flux_mode};\n",
+        f"momentumFluxMode {momentum_flux_mode};\n"
+        f"energyDonorMode {energy_donor_mode};\n",
         encoding="utf-8")
     shutil.copy2(material,output/"constant/fluid/fsC08Material")
     # An old legacy solid field must NOT be misinterpreted as rhoAlpha.solid.
@@ -336,6 +344,7 @@ def stage(source: Path, material: Path, output: Path,
         "momentum_matrix_coupling":momentum_matrix_coupling,
         "phase_pressure_mobility":phase_pressure_mobility,
         "momentum_flux_mode":momentum_flux_mode,
+        "energy_donor_mode":energy_donor_mode,
         "startup_probe_dt_s":startup_probe_dt,
         "startup_probe_steps":startup_probe_steps if startup_probe_dt is not None else None,
         "startup_probe_only":startup_probe_dt is not None,
@@ -366,6 +375,7 @@ def main(argv=None) -> int:
     ap.add_argument("--momentum-matrix-coupling",choices=("legacy","refreshBeforePressure"),default="legacy")
     ap.add_argument("--phase-pressure-mobility",choices=("separate","phaseWeighted"),default="separate")
     ap.add_argument("--momentum-flux-mode",choices=("incremental","totalUpwind","incrementalNoDdtCorr","totalUpwindNoDdtCorr"),default="incremental")
+    ap.add_argument("--energy-donor-mode",choices=("legacy","oldGas","currentLiquid","oldGasCurrentLiquid"),default="legacy")
     args=ap.parse_args(argv)
     output=args.destination or (
         Path.home()/"OpenFOAM"/"FS_C08_COUPLED_RUNS"/
@@ -374,7 +384,7 @@ def main(argv=None) -> int:
     )
     try:
         report=stage(args.source,args.material,output,args.laminar_reference,
-                     args.startup_probe_dt,args.startup_probe_steps,args.momentum_face_mobility,args.momentum_matrix_coupling,args.phase_pressure_mobility,args.momentum_flux_mode)
+                     args.startup_probe_dt,args.startup_probe_steps,args.momentum_face_mobility,args.momentum_matrix_coupling,args.phase_pressure_mobility,args.momentum_flux_mode,args.energy_donor_mode)
         print(json.dumps(report,indent=2))
         return 0
     except (ValueError,OSError) as e:
