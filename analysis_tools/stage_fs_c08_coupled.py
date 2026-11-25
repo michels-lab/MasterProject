@@ -41,23 +41,49 @@ def sha(path: Path) -> str:
 
 
 def add_phase_mass_solvers(solution: str) -> str:
-    """Install explicit regular AND final PIMPLE matrix solver entries."""
+    """Install regular/final phase-mass and mixture-temperature solvers.
+
+    The mass matrix is diagonal (implicit ddt, explicit face flux).
+    The new energy matrix is symmetric: implicit Sp and scalar diffusion,
+    with energy advection on the RHS. DILU is not a symmetric preconditioner.
+    Preserve inherited pressure/momentum and other solver dictionaries.
+    """
     pattern = r"(?m)^(\s*solvers\s*\{)"
     require(len(re.findall(pattern, solution)) == 1,
             "expected exactly one solvers dictionary in fluid fvSolution")
     require("rhoAlpha." not in solution,
             "source already has FS-C08 phase mass matrix entries")
+
+    # Remove existing literal T/TFinal blocks, if any. Explicit new keys
+    # also take precedence over inherited regex entries such as "T.*".
+    # Refuse unexpectedly nested blocks instead of partially editing them.
+    exact_T = re.compile(r'(?m)^[ \t]*(?:"T(?:Final)?"|T(?:Final)?)[ \t\r\n]*\{')
+    while True:
+        match = exact_T.search(solution)
+        if match is None:
+            break
+        end = solution.find("}", match.end())
+        require(end != -1 and "{" not in solution[match.end():end],
+                "unexpected nested/unterminated literal T solver block")
+        solution = solution[:match.start()] + solution[end+1:]
+
     entries = []
-    for field in ("rhoAlpha.liquid", "rhoAlpha.solid"):
+    for field in ("rhoAlpha.liquid", "rhoAlpha.solid", "T"):
         for final in (False, True):
             name = field + ("Final" if final else "")
+            # Current mass equation is diagonal; diagonal is a valid
+            # preconditioner for both matrix classes. Temperature uses
+            # PCG/DIC for its symmetric diffusion-plus-diagonal operator.
+            solver = "PCG" if field == "T" else "PBiCGStab"
+            preconditioner = "DIC" if field == "T" else "diagonal"
+            rel_tol = 0 if final or field == "T" else 0.01
             entries.append(
                 f"\n    {name}\n"
                 "    {\n"
-                "        solver          PBiCGStab;\n"
-                "        preconditioner  DILU;\n"
+                f"        solver          {solver};\n"
+                f"        preconditioner  {preconditioner};\n"
                 "        tolerance       1e-10;\n"
-                f"        relTol          {0 if final else 0.01};\n"
+                f"        relTol          {rel_tol};\n"
                 "    }\n"
             )
     return re.sub(pattern, lambda m: m.group(1) + "".join(entries),
