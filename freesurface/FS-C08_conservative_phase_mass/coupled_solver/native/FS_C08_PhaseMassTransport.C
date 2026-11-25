@@ -4,6 +4,7 @@
 #include "FS_C08_PhaseMassTransport.H"
 #include "fvc.H"
 #include "fvmSup.H"
+#include "PstreamReduceOps.H"
 #include "zeroGradientFvPatchFields.H"
 #include <cmath>
 namespace Foam { namespace fsC08 {
@@ -217,7 +218,7 @@ PhaseMassTransport::PhaseMassTransport
 
     checkAndUpdateProperties(T,metal);
     initializeIfRequired(metal,T);
-    reconstructFractions();
+    reconstructFractions(T,"initialization");
 
     // On restart, VOF and masses represent the SAME physical inventory.
     // Do not silently rewrite an inconsistent saved VOF or clip mass.
@@ -469,12 +470,16 @@ void PhaseMassTransport::refreshAfterEnergy
     // mass transport is complete. Pressure MUST see the new volume.
     // Never consume phase mass or re-evaluate kinetic Gamma here.
     checkAndUpdateProperties(T,metal);
-    reconstructFractions();
     updateVolumeSources(T);
+    reconstructFractions(T,"afterEnergy");
 }
 
 
-void PhaseMassTransport::reconstructFractions()
+void PhaseMassTransport::reconstructFractions
+(
+    const volScalarField& T,
+    const char* stage
+)
 {
     const auto& ml=mLiquid_.primitiveField();
     const auto& ms=mSolid_.primitiveField();
@@ -483,20 +488,82 @@ void PhaseMassTransport::reconstructFractions()
     auto& al=alphaLiquid_.primitiveFieldRef();
     auto& as=alphaSolid_.primitiveFieldRef();
     auto& am=alphaMetalFromMass_.primitiveFieldRef();
+    label worstCell=-1;
+    label overfilledCells=0;
+    scalar maximumExcess=0;
+    scalar excessVolume=0;
+    scalar spareVolume=0;
+    scalar liquidMassExcess=0;
     forAll(ml,i)
     {
         al[i]=ml[i]/rl[i]; as[i]=ms[i]/rs[i]; am[i]=al[i]+as[i];
-        if (!std::isfinite(am[i]) || al[i]<-1e-12 || as[i]<-1e-12
-            || am[i]>1+1e-12)
+        if (!std::isfinite(am[i]) || al[i]<-1e-12 || as[i]<-1e-12)
             FatalErrorInFunction
-                << "FS-C08 saturation violation at " << i
+                << "FS-C08 invalid phase fraction at " << i
+                << " stage=" << stage
                 << ", alphaL=" << al[i] << ", alphaS=" << as[i]
                 << "; no mass clipping" << exit(FatalError);
+
+        // Trial volume defect, not a mass loss and not a physical VOF.
+        // A future pressure/flux projection must redistribute this mass
+        // conservatively, with its associated energy, before accepting alpha.
+        const scalar excess=max(scalar(0),am[i]-scalar(1));
+        const scalar spare=max(scalar(0),scalar(1)-am[i]);
+        excessVolume+=excess*mesh_.V()[i];
+        spareVolume+=spare*mesh_.V()[i];
+        liquidMassExcess+=max(scalar(0),ml[i]-rl[i]*max(scalar(0),scalar(1)-as[i]))
+                         *mesh_.V()[i];
+        if (excess>1e-12)
+        {
+            ++overfilledCells;
+            if (excess>maximumExcess)
+            {
+                maximumExcess=excess;
+                worstCell=i;
+            }
+        }
+    }
+    const label globalOverfilledCells=returnReduce(overfilledCells,sumOp<label>());
+    const scalar globalMaxExcess=returnReduce(maximumExcess,maxOp<scalar>());
+    const scalar globalExcessVolume=returnReduce(excessVolume,sumOp<scalar>());
+    const scalar globalSpareVolume=returnReduce(spareVolume,sumOp<scalar>());
+    const scalar globalLiquidMassExcess=returnReduce(liquidMassExcess,sumOp<scalar>());
+    if (globalOverfilledCells>0)
+    {
+        Info<< "FS_C08_TRIAL_VOLUME_DEFECT stage=" << stage
+            << " time_s=" << mesh_.time().value()
+            << " overfilledCells=" << globalOverfilledCells
+            << " maxExcessFraction=" << globalMaxExcess
+            << " excessVolume_m3=" << globalExcessVolume
+            << " spareVolume_m3=" << globalSpareVolume
+            << " liquidMassAboveLocalCapacity_kg=" << globalLiquidMassExcess
+            << " acceptedPhysicalState=0" << nl;
+        if (worstCell>=0)
+        {
+            Pout<< "FS_C08_TRIAL_VOLUME_WORST_CELL localCell=" << worstCell
+                << " T_K=" << T.primitiveField()[worstCell]
+                << " rhoL_kg_m3=" << rl[worstCell]
+                << " rhoS_kg_m3=" << rs[worstCell]
+                << " mL_kg_m3=" << ml[worstCell]
+                << " mS_kg_m3=" << ms[worstCell]
+                << " alphaL=" << al[worstCell]
+                << " alphaS=" << as[worstCell]
+                << " cellVolume_m3=" << mesh_.V()[worstCell]
+                << " SvolThermal_s_1=" << SvolThermal_.primitiveField()[worstCell]
+                << " SvolPhaseChange_s_1=" << SvolPhaseChange_.primitiveField()[worstCell]
+                << nl;
+        }
+        FatalErrorInFunction
+            << "FS-C08 saturation violation stage=" << stage
+            << " maxExcessFraction=" << globalMaxExcess
+            << "; no mass clipping; pressure-volume coupling required"
+            << exit(FatalError);
     }
     alphaLiquid_.correctBoundaryConditions();
     alphaSolid_.correctBoundaryConditions();
     alphaMetalFromMass_.correctBoundaryConditions();
 }
+
 
 void PhaseMassTransport::solve
 (
@@ -520,7 +587,7 @@ void PhaseMassTransport::solve
     }
     checkAndUpdateProperties(T,alphaMetal);
     initializeIfRequired(alphaMetal,T);
-    reconstructFractions();
+    reconstructFractions(T,"beforeAdvection");
     volScalarField liquidShare
     (
         IOobject("fsC08LiquidShare",mesh_.time().name(),mesh_,
@@ -590,12 +657,12 @@ void PhaseMassTransport::solve
     mLiquid_.correctBoundaryConditions();
     mSolid_.correctBoundaryConditions();
 
-    reconstructFractions();
+    reconstructFractions(T,"afterPhaseExchange");
     lastSolvedTimeIndex_=mesh_.time().timeIndex();
     Info<< "FS_C08_IN_SOLVER_PHASE_MASS_EQUATIONS t="
         << mesh_.time().value()
         << " gammaMax=" << max(Gamma_).value()
-        << " pressure/energy NOT YET linked" << nl;
+        << " phaseMassPredictorOnly=1 pressureEnergyNotYetCorrected=1" << nl;
 }
 
 scalar PhaseMassTransport::liquidCv(const scalar T) const
