@@ -359,10 +359,9 @@ void solvers::fsC08ConservativeVoF::postSolve()
 {
     compressibleVoF::postSolve();
 
-    // Snapshot the thermodynamic internal E immediately AFTER the
-    // thermal solve but BEFORE pressure changed the gas EOS.
-    // For PIMPLE multiple outer loops this is the final predictor's
-    // phase inventory, not an old synthetic or postprocessed field.
+    // Snapshot the stored accepted internal energy before this postSolve
+    // reconstruction. The difference audits postSolve consistency;
+    // it is NOT an isolated pressure-work measurement.
     const scalarField energyBeforePressure
     (
         phaseInternalEnergy_.primitiveField()
@@ -566,6 +565,81 @@ void solvers::fsC08ConservativeVoF::postSolve()
         << " shrinkageFeedingPhysicsNotYetValidated=1" << nl;
 
     const scalar dt=runTime.deltaTValue();
+
+    // Independent accepted-state observables for transient investigation.
+    // These do not change the equations or convert an energy diagnostic
+    // into an acceptance claim. Integrate actual conserved phase masses
+    // and intrinsic densities, not thresholded interface cells.
+    scalar liquidKg=0,solidKg=0,liquidV=0,solidV=0,gasV=0;
+    scalar oldMetalV=0,phaseRate=0,thermalRate=0,domainV=0,independentGasKg=0;
+    scalar maxLocalEnergy=0,absLocalEnergy=0,energyScale=0,maxU=0;
+    scalar maxLocalEnergyRelative=0;
+    label worstEnergyCell=-1;
+    const tmp<volScalarField> tAdvDiv=fvc::div(phaseEnergyPhi_);
+    const tmp<volScalarField> tHeatDiv=fvc::div(phaseHeatPhi_);
+    const auto& advDiv=tAdvDiv().primitiveField();
+    const auto& heatDiv=tHeatDiv().primitiveField();
+    const auto& rL=phaseMass_->liquidDensity().primitiveField();
+    const auto& rS=phaseMass_->solidDensity().primitiveField();
+    const auto& aOld=alpha1.oldTime().primitiveField();
+    const auto& phaseSource=phaseMass_->phaseVolumeSource().primitiveField();
+    const auto& thermalSource=phaseMass_->thermalVolumeSource().primitiveField();
+    forAll(V,i)
+    {
+        domainV+=V[i];
+        liquidKg+=V[i]*l[i];
+        solidKg+=V[i]*s[i];
+        liquidV+=V[i]*l[i]/rL[i];
+        solidV+=V[i]*s[i]/rS[i];
+        independentGasKg+=V[i]*gasMassTrial_[i];
+        gasV+=V[i]*gasMassTrial_[i]/rGas[i];
+        oldMetalV+=V[i]*aOld[i];
+        phaseRate+=V[i]*phaseSource[i];
+        thermalRate+=V[i]*thermalSource[i];
+        maxU=max(maxU,mag(finalU[i]));
+        const scalar storage=u[i]-u0[i];
+        const scalar advection=dt*advDiv[i];
+        const scalar conduction=dt*heatDiv[i];
+        const scalar work=dt*workDensity[i];
+        const scalar defect=mag(storage+advection+conduction+work);
+        const scalar scale=mag(storage)+mag(advection)+mag(conduction)+mag(work);
+        if (!std::isfinite(defect) || !std::isfinite(scale))
+            FatalErrorInFunction << "FS-C08 nonfinite local energy ledger cell=" << i
+                << exit(FatalError);
+        absLocalEnergy+=V[i]*defect;
+        energyScale+=V[i]*scale;
+        maxLocalEnergyRelative=max(maxLocalEnergyRelative,
+            defect/max(scalar(1),scale));
+        if (defect>maxLocalEnergy)
+        {
+            maxLocalEnergy=defect;
+            worstEnergyCell=i;
+        }
+    }
+    // The coupled solver explicitly rejects parallel execution.
+    Info<< "FS_C08_ACCEPTED_STATE_LEDGER"
+        << " time_s=" << runTime.value() << " dt_s=" << dt
+        << " liquidMass_kg=" << liquidKg << " solidMass_kg=" << solidKg
+        << " independentGasMass_kg=" << independentGasKg
+        << " liquidVolume_m3=" << liquidV << " solidVolume_m3=" << solidV
+        << " gasVolume_m3=" << gasV << " domainVolume_m3=" << domainV
+        << " previousMetalVolume_m3=" << oldMetalV
+        << " deltaMetalVolume_m3=" << liquidV+solidV-oldMetalV
+        << " phaseVolumeRate_m3_s=" << phaseRate
+        << " thermalVolumeRate_m3_s=" << thermalRate
+        << " Tmin_K=" << min(mixture_.T()).value()
+        << " Tmax_K=" << max(mixture_.T()).value()
+        << " pMin_Pa=" << min(p).value() << " pMax_Pa=" << max(p).value()
+        << " maxU_m_s=" << maxU << nl;
+    Info<< "FS_C08_LOCAL_ENERGY_LEDGER"
+        << " time_s=" << runTime.value()
+        << " maxAbsCellResidual_J_m3=" << maxLocalEnergy
+        << " worstCell=" << worstEnergyCell
+        << " sumAbsCellResidual_J=" << absLocalEnergy
+        << " sumAbsCellTerms_J=" << energyScale
+        << " maxCellRelativeResidual=" << maxLocalEnergyRelative
+        << " energyValidationPending=1" << nl;
+
     const scalar metalResidual=M-M0+dt*boundaryMassRate;
     const scalar gasContinuityDefect=Mgas-Mgas0+dt*gasBoundaryOut;
     // This numerical tolerance is dimensionless and independent of
