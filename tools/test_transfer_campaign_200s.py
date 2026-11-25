@@ -6,6 +6,10 @@ from pathlib import Path
 import transfer_campaign_200s as t
 
 class Snapshots(unittest.TestCase):
+    def test_authorized_scope(self):
+        self.assertEqual(t.RUN_ORDER,("C14-3DA-200s","C14-2D-200s","B14-2D-200s","C14-3DB-200s"))
+        self.assertEqual(set(t.ORDER)-set(t.RUN_ORDER),set(t.EXCLUDED))
+        self.assertEqual(len(t.ORDER),6)
     def fixture(self,p,compact=False):
         p.mkdir(parents=True)
         for rel,body in (("0/metal/T",b"initial"),("constant/metal/polyMesh/points",b"mesh"),("system/controlDict",b"compact" if compact else b"dense")):

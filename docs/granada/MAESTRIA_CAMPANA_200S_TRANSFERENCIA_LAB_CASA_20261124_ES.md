@@ -1,3 +1,5 @@
+> **Corrección de alcance autorizada por el investigador, 24-11-2026:** B14 NO es candidato 3D. Campaña activa exclusivamente C14-3DA-200s, C14-2D-200s, B14-2D-200s, C14-3DB-200s (4 corridas, 800000 pasos); B14-2D referencia de contracción, C14 candidato 3D. Excluir B14-3DA-200s, B14-3DB-200s de ejecución y descarga. El paquete histórico de seis entradas ya publicado permanece intacto; no es autorización para correr seis. Transferidor actualizado 3deb781c0f1a87cb84244fdb3c748b39dbce3fa4; no modifica física, mallas, almacenamiento, rama FS ni resultados previos. Proyección para cuatro casos 103865500374 bytes; no consumo medido. 4/4 entradas autorizadas publicadas; 0/4 CFD completos confirmados. Foundation 14 laboratorio confirmado por consola (14-a4867fc914c1); importación y CFD pendientes. Interrupción local A fue manual según investigador, no prueba de estabilidad. A 8/10=80%, B 2/7=29% históricos.
+
 # Campaña compacta 200 s — transferencia laptop / laboratorio / casa
 24-11-2026. Investigador decidió ejecutar CFD en computadora de laboratorio y publicar resultados para análisis en casa.
 
