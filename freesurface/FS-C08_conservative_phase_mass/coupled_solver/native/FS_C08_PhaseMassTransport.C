@@ -2,6 +2,8 @@
    Material tables REQUIRED. Not a shadow, no fabricated properties.
    SPDX-License-Identifier: GPL-3.0-or-later */
 #include "FS_C08_PhaseMassTransport.H"
+#include "FS_C08_VolumeProjection.H"
+#include "upwind.H"
 #include "fvc.H"
 #include "fvmSup.H"
 #include "PstreamReduceOps.H"
@@ -609,12 +611,16 @@ void PhaseMassTransport::solve
     liquidShare.correctBoundaryConditions();
 
     // Real MULES-limited metal flux on ALL CFD mesh faces and boundaries.
-    const surfaceScalarField predictorFlux
+    surfaceScalarField predictorFlux
     (
         "fsC08PredictorLiquidMassFlux",
-        alphaPhiMetal*fvc::interpolate(liquidShare)
+        alphaPhiMetal*upwind<scalar>(mesh_,alphaPhiMetal).interpolate(liquidShare)
                     *fvc::interpolate(rhoLiquid_)
     );
+    // MULES bounds total metal volume, not the independent liquid
+    // inventory. A solid-only donor cannot export liquid. Also bound
+    // the sum of all outgoing mass transfers against the old inventory.
+    limitPredictorMassFlux(predictorFlux,mLiquid_.oldTime(),"liquidMULES");
     replayTrialFromFlux(T,alphaMetal,predictorFlux);
     // Trial masses can temporarily demand more than the local cell volume.
     // The pressure corrector must close volume before publishing VOF.
@@ -672,6 +678,10 @@ void PhaseMassTransport::replayTrialFromFlux
             FatalErrorInFunction
                 << "FS-C08: liquid FV advection created negative/nonfinite "
                 << "mass in cell " << i
+                << " transportedLiquid=" << transportedLiquid[i]
+                << " oldLiquid=" << mLiquid_.oldTime()[i]
+                << " oldSolid=" << initialSolid[i]
+                << " time_s=" << mesh_.time().value()
                 << "; adjust native CFD Courant / fluxes, no clipping."
                 << exit(FatalError);
         }
