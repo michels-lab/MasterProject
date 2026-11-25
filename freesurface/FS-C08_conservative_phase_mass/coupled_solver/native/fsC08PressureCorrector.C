@@ -34,6 +34,8 @@ License
 #include "FS_C08_VolumeProjection.H"
 #include "PstreamReduceOps.H"
 #include "upwind.H"
+#include "harmonic.H"
+#include "IOdictionary.H"
 #include "zeroGradientFvPatchFields.H"
 #include "fixedValueFvPatchFields.H"
 #include <cmath>
@@ -70,7 +72,29 @@ void Foam::solvers::fsC08ConservativeVoF::pressureCorrector()
     reconcileMixtureDensity();
     fvVectorMatrix& UEqn=tUEqn.ref();
     setrAU(UEqn);
-    const surfaceScalarField rAUf("fsC08MomentumMobility",fvc::interpolate(rAU()));
+    // Controlled numerical comparison, not a material property.
+    // Keep the ten-step passing arithmetic reference as the default.
+    const IOdictionary numerics
+    (
+        IOobject("fsC08Numerics",runTime.constant(),mesh,
+                 IOobject::READ_IF_PRESENT,IOobject::NO_WRITE)
+    );
+    const word faceMobility=numerics.found("momentumFaceMobility")
+        ? numerics.lookup<word>("momentumFaceMobility") : word("linear");
+    if (faceMobility!="linear" && faceMobility!="harmonic")
+        FatalErrorInFunction << "FS-C08 unknown momentumFaceMobility "
+            << faceMobility << exit(FatalError);
+    surfaceScalarField rAUf("fsC08MomentumMobility",fvc::interpolate(rAU()));
+    if (faceMobility=="harmonic")
+    {
+        const tmp<surfaceScalarField> tHarmonic=harmonic(mesh).interpolate(rAU());
+        // Only change internal face interpolation, preserving BC mobilities.
+        rAUf.primitiveFieldRef()=tHarmonic().primitiveField();
+    }
+    forAll(rAUf,i)
+        if (!std::isfinite(rAUf[i]) || rAUf[i]<=0)
+            FatalErrorInFunction << "FS-C08 invalid face momentum mobility "
+                << i << exit(FatalError);
     const volVectorField HbyA(constrainHbyA(rAU()*UEqn.H(),U,p_rgh));
     surfaceScalarField phiHbyA
     (
@@ -475,6 +499,61 @@ void Foam::solvers::fsC08ConservativeVoF::pressureCorrector()
     fvc::correctUf(Uf,U,fvc::absolute(phi,U),MRF);
     p_rgh=p-rho*buoyancy.gh-buoyancy.pRef;
     p_rgh.correctBoundaryConditions();
+    // An independent comparison: the accepted conservative flux
+    // reconstruction versus the frozen matrix's direct pressure-gradient
+    // velocity. Neither diagnostic overwrites the accepted solution.
+    const volVectorField pressureGradientU
+    (
+        "fsC08PressureGradientVelocity",
+        HbyA+rAU()*fvc::reconstruct
+        (
+            phig/rAUf-fvc::snGrad(p_rgh)*mesh.magSf()
+        )
+    );
+    const surfaceScalarField fluxFromU("fsC08FluxFromAcceptedU",fvc::flux(U));
+    scalar maxVelocityGap=0,maxPressureVelocity=0,maxFaceGap=0;
+    scalar maxPureGasGap=0,maxPureGasSpeed=0;
+    label gapCell=-1,faceGapId=-1;
+    forAll(U,i)
+    {
+        const scalar gap=mag(U[i]-pressureGradientU[i]);
+        maxPressureVelocity=max(maxPressureVelocity,mag(pressureGradientU[i]));
+        if (gap>maxVelocityGap)
+        {
+            maxVelocityGap=gap;
+            gapCell=i;
+        }
+        if (phaseMass_->liquidMass()[i]==0 && phaseMass_->solidMass()[i]==0)
+        {
+            maxPureGasGap=max(maxPureGasGap,gap);
+            maxPureGasSpeed=max(maxPureGasSpeed,mag(U[i]));
+        }
+    }
+    forAll(phi,facei)
+    {
+        const scalar gap=mag(phi[facei]-fluxFromU[facei])/mesh.magSf()[facei];
+        if (gap>maxFaceGap)
+        {
+            maxFaceGap=gap;
+            faceGapId=facei;
+        }
+    }
+    Info<< "FS_C08_MOMENTUM_CONSISTENCY"
+        << " time_s=" << runTime.value()
+        << " faceMobility=" << faceMobility
+        << " maxVelocityGap_m_s=" << maxVelocityGap
+        << " maxDirectPressureSpeed_m_s=" << maxPressureVelocity
+        << " maxPureGasVelocityGap_m_s=" << maxPureGasGap
+        << " maxPureGasSpeed_m_s=" << maxPureGasSpeed
+        << " maxInternalFaceNormalGap_m_s=" << maxFaceGap
+        << " face=" << faceGapId << " cell=" << gapCell;
+    if (gapCell>=0)
+        Info<< " center_m=" << mesh.C()[gapCell]
+            << " reconstructedU=" << U[gapCell]
+            << " pressureGradientU=" << pressureGradientU[gapCell]
+            << " alphaMetal=" << alpha1[gapCell]
+            << " rho_kg_m3=" << rho[gapCell];
+    Info<< " diagnosticOnly=1" << nl;
     Info<< "FS_C08_NATIVE_PRESSURE_WITH_MASS_DENSITY"
         << " time_s=" << runTime.value()
         << " gasEOSMismatch=" << gasMismatch
