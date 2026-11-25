@@ -30,7 +30,10 @@ tmp<volScalarField> trialVolumeResidual
             || !std::isfinite(rhoG[i]) || rhoG[i]<=0)
         {
             FatalErrorInFunction << "Invalid FS-C08 trial mass/density cell "
-                << i << exit(FatalError);
+                << i << " mL=" << mL[i] << " mS=" << mS[i]
+                << " mG=" << mG[i] << " rhoL=" << rhoL[i]
+                << " rhoS=" << rhoS[i] << " rhoG=" << rhoG[i]
+                << exit(FatalError);
         }
     }
     return mL/rhoL + mS/rhoS + mG/rhoG
