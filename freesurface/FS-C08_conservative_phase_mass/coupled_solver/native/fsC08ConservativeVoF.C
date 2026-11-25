@@ -166,6 +166,8 @@ solvers::fsC08ConservativeVoF::fsC08ConservativeVoF(fvMesh& mesh)
     // for independent inspection of the conservative gas inventory.
     mixture_.alpha2().writeOpt()=IOobject::AUTO_WRITE;
     mixture_.T().oldTime();
+    // Establish native gas energy history at t=0, before thermal correction.
+    mixture_.thermo2().he().oldTime();
     reconcileMixtureDensity();
     rhoMetalEffective_.oldTime();
     scalar initialGasMass=0, initialVolumeDefect=0;
@@ -318,6 +320,9 @@ void solvers::fsC08ConservativeVoF::prePredictor()
         if (!std::isfinite(gasMassTrial_[i]) || gasMassTrial_[i]<0)
             FatalErrorInFunction
                 << "FS-C08 inadmissible gas trial mass cell=" << i
+                << " trial_kg_m3=" << gasMassTrial_[i]
+                << " old_kg_m3=" << gasMassOld[i]
+                << " source_kg_m3_s=" << gasSource[i]
                 << "; no clipping" << exit(FatalError);
     }
     gasMassTrial_.correctBoundaryConditions();
