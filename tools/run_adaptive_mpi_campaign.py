@@ -22,6 +22,7 @@ CASES = ("C14-3DB-200s", "C14-3DA-200s", "B14-2D-200s")
 need = adaptive.need
 read = adaptive.read
 dump = adaptive.dump
+EXPERIMENT = "experimental_adaptive_capped_mpi"
 
 def execute(case, filename, args, on_line=None):
     print("START", filename, " ".join(args), flush=True)
@@ -93,6 +94,7 @@ def prepare(case, url, ranks, end, max_dt=.025):
         r.update(status="MPI_PREPARED", solver_completed=False, physical_validation=False,
                  execution_mode="serial_reference" if ranks == 1 else "mpi",
                  mpi_ranks=ranks, target_time_s=end, time_mode="adaptive_capped",
+                 validation_class=EXPERIMENT, production_approved=False,
                  initial_dt_s=.001, max_co=.25, max_dt_s=max_dt,
                  max_co_policy="explicit 0.25", max_deltaT_policy="explicit configurable cap",
                  fixed_input_sha256=r["input_sha256"], input_sha256=after,
@@ -110,7 +112,9 @@ def run(case, r, ranks, end):
     dt_log = co_log = None
     ended = fatal = False
     last_progress = 0.
-    previous_wall = None
+    first_step_wall = None
+    observed_ranks = None
+    benchmark = {}
     phase = "decomposition"
     try:
         need(transfer.input_hashes(case) == r["input_sha256"], "input hash drift")
@@ -131,7 +135,11 @@ def run(case, r, ranks, end):
                         "maxCourant_reported", "wall_since_launch_s"))
             started = time.monotonic()
             def parse(line):
-                nonlocal last, dt_log, co_log, ended, fatal, last_progress, previous_wall
+                nonlocal last, dt_log, co_log, ended, fatal, last_progress, first_step_wall, observed_ranks
+                m = re.match(r"^\s*nProcs\s*:\s*(\d+)", line)
+                if m:
+                    observed_ranks = int(m[1])
+                    need(observed_ranks == ranks, "actual MPI process count mismatch")
                 ended |= line.strip() == "End"
                 fatal |= "FOAM FATAL" in line
                 m = re.search(r"deltaT\s*=\s*(" + adaptive.NUM + ")", line)
@@ -154,6 +162,12 @@ def run(case, r, ranks, end):
                 dts.append(dt)
                 elapsed = time.monotonic() - started
                 w.writerow((len(steps), t, dt, dt_log, co_log, elapsed))
+                if first_step_wall is None:
+                    first_step_wall = elapsed
+                for station in (1., 2., 2.4, 3.):
+                    if last < station <= t and str(station) not in benchmark:
+                        benchmark[str(station)] = {"actual_time_s":t, "steps":len(steps),
+                            "wall_from_launch_s":elapsed, "wall_since_first_step_s":elapsed-first_step_wall}
                 if len(steps) == 1 or t - last_progress >= .099999 or t >= end - 1e-7:
                     print(f"{case.name}: {t:.9g}/{end}s steps={len(steps)} dt={dt:.6g} Co={co_log} wall={elapsed:.1f}s",
                           flush=True)
@@ -166,8 +180,10 @@ def run(case, r, ranks, end):
                 args = ["mpirun", "-np", str(ranks)] + args + ["-parallel"]
             r["solver_wall_seconds"] = execute(case, "log.foamMultiRun", args, parse)
         need(ended and not fatal and steps and abs(last - end) < 1e-7, "incomplete solver")
+        need(observed_ranks == ranks, "native nProcs not confirmed")
         r.update(solver_completed=True, final_time_s=last, solver_steps=len(steps),
-                 status="MPI_SOLVER_COMPLETE_AUDIT_PENDING",
+                 status="MPI_SOLVER_COMPLETE_AUDIT_PENDING", observed_mpi_ranks=observed_ranks,
+                 benchmark_stations=benchmark, first_step_wall_seconds=first_step_wall,
                  adaptive_statistics={"min_dt_s":min(dts), "max_dt_s":max(dts),
                     "mean_dt_s":sum(dts)/len(dts), "max_logged_Courant":max(cos) if cos else None,
                     "wall_seconds":r["solver_wall_seconds"]})
@@ -201,8 +217,29 @@ def run(case, r, ranks, end):
                     for name in names:
                         adaptive.profile(folder / (name + ".xy"),
                             adaptive.NEAR if group == "nearTopInternalLine" else adaptive.CANON)
+            reductions = ("metalTopPhiSum", "metalTopEnergyPower", "metalMoldEnergyPower",
+                          "metalBoundaryEnergyPower", "metalSensibleEnthalpy", "metalMeanLiquidFraction",
+                          "metalLatentHeatPower", "metalMeanCoolingRate", "metalMeanSolidificationRate",
+                          "metalMaxCourant", "metalMaxThermalGradient", "metalMaxDensityGradient")
+            for group in reductions:
+                files = list((pp / group / "0").glob("*.dat"))
+                need(len(files) == 1, "missing/ambiguous pilot reduction " + group)
+                adaptive.times_table(files[0], target, 5e-5)
+                if group == "metalMeanLiquidFraction":
+                    need(all(len(row) == 2 and -1e-6 <= row[1] <= 1 + 1e-6
+                             for row in adaptive.rows(files[0])), "mean liquid fraction outside bounds")
+            top = [(t, p) for t, p in adaptive.directories(pp / "topFlow") if t > 0]
+            need(len(top) == len(target)-1 and all(abs(t-e)<5e-7 and
+                 (p / "patch(metalTop).xy").is_file() for (t,p),e in zip(top,target[1:])),
+                 "pilot topFlow cadence")
+            temperatures = [v for row in adaptive.rows(pp / "temperatureProbe/0/T") for v in row[1:]]
+            need(temperatures and all(0 < v < 1e6 for v in temperatures),
+                 "nonpositive or invalid sampled temperature")
+            r["pilot_temperature_probe_range_K"] = [min(temperatures), max(temperatures)]
             r["status"] = "MPI_PILOT_PASS"
-            r["pilot_audit"] = "probes, profiles, early topFlow and reconstructed fields"
+            r["pilot_audit"] = {"probes":len(steps)+1, "profile_stations":len(target),
+                "volume_stations":end+1, "reduction_stations":len(target),
+                "topFlow_stations":len(top), "scope":"sampled diagnostics; no physical validation"}
         print(r["status"], case, "solver wall seconds:", r["solver_wall_seconds"], flush=True)
     except BaseException as e:
         r["status"] = "MPI_ATTEMPT_PRESERVED"
@@ -242,6 +279,8 @@ def main():
             need(any((r := read(p)).get("status") == "MPI_PILOT_PASS" and
                      r.get("mpi_ranks") == a.ranks and
                      r.get("max_co") == .25 and r.get("max_dt_s") == a.max_dt
+                     and r.get("validation_class") == EXPERIMENT and r.get("observed_mpi_ranks") == a.ranks
+                     and isinstance(r.get("pilot_audit"), dict)
                      for p in reports), "pass same-case/ranks/maxDeltaT pilot first")
         parent = Path(tempfile.mkdtemp(prefix=f"r{a.ranks}-{end}s-Co025-dt{cap_tag}-", dir=ROOT))
         case = parent / a.case
@@ -264,6 +303,7 @@ def main():
                             transfer.add(tar, q, case.name + "/" + name)
                 transfer.publish(url, branch, archive, {"kind":"adaptive_scientific_results",
                     "case":case.name, "time_mode":"adaptive_capped", "mpi_ranks":a.ranks,
+                    "validation_class":EXPERIMENT, "physical_validation":False,
                     "max_co":.25, "max_dt_s":a.max_dt, "solver_steps":report["solver_steps"],
                     "final_time_s":200, "solver_log_sha256":transfer.sha(case / "log.foamMultiRun"),
                     "report_sha256":transfer.sha(case / adaptive.REPORT),
