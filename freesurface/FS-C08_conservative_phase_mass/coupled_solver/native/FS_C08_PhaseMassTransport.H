@@ -131,6 +131,15 @@ public:
     void refreshTrialProperties(const volScalarField& T, const volScalarField& metal);
     void acceptTrialFractions(const volScalarField& T);
 
+    // Reassemble phase continuity and Gamma from time n using the
+    // corrected liquid face mass flux. Does not publish physical VOF.
+    void replayTrialFromFlux
+    (
+        const volScalarField& T,
+        const volScalarField& metal,
+        const surfaceScalarField& correctedLiquidMassFlux
+    );
+
     const volScalarField& liquidMass() const { return mLiquid_; }
     const volScalarField& solidMass() const { return mSolid_; }
     const volScalarField& liquidDensity() const { return rhoLiquid_; }
