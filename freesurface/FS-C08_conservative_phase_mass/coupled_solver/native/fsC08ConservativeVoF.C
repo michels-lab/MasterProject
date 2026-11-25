@@ -175,19 +175,18 @@ void solvers::fsC08ConservativeVoF::reconcileMixtureDensity()
     const auto& ml=phaseMass_->liquidMass().primitiveField();
     const auto& ms=phaseMass_->solidMass().primitiveField();
     const auto& rL=phaseMass_->liquidDensity().primitiveField();
-    const auto& metal=alpha1.primitiveField();
+    const auto& rS=phaseMass_->solidDensity().primitiveField();
     auto& rMetal=rhoMetalEffective_.primitiveFieldRef();
     forAll(rMetal,i)
     {
-        rMetal[i]=metal[i]>0
-            ? (ml[i]+ms[i])/metal[i]
-            : rL[i];
+        const scalar trialVolume=ml[i]/rL[i]+ms[i]/rS[i];
+        rMetal[i]=trialVolume>0 ? (ml[i]+ms[i])/trialVolume : rL[i];
     }
     rhoMetalEffective_.correctBoundaryConditions();
     mixtureDensity =
         phaseMass_->liquidMass()
       + phaseMass_->solidMass()
-      + alpha2*mixture_.rho2();
+      + gasMassTrial_;
     mixtureDensity.correctBoundaryConditions();
 }
 
@@ -199,8 +198,7 @@ void solvers::fsC08ConservativeVoF::updatePhaseInternalEnergy()
     const auto& ml=phaseMass_->liquidMass().primitiveField();
     const auto& ms=phaseMass_->solidMass().primitiveField();
     const auto& T=mixture_.T().primitiveField();
-    const auto& rhoGas=mixture_.rho2().primitiveField();
-    const auto& alphaGas=alpha2.primitiveField();
+    const auto& gasMass=gasMassTrial_.primitiveField();
     const auto& uGas=mixture_.thermo2().he().primitiveField();
     auto& energy=phaseInternalEnergy_.primitiveFieldRef();
 
@@ -215,7 +213,7 @@ void solvers::fsC08ConservativeVoF::updatePhaseInternalEnergy()
         energy[i]=
             ml[i]*liquid
           + ms[i]*solid
-          + alphaGas[i]*rhoGas[i]*uGas[i];
+          + gasMass[i]*uGas[i];
         if (!std::isfinite(energy[i]))
         {
             FatalErrorInFunction
@@ -243,13 +241,9 @@ void solvers::fsC08ConservativeVoF::prePredictor()
     // No made-up face flux, no post-processed saved-state inference.
     phaseMass_->solve(mixture_.T(),alpha1,alphaPhi1);
 
-    // Reconstruct metal VOF from transported mass and distinct rho(T).
-    // The native solid-fraction fvModel must NOT also be active.
-    alpha1 = phaseMass_->alphaMetal();
-    alpha2 = scalar(1)-alpha1;
-    alpha1.correctBoundaryConditions();
-    alpha2.correctBoundaryConditions();
-    correctInterface();
+    // Keep native bounded MULES geometry as provisional geometry.
+    // The independent trial masses are not yet admissible VOF.
+    // Publish phaseMass alpha only after pressure/volume closure.
 
     // Flow of solid skeleton is zero. Only liquid carries metal mass.
     alphaRhoPhi1 = phaseMass_->liquidMassFlux();
@@ -288,9 +282,9 @@ void solvers::fsC08ConservativeVoF::prePredictor()
     );
     contErr2 =
     (
-        fvc::ddt(alpha2,mixture_.rho2())()()
+        ((gasMassTrial_-gasMassOld)/runTime.deltaT())()()
       + fvc::div(alphaRhoPhi2)()()
-      - (fvModels().source(alpha2,mixture_.rho2())&mixture_.rho2())()
+      - gasSource()
     );
 
     mixture_.correct();
