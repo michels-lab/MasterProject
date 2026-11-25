@@ -1,3 +1,5 @@
+> **25-11-2026 | Actualización FS-C08:** tercer lote (energía) compilado y ejecutado, 4/4 variantes completas, 40/40 pasos; tres lotes acumulados 119/120 pasos, 11/12 variantes completas. Cambiar nivel temporal de advección no elimina aceleración; referencia retenida 143.896 m/s a 10 μs. Nuevo lote de soporte de transporte de presión (trial/oldLiquid/oldGas/oldBoth) publicado en rama independiente, compilación y CFD pendientes. Sin validación física ni cambio de hitos A/B. [Bitácora FS-C08](https://github.com/michels-lab/MasterProject/blob/research/fs-c08-conservative-phase-mass-20261123/freesurface/FS-C08_conservative_phase_mass/BITACORA_20261125_ES.md).
+
 # Estado integrado de investigación — 25 de noviembre de 2026
 
 Actualización documental, no corrida nueva. Conserva la [bitácora del 24-11](MAESTRIA_ESTADO_INTEGRADO_20261124_ES.md) como historia; esta página prevalece para el alcance aquí documentado. Fuentes: estados canónicos de A/B del repositorio, consola WSL de FS-C08 de los lotes y observaciones del investigador en conversaciones de campaña. Los archivos remotos de laboratorio no se han inspeccionado directamente en esta actualización.
