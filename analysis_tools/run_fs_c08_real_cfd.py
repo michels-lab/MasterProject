@@ -407,6 +407,10 @@ def execute(source: Path, material: Path, output: Path,
             line.strip() for line in log.splitlines()
             if any(marker in line for marker in markers)
         ][-30:]
+        report["accepted_extreme_cells"] = [
+            line.strip() for line in log.splitlines()
+            if "FS_C08_ACCEPTED_EXTREME_CELL" in line
+        ][-6:]
         report["accepted_pressure_records"] = log.count(
             "pressureVolumeEnergyIterationConverged=1")
         snapshots = numeric_time_dirs(output)
@@ -544,6 +548,8 @@ def main(argv: list[str] | None = None) -> int:
                 "native_thermal_solve_records", "fixed_probe_schedule_gate"):
         if key in report:
             print(key + ":", report[key])
+    for line in report.get("accepted_extreme_cells", []):
+        print(line)
     for key in ("native_numeric_budget_gate", "native_coupled_volume_gate", "transient_ledger"):
         if key in report:
             print(key + ":", json.dumps(report[key], sort_keys=True))
