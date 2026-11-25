@@ -29,7 +29,7 @@
     "POTENTIAL_UNLOGGED_CHANGES": 2
   },
   "finding_total": 9,
-  "inventory_fingerprint": "3d3adadf5c5e436916a9d9a8bfee5ddb5511e94909aefec3016e0e992dd4e7bc",
+  "inventory_fingerprint": "f9ed1fbfe66c111cca10dec95fca58e357f516db295930778c3b3767c853ef4d",
   "evidence_fingerprint": "07e4d13b306e45d7843bda6a92f8a9344e8834e3fbe3e9403701d946fa3fd5d0",
   "files": [
     {
@@ -300120,7 +300120,7 @@
       "role": "source",
       "purpose": "code/test implementation",
       "certainty": "rule",
-      "blob": "3c84f83b70c4de529cc41e10ec5e87432269460c"
+      "blob": "b04fc444f6e29581b5a642b9c36e9031632fd2c1"
     }
   ],
   "findings": [
