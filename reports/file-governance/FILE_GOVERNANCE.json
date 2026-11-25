@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "audit_kind": "deterministic_full_tracked_tree",
-  "tracked_files_total": 42877,
-  "classified_files_total": 42872,
+  "tracked_files_total": 42878,
+  "classified_files_total": 42873,
   "docs_content_inspected": 232,
   "large_docs_skipped": 1,
   "excluded_reports": 5,
@@ -19,7 +19,7 @@
     "simulation_input": 2683,
     "simulation_log": 3264,
     "simulation_output": 36203,
-    "source": 166,
+    "source": 167,
     "test": 76,
     "web_ui": 1,
     "workflow": 36
@@ -29,8 +29,8 @@
     "POTENTIAL_UNLOGGED_CHANGES": 2
   },
   "finding_total": 9,
-  "inventory_fingerprint": "48ab5a78558b0e1aa28a0d28d96b39048b0d9b1efd37847907b3ad67469d0764",
-  "evidence_fingerprint": "07e4d13b306e45d7843bda6a92f8a9344e8834e3fbe3e9403701d946fa3fd5d0",
+  "inventory_fingerprint": "bd2c5d7ecd111ee86841f9807fc33c64c6a8c4fcb9f5ae8f3ed59b78f5bb9302",
+  "evidence_fingerprint": "4b1f77afa7758ad99618a955a9237ec0106cfe5b9bbbabf5958edd6d1e955e9a",
   "files": [
     {
       "path": ".github/agents/openfoam-solidification.agent.md",
@@ -300088,6 +300088,13 @@
       "blob": "a2e2dd275c8b272cee6c762f6edfd5d5566d7a2d"
     },
     {
+      "path": "tools/run_adaptive_campaign_200s.py",
+      "role": "source",
+      "purpose": "code/test implementation",
+      "certainty": "rule",
+      "blob": "dcff046b94ba236d3407031e78cfb9a0ec54d823"
+    },
+    {
       "path": "tools/test_compact_campaign_200s.py",
       "role": "test",
       "purpose": "code/test implementation",
@@ -300202,20 +300209,20 @@
       "state": "REVIEW_REQUIRED"
     },
     {
-      "id": "8b22b57d7f7c6868",
+      "id": "da77b645d5afc916",
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_EN.md",
-      "observation": "1 implementation/config paths changed since this log's last commit; examples: tools/transfer_campaign_200s.py",
+      "observation": "2 implementation/config paths changed since this log's last commit; examples: tools/run_adaptive_campaign_200s.py, tools/transfer_campaign_200s.py",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     },
     {
-      "id": "4533ab611484cfff",
+      "id": "c63c590816acb22a",
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_ES.md",
-      "observation": "1 implementation/config paths changed since this log's last commit; examples: tools/transfer_campaign_200s.py",
+      "observation": "2 implementation/config paths changed since this log's last commit; examples: tools/run_adaptive_campaign_200s.py, tools/transfer_campaign_200s.py",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     }

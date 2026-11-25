@@ -5,7 +5,7 @@ No file is auto-deleted or declared unused.
 
 ## Coverage
 
-Tracked: 42877; classified: 42872; readable documents: 232; above read cap: 1; findings: 9.
+Tracked: 42878; classified: 42873; readable documents: 232; above read cap: 1; findings: 9.
 
 ## File roles
 
@@ -23,7 +23,7 @@ Tracked: 42877; classified: 42872; readable documents: 232; above read cap: 1; f
 | simulation_input | 2683 |
 | simulation_log | 3264 |
 | simulation_output | 36203 |
-| source | 166 |
+| source | 167 |
 | test | 76 |
 | web_ui | 1 |
 | workflow | 36 |
@@ -37,8 +37,8 @@ Tracked: 42877; classified: 42872; readable documents: 232; above read cap: 1; f
 - **CONFIRMED / BROKEN_RELATIVE_LINK** docs/granada/C3D05_T0_README_HISTORICAL_BEFORE_SINGLE_FLOW_20261120.md: Missing: outside-repo. Next: Fix link or restore target (ID 2fa56a22be90f045)
 - **CONFIRMED / BROKEN_RELATIVE_LINK** docs/granada/C3D05_T0_README_HISTORICAL_BEFORE_SINGLE_FLOW_20261120.md: Missing: outside-repo. Next: Fix link or restore target (ID 2fa56a22be90f045)
 - **CONFIRMED / BROKEN_RELATIVE_LINK** docs/granada/C3D05_T0_README_HISTORICAL_BEFORE_SINGLE_FLOW_20261120.md: Missing: outside-repo. Next: Fix link or restore target (ID 2fa56a22be90f045)
-- **REVIEW / POTENTIAL_UNLOGGED_CHANGES** PROJECT_AUDIT_LOG_EN.md: 1 implementation/config paths changed since this log's last commit; examples: tools/transfer_campaign_200s.py. Next: Inspect diffs and reconcile only meaningful decisions/results in the canonical log (ID 8b22b57d7f7c6868)
-- **REVIEW / POTENTIAL_UNLOGGED_CHANGES** PROJECT_AUDIT_LOG_ES.md: 1 implementation/config paths changed since this log's last commit; examples: tools/transfer_campaign_200s.py. Next: Inspect diffs and reconcile only meaningful decisions/results in the canonical log (ID 4533ab611484cfff)
+- **REVIEW / POTENTIAL_UNLOGGED_CHANGES** PROJECT_AUDIT_LOG_EN.md: 2 implementation/config paths changed since this log's last commit; examples: tools/run_adaptive_campaign_200s.py, tools/transfer_campaign_200s.py. Next: Inspect diffs and reconcile only meaningful decisions/results in the canonical log (ID da77b645d5afc916)
+- **REVIEW / POTENTIAL_UNLOGGED_CHANGES** PROJECT_AUDIT_LOG_ES.md: 2 implementation/config paths changed since this log's last commit; examples: tools/run_adaptive_campaign_200s.py, tools/transfer_campaign_200s.py. Next: Inspect diffs and reconcile only meaningful decisions/results in the canonical log (ID c63c590816acb22a)
 
 Complete path → purpose/role/certainty list lives in FILE_GOVERNANCE.json. SUMMARY.json has counts only for master polling.
 A dated file, duplicate, or suspicious name is an **investigation candidate**, not unwanted material.
