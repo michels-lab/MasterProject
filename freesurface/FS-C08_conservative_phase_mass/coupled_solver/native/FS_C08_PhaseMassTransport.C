@@ -469,8 +469,22 @@ void PhaseMassTransport::refreshAfterEnergy
     // After the native CHT energy solve, densities can change even when
     // mass transport is complete. Pressure MUST see the new volume.
     // Never consume phase mass or re-evaluate kinetic Gamma here.
+    refreshTrialProperties(T,metal);
+    acceptTrialFractions(T);
+}
+
+void PhaseMassTransport::refreshTrialProperties
+(
+    const volScalarField& T,
+    const volScalarField& metal
+)
+{
     checkAndUpdateProperties(T,metal);
     updateVolumeSources(T);
+}
+
+void PhaseMassTransport::acceptTrialFractions(const volScalarField& T)
+{
     reconstructFractions(T,"afterEnergy");
 }
 
