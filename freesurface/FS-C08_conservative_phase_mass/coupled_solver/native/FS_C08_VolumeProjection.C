@@ -319,6 +319,7 @@ bool projectTrialInventories
         const volScalarField dg("fsC08ProjectionDG",-dt*fvc::div(dfg));
         const volScalarField drg("fsC08ProjectionDRhoG",psiG*dp);
         bool advanced=false;
+        label inadmissibleBacktracks=0, nonDescentBacktracks=0;
         scalar step=1;
         for (label back=0;back<maxBacktracks;++back,step*=0.5)
         {
@@ -327,11 +328,25 @@ bool projectTrialInventories
             const volScalarField rc("fsC08ProjectionCandidateRhoG",rg+step*drg);
             const volScalarField pc("fsC08ProjectionCandidateP",p+step*dp);
             if (!admissibleTrial(lc,mS,gc,rhoL,rhoS,rc,pc,false))
+            {
+                ++inadmissibleBacktracks;
                 continue;
+            }
             const tmp<volScalarField> candidate=
                 trialVolumeResidual(lc,mS,gc,rhoL,rhoS,rc);
             const scalar nextNorm=residualNorm(candidate());
-            if (nextNorm>=norm && nextNorm>tolerance) continue;
+            if (nextNorm>=norm && nextNorm>tolerance)
+            {
+                ++nonDescentBacktracks;
+                continue;
+            }
+            Info<< "FS_C08_VOLUME_PROJECTION_ITER"
+                << " iteration=" << iter
+                << " residualBefore=" << norm
+                << " residualAfter=" << nextNorm
+                << " acceptedStep=" << step
+                << " inadmissibleBacktracks=" << inadmissibleBacktracks
+                << " nonDescentBacktracks=" << nonDescentBacktracks << nl;
             l=lc; g=gc; rg=rc; p=pc;
             fl+=step*dfl; fg+=step*dfg;
             advanced=true;
@@ -341,7 +356,16 @@ bool projectTrialInventories
         {
             Info<< "FS_C08_VOLUME_PROJECTION_REJECTED"
                 << " reason=no_admissible_descent"
-                << " maxResidual=" << norm << nl;
+                << " iteration=" << iter
+                << " maxResidual=" << norm
+                << " inadmissibleBacktracks=" << inadmissibleBacktracks
+                << " nonDescentBacktracks=" << nonDescentBacktracks
+                << " minLiquidMass=" << min(l).value()
+                << " minGasMass=" << min(g).value()
+                << " minGasDensity=" << min(rg).value()
+                << " minPressure=" << min(p).value()
+                << " dpMin=" << min(dp).value()
+                << " dpMax=" << max(dp).value() << nl;
             return false;
         }
     }
