@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
   "audit_kind": "deterministic_full_tracked_tree",
-  "tracked_files_total": 42891,
-  "classified_files_total": 42886,
-  "docs_content_inspected": 234,
+  "tracked_files_total": 42892,
+  "classified_files_total": 42887,
+  "docs_content_inspected": 235,
   "large_docs_skipped": 1,
   "excluded_reports": 5,
   "roles": {
@@ -12,7 +12,7 @@
     "bitacora": 5,
     "config": 21,
     "data": 37,
-    "document": 195,
+    "document": 196,
     "index": 35,
     "license": 1,
     "simulation_case_file": 141,
@@ -29,7 +29,7 @@
     "POTENTIAL_UNLOGGED_CHANGES": 2
   },
   "finding_total": 9,
-  "inventory_fingerprint": "b17f9987848533a4d154902cb1720ee066fef046d2a2ac5d01ee458d79afa0ed",
+  "inventory_fingerprint": "5c28e0903bd5023e6e7a42f6976bae462c7ee5d90c490a1a20d923f59d72f7c7",
   "evidence_fingerprint": "85e91a2cb4a13355e925e7efa3e0a95fcc6c93051344b79ab2ba2c0750f785a0",
   "files": [
     {
@@ -299414,6 +299414,13 @@
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
       "blob": "78729428d345f2a149a930a84be993b95a5530da"
+    },
+    {
+      "path": "docs/granada/MAESTRIA_ESTADO_INTEGRADO_20261125_ES.md",
+      "role": "document",
+      "purpose": "manual/decision/report/historical note",
+      "certainty": "inferred",
+      "blob": "127be0cf32423a3f574b059814365c3525031c01"
     },
     {
       "path": "docs/granada/OPENFOAM_HUB_READ_ACCESS_20261021.md",
