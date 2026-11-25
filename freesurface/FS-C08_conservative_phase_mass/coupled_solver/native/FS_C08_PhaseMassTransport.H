@@ -127,6 +127,10 @@ public:
         const volScalarField& alphaMetal
     );
 
+    // Separate property refresh from the strict physical VOF publication.
+    void refreshTrialProperties(const volScalarField& T, const volScalarField& metal);
+    void acceptTrialFractions(const volScalarField& T);
+
     const volScalarField& liquidMass() const { return mLiquid_; }
     const volScalarField& solidMass() const { return mSolid_; }
     const volScalarField& liquidDensity() const { return rhoLiquid_; }
