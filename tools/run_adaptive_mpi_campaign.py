@@ -3,6 +3,7 @@
 from __future__ import annotations
 import argparse
 import csv
+import errno
 import fcntl
 import math
 import os
@@ -317,6 +318,8 @@ def publish_result(case, url, ranks, max_dt):
                 q = case / name
                 if q.exists():
                     transfer.add(tar, q, case.name + "/" + name)
+            for q in sorted(case.glob("log.*.recovery-*")):
+                transfer.add(tar,q,case.name+"/"+q.name)
         transfer.publish(url, branch, archive, {"kind":"adaptive_scientific_results",
             "case":case.name, "time_mode":time_mode(max_dt), "mpi_ranks":ranks,
             "validation_class":experiment(max_dt), "physical_validation":False,
@@ -326,6 +329,103 @@ def publish_result(case, url, ranks, max_dt):
             "native_runtime_coverage_complete":True, "volume_fields_included":False},
             p / "git", case=case)
     return branch
+
+def recover_completed(case, r, ranks, max_dt):
+    """Recover post-solver stages only; never launch foamMultiRun."""
+    need(r.get("solver_completed") is True and r.get("final_time_s") == 200
+         and r.get("observed_mpi_ranks") == ranks and r.get("max_dt_s") == max_dt,
+         "no proven completed solver to recover")
+    steps = []
+    with (case / adaptive.TIMELINE).open() as f:
+        for row in csv.DictReader(f):
+            t = float(row["time_s"])
+            need(int(row["step"]) == len(steps)+1 and math.isfinite(t)
+                 and t > (steps[-1] if steps else 0.) and t <= 200+1e-7,
+                 "invalid recovered timeline")
+            if max_dt is not None:
+                need(t-(steps[-1] if steps else 0.) <= max_dt+1e-9,
+                     "recovered timeline exceeds cap")
+            steps.append(t)
+    need(len(steps) == r["solver_steps"] and steps and abs(steps[-1]-200)<1e-7,
+         "incomplete recovered timeline")
+    ended = fatal = False
+    native_ranks = None
+    last = None
+    with (case / "log.foamMultiRun").open(errors="replace") as f:
+        for line in f:
+            ended |= line.strip() == "End"
+            fatal |= "FOAM FATAL" in line
+            m = re.match(r"^\s*nProcs\s*:\s*(\d+)", line)
+            if m: native_ranks = int(m[1])
+            m = re.match(r"^\s*Time\s*=\s*(" + adaptive.NUM + r")\s*s?\s*$", line)
+            if m: last = float(m[1])
+    need(ended and not fatal and native_ranks == ranks and last is not None
+         and abs(last-200)<1e-7, "native log does not prove completion")
+    backup = Path(tempfile.mkdtemp(prefix="postsolver-recovery-", dir=case.parent))
+    print("RECOVER_POSTSOLVER", case, "evidence backup", backup, flush=True)
+    required = {"metal":("T","U","p","p_rgh","phaseChangeSource:alpha1")+adaptive.DERIVED,
+                "mold":("T",)}
+    def has_fields(folder):
+        return all((folder/reg/field).is_file() and (folder/reg/field).stat().st_size>0
+                   for reg, fields in required.items() for field in fields)
+    if ranks > 1:
+        # Reconstruct from the last time in the interrupted native log
+        # (even if some files exist), and all missing positive stations.
+        # Never overwrite an existing output: move suspect folders aside.
+        attempted = []
+        for p in [case/"log.reconstructPar", *sorted(case.glob("log.reconstructPar.recovery-*"))]:
+            if p.is_file():
+                times = []
+                with p.open(errors="replace") as f:
+                    for line in f:
+                        m = re.match(r"^\s*Time\s*=\s*(" + adaptive.NUM + r")\s*s?\s*$", line)
+                        if m: times.append(float(m[1]))
+                if times: attempted.append(times[-1])
+        missing = [t for t in range(1,201) if not has_fields(case/str(t))]
+        if missing:
+            start = max(1, min([min(missing)] + [int(t) for t in attempted if 1<=t<=200]))
+        else:
+            start = max(1,min([200]+[int(t) for t in attempted if 1<=t<=200]))
+        # Check all processor sources before moving any reconstructed output.
+        for n in range(ranks):
+            proc = case/f"processor{n}"
+            need(proc.is_dir(), "missing processor directory "+str(proc))
+            for t in range(start,201):
+                need(has_fields(proc/str(t)), "missing distributed fields "+str(proc/str(t)))
+        for t in range(start,201):
+            folder = case/str(t)
+            if folder.exists(): folder.rename(backup/str(t))
+        need(shutil.disk_usage(case).free > adaptive.RESERVE,
+             "insufficient free space for recovery")
+        r["recovery_reconstruct_from_s"] = start
+        name = "log.reconstructPar.recovery-" + backup.name
+        execute(case,name,["reconstructPar","-allRegions","-time",f"{start}:200","-case",str(case)])
+        # Native reconstruction normally excludes zero. If necessary, recover
+        # actual zero-time outputs only when every processor retained them.
+        if not has_fields(case/"0"):
+            need(all(has_fields(case/f"processor{n}"/"0") for n in range(ranks)),
+                 "native zero-time fields unavailable; do not fabricate them")
+            shutil.copytree(case/"0",backup/"original-zero")
+            execute(case,"log.reconstructZero.recovery-"+backup.name,
+                    ["reconstructPar","-allRegions","-withZero","-time","0","-case",str(case)])
+    # Preserve partial previous audit products; audit uses exclusive creation.
+    pp = case/"postProcessing/metal"
+    for p in pp.glob("CompactCanonical*"):
+        if p.is_dir(): p.rename(backup/p.name)
+    if (case/"logs").exists(): (case/"logs").rename(backup/"logs")
+    adaptive.early_gate(case,r)
+    execute(case,"log.foamLog.recovery-"+backup.name,["foamLog","log.foamMultiRun"])
+    r["runtime_audit"] = adaptive.audit(case,r,steps)
+    r["recovery_backup_path"] = str(backup)
+    if not r["runtime_audit"]["native_runtime_coverage_complete"]:
+        r["status"]="MPI_SOLVER_COMPLETE_AUDIT_PENDING"
+        dump(case/adaptive.REPORT,r)
+        raise RuntimeError("recovered output audit failed: "+str(r["runtime_audit"]["errors"]))
+    r["status"]="SOLVER_COMPLETE_ADAPTIVE_AUDITED"
+    r["recovered_postsolver"]=True
+    r["physical_validation"]=False
+    dump(case/adaptive.REPORT,r)
+    print("RECOVERY_AUDITED",case,flush=True)
 
 def run_queued_case(name, url, ranks, max_dt):
     branch = result_branch(name, ranks, max_dt)
@@ -348,6 +448,11 @@ def run_queued_case(name, url, ranks, max_dt):
         if r and r.get("status") == "SOLVER_COMPLETE_ADAPTIVE_AUDITED":
             return {"status":"PUBLISHED", "branch":publish_result(case,url,ranks,max_dt),
                     "case_path":str(case), "reused":True}
+    for case, r in full:
+        if r and r.get("solver_completed") is True and r.get("final_time_s") == 200:
+            recover_completed(case,r,ranks,max_dt)
+            return {"status":"PUBLISHED","branch":publish_result(case,url,ranks,max_dt),
+                    "case_path":str(case),"recovered":True}
     if full:
         return {"status":"FULL_ATTEMPT_PRESERVED", "paths":[str(c) for c,_ in full],
                 "note":"incomplete or unaudited; no automatic rerun"}
@@ -374,13 +479,14 @@ def sequence(url, ranks):
             try:
                 wave[name] = run_queued_case(name,url,ranks,max_dt)
             except (RuntimeError, ValueError, OSError, KeyError, subprocess.SubprocessError) as exc:
+                if isinstance(exc,OSError) and exc.errno in (errno.EROFS,errno.EIO,errno.ENOSPC):
+                    print("FILESYSTEM_FAILURE_STOP: repair storage before continuing; no CFD rerun",flush=True)
+                    raise
                 wave[name] = {"status":"BLOCKED_OR_FAILED_PRESERVED", "error":str(exc)}
                 print(wave[name], flush=True)
-            finally:
-                # Atomic replacement avoids a torn index on interruption.
-                tmp = index.with_suffix(".tmp")
-                dump(tmp, summary)
-                tmp.replace(index)
+            # Atomic replacement only after successful handling; storage failures
+            # must stop the queue instead of masking the original exception.
+            dump(index, summary)
         print("WAVE_ATTEMPTS_FINISHED", tag, flush=True)
     print(summary, flush=True)
     need(all(summary[cap_tag(dt)][name]["status"] == "PUBLISHED"
@@ -396,6 +502,7 @@ def main():
     caps.add_argument("--no-max-dt", action="store_true", help="omit explicit maxDeltaT; retain maxCo 0.25")
     ap.add_argument("--full", action="store_true")
     ap.add_argument("--publish", action="store_true")
+    ap.add_argument("--recover-only", action="store_true", help="recover and publish the named completed solver; never launch CFD")
     ap.add_argument("--sequence", action="store_true", help="wait for active campaign; run capped then uncapped four-case waves; publish automatically")
     ap.add_argument("--repo", type=Path, default=adaptive.HOME / "MasterProject")
     a = ap.parse_args()
@@ -405,6 +512,7 @@ def main():
          "max-dt must be finite and between 0.001 and 1 s")
     need(a.ranks <= len(os.sched_getaffinity(0)), "not enough available logical CPUs")
     need(not a.publish or a.full or a.sequence, "pilots cannot be published as 200s results")
+    need(not a.recover_only or (not a.sequence and not a.full), "recover-only is separate from new runs")
     need(not a.sequence or (not a.full and not a.no_max_dt and a.max_dt == .025),
          "sequence has fixed capped/uncapped waves")
     need(not ROOT.is_symlink() and not adaptive.ROOT.is_symlink(), "unsafe root")
@@ -423,6 +531,18 @@ def main():
         if a.sequence:
             sequence(url,a.ranks)
             return
+        if a.recover_only:
+            full = list(reports_for(a.case,a.ranks,max_dt,200))
+            for case,r in full:
+                if r and r.get("status") == "SOLVER_COMPLETE_ADAPTIVE_AUDITED":
+                    print("PUBLISHED",publish_result(case,url,a.ranks,max_dt),flush=True)
+                    return
+            for case,r in full:
+                if r and r.get("solver_completed") is True and r.get("final_time_s")==200:
+                    recover_completed(case,r,a.ranks,max_dt)
+                    print("PUBLISHED",publish_result(case,url,a.ranks,max_dt),flush=True)
+                    return
+            raise RuntimeError("no completed solver report found; preserve all attempts")
         end = 200 if a.full else 3
         if a.full:
             need(any(pilot_pass(r,a.ranks,max_dt)
