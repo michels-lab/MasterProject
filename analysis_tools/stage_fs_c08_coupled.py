@@ -90,7 +90,23 @@ def add_phase_mass_solvers(solution: str) -> str:
                   solution, count=1)
 
 
-def stage(source: Path, material: Path, output: Path) -> dict:
+def laminar_reference_models(momentum: str, models: str) -> tuple[str, str]:
+    """Explicit isolated molecular-transport reference; never alter source."""
+    pattern = r"(?m)^(\s*simulationType\s+)(RAS|laminar)(\s*;)"
+    require(len(re.findall(pattern, momentum)) == 1,
+            "laminar reference requires explicit mixture RAS or laminar transport")
+    momentum = re.sub(pattern, r"\g<1>laminar\g<3>", momentum, count=1)
+    damping = r"(?ms)^\s*turbulenceDamping\s*\{[^{}]*\}\s*"
+    require(len(re.findall(damping, models)) == 1,
+            "expected one known turbulenceDamping block")
+    models = re.sub(damping, "\n", models, count=1)
+    models += ("\n// FS-C08 controlled laminar reference: native nut=0; "
+               "VoFTurbulenceDamping not applicable.\n")
+    return momentum, models
+
+
+def stage(source: Path, material: Path, output: Path,
+          laminar_reference: bool = False) -> dict:
     source=source.expanduser().resolve()
     material=material.expanduser().resolve()
     output=output.expanduser().absolute()
@@ -172,6 +188,13 @@ def stage(source: Path, material: Path, output: Path) -> dict:
         "\n// FS-C08: old alphaSolidT/VoFSolidificationMelting REMOVED.\n"
         "// Phase energy contains latent only in u_liquid-u_solid reference.\n"
     )
+    momentum_reference = None
+    if laminar_reference:
+        momentum_file = source/"constant/fluid/momentumTransport"
+        require(momentum_file.is_file(), "missing explicit fluid momentumTransport")
+        momentum_reference, newModels = laminar_reference_models(
+            momentum_file.read_text(encoding="utf-8"), newModels
+        )
     solution=(source/"system/fluid/fvSolution").read_text(encoding="utf-8")
     solution=add_phase_mass_solvers(solution)
     schemes=(source/"system/fluid/fvSchemes").read_text(encoding="utf-8")
@@ -199,12 +222,17 @@ def stage(source: Path, material: Path, output: Path) -> dict:
         require((BASE_MODULE/need).is_file(),"native solver source missing "+need)
 
     tracked=["0/fluid/alpha.metal","constant/fluid/fvModels","system/controlDict"]
+    if laminar_reference:
+        tracked.append("constant/fluid/momentumTransport")
     sourceSHA={k:sha(source/k) for k in tracked}
     output.mkdir(parents=True,exist_ok=False)
     for name in ("0","constant","system"):
         shutil.copytree(source/name,output/name,symlinks=False)
     (output/"system/controlDict").write_text(ctrl,encoding="utf-8")
     (output/"constant/fluid/fvModels").write_text(newModels,encoding="utf-8")
+    if momentum_reference is not None:
+        (output/"constant/fluid/momentumTransport").write_text(
+            momentum_reference, encoding="utf-8")
     (output/"system/fluid/fvSolution").write_text(solution,encoding="utf-8")
     (output/"system/fluid/fvSchemes").write_text(schemes,encoding="utf-8")
     shutil.copy2(material,output/"constant/fluid/fsC08Material")
@@ -224,7 +252,9 @@ def stage(source: Path, material: Path, output: Path) -> dict:
         "original_source_sha256_after":{k:sha(source/k) for k in tracked},
         "material_values_fabricated":False,
         "previous_VoFSolidificationMelting_removed":True,
-        "turbulenceDamping_retained":True,
+        "turbulenceDamping_retained":not laminar_reference,
+        "transport_reference":"laminar_molecular" if laminar_reference else "inherited_RAS",
+        "laminar_reference_is_controlled_experiment":laminar_reference,
         "native_CFDSolver_compilation_verified":False,
         "native_CFD_executed":False,
         "physical_shrinkage_validated":False,
@@ -243,6 +273,8 @@ def main(argv=None) -> int:
     ap.add_argument("--source",required=True,type=Path)
     ap.add_argument("--material",required=True,type=Path)
     ap.add_argument("--destination",type=Path,default=None)
+    ap.add_argument("--laminar-reference", action="store_true",
+                    help="Isolated molecular transport reference, not calibrated RAS")
     args=ap.parse_args(argv)
     output=args.destination or (
         Path.home()/"OpenFOAM"/"FS_C08_COUPLED_RUNS"/
@@ -250,7 +282,7 @@ def main(argv=None) -> int:
          +"_"+secrets.token_hex(4))
     )
     try:
-        report=stage(args.source,args.material,output)
+        report=stage(args.source,args.material,output,args.laminar_reference)
         print(json.dumps(report,indent=2))
         return 0
     except (ValueError,OSError) as e:
