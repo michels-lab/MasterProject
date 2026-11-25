@@ -6,7 +6,7 @@
   "parent_branch": "research/fs-c02-metal-air-vof-20261117",
   "scientific_project": "Master's research — cast iron solidification and shrinkage using OpenFOAM Foundation14",
   "stage": "FS_C08_INTEGRATED_COUPLED_PRESSURE_VOLUME_MASS_ENERGY_CANDIDATE",
-  "status": "FS_C08_FIFTH_B14_CFD_LOCALIZED_PURE_GAS_THERMAL_VOLUME_DEFECT__HARMONIC_CONDUCTION_CANDIDATE",
+  "status": "FS_C08_SIXTH_CFD_HARMONIC_THERMAL_IMPROVEMENT_VERIFIED__LAMINAR_REFERENCE_AND_FEASIBLE_STEP_CANDIDATE",
   "code": "analysis_tools/fs_c08_conservative_reference.py",
   "tests": "analysis_tools/test_fs_c08_conservative_reference.py",
   "test_count_declared": 18,
@@ -108,8 +108,8 @@
   "cpp_mass_phase_update_gamma_and_volume_closure": true,
   "cpp_pressure_velocity_energy_or_cht": false,
   "CI_cxx_compile_step_declared": true,
-  "last_work": "Fifth real WSL attempt: exact initial and roundoff pre-energy volume closure, pure gas cell 16475 after energy has mass 1.15862 kg/m3 at T=1042.86 K and p=100000 Pa, volume 3.47619 times cell capacity. Pressure line search stalls on inadmissibility, not non-descent. Added harmonic face conductivity and exact assembled thermal flux/local energy diagnostics; causal hypothesis not verified. No B14 change.",
-  "next_scientific_stage": "Build and isolated retry; compare thermal budgets and worst cell before/after harmonic conductivity, inspect mesh/BC/energy terms if large gas jump persists; then revisit pressure admissibility and coupled energy/mass closure. No physical validation yet.",
+  "last_work": "Sixth native build passed. Harmonic interpolation reduced max volume residual from 2.47619 to 0.00301872; gas rise 742.858 K to 0.9056 K. Native effective iron conductivity 50793.75 W/m/K indicates inherited eddy contribution; no complete time step. Added explicit isolated laminar reference option, conductivity split logging, analytic global positivity step bound and limiting cell diagnostics. No new build/tests run yet.",
+  "next_scientific_stage": "Run explicit --laminar-reference isolated candidate, inspect eddy K=0, pressure step bound and accepted local closure; if trace mass limits Newton, redesign directional mobility. Laminar is controlled diagnostic only, not a calibrated replacement for RAS.",
   "Wsl_tests_runner": "python3 -B -m unittest discover -s analysis_tools -p 'test_fs_c08_conservative_reference.py' -v",
   "Wsl_tests_summary": "Ran 18 tests in 0.072s; OK",
   "Wsl_tests_source_head": "eddacd6e9",
@@ -662,7 +662,7 @@
       "runtime_load_verified": false,
       "completed_timestep_verified": false
     },
-    "ready_for_retry_scope": "experimental isolated retry with thermal candidate and new local ledger; not proof of root cause or physical correctness"
+    "ready_for_retry_scope": "isolated laminar reference; analytic feasible step, no established pressure convergence"
   },
   "fourth_B14_CFD_attempt": {
     "source_commit": "f81140daeac793d7d1b9ff9c54eb83036a742070",
@@ -729,5 +729,51 @@
     "candidate_thermal_fix": "distance-weighted harmonic internal face conductivity rather than arithmetic interpolation across material jumps; retain physical CHT patch coefficient; use exact assembled conductive matrix flux; diagnostic local thermal ledger",
     "thermal_fix_commit": "f69333cce95b103b3e255b533bf334e2a285fc8d",
     "new_build_or_CFD_verified": false
+  },
+  "sixth_B14_CFD_attempt": {
+    "source_commit": "8b6a1451434ed44837a89f6d6b423b4daad58507",
+    "report": "/home/michel/OpenFOAM/FS_C08_DIAGNOSTICS/FS_C08_REAL_CFD_DIAGNOSTICS_20261125T080629Z_59ab110e/FS_C08_REAL_CFD_REPORT.json",
+    "wmake_exit_code": 0,
+    "foamMultiRun_exit_code": 1,
+    "first_time_s": 1.19999904e-7,
+    "initial_volume_residual": 0,
+    "pre_energy_volume_residual": 2.22044604925e-16,
+    "post_energy_volume_residual": 0.00301872031719,
+    "worst_gas_cell": {
+      "id": 16475,
+      "Told_K": 300,
+      "Tnew_K": 300.905616095,
+      "rhoGas_kg_m3": 1.15513596155,
+      "gasMass_kg_m3": 1.15862299394
+    },
+    "worst_thermal_cell": {
+      "id": 63,
+      "Told_K": 1500,
+      "Tnew_K_first_corrector": 1501.59991115,
+      "kEffective_W_mK": 50793.7492857,
+      "gasMass": 0
+    },
+    "pressure_projection": {
+      "rejected_iteration": 0,
+      "inadmissibleBacktracks": 24,
+      "nonDescentBacktracks": 0,
+      "dpMin_Pa": -1187827.84847,
+      "dpMax_Pa": 7411109.52389
+    },
+    "accepted_positive_timestep": false,
+    "source_three_tracked_sha256_unchanged": true,
+    "global_energy_mass_verified": false
+  },
+  "next_transport_experiment": {
+    "mode": "explicit --laminar-reference; inherited RAS remains default; no B14 changes",
+    "reason": "isolate anomalous native eddy conductivity; Foundation14 compressibleInterPhaseThermophysicalTransportModel adds rho Cp nut",
+    "stage_commit": "56dee8fb69e950a31a7985560ee426f0a0ae7854",
+    "runner_commit": "d91a6c8faa9889743acd096cf9ff23560e35fbd8",
+    "thermal_split_commit": "150330e849474a2555412afef51bd48b4f025638",
+    "feasible_step_commit": "2120b87ebb11a8ed1999d619c1d869bc7dcb5612",
+    "test_commit": "fcf60ab772c0226b409868ec1335dcbac9dded11",
+    "native_build_verified": false,
+    "regression_run_verified": false,
+    "physical_validation": false
   }
 }
