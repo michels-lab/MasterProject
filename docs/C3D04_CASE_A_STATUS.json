@@ -1502,7 +1502,7 @@
     "discrete_conservation_verified": false
   },
   "adaptive_200s_campaign": {
-    "status": "UNCAPPED_ADAPTIVE_RUNNER_PUBLISHED_NOT_EXECUTED",
+    "status": "PREPARATION_FAILED_CADENCE_ORDER_FIX_PUBLISHED",
     "authorized_cases": [
       "C14-3DA-200s",
       "C14-2D-200s",
@@ -1520,10 +1520,11 @@
     "probe_interval": "actual adaptive solver step",
     "prepared_observed": 0,
     "completed_observed": 0,
-    "runner_commit": "see current repository revision",
+    "runner_commit": "93e3b899ab264c551582c28e8a95a50a34e5cc3c",
     "documentation": "docs/granada/MAESTRIA_CAMPANA_ADAPTATIVA_200S_20261124_ES.md",
     "max_deltaT_policy": "omit explicit maxDeltaT; retain native limits and maxCo",
     "root": "CAMPAIGN_200S_ADAPTIVE_UNCAPPED_01",
-    "result_prefix": "results/campaign-200s-adaptive-uncapped-v1/"
+    "result_prefix": "results/campaign-200s-adaptive-uncapped-v1/",
+    "last_observed_failure": "no .1s controls found in functions; no CFD"
   }
 }

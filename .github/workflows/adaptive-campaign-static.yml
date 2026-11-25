@@ -1,0 +1,23 @@
+name: Adaptive campaign static checks
+on:
+  push:
+    branches: [main]
+    paths:
+      - tools/run_adaptive_campaign_200s.py
+      - tools/test_adaptive_campaign_200s.py
+      - .github/workflows/adaptive-campaign-static.yml
+permissions:
+  contents: read
+jobs:
+  static:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            tools
+            analysis_tools/topSurfaceFlowPostProcessing
+            cases_controlled_buoyancy/B14_topFixedFlux_explicitRef/system
+            cases_controlled_buoyancy/C14_topFixedFlux_explicitRef/system
+            cases_3d/C3D_04_rounded_multiblock_pilot/C14_3D_A_faithful/system
+      - run: python3 -B tools/test_adaptive_campaign_200s.py -v
