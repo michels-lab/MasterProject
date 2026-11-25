@@ -1500,5 +1500,27 @@
     "spatial_plan": "Refine actual T02 blockMeshDict without geometry changes; levels not selected or generated",
     "independence_verified": false,
     "discrete_conservation_verified": false
+  },
+  "adaptive_200s_campaign": {
+    "status": "ADAPTIVE_RUNNER_PUBLISHED_NOT_EXECUTED",
+    "authorized_cases": [
+      "C14-3DA-200s",
+      "C14-2D-200s",
+      "B14-2D-200s",
+      "C14-3DB-200s"
+    ],
+    "fixed_lab_campaign_preserved": true,
+    "source_input_branch": "transfer/campaign-200s-compact-inputs-v1",
+    "source_archive_sha256": "c7687e03296e7e310512e6a61f8b436052430226dee3c51fb61d27c6fb23ea9d",
+    "initial_dt_s": 0.001,
+    "max_dt_s": 0.01,
+    "max_co": 0.25,
+    "profile_interval_s": 0.1,
+    "volume_interval_s": 1,
+    "probe_interval": "actual adaptive solver step",
+    "prepared_observed": 0,
+    "completed_observed": 0,
+    "runner_commit": "260ab7970dabad509bb14b4f3181661ea3f30471",
+    "documentation": "docs/granada/MAESTRIA_CAMPANA_ADAPTATIVA_200S_20261124_ES.md"
   }
 }

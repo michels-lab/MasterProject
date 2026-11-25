@@ -27,3 +27,6 @@ Se mantienen worktrees A/B/FS separados; no se fusiona FS-C08 ni se toca WSL. Lo
 
 
 > **Campaña 200 s:** preparador integrado publicado, materialización/ejecución WSL aún no observadas. [Plan y entrega](MAESTRIA_CAMPANA_B14_C14_200S_PLAN_20261124_ES.md). 0/6 corridas de 200 s confirmadas; A/B conservan hitos históricos.
+
+## Campaña adaptativa independiente autorizada — 24-11-2026
+Cuatro casos C14-3DA, C14-2D, B14-2D, C14-3DB en PC del investigador, no B14 3D. Conserva inputs de paquete verificado y campaña fija laboratorio. Cambios solo de control temporal: adjustTimeStep yes; deltaT inicial .001, maxCo .25, maxDeltaT .01 (decisión conservadora provisional), timePrecision 12; escritura adjustableRunTime 1 s, perfiles/reducciones .1 s por tiempo físico, sondas cada paso real. Sin compresión, sin retirar campos. Registra tiempos/dt/Courant, número real de pasos, wall time, auditoría de cadencia y perfiles; publicación independiente opcional. No afirmar ahorro de tiempo ni precisión temporal demostrada. Código 260ab7970dabad509bb14b4f3181661ea3f30471; ejecución y validación nativa pendientes. A 8/10=80%, B 2/7=29%; adaptación 0/4 preparada localmente, 0/4 completada. [Protocolo](./MAESTRIA_CAMPANA_ADAPTATIVA_200S_20261124_ES.md).
