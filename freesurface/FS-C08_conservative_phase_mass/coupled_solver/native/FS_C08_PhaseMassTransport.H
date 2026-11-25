@@ -96,7 +96,8 @@ class PhaseMassTransport
     void initializeIfRequired(const volScalarField& alphaMetal, const volScalarField& T);
     void evaluateGamma(const volScalarField& T);
     void updateVolumeSources(const volScalarField& T);
-    void reconstructFractions();
+    // Strict physical closure; record the full trial-volume defect before aborting.
+    void reconstructFractions(const volScalarField& T, const char* stage);
 
 public:
 
