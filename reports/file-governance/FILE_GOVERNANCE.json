@@ -29,7 +29,7 @@
     "POTENTIAL_UNLOGGED_CHANGES": 2
   },
   "finding_total": 9,
-  "inventory_fingerprint": "07877d173451415570e378d8eedcdee3de6203331d4632722f7b73e53f6ae57d",
+  "inventory_fingerprint": "3a575232a2db6546ac37538b23ae06a2aef5402558239feb5c2ec1ccfe046352",
   "evidence_fingerprint": "ee369aa8f89dddf87f888727df46e90e4d471ed0d3cf033ea57b986f065df053",
   "files": [
     {
@@ -300099,7 +300099,7 @@
       "role": "source",
       "purpose": "code/test implementation",
       "certainty": "rule",
-      "blob": "72d0a5c40686166193ed4d114971320aa6762e05"
+      "blob": "4b9737459f5373f7ac0aa231e5c01cd4f0d64248"
     },
     {
       "path": "tools/test_compact_campaign_200s.py",
