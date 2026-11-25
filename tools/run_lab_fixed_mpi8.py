@@ -20,7 +20,12 @@ SRC=transfer.COMPACT
 DST=HOME/"CAMPAIGN_200S_FIXED_MPI_08"
 NAMES=("C14-2D-200s","B14-2D-200s","C14-3DB-200s")
 REPORT=transfer.REPORT
-MPI_CMD=["mpirun","--map-by","hwthread:HWTCPUS","--bind-to","hwthread","-np","8"]
+MPI_CMD=None
+MPI_CANDIDATES=(
+    ["mpirun","--host","localhost:8","--map-by","slot","--bind-to","none","-np","8"],
+    ["mpirun","--host","localhost:8","--map-by","slot:OVERSUBSCRIBE","--bind-to","none","-np","8"],
+    ["mpirun","--map-by","hwthread:HWTCPUS","--bind-to","hwthread","-np","8"],
+)
 TIME=re.compile(r"^\s*Time\s*=\s*([0-9.eE+-]+)s?\s*$")
 RANK=re.compile(r"^\s*nProcs\s*:\s*(\d+)")
 def need(ok,msg):
@@ -184,13 +189,27 @@ def execute(prepared):
         save(path,meta)
         raise
 def mpi_preflight():
-    print("MPI_PREFLIGHT",MPI_CMD,flush=True)
-    p=subprocess.run(MPI_CMD+["sh","-c",'printf "%s\\n" "$OMPI_COMM_WORLD_RANK"'],
-                     stdout=subprocess.PIPE,stderr=subprocess.PIPE,text=True,timeout=45)
-    print(p.stdout,p.stderr,flush=True)
-    need(p.returncode==0 and sorted(p.stdout.split())==list("01234567"),
-         "eight distinct MPI ranks not proven; no case mutation")
-    print("MPI_PREFLIGHT_PASS",flush=True)
+    global MPI_CMD
+    for cmd in MPI_CANDIDATES:
+        print("MPI_PREFLIGHT",cmd,flush=True)
+        try:
+            p=subprocess.run(cmd+["sh","-c",'printf "%s\\n" "$OMPI_COMM_WORLD_RANK"'],
+                         stdout=subprocess.PIPE,stderr=subprocess.PIPE,text=True,timeout=45)
+        except subprocess.TimeoutExpired:
+            print("MPI_PREFLIGHT_TIMEOUT",cmd,flush=True)
+            continue
+        print(p.stdout,p.stderr,flush=True)
+        if p.returncode==0 and sorted(p.stdout.split())==list("01234567"):
+            MPI_CMD=cmd
+            print("MPI_PREFLIGHT_PASS",MPI_CMD,flush=True)
+            return
+    print("MPI_DIAGNOSTIC_SINGLE_RANK",flush=True)
+    try:
+        subprocess.run(["mpirun","--host","localhost:1","--bind-to","none","-np","1","hostname"],timeout=20)
+    except subprocess.TimeoutExpired:
+        print("MPI_SINGLE_RANK_TIMEOUT",flush=True)
+    raise RuntimeError("eight distinct MPI ranks not proven by any mapping; no case mutation")
+
 
 def archive_failed_starts():
     existing=[DST/n for n in NAMES if (DST/n).exists()]
