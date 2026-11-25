@@ -29,7 +29,7 @@
     "POTENTIAL_UNLOGGED_CHANGES": 2
   },
   "finding_total": 9,
-  "inventory_fingerprint": "8e9034c1f35223a38c5c2eec24740a0a7fe6b92003969b628c46b59f2905fb85",
+  "inventory_fingerprint": "71fa81a01d4c5b98f49dd3bccf78c45dfb1dc59ae19079c84601fd6f193f0bfe",
   "evidence_fingerprint": "60d4bedc8ada4fc0d3334dceec1a033980988f3d50745a00e790d1d4a5e943e2",
   "files": [
     {
@@ -299392,7 +299392,7 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "b2e3c6017b34cc544c41b73784c7f2a031d6acc8"
+      "blob": "3a2fea4e018a8ba1dfec24ea0e2f6ab362dc3ea8"
     },
     {
       "path": "docs/granada/MAESTRIA_CAMPANA_B14_C14_200S_PLAN_20261124_ES.md",
@@ -300113,7 +300113,7 @@
       "role": "source",
       "purpose": "code/test implementation",
       "certainty": "rule",
-      "blob": "941e9d2554048a3fd1939daa871b6b7cd2754085"
+      "blob": "973d34478c8d22eaadb4f1cea7bbd1f87a835bfb"
     },
     {
       "path": "tools/test_adaptive_campaign_200s.py",
