@@ -5,6 +5,9 @@
  * GPL-3.0-or-later.
  */
 #include "FS_C08_VolumeProjection.H"
+#include "FS_C08_DonorCapacity.H"
+#include <vector>
+#include <algorithm>
 #include "fvcDiv.H"
 #include "fvmLaplacian.H"
 #include "fvmSup.H"
@@ -123,13 +126,13 @@ void limitPredictorMassFlux
             << exit(FatalError);
     const auto& own=mesh.owner();
     const auto& nei=mesh.neighbour();
-    scalarField outgoing(availableMass.size(),0);
+    std::vector<long double> outgoing(availableMass.size(),0);
     forAll(nei,facei)
     {
         const scalar q=massFlux[facei];
         if (!std::isfinite(q))
             FatalErrorInFunction << "Nonfinite FS-C08 predictor flux" << exit(FatalError);
-        outgoing[q>=0 ? own[facei] : nei[facei]]+=dt*mag(q);
+        outgoing[q>=0 ? own[facei] : nei[facei]]+=static_cast<long double>(mag(q));
     }
     forAll(mesh.boundary(),patchi)
     {
@@ -143,7 +146,7 @@ void limitPredictorMassFlux
             if (!std::isfinite(q))
                 FatalErrorInFunction << "Nonfinite FS-C08 boundary predictor flux"
                     << exit(FatalError);
-            outgoing[cells[facei]]+=dt*max(scalar(0),q);
+            outgoing[cells[facei]]+=static_cast<long double>(max(scalar(0),q));
         }
     }
     scalarField scale(availableMass.size(),1);
@@ -154,15 +157,17 @@ void limitPredictorMassFlux
         if (!std::isfinite(availableMass[i]) || availableMass[i]<0)
             FatalErrorInFunction << "FS-C08 invalid predictor inventory cell=" << i
                 << " mass=" << availableMass[i] << " stage=" << stage << exit(FatalError);
-        const scalar inventory=availableMass[i]*mesh.V()[i];
-        const scalar cap=scalar(0.95)*inventory;
-        if (outgoing[i]>cap)
+        const long double inventory=static_cast<long double>(availableMass[i])*mesh.V()[i];
+        const long double factor=donorCapacityScale
+            (availableMass[i],mesh.V()[i],dt,outgoing[i],0.95L,1.0L);
+        if (factor<1)
         {
-            scale[i]=cap/outgoing[i];
+            scale[i]=static_cast<scalar>(factor);
             minScale=min(minScale,scale[i]);
             if (firstLimited<0) firstLimited=i;
             if (inventory>0)
-                maxRequestedRatio=max(maxRequestedRatio,outgoing[i]/inventory);
+                maxRequestedRatio=max(maxRequestedRatio,static_cast<scalar>(std::min(
+                    static_cast<long double>(GREAT),dt*outgoing[i]/inventory)));
             ++limited;
         }
     }
@@ -358,23 +363,23 @@ bool projectTrialInventories
                 dp,dfl,dfg,referenceCell
             );
 
-            scalarField outL(l.size(),0), outG(g.size(),0);
+            std::vector<long double> outL(l.size(),0), outG(g.size(),0);
             forAll(nei,facei)
             {
                 const label donorL=dfl[facei]>=0 ? own[facei] : nei[facei];
                 const label donorG=dfg[facei]>=0 ? own[facei] : nei[facei];
-                outL[donorL]+=dt.value()*mag(dfl[facei]);
-                outG[donorG]+=dt.value()*mag(dfg[facei]);
+                outL[donorL]+=static_cast<long double>(mag(dfl[facei]));
+                outG[donorG]+=static_cast<long double>(mag(dfg[facei]));
             }
             forAll(mesh.boundary(),patchi)
             {
                 const auto& cells=mesh.boundary()[patchi].faceCells();
                 forAll(cells,facei)
                 {
-                    outL[cells[facei]]+=dt.value()
-                        *max(scalar(0),dfl.boundaryField()[patchi][facei]);
-                    outG[cells[facei]]+=dt.value()
-                        *max(scalar(0),dfg.boundaryField()[patchi][facei]);
+                    outL[cells[facei]]+=static_cast<long double>
+                        (max(scalar(0),dfl.boundaryField()[patchi][facei]));
+                    outG[cells[facei]]+=static_cast<long double>
+                        (max(scalar(0),dfg.boundaryField()[patchi][facei]));
                 }
             }
 
@@ -383,17 +388,19 @@ bool projectTrialInventories
             scalar minScaleL=1,minScaleG=1;
             forAll(l,i)
             {
-                const scalar capL=scalar(0.95)*l[i]*mesh.V()[i];
-                const scalar capG=scalar(0.95)*g[i]*mesh.V()[i];
-                if (outL[i]>capL)
+                const long double factorL=donorCapacityScale
+                    (l[i],mesh.V()[i],dt.value(),outL[i],0.95L,0.8L);
+                const long double factorG=donorCapacityScale
+                    (g[i],mesh.V()[i],dt.value(),outG[i],0.95L,0.8L);
+                if (factorL<1)
                 {
-                    scaleL[i]=scalar(0.8)*capL/outL[i];
+                    scaleL[i]=static_cast<scalar>(factorL);
                     minScaleL=min(minScaleL,scaleL[i]);
                     ++limitedL;
                 }
-                if (outG[i]>capG)
+                if (factorG<1)
                 {
-                    scaleG[i]=scalar(0.8)*capG/outG[i];
+                    scaleG[i]=static_cast<scalar>(factorG);
                     minScaleG=min(minScaleG,scaleG[i]);
                     ++limitedG;
                 }
@@ -500,7 +507,7 @@ bool projectTrialInventories
         const auto boundStep=[&](scalar value, scalar increment,
                                  label celli, const word& name)
         {
-            if (increment<0)
+            if (increment<0 && value < -increment)
             {
                 const scalar bound=value/(-increment);
                 if (bound<step)
