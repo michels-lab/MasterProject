@@ -51,7 +51,7 @@ def execute(case, filename, args, on_line=None):
             raise
     return time.monotonic() - started
 
-def prepare(case, url, ranks, end):
+def prepare(case, url, ranks, end, no_max_co=False):
     # Fetch original verified inputs, never copy a live or previously run case.
     with tempfile.TemporaryDirectory(prefix="mpi-input-", dir=case.parent) as tmp:
         p = Path(tmp)
@@ -68,6 +68,12 @@ def prepare(case, url, ranks, end):
             shutil.copytree(src / name, case / name)
         need(transfer.input_hashes(case) == r["input_sha256"], "copy drift")
         changed = adaptive.adapt_dicts(case)
+        if no_max_co:
+            p = case / "system/controlDict"
+            content, count = re.subn(r"(?m)^[ \t]*maxCo[ \t]+0\.25[ \t]*;[ \t]*(?:\n|$)", "", p.read_text())
+            need(count == 1 and not re.search(r"(?m)^[ \t]*maxCo\b", content), "unexpected maxCo entry")
+            p.write_text(content)
+            changed["system/controlDict"] = transfer.sha(p)
         if end != 200:
             p = case / "system/controlDict"
             p.write_text(adaptive.edit_key(p.read_text(), "endTime", "200", str(end)))
@@ -86,7 +92,8 @@ def prepare(case, url, ranks, end):
         r.update(status="MPI_PREPARED", solver_completed=False, physical_validation=False,
                  execution_mode="serial_reference" if ranks == 1 else "mpi",
                  mpi_ranks=ranks, target_time_s=end, time_mode="adaptive_uncapped",
-                 initial_dt_s=.001, max_co=.25, max_dt_s=None,
+                 initial_dt_s=.001, max_co=None if no_max_co else .25, max_dt_s=None,
+                 max_co_policy="omit explicit maxCo; native remaining limits" if no_max_co else "explicit 0.25",
                  fixed_input_sha256=r["input_sha256"], input_sha256=after,
                  changed_time_control_files=changed, source_transfer_sha256=m["archive_sha256"],
                  profile_target_interval_s=.1, volume_target_interval_s=1.0,
@@ -208,6 +215,7 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--case", choices=CASES, default=CASES[0])
     ap.add_argument("--ranks", type=int, choices=(1, 8, 10), default=8)
+    ap.add_argument("--no-max-co", action="store_true", help="experimental: omit explicit maxCo from new attempts")
     ap.add_argument("--full", action="store_true")
     ap.add_argument("--publish", action="store_true")
     ap.add_argument("--repo", type=Path, default=adaptive.HOME / "MasterProject")
@@ -228,16 +236,18 @@ def main():
         if a.full:
             reports = ROOT.glob("*/" + a.case + "/" + adaptive.REPORT)
             need(any((r := read(p)).get("status") == "MPI_PILOT_PASS" and
-                     r.get("mpi_ranks") == a.ranks for p in reports), "pass same-case/ranks pilot first")
-        parent = Path(tempfile.mkdtemp(prefix=f"r{a.ranks}-{end}s-", dir=ROOT))
+                     r.get("mpi_ranks") == a.ranks and
+                     r.get("max_co") == (None if a.no_max_co else .25) for p in reports), "pass same-case/ranks pilot first")
+        parent = Path(tempfile.mkdtemp(prefix=f"r{a.ranks}-{end}s-{'noCo' if a.no_max_co else 'Co025'}-", dir=ROOT))
         case = parent / a.case
         case.mkdir()
         print("NEW_ATTEMPT", case, flush=True)
-        r = prepare(case, url, a.ranks, end)
+        r = prepare(case, url, a.ranks, end, a.no_max_co)
         run(case, r, a.ranks, end)
         if a.publish:
             adaptive.ROOT = parent
-            adaptive.RESULT_PREFIX = f"results/campaign-200s-adaptive-mpi-r{a.ranks}-v1/"
+            adaptive.RESULT_PREFIX = (f"results/campaign-200s-adaptive-mpi-r{a.ranks}-"
+                                      + ("noCo-v1/" if a.no_max_co else "v1/"))
             adaptive.publish(case, url)
 
 if __name__ == "__main__":
