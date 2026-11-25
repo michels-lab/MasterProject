@@ -140,6 +140,11 @@ public:
         const surfaceScalarField& correctedLiquidMassFlux
     );
 
+    // Fixed-temperature equilibrium mass-to-volume derivative.
+    // The transported liquid inventory is evaluated BEFORE phase exchange.
+    const word& phaseChangeClosure() const { return phaseChangeClosure_; }
+    scalar equilibriumDensity(const scalar T) const;
+
     const volScalarField& liquidMass() const { return mLiquid_; }
     const volScalarField& solidMass() const { return mSolid_; }
     const volScalarField& liquidDensity() const { return rhoLiquid_; }
