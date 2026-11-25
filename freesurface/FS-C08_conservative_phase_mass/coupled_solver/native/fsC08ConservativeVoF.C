@@ -574,7 +574,9 @@ void solvers::fsC08ConservativeVoF::postSolve()
     scalar oldMetalV=0,phaseRate=0,thermalRate=0,domainV=0,independentGasKg=0;
     scalar maxLocalEnergy=0,absLocalEnergy=0,energyScale=0,maxU=0;
     scalar maxLocalEnergyRelative=0;
-    label worstEnergyCell=-1;
+    label worstEnergyCell=-1,maxUCell=-1,maxGasHeatingCell=-1;
+    scalar maxGasHeating=0;
+    const volScalarField& acceptedT=mixture_.T();
     const tmp<volScalarField> tAdvDiv=fvc::div(phaseEnergyPhi_);
     const tmp<volScalarField> tHeatDiv=fvc::div(phaseHeatPhi_);
     const auto& advDiv=tAdvDiv().primitiveField();
@@ -596,7 +598,20 @@ void solvers::fsC08ConservativeVoF::postSolve()
         oldMetalV+=V[i]*aOld[i];
         phaseRate+=V[i]*phaseSource[i];
         thermalRate+=V[i]*thermalSource[i];
-        maxU=max(maxU,mag(finalU[i]));
+        const scalar speed=mag(finalU[i]);
+        if (speed>maxU)
+        {
+            maxU=speed;
+            maxUCell=i;
+        }
+        // Gas-dominated is a reporting classification ONLY; no
+        // inventory, phase change or transport is disabled by it.
+        const scalar gasHeating=acceptedT[i]-acceptedT.oldTime()[i];
+        if (aGas[i]>0.99 && gasHeating>maxGasHeating)
+        {
+            maxGasHeating=gasHeating;
+            maxGasHeatingCell=i;
+        }
         const scalar storage=u[i]-u0[i];
         const scalar advection=dt*advDiv[i];
         const scalar conduction=dt*heatDiv[i];
@@ -639,6 +654,29 @@ void solvers::fsC08ConservativeVoF::postSolve()
         << " sumAbsCellTerms_J=" << energyScale
         << " maxCellRelativeResidual=" << maxLocalEnergyRelative
         << " energyValidationPending=1" << nl;
+
+    // Identify where the high velocities and gas heating arise. The
+    // final single mixture T and frozen momentum approximation still
+    // require physical review; this is evidence, not a stability gate.
+    const auto logCell=[&](const label i,const char* reason)
+    {
+        if (i<0) return;
+        Info<< "FS_C08_ACCEPTED_EXTREME_CELL"
+            << " time_s=" << runTime.value() << " reason=" << reason
+            << " cell=" << i << " center_m=" << mesh.C()[i]
+            << " alphaGas=" << aGas[i]
+            << " liquidMass_kg_m3=" << l[i] << " solidMass_kg_m3=" << s[i]
+            << " gasMass_kg_m3=" << gasMassTrial_[i]
+            << " speed_m_s=" << mag(finalU[i])
+            << " p_Pa=" << p[i] << " pOld_Pa=" << p.oldTime()[i]
+            << " T_K=" << acceptedT[i] << " Told_K=" << acceptedT.oldTime()[i]
+            << " storage_J_m3=" << u[i]-u0[i]
+            << " advectionOut_J_m3=" << dt*advDiv[i]
+            << " conductionOut_J_m3=" << dt*heatDiv[i]
+            << " mechanicalWork_J_m3=" << dt*workDensity[i] << nl;
+    };
+    logCell(maxUCell,"maximumSpeed");
+    logCell(maxGasHeatingCell,"maximumGasDominatedHeating");
 
     const scalar metalResidual=M-M0+dt*boundaryMassRate;
     const scalar gasContinuityDefect=Mgas-Mgas0+dt*gasBoundaryOut;
