@@ -55,6 +55,7 @@ License
 #include "fvmSup.H"
 #include "fvmLaplacian.H"
 #include "harmonic.H"
+#include "upwind.H"
 #include "zeroGradientFvPatchFields.H"
 #include "PstreamReduceOps.H"
 
@@ -193,7 +194,14 @@ void Foam::solvers::fsC08ConservativeVoF::thermophysicalPredictor()
                 cvL=phaseMass_->liquidCv(temp[i]);
                 cvS=phaseMass_->solidCv(temp[i]);
             }
-            ul[i]=ul_i;
+            // Advective energy belongs to the transported liquid,
+            // not the post-freezing inventory in the receiver. Use the
+            // old donor temperature for explicit first-order transport;
+            // a cell with no old metal uses its current mixture T
+            // if the pressure flux establishes a through-flow.
+            const scalar oldMetal= mL.oldTime()[i]+mS.oldTime()[i];
+            ul[i]=phaseMass_->liquidInternalEnergy
+                (oldMetal>0 ? T.oldTime()[i] : temp[i]);
 
             // CURRENT exact internal-energy inventory at Tguess.
             e[i]=ml[i]*ul_i+ms[i]*us_i+mg[i]*ug[i];
@@ -230,13 +238,17 @@ void Foam::solvers::fsC08ConservativeVoF::thermophysicalPredictor()
             }
         }
 
-        // Same native face flux to owner AND neighbour => exact
+        // Donor-consistent signed mass-energy flux: do not average a
+        // hot liquid donor with a cold gas receiver or an inert energy
+        // reference at the interface. Same flux to owner/neighbour => exact
         // cancellation of internal advective energy at global level.
         const surfaceScalarField internalEnergyFlux
         (
             "FS_C08_internalEnergyFlux",
-            phaseMass_->liquidMassFlux()*fvc::interpolate(uLiquid)
-          + alphaRhoPhi2*fvc::interpolate(mixture_.thermo2().he())
+            phaseMass_->liquidMassFlux()
+                *upwind<scalar>(mesh,phaseMass_->liquidMassFlux()).interpolate(uLiquid)
+          + alphaRhoPhi2
+                *upwind<scalar>(mesh,alphaRhoPhi2).interpolate(mixture_.thermo2().he())
         );
 
         // Retain exactly the FV face energy flux used by TEqn.
