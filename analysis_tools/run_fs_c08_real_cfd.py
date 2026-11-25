@@ -353,6 +353,7 @@ def execute(source: Path, material: Path, output: Path,
             momentum_matrix_coupling: str = "legacy",
             phase_pressure_mobility: str = "separate",
             momentum_flux_mode: str = "incremental",
+            energy_donor_mode: str = "legacy",
             *, verified_batch_build: dict | None = None) -> dict:
     require(os.environ.get("WM_PROJECT_VERSION") == "14",
             "load OpenFOAM Foundation14 before executing the actual solver")
@@ -387,6 +388,7 @@ def execute(source: Path, material: Path, output: Path,
         "momentum_matrix_coupling": momentum_matrix_coupling,
         "phase_pressure_mobility": phase_pressure_mobility,
         "momentum_flux_mode": momentum_flux_mode,
+        "energy_donor_mode": energy_donor_mode,
         "startup_probe_dt_s": startup_probe_dt,
         "startup_probe_steps": startup_probe_steps if startup_probe_dt is not None else None,
         "startup_probe_only": startup_probe_dt is not None,
@@ -419,7 +421,7 @@ def execute(source: Path, material: Path, output: Path,
         require(libfile.is_file() and digest(libfile) == receipt["native_library_sha256"],
                 "native library differs from verified build")
         report["native_OpenFOAM14_wmake_verified"] = True
-        staged = stage(source, material, output, laminar_reference, startup_probe_dt, startup_probe_steps, momentum_face_mobility, momentum_matrix_coupling, phase_pressure_mobility, momentum_flux_mode)
+        staged = stage(source, material, output, laminar_reference, startup_probe_dt, startup_probe_steps, momentum_face_mobility, momentum_matrix_coupling, phase_pressure_mobility, momentum_flux_mode, energy_donor_mode)
         report["isolated_case_stage_status"] = staged["status"]
         report["source_sha256_before"] = source_before
         report["source_sha256_after_stage"] = {
@@ -459,6 +461,10 @@ def execute(source: Path, material: Path, output: Path,
             line.strip() for line in log.splitlines()
             if any(marker in line for marker in markers)
         ][-30:]
+        report["phase_energy_split_records"] = [
+            line.strip() for line in log.splitlines()
+            if "FS_C08_PHASE_ENERGY_SPLIT" in line
+        ]
         report["interface_transport_records"] = [
             line.strip() for line in log.splitlines()
             if "FS_C08_INTERFACE_TRANSPORT_AUDIT" in line
@@ -599,6 +605,7 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--momentum-matrix-coupling", choices=("legacy","refreshBeforePressure"), default="legacy")
     ap.add_argument("--phase-pressure-mobility", choices=("separate","phaseWeighted"), default="separate")
     ap.add_argument("--momentum-flux-mode",choices=("incremental","totalUpwind","incrementalNoDdtCorr","totalUpwindNoDdtCorr"),default="incremental")
+    ap.add_argument("--energy-donor-mode",choices=("legacy","oldGas","currentLiquid","oldGasCurrentLiquid"),default="legacy")
     args = ap.parse_args(argv)
     stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
     suffix = secrets.token_hex(4)
@@ -614,7 +621,7 @@ def main(argv: list[str] | None = None) -> int:
         with native_library_lock():
             report = execute(args.source, args.material, output,
                              diagnostics, args.timeout_minutes, args.laminar_reference,
-                             args.startup_probe_dt, args.startup_probe_steps, args.momentum_face_mobility, args.momentum_matrix_coupling, args.phase_pressure_mobility, args.momentum_flux_mode)
+                             args.startup_probe_dt, args.startup_probe_steps, args.momentum_face_mobility, args.momentum_matrix_coupling, args.phase_pressure_mobility, args.momentum_flux_mode, args.energy_donor_mode)
     except (RuntimeError, OSError, ValueError) as exc:
         print(str(exc), file=sys.stderr)
         return 2
@@ -628,6 +635,8 @@ def main(argv: list[str] | None = None) -> int:
                 "native_thermal_solve_records", "fixed_probe_schedule_gate"):
         if key in report:
             print(key + ":", report[key])
+    for line in report.get("phase_energy_split_records", [])[-3:]:
+        print(line)
     for line in report.get("interface_transport_records", [])[-3:]:
         print(line)
     for line in report.get("phase_pressure_mobility_records", [])[-6:]:
