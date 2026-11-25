@@ -127,7 +127,7 @@ void Foam::solvers::fsC08ConservativeVoF::pressureCorrector()
     const volScalarField gasSource
     (
         "fsC08CoupledGasSource",
-        (gasMassTrial_-gasMassOld)/dt+fvc::div(alphaRhoPhi2)
+        (fvModels().source(alpha2,mixture_.rho2())&mixture_.rho2())
     );
     const surfaceScalarField predictedPhi
     (
@@ -204,6 +204,17 @@ void Foam::solvers::fsC08ConservativeVoF::pressureCorrector()
             fg.boundaryFieldRef()[patchi]=rhoGFace.boundaryField()[patchi]
                 *predictedPhi.boundaryField()[patchi];
         }
+
+    // The combined momentum predictor is not a converged pressure
+    // flux. Its total signed transfer must also be admissible before
+    // replaying from time n. Recompute pressure after this restriction.
+    const volScalarField gasAvailable
+    (
+        "fsC08GasMomentumAvailable",gasMassOld+dt*gasSource
+    );
+    fsC08::limitPredictorMassFlux
+        (fl,phaseMass_->liquidMass().oldTime(),"liquidMomentum");
+    fsC08::limitPredictorMassFlux(fg,gasAvailable,"gasMomentum");
 
     const scalar volumeTolerance=1e-12;
     const scalar localMassTolerance=1e-10;
