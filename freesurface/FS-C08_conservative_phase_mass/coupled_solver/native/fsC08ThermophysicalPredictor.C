@@ -404,26 +404,10 @@ void Foam::solvers::fsC08ConservativeVoF::thermophysicalPredictor()
         << " maxAbsResidual=" << maxVolumeDefect
         << " acceptedPhysicalState=0" << nl;
 
-    // Strict legacy gate remains until the momentum-pressure projection
-    // can conservatively correct all three inventories and energy.
-    phaseMass_->acceptTrialFractions(T);
-    alpha1=phaseMass_->alphaMetal();
-    alpha2=scalar(1)-alpha1;
-    alpha1.correctBoundaryConditions();
-    alpha2.correctBoundaryConditions();
-    correctInterface();
-
-    alphaRhoPhi1=phaseMass_->liquidMassFlux();
-    alphaPhi1=alphaRhoPhi1/
-        fvc::interpolate(phaseMass_->liquidDensity());
-    alphaPhi2=phi-alphaPhi1;
-    alphaRhoPhi2=fvc::interpolate(mixture_.rho2())*alphaPhi2;
-    rhoPhi=alphaRhoPhi1+alphaRhoPhi2;
+    // Do not accept overfilled trial geometry here. This same energy
+    // predictor is called again from the coupled pressure corrector
+    // using the corrected phase mass fluxes and independent inventories.
     reconcileMixtureDensity();
-
-    // Retain the state solved by the ENERGY equation before the pressure
-    // corrector changes gas p/rho. The delta to postSolve internal E
-    // measures operator-splitting inconsistency, not a phase-change term.
     updatePhaseInternalEnergy();
 
     Info<< "FS_C08_NATIVE_PHASE_RESOLVED_INTERNAL_ENERGY"
