@@ -70,8 +70,6 @@ void Foam::solvers::fsC08ConservativeVoF::pressureCorrector()
 
     // Freeze the real momentum matrix during the inner nonlinear closure.
     reconcileMixtureDensity();
-    fvVectorMatrix& UEqn=tUEqn.ref();
-    setrAU(UEqn);
     // Controlled numerical comparison, not a material property.
     // Keep the ten-step passing arithmetic reference as the default.
     const IOdictionary numerics
@@ -84,6 +82,27 @@ void Foam::solvers::fsC08ConservativeVoF::pressureCorrector()
     if (faceMobility!="linear" && faceMobility!="harmonic")
         FatalErrorInFunction << "FS-C08 unknown momentumFaceMobility "
             << faceMobility << exit(FatalError);
+    const word momentumCoupling=numerics.found("momentumMatrixCoupling")
+        ? numerics.lookup<word>("momentumMatrixCoupling") : word("legacy");
+    if (momentumCoupling!="legacy" && momentumCoupling!="refreshBeforePressure")
+        FatalErrorInFunction << "FS-C08 unknown momentumMatrixCoupling "
+            << momentumCoupling << exit(FatalError);
+    // Native PIMPLE assembles UEqn before the thermal predictor. FS-C08
+    // changes the independent densities during that predictor. Rebuild
+    // UEqn from the updated inventory and conservative fluxes once,
+    // before constructing the pressure Schur complement.
+    // No separate momentum solve or change to old-time inventories.
+    if (momentumCoupling=="refreshBeforePressure")
+    {
+        if (pimple.momentumPredictor())
+            FatalErrorInFunction << "FS-C08 refresh experiment requires momentumPredictor no"
+                << exit(FatalError);
+        p_rgh=p-rho*buoyancy.gh-buoyancy.pRef;
+        p_rgh.correctBoundaryConditions();
+        compressibleVoF::momentumPredictor();
+    }
+    fvVectorMatrix& UEqn=tUEqn.ref();
+    setrAU(UEqn);
     surfaceScalarField rAUf("fsC08MomentumMobility",fvc::interpolate(rAU()));
     if (faceMobility=="harmonic")
     {
@@ -96,10 +115,15 @@ void Foam::solvers::fsC08ConservativeVoF::pressureCorrector()
             FatalErrorInFunction << "FS-C08 invalid face momentum mobility "
                 << i << exit(FatalError);
     const volVectorField HbyA(constrainHbyA(rAU()*UEqn.H(),U,p_rgh));
+    const surfaceScalarField temporalFluxCorrection
+    (
+        "fsC08TemporalFluxCorrection",
+        fvc::interpolate(rho*rAU())*fvc::ddtCorr(U,phi,Uf)
+    );
     surfaceScalarField phiHbyA
     (
         "fsC08MomentumPredictorFlux",
-        fvc::flux(HbyA)+fvc::interpolate(rho*rAU())*fvc::ddtCorr(U,phi,Uf)
+        fvc::flux(HbyA)+temporalFluxCorrection
     );
     MRF.makeRelative(phiHbyA);
     const surfaceScalarField phig
@@ -511,6 +535,42 @@ void Foam::solvers::fsC08ConservativeVoF::pressureCorrector()
         )
     );
     const surfaceScalarField fluxFromU("fsC08FluxFromAcceptedU",fvc::flux(U));
+    const volVectorField pressureContribution
+    (
+        "fsC08PressureContribution",
+        -rAU()*fvc::reconstruct(fvc::snGrad(p_rgh)*mesh.magSf())
+    );
+    const volVectorField gravitySurfaceContribution
+    (
+        "fsC08GravitySurfaceContribution",
+        rAU()*fvc::reconstruct(phig/rAUf)
+    );
+    label fastest=-1;
+    scalar maxSpeed=-1;
+    forAll(U,i)
+        if (mag(U[i])>maxSpeed)
+        {
+            fastest=i;
+            maxSpeed=mag(U[i]);
+        }
+    scalar maxTemporalNormal=0;
+    forAll(temporalFluxCorrection,facei)
+        maxTemporalNormal=max(maxTemporalNormal,
+            mag(temporalFluxCorrection[facei])/mesh.magSf()[facei]);
+    if (fastest>=0)
+    {
+        const label i=fastest;
+        Info<< "FS_C08_MOMENTUM_FORCE_SPLIT"
+            << " time_s=" << runTime.value()
+            << " matrixCoupling=" << momentumCoupling
+            << " cell=" << i << " alphaMetal=" << alpha1[i]
+            << " speed_m_s=" << maxSpeed
+            << " HbyA_m_s=" << HbyA[i]
+            << " pressureContribution_m_s=" << pressureContribution[i]
+            << " gravitySurfaceContribution_m_s=" << gravitySurfaceContribution[i]
+            << " maxTemporalFaceCorrection_m_s=" << maxTemporalNormal
+            << " diagnosticOnly=1" << nl;
+    }
     scalar maxVelocityGap=0,maxPressureVelocity=0,maxFaceGap=0;
     scalar maxPureGasGap=0,maxPureGasSpeed=0;
     label gapCell=-1,faceGapId=-1;
@@ -561,6 +621,44 @@ void Foam::solvers::fsC08ConservativeVoF::pressureCorrector()
         << " independentGasTrialMass=1"
         << " frozenMomentumMatrixApproximation=1"
         << " physicalShrinkageValidated=0" << nl;
+    // Audit the accepted velocity against a freshly assembled native
+    // matrix, without solving or changing U. This measures a velocity-
+    // equivalent algebraic defect, not a validated full momentum PDE
+    // residual (the single-velocity and interface force model remain).
+    if (!pimple.momentumPredictor())
+    {
+        compressibleVoF::momentumPredictor();
+        setrAU(tUEqn.ref());
+        const volVectorField freshHbyA
+        (
+            "fsC08FreshHbyA",
+            constrainHbyA(rAU()*tUEqn.ref().H(),U,p_rgh)
+        );
+        const volVectorField freshTarget
+        (
+            "fsC08FreshMomentumTarget",
+            freshHbyA+rAU()*fvc::reconstruct
+            (
+                (surfaceTensionForce()-buoyancy.ghf*fvc::snGrad(rho)
+                 -fvc::snGrad(p_rgh))*mesh.magSf()
+            )
+        );
+        scalar maxDefect=0,maxGasDefect=0;
+        label worst=-1;
+        forAll(U,i)
+        {
+            const scalar defect=mag(U[i]-freshTarget[i]);
+            if (defect>maxDefect) {maxDefect=defect; worst=i;}
+            if (phaseMass_->liquidMass()[i]==0 && phaseMass_->solidMass()[i]==0)
+                maxGasDefect=max(maxGasDefect,defect);
+        }
+        Info<< "FS_C08_FRESH_MOMENTUM_DEFECT"
+            << " time_s=" << runTime.value()
+            << " matrixCoupling=" << momentumCoupling
+            << " maxVelocityEquivalentDefect_m_s=" << maxDefect
+            << " maxPureGasDefect_m_s=" << maxGasDefect
+            << " cell=" << worst << " diagnosticOnly=1" << nl;
+    }
     clearrAU();
     tUEqn.clear();
 }
