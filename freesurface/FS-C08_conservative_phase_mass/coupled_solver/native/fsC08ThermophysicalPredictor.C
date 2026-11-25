@@ -83,13 +83,10 @@ void Foam::solvers::fsC08ConservativeVoF::thermophysicalPredictor()
 
     // Explicitly retrieve old native phase masses and old gas internal
     // energy. The same oldTime reference is used throughout PIMPLE.
-    const auto& mL0=mL.oldTime().primitiveField();
-    const auto& mS0=mS.oldTime().primitiveField();
-    const auto& TG0=T.oldTime().primitiveField();
-    const auto& aG0=alpha2.oldTime().primitiveField();
-    const auto& rhoG0=rhoG.oldTime().primitiveField();
-    const auto& uG0=mixture_.thermo2().he().oldTime().primitiveField();
-    const auto& V=mesh.V();
+    // The previous accepted energy inventory is persisted at t=n.
+    // Native phase thermo oldTime fields may be lazily created during
+    // correction; do not mix snapshots from different EOS states.
+    const auto& acceptedE0=phaseInternalEnergy_.oldTime().primitiveField();
 
     const scalar dt=runTime.deltaTValue();
     if (!std::isfinite(dt) || dt<=0)
@@ -112,13 +109,7 @@ void Foam::solvers::fsC08ConservativeVoF::thermophysicalPredictor()
     auto& E0=Eold.primitiveFieldRef();
     forAll(E0,i)
     {
-        scalar l=0,s=0;
-        if (mL0[i]>0 || mS0[i]>0)
-        {
-            l=phaseMass_->liquidInternalEnergy(TG0[i]);
-            s=phaseMass_->solidInternalEnergy(TG0[i]);
-        }
-        E0[i]=mL0[i]*l + mS0[i]*s + aG0[i]*rhoG0[i]*uG0[i];
+        E0[i]=acceptedE0[i];
         if (!std::isfinite(E0[i]))
             FatalErrorInFunction
                 << "FS-C08 nonfinite old mixture internal energy cell "
@@ -396,8 +387,29 @@ void Foam::solvers::fsC08ConservativeVoF::thermophysicalPredictor()
         phaseMass_->liquidDensity(),phaseMass_->solidDensity(),rhoG
     );
     scalar maxVolumeDefect=0;
+    label worstCell=-1;
     forAll(volumeResidual(),i)
-        maxVolumeDefect=max(maxVolumeDefect,mag(volumeResidual()[i]));
+        if (mag(volumeResidual()[i])>maxVolumeDefect)
+        {
+            maxVolumeDefect=mag(volumeResidual()[i]);
+            worstCell=i;
+        }
+    if (worstCell>=0 && maxVolumeDefect>1e-8)
+    {
+        const label i=worstCell;
+        Info<< "FS_C08_TRIAL_VOLUME_COMPONENTS"
+            << " cell=" << i
+            << " signedResidual=" << volumeResidual()[i]
+            << " T_K=" << T[i] << " p_Pa=" << p[i]
+            << " mGasOld=" << gasMassTrial_.oldTime()[i]
+            << " mGasTrial=" << gasMassTrial_[i]
+            << " rhoGas=" << rhoG[i]
+            << " alphaGasGeometry=" << alpha2[i]
+            << " alphaGasFromMass=" << gasMassTrial_[i]/rhoG[i]
+            << " alphaLiquidFromMass=" << mL[i]/phaseMass_->liquidDensity()[i]
+            << " alphaSolidFromMass=" << mS[i]/phaseMass_->solidDensity()[i]
+            << nl;
+    }
     reduce(maxVolumeDefect,maxOp<scalar>());
     Info<< "FS_C08_THREE_PHASE_TRIAL_VOLUME"
         << " time_s=" << runTime.value()
