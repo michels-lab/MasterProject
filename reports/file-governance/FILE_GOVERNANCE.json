@@ -29,7 +29,7 @@
     "POTENTIAL_UNLOGGED_CHANGES": 2
   },
   "finding_total": 9,
-  "inventory_fingerprint": "261f032911ae60d8277ee29b161421f2017e10b9ef50b4164efb8ecc33bca1b0",
+  "inventory_fingerprint": "e817a77c6c61ed2eb8cd41b331f98d05a75efc9da82b61aa404311398f520fd6",
   "evidence_fingerprint": "3ec95c6e132cce957ede03868a95e8c25334061f23a4538e4961212cbbba1d33",
   "files": [
     {
@@ -299399,7 +299399,7 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "4ad349040e0b9debcd7e707ba67740784a71e886"
+      "blob": "0e8ee149813ad9f02177b45019adc46ef32512e8"
     },
     {
       "path": "docs/granada/MAESTRIA_CAMPANA_B14_C14_200S_PLAN_20261124_ES.md",
@@ -300120,7 +300120,7 @@
       "role": "source",
       "purpose": "code/test implementation",
       "certainty": "rule",
-      "blob": "66dd0cf7bf582c9630bb4149bab1e5e4d04a0a05"
+      "blob": "e15187044493325e131264a1feeb386610a52f66"
     },
     {
       "path": "tools/run_case_a_200s_granada.py",
