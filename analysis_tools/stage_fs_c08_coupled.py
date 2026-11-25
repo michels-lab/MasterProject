@@ -13,6 +13,7 @@ import argparse
 from datetime import datetime, timezone
 import hashlib
 import json
+import math
 from pathlib import Path
 import re
 import secrets
@@ -105,8 +106,34 @@ def laminar_reference_models(momentum: str, models: str) -> tuple[str, str]:
     return momentum, models
 
 
+def startup_probe_controls(ctrl: str, dt: float) -> str:
+    """One real fixed-duration CFD step, not a full casting simulation.
+
+    A probe is an explicit numerical sensitivity experiment. It preserves
+    the original maximum timestep and all material and pressure bounds.
+    """
+    require(math.isfinite(dt) and dt > 0, "invalid startup probe dt")
+    number = r"[0-9]+(?:\.[0-9]*)?(?:[eE][+-]?[0-9]+)?"
+    cap = re.findall(r"(?m)^\s*maxDeltaT\s+("+number+r")\s*;", ctrl)
+    require(len(cap) == 1 and dt <= float(cap[0]),
+            "startup probe dt exceeds original maxDeltaT or cap is ambiguous")
+    require(len(re.findall(r"(?m)^\s*startTime\s+0(?:\.0*)?\s*;",ctrl))==1,
+            "startup probe requires original startTime 0")
+    replacements = {"startFrom": "startTime", "stopAt": "endTime",
+                    "deltaT": format(dt, ".16g"), "endTime": format(dt, ".16g"),
+                    "adjustTimeStep": "no", "writeControl": "timeStep",
+                    "writeInterval": "1"}
+    for key, value in replacements.items():
+        pattern = r"(?m)^([ \t]*"+re.escape(key)+r"\s+)[^;\n]+;"
+        require(len(re.findall(pattern,ctrl))==1,
+                "ambiguous startup probe control: "+key)
+        ctrl=re.sub(pattern,lambda m: m.group(1)+value+";",ctrl,count=1)
+    return ctrl
+
+
 def stage(source: Path, material: Path, output: Path,
-          laminar_reference: bool = False) -> dict:
+          laminar_reference: bool = False,
+          startup_probe_dt: float | None = None) -> dict:
     source=source.expanduser().resolve()
     material=material.expanduser().resolve()
     output=output.expanduser().absolute()
@@ -174,6 +201,10 @@ def stage(source: Path, material: Path, output: Path,
     ctrl=re.sub(old,r"\1fsC08ConservativeVoF\2",ctrl,count=1)
     ctrl=ctrl.replace("regionSolvers",
         'libs ("libfsC08ConservativeVoF.so");\n\nregionSolvers',1)
+
+    if startup_probe_dt is not None:
+        require(laminar_reference, "startup probes require explicit laminar reference")
+        ctrl=startup_probe_controls(ctrl,startup_probe_dt)
 
     originalModels=MODEL.read_text(encoding="utf-8")
     marker="/* FS-C06 numerical Foundation14 COMPATIBILITY candidate only."
@@ -255,6 +286,8 @@ def stage(source: Path, material: Path, output: Path,
         "turbulenceDamping_retained":not laminar_reference,
         "transport_reference":"laminar_molecular" if laminar_reference else "inherited_RAS",
         "laminar_reference_is_controlled_experiment":laminar_reference,
+        "startup_probe_dt_s":startup_probe_dt,
+        "startup_probe_only":startup_probe_dt is not None,
         "native_CFDSolver_compilation_verified":False,
         "native_CFD_executed":False,
         "physical_shrinkage_validated":False,
@@ -275,6 +308,8 @@ def main(argv=None) -> int:
     ap.add_argument("--destination",type=Path,default=None)
     ap.add_argument("--laminar-reference", action="store_true",
                     help="Isolated molecular transport reference, not calibrated RAS")
+    ap.add_argument("--startup-probe-dt",type=float,
+                    help="One fixed real CFD step, numerical sensitivity only")
     args=ap.parse_args(argv)
     output=args.destination or (
         Path.home()/"OpenFOAM"/"FS_C08_COUPLED_RUNS"/
@@ -282,7 +317,8 @@ def main(argv=None) -> int:
          +"_"+secrets.token_hex(4))
     )
     try:
-        report=stage(args.source,args.material,output,args.laminar_reference)
+        report=stage(args.source,args.material,output,args.laminar_reference,
+                     args.startup_probe_dt)
         print(json.dumps(report,indent=2))
         return 0
     except (ValueError,OSError) as e:
