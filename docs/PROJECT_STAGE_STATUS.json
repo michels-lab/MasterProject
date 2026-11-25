@@ -818,7 +818,7 @@
     "lab_openfoam_confirmed": "14-a4867fc914c1"
   },
   "adaptive_200s_campaign": {
-    "status": "PREPARATION_FAILED_CADENCE_ORDER_FIX_PUBLISHED",
+    "status": "FOUR_PREPARED_C14_2D_RUNNING_A_FAILED_PRESERVED",
     "authorized_cases": [
       "C14-3DA-200s",
       "C14-2D-200s",
@@ -834,13 +834,38 @@
     "profile_interval_s": 0.1,
     "volume_interval_s": 1,
     "probe_interval": "actual adaptive solver step",
-    "prepared_observed": 0,
+    "prepared_observed": 4,
     "completed_observed": 0,
     "runner_commit": "93e3b899ab264c551582c28e8a95a50a34e5cc3c",
     "documentation": "docs/granada/MAESTRIA_CAMPANA_ADAPTATIVA_200S_20261124_ES.md",
     "max_deltaT_policy": "omit explicit maxDeltaT; retain native limits and maxCo",
     "root": "CAMPAIGN_200S_ADAPTIVE_UNCAPPED_01",
     "result_prefix": "results/campaign-200s-adaptive-uncapped-v1/",
-    "last_observed_failure": "no .1s controls found in functions; no CFD"
+    "last_observed_failure": "no .1s controls found in functions; no CFD",
+    "runtime_observation": {
+      "source": "investigator WSL stdout",
+      "date": "2026-11-24",
+      "prepared": 4,
+      "complete_confirmed": 0,
+      "case_A": {
+        "status": "RUN_INCOMPLETE_PRESERVED",
+        "first_step_s": 0.001,
+        "error": "incomplete solver",
+        "root_cause": "unknown; inspect native solver log and exit evidence"
+      },
+      "case_C14_2D": {
+        "status": "RUNNING_LAST_OBSERVED",
+        "last_observed_time_s": 14,
+        "steps": 1728,
+        "dt_s": 0.02,
+        "fixed_equivalent_steps": 14000,
+        "first_second_cadence_gate": "PASS",
+        "physical_validation": false
+      },
+      "other_cases": "not yet observed running",
+      "native_cadence_verified_for": [
+        "C14-2D-200s"
+      ]
+    }
   }
 }
