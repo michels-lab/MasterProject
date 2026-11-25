@@ -1,0 +1,33 @@
+{
+  "kind": "inputs",
+  "solver_commit": "50d3bbd7750756d7d854eaa2a6f8d69157a3341f",
+  "cases": [
+    "C14-3DA-200s",
+    "C14-2D-200s",
+    "B14-2D-200s",
+    "B14-3DA-200s",
+    "C14-3DB-200s",
+    "B14-3DB-200s"
+  ],
+  "archive_bytes": 85103418,
+  "archive_sha256": "c7687e03296e7e310512e6a61f8b436052430226dee3c51fb61d27c6fb23ea9d",
+  "parts": [
+    {
+      "name": "archive.tar.gz.part000000",
+      "bytes": 33554432,
+      "sha256": "e429e76692b99c2fa6b01b88f2a53132d51bea158dc6909d9c3aa4b9b3b36086"
+    },
+    {
+      "name": "archive.tar.gz.part000001",
+      "bytes": 33554432,
+      "sha256": "0fcbbb60d8a218ef8c9ea999190e9bbbdd474577fd7d51f1bcd6af1333934299"
+    },
+    {
+      "name": "archive.tar.gz.part000002",
+      "bytes": 17994554,
+      "sha256": "44bfb9d977ad0def8ea8155123c2a45ea87e9aa039dbc63f66d98a07fc69e366"
+    }
+  ],
+  "archive_format": "tar.gz split into ordered binary chunks",
+  "complete": true
+}
