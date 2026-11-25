@@ -49,6 +49,7 @@ def summarize(name, coupling, mobility, report):
         "accepted_pressure_records": report.get("accepted_pressure_records", 0),
         "complete_ledger_steps": ledger.get("complete_native_ledger_times", 0),
         "saved_steps": len(report.get("saved_positive_times_s", [])),
+        "saved_positive_times_s": report.get("saved_positive_times_s", []),
         "last_saved_time_s": report.get("latest_saved_time_s"),
         "last_ledger_time_s": last.get("time_s"),
         **{key: last.get(key) for key in METRICS},
@@ -70,6 +71,8 @@ def common_time_comparison(rows, dt):
     for row in rows:
         file=row.get("ledger_csv")
         by_step={}
+        saved={round(t/dt) for t in row["saved_positive_times_s"]
+               if abs(t-round(t/dt)*dt)<=max(1e-14,dt*1e-6)}
         if file and Path(file).is_file():
             with Path(file).open(newline="",encoding="utf-8") as fp:
                 for rec in csv.DictReader(fp):
@@ -77,7 +80,7 @@ def common_time_comparison(rows, dt):
                     if t is None or rec.get("all_native_ledgers_present")!="True":
                         continue
                     step=round(t/dt)
-                    if step<1 or step>row["saved_steps"] or abs(t-step*dt)>max(1e-14,dt*1e-6):
+                    if step<1 or step not in saved or abs(t-step*dt)>max(1e-14,dt*1e-6):
                         continue
                     by_step[step]={key:numeric(rec.get(key)) for key in METRICS}
         histories.append(by_step)
