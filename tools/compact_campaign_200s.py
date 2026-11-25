@@ -74,7 +74,7 @@ def set_key(s,key,value,expected=None):
 def blocks(s):
     # Native dictionaries use unindented object headers, including the coded
     # object whose C++ payload is indented. Preserve all original block bodies.
-    matches=list(re.finditer(r"(?m)^(\w+)[ \t]*\n\{",s))
+    matches=[m for m in re.finditer(r"(?m)^(\w+)[ \t]*\n\{",s) if m[1]!="FoamFile"]
     need(matches,"no native objects")
     result={}
     for i,m in enumerate(matches):
@@ -118,7 +118,7 @@ def config(case,geometry):
     # Near-top native line at 0.1s, from already geometry-mapped auxiliary dict.
     top=(case/"system/topSurfaceFlowPostProcessing").read_text()
     b=blocks(top);need("nearTopInternalLine" in b,"nearTop source missing")
-    near=transform(b["nearTopInternalLine"][2],(),(),("nearTopInternalLine",))
+    near=b["nearTopInternalLine"][2]
     near=set_key(near,"executeControl","timeStep")
     near=set_key(near,"executeInterval","100")
     near=set_key(near,"writeInterval","100")
