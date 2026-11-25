@@ -51,7 +51,7 @@ def execute(case, filename, args, on_line=None):
             raise
     return time.monotonic() - started
 
-def prepare(case, url, ranks, end, max_dt=.01):
+def prepare(case, url, ranks, end, max_dt=.025):
     # Fetch original verified inputs, never copy a live or previously run case.
     with tempfile.TemporaryDirectory(prefix="mpi-input-", dir=case.parent) as tmp:
         p = Path(tmp)
@@ -217,7 +217,7 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--case", choices=CASES, default=CASES[0])
     ap.add_argument("--ranks", type=int, choices=(1, 8, 10), default=8)
-    ap.add_argument("--max-dt", type=float, default=.01, help="maximum time step in seconds, default 0.01")
+    ap.add_argument("--max-dt", type=float, default=.025, help="maximum time step in seconds, default 0.025")
     ap.add_argument("--full", action="store_true")
     ap.add_argument("--publish", action="store_true")
     ap.add_argument("--repo", type=Path, default=adaptive.HOME / "MasterProject")
