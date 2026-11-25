@@ -82,7 +82,7 @@ void Foam::solvers::fsC08ConservativeVoF::thermophysicalPredictor()
     const IOdictionary numerics
     (
         IOobject("fsC08Numerics",runTime.constant(),mesh,
-                 IOobject::READ_IF_PRESENT,IOobject::NO_WRITE)
+                 IOobject::READ_IF_PRESENT,IOobject::NO_WRITE,false)
     );
     const word energyDonor=numerics.found("energyDonorMode")
         ? numerics.lookup<word>("energyDonorMode") : word("legacy");
