@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "audit_kind": "deterministic_full_tracked_tree",
-  "tracked_files_total": 42882,
-  "classified_files_total": 42877,
+  "tracked_files_total": 42883,
+  "classified_files_total": 42878,
   "docs_content_inspected": 233,
   "large_docs_skipped": 1,
   "excluded_reports": 5,
@@ -19,7 +19,7 @@
     "simulation_input": 2683,
     "simulation_log": 3264,
     "simulation_output": 36203,
-    "source": 168,
+    "source": 169,
     "test": 77,
     "web_ui": 1,
     "workflow": 37
@@ -29,8 +29,8 @@
     "POTENTIAL_UNLOGGED_CHANGES": 2
   },
   "finding_total": 9,
-  "inventory_fingerprint": "38cde0cf921238b512a5e00a95b86102a1724e01ed971e7043d966b9ec72866c",
-  "evidence_fingerprint": "60d4bedc8ada4fc0d3334dceec1a033980988f3d50745a00e790d1d4a5e943e2",
+  "inventory_fingerprint": "8c65b64a8b32361585ddf993c78739f67136b6dc2090ea48567fbcfa9fde2e64",
+  "evidence_fingerprint": "7cd5e742e6cebae62fd2a7c99d251a09633afc38d2e3d7b22737d79a1e26ad76",
   "files": [
     {
       "path": ".github/agents/openfoam-solidification.agent.md",
@@ -299392,7 +299392,7 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "a526ed1177b3d8e7e1c89fb9dcf76c50889b087a"
+      "blob": "076b0f47308bb34382e18b06f52004ccf053d630"
     },
     {
       "path": "docs/granada/MAESTRIA_CAMPANA_B14_C14_200S_PLAN_20261124_ES.md",
@@ -300116,6 +300116,13 @@
       "blob": "7701122dae9f580b0079caf1544b63755119d1ed"
     },
     {
+      "path": "tools/run_case_a_200s_granada.py",
+      "role": "source",
+      "purpose": "code/test implementation",
+      "certainty": "rule",
+      "blob": "727519465ec2d01b1d2b84ae77fa84cbf6e86372"
+    },
+    {
       "path": "tools/test_adaptive_campaign_200s.py",
       "role": "test",
       "purpose": "code/test implementation",
@@ -300237,20 +300244,20 @@
       "state": "REVIEW_REQUIRED"
     },
     {
-      "id": "61392945b010ec37",
+      "id": "f5ebf980e03d81b2",
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_EN.md",
-      "observation": "7 implementation/config paths changed since this log's last commit; examples: .github/workflows/adaptive-campaign-static.yml, docs/C3D04_CASE_A_STATUS.json, docs/PROJECT_STAGE_STATUS.json, tools/run_adaptive_campaign_200s.py, tools/run_adaptive_mpi_campaign.py, tools/test_adaptive_campaign_200s.py",
+      "observation": "8 implementation/config paths changed since this log's last commit; examples: .github/workflows/adaptive-campaign-static.yml, docs/C3D04_CASE_A_STATUS.json, docs/PROJECT_STAGE_STATUS.json, tools/run_adaptive_campaign_200s.py, tools/run_adaptive_mpi_campaign.py, tools/run_case_a_200s_granada.py",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     },
     {
-      "id": "26febdf4e0bb7467",
+      "id": "7fbcaf6e99a9988e",
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_ES.md",
-      "observation": "7 implementation/config paths changed since this log's last commit; examples: .github/workflows/adaptive-campaign-static.yml, docs/C3D04_CASE_A_STATUS.json, docs/PROJECT_STAGE_STATUS.json, tools/run_adaptive_campaign_200s.py, tools/run_adaptive_mpi_campaign.py, tools/test_adaptive_campaign_200s.py",
+      "observation": "8 implementation/config paths changed since this log's last commit; examples: .github/workflows/adaptive-campaign-static.yml, docs/C3D04_CASE_A_STATUS.json, docs/PROJECT_STAGE_STATUS.json, tools/run_adaptive_campaign_200s.py, tools/run_adaptive_mpi_campaign.py, tools/run_case_a_200s_granada.py",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     }
