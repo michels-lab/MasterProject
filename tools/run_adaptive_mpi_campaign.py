@@ -51,7 +51,7 @@ def execute(case, filename, args, on_line=None):
             raise
     return time.monotonic() - started
 
-def prepare(case, url, ranks, end, no_max_co=False):
+def prepare(case, url, ranks, end, max_dt=.01):
     # Fetch original verified inputs, never copy a live or previously run case.
     with tempfile.TemporaryDirectory(prefix="mpi-input-", dir=case.parent) as tmp:
         p = Path(tmp)
@@ -68,12 +68,13 @@ def prepare(case, url, ranks, end, no_max_co=False):
             shutil.copytree(src / name, case / name)
         need(transfer.input_hashes(case) == r["input_sha256"], "copy drift")
         changed = adaptive.adapt_dicts(case)
-        if no_max_co:
-            p = case / "system/controlDict"
-            content, count = re.subn(r"(?m)^[ \t]*maxCo[ \t]+0\.25[ \t]*;[ \t]*(?:\n|$)", "", p.read_text())
-            need(count == 1 and not re.search(r"(?m)^[ \t]*maxCo\b", content), "unexpected maxCo entry")
-            p.write_text(content)
-            changed["system/controlDict"] = transfer.sha(p)
+        p = case / "system/controlDict"
+        content = p.read_text()
+        need(not re.search(r"(?m)^[ \t]*maxDeltaT\b", content), "unexpected maxDeltaT entry")
+        content, count = re.subn(r"(?m)^([ \t]*maxCo[ \t]+0\.25[ \t]*;)[ \t]*$", lambda m: m[1] + f"\nmaxDeltaT       {max_dt:.15g};", content)
+        need(count == 1, "missing explicit maxCo 0.25")
+        p.write_text(content)
+        changed["system/controlDict"] = transfer.sha(p)
         if end != 200:
             p = case / "system/controlDict"
             p.write_text(adaptive.edit_key(p.read_text(), "endTime", "200", str(end)))
@@ -91,9 +92,9 @@ def prepare(case, url, ranks, end, no_max_co=False):
              "unexpected input changes")
         r.update(status="MPI_PREPARED", solver_completed=False, physical_validation=False,
                  execution_mode="serial_reference" if ranks == 1 else "mpi",
-                 mpi_ranks=ranks, target_time_s=end, time_mode="adaptive_uncapped",
-                 initial_dt_s=.001, max_co=None if no_max_co else .25, max_dt_s=None,
-                 max_co_policy="omit explicit maxCo; native remaining limits" if no_max_co else "explicit 0.25",
+                 mpi_ranks=ranks, target_time_s=end, time_mode="adaptive_capped",
+                 initial_dt_s=.001, max_co=.25, max_dt_s=max_dt,
+                 max_co_policy="explicit 0.25", max_deltaT_policy="explicit configurable cap",
                  fixed_input_sha256=r["input_sha256"], input_sha256=after,
                  changed_time_control_files=changed, source_transfer_sha256=m["archive_sha256"],
                  profile_target_interval_s=.1, volume_target_interval_s=1.0,
@@ -148,6 +149,7 @@ def run(case, r, ranks, end):
                 t = float(m[1])
                 dt = t - last
                 need(math.isfinite(dt) and dt > 0 and t <= end + 1e-7, "invalid time step")
+                need(dt <= r["max_dt_s"] + 1e-9, "actual time step exceeds configured maxDeltaT")
                 steps.append(t)
                 dts.append(dt)
                 elapsed = time.monotonic() - started
@@ -215,12 +217,14 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--case", choices=CASES, default=CASES[0])
     ap.add_argument("--ranks", type=int, choices=(1, 8, 10), default=8)
-    ap.add_argument("--no-max-co", action="store_true", help="experimental: omit explicit maxCo from new attempts")
+    ap.add_argument("--max-dt", type=float, default=.01, help="maximum time step in seconds, default 0.01")
     ap.add_argument("--full", action="store_true")
     ap.add_argument("--publish", action="store_true")
     ap.add_argument("--repo", type=Path, default=adaptive.HOME / "MasterProject")
     a = ap.parse_args()
     need(os.environ.get("WM_PROJECT_VERSION") == "14", "load Foundation14")
+    need(math.isfinite(a.max_dt) and .001 <= a.max_dt <= 1., "max-dt must be finite and between 0.001 and 1 s")
+    cap_tag = format(a.max_dt, ".15g").replace(".", "p")
     need(a.ranks <= len(os.sched_getaffinity(0)), "not enough available logical CPUs")
     need(not a.publish or a.full, "pilots cannot be published as 200s results")
     need(not ROOT.is_symlink() and not adaptive.ROOT.is_symlink(), "unsafe root")
@@ -237,18 +241,34 @@ def main():
             reports = ROOT.glob("*/" + a.case + "/" + adaptive.REPORT)
             need(any((r := read(p)).get("status") == "MPI_PILOT_PASS" and
                      r.get("mpi_ranks") == a.ranks and
-                     r.get("max_co") == (None if a.no_max_co else .25) for p in reports), "pass same-case/ranks pilot first")
-        parent = Path(tempfile.mkdtemp(prefix=f"r{a.ranks}-{end}s-{'noCo' if a.no_max_co else 'Co025'}-", dir=ROOT))
+                     r.get("max_co") == .25 and r.get("max_dt_s") == a.max_dt
+                     for p in reports), "pass same-case/ranks/maxDeltaT pilot first")
+        parent = Path(tempfile.mkdtemp(prefix=f"r{a.ranks}-{end}s-Co025-dt{cap_tag}-", dir=ROOT))
         case = parent / a.case
         case.mkdir()
         print("NEW_ATTEMPT", case, flush=True)
-        r = prepare(case, url, a.ranks, end, a.no_max_co)
+        r = prepare(case, url, a.ranks, end, a.max_dt)
         run(case, r, a.ranks, end)
         if a.publish:
-            adaptive.ROOT = parent
-            adaptive.RESULT_PREFIX = (f"results/campaign-200s-adaptive-mpi-r{a.ranks}-"
-                                      + ("noCo-v1/" if a.no_max_co else "v1/"))
-            adaptive.publish(case, url)
+            branch = f"results/campaign-200s-adaptive-mpi-r{a.ranks}-Co025-dt{cap_tag}-v1/{a.case}"
+            report = read(case / adaptive.REPORT)
+            need(report["status"] == "SOLVER_COMPLETE_ADAPTIVE_AUDITED", "publication requires full audit")
+            with tempfile.TemporaryDirectory(prefix="mpi-publish-", dir=parent) as tmp:
+                p = Path(tmp)
+                archive = p / "result.tar.gz"
+                with transfer.deterministic_tar(archive) as tar:
+                    for name in ("postProcessing", "logs", adaptive.REPORT, adaptive.TIMELINE,
+                                 "log.foamMultiRun", "log.foamLog", "log.decomposePar", "log.reconstructPar"):
+                        q = case / name
+                        if q.exists():
+                            transfer.add(tar, q, case.name + "/" + name)
+                transfer.publish(url, branch, archive, {"kind":"adaptive_scientific_results",
+                    "case":case.name, "time_mode":"adaptive_capped", "mpi_ranks":a.ranks,
+                    "max_co":.25, "max_dt_s":a.max_dt, "solver_steps":report["solver_steps"],
+                    "final_time_s":200, "solver_log_sha256":transfer.sha(case / "log.foamMultiRun"),
+                    "report_sha256":transfer.sha(case / adaptive.REPORT),
+                    "native_runtime_coverage_complete":True, "volume_fields_included":False},
+                    p / "git", case=case)
 
 if __name__ == "__main__":
     main()
