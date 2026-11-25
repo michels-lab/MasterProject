@@ -6,7 +6,7 @@
   "parent_branch": "research/fs-c02-metal-air-vof-20261117",
   "scientific_project": "Master's research — cast iron solidification and shrinkage using OpenFOAM Foundation14",
   "stage": "FS_C08_INTEGRATED_COUPLED_PRESSURE_VOLUME_MASS_ENERGY_CANDIDATE",
-  "status": "FS_C08_FIRST_FIXED_T_VOLUME_CLOSURES_VERIFIED__EQUILIBRIUM_REPLAY_JACOBIAN_CANDIDATE",
+  "status": "FS_C08_EQUILIBRIUM_REPLAY_VERIFIED__TRACE_GAS_CAPACITY_ACTIVE_SET_CANDIDATE",
   "code": "analysis_tools/fs_c08_conservative_reference.py",
   "tests": "analysis_tools/test_fs_c08_conservative_reference.py",
   "test_count_declared": 18,
@@ -108,8 +108,8 @@
   "cpp_mass_phase_update_gamma_and_volume_closure": true,
   "cpp_pressure_velocity_energy_or_cht": false,
   "CI_cxx_compile_step_declared": true,
-  "last_work": "Both real startup sensitivity probes solved the first fixed-T projection to roundoff; full coupled iterations still fail. Implemented equilibrium preconversion transported-liquid projection, exact phase partition and donor-consistent energy advection; no new compile/run verified. B14 unchanged.",
-  "next_scientific_stage": "Run isolated 1e-6 startup probe; check pre/post conversion volume identity, fixed T replay, coupled energy convergence and mass/energy budgets. Repeat 1e-5 only after understanding result. No tolerance relaxation, no negative mass or pressure clipping.",
+  "last_work": "Equilibrium pressure replay verified at fixed T to roundoff; second energy solve creates 0.041 volume residual, trace gas in metal limits Newton. Implemented aggregate donor capacity-constrained pressure mobility reassembly and automatic evidence; B14 unchanged, no relaxed gates.",
+  "next_scientific_stage": "Run one laminar fixed 1e-6 s probe; examine donor capacity convergence, fixed T equilibrium replay, thermal/pressure coupled residual and local conservation; if stalls, replace overly restrictive capacity limiter with signed net-flux constrained formulation. No complete transient or physical validation yet.",
   "Wsl_tests_runner": "python3 -B -m unittest discover -s analysis_tools -p 'test_fs_c08_conservative_reference.py' -v",
   "Wsl_tests_summary": "Ran 18 tests in 0.072s; OK",
   "Wsl_tests_source_head": "eddacd6e9",
@@ -662,7 +662,7 @@
       "runtime_load_verified": false,
       "completed_timestep_verified": false
     },
-    "ready_for_retry_scope": "one laminar fixed 1e-6 s step with equilibrium pressure replay and donor energy correction"
+    "ready_for_retry_scope": "isolated laminar 1 microsecond startup probe only; new active set uncompiled"
   },
   "fourth_B14_CFD_attempt": {
     "source_commit": "f81140daeac793d7d1b9ff9c54eb83036a742070",
@@ -873,5 +873,32 @@
     "scope": "equilibrium only; kinetic derivative explicitly rejected; alloy T coverage required even in prospective metal transport cells; frozen momentum and single mixture T still approximations; no physical validation",
     "native_build_verified": false,
     "CFD_verified": false
+  },
+  "equilibrium_replay_probe": {
+    "tested_commit": "691b113d6b5228c64947aef93421485497936610",
+    "diagnostics": "FS_C08_REAL_CFD_DIAGNOSTICS_20261125T082448Z_eb3b82de",
+    "dt_s": 0.000001,
+    "laminar": true,
+    "first_pre_post_conversion_volume_mismatch": 4.4408920985e-16,
+    "first_jacobian_defect": 8.73039733631e-16,
+    "first_projection_residual": 2.22044604925e-16,
+    "first_fixed_T_replay_residual": 5.55111512313e-16,
+    "second_pre_post_conversion_mismatch": 6.66133814775e-16,
+    "second_energy_volume_residual": 0.0410454705473,
+    "second_energy_max_delta_T_K": 12.3144368081,
+    "max_local_metal_continuity": 3.89763532089e-16,
+    "max_local_gas_continuity": 9.58173232946e-17,
+    "limiting_cell": 2249,
+    "limiting_gas_mass_kg_m3": 4.83456276325e-20,
+    "proposed_gas_increment_kg_m3": -1.4070981376e-15,
+    "final_limiting_cell": 2254,
+    "accepted_full_steps": 0,
+    "first_run_error": "pressure projection rejected at corrector 1",
+    "new_candidate": "capacity-constrained reassembly of pressure mobilities, aggregate outgoing correction over all donor faces <=0.95*cell phase inventory; scale violating mobility with 0.8 safety factor, up to 64 sweeps, no deletion or mass threshold",
+    "limitations": "sufficient conservative bound ignores simultaneous inflow; monotone mobility reduction may overrestrict flux; remains single-T/frozen-momentum equilibrium formulation; thermal interface residual still requires study",
+    "fix_commit": "643045d9541028f7264ffbe28436bc9dd50e7357",
+    "diagnostic_commit": "d90f87db408a84b92c0ee06e5bc380b6818baab7",
+    "new_native_build_verified": false,
+    "new_CFD_verified": false
   }
 }
