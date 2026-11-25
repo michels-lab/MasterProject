@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "audit_kind": "deterministic_full_tracked_tree",
-  "tracked_files_total": 42886,
-  "classified_files_total": 42881,
+  "tracked_files_total": 42887,
+  "classified_files_total": 42882,
   "docs_content_inspected": 234,
   "large_docs_skipped": 1,
   "excluded_reports": 5,
@@ -19,7 +19,7 @@
     "simulation_input": 2683,
     "simulation_log": 3264,
     "simulation_output": 36203,
-    "source": 170,
+    "source": 171,
     "test": 78,
     "web_ui": 1,
     "workflow": 37
@@ -29,8 +29,8 @@
     "POTENTIAL_UNLOGGED_CHANGES": 2
   },
   "finding_total": 9,
-  "inventory_fingerprint": "495d196e2df634b6fbca47686f1e404fc7d745510e80de183a2498b8f4453ca0",
-  "evidence_fingerprint": "121367aeb9a34da5aca38a951cc5f53ca00a1afe20a8848d63c57b734fb074ab",
+  "inventory_fingerprint": "721e3482006d5b5e2a2a4097465d8c8d858c990844c3a4d984beceff9ba4680f",
+  "evidence_fingerprint": "c98670f3667900ee295fcde5fd0ec7f66ae44043499e6baaf8280e6f438e82b5",
   "files": [
     {
       "path": ".github/agents/openfoam-solidification.agent.md",
@@ -300137,6 +300137,13 @@
       "blob": "e78ec43d6662b8ce3ea945689d0655bc93c6700e"
     },
     {
+      "path": "tools/run_lab_fixed_mpi8.py",
+      "role": "source",
+      "purpose": "code/test implementation",
+      "certainty": "rule",
+      "blob": "55c5d2ec7a2d56ad0d8159e15e888f56f3eb72a1"
+    },
+    {
       "path": "tools/test_adaptive_campaign_200s.py",
       "role": "test",
       "purpose": "code/test implementation",
@@ -300265,20 +300272,20 @@
       "state": "REVIEW_REQUIRED"
     },
     {
-      "id": "b41ca24ae9d665c3",
+      "id": "b87f4219cd9d01ed",
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_EN.md",
-      "observation": "10 implementation/config paths changed since this log's last commit; examples: .github/workflows/adaptive-campaign-static.yml, docs/C3D04_CASE_A_STATUS.json, docs/PROJECT_STAGE_STATUS.json, tools/finalize_lab_fixed_mpi8.py, tools/run_adaptive_campaign_200s.py, tools/run_adaptive_mpi_campaign.py",
+      "observation": "11 implementation/config paths changed since this log's last commit; examples: .github/workflows/adaptive-campaign-static.yml, docs/C3D04_CASE_A_STATUS.json, docs/PROJECT_STAGE_STATUS.json, tools/finalize_lab_fixed_mpi8.py, tools/run_adaptive_campaign_200s.py, tools/run_adaptive_mpi_campaign.py",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     },
     {
-      "id": "9cd998fb47bb592c",
+      "id": "acf7dc68d5dce843",
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_ES.md",
-      "observation": "10 implementation/config paths changed since this log's last commit; examples: .github/workflows/adaptive-campaign-static.yml, docs/C3D04_CASE_A_STATUS.json, docs/PROJECT_STAGE_STATUS.json, tools/finalize_lab_fixed_mpi8.py, tools/run_adaptive_campaign_200s.py, tools/run_adaptive_mpi_campaign.py",
+      "observation": "11 implementation/config paths changed since this log's last commit; examples: .github/workflows/adaptive-campaign-static.yml, docs/C3D04_CASE_A_STATUS.json, docs/PROJECT_STAGE_STATUS.json, tools/finalize_lab_fixed_mpi8.py, tools/run_adaptive_campaign_200s.py, tools/run_adaptive_mpi_campaign.py",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     }
