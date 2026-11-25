@@ -94,3 +94,14 @@ def write_transient_ledger(log: str, directory: Path) -> dict:
     (directory / "FS_C08_TRANSIENT_LEDGER.json").write_text(
         json.dumps(summary, indent=2, allow_nan=False)+"\n", encoding="utf-8")
     return summary
+
+if __name__ == "__main__":
+    import argparse
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("log", type=Path)
+    parser.add_argument("--output", type=Path, required=True)
+    args = parser.parse_args()
+    args.output.mkdir(parents=True, exist_ok=True)
+    report = write_transient_ledger(
+        args.log.read_text(encoding="utf-8", errors="replace"), args.output)
+    print(json.dumps(report, indent=2, allow_nan=False))
