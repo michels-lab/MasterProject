@@ -31,7 +31,7 @@ solvers::fsC08ConservativeVoF::fsC08ConservativeVoF(fvMesh& mesh)
         IOobject
         (
             "rhoAlpha.airTrial.fsC08",mesh.time().name(),mesh,
-            IOobject::NO_READ,IOobject::NO_WRITE
+            IOobject::NO_READ,IOobject::AUTO_WRITE
         ),
         alpha2*mixture_.rho2()
     ),
@@ -306,6 +306,17 @@ void solvers::fsC08ConservativeVoF::postSolve()
         phaseInternalEnergy_.primitiveField()
     );
 
+    // Ensure the base postSolve did not overwrite the accepted gas closure.
+    scalar postSolveGasMismatch=0;
+    forAll(gasMassTrial_,i)
+        postSolveGasMismatch=max(postSolveGasMismatch,
+            mag(gasMassTrial_[i]-alpha2[i]*mixture_.rho2()[i])
+            /max(scalar(1),mixture_.rho2()[i]));
+    reduce(postSolveGasMismatch,maxOp<scalar>());
+    if (postSolveGasMismatch>2e-12)
+        FatalErrorInFunction
+            << "FS-C08 postSolve changed accepted gas inventory "
+            << postSolveGasMismatch << exit(FatalError);
     // Now include the actual corrected gas p/rho/u state.
     updatePhaseInternalEnergy();
     // Darcy dissipation must use the velocity AFTER the final native
