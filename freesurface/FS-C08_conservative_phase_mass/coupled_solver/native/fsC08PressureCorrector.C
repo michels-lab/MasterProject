@@ -95,6 +95,14 @@ void Foam::solvers::fsC08ConservativeVoF::pressureCorrector()
     if (phaseMobility=="phaseWeighted" && faceMobility!="linear")
         FatalErrorInFunction << "FS-C08 phaseWeighted comparison requires linear face mobility"
             << exit(FatalError);
+    const word fluxMode=numerics.found("momentumFluxMode")
+        ? numerics.lookup<word>("momentumFluxMode") : word("incremental");
+    if (fluxMode!="incremental" && fluxMode!="totalUpwind"
+        && fluxMode!="incrementalNoDdtCorr" && fluxMode!="totalUpwindNoDdtCorr")
+        FatalErrorInFunction << "FS-C08 unknown momentumFluxMode " << fluxMode
+            << exit(FatalError);
+    const bool totalUpwind=fluxMode=="totalUpwind" || fluxMode=="totalUpwindNoDdtCorr";
+    const bool noDdtCorr=fluxMode=="incrementalNoDdtCorr" || fluxMode=="totalUpwindNoDdtCorr";
     // Native PIMPLE assembles UEqn before the thermal predictor. FS-C08
     // changes the independent densities during that predictor. Rebuild
     // UEqn from the updated inventory and conservative fluxes once,
@@ -131,11 +139,13 @@ void Foam::solvers::fsC08ConservativeVoF::pressureCorrector()
             FatalErrorInFunction << "FS-C08 invalid face momentum mobility "
                 << i << exit(FatalError);
     const volVectorField HbyA(constrainHbyA(rAU()*UEqn.H(),U,p_rgh));
-    const surfaceScalarField temporalFluxCorrection
+    surfaceScalarField temporalFluxCorrection
     (
         "fsC08TemporalFluxCorrection",
         fvc::interpolate(rho*rAU())*fvc::ddtCorr(U,phi,Uf)
     );
+    if (noDdtCorr)
+        temporalFluxCorrection=dimensionedScalar(temporalFluxCorrection.dimensions(),0);
     surfaceScalarField phiHbyA
     (
         "fsC08MomentumPredictorFlux",
@@ -257,8 +267,22 @@ void Foam::solvers::fsC08ConservativeVoF::pressureCorrector()
         "fsC08MomentumDonorG",
         upwind<scalar>(mesh,baselineDeltaPhi).interpolate(wG)
     );
-    fl+=fvc::interpolate(phaseMass_->liquidDensity())*donorWL*baselineDeltaPhi;
-    fg+=fvc::interpolate(mixture_.rho2())*donorWG*baselineDeltaPhi;
+    if (totalUpwind)
+    {
+        // Diagnostic alternative: replace the incremental split with a
+        // signed total predictor split, using the same mobile weights.
+        // This deliberately removes the MULES compression contribution
+        // from this predictor only; it is NOT a production VOF scheme.
+        fl=fvc::interpolate(phaseMass_->liquidDensity())
+            *upwind<scalar>(mesh,predictedPhi).interpolate(wL)*predictedPhi;
+        fg=fvc::interpolate(mixture_.rho2())
+            *upwind<scalar>(mesh,predictedPhi).interpolate(wG)*predictedPhi;
+    }
+    else
+    {
+        fl+=fvc::interpolate(phaseMass_->liquidDensity())*donorWL*baselineDeltaPhi;
+        fg+=fvc::interpolate(mixture_.rho2())*donorWG*baselineDeltaPhi;
+    }
     const surfaceScalarField rhoGFace
     (
         "fsC08VentedGasDensity",fvc::interpolate(mixture_.rho2())
@@ -610,6 +634,38 @@ void Foam::solvers::fsC08ConservativeVoF::pressureCorrector()
     fvc::correctUf(Uf,U,fvc::absolute(phi,U),MRF);
     p_rgh=p-rho*buoyancy.gh-buoyancy.pRef;
     p_rgh.correctBoundaryConditions();
+    // Audit numerical transport across the original metal/air support.
+    // No threshold or deletion of trace inventories is used.
+    scalar intoInitiallyGasKg=0,metalInInitiallyGasKg=0,counterflowVolume=0;
+    label counterflowFaces=0;
+    const auto& own=mesh.owner();
+    const auto& nei=mesh.neighbour();
+    const auto& oldL=phaseMass_->liquidMass().oldTime();
+    const auto& oldS=phaseMass_->solidMass().oldTime();
+    forAll(nei,facei)
+    {
+        const scalar q=alphaRhoPhi1[facei];
+        const label receiver=q>=0 ? nei[facei] : own[facei];
+        if (oldL[receiver]==0 && oldS[receiver]==0)
+            intoInitiallyGasKg+=dt.value()*mag(q);
+        const scalar qL=alphaPhi1[facei],qG=alphaPhi2[facei];
+        if ((qL>0 && qG<0) || (qL<0 && qG>0))
+        {
+            ++counterflowFaces;
+            counterflowVolume+=dt.value()*min(mag(qL),mag(qG));
+        }
+    }
+    forAll(oldL,i)
+        if (oldL[i]==0 && oldS[i]==0)
+            metalInInitiallyGasKg+=mesh.V()[i]*
+                (phaseMass_->liquidMass()[i]+phaseMass_->solidMass()[i]);
+    Info<< "FS_C08_INTERFACE_TRANSPORT_AUDIT"
+        << " time_s=" << runTime.value() << " fluxMode=" << fluxMode
+        << " grossMetalTransferIntoPreviouslyGasCells_kg=" << intoInitiallyGasKg
+        << " retainedMetalInPreviouslyGasCells_kg=" << metalInInitiallyGasKg
+        << " counterflowFaces=" << counterflowFaces
+        << " counterflowVolume_m3=" << counterflowVolume
+        << " diagnosticOnly=1" << nl;
     // An independent comparison: the accepted conservative flux
     // reconstruction versus the frozen matrix's direct pressure-gradient
     // velocity. Neither diagnostic overwrites the accepted solution.
