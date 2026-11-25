@@ -28,7 +28,7 @@
     "BROKEN_RELATIVE_LINK": 7
   },
   "finding_total": 7,
-  "inventory_fingerprint": "7ee6669ac05314f7e3c3cbc71177acde97edf3badda915769642c08ae38f0b43",
+  "inventory_fingerprint": "456b7c1aa1bb9a179195d0358cfcb9c3ed6edf845fa68659327fdbd98b9f491c",
   "evidence_fingerprint": "a38cca05722cc62f2a19d8787a386e132771345cc8472199f5e39f915b2e8a45",
   "files": [
     {
@@ -421,14 +421,14 @@
       "role": "bitacora",
       "purpose": "technical/audit change history",
       "certainty": "rule",
-      "blob": "c0ba236cfbe26ff98af302a23eeaa3bd9c4c7de3"
+      "blob": "2d189150164f7ee2b09556edcad0ed0ce1c3958a"
     },
     {
       "path": "PROJECT_AUDIT_LOG_ES.md",
       "role": "bitacora",
       "purpose": "technical/audit change history",
       "certainty": "rule",
-      "blob": "0b92581e214f71a5e08a28b3d20f38ac6c1b568e"
+      "blob": "7444e29329d59bdae9814ccb5a3dc46619e65084"
     },
     {
       "path": "README.md",
@@ -298775,7 +298775,7 @@
       "role": "config",
       "purpose": "machine-readable configuration",
       "certainty": "rule",
-      "blob": "543d36b7016b44fab84a88bcacb59e4634056d64"
+      "blob": "04fa96ac3aa17db1354305fa857b5c82b671a7d9"
     },
     {
       "path": "docs/C3D_01_ESTADO_REAL_20261110_ES.md",
@@ -299062,7 +299062,7 @@
       "role": "config",
       "purpose": "machine-readable configuration",
       "certainty": "rule",
-      "blob": "9f075b243f1b40cdb23868874fc2d5c884ad9587"
+      "blob": "38e7f84921fbea4e4d84cb7dc27cf34ab14293ec"
     },
     {
       "path": "docs/REGLA_INSTRUCCIONES_UNIFICADAS_ES.md",
@@ -299363,7 +299363,7 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "b5451d87edcf6958678c2bd584207711e89e0226"
+      "blob": "df37c3938435b8032d3d53a256bc0223b719e204"
     },
     {
       "path": "docs/granada/MAESTRIA_CAMPANA_B14_C14_200S_PLAN_20261124_ES.md",
@@ -299377,7 +299377,7 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "ad18ccb8826d1584bb9c6f20bacddf3e54da849c"
+      "blob": "cca933a11583424ba1526c406e5ecfbbcafb0aec"
     },
     {
       "path": "docs/granada/OPENFOAM_HUB_READ_ACCESS_20261021.md",
