@@ -117,7 +117,33 @@ def init_repo(p,url):
     if not subprocess.run(["git","var","GIT_AUTHOR_IDENT"],cwd=p,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL).returncode==0:
         git("config","user.name","MasterProject campaign",cwd=p)
         git("config","user.email","campaign@users.noreply.github.com",cwd=p)
-def publish(url,branch,archive,metadata,work):
+def preview(case,work):
+    """Small native-data view for direct GitHub analysis, not full archive."""
+    dst=work/"analysis_preview";dst.mkdir(exist_ok=True)
+    shutil.copy2(case/REPORT,dst/REPORT)
+    pp=case/"postProcessing/metal"
+    probe=pp/"temperatureProbe/0"
+    for field in ("T","U","p_rgh","rho","phaseChangeSource:alpha1"):
+        p=probe/field
+        if not p.is_file():continue
+        target=dst/"postProcessing/metal/temperatureProbe/0"/field
+        target.parent.mkdir(parents=True,exist_ok=True)
+        with p.open() as f,target.open("w") as out:
+            for line in f:
+                if line.lstrip().startswith("#"):out.write(line);continue
+                if not line.strip():continue
+                try:t=float(line.split()[0])
+                except ValueError:continue
+                if abs(t*10-round(t*10))<1e-7:out.write(line)
+    for group in ("metalTopPhiSum","metalTopEnergyPower","metalMoldEnergyPower","metalBoundaryEnergyPower",
+                  "metalSensibleEnthalpy","metalMeanLiquidFraction","metalLatentHeatPower","metalMeanCoolingRate",
+                  "metalMeanSolidificationRate","metalMaxCourant","metalMaxThermalGradient","metalMaxDensityGradient"):
+        for p in (pp/group).glob("*/*.dat"):
+            if p.stat().st_size>10*1024**2:continue
+            target=dst/"postProcessing/metal"/group/p.parent.name/p.name
+            target.parent.mkdir(parents=True,exist_ok=True);shutil.copy2(p,target)
+    (dst/"README.md").write_text("Native exact-time subset of central probes at 0.1 s; reductions as saved. No interpolation. Full probes, profiles and logs are in the verified archive. Not an independent physical validation.\n")
+def publish(url,branch,archive,metadata,work,case=None):
     # New independent result branch: no checkout or mutations of MasterProject.
     # Small pushes, even when the final archive is several GB.
     exists=bool(remote_head(url,branch))
@@ -148,6 +174,9 @@ def publish(url,branch,archive,metadata,work):
         git("commit","-qm",f"Archive chunks {i+1}-{i+len(group)} / {len(parts)}",cwd=work)
         git("push","origin","HEAD:refs/heads/"+branch,cwd=work)
     dump(work/"MANIFEST.json",manifest)
+    if case is not None:
+        preview(case,work)
+        git("add","analysis_preview",cwd=work)
     git("add","MANIFEST.json",cwd=work)
     git("commit","-qm","Complete archive SHA256 manifest",cwd=work)
     git("push","origin","HEAD:refs/heads/"+branch,cwd=work)
@@ -245,7 +274,7 @@ def run_all(url):
                     publish(url,branch,archive,{"kind":"scientific_results","case":name,"solver_steps":200000,
                         "final_time_s":200,"solver_log_sha256":sha(case/"log.foamMultiRun"),
                         "report_sha256":sha(case/REPORT),"native_runtime_coverage_complete":r.get("runtime_audit",{}).get("native_runtime_coverage_complete",False),
-                        "status":r["status"],"volume_fields_included":False},p/"git")
+                        "status":r["status"],"volume_fields_included":False},p/"git",case=case)
                 summary[name]={"status":r["status"],"publication":branch}
         except (RuntimeError,OSError,KeyError,ValueError,subprocess.SubprocessError) as e:
             summary[name]={"status":"BLOCKED_OR_FAILED_PRESERVED","error":str(e)}
