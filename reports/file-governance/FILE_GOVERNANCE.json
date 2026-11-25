@@ -29,7 +29,7 @@
     "POTENTIAL_UNLOGGED_CHANGES": 2
   },
   "finding_total": 9,
-  "inventory_fingerprint": "9dc5993dc5c67bc8822d04ac3d0602a3c9ccae2984f5d1316b686a3b582e3c17",
+  "inventory_fingerprint": "c99e6ed7c4e7d5cbefb0ad9b390b3062e1818679d6ab0062a83daf1f467d712c",
   "evidence_fingerprint": "c06490a57c1f57c5551f19446d79f2c0b2c6a5fb28af9457c377456b0057576c",
   "files": [
     {
@@ -298783,7 +298783,7 @@
       "role": "config",
       "purpose": "machine-readable configuration",
       "certainty": "rule",
-      "blob": "777b38a19555c8c84c642b3a07e4c47482053bfa"
+      "blob": "1f842be27f8ed88e3088f9c5ec6d2e18a093c63b"
     },
     {
       "path": "docs/C3D_01_ESTADO_REAL_20261110_ES.md",
@@ -299070,7 +299070,7 @@
       "role": "config",
       "purpose": "machine-readable configuration",
       "certainty": "rule",
-      "blob": "74603252f2bc9818e18ae516e6c2099d461efc9b"
+      "blob": "30f047b9d9476a653a6c35da216ca04adaa7d74d"
     },
     {
       "path": "docs/REGLA_INSTRUCCIONES_UNIFICADAS_ES.md",
@@ -299371,14 +299371,14 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "154388572ae84ef2348b327d694b61dc05174428"
+      "blob": "511da2385c692c55c8daf39e31abbf50e1e0c6a5"
     },
     {
       "path": "docs/granada/MAESTRIA_CAMPANA_200S_TRANSFERENCIA_LAB_CASA_20261124_ES.md",
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "4fd06da483833644f361dd576d086e419ade34b0"
+      "blob": "c5674ea4aa0ca4cdcf01dae5f28dc924bb017eed"
     },
     {
       "path": "docs/granada/MAESTRIA_CAMPANA_B14_C14_200S_PLAN_20261124_ES.md",
