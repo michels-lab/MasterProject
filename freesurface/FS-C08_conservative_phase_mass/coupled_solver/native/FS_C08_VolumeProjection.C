@@ -210,11 +210,15 @@ bool projectTrialInventories
     surfaceScalarField fg("fsC08ProjectionTrialFG",gasMassFlux);
     surfaceScalarField dfl("fsC08ProjectionDeltaFL",liquidMassFlux*scalar(0));
     surfaceScalarField dfg("fsC08ProjectionDeltaFG",gasMassFlux*scalar(0));
-    const dimensionedScalar dt=dp.mesh().time().deltaT();
+    const fvMesh& mesh=dp.mesh();
+    const dimensionedScalar dt=mesh.time().deltaT();
     const scalar tolerance=1e-12;
     const label maxIterations=30;
     const label maxBacktracks=24;
 
+    if (Pstream::parRun())
+        FatalErrorInFunction << "FS-C08 first active-set projection is serial only"
+            << exit(FatalError);
     if (!admissibleTrial(l,mS,g,rhoL,rhoS,rg,p,false))
         return false;
 
@@ -239,11 +243,74 @@ bool projectTrialInventories
 
         dp=dimensionedScalar(dp.dimensions(),0);
         dp.correctBoundaryConditions();
-        solveVolumePressureIncrement
-        (
-            residual(),g,rhoL,rg,psiG,liquidMobility,gasMobility,
-            dp,dfl,dfg,referenceCell
-        );
+        // Active-set pressure mobilities. A face with an absent donor
+        // cannot export that phase. Reassemble the pressure Jacobian
+        // instead of clipping the resulting mass or face flux afterwards.
+        // First integrated candidate is serial; coupled patch donor
+        // communication requires a separate implementation.
+        surfaceScalarField mlFace("fsC08ActiveLiquidMobility",liquidMobility);
+        surfaceScalarField mgFace("fsC08ActiveGasMobility",gasMobility);
+        bool activeSetStable=false;
+        for (label sweep=0;sweep<12;++sweep)
+        {
+            dp=dimensionedScalar(dp.dimensions(),0);
+            dp.correctBoundaryConditions();
+            solveVolumePressureIncrement
+            (
+                residual(),g,rhoL,rg,psiG,mlFace,mgFace,
+                dp,dfl,dfg,referenceCell
+            );
+            bool changed=false;
+            const auto& own=mesh.owner();
+            const auto& nei=mesh.neighbour();
+            forAll(nei,facei)
+            {
+                const label donorL=dfl[facei]>=0 ? own[facei] : nei[facei];
+                const label donorG=dfg[facei]>=0 ? own[facei] : nei[facei];
+                if (dfl[facei]!=0 && l[donorL]<=0 && mlFace[facei]>0)
+                {
+                    mlFace.primitiveFieldRef()[facei]=0;
+                    changed=true;
+                }
+                if (dfg[facei]!=0 && g[donorG]<=0 && mgFace[facei]>0)
+                {
+                    mgFace.primitiveFieldRef()[facei]=0;
+                    changed=true;
+                }
+            }
+            forAll(mesh.boundary(),patchi)
+            {
+                const auto& cells=mesh.boundary()[patchi].faceCells();
+                forAll(cells,facei)
+                {
+                    if (dfl.boundaryField()[patchi][facei]>0
+                        && l[cells[facei]]<=0
+                        && mlFace.boundaryField()[patchi][facei]>0)
+                    {
+                        mlFace.boundaryFieldRef()[patchi][facei]=0;
+                        changed=true;
+                    }
+                    if (dfg.boundaryField()[patchi][facei]>0
+                        && g[cells[facei]]<=0
+                        && mgFace.boundaryField()[patchi][facei]>0)
+                    {
+                        mgFace.boundaryFieldRef()[patchi][facei]=0;
+                        changed=true;
+                    }
+                }
+            }
+            if (!returnReduce(label(changed),sumOp<label>()))
+            {
+                activeSetStable=true;
+                break;
+            }
+        }
+        if (!activeSetStable)
+        {
+            Info<< "FS_C08_VOLUME_PROJECTION_REJECTED"
+                << " reason=donor_active_set_limit" << nl;
+            return false;
+        }
 
         // Uniform damping of all pressure and face mass increments:
         // no cell-local mass clipping, no independent phase scaling.
