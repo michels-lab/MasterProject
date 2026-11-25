@@ -28,6 +28,9 @@ END=200.
 RESERVE=10*1024**3
 NUM=r"[+-]?(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][+-]?\d+)?"
 TIMELINE="adaptive_time_steps.csv"
+CANON="U_x U_y U_z T p_rgh rho phaseChangeSource:alpha1 vorticity_x vorticity_y vorticity_z flowType magSqrDevGradU gradT_x gradT_y gradT_z magGradT dTdt coolingRate gradRho_x gradRho_y gradRho_z magGradRho dAlphaLdt solidificationRate latentHeatRateVol CoCell".split()
+NEAR="U_x U_y U_z T p_rgh rho phaseChangeSource:alpha1".split()
+DERIVED=("dTdt","coolingRate","dAlphaLdt","solidificationRate","latentHeatRateVol","gradT","magGradT","gradRho","magGradRho","CoCell","vorticity","flowType","magSqrDevGradU","phaseChangeDarcyCoeff","phaseChangeBuoyancyAcceleration")
 RESULT_PREFIX="results/campaign-200s-adaptive-v1/"
 
 def need(ok,msg):
@@ -118,6 +121,31 @@ def directories(p):
         except ValueError:continue
         if math.isfinite(v):result.append((v,q))
     return sorted(result)
+def profile_groups(r):
+    groups={"horizontalProfiles":["line_y10mm","line_y20mm","line_y30mm"],
+            "verticalProfiles":["line_x20mm"],"nearTopInternalLine":["line_y39p75mm"]}
+    if r["sampling"]["additional_3D_profiles"]:groups["additional3DProfiles"]=list(r["sampling"]["additional_3D_profiles"])
+    return groups
+def profile(p,cols,dest=None):
+    with p.open() as f:h=f.readline().lstrip("#").split()
+    need(len(h)==len(cols)+1 and h[0] in ("x","y","z"),"unexpected header "+str(p))
+    need(all(a==b or (a.endswith("...") and b.startswith(a[:-3])) for a,b in zip(h[1:],cols)),"unexpected columns "+str(p))
+    v=list(rows(p))
+    need(1<len(v)<=80 and all(len(row)==len(h) for row in v),"invalid spatial coverage "+str(p))
+    if dest:
+        dest.parent.mkdir(parents=True,exist_ok=True)
+        with p.open() as src,dest.open("x") as out:
+            next(src);out.write("# "+h[0]+" "+" ".join(cols)+"\n");shutil.copyfileobj(src,out)
+    return len(v)
+def early_gate(case,r):
+    pp=case/"postProcessing/metal"
+    for g,names in profile_groups(r).items():
+        d=[p for t,p in directories(pp/g) if abs(t-.1)<5e-7]
+        need(len(d)==1,"missing exact .1s profile "+g)
+        for n in names:profile(d[0]/(n+".xy"),NEAR if g=="nearTopInternalLine" else CANON)
+    need(any(abs(t-.1)<5e-7 and (p/"patch(metalTop).xy").is_file() for t,p in directories(pp/"topFlow")),"missing .1s topFlow")
+    need(any(abs(t-1)<5e-7 and (p/"metal/T").is_file() and (p/"mold/T").is_file() for t,p in directories(case)),"missing 1s volume")
+    need(all(abs(t-round(t))<5e-7 for t,p in directories(case) if (p/"metal").is_dir() or (p/"mold").is_dir()),"unexpected extra volume writes")
 def audit(case,r,steps):
     pp=case/"postProcessing/metal";counts={};errors=[]
     def guard(key,fn):
@@ -136,25 +164,21 @@ def audit(case,r,steps):
             p=list((pp/g/"0").glob("*.dat"));need(len(p)==1,"missing/ambiguous reduction")
             return times_table(p[0],target,5e-5)
         guard("reduction/"+g,red)
-    groups={"horizontalProfiles":["line_y10mm","line_y20mm","line_y30mm"],
-            "verticalProfiles":["line_x20mm"],"nearTopInternalLine":["line_y39p75mm"]}
-    if r["sampling"]["additional_3D_profiles"]:groups["additional3DProfiles"]=list(r["sampling"]["additional_3D_profiles"])
-    for g,names in groups.items():
+    for g,names in profile_groups(r).items():
         def profiles(g=g,names=names):
             dirs=directories(pp/g)
             need(len(dirs)==len(target),"profile count mismatch")
             need(all(abs(x-y)<5e-7 for (x,_),y in zip(dirs,target)),"profile cadence differs")
             for _,d in dirs:
                 for n in names:
-                    v=list(rows(d/(n+".xy")))
-                    need(1<len(v)<=80,"missing line "+str(d/n))
+                    profile(d/(n+".xy"),NEAR if g=="nearTopInternalLine" else CANON,pp/("CompactCanonical"+g)/d.name/(n+".xy"))
             return {"times":len(dirs),"lines":len(names)}
         guard(g,profiles)
     def volume():
         ds=directories(case)
         need(len(ds)==201 and all(abs(t-i)<5e-7 for i,(t,p) in enumerate(ds)),"volume cadence differs")
         for _,p in ds:
-            for reg,fields in (("metal",("T","U","p","p_rgh","phaseChangeSource:alpha1")),("mold",("T",))):
+            for reg,fields in (("metal",("T","U","p","p_rgh","phaseChangeSource:alpha1")+DERIVED),("mold",("T",))):
                 for f in fields:need((p/reg/f).is_file(),"missing "+str(p/reg/f))
         return len(ds)
     guard("volume",volume)
@@ -171,7 +195,7 @@ def run(case):
     need(transfer.input_hashes(case)==r["input_sha256"],"input hash mismatch")
     need(shutil.disk_usage(case).free>=r["disk_projection"]["projected_bytes_with_50pct_margin"]+RESERVE,"disk reserve")
     r["status"]="RUNNING_ADAPTIVE";dump(case/REPORT,r)
-    steps=[];dts=[];co=[];last=0.;end=False;fatal=False;last_print=-1;dt_log=None;co_log=None
+    steps=[];dts=[];co=[];last=0.;end=False;fatal=False;last_print=-1;dt_log=None;co_log=None;gated=False
     started=time.monotonic()
     try:
         with (case/"log.foamMultiRun").open("x") as log,(case/TIMELINE).open("x") as timeline:
@@ -184,12 +208,15 @@ def run(case):
                     if m:dt_log=float(m[1])
                     m=re.search(r"Courant Number.*?max:\s*("+NUM+")",line)
                     if m:co_log=float(m[1]);co.append(co_log)
-                    m=re.match(r"^\s*Time\s*=\s*("+NUM+r")s?\s*$",line)
+                    m=re.match(r"^\s*Time\s*=\s*("+NUM+r")\s*s?\s*$",line)
                     if not m:continue
                     t=float(m[1]);dt=t-last
                     need(0<dt<=MAX_DT+1e-7 and t<=END+1e-7,"unexpected adaptive step "+str(dt))
                     steps.append(t);dts.append(dt);w.writerow((len(steps),t,dt,dt_log,co_log))
                     dt_log=co_log=None;last=t
+                    if not gated and t>1.01:
+                        early_gate(case,r);gated=True;r["early_split_cadence_gate"]="PASS";dump(case/REPORT,r)
+                        print("Native adaptive output cadence verified",flush=True)
                     if int(t)>last_print:
                         last_print=int(t);log.flush();timeline.flush()
                         print(f"{case.name}: {t:.6g}/200 s | steps {len(steps)} | dt={dt:.6g}",flush=True)
@@ -255,4 +282,5 @@ def main():
             dump(ROOT/"ADAPTIVE_CAMPAIGN_INDEX.json",summary)
         print(json.dumps(summary,indent=2),flush=True)
         need(all(read(ROOT/n/REPORT).get("solver_completed") for n in ORDER),"some cases incomplete; preserved")
+        if a.publish:need(all(not v.startswith("BLOCKED") for v in summary.values()),"publication incomplete; rerun only publishes completed cases")
 if __name__=="__main__":main()
