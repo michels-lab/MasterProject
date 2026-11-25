@@ -161,6 +161,10 @@ solvers::fsC08ConservativeVoF::fsC08ConservativeVoF(fvMesh& mesh)
     gasMassTrial_=alpha2*mixture_.rho2();
     gasMassTrial_.correctBoundaryConditions();
     gasMassTrial_.oldTime();
+    // Foundation14 creates alpha2 as 1-alpha1 without AUTO_WRITE.
+    // FS-C08 requires both native geometry fields in every saved state
+    // for independent inspection of the conservative gas inventory.
+    mixture_.alpha2().writeOpt()=IOobject::AUTO_WRITE;
     mixture_.T().oldTime();
     reconcileMixtureDensity();
     rhoMetalEffective_.oldTime();
