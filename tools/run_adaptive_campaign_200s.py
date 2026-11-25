@@ -19,10 +19,9 @@ import sys
 import transfer_campaign_200s as transfer
 
 HOME=Path.home()/"OpenFOAM"
-ROOT=HOME/"CAMPAIGN_200S_ADAPTIVE_01"
+ROOT=HOME/"CAMPAIGN_200S_ADAPTIVE_UNCAPPED_01"
 ORDER=("C14-3DA-200s","C14-2D-200s","B14-2D-200s","C14-3DB-200s")
 REPORT="CAMPAIGN_200S_REPORT.json"
-MAX_DT=.01
 MAX_CO=.25
 END=200.
 RESERVE=10*1024**3
@@ -31,7 +30,7 @@ TIMELINE="adaptive_time_steps.csv"
 CANON="U_x U_y U_z T p_rgh rho phaseChangeSource:alpha1 vorticity_x vorticity_y vorticity_z flowType magSqrDevGradU gradT_x gradT_y gradT_z magGradT dTdt coolingRate gradRho_x gradRho_y gradRho_z magGradRho dAlphaLdt solidificationRate latentHeatRateVol CoCell".split()
 NEAR="U_x U_y U_z T p_rgh rho phaseChangeSource:alpha1".split()
 DERIVED=("dTdt","coolingRate","dAlphaLdt","solidificationRate","latentHeatRateVol","gradT","magGradT","gradRho","magGradRho","CoCell","vorticity","flowType","magSqrDevGradU","phaseChangeDarcyCoeff","phaseChangeBuoyancyAcceleration")
-RESULT_PREFIX="results/campaign-200s-adaptive-v1/"
+RESULT_PREFIX="results/campaign-200s-adaptive-uncapped-v1/"
 
 def need(ok,msg):
     if not ok:raise RuntimeError(msg)
@@ -46,8 +45,10 @@ def adapt_dicts(case):
     changed={}
     p=case/"system/controlDict";old=p.read_text();s=old
     for k,a,b in (("adjustTimeStep","no","yes"),("writeControl","timeStep","adjustableRunTime"),
-                  ("writeInterval","1000","1"),("maxDeltaT","0.1","0.01"),("timePrecision","6","12")):
+                  ("writeInterval","1000","1"),("timePrecision","6","12")):
         s=edit_key(s,k,a,b)
+    s,n=re.subn(r"(?m)^[ \t]*maxDeltaT[ \t]+0\.1[ \t]*;[ \t]*\n","",s)
+    need(n==1 and not re.search(r"(?m)^[ \t]*maxDeltaT\b",s),"unexpected maxDeltaT entry")
     for k,v in (("deltaT","0.001"),("maxCo","0.25"),("endTime","200"),("writeFormat","ascii"),("writeCompression","off")):
         need(re.search(r"(?m)^[ \t]*"+k+r"[ \t]+"+re.escape(v)+r"[ \t]*;",s),"original control drift "+k)
     p.write_text(s);changed["system/controlDict"]=transfer.sha(p)
@@ -94,7 +95,7 @@ def prepare(repo,url):
             report={**r,"status":"ADAPTIVE_PREPARED_NOT_RUN","solver_completed":False,
                     "physical_validation":False,"fixed_input_sha256":r["input_sha256"],"input_sha256":after,
                     "changed_time_control_files":changed,"source_transfer_sha256":m["archive_sha256"],
-                    "time_mode":"adaptive","initial_dt_s":.001,"max_dt_s":MAX_DT,"max_co":MAX_CO,
+                    "time_mode":"adaptive","initial_dt_s":.001,"max_dt_s":None,"max_deltaT_policy":"no explicit maxDeltaT; native solver and output scheduling restrictions retained","max_co":MAX_CO,
                     "probe_cadence":"every actual solver step","profile_target_interval_s":.1,
                     "volume_target_interval_s":1.0,"solver_steps_target":None,"probe_samples_target":None,
                     "disk_projection_note":"retain fixed estimate as planning reserve, not actual adaptive output estimate"}
@@ -211,7 +212,7 @@ def run(case):
                     m=re.match(r"^\s*Time\s*=\s*("+NUM+r")\s*s?\s*$",line)
                     if not m:continue
                     t=float(m[1]);dt=t-last
-                    need(0<dt<=MAX_DT+1e-7 and t<=END+1e-7,"unexpected adaptive step "+str(dt))
+                    need(math.isfinite(dt) and dt>0 and t<=END+1e-7,"invalid adaptive step "+str(dt))
                     steps.append(t);dts.append(dt);w.writerow((len(steps),t,dt,dt_log,co_log))
                     dt_log=co_log=None;last=t
                     if not gated and t>1.01:
@@ -252,7 +253,7 @@ def publish(case,url):
                 q=case/n
                 if q.exists():transfer.add(t,q,case.name+"/"+n)
         transfer.publish(url,branch,archive,{"kind":"adaptive_scientific_results","case":case.name,
-            "time_mode":"adaptive","solver_steps":r["solver_steps"],"final_time_s":200,
+            "time_mode":"adaptive_uncapped","solver_steps":r["solver_steps"],"final_time_s":200,
             "solver_log_sha256":transfer.sha(case/"log.foamMultiRun"),"report_sha256":transfer.sha(case/REPORT),
             "native_runtime_coverage_complete":r.get("runtime_audit",{}).get("native_runtime_coverage_complete",False),
             "volume_fields_included":False},p/"git",case=case)
