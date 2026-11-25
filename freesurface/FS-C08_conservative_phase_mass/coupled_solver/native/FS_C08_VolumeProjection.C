@@ -116,7 +116,7 @@ void limitPredictorMassFlux
     const char* stage
 )
 {
-    const fvMesh& mesh=massFlux.mesh();
+    const fvMesh& mesh=availableMass.mesh();
     const scalar dt=mesh.time().deltaTValue();
     if (Pstream::parRun() || !std::isfinite(dt) || dt<=0)
         FatalErrorInFunction << "FS-C08 predictor limiter requires serial positive dt"
