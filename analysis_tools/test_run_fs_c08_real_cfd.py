@@ -103,6 +103,25 @@ class RealCFDBudgetEvidenceTests(unittest.TestCase):
                 self.assertRegex(match[1], r"relTol\s+" + re.escape(rel_tol) + ";")
         self.assertIn("p_rgh { solver PCG; }", staged)
 
+    def test_symmetric_temperature_solver_overrides_inherited_dilu(self):
+        import re
+        original = ('solvers\n{\n'
+                    '    "T.*" { solver PBiCGStab; preconditioner DILU; }\n'
+                    '    T { solver PBiCGStab; preconditioner DILU; }\n'
+                    '    "TFinal" { $T; relTol 0; }\n'
+                    '    U { solver PBiCGStab; preconditioner DILU; }\n}\n')
+        staged = add_phase_mass_solvers(original)
+        for key in ("T", "TFinal"):
+            matches = re.findall(r"(?m)^\s*" + key + r"\s*\{([^}]+)\}", staged)
+            self.assertEqual(len(matches), 1)
+            self.assertRegex(matches[0], r"solver\s+PCG;")
+            self.assertRegex(matches[0], r"preconditioner\s+DIC;")
+            self.assertRegex(matches[0], r"relTol\s+0;")
+        self.assertNotIn('"TFinal"', staged)
+        self.assertIn('"T.*" { solver PBiCGStab; preconditioner DILU; }', staged)
+        self.assertIn('U { solver PBiCGStab; preconditioner DILU; }', staged)
+        self.assertRegex(staged, r"rhoAlpha\.liquidFinal\s*\{[^}]*preconditioner\s+diagonal;")
+
     def test_fatal_io_details_not_masked_by_sigfpe_startup(self):
         with TemporaryDirectory() as temp:
             path = Path(temp) / "foamMultiRun.log"
