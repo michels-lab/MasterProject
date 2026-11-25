@@ -40,6 +40,30 @@ def sha(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
+def add_phase_mass_solvers(solution: str) -> str:
+    """Install explicit regular AND final PIMPLE matrix solver entries."""
+    pattern = r"(?m)^(\s*solvers\s*\{)"
+    require(len(re.findall(pattern, solution)) == 1,
+            "expected exactly one solvers dictionary in fluid fvSolution")
+    require("rhoAlpha." not in solution,
+            "source already has FS-C08 phase mass matrix entries")
+    entries = []
+    for field in ("rhoAlpha.liquid", "rhoAlpha.solid"):
+        for final in (False, True):
+            name = field + ("Final" if final else "")
+            entries.append(
+                f"\n    {name}\n"
+                "    {\n"
+                "        solver          PBiCGStab;\n"
+                "        preconditioner  DILU;\n"
+                "        tolerance       1e-10;\n"
+                f"        relTol          {0 if final else 0.01};\n"
+                "    }\n"
+            )
+    return re.sub(pattern, lambda m: m.group(1) + "".join(entries),
+                  solution, count=1)
+
+
 def stage(source: Path, material: Path, output: Path) -> dict:
     source=source.expanduser().resolve()
     material=material.expanduser().resolve()
@@ -123,22 +147,7 @@ def stage(source: Path, material: Path, output: Path) -> dict:
         "// Phase energy contains latent only in u_liquid-u_solid reference.\n"
     )
     solution=(source/"system/fluid/fvSolution").read_text(encoding="utf-8")
-    require(re.search(r"(?m)^\s*solvers\s*\{",solution) is not None,
-            "no solvers dictionary in fluid fvSolution")
-    require("rhoAlpha.liquid" not in solution and "rhoAlpha.solid" not in solution,
-            "source already has FS-C08 phase mass matrix entries")
-    solution=re.sub(
-        r"(?m)^(\s*solvers\s*\{)",
-        lambda m:m.group(1)+(
-            '\n    "rhoAlpha.(liquid|solid)"\n'
-            '    {\n'
-            '        solver          PBiCGStab;\n'
-            '        preconditioner  DILU;\n'
-            '        tolerance       1e-10;\n'
-            '        relTol          0.01;\n'
-            '    }\n'
-        ),solution,count=1
-    )
+    solution=add_phase_mass_solvers(solution)
     for need in (
         "FS_C08_PhaseMassTransport.C",
         "fsC08ConservativeVoF.C",
