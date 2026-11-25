@@ -307,7 +307,7 @@ void solvers::fsC08ConservativeVoF::prePredictor()
     );
     fsC08::limitPredictorMassFlux(alphaRhoPhi2,gasAvailable,"gasMULES");
     alphaPhi2=alphaRhoPhi2/fvc::interpolate(mixture_.rho2());
-    phi=alphaPhi1+alphaPhi2;
+    phi_=alphaPhi1+alphaPhi2;
     rhoPhi=alphaRhoPhi1+alphaRhoPhi2;
     gasMassTrial_=fsC08::trialMassFromOldTime
     (
