@@ -46,6 +46,7 @@ License
 \*---------------------------------------------------------------------------*/
 
 #include "fsC08ConservativeVoF.H"
+#include "FS_C08_VolumeProjection.H"
 #include "fvcMeshPhi.H"
 #include "fvcDdt.H"
 #include "fvcDiv.H"
@@ -172,8 +173,9 @@ void Foam::solvers::fsC08ConservativeVoF::thermophysicalPredictor()
         const volScalarField& gasCv=tGasCv();
         const auto& ug=mixture_.thermo2().he().primitiveField();
         const auto& gasC=gasCv.primitiveField();
-        const auto& aG=alpha2.primitiveField();
-        const auto& rg=rhoG.primitiveField();
+        // Gas trial inventory is an independent conserved predictor;
+        // native rhoG is still the EOS field used by the pressure block.
+        const auto& mg=gasMassTrial_.primitiveField();
         const auto& ml=mL.primitiveField();
         const auto& ms=mS.primitiveField();
         const auto& temp=T.primitiveField();
@@ -202,8 +204,8 @@ void Foam::solvers::fsC08ConservativeVoF::thermophysicalPredictor()
             ul[i]=ul_i;
 
             // CURRENT exact internal-energy inventory at Tguess.
-            e[i]=ml[i]*ul_i+ms[i]*us_i+aG[i]*rg[i]*ug[i];
-            c[i]=ml[i]*cvL+ms[i]*cvS+aG[i]*rg[i]*gasC[i];
+            e[i]=ml[i]*ul_i+ms[i]*us_i+mg[i]*ug[i];
+            c[i]=ml[i]*cvL+ms[i]*cvS+mg[i]*gasC[i];
             if (!std::isfinite(e[i]) || !std::isfinite(c[i])
                 || c[i]<=0)
             {
@@ -387,7 +389,24 @@ void Foam::solvers::fsC08ConservativeVoF::thermophysicalPredictor()
 
     // Energy solve must update rho_l(T), rho_s(T), and thus occupied
     // VOF volume BEFORE native PIMPLE pressure. Never apply Gamma twice.
-    phaseMass_->refreshAfterEnergy(T,alpha1);
+    phaseMass_->refreshTrialProperties(T,alpha1);
+    const tmp<volScalarField> volumeResidual=fsC08::trialVolumeResidual
+    (
+        phaseMass_->liquidMass(),phaseMass_->solidMass(),gasMassTrial_,
+        phaseMass_->liquidDensity(),phaseMass_->solidDensity(),rhoG
+    );
+    scalar maxVolumeDefect=0;
+    forAll(volumeResidual(),i)
+        maxVolumeDefect=max(maxVolumeDefect,mag(volumeResidual()[i]));
+    reduce(maxVolumeDefect,maxOp<scalar>());
+    Info<< "FS_C08_THREE_PHASE_TRIAL_VOLUME"
+        << " time_s=" << runTime.value()
+        << " maxAbsResidual=" << maxVolumeDefect
+        << " acceptedPhysicalState=0" << nl;
+
+    // Strict legacy gate remains until the momentum-pressure projection
+    // can conservatively correct all three inventories and energy.
+    phaseMass_->acceptTrialFractions(T);
     alpha1=phaseMass_->alphaMetal();
     alpha2=scalar(1)-alpha1;
     alpha1.correctBoundaryConditions();
