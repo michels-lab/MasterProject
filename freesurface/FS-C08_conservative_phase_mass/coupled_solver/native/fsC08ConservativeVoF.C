@@ -276,8 +276,11 @@ void solvers::fsC08ConservativeVoF::prePredictor()
     // MULES provides a real, all-face metal VOF flux from evolving U.
     compressibleVoF::prePredictor();
 
+    // Preserve native gas volume flux before liquid-only transport
+    // changes the metal flux. Do not turn a withheld liquid/solid flux
+    // into a fictitious gas flux through a metal cell.
+    const surfaceScalarField nativeGasPhi("fsC08NativeGasPredictorPhi",phi-alphaPhi1);
     // Actual finite-volume continuity for liquid and stationary solid.
-    // No made-up face flux, no post-processed saved-state inference.
     phaseMass_->solve(mixture_.T(),alpha1,alphaPhi1);
 
     // Keep native bounded MULES geometry as provisional geometry.
@@ -288,9 +291,8 @@ void solvers::fsC08ConservativeVoF::prePredictor()
     alphaRhoPhi1 = phaseMass_->liquidMassFlux();
     alphaPhi1 =
         alphaRhoPhi1/fvc::interpolate(phaseMass_->liquidDensity());
-    alphaPhi2 = phi-alphaPhi1;
+    alphaPhi2 = nativeGasPhi;
     alphaRhoPhi2 = fvc::interpolate(mixture_.rho2())*alphaPhi2;
-    rhoPhi = alphaRhoPhi1+alphaRhoPhi2;
 
     // Predict gas mass from the actual old inventory and signed FV gas
     // mass flux, not from a provisional complement of alpha.metal.
@@ -299,6 +301,14 @@ void solvers::fsC08ConservativeVoF::prePredictor()
         "fsC08GasTrialMassSource",
         (fvModels().source(alpha2,mixture_.rho2())&mixture_.rho2())
     );
+    const volScalarField gasAvailable
+    (
+        "fsC08GasPredictorAvailable",gasMassOld+runTime.deltaT()*gasSource
+    );
+    fsC08::limitPredictorMassFlux(alphaRhoPhi2,gasAvailable,"gasMULES");
+    alphaPhi2=alphaRhoPhi2/fvc::interpolate(mixture_.rho2());
+    phi=alphaPhi1+alphaPhi2;
+    rhoPhi=alphaRhoPhi1+alphaRhoPhi2;
     gasMassTrial_=fsC08::trialMassFromOldTime
     (
         gasMassOld,alphaRhoPhi2,gasSource
