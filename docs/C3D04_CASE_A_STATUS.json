@@ -1361,7 +1361,7 @@
       "all_six_fit_estimate": true,
       "windows_host_volume_free_verified": false
     },
-    "next": "Verify Windows physical disk capacity, then explicitly execute C14-3DA-200s with compact_campaign_200s.py --run; integrated native first-second cadence gate; no dense run.",
+    "next": "Inspect local C14-3DA incomplete report before lab CFD; input transfer complete, lab import not verified.",
     "compact_storage": {
       "authorized": true,
       "script": "tools/compact_campaign_200s.py",
@@ -1409,6 +1409,23 @@
         "native_split_cadence_verified": false
       },
       "native_split_cadence_verified": false
+    },
+    "lab_transfer": {
+      "status": "INPUT_TRANSFER_PUBLISHED_MANIFEST_VERIFIED",
+      "branch": "transfer/campaign-200s-compact-inputs-v1",
+      "commit": "ca7db498b0cfd8760c63e28c8b9b1e093268e085",
+      "archive_bytes": 85103418,
+      "archive_sha256": "c7687e03296e7e310512e6a61f8b436052430226dee3c51fb61d27c6fb23ea9d",
+      "parts": 3,
+      "cases": 6,
+      "solver_commit": "50d3bbd7750756d7d854eaa2a6f8d69157a3341f",
+      "transfer_script_commit": "b52c3ee4964e09bad219c5a55eeb3df9337c50ed",
+      "static_ci_run": 45523141937,
+      "static_ci_conclusion": "success",
+      "lab_import_verified": false,
+      "lab_cfd_verified": false,
+      "local_compact_A_status": "RUN_INCOMPLETE_PRESERVED",
+      "local_compact_A_failure_cause": "not yet inspected; request report before assuming lab readiness"
     }
   },
   "stage09_temporal_sensitivity": {
