@@ -106,13 +106,20 @@ def laminar_reference_models(momentum: str, models: str) -> tuple[str, str]:
     return momentum, models
 
 
-def startup_probe_controls(ctrl: str, dt: float) -> str:
-    """One real fixed-duration CFD step, not a full casting simulation.
+def startup_probe_controls(ctrl: str, dt: float, steps: int = 1) -> str:
+    """A bounded sequence of real fixed-duration CFD steps, not a full casting simulation.
 
     A probe is an explicit numerical sensitivity experiment. It preserves
     the original maximum timestep and all material and pressure bounds.
     """
     require(math.isfinite(dt) and dt > 0, "invalid startup probe dt")
+    require(isinstance(steps, int) and 1 <= steps <= 1000,
+            "startup probe steps must be in [1,1000]")
+    end = steps*dt
+    require(math.isfinite(end) and end > 0, "invalid probe horizon")
+    original_end = re.findall(r"(?m)^\s*endTime\s+([0-9.eE+-]+)\s*;", ctrl)
+    require(len(original_end)==1 and end <= float(original_end[0]),
+            "startup probe exceeds source horizon")
     number = r"[0-9]+(?:\.[0-9]*)?(?:[eE][+-]?[0-9]+)?"
     cap = re.findall(r"(?m)^\s*maxDeltaT\s+("+number+r")\s*;", ctrl)
     require(len(cap) == 1 and dt <= float(cap[0]),
@@ -120,7 +127,7 @@ def startup_probe_controls(ctrl: str, dt: float) -> str:
     require(len(re.findall(r"(?m)^\s*startTime\s+0(?:\.0*)?\s*;",ctrl))==1,
             "startup probe requires original startTime 0")
     replacements = {"startFrom": "startTime", "stopAt": "endTime",
-                    "deltaT": format(dt, ".16g"), "endTime": format(dt, ".16g"),
+                    "deltaT": format(dt, ".16g"), "endTime": format(end, ".16g"),
                     "adjustTimeStep": "no", "writeControl": "timeStep",
                     "writeInterval": "1"}
     for key, value in replacements.items():
@@ -128,12 +135,17 @@ def startup_probe_controls(ctrl: str, dt: float) -> str:
         require(len(re.findall(pattern,ctrl))==1,
                 "ambiguous startup probe control: "+key)
         ctrl=re.sub(pattern,lambda m: m.group(1)+value+";",ctrl,count=1)
+    # Retain every positive-time output for independent per-step auditing.
+    purge = r"(?m)^([ \t]*purgeWrite\s+)[^;\n]+;"
+    require(len(re.findall(purge, ctrl))<=1, "ambiguous purgeWrite")
+    ctrl = re.sub(purge, lambda m: m.group(1)+"0;", ctrl)
     return ctrl
 
 
 def stage(source: Path, material: Path, output: Path,
           laminar_reference: bool = False,
-          startup_probe_dt: float | None = None) -> dict:
+          startup_probe_dt: float | None = None,
+          startup_probe_steps: int = 1) -> dict:
     source=source.expanduser().resolve()
     material=material.expanduser().resolve()
     output=output.expanduser().absolute()
@@ -202,9 +214,11 @@ def stage(source: Path, material: Path, output: Path,
     ctrl=ctrl.replace("regionSolvers",
         'libs ("libfsC08ConservativeVoF.so");\n\nregionSolvers',1)
 
+    require(startup_probe_dt is not None or startup_probe_steps == 1,
+            "startup probe steps require an explicit dt")
     if startup_probe_dt is not None:
         require(laminar_reference, "startup probes require explicit laminar reference")
-        ctrl=startup_probe_controls(ctrl,startup_probe_dt)
+        ctrl=startup_probe_controls(ctrl,startup_probe_dt,startup_probe_steps)
 
     originalModels=MODEL.read_text(encoding="utf-8")
     marker="/* FS-C06 numerical Foundation14 COMPATIBILITY candidate only."
@@ -287,6 +301,7 @@ def stage(source: Path, material: Path, output: Path,
         "transport_reference":"laminar_molecular" if laminar_reference else "inherited_RAS",
         "laminar_reference_is_controlled_experiment":laminar_reference,
         "startup_probe_dt_s":startup_probe_dt,
+        "startup_probe_steps":startup_probe_steps if startup_probe_dt is not None else None,
         "startup_probe_only":startup_probe_dt is not None,
         "native_CFDSolver_compilation_verified":False,
         "native_CFD_executed":False,
@@ -310,6 +325,7 @@ def main(argv=None) -> int:
                     help="Isolated molecular transport reference, not calibrated RAS")
     ap.add_argument("--startup-probe-dt",type=float,
                     help="One fixed real CFD step, numerical sensitivity only")
+    ap.add_argument("--startup-probe-steps",type=int,default=1)
     args=ap.parse_args(argv)
     output=args.destination or (
         Path.home()/"OpenFOAM"/"FS_C08_COUPLED_RUNS"/
@@ -318,7 +334,7 @@ def main(argv=None) -> int:
     )
     try:
         report=stage(args.source,args.material,output,args.laminar_reference,
-                     args.startup_probe_dt)
+                     args.startup_probe_dt,args.startup_probe_steps)
         print(json.dumps(report,indent=2))
         return 0
     except (ValueError,OSError) as e:
