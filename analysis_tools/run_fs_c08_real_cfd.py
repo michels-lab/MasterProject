@@ -263,7 +263,8 @@ def numeric_time_dirs(case: Path) -> list[tuple[float, Path]]:
 
 
 def execute(source: Path, material: Path, output: Path,
-            diagnostics: Path, timeout_minutes: int) -> dict:
+            diagnostics: Path, timeout_minutes: int,
+            laminar_reference: bool = False) -> dict:
     require(os.environ.get("WM_PROJECT_VERSION") == "14",
             "load OpenFOAM Foundation14 before executing the actual solver")
     require(shutil.which("wmake") is not None, "wmake unavailable")
@@ -282,6 +283,8 @@ def execute(source: Path, material: Path, output: Path,
             "new run and diagnostic directories must not exist already")
 
     tracked = ("0/fluid/alpha.metal", "constant/fluid/fvModels", "system/controlDict")
+    if laminar_reference:
+        tracked += ("constant/fluid/momentumTransport",)
     source_before = {part: digest(source/part) for part in tracked}
     diagnostics.mkdir(parents=True)
     report = {
@@ -289,6 +292,7 @@ def execute(source: Path, material: Path, output: Path,
         "status": "FS_C08_REAL_CFD_NOT_STARTED",
         "source": str(source),
         "material_sha256": digest(material),
+        "transport_reference": "laminar_molecular" if laminar_reference else "inherited_RAS",
         "output_case": str(output),
         "diagnostics": str(diagnostics),
         "native_OpenFOAM14_wmake_verified": False,
@@ -316,7 +320,7 @@ def execute(source: Path, material: Path, output: Path,
             return report
 
         report["native_OpenFOAM14_wmake_verified"] = True
-        staged = stage(source, material, output)
+        staged = stage(source, material, output, laminar_reference)
         report["isolated_case_stage_status"] = staged["status"]
         report["source_sha256_before"] = source_before
         report["source_sha256_after_stage"] = {
@@ -417,6 +421,8 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--diagnostics", type=Path,
                     help="New FS_C08_REAL_CFD_DIAGNOSTICS_* path")
     ap.add_argument("--timeout-minutes", type=int, default=120)
+    ap.add_argument("--laminar-reference", action="store_true",
+                    help="Controlled molecular transport reference; preserves source RAS")
     args = ap.parse_args(argv)
     stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
     suffix = secrets.token_hex(4)
@@ -430,7 +436,7 @@ def main(argv: list[str] | None = None) -> int:
     )
     try:
         report = execute(args.source, args.material, output,
-                         diagnostics, args.timeout_minutes)
+                         diagnostics, args.timeout_minutes, args.laminar_reference)
     except (RuntimeError, OSError, ValueError) as exc:
         print(str(exc), file=sys.stderr)
         return 2
