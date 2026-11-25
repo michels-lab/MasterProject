@@ -1,0 +1,24 @@
+name: Compact campaign 200s static checks
+on:
+  push:
+    branches: [main]
+    paths:
+      - tools/compact_campaign_200s.py
+      - tools/test_compact_campaign_200s.py
+      - .github/workflows/compact-campaign-200s-static.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  static:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            tools
+            analysis_tools/topSurfaceFlowPostProcessing
+            cases_controlled_buoyancy/B14_topFixedFlux_explicitRef/system
+            cases_controlled_buoyancy/C14_topFixedFlux_explicitRef/system
+            cases_3d/C3D_04_rounded_multiblock_pilot/C14_3D_A_faithful/system
+      - run: python3 -B tools/test_compact_campaign_200s.py -v
