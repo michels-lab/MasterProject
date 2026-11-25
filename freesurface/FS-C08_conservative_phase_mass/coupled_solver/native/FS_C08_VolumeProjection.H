@@ -39,6 +39,17 @@ void solveVolumePressureIncrement
     const label referenceCell = -1
 );
 
+// Bound a PREDICTOR mass flux before transport, against the old-time
+// available phase inventory. One signed face flux is shared by both cells.
+// Do not call this on the converged pressure flux: projection itself
+// maintains admissibility and volume closure.
+void limitPredictorMassFlux
+(
+    surfaceScalarField& massFlux,
+    const volScalarField& availableMass,
+    const char* stage
+);
+
 // Apply the SAME signed face flux increment to owner and neighbour.
 // New mass is candidateMass - dt*div(deltaMassFlux). No clipping.
 // Reject a negative trial before it can enter EOS or energy calculations.
