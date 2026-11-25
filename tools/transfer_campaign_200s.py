@@ -71,7 +71,7 @@ def add(t,p,arc):
     need(p.exists() and not p.is_symlink(),"missing/linked "+str(p))
     def filt(info):
         need(info.isfile() or info.isdir(),"nonregular archive entry "+info.name)
-        info.uid=info.gid=0;info.uname=info.gname="";info.mtime=0
+        info.uid=info.gid=0;info.uname=info.gname="";info.mtime=0;info.mode=0o755 if info.isdir() else 0o644
         return info
     t.add(p,arcname=arc,recursive=True,filter=filt)
 @contextmanager
@@ -80,23 +80,76 @@ def deterministic_tar(path):
         with gzip.GzipFile(filename="",fileobj=raw,mode="wb",compresslevel=3,mtime=0) as zipped:
             with tarfile.open(fileobj=zipped,mode="w") as t:
                 yield t
+def snapshot_inputs(src,dst,peer,expected_name,compact,solver_sha):
+    """Create a new unrun *transfer copy*, never reset the original case.
+
+    Only manifest-listed input bytes are eligible, even if a solver generated
+    more files in 0 or changed the local report. Recover a missing input from
+    its dense/compact counterpart only when the exact expected SHA matches.
+    """
+    r=read(src/REPORT)
+    need(r["case"]==expected_name,"wrong identity "+str(src))
+    manifest=r["input_sha256"]
+    need(isinstance(manifest,dict) and manifest,"missing original input manifest "+str(src))
+    if compact:
+        dense=read(peer/REPORT)
+        need(r["source_input_sha256"]==dense["input_sha256"],"dense provenance mismatch "+expected_name)
+        need(r["implementation_sha256"]==solver_sha,"prepared solver differs from pinned script")
+    dst.mkdir(parents=True)
+    recovered=[]
+    for rel,h in sorted(manifest.items()):
+        rp=Path(rel)
+        need(not rp.is_absolute() and ".." not in rp.parts and rp.parts[0] in ("0","constant","system"),"invalid input path "+rel)
+        p=src/rp
+        def exact(q,root):
+            return q.is_file() and not q.is_symlink() and q.resolve().is_relative_to(root.resolve()) and sha(q)==h
+        if not exact(p,src):
+            p=peer/rp
+            need(exact(p,peer),"original input SHA unavailable: "+expected_name+" / "+rel+" (neither source nor counterpart matches)")
+            recovered.append(rel)
+        target=dst/rp;target.parent.mkdir(parents=True,exist_ok=True)
+        shutil.copy2(p,target)
+        need(sha(target)==h,"source changed while copying "+rel)
+    need(input_hashes(dst)==manifest,"snapshot input mismatch "+str(dst))
+    # Copy only preparation/provenance metadata; no previous solver evidence.
+    keys=("case","formulation","geometry","purpose","source_sha256","input_sha256","mesh_sha256",
+          "sampling","end_s","dt_s","saved_dt_s","disk_projection","physical_validation",
+          "reference_10s_log_sha256","only_control_change","source_input_sha256","changed_io_files",
+          "volume_saved_dt_s","profile_and_reduction_dt_s","probe_dt_s","momentum_volume_dt_s",
+          "volume_states_target","profile_states_target","probe_samples_target","implementation_sha256")
+    report={k:r[k] for k in keys if k in r}
+    report.update(status="PREPARED_COMPACT_NOT_RUN" if compact else "PREPARED_NOT_RUN",
+                  solver_completed=False,physical_validation=False,
+                  transfer_snapshot={"original_status":r["status"],"original_solver_completed":bool(r.get("solver_completed")),
+                                     "original_report_sha256":sha(src/REPORT),
+                                     "recovered_exact_sha_inputs":recovered,"runtime_outputs_excluded":True})
+    if compact:
+        report["source_dense_case"]=str(DENSE/expected_name)
+        report["source_dense_report_sha256"]=sha(dst.parent.parent/DENSE.name/expected_name/REPORT)
+        report["original_dense_case_preserved"]=True
+    dump(dst/REPORT,report)
+    (dst/(expected_name+".foam")).touch()
+    print("TRANSFER SNAPSHOT",expected_name,"compact" if compact else "dense",
+          "source="+r["status"],"exact inputs="+str(len(manifest)),flush=True)
+    return report
+
 def archive_inputs(path,repo):
     solver=subprocess.check_output(["git","-C",str(repo),"show",PIN+":tools/compact_campaign_200s.py"])
-    with deterministic_tar(path) as t:
-        for root in (DENSE,COMPACT):
+    solver_sha=hashlib.sha256(solver).hexdigest()
+    with tempfile.TemporaryDirectory(prefix="input-snapshot-",dir=path.parent) as tmp:
+        stage=Path(tmp)
+        for root,peer in ((DENSE,COMPACT),(COMPACT,DENSE)):
+            reports={}
             for name in ORDER:
-                p=root/name;r=untouched(p)
-                need(r["case"]==name,"wrong identity")
-                if root==COMPACT:
-                    need(r["source_input_sha256"]==read(DENSE/name/REPORT)["input_sha256"],"dense provenance mismatch")
-                    need(r["implementation_sha256"]==hashlib.sha256(solver).hexdigest(),"prepared solver differs from pinned script")
-                for d in ("0","constant","system",REPORT):add(t,p/d,root.name+"/"+name+"/"+d)
-                marker=p/(name+".foam")
-                if marker.exists():add(t,marker,root.name+"/"+name+"/"+marker.name)
-            for f in ("CAMPAIGN_INDEX.json","CAMPAIGN_RESOURCES.json"):add(t,root/f,root.name+"/"+f)
-        with tempfile.TemporaryDirectory() as tmp:
-            script=Path(tmp)/"compact_campaign_200s.py";script.write_bytes(solver)
-            add(t,script,script.name)
+                reports[name]=snapshot_inputs(root/name,stage/root.name/name,peer/name,name,root==COMPACT,solver_sha)
+            dump(stage/root.name/"CAMPAIGN_INDEX.json",reports)
+            # Resource estimates remain historical planning evidence, not a
+            # claim about the laboratory disk. New solver checks actual free.
+            shutil.copy2(root/"CAMPAIGN_RESOURCES.json",stage/root.name/"CAMPAIGN_RESOURCES.json")
+        (stage/"compact_campaign_200s.py").write_bytes(solver)
+        with deterministic_tar(path) as t:
+            for name in (DENSE.name,COMPACT.name,"compact_campaign_200s.py"):
+                add(t,stage/name,name)
 def archive_results(path,case):
     r=read(case/REPORT)
     need(r.get("solver_completed") is True and r.get("solver_steps")==200000 and r.get("final_time_s")==200,
