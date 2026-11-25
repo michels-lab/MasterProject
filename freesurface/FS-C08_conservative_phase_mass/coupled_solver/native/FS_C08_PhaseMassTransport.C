@@ -616,7 +616,8 @@ void PhaseMassTransport::solve
                     *fvc::interpolate(rhoLiquid_)
     );
     replayTrialFromFlux(T,alphaMetal,predictorFlux);
-    reconstructFractions(T,"afterPhaseExchange");
+    // Trial masses can temporarily demand more than the local cell volume.
+    // The pressure corrector must close volume before publishing VOF.
     Info<< "FS_C08_IN_SOLVER_PHASE_MASS_EQUATIONS t="
         << mesh_.time().value()
         << " gammaMax=" << max(Gamma_).value()
