@@ -108,8 +108,8 @@
   "cpp_mass_phase_update_gamma_and_volume_closure": true,
   "cpp_pressure_velocity_energy_or_cht": false,
   "CI_cxx_compile_step_declared": true,
-  "last_work": "2026-11-24 17:58 America/Monterrey: independently verified GitHub job 138863642915 success on all actual Foundation14 compile/load and numerical-budget gate steps. Current code at ecea28baf7f8 identical to tested revision (status-only change). No actual CFD performed; composition-specific phase-resolved input is the blocker.",
-  "next_scientific_stage": "Obtain actual composition-specific, phase-resolved thermophysical curves with citation provenance; confirm single-temperature metal-gas interface validity; stage untouched FS-C07 t=0 into independent FS_C08_COUPLED_* and run ONE real Foundation14 foamMultiRun until controlDict endTime, verify actual metal+gas budgets and energy before claiming physical shrinkage.",
+  "last_work": "2026-11-24: researcher explicitly selected B14 properties instead of literature/JMatPro for a provisional numerical reference. Versioned B14-derived phase dictionary and provenance. No CFD run; no alloy-specific validation. Native metal viscosity inherited from FS-C07 must be verified.",
+  "next_scientific_stage": "Run first isolated FS-C08 native CFD using explicitly authorized B14-derived engineering reference after verifying inherited native viscosity; conserve mass and audit energy/field evolution; real CE/S material remains pending for validation.",
   "Wsl_tests_runner": "python3 -B -m unittest discover -s analysis_tools -p 'test_fs_c08_conservative_reference.py' -v",
   "Wsl_tests_summary": "Ran 18 tests in 0.072s; OK",
   "Wsl_tests_source_head": "eddacd6e9",
@@ -533,5 +533,14 @@
   "native_real_cfd_report_checks_count": 9,
   "native_real_cfd_report_checks_last_ci": "Run 45512536197, job 138863642915: numerical-budget evidence gate, actual Foundation14 installation, wmake and dlopen all success. Compared with ecea28baf7f8: only STATUS.json changed.",
   "jmatpro_repository_raw_exports_present": false,
-  "jmatpro_repo_material_source_check": "thermodynamics/jmatpro/ only contains README_ES.md, BRIDGE_USAGE_ES.md, JMATPRO_EXPORT_TEMPLATE.csv (empty values); phase-specific rho_l/rho_s(T), Cv_l/Cv_s(T), f_s,mass(T), k_l/k_s(T), L, Darcy Cu/q with provenance not available in versioned repository."
+  "jmatpro_repo_material_source_check": "thermodynamics/jmatpro/ only contains README_ES.md, BRIDGE_USAGE_ES.md, JMATPRO_EXPORT_TEMPLATE.csv (empty values); phase-specific rho_l/rho_s(T), Cv_l/Cv_s(T), f_s,mass(T), k_l/k_s(T), L, Darcy Cu/q with provenance not available in versioned repository.",
+  "b14_reference_material_available": true,
+  "b14_reference_material_path": "freesurface/FS-C08_conservative_phase_mass/coupled_solver/materials/B14_reference/fsC08Material",
+  "b14_reference_material_source_commit": "49c3ede24c0aadfbc9fce9fcb4e9963c87f096ec",
+  "b14_reference_material_commit": "34510a525f342476eda2d5f683247d8b3bc10861",
+  "b14_reference_provenance_path": "freesurface/FS-C08_conservative_phase_mass/coupled_solver/materials/B14_reference/B14_REFERENCE_PROVENANCE_ES.md",
+  "b14_reference_is_composition_calibrated": false,
+  "b14_reference_phase_density_split_is_assumption": true,
+  "b14_reference_cv_and_internal_energy_offset_are_approximations": true,
+  "b14_reference_native_viscosity_verified": false
 }
