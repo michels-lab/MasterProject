@@ -76,19 +76,27 @@ def first_compiler_error(logfile: Path) -> str | None:
 
 
 def first_native_error(logfile: Path) -> str | None:
+    """Prefer actual fatal details to startup diagnostics and warning banners."""
+    lines = logfile.read_text(encoding="utf-8", errors="replace").splitlines()
+    fatal = re.compile(r"FOAM FATAL(?: IO)? ERROR", re.IGNORECASE)
+    for i, line in enumerate(lines):
+        if fatal.search(line):
+            detail = next((x.strip() for x in lines[i+1:]
+                           if x.strip()), "")
+            return (line.strip() + (" | " + detail if detail else ""))[:1000]
     pattern = re.compile(
-        r"FOAM FATAL ERROR|FOAM FATAL IO ERROR|floating point exception|"
-        r"segmentation fault|error:|cannot open shared object|"
-        r"unknown solver|uncaught exception",
+        r"floating point exception|segmentation fault|error:|"
+        r"cannot open shared object|unknown solver|uncaught exception|"
+        r"FS_C08_RUNTIME_TIMEOUT",
         flags=re.IGNORECASE,
     )
-    for line in logfile.read_text(
-        encoding="utf-8", errors="replace"
-    ).splitlines():
+    for line in lines:
+        if re.search(r"Enabling floating point exception trapping", line,
+                     re.IGNORECASE):
+            continue
         if pattern.search(line):
             return line.strip()[:1000]
     return None
-
 
 
 def inspect_real_cfd_budgets(log: str, final_saved_time_s: float) -> dict:
@@ -249,6 +257,7 @@ def execute(source: Path, material: Path, output: Path,
 
     compile_log = diagnostics / "native_wmake.log"
     try:
+        print("FS-C08 native build log:", compile_log, flush=True)
         build = run_logged(["wmake", "libso"], BASE_MODULE, compile_log,
                            timeout_minutes=30)
         report["wmake"] = build
@@ -271,6 +280,8 @@ def execute(source: Path, material: Path, output: Path,
 
         native_log = diagnostics / "foamMultiRun.log"
         report["real_foamMultiRun_started"] = True
+        write_report(reportfile, report)
+        print("FS-C08 native CFD log:", native_log, flush=True)
         run = run_logged(["foamMultiRun", "-case", str(output)], output,
                          native_log, timeout_minutes)
         report["foamMultiRun"] = run
