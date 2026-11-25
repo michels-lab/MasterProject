@@ -6,7 +6,9 @@ import unittest
 from pathlib import Path
 from tempfile import TemporaryDirectory
 
-from run_fs_c08_real_cfd import inspect_real_cfd_budgets, require_native_end_time
+from run_fs_c08_real_cfd import (inspect_real_cfd_budgets, require_native_end_time,
+                                 first_native_error)
+from stage_fs_c08_coupled import add_phase_mass_solvers
 
 
 def native_log(
@@ -88,6 +90,35 @@ class RealCFDBudgetEvidenceTests(unittest.TestCase):
     def test_empty_log_rejected(self):
         with self.assertRaisesRegex(ValueError, "no actual"):
             inspect_real_cfd_budgets("End\n", 0.05)
+
+
+    def test_final_pimple_entries_generated_for_each_mass_field(self):
+        import re
+        original = "solvers\n{\n    p_rgh { solver PCG; }\n}\n"
+        staged = add_phase_mass_solvers(original)
+        for name in ("rhoAlpha.liquid", "rhoAlpha.solid"):
+            for suffix, rel_tol in (("", "0.01"), ("Final", "0")):
+                match = re.search(re.escape(name + suffix) + r"\s*\{([^}]+)\}", staged)
+                self.assertIsNotNone(match)
+                self.assertRegex(match[1], r"relTol\s+" + re.escape(rel_tol) + ";")
+        self.assertIn("p_rgh { solver PCG; }", staged)
+
+    def test_fatal_io_details_not_masked_by_sigfpe_startup(self):
+        with TemporaryDirectory() as temp:
+            path = Path(temp) / "foamMultiRun.log"
+            path.write_text("sigFpe : Enabling floating point exception trapping (FOAM_SIGFPE).\n"
+                            "--> FOAM FATAL IO ERROR:\n"
+                            "keyword rhoAlpha.liquidFinal is undefined in dictionary\n")
+            self.assertIn("rhoAlpha.liquidFinal", first_native_error(path))
+            path.write_text("sigFpe : Enabling floating point exception trapping (FOAM_SIGFPE).\n")
+            self.assertIsNone(first_native_error(path))
+
+    def test_actual_floating_point_exception_still_detected(self):
+        with TemporaryDirectory() as temp:
+            path = Path(temp) / "foamMultiRun.log"
+            path.write_text("sigFpe : Enabling floating point exception trapping (FOAM_SIGFPE).\n"
+                            "Floating point exception (core dumped)\n")
+            self.assertEqual(first_native_error(path), "Floating point exception (core dumped)")
 
 
 if __name__ == "__main__":
