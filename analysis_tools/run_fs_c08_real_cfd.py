@@ -354,6 +354,7 @@ def execute(source: Path, material: Path, output: Path,
             phase_pressure_mobility: str = "separate",
             momentum_flux_mode: str = "incremental",
             energy_donor_mode: str = "legacy",
+            pressure_transport_support: str = "trial",
             *, verified_batch_build: dict | None = None) -> dict:
     require(os.environ.get("WM_PROJECT_VERSION") == "14",
             "load OpenFOAM Foundation14 before executing the actual solver")
@@ -389,6 +390,7 @@ def execute(source: Path, material: Path, output: Path,
         "phase_pressure_mobility": phase_pressure_mobility,
         "momentum_flux_mode": momentum_flux_mode,
         "energy_donor_mode": energy_donor_mode,
+        "pressure_transport_support": pressure_transport_support,
         "startup_probe_dt_s": startup_probe_dt,
         "startup_probe_steps": startup_probe_steps if startup_probe_dt is not None else None,
         "startup_probe_only": startup_probe_dt is not None,
@@ -421,7 +423,7 @@ def execute(source: Path, material: Path, output: Path,
         require(libfile.is_file() and digest(libfile) == receipt["native_library_sha256"],
                 "native library differs from verified build")
         report["native_OpenFOAM14_wmake_verified"] = True
-        staged = stage(source, material, output, laminar_reference, startup_probe_dt, startup_probe_steps, momentum_face_mobility, momentum_matrix_coupling, phase_pressure_mobility, momentum_flux_mode, energy_donor_mode)
+        staged = stage(source, material, output, laminar_reference, startup_probe_dt, startup_probe_steps, momentum_face_mobility, momentum_matrix_coupling, phase_pressure_mobility, momentum_flux_mode, energy_donor_mode, pressure_transport_support)
         report["isolated_case_stage_status"] = staged["status"]
         report["source_sha256_before"] = source_before
         report["source_sha256_after_stage"] = {
@@ -464,6 +466,10 @@ def execute(source: Path, material: Path, output: Path,
         report["phase_energy_split_records"] = [
             line.strip() for line in log.splitlines()
             if "FS_C08_PHASE_ENERGY_SPLIT" in line
+        ]
+        report["pressure_transport_support_records"] = [
+            line.strip() for line in log.splitlines()
+            if "FS_C08_PRESSURE_TRANSPORT_SUPPORT" in line
         ]
         report["interface_transport_records"] = [
             line.strip() for line in log.splitlines()
@@ -606,6 +612,7 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--phase-pressure-mobility", choices=("separate","phaseWeighted"), default="separate")
     ap.add_argument("--momentum-flux-mode",choices=("incremental","totalUpwind","incrementalNoDdtCorr","totalUpwindNoDdtCorr"),default="incremental")
     ap.add_argument("--energy-donor-mode",choices=("legacy","oldGas","currentLiquid","oldGasCurrentLiquid"),default="legacy")
+    ap.add_argument("--pressure-transport-support",choices=("trial","oldLiquid","oldGas","oldBoth"),default="trial")
     args = ap.parse_args(argv)
     stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
     suffix = secrets.token_hex(4)
@@ -621,7 +628,7 @@ def main(argv: list[str] | None = None) -> int:
         with native_library_lock():
             report = execute(args.source, args.material, output,
                              diagnostics, args.timeout_minutes, args.laminar_reference,
-                             args.startup_probe_dt, args.startup_probe_steps, args.momentum_face_mobility, args.momentum_matrix_coupling, args.phase_pressure_mobility, args.momentum_flux_mode, args.energy_donor_mode)
+                             args.startup_probe_dt, args.startup_probe_steps, args.momentum_face_mobility, args.momentum_matrix_coupling, args.phase_pressure_mobility, args.momentum_flux_mode, args.energy_donor_mode, args.pressure_transport_support)
     except (RuntimeError, OSError, ValueError) as exc:
         print(str(exc), file=sys.stderr)
         return 2
