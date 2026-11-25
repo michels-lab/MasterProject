@@ -9,6 +9,7 @@
 #include "fvmLaplacian.H"
 #include "fvmSup.H"
 #include "fvMatrices.H"
+#include "PstreamReduceOps.H"
 #include <cmath>
 
 namespace Foam { namespace fsC08 {
@@ -88,7 +89,7 @@ void solveVolumePressureIncrement
     );
     fvScalarMatrix volumeEqn
     (
-        liquidEqn/rhoL + gasEqn/rhoG
+        (scalar(1)/rhoL)*liquidEqn + (scalar(1)/rhoG)*gasEqn
       + fvm::Sp(gasCompressibility,dp)
      == residual/dt
     );
@@ -125,6 +126,161 @@ tmp<volScalarField> correctedTrialMass
                 << exit(FatalError);
     }
     return result;
+}
+
+tmp<volScalarField> trialMassFromOldTime
+(
+    const volScalarField& oldMass,
+    const surfaceScalarField& massFlux,
+    const volScalarField& massSource
+)
+{
+    // A signed FV divergence cancels internal face transfers globally.
+    return oldMass + oldMass.mesh().time().deltaT()
+                   *(massSource-fvc::div(massFlux));
+}
+
+namespace
+{
+scalar residualNorm(const volScalarField& field)
+{
+    scalar result=0;
+    forAll(field,i) result=max(result,mag(field[i]));
+    return returnReduce(result,maxOp<scalar>());
+}
+
+bool admissibleTrial
+(
+    const volScalarField& l, const volScalarField& s,
+    const volScalarField& g, const volScalarField& rl,
+    const volScalarField& rs, const volScalarField& rg,
+    const volScalarField& p, const bool requireVolumeClosure
+)
+{
+    label bad=0;
+    forAll(l,i)
+    {
+        if
+        (
+            !std::isfinite(l[i]) || l[i]<0
+         || !std::isfinite(s[i]) || s[i]<0
+         || !std::isfinite(g[i]) || g[i]<0
+         || !std::isfinite(rl[i]) || rl[i]<=0
+         || !std::isfinite(rs[i]) || rs[i]<=0
+         || !std::isfinite(rg[i]) || rg[i]<=0
+         || !std::isfinite(p[i]) || p[i]<=0
+        )
+        {
+            ++bad;
+            continue;
+        }
+        // Stationary solid overfill cannot be solved by displacing liquid.
+        if (s[i]/rs[i]>1+1e-12) ++bad;
+        if (requireVolumeClosure &&
+            (l[i]/rl[i]+s[i]/rs[i]>1+1e-12
+             || g[i]/rg[i]>1+1e-12))
+            ++bad;
+    }
+    return returnReduce(bad,sumOp<label>())==0;
+}
+}
+
+bool projectTrialInventories
+(
+    volScalarField& mL, const volScalarField& mS,
+    volScalarField& mG,
+    const volScalarField& rhoL, const volScalarField& rhoS,
+    volScalarField& rhoG, const volScalarField& psiG,
+    volScalarField& pressure,
+    const surfaceScalarField& liquidMobility,
+    const surfaceScalarField& gasMobility,
+    surfaceScalarField& liquidMassFlux,
+    surfaceScalarField& gasMassFlux,
+    volScalarField& dp,
+    const label referenceCell
+)
+{
+    // Local transaction: a failed Newton trial cannot poison the
+    // conservative inventories or the caller's physical pressure.
+    volScalarField l("fsC08ProjectionTrialL",mL);
+    volScalarField g("fsC08ProjectionTrialG",mG);
+    volScalarField rg("fsC08ProjectionTrialRhoG",rhoG);
+    volScalarField p("fsC08ProjectionTrialP",pressure);
+    surfaceScalarField fl("fsC08ProjectionTrialFL",liquidMassFlux);
+    surfaceScalarField fg("fsC08ProjectionTrialFG",gasMassFlux);
+    surfaceScalarField dfl("fsC08ProjectionDeltaFL",liquidMassFlux*scalar(0));
+    surfaceScalarField dfg("fsC08ProjectionDeltaFG",gasMassFlux*scalar(0));
+    const dimensionedScalar dt=dp.mesh().time().deltaT();
+    const scalar tolerance=1e-12;
+    const label maxIterations=30;
+    const label maxBacktracks=24;
+
+    if (!admissibleTrial(l,mS,g,rhoL,rhoS,rg,p,false))
+        return false;
+
+    for (label iter=0;iter<=maxIterations;++iter)
+    {
+        const tmp<volScalarField> residual=
+            trialVolumeResidual(l,mS,g,rhoL,rhoS,rg);
+        const scalar norm=residualNorm(residual());
+        if (norm<=tolerance &&
+            admissibleTrial(l,mS,g,rhoL,rhoS,rg,p,true))
+        {
+            // Only a converged, bounded trial reaches the caller.
+            dp=p-pressure;
+            mL=l; mG=g; rhoG=rg; pressure=p;
+            liquidMassFlux=fl; gasMassFlux=fg;
+            Info<< "FS_C08_FIXED_T_VOLUME_PROJECTION_CONVERGED"
+                << " iterations=" << iter << " maxResidual=" << norm
+                << " fullEnergyMomentumCouplingVerified=0" << nl;
+            return true;
+        }
+        if (iter==maxIterations) break;
+
+        dp=dimensionedScalar(dp.dimensions(),0);
+        dp.correctBoundaryConditions();
+        solveVolumePressureIncrement
+        (
+            residual(),g,rhoL,rg,psiG,liquidMobility,gasMobility,
+            dp,dfl,dfg,referenceCell
+        );
+
+        // Uniform damping of all pressure and face mass increments:
+        // no cell-local mass clipping, no independent phase scaling.
+        // The same factor multiplies both sides of every internal face.
+        const volScalarField dl("fsC08ProjectionDL",-dt*fvc::div(dfl));
+        const volScalarField dg("fsC08ProjectionDG",-dt*fvc::div(dfg));
+        const volScalarField drg("fsC08ProjectionDRhoG",psiG*dp);
+        bool advanced=false;
+        scalar step=1;
+        for (label back=0;back<maxBacktracks;++back,step*=0.5)
+        {
+            const volScalarField lc("fsC08ProjectionCandidateL",l+step*dl);
+            const volScalarField gc("fsC08ProjectionCandidateG",g+step*dg);
+            const volScalarField rc("fsC08ProjectionCandidateRhoG",rg+step*drg);
+            const volScalarField pc("fsC08ProjectionCandidateP",p+step*dp);
+            if (!admissibleTrial(lc,mS,gc,rhoL,rhoS,rc,pc,false))
+                continue;
+            const tmp<volScalarField> candidate=
+                trialVolumeResidual(lc,mS,gc,rhoL,rhoS,rc);
+            const scalar nextNorm=residualNorm(candidate());
+            if (nextNorm>=norm && nextNorm>tolerance) continue;
+            l=lc; g=gc; rg=rc; p=pc;
+            fl+=step*dfl; fg+=step*dfg;
+            advanced=true;
+            break;
+        }
+        if (!advanced)
+        {
+            Info<< "FS_C08_VOLUME_PROJECTION_REJECTED"
+                << " reason=no_admissible_descent"
+                << " maxResidual=" << norm << nl;
+            return false;
+        }
+    }
+    Info<< "FS_C08_VOLUME_PROJECTION_REJECTED"
+        << " reason=iteration_limit" << nl;
+    return false;
 }
 
 }} // namespace Foam::fsC08
