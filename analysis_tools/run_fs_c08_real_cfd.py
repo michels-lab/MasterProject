@@ -312,7 +312,8 @@ def execute(source: Path, material: Path, output: Path,
             laminar_reference: bool = False,
             startup_probe_dt: float | None = None,
             startup_probe_steps: int = 1,
-            momentum_face_mobility: str = "linear") -> dict:
+            momentum_face_mobility: str = "linear",
+            momentum_matrix_coupling: str = "legacy") -> dict:
     require(os.environ.get("WM_PROJECT_VERSION") == "14",
             "load OpenFOAM Foundation14 before executing the actual solver")
     require(shutil.which("wmake") is not None, "wmake unavailable")
@@ -343,6 +344,7 @@ def execute(source: Path, material: Path, output: Path,
         "transport_reference": "laminar_molecular" if laminar_reference else "inherited_RAS",
         "output_case": str(output),
         "momentum_face_mobility": momentum_face_mobility,
+        "momentum_matrix_coupling": momentum_matrix_coupling,
         "startup_probe_dt_s": startup_probe_dt,
         "startup_probe_steps": startup_probe_steps if startup_probe_dt is not None else None,
         "startup_probe_only": startup_probe_dt is not None,
@@ -372,7 +374,7 @@ def execute(source: Path, material: Path, output: Path,
             return report
 
         report["native_OpenFOAM14_wmake_verified"] = True
-        staged = stage(source, material, output, laminar_reference, startup_probe_dt, startup_probe_steps, momentum_face_mobility)
+        staged = stage(source, material, output, laminar_reference, startup_probe_dt, startup_probe_steps, momentum_face_mobility, momentum_matrix_coupling)
         report["isolated_case_stage_status"] = staged["status"]
         report["source_sha256_before"] = source_before
         report["source_sha256_after_stage"] = {
@@ -409,6 +411,11 @@ def execute(source: Path, material: Path, output: Path,
             line.strip() for line in log.splitlines()
             if any(marker in line for marker in markers)
         ][-30:]
+        report["momentum_force_records"] = [
+            line.strip() for line in log.splitlines()
+            if "FS_C08_MOMENTUM_FORCE_SPLIT" in line
+            or "FS_C08_FRESH_MOMENTUM_DEFECT" in line
+        ]
         report["momentum_consistency_records"] = [
             line.strip() for line in log.splitlines()
             if "FS_C08_MOMENTUM_CONSISTENCY" in line
@@ -527,6 +534,7 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--startup-probe-steps", type=int, default=1,
                     help="Consecutive fixed-dt steps; every step must pass audits")
     ap.add_argument("--momentum-face-mobility", choices=("linear","harmonic"), default="linear")
+    ap.add_argument("--momentum-matrix-coupling", choices=("legacy","refreshBeforePressure"), default="legacy")
     args = ap.parse_args(argv)
     stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
     suffix = secrets.token_hex(4)
@@ -541,7 +549,7 @@ def main(argv: list[str] | None = None) -> int:
     try:
         report = execute(args.source, args.material, output,
                          diagnostics, args.timeout_minutes, args.laminar_reference,
-                         args.startup_probe_dt, args.startup_probe_steps, args.momentum_face_mobility)
+                         args.startup_probe_dt, args.startup_probe_steps, args.momentum_face_mobility, args.momentum_matrix_coupling)
     except (RuntimeError, OSError, ValueError) as exc:
         print(str(exc), file=sys.stderr)
         return 2
@@ -555,6 +563,8 @@ def main(argv: list[str] | None = None) -> int:
                 "native_thermal_solve_records", "fixed_probe_schedule_gate"):
         if key in report:
             print(key + ":", report[key])
+    for line in report.get("momentum_force_records", [])[-6:]:
+        print(line)
     for line in report.get("momentum_consistency_records", [])[-3:]:
         print(line)
     for line in report.get("accepted_extreme_cells", []):
