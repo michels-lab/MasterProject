@@ -127,7 +127,7 @@ def startup_probe_controls(ctrl: str, dt: float, steps: int = 1) -> str:
     require(len(re.findall(r"(?m)^\s*startTime\s+0(?:\.0*)?\s*;",ctrl))==1,
             "startup probe requires original startTime 0")
     replacements = {"startFrom": "startTime", "stopAt": "endTime",
-                    "deltaT": format(dt, ".16g"), "endTime": format(end, ".16g"),
+                    "deltaT": format(dt, ".16g"), "endTime": format(end, ".15g"),
                     "adjustTimeStep": "no", "writeControl": "timeStep",
                     "writeInterval": "1"}
     for key, value in replacements.items():
