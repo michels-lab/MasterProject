@@ -54,6 +54,7 @@ License
 #include "fvcSnGrad.H"
 #include "fvmSup.H"
 #include "fvmLaplacian.H"
+#include "harmonic.H"
 #include "zeroGradientFvPatchFields.H"
 #include "PstreamReduceOps.H"
 
@@ -305,6 +306,20 @@ void Foam::solvers::fsC08ConservativeVoF::thermophysicalPredictor()
             }
         }
 
+        // A discontinuity in conductivity is a series thermal resistance,
+        // not a parallel arithmetic average across a metal/air face.
+        // Use the distance-weighted harmonic interpolation for internal
+        // faces; keep physical patch conductivities supplied by CHT.
+        surfaceScalarField kappaFace
+        (
+            "fsC08HarmonicFaceKappa",
+            harmonic(mesh).interpolate(kappaFsC08)
+        );
+        forAll(kappaFace.boundaryField(),patchi)
+            if (!mesh.boundary()[patchi].coupled())
+                kappaFace.boundaryFieldRef()[patchi]=
+                    kappaFsC08.boundaryField()[patchi];
+
         const scalarField T_before(T.primitiveField());
 
         // Newton/Picard linearisation of E(T):
@@ -324,10 +339,21 @@ void Foam::solvers::fsC08ConservativeVoF::thermophysicalPredictor()
             - (contErr1()+contErr2())*K;
         mechanicalWorkDensity_.correctBoundaryConditions();
 
+        // Retain the actual assembled conductive matrix to recover its
+        // signed face flux, including the explicit non-orthogonal term.
+        // Use the inherited named temperature Laplacian discretisation.
+        mesh.schemes().setFluxRequired(T.name());
+        fvScalarMatrix heatEqn
+        (
+            -fvm::laplacian
+            (
+                kappaFace,T,"laplacian(kappaEffective.fsC08,T)"
+            )
+        );
         fvScalarMatrix TEqn
         (
             fvm::Sp(CVvol/runTime.deltaT(),T)
-          - fvm::laplacian(kappaFsC08,T)
+          + heatEqn
           + mechanicalWorkDensity_
          ==
             (Eold-Eguess+CVvol*T)/runTime.deltaT()
@@ -343,9 +369,50 @@ void Foam::solvers::fsC08ConservativeVoF::thermophysicalPredictor()
         // especially the fluid-mold CHT interface.
         // This uses the same phase conductivity that was assembled in
         // the nonlinear TEqn. q = -k grad(T) dot outward normal.
-        phaseHeatPhi_=
-            -fvc::interpolate(kappaFsC08)
-            *fvc::snGrad(T)*mesh.magSf();
+        phaseHeatPhi_=heatEqn.flux();
+
+        // Separate conductive, advective and mechanical contributions
+        // in the cell with the largest thermal change. This is an
+        // equation-level audit, not a claim of global CHT conservation.
+        const tmp<volScalarField> tHeatDiv=fvc::div(phaseHeatPhi_);
+        const tmp<volScalarField> tEnergyDiv=fvc::div(internalEnergyFlux);
+        const volScalarField& heatDiv=tHeatDiv();
+        const volScalarField& energyDiv=tEnergyDiv();
+        label worstThermalCell=-1;
+        scalar worstThermalChange=0;
+        forAll(T_before,i)
+        {
+            const scalar change=mag(T[i]-T.oldTime()[i]);
+            if (change>worstThermalChange)
+            {
+                worstThermalChange=change;
+                worstThermalCell=i;
+            }
+        }
+        if (worstThermalCell>=0 && worstThermalChange>1)
+        {
+            const label i=worstThermalCell;
+            const scalar storageLinear=
+                (Eguess[i]-Eold[i]+CVvol[i]*(T[i]-T_before[i]))/dt;
+            Info<< "FS_C08_CELL_THERMAL_BUDGET"
+                << " cell=" << i
+                << " corrector=" << corrector
+                << " center_m=" << mesh.C()[i]
+                << " cellVolume_m3=" << mesh.V()[i]
+                << " Told_K=" << T.oldTime()[i]
+                << " Tguess_K=" << T_before[i]
+                << " Tnew_K=" << T[i]
+                << " gasMass_kg_m3=" << gasMassTrial_[i]
+                << " CvVol_J_m3K=" << CVvol[i]
+                << " kCell_W_mK=" << kappaFsC08[i]
+                << " storage_W_m3=" << storageLinear
+                << " conductionOut_W_m3=" << heatDiv[i]
+                << " advectionOut_W_m3=" << energyDiv[i]
+                << " mechanicalWork_W_m3=" << mechanicalWorkDensity_[i]
+                << " linearBalance_W_m3="
+                << storageLinear+heatDiv[i]+energyDiv[i]+mechanicalWorkDensity_[i]
+                << nl;
+        }
 
         lastDeltaT=0;
         const auto& Tnew=T.primitiveField();
@@ -400,6 +467,9 @@ void Foam::solvers::fsC08ConservativeVoF::thermophysicalPredictor()
         Info<< "FS_C08_TRIAL_VOLUME_COMPONENTS"
             << " cell=" << i
             << " signedResidual=" << volumeResidual()[i]
+            << " Told_K=" << T.oldTime()[i]
+            << " center_m=" << mesh.C()[i]
+            << " cellVolume_m3=" << mesh.V()[i]
             << " T_K=" << T[i] << " p_Pa=" << p[i]
             << " mGasOld=" << gasMassTrial_.oldTime()[i]
             << " mGasTrial=" << gasMassTrial_[i]
