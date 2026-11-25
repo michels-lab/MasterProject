@@ -25,6 +25,9 @@ DENSE=HOME/"CAMPAIGN_200S_01"
 COMPACT=HOME/"CAMPAIGN_200S_COMPACT_01"
 REPORT="CAMPAIGN_200S_REPORT.json"
 ORDER=("C14-3DA-200s","C14-2D-200s","B14-2D-200s","B14-3DA-200s","C14-3DB-200s","B14-3DB-200s")
+# Historical input archive retains all six snapshots; only four are authorized.
+RUN_ORDER=("C14-3DA-200s","C14-2D-200s","B14-2D-200s","C14-3DB-200s")
+EXCLUDED=("B14-3DA-200s","B14-3DB-200s")
 PIN="50d3bbd7750756d7d854eaa2a6f8d69157a3341f"
 INPUT_BRANCH="transfer/campaign-200s-compact-inputs-v1"
 RESULT_PREFIX="results/campaign-200s-compact-v1/"
@@ -312,7 +315,9 @@ def run_all(url):
     need(os.environ.get("WM_PROJECT_VERSION")=="14","load Foundation14 first")
     install_inputs(url)
     summary={}
-    for name in ORDER:
+    print("AUTHORIZED CFD:",", ".join(RUN_ORDER),flush=True)
+    print("EXCLUDED FROM CFD:",", ".join(EXCLUDED),flush=True)
+    for name in RUN_ORDER:
         case=COMPACT/name;branch=RESULT_PREFIX+name
         try:
             r=read(case/REPORT)
@@ -339,12 +344,12 @@ def run_all(url):
             print(name,summary[name],flush=True)
         dump(COMPACT/"LAB_CAMPAIGN_PUBLICATION.json",summary)
     print(json.dumps(summary,indent=2),flush=True)
-    need(all("publication" in x for x in summary.values()),"some cases incomplete or not uploaded; inspect summary")
+    need(set(summary)==set(RUN_ORDER) and all("publication" in x for x in summary.values()),"some authorized cases incomplete or not uploaded; inspect summary")
 def get_results(url):
     dest=HOME/"CAMPAIGN_200S_HOME_RESULTS_01"
     need(COMPACT.is_dir(),"prepared laptop compact inputs required")
     dest.mkdir(exist_ok=True)
-    for name in ORDER:
+    for name in RUN_ORDER:
         branch=RESULT_PREFIX+name
         if complete_manifest(url,branch) is None:
             print("NOT PUBLISHED OR INCOMPLETE",name,flush=True);continue
