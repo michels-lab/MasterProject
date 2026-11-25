@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "audit_kind": "deterministic_full_tracked_tree",
-  "tracked_files_total": 42869,
-  "classified_files_total": 42864,
+  "tracked_files_total": 42870,
+  "classified_files_total": 42865,
   "docs_content_inspected": 230,
   "large_docs_skipped": 1,
   "excluded_reports": 5,
@@ -19,17 +19,18 @@
     "simulation_input": 2683,
     "simulation_log": 3264,
     "simulation_output": 36203,
-    "source": 164,
+    "source": 165,
     "test": 74,
     "web_ui": 1,
     "workflow": 34
   },
   "finding_counts": {
-    "BROKEN_RELATIVE_LINK": 7
+    "BROKEN_RELATIVE_LINK": 7,
+    "POTENTIAL_UNLOGGED_CHANGES": 2
   },
-  "finding_total": 7,
-  "inventory_fingerprint": "c724620f8f08c925761093479c3a5835af1104ae7a17dea68cf2e406cc79a3e9",
-  "evidence_fingerprint": "a38cca05722cc62f2a19d8787a386e132771345cc8472199f5e39f915b2e8a45",
+  "finding_total": 9,
+  "inventory_fingerprint": "33fbecca24c25b2da58c64cb93123d68b6118eb34d20bccefd38e40b2ef6d686",
+  "evidence_fingerprint": "487570292fc60b421aa9250d90731a7bec23e3e4c1f5b9c90e69f83192020423",
   "files": [
     {
       "path": ".github/agents/openfoam-solidification.agent.md",
@@ -300024,6 +300025,13 @@
       "blob": "a737901aac4d401a323f2f22d37d7d6666acbf5e"
     },
     {
+      "path": "tools/compact_campaign_200s.py",
+      "role": "source",
+      "purpose": "code/test implementation",
+      "certainty": "rule",
+      "blob": "3e63fcea06d22c090c7c23900e60d01525f023b6"
+    },
+    {
       "path": "tools/file_governance_audit_proof.py",
       "role": "source",
       "purpose": "code/test implementation",
@@ -300142,6 +300150,24 @@
       "path": "docs/granada/C3D05_T0_README_HISTORICAL_BEFORE_SINGLE_FLOW_20261120.md",
       "observation": "Missing: outside-repo",
       "recommendation": "Fix link or restore target",
+      "state": "REVIEW_REQUIRED"
+    },
+    {
+      "id": "806fab75ef239671",
+      "code": "POTENTIAL_UNLOGGED_CHANGES",
+      "severity": "review",
+      "path": "PROJECT_AUDIT_LOG_EN.md",
+      "observation": "1 implementation/config paths changed since this log's last commit; examples: tools/compact_campaign_200s.py",
+      "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
+      "state": "REVIEW_REQUIRED"
+    },
+    {
+      "id": "39b185b4a90710e2",
+      "code": "POTENTIAL_UNLOGGED_CHANGES",
+      "severity": "review",
+      "path": "PROJECT_AUDIT_LOG_ES.md",
+      "observation": "1 implementation/config paths changed since this log's last commit; examples: tools/compact_campaign_200s.py",
+      "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     }
   ],

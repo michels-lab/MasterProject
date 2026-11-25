@@ -5,7 +5,7 @@ No file is auto-deleted or declared unused.
 
 ## Coverage
 
-Tracked: 42869; classified: 42864; readable documents: 230; above read cap: 1; findings: 7.
+Tracked: 42870; classified: 42865; readable documents: 230; above read cap: 1; findings: 9.
 
 ## File roles
 
@@ -23,7 +23,7 @@ Tracked: 42869; classified: 42864; readable documents: 230; above read cap: 1; f
 | simulation_input | 2683 |
 | simulation_log | 3264 |
 | simulation_output | 36203 |
-| source | 164 |
+| source | 165 |
 | test | 74 |
 | web_ui | 1 |
 | workflow | 34 |
@@ -37,6 +37,8 @@ Tracked: 42869; classified: 42864; readable documents: 230; above read cap: 1; f
 - **CONFIRMED / BROKEN_RELATIVE_LINK** docs/granada/C3D05_T0_README_HISTORICAL_BEFORE_SINGLE_FLOW_20261120.md: Missing: outside-repo. Next: Fix link or restore target (ID 2fa56a22be90f045)
 - **CONFIRMED / BROKEN_RELATIVE_LINK** docs/granada/C3D05_T0_README_HISTORICAL_BEFORE_SINGLE_FLOW_20261120.md: Missing: outside-repo. Next: Fix link or restore target (ID 2fa56a22be90f045)
 - **CONFIRMED / BROKEN_RELATIVE_LINK** docs/granada/C3D05_T0_README_HISTORICAL_BEFORE_SINGLE_FLOW_20261120.md: Missing: outside-repo. Next: Fix link or restore target (ID 2fa56a22be90f045)
+- **REVIEW / POTENTIAL_UNLOGGED_CHANGES** PROJECT_AUDIT_LOG_EN.md: 1 implementation/config paths changed since this log's last commit; examples: tools/compact_campaign_200s.py. Next: Inspect diffs and reconcile only meaningful decisions/results in the canonical log (ID 806fab75ef239671)
+- **REVIEW / POTENTIAL_UNLOGGED_CHANGES** PROJECT_AUDIT_LOG_ES.md: 1 implementation/config paths changed since this log's last commit; examples: tools/compact_campaign_200s.py. Next: Inspect diffs and reconcile only meaningful decisions/results in the canonical log (ID 39b185b4a90710e2)
 
 Complete path → purpose/role/certainty list lives in FILE_GOVERNANCE.json. SUMMARY.json has counts only for master polling.
 A dated file, duplicate, or suspicious name is an **investigation candidate**, not unwanted material.
