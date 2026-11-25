@@ -97,9 +97,17 @@ void Foam::solvers::fsC08ConservativeVoF::pressureCorrector()
         if (pimple.momentumPredictor())
             FatalErrorInFunction << "FS-C08 refresh experiment requires momentumPredictor no"
                 << exit(FatalError);
-        p_rgh=p-rho*buoyancy.gh-buoyancy.pRef;
-        p_rgh.correctBoundaryConditions();
+        // Update only internal reduced pressure here. fixedFluxPressure
+        // requires constrainPressure() to install the CURRENT time-index
+        // normal gradient before any boundary evaluation. The matrix
+        // assembly (momentumPredictor no) does not solve for U.
+        p_rgh.primitiveFieldRef()=
+            p.primitiveField()-rho.primitiveField()*buoyancy.gh.primitiveField()
+            -buoyancy.pRef.value();
+        Info<< "FS_C08_MOMENTUM_REFRESH_BEGIN time_s=" << runTime.value()
+            << " pressureBoundaryEvaluationDeferred=1" << nl;
         compressibleVoF::momentumPredictor();
+        Info<< "FS_C08_MOMENTUM_REFRESH_ASSEMBLED time_s=" << runTime.value() << nl;
     }
     fvVectorMatrix& UEqn=tUEqn.ref();
     setrAU(UEqn);
@@ -134,6 +142,12 @@ void Foam::solvers::fsC08ConservativeVoF::pressureCorrector()
     );
     phiHbyA+=phig;
     constrainPressure(p_rgh,U,phiHbyA,rAUf,MRF);
+    if (momentumCoupling=="refreshBeforePressure")
+    {
+        p_rgh.correctBoundaryConditions();
+        Info<< "FS_C08_MOMENTUM_REFRESH_PRESSURE_BC_READY time_s="
+            << runTime.value() << nl;
+    }
     fvc::makeRelative(phiHbyA,U);
 
     // Homogeneous pressure increment BCs. Reject unknown boundary types.
