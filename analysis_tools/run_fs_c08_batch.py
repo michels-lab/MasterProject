@@ -45,6 +45,13 @@ SUPPORT_VARIANTS = tuple(
     for mode in ("trial","oldLiquid","oldGas","oldBoth")
 )
 
+TEMPORAL_VARIANTS = tuple(
+    ("temporal_"+name, "refreshBeforePressure", "separate", "incremental", "legacy", "trial")
+    for name in ("double_dt","reference","half_dt","quarter_dt")
+)
+TEMPORAL_FACTORS = {"temporal_double_dt":2.0,"temporal_reference":1.0,
+                    "temporal_half_dt":0.5,"temporal_quarter_dt":0.25}
+
 METRICS = (
     "maxU_m_s", "pMax_Pa", "metalVolume_m3", "solidMass_kg",
     "metalMassResidual_kg", "gasContinuityDefect_kg",
@@ -58,7 +65,7 @@ def numeric(value):
     except (ValueError, TypeError):
         return None
 
-def summarize(name, coupling, mobility, flux_mode, energy_mode, support_mode, report):
+def summarize(name, coupling, mobility, flux_mode, energy_mode, support_mode, report, case_dt, case_steps, compact=False):
     ledger=report.get("transient_ledger", {})
     last=ledger.get("last_complete_state") or {}
     return {
@@ -66,11 +73,19 @@ def summarize(name, coupling, mobility, flux_mode, energy_mode, support_mode, re
         "momentum_flux_mode": flux_mode,
         "energy_donor_mode": energy_mode,
         "pressure_transport_support": support_mode,
+        "fixed_dt_s": case_dt, "scheduled_steps": case_steps,
+        "requested_end_time_s": case_dt*case_steps,
+        "momentum_force_first4": report.get("momentum_force_records", [])[:4],
+        "momentum_force_last4": report.get("momentum_force_records", [])[-4:],
+        "momentum_consistency_first2": report.get("momentum_consistency_records", [])[:2],
+        "momentum_consistency_last2": report.get("momentum_consistency_records", [])[-2:],
+        "initial_projection_jacobian_records": report.get("initial_projection_jacobian_records", []),
+        "native_diagnostic_tail_on_failure": report.get("native_diagnostic_tail", [])[-10:] if not report.get("real_CFD_completed") else [],
         "pressure_transport_support_records_first5": report.get("pressure_transport_support_records", [])[:5],
         "pressure_transport_support_records_last3": report.get("pressure_transport_support_records", [])[-3:],
         "phase_energy_split_records_last3": report.get("phase_energy_split_records", [])[-3:],
         "phase_energy_split_records_first3": report.get("phase_energy_split_records", [])[:3],
-        "interface_transport_records": report.get("interface_transport_records", []),
+        "interface_transport_records": (report.get("interface_transport_records", [])[:2]+report.get("interface_transport_records", [])[-2:] if compact else report.get("interface_transport_records", [])),
         "status": report.get("status", "UNKNOWN"),
         "completed": bool(report.get("real_CFD_completed")),
         "accepted_pressure_records": report.get("accepted_pressure_records", 0),
@@ -112,7 +127,8 @@ def common_time_comparison(rows, dt):
                     by_step[step]={key:numeric(rec.get(key)) for key in METRICS}
         histories.append(by_step)
     shared=set.intersection(*(set(h) for h in histories)) if histories else set()
-    return [{"step": step, "time_s": step*dt,
+    return [{"step": step, "comparison_tick":step, "time_s": step*dt,
+             "actual_steps":{row["variant"]:round(step*dt/row["fixed_dt_s"]) for row in rows},
              "variants": {row["variant"]: h[step] for row,h in zip(rows,histories)}}
             for step in sorted(shared)]
 
@@ -124,11 +140,19 @@ def main(argv=None):
     parser.add_argument("--steps",type=int,default=10)
     parser.add_argument("--dt",type=float,default=1e-6)
     parser.add_argument("--timeout-minutes",type=int,default=120)
-    parser.add_argument("--suite",choices=("mobility","flux","energy","support"),default="support")
+    parser.add_argument("--suite",choices=("mobility","flux","energy","support","temporal"),default="support")
     args=parser.parse_args(argv)
     variants=SUPPORT_VARIANTS if args.suite=="support" else tuple(v+("trial",) for v in (ENERGY_VARIANTS if args.suite=="energy" else tuple(v+("legacy",) for v in (FLUX_VARIANTS if args.suite=="flux" else VARIANTS))))
     if not 1<=args.steps<=1000 or not math.isfinite(args.dt) or args.dt<=0 or args.timeout_minutes<1:
         parser.error("invalid fixed-step controls or timeout")
+    if args.suite=="temporal":
+        if args.steps%2 or args.steps*4>1000:
+            parser.error("temporal suite requires an even reference step count <=250")
+        variants=TEMPORAL_VARIANTS
+    def controls(name):
+        factor=TEMPORAL_FACTORS[name] if args.suite=="temporal" else 1.0
+        return args.dt*factor, int(args.steps/factor)
+    comparison_dt=min(controls(v[0])[0] for v in variants)
     source=args.source.expanduser().resolve()
     material=args.material.expanduser().resolve()
     if not source.is_dir() or not material.is_file():
@@ -142,6 +166,11 @@ def main(argv=None):
     summary_path=root/"FS_C08_BATCH_SUMMARY.json"
     batch={"schema":"fs-c08-native-batch-v1","status":"BUILDING","dt_s":args.dt,
            "steps":args.steps,"requested_parallel_jobs":args.jobs,"suite":args.suite,
+           "reference_dt_s":args.dt,"reference_steps":args.steps,
+           "common_target_time_s":args.dt*args.steps,
+           "comparison_tick_s":comparison_dt,
+           "per_variant_controls":{v[0]:{"dt_s":controls(v[0])[0],"steps":controls(v[0])[1]} for v in variants},
+           "adaptive_timestep":False,
            "global_energy_verified":False,"physical_shrinkage_validated":False,
            "variants":[]}
     write_report(summary_path,batch)
@@ -159,12 +188,13 @@ def main(argv=None):
             write_report(summary_path,batch)
             def worker(variant):
                 name,coupling,mobility,flux_mode,energy_mode,support_mode=variant
+                case_dt,case_steps=controls(name)
                 output=cases/("FS_C08_COUPLED_"+stamp+"_"+name)
                 diag=root/name
                 print("START",name,flush=True)
                 try:
                     report=execute(source,material,output,diag,args.timeout_minutes,
-                        True,args.dt,args.steps,"linear",coupling,mobility,flux_mode,energy_mode,support_mode,
+                        True,case_dt,case_steps,"linear",coupling,mobility,flux_mode,energy_mode,support_mode,
                         verified_batch_build=receipt)
                 except Exception as exc:
                     # One failed variant must not cancel the remaining cases.
@@ -177,7 +207,7 @@ def main(argv=None):
                         real_CFD_completed=False,batch_worker_error=str(exc),
                         diagnostics=str(diag),output_case=str(output))
                     write_report(report_file,report)
-                result=summarize(name,coupling,mobility,flux_mode,energy_mode,support_mode,report)
+                result=summarize(name,coupling,mobility,flux_mode,energy_mode,support_mode,report,case_dt,case_steps,args.suite=="temporal")
                 print("FINISH",name,result["status"],
                       "saved steps",result["saved_steps"],flush=True)
                 return result
@@ -189,7 +219,7 @@ def main(argv=None):
                     finished[row["variant"]]=row
                     batch["variants"]=[finished[v[0]] for v in variants if v[0] in finished]
                     write_report(summary_path,batch)
-            batch["common_saved_time_comparison"]=common_time_comparison(batch["variants"],args.dt)
+            batch["common_saved_time_comparison"]=common_time_comparison(batch["variants"],comparison_dt)
             batch["status"]="COMPLETED_ALL_VARIANTS" if all(r["completed"] for r in batch["variants"]) else "COMPLETED_WITH_REJECTED_VARIANTS"
             batch["passed_variants"]=sum(r["completed"] for r in batch["variants"])
             write_report(summary_path,batch)
