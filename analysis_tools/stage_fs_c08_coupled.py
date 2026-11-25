@@ -145,7 +145,12 @@ def startup_probe_controls(ctrl: str, dt: float, steps: int = 1) -> str:
 def stage(source: Path, material: Path, output: Path,
           laminar_reference: bool = False,
           startup_probe_dt: float | None = None,
-          startup_probe_steps: int = 1) -> dict:
+          startup_probe_steps: int = 1,
+          momentum_face_mobility: str = "linear") -> dict:
+    require(momentum_face_mobility in ("linear","harmonic"),
+            "unknown momentum face mobility")
+    require(momentum_face_mobility=="linear" or (laminar_reference and startup_probe_dt is not None),
+            "harmonic mobility is restricted to controlled laminar startup probes")
     source=source.expanduser().resolve()
     material=material.expanduser().resolve()
     output=output.expanduser().absolute()
@@ -280,6 +285,11 @@ def stage(source: Path, material: Path, output: Path,
             momentum_reference, encoding="utf-8")
     (output/"system/fluid/fvSolution").write_text(solution,encoding="utf-8")
     (output/"system/fluid/fvSchemes").write_text(schemes,encoding="utf-8")
+    (output/"constant/fluid/fsC08Numerics").write_text(
+        "FoamFile\n{\n    format ascii;\n    class dictionary;\n"
+        "    object fsC08Numerics;\n}\n"
+        f"momentumFaceMobility {momentum_face_mobility};\n",
+        encoding="utf-8")
     shutil.copy2(material,output/"constant/fluid/fsC08Material")
     # An old legacy solid field must NOT be misinterpreted as rhoAlpha.solid.
     legacy=output/"0/fluid/alpha.metal.solid"
@@ -300,6 +310,7 @@ def stage(source: Path, material: Path, output: Path,
         "turbulenceDamping_retained":not laminar_reference,
         "transport_reference":"laminar_molecular" if laminar_reference else "inherited_RAS",
         "laminar_reference_is_controlled_experiment":laminar_reference,
+        "momentum_face_mobility":momentum_face_mobility,
         "startup_probe_dt_s":startup_probe_dt,
         "startup_probe_steps":startup_probe_steps if startup_probe_dt is not None else None,
         "startup_probe_only":startup_probe_dt is not None,
@@ -326,6 +337,7 @@ def main(argv=None) -> int:
     ap.add_argument("--startup-probe-dt",type=float,
                     help="One fixed real CFD step, numerical sensitivity only")
     ap.add_argument("--startup-probe-steps",type=int,default=1)
+    ap.add_argument("--momentum-face-mobility",choices=("linear","harmonic"),default="linear")
     args=ap.parse_args(argv)
     output=args.destination or (
         Path.home()/"OpenFOAM"/"FS_C08_COUPLED_RUNS"/
@@ -334,7 +346,7 @@ def main(argv=None) -> int:
     )
     try:
         report=stage(args.source,args.material,output,args.laminar_reference,
-                     args.startup_probe_dt,args.startup_probe_steps)
+                     args.startup_probe_dt,args.startup_probe_steps,args.momentum_face_mobility)
         print(json.dumps(report,indent=2))
         return 0
     except (ValueError,OSError) as e:
