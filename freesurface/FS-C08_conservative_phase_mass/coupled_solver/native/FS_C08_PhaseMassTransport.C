@@ -686,13 +686,29 @@ void PhaseMassTransport::replayTrialFromFlux
     const scalar dt=mesh_.time().deltaTValue();
     auto& ml=mLiquid_.primitiveFieldRef();
     auto& ms=mSolid_.primitiveFieldRef();
-    const auto& g=Gamma_.primitiveField();
+    auto& g=Gamma_.primitiveFieldRef();
     forAll(ml,i)
     {
-        const scalar dm=dt*g[i];
-        ml[i]-=dm;
-        ms[i]+=dm;
+        if (phaseChangeClosure_=="equilibrium" && ml[i]+ms[i]>0)
+        {
+            // Direct partition of the transported total. Do not subtract
+            // dt*Gamma from almost identical operands at fs=1: this
+            // leaves fictitious mobile liquid or negative roundoff mass.
+            const scalar total=ml[i]+ms[i];
+            const scalar previousSolid=ms[i];
+            const scalar fs=solidMassFractionT_->value(T[i]);
+            ml[i]=(scalar(1)-fs)*total;
+            ms[i]=fs*total;
+            g[i]=(ms[i]-previousSolid)/dt;
+        }
+        else
+        {
+            const scalar dm=dt*g[i];
+            ml[i]-=dm;
+            ms[i]+=dm;
+        }
     }
+    Gamma_.correctBoundaryConditions();
     mLiquid_.correctBoundaryConditions();
     mSolid_.correctBoundaryConditions();
 
@@ -700,6 +716,23 @@ void PhaseMassTransport::replayTrialFromFlux
     updateVolumeSources(T);
     lastSolvedTimeIndex_=mesh_.time().timeIndex();
 }
+
+scalar PhaseMassTransport::equilibriumDensity(const scalar T) const
+{
+    if (!std::isfinite(T) || T<Tmin_K_ || T>Tmax_K_)
+        FatalErrorInFunction
+            << "FS-C08 equilibrium pressure transport T outside alloy table: "
+            << T << exit(FatalError);
+    const scalar fs=solidMassFractionT_->value(T);
+    const scalar rl=rhoLiquidT_->value(T);
+    const scalar rs=rhoSolidT_->value(T);
+    if (!std::isfinite(fs) || fs<0 || fs>1 ||
+        !std::isfinite(rl) || rl<=0 || !std::isfinite(rs) || rs<=0)
+        FatalErrorInFunction << "Invalid equilibrium density at T=" << T
+            << exit(FatalError);
+    return scalar(1)/((scalar(1)-fs)/rl+fs/rs);
+}
+
 
 scalar PhaseMassTransport::liquidCv(const scalar T) const
 {
