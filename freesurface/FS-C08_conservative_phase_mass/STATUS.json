@@ -1348,5 +1348,28 @@
     "description": "Compare advective donor energy time levels; current inventory energy still updated nonlinearly in all variants. Old native gas he history explicitly initialized at t=0. Old gas internal-face advection and outflow optional, inflow current boundary state. Liquid current/old donor optional. Split advection gas/liquid, conduction, mechanical work at largest thermal-change cell. No phase mass correction changes. No claim of full CHT balance, separate phase temperatures, or calibrated physical model.",
     "native_build_verified": false,
     "CFD_verified": false
+  },
+  "integrated_sync_20261125": {
+    "case_log": "freesurface/FS-C08_conservative_phase_mass/BITACORA_20261125_ES.md",
+    "main_project_log": "https://github.com/michels-lab/MasterProject/blob/main/docs/granada/MAESTRIA_ESTADO_INTEGRADO_20261125_ES.md",
+    "verified_batches": {
+      "mobility": {
+        "accepted_steps": 40,
+        "scheduled_steps": 40,
+        "complete_variants": 4
+      },
+      "flux": {
+        "accepted_steps": 39,
+        "scheduled_steps": 40,
+        "complete_variants": 3
+      }
+    },
+    "energy_suite": "CODE_COMMITTED_NOT_NATIVE_EXECUTED",
+    "reference": "refreshBeforePressure/separate/linear/incremental",
+    "fixed_dt_s": 0.000001,
+    "physical_shrinkage_validated": false,
+    "global_energy_verified": false,
+    "clipboard": "tee + clip.exe including failed run exit code",
+    "scope": "Documentation only; FS research branch remains independent of main; no new CFD and no changes to inputs."
   }
 }
