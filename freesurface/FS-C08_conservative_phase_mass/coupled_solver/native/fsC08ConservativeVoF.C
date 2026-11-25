@@ -164,12 +164,32 @@ solvers::fsC08ConservativeVoF::fsC08ConservativeVoF(fvMesh& mesh)
     mixture_.T().oldTime();
     reconcileMixtureDensity();
     rhoMetalEffective_.oldTime();
+    scalar initialGasMass=0, initialVolumeDefect=0;
+    const auto& cellVolumes=mesh.V();
+    forAll(gasMassTrial_,i)
+    {
+        initialGasMass+=gasMassTrial_[i]*cellVolumes[i];
+        const scalar occupied=
+              phaseMass_->liquidMass()[i]/phaseMass_->liquidDensity()[i]
+            + phaseMass_->solidMass()[i]/phaseMass_->solidDensity()[i]
+            + gasMassTrial_[i]/mixture_.rho2()[i];
+        if (!std::isfinite(occupied))
+            FatalErrorInFunction << "FS-C08 nonfinite initial phase volume "
+                << i << exit(FatalError);
+        initialVolumeDefect=max(initialVolumeDefect,mag(occupied-1));
+    }
+    reduce(initialGasMass,sumOp<scalar>());
+    reduce(initialVolumeDefect,maxOp<scalar>());
     Info<< "FS_C08_INITIAL_GAS_INVENTORY"
-        << " mass_kg=" << gSum(gasMassTrial_.primitiveField()*mesh.V())
+        << " mass_kg=" << initialGasMass
+        << " maxInitialVolumeDefect=" << initialVolumeDefect
         << " rhoMin=" << min(mixture_.rho2()).value()
         << " rhoMax=" << max(mixture_.rho2()).value()
         << " Tmin=" << min(mixture_.T()).value()
         << " Tmax=" << max(mixture_.T()).value() << nl;
+    if (initialVolumeDefect>1e-12)
+        FatalErrorInFunction << "FS-C08 initial gas/metal volume inconsistent"
+            << exit(FatalError);
     updatePhaseInternalEnergy();
     phaseInternalEnergy_.oldTime();
     Info<< "FS_C08_COUPLED_SOLVER_MODULE_INSTALLED "
@@ -287,6 +307,19 @@ void solvers::fsC08ConservativeVoF::prePredictor()
                 << "; no clipping" << exit(FatalError);
     }
     gasMassTrial_.correctBoundaryConditions();
+
+    const tmp<volScalarField> preEnergyResidual=fsC08::trialVolumeResidual
+    (
+        phaseMass_->liquidMass(),phaseMass_->solidMass(),gasMassTrial_,
+        phaseMass_->liquidDensity(),phaseMass_->solidDensity(),mixture_.rho2()
+    );
+    scalar maxPreEnergyDefect=0;
+    forAll(preEnergyResidual(),i)
+        maxPreEnergyDefect=max(maxPreEnergyDefect,mag(preEnergyResidual()[i]));
+    reduce(maxPreEnergyDefect,maxOp<scalar>());
+    Info<< "FS_C08_PRE_ENERGY_VOLUME"
+        << " time_s=" << runTime.value()
+        << " maxAbsResidual=" << maxPreEnergyDefect << nl;
 
     // Per-phase mass continuity errors are now from physical inventory.
     contErr1 =
