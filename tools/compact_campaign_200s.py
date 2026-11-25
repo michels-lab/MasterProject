@@ -102,7 +102,7 @@ def config(case,geometry):
     changes={}
     def edit(rel,fn):
         p=case/rel;before=p.read_bytes()
-        after=fn(before.decode("utf-8")).encode("utf-8")
+        after=fn(before.decode("utf-8").replace("\r\n","\n")).encode("utf-8")
         need(before!=after,"no change "+rel);p.write_bytes(after)
         changes[rel]={"old_sha256":hashlib.sha256(before).hexdigest(),"new_sha256":sha(p)}
     def control(s):
@@ -296,6 +296,8 @@ def execute(name):
     need(TARGET.is_dir() and not TARGET.is_symlink(),"compact campaign not prepared")
     with lock(SOURCE),lock(TARGET):
         case=TARGET/name;r=json.loads((case/REPORT).read_text())
+        original=unrun(SOURCE/name)
+        need(original["input_sha256"]==r["source_input_sha256"],"dense source changed since compact preparation")
         need(r["status"]=="PREPARED_COMPACT_NOT_RUN" and not (case/"log.foamMultiRun").exists(),"already attempted; preserve")
         need(inputs(case)==r["input_sha256"],"compact inputs changed")
         need(shutil.disk_usage(case).free>=r["disk_projection"]["projected_bytes_with_50pct_margin"]+RESERVE,"insufficient WSL free disk")
@@ -311,7 +313,7 @@ def execute(name):
                         if not m:continue
                         n+=1;last=float(m[1])
                         need(abs(last-n*.001)<1e-7,"solver step drift")
-                        if n==1001:
+                        if n==1002:
                             early_gate(case,r);r["early_split_cadence_gate"]="PASS"
                             json_out(case/REPORT,r);print("Split cadence verified on actual CFD: .1s profiles / 1s volumes",flush=True)
                         if n%1000==0:
