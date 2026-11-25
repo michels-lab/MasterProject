@@ -18,6 +18,10 @@ class fsC08ConservativeVoF : public compressibleVoF
 {
     autoPtr<fsC08::PhaseMassTransport> phaseMass_;
 
+    // Independent trial gas mass per cell volume. Until the pressure
+    // projection is connected, this is NOT an accepted restart field.
+    volScalarField gasMassTrial_;
+
     // Persistent effective metal density from actual conserved phase masses.
     // Must own oldTime() for the native compressible pressure ddt terms.
     volScalarField rhoMetalEffective_;
