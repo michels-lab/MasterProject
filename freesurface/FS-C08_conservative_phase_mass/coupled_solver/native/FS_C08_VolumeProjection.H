@@ -48,5 +48,38 @@ tmp<volScalarField> correctedTrialMass
     const surfaceScalarField& deltaMassFlux
 );
 
+// Rebuild a trial inventory from the SAME old-time field, never by
+// incrementing the previously corrected n+1 state. Source is kg/m3/s;
+// a positive source adds phase mass. Gas normally has zero source.
+tmp<volScalarField> trialMassFromOldTime
+(
+    const volScalarField& oldMass,
+    const surfaceScalarField& massFlux,
+    const volScalarField& massSource
+);
+
+// A nonlinear pressure/volume transaction for the fixed-temperature,
+// pressure-incompressible metal / linear-in-pressure gas EOS subproblem.
+// Inputs mL/mG/pressure/rhoG and fluxes are updated only on success.
+// dp must have homogeneous increment BCs consistent with pressure.
+// Caller supplies frozen momentum-derived mobilities (NOT arbitrary
+// diffusivities). Does not modify VOF, energy, temperature, or U.
+// Returns false when the trial cannot be made admissible, without
+// clipping mass or relaxing the volume tolerance.
+bool projectTrialInventories
+(
+    volScalarField& mL, const volScalarField& mS,
+    volScalarField& mG,
+    const volScalarField& rhoL, const volScalarField& rhoS,
+    volScalarField& rhoG, const volScalarField& psiG,
+    volScalarField& pressure,
+    const surfaceScalarField& liquidMobility,
+    const surfaceScalarField& gasMobility,
+    surfaceScalarField& liquidMassFlux,
+    surfaceScalarField& gasMassFlux,
+    volScalarField& dp,
+    const label referenceCell = -1
+);
+
 }} // namespace Foam::fsC08
 #endif
