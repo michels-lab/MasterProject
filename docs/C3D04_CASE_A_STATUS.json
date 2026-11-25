@@ -1323,7 +1323,7 @@
   "planned_200s_campaign": {
     "date": "2026-11-24",
     "priority": "Compact storage before any new 200s CFD; C14-3DA first unless researcher changes priority",
-    "status": "DENSE_SIX_PREPARED_COMPACT_PREPARER_PUBLISHED_WSL_PENDING",
+    "status": "WSL_ALL_SIX_COMPACT_PREPARED_NO_CFD",
     "plan": "docs/granada/MAESTRIA_CAMPANA_B14_C14_200S_PLAN_20261124_ES.md",
     "original_10s_preserved": true,
     "physical_validation": false,
@@ -1361,7 +1361,7 @@
       "all_six_fit_estimate": true,
       "windows_host_volume_free_verified": false
     },
-    "next": "Prepare compact independent copies; inspect resource report; run C14-3DA-200s with integrated split cadence gate only after disk verification.",
+    "next": "Verify Windows physical disk capacity, then explicitly execute C14-3DA-200s with compact_campaign_200s.py --run; integrated native first-second cadence gate; no dense run.",
     "compact_storage": {
       "authorized": true,
       "script": "tools/compact_campaign_200s.py",
@@ -1375,11 +1375,40 @@
       "profile_states": 2001,
       "probe_samples": 200001,
       "dense_prepared_observed": 6,
-      "compact_prepared_observed": 0,
+      "compact_prepared_observed": 6,
       "compact_cfd_observed": 0,
       "static_ci_url": "https://github.com/michels-lab/MasterProject/actions/runs/45516133349",
-      "static_ci_status": "queued at inspection",
-      "actual_storage_verified": false
+      "static_ci_status": "completed/success",
+      "actual_storage_verified": false,
+      "resource_evidence": {
+        "source": "user-supplied WSL stdout; not direct access to laptop",
+        "date": "2026-11-24",
+        "script_commit": "50d3bbd7750756d7d854eaa2a6f8d69157a3341f",
+        "reported_origin_main": "8d8fff3a5",
+        "prepared": 6,
+        "solver_executed": false,
+        "previous_projected_bytes": 677717076556,
+        "compact_projected_bytes": 195999917264,
+        "projected_reduction_percent": 71.0793893138969,
+        "free_bytes_WSL": 930909974528,
+        "all_fit_WSL_estimate": true,
+        "windows_physical_capacity_verified": false,
+        "per_case_projected_bytes": {
+          "C14-2D-200s": 5865541742,
+          "B14-2D-200s": 5865541742,
+          "C14-3DA-200s": 6722248179,
+          "B14-3DA-200s": 6722248179,
+          "C14-3DB-200s": 85412168711,
+          "B14-3DB-200s": 85412168711
+        },
+        "static_ci": {
+          "run_id": 45516133349,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        "native_split_cadence_verified": false
+      },
+      "native_split_cadence_verified": false
     }
   },
   "stage09_temporal_sensitivity": {
