@@ -7,7 +7,7 @@ from pathlib import Path
 from tempfile import TemporaryDirectory
 
 from run_fs_c08_real_cfd import (inspect_real_cfd_budgets, require_native_end_time,
-                                 first_native_error)
+                                 first_native_error, inspect_coupled_volume_closure)
 from stage_fs_c08_coupled import add_phase_mass_solvers
 
 
@@ -86,6 +86,23 @@ class RealCFDBudgetEvidenceTests(unittest.TestCase):
                 path.write_text(data)
                 with self.assertRaisesRegex(RuntimeError, "exactly one"):
                     require_native_end_time(path)
+
+    def test_coupled_volume_gate_accepts_only_converged_local_step(self):
+        iteration = ("FS_C08_COUPLED_VOLUME_ENERGY_ITER time_s=0.05 "
+                     "maxVolumeResidual=1e-13 maxDeltaT_K=1e-7 "
+                     "maxPhaseReplayRelative=1e-11 maxMetalOverfill=1e-13 "
+                     "maxLocalMetalContinuity=1e-12 maxLocalGasContinuity=1e-12")
+        pressure = ("FS_C08_NATIVE_PRESSURE_WITH_MASS_DENSITY time_s=0.05 "
+                    "gasEOSMismatch=1e-13 pressureVolumeEnergyIterationConverged=1")
+        log = iteration + "\n" + pressure
+        self.assertEqual(inspect_coupled_volume_closure(log, 0.05)
+                         ["accepted_pressure_closure_records"], 1)
+        for bad in (log.replace("maxVolumeResidual=1e-13", "maxVolumeResidual=1e-5"),
+                    log.replace("maxLocalGasContinuity=1e-12", "maxLocalGasContinuity=1e-3"),
+                    log.replace("gasEOSMismatch=1e-13", "gasEOSMismatch=nan"),
+                    pressure, iteration):
+            with self.assertRaises(ValueError):
+                inspect_coupled_volume_closure(bad, 0.05)
 
     def test_empty_log_rejected(self):
         with self.assertRaisesRegex(ValueError, "no actual"):
