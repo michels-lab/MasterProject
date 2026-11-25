@@ -672,8 +672,8 @@
   },
   "planned_200s_campaign": {
     "date": "2026-11-24",
-    "priority": "C14 solidification; B14 shrinkage reference; six-run campaign accepted",
-    "status": "WSL_ALL_SIX_PREPARED_NO_CFD",
+    "priority": "Compact storage before any new 200s CFD; C14-3DA first unless researcher changes priority",
+    "status": "DENSE_SIX_PREPARED_COMPACT_PREPARER_PUBLISHED_WSL_PENDING",
     "plan": "docs/granada/MAESTRIA_CAMPANA_B14_C14_200S_PLAN_20261124_ES.md",
     "original_10s_preserved": true,
     "physical_validation": false,
@@ -703,6 +703,25 @@
       "all_six_fit_estimate": true,
       "windows_host_volume_free_verified": false
     },
-    "next": "Run C14-3DA-200s using targeted priority executor after host disk check; preserve all others."
+    "next": "Prepare compact independent copies; inspect resource report; run C14-3DA-200s with integrated split cadence gate only after disk verification.",
+    "compact_storage": {
+      "authorized": true,
+      "script": "tools/compact_campaign_200s.py",
+      "script_commit": "50d3bbd7750756d7d854eaa2a6f8d69157a3341f",
+      "plan": "docs/granada/MAESTRIA_CAMPANA_200S_ALMACENAMIENTO_COMPACTO_20261124_ES.md",
+      "volume_interval_s": 1,
+      "diagnostic_interval_s": 0.1,
+      "probe_interval_s": 0.001,
+      "momentum_volume_interval_s": 1,
+      "volume_states": 201,
+      "profile_states": 2001,
+      "probe_samples": 200001,
+      "dense_prepared_observed": 6,
+      "compact_prepared_observed": 0,
+      "compact_cfd_observed": 0,
+      "static_ci_url": "https://github.com/michels-lab/MasterProject/actions/runs/45516133349",
+      "static_ci_status": "queued at inspection",
+      "actual_storage_verified": false
+    }
   }
 }
