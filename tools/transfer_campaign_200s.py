@@ -213,9 +213,14 @@ def complete_manifest(url,branch):
     if not remote_head(url,branch):return None
     with tempfile.TemporaryDirectory(prefix="manifest-",dir=HOME) as d:
         p=Path(d);init_repo(p,url)
+        git("config","remote.origin.promisor","true",cwd=p)
+        git("config","remote.origin.partialclonefilter","blob:none",cwd=p)
         git("fetch","--depth=1","--filter=blob:none","origin","refs/heads/"+branch,cwd=p)
         proc=subprocess.run(["git","show","FETCH_HEAD:MANIFEST.json"],cwd=p,text=True,stdout=subprocess.PIPE,stderr=subprocess.DEVNULL)
-        if proc.returncode:return None
+        if proc.returncode:
+            names=git("ls-tree","--name-only","FETCH_HEAD",cwd=p,capture=True).splitlines()
+            need("MANIFEST.json" not in names,"remote manifest exists but could not be read")
+            return None
         m=json.loads(proc.stdout);need(m.get("complete") is True,"invalid published manifest")
         return m
 def push_inputs(repo,url):
