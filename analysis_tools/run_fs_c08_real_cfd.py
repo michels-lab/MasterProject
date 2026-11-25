@@ -400,8 +400,11 @@ def execute(source: Path, material: Path, output: Path,
             report["native_numeric_budget_gate"]["native_thermal_solve_records"]
         )
         fluid = finaldir / "fluid"
+        # Native OpenFOAM can write either uncompressed or gzip fields.
+        # Do not confuse an on-disk compression option with missing physics.
         missing = [name for name in REQUIRED_FINAL_FIELDS
-                   if not (fluid / name).is_file()]
+                   if not ((fluid / name).is_file()
+                           or (fluid / (name + ".gz")).is_file())]
         report["latest_saved_time_s"] = finaltime
         report["missing_final_physical_fields"] = missing
         if (missing or not report["metal_gas_conservation_gate_records"]
@@ -470,7 +473,10 @@ def main(argv: list[str] | None = None) -> int:
           diagnostics.expanduser().absolute() / "FS_C08_REAL_CFD_REPORT.json")
     print("FS-C08 STATUS:", report["status"])
     for key in ("first_compiler_error", "first_run_error", "budget_gate_error",
-                "accepted_pressure_records", "latest_saved_time_s"):
+                "accepted_pressure_records", "latest_saved_time_s",
+                "missing_final_physical_fields",
+                "metal_gas_conservation_gate_records",
+                "native_thermal_solve_records"):
         if key in report:
             print(key + ":", report[key])
     if not report["real_CFD_completed"] or report.get("startup_probe_only"):
