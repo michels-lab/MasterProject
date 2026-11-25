@@ -588,22 +588,13 @@ void PhaseMassTransport::solve
     const surfaceScalarField& alphaPhiMetal
 )
 {
-    // PIMPLE may call prePredictor multiple times in a single physical dt.
-    // Recompute from n each outer corrector, not cumulatively from a
-    // previous n+1 phase-change update. fvm::ddt(mLiquid_) always uses
-    // mLiquid_.oldTime() as the n state; restore solid mass to the
-    // same n state before calculating a new Gamma(T) predictor.
+    // Keep the last admissible phase geometry for the MULES predictor.
+    // An outer iteration must not mix old solid with a trial liquid
+    // inventory when constructing the conditional liquid face share.
     mLiquid_.oldTime();
     mSolid_.oldTime();
-    if (lastSolvedTimeIndex_==mesh_.time().timeIndex())
-    {
-        mSolid_.primitiveFieldRef() =
-            mSolid_.oldTime().primitiveField();
-        mSolid_.correctBoundaryConditions();
-    }
     checkAndUpdateProperties(T,alphaMetal);
     initializeIfRequired(alphaMetal,T);
-    reconstructFractions(T,"beforeAdvection");
     volScalarField liquidShare
     (
         IOobject("fsC08LiquidShare",mesh_.time().name(),mesh_,
@@ -618,8 +609,39 @@ void PhaseMassTransport::solve
     liquidShare.correctBoundaryConditions();
 
     // Real MULES-limited metal flux on ALL CFD mesh faces and boundaries.
-    liquidMassPhi_ = alphaPhiMetal*fvc::interpolate(liquidShare)
-                    *fvc::interpolate(rhoLiquid_);
+    const surfaceScalarField predictorFlux
+    (
+        "fsC08PredictorLiquidMassFlux",
+        alphaPhiMetal*fvc::interpolate(liquidShare)
+                    *fvc::interpolate(rhoLiquid_)
+    );
+    replayTrialFromFlux(T,alphaMetal,predictorFlux);
+    reconstructFractions(T,"afterPhaseExchange");
+    Info<< "FS_C08_IN_SOLVER_PHASE_MASS_EQUATIONS t="
+        << mesh_.time().value()
+        << " gammaMax=" << max(Gamma_).value()
+        << " phaseMassPredictorOnly=1 pressureEnergyNotYetCorrected=1" << nl;
+}
+
+void PhaseMassTransport::replayTrialFromFlux
+(
+    const volScalarField& T,
+    const volScalarField& metal,
+    const surfaceScalarField& correctedLiquidMassFlux
+)
+{
+    // Snapshot/copy the supplied flux before touching the stored flux;
+    // a caller may pass the existing field itself.
+    const surfaceScalarField replayFlux("fsC08ReplayLiquidMassFlux",
+                                       correctedLiquidMassFlux);
+    mLiquid_.oldTime();
+    mSolid_.oldTime();
+    mLiquid_.primitiveFieldRef()=mLiquid_.oldTime().primitiveField();
+    mSolid_.primitiveFieldRef()=mSolid_.oldTime().primitiveField();
+    mLiquid_.correctBoundaryConditions();
+    mSolid_.correctBoundaryConditions();
+    checkAndUpdateProperties(T,metal);
+    liquidMassPhi_=replayFlux;
 
     // Step A: transport liquid mass on all genuine CFD faces. The
     // stationary solid has no advective flux. Physical dimensions of
@@ -673,12 +695,9 @@ void PhaseMassTransport::solve
     mLiquid_.correctBoundaryConditions();
     mSolid_.correctBoundaryConditions();
 
-    reconstructFractions(T,"afterPhaseExchange");
+    // Recompute the material source with the replayed phase masses.
+    updateVolumeSources(T);
     lastSolvedTimeIndex_=mesh_.time().timeIndex();
-    Info<< "FS_C08_IN_SOLVER_PHASE_MASS_EQUATIONS t="
-        << mesh_.time().value()
-        << " gammaMax=" << max(Gamma_).value()
-        << " phaseMassPredictorOnly=1 pressureEnergyNotYetCorrected=1" << nl;
 }
 
 scalar PhaseMassTransport::liquidCv(const scalar T) const
