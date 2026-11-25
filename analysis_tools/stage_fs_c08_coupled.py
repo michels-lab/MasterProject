@@ -68,7 +68,7 @@ def add_phase_mass_solvers(solution: str) -> str:
         solution = solution[:match.start()] + solution[end+1:]
 
     entries = []
-    for field in ("rhoAlpha.liquid", "rhoAlpha.solid", "T"):
+    for field in ("rhoAlpha.liquid", "rhoAlpha.solid", "T", "pVolumeCorrection.fsC08"):
         for final in (False, True):
             name = field + ("Final" if final else "")
             # Current mass equation is diagonal; diagonal is a valid
@@ -76,7 +76,7 @@ def add_phase_mass_solvers(solution: str) -> str:
             # PCG/DIC for its symmetric diffusion-plus-diagonal operator.
             solver = "PCG" if field == "T" else "PBiCGStab"
             preconditioner = "DIC" if field == "T" else "diagonal"
-            rel_tol = 0 if final or field == "T" else 0.01
+            rel_tol = 0 if final or field in ("T", "pVolumeCorrection.fsC08") else 0.01
             entries.append(
                 f"\n    {name}\n"
                 "    {\n"
@@ -174,7 +174,21 @@ def stage(source: Path, material: Path, output: Path) -> dict:
     )
     solution=(source/"system/fluid/fvSolution").read_text(encoding="utf-8")
     solution=add_phase_mass_solvers(solution)
+    schemes=(source/"system/fluid/fvSchemes").read_text(encoding="utf-8")
+    projection_scheme = (
+        '    laplacian(fsC08VolumeMobility,pVolumeCorrection.fsC08) '
+        'Gauss linear orthogonal;\n'
+    )
+    scheme_pattern = r"(?m)^(\s*laplacianSchemes\s*\{)"
+    require(len(re.findall(scheme_pattern, schemes)) == 1,
+            "expected one fluid laplacianSchemes block")
+    require("fsC08VolumeMobility" not in schemes,
+            "source already has experimental pressure projection scheme")
+    schemes=re.sub(scheme_pattern,
+        lambda m: m.group(1)+"\n"+projection_scheme,schemes,count=1)
     for need in (
+        "FS_C08_VolumeProjection.C",
+        "FS_C08_VolumeProjection.H",
         "FS_C08_PhaseMassTransport.C",
         "fsC08ConservativeVoF.C",
         "fsC08MushyMomentum.C",
@@ -192,6 +206,7 @@ def stage(source: Path, material: Path, output: Path) -> dict:
     (output/"system/controlDict").write_text(ctrl,encoding="utf-8")
     (output/"constant/fluid/fvModels").write_text(newModels,encoding="utf-8")
     (output/"system/fluid/fvSolution").write_text(solution,encoding="utf-8")
+    (output/"system/fluid/fvSchemes").write_text(schemes,encoding="utf-8")
     shutil.copy2(material,output/"constant/fluid/fsC08Material")
     # An old legacy solid field must NOT be misinterpreted as rhoAlpha.solid.
     legacy=output/"0/fluid/alpha.metal.solid"
