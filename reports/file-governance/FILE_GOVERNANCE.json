@@ -29,7 +29,7 @@
     "POTENTIAL_UNLOGGED_CHANGES": 2
   },
   "finding_total": 9,
-  "inventory_fingerprint": "5c28e0903bd5023e6e7a42f6976bae462c7ee5d90c490a1a20d923f59d72f7c7",
+  "inventory_fingerprint": "268eff2bb71993782d6aa1103fd72a7fec59b4d0b0fb18bcafbf2c2b30469929",
   "evidence_fingerprint": "85e91a2cb4a13355e925e7efa3e0a95fcc6c93051344b79ab2ba2c0750f785a0",
   "files": [
     {
@@ -450,7 +450,7 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "7748277458076f2be61e807e782f9dc4a06a73aa"
+      "blob": "9b450e62f12210744d27fcd9168b68698e1745ed"
     },
     {
       "path": "RUN_CASE_REGISTRY.csv",
@@ -27708,7 +27708,7 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "8094b29f2929f2bbf69c7b7eb61fd36c0d181587"
+      "blob": "c42727d33c434f52d433d419519d319cba60c1e2"
     },
     {
       "path": "cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/C14_3D_PHYSICS_CONTRACT.json",
@@ -28324,7 +28324,7 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "d03d755b18870cf5985089cef85215d78402fe71"
+      "blob": "876c9ef6642257e6cfda6de0a21b56973544c19e"
     },
     {
       "path": "cases_3d/C3D_05_step_gmsh_conformal/c14_physics/ABRIR_CASO_B.sh",
@@ -74286,7 +74286,7 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "f45a3fd6c54e9a2109455232965b020ba44aa238"
+      "blob": "f75821214d53d93bb96ef93a0ba2d762b651ef95"
     },
     {
       "path": "cases_controlled_buoyancy/B14_topFixedFlux_explicitRef/CASE_VARIANT.md",
@@ -208287,7 +208287,7 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "e69848f2c2f10784c95f247c4b0059dce18c9d2a"
+      "blob": "88b7ee5ea497f0e06336db8c6f5aa82f04f714bc"
     },
     {
       "path": "cases_controlled_buoyancy/C14_topFixedFlux_explicitRef/CASE_VARIANT.md",
@@ -298797,7 +298797,7 @@
       "role": "config",
       "purpose": "machine-readable configuration",
       "certainty": "rule",
-      "blob": "2a5cdae30522505972de140fc50e295f9bf8c1c7"
+      "blob": "776ca0de573918e4a528a1dca1440350e51849a1"
     },
     {
       "path": "docs/C3D_01_ESTADO_REAL_20261110_ES.md",
@@ -299084,7 +299084,7 @@
       "role": "config",
       "purpose": "machine-readable configuration",
       "certainty": "rule",
-      "blob": "e933c7f995b65de16c0be94e4488688c1fad5d31"
+      "blob": "7b035b803a55048f4e03f59e8891ed2340b8244d"
     },
     {
       "path": "docs/REGLA_INSTRUCCIONES_UNIFICADAS_ES.md",
@@ -299420,7 +299420,7 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "127be0cf32423a3f574b059814365c3525031c01"
+      "blob": "97b83b2760f3fe91228d5cf2c28871664cb1e6a9"
     },
     {
       "path": "docs/granada/OPENFOAM_HUB_READ_ACCESS_20261021.md",
