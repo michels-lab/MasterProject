@@ -258,6 +258,32 @@ void Foam::solvers::fsC08ConservativeVoF::thermophysicalPredictor()
         const tmp<volScalarField> tNativeMetalK=
             mixture_.thermo1().kappa();
         const auto& nativeK=tNativeMetalK().primitiveField();
+        const tmp<volScalarField> tNativeGasK=mixture_.thermo2().kappa();
+        const auto& nativeGasK=tNativeGasK().primitiveField();
+        scalar maxNativeEddyK=0;
+        label maxEddyCell=-1;
+        forAll(nativeK,i)
+        {
+            const scalar molecular=alpha1[i]*nativeK[i]+alpha2[i]*nativeGasK[i];
+            const scalar eddy=kappaFsC08[i]-molecular;
+            if (eddy>maxNativeEddyK)
+            {
+                maxNativeEddyK=eddy;
+                maxEddyCell=i;
+            }
+        }
+        if (corrector==0)
+        {
+            Info<< "FS_C08_THERMAL_TRANSPORT_SPLIT"
+                << " maxNativeEddyK_W_mK=" << maxNativeEddyK
+                << " cell=" << maxEddyCell;
+            if (maxEddyCell>=0)
+                Info<< " nativeMetalK_W_mK=" << nativeK[maxEddyCell]
+                    << " nativeGasK_W_mK=" << nativeGasK[maxEddyCell]
+                    << " nativeKeff_W_mK=" << kappaFsC08[maxEddyCell]
+                    << " alphaMetal=" << alpha1[maxEddyCell];
+            Info<< nl;
+        }
         const auto& aL=phaseMass_->alphaLiquid().primitiveField();
         const auto& aS=phaseMass_->alphaSolid().primitiveField();
         auto& keff=kappaFsC08.primitiveFieldRef();
