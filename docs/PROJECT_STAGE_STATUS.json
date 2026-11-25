@@ -703,7 +703,7 @@
       "all_six_fit_estimate": true,
       "windows_host_volume_free_verified": false
     },
-    "next": "Inspect local C14-3DA incomplete report before lab CFD; input transfer complete, lab import not verified.",
+    "next": "Hold lab launch pending measured B storage and diagnosis of local incomplete compact A; do not change physics or existing published input snapshot.",
     "compact_storage": {
       "authorized": true,
       "script": "tools/compact_campaign_200s.py",
@@ -768,6 +768,27 @@
       "lab_cfd_verified": false,
       "local_compact_A_status": "RUN_INCOMPLETE_PRESERVED",
       "local_compact_A_failure_cause": "not yet inspected; request report before assuming lab readiness"
+    },
+    "storage_audit": {
+      "date": "2026-11-24",
+      "source": "investigator du -sh / du -ah stdout, rounded allocated MiB",
+      "reference": "C3D04_A_C14_FAITHFUL_RUNTIME_10S_01",
+      "postprocessing_MiB": 110,
+      "logs_MiB": 12,
+      "solver_log_MiB": 28,
+      "snapshots_MiB": {
+        "5": 5.9,
+        "10": 6.3,
+        "0.1": 5.1
+      },
+      "canonical_profiles_MiB": 53,
+      "raw_profiles_MiB": 53.3,
+      "topFlow_MiB": 3.2,
+      "probe_MiB": 1.6,
+      "known_estimate_bias": "all A postprocessing and logs scaled by B total cell ratio, not appropriate for probes, fixed-count lines, scalar reductions or per-step logs",
+      "next": "inspect B actual snapshot sizes and A compact incomplete error; decide minimal archive and binary/compression compatibility before replacing published inputs",
+      "physical_model_changed": false,
+      "published_transfer_unchanged": true
     }
   }
 }
