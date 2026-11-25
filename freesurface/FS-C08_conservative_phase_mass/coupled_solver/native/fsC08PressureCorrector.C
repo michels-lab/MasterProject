@@ -206,6 +206,7 @@ void Foam::solvers::fsC08ConservativeVoF::pressureCorrector()
         }
 
     const scalar volumeTolerance=1e-12;
+    const scalar localMassTolerance=1e-10;
     const scalar temperatureTolerance=1e-6;
     const scalar phaseReplayTolerance=1e-10;
     const label maxCoupledCorrectors=30;
@@ -293,7 +294,27 @@ void Foam::solvers::fsC08ConservativeVoF::pressureCorrector()
                 phaseMass_->liquidMass(),phaseMass_->solidMass(),gasMassTrial_,
                 phaseMass_->liquidDensity(),phaseMass_->solidDensity(),mixture_.rho2()
             );
+        // Local FV continuity audit in kg/m3 over this actual time step.
+        // Global cancellation cannot hide a cell-level conservation defect.
+        const volScalarField lDefect
+        (
+            "fsC08LocalLiquidDefect",
+            phaseMass_->liquidMass()-phaseMass_->liquidMass().oldTime()
+          + dt*(fvc::div(fl)+phaseMass_->gamma())
+        );
+        const volScalarField sDefect
+        (
+            "fsC08LocalSolidDefect",
+            phaseMass_->solidMass()-phaseMass_->solidMass().oldTime()
+          - dt*phaseMass_->gamma()
+        );
+        const volScalarField gDefect
+        (
+            "fsC08LocalGasDefect",
+            gasMassTrial_-gasMassOld+dt*(fvc::div(fg)-gasSource)
+        );
         scalar maxVolume=0,maxDT=0,maxReplay=0,maxOverfill=0;
+        scalar maxLocalMetal=0,maxLocalGas=0;
         forAll(temperatureBefore,i)
         {
             maxVolume=max(maxVolume,mag(residual()[i]));
@@ -305,24 +326,54 @@ void Foam::solvers::fsC08ConservativeVoF::pressureCorrector()
             const scalar occupied=phaseMass_->liquidMass()[i]/phaseMass_->liquidDensity()[i]
                                 +phaseMass_->solidMass()[i]/phaseMass_->solidDensity()[i];
             maxOverfill=max(maxOverfill,occupied-scalar(1));
+            const scalar scaleMetal=max(scalar(1),
+                phaseMass_->liquidMass().oldTime()[i]+phaseMass_->solidMass().oldTime()[i]);
+            const scalar scaleGas=max(scalar(1),max(gasMassOld[i],gasMassTrial_[i]));
+            maxLocalMetal=max(maxLocalMetal,(mag(lDefect[i])+mag(sDefect[i]))/scaleMetal);
+            maxLocalGas=max(maxLocalGas,mag(gDefect[i])/scaleGas);
         }
         reduce(maxVolume,maxOp<scalar>());
         reduce(maxDT,maxOp<scalar>());
         reduce(maxReplay,maxOp<scalar>());
         reduce(maxOverfill,maxOp<scalar>());
+        reduce(maxLocalMetal,maxOp<scalar>());
+        reduce(maxLocalGas,maxOp<scalar>());
         Info<< "FS_C08_COUPLED_VOLUME_ENERGY_ITER"
             << " time_s=" << runTime.value()
             << " corrector=" << iter+1
             << " maxVolumeResidual=" << maxVolume
             << " maxDeltaT_K=" << maxDT
             << " maxPhaseReplayRelative=" << maxReplay
-            << " maxMetalOverfill=" << maxOverfill << nl;
+            << " maxMetalOverfill=" << maxOverfill
+            << " maxLocalMetalContinuity=" << maxLocalMetal
+            << " maxLocalGasContinuity=" << maxLocalGas << nl;
         if (maxVolume<=volumeTolerance && maxDT<=temperatureTolerance
-            && maxReplay<=phaseReplayTolerance && maxOverfill<=0)
+            && maxReplay<=phaseReplayTolerance && maxOverfill<=volumeTolerance
+            && maxLocalMetal<=localMassTolerance && maxLocalGas<=localMassTolerance)
         {
             phaseMass_->acceptTrialFractions(T);
-            alpha1=phaseMass_->alphaMetal();
-            alpha2=scalar(1)-alpha1;
+            // Only roundoff-level closure mismatch remains. The native
+            // VOF pair must sum to exactly one. Normalize the geometry
+            // by the total volume, NEVER the independent mass fields.
+            // Reject larger corrections before this operation.
+            scalar geometryCorrection=0;
+            forAll(gasMassTrial_,i)
+            {
+                const scalar am=phaseMass_->alphaMetal()[i];
+                const scalar ag=gasMassTrial_[i]/mixture_.rho2()[i];
+                const scalar total=am+ag;
+                if (!std::isfinite(total) || total<=0
+                    || mag(total-scalar(1))>volumeTolerance
+                    || am<0 || ag<0)
+                    FatalErrorInFunction << "FS-C08 inadmissible accepted geometry "
+                        << i << exit(FatalError);
+                alpha1[i]=am/total;
+                alpha2[i]=scalar(1)-alpha1[i];
+                geometryCorrection=max(geometryCorrection,mag(alpha1[i]-am));
+            }
+            reduce(geometryCorrection,maxOp<scalar>());
+            Info<< "FS_C08_NATIVE_VOF_ROUNDOFF_CLOSURE maxCorrection="
+                << geometryCorrection << " conservedMassModified=0" << nl;
             alpha1.correctBoundaryConditions();
             alpha2.correctBoundaryConditions();
             correctInterface();
@@ -353,6 +404,10 @@ void Foam::solvers::fsC08ConservativeVoF::pressureCorrector()
     alphaPhi2=alphaRhoPhi2/fvc::interpolate(mixture_.rho2());
     phi=alphaPhi1+alphaPhi2;
     rhoPhi=alphaRhoPhi1+alphaRhoPhi2;
+    U=HbyA+rAU()*fvc::reconstruct((phi-phiHbyA+phig)/rAUf);
+    U.correctBoundaryConditions();
+    fvConstraints().constrain(U);
+    K=0.5*magSqr(U);
     vDot=fvc::ddt(alpha1)()()+fvc::div(alphaPhi1)()()
         -alpha1()*fvc::div(phi)()();
     fvc::correctUf(Uf,U,fvc::absolute(phi,U),MRF);
