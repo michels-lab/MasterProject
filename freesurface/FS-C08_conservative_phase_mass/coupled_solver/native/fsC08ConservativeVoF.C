@@ -2,6 +2,7 @@
  * GPL-3.0-or-later. Does not modify installed OpenFOAM14.
  */
 #include "fsC08ConservativeVoF.H"
+#include "FS_C08_VolumeProjection.H"
 #include "addToRunTimeSelectionTable.H"
 #include "fvcDdt.H"
 #include "fvcDiv.H"
@@ -24,6 +25,15 @@ solvers::fsC08ConservativeVoF::fsC08ConservativeVoF(fvMesh& mesh)
     phaseMass_
     (
         new fsC08::PhaseMassTransport(mesh,alpha1,mixture_.T())
+    ),
+    gasMassTrial_
+    (
+        IOobject
+        (
+            "rhoAlpha.airTrial.fsC08",mesh.time().name(),mesh,
+            IOobject::NO_READ,IOobject::NO_WRITE
+        ),
+        alpha2*mixture_.rho2()
     ),
     rhoMetalEffective_
     (
@@ -219,6 +229,13 @@ void solvers::fsC08ConservativeVoF::updatePhaseInternalEnergy()
 
 void solvers::fsC08ConservativeVoF::prePredictor()
 {
+    // Snapshot the old physical gas inventory before base MULES can
+    // change alpha. Replaying an outer corrector always starts at n.
+    const volScalarField gasMassOld
+    (
+        "fsC08GasMassAtN",
+        alpha2.oldTime()*mixture_.rho2().oldTime()
+    );
     // MULES provides a real, all-face metal VOF flux from evolving U.
     compressibleVoF::prePredictor();
 
@@ -241,6 +258,26 @@ void solvers::fsC08ConservativeVoF::prePredictor()
     alphaPhi2 = phi-alphaPhi1;
     alphaRhoPhi2 = fvc::interpolate(mixture_.rho2())*alphaPhi2;
     rhoPhi = alphaRhoPhi1+alphaRhoPhi2;
+
+    // Predict gas mass from the actual old inventory and signed FV gas
+    // mass flux, not from a provisional complement of alpha.metal.
+    const volScalarField gasSource
+    (
+        "fsC08GasTrialMassSource",
+        (fvModels().source(alpha2,mixture_.rho2())&mixture_.rho2())
+    );
+    gasMassTrial_=fsC08::trialMassFromOldTime
+    (
+        gasMassOld,alphaRhoPhi2,gasSource
+    );
+    forAll(gasMassTrial_,i)
+    {
+        if (!std::isfinite(gasMassTrial_[i]) || gasMassTrial_[i]<0)
+            FatalErrorInFunction
+                << "FS-C08 inadmissible gas trial mass cell=" << i
+                << "; no clipping" << exit(FatalError);
+    }
+    gasMassTrial_.correctBoundaryConditions();
 
     // Per-phase mass continuity errors are now from physical inventory.
     contErr1 =
