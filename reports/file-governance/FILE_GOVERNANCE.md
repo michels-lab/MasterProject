@@ -5,7 +5,7 @@ No file is auto-deleted or declared unused.
 
 ## Coverage
 
-Tracked: 42878; classified: 42873; readable documents: 232; above read cap: 1; findings: 9.
+Tracked: 42879; classified: 42874; readable documents: 233; above read cap: 1; findings: 9.
 
 ## File roles
 
@@ -16,7 +16,7 @@ Tracked: 42878; classified: 42873; readable documents: 232; above read cap: 1; f
 | bitacora | 5 |
 | config | 21 |
 | data | 37 |
-| document | 193 |
+| document | 194 |
 | index | 35 |
 | license | 1 |
 | simulation_case_file | 141 |
@@ -37,8 +37,8 @@ Tracked: 42878; classified: 42873; readable documents: 232; above read cap: 1; f
 - **CONFIRMED / BROKEN_RELATIVE_LINK** docs/granada/C3D05_T0_README_HISTORICAL_BEFORE_SINGLE_FLOW_20261120.md: Missing: outside-repo. Next: Fix link or restore target (ID 2fa56a22be90f045)
 - **CONFIRMED / BROKEN_RELATIVE_LINK** docs/granada/C3D05_T0_README_HISTORICAL_BEFORE_SINGLE_FLOW_20261120.md: Missing: outside-repo. Next: Fix link or restore target (ID 2fa56a22be90f045)
 - **CONFIRMED / BROKEN_RELATIVE_LINK** docs/granada/C3D05_T0_README_HISTORICAL_BEFORE_SINGLE_FLOW_20261120.md: Missing: outside-repo. Next: Fix link or restore target (ID 2fa56a22be90f045)
-- **REVIEW / POTENTIAL_UNLOGGED_CHANGES** PROJECT_AUDIT_LOG_EN.md: 2 implementation/config paths changed since this log's last commit; examples: tools/run_adaptive_campaign_200s.py, tools/transfer_campaign_200s.py. Next: Inspect diffs and reconcile only meaningful decisions/results in the canonical log (ID da77b645d5afc916)
-- **REVIEW / POTENTIAL_UNLOGGED_CHANGES** PROJECT_AUDIT_LOG_ES.md: 2 implementation/config paths changed since this log's last commit; examples: tools/run_adaptive_campaign_200s.py, tools/transfer_campaign_200s.py. Next: Inspect diffs and reconcile only meaningful decisions/results in the canonical log (ID c63c590816acb22a)
+- **REVIEW / POTENTIAL_UNLOGGED_CHANGES** PROJECT_AUDIT_LOG_EN.md: 4 implementation/config paths changed since this log's last commit; examples: docs/C3D04_CASE_A_STATUS.json, docs/PROJECT_STAGE_STATUS.json, tools/run_adaptive_campaign_200s.py, tools/transfer_campaign_200s.py. Next: Inspect diffs and reconcile only meaningful decisions/results in the canonical log (ID 57cb2219a47e2852)
+- **REVIEW / POTENTIAL_UNLOGGED_CHANGES** PROJECT_AUDIT_LOG_ES.md: 4 implementation/config paths changed since this log's last commit; examples: docs/C3D04_CASE_A_STATUS.json, docs/PROJECT_STAGE_STATUS.json, tools/run_adaptive_campaign_200s.py, tools/transfer_campaign_200s.py. Next: Inspect diffs and reconcile only meaningful decisions/results in the canonical log (ID c103cfa3cf5bb31b)
 
 Complete path → purpose/role/certainty list lives in FILE_GOVERNANCE.json. SUMMARY.json has counts only for master polling.
 A dated file, duplicate, or suspicious name is an **investigation candidate**, not unwanted material.
