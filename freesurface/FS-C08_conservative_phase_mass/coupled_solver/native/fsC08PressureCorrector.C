@@ -238,12 +238,48 @@ void Foam::solvers::fsC08ConservativeVoF::pressureCorrector()
             if (incrementTypes[patchi]=="fixedValue")
                 liquidMobility.boundaryFieldRef()[patchi]=scalar(0);
 
-        volScalarField projectedL("fsC08ProjectedL",phaseMass_->liquidMass());
+        // The pressure unknown changes transported liquid mass BEFORE
+        // equilibrium phase conversion, not the post-conversion mobile
+        // liquid. At fixed T, total metal M has volume M*((1-fs)/rhoL
+        // +fs/rhoS). The old stationary solid remains an invariant in
+        // this transport split; after projection the exact equilibrium
+        // partition is replayed from n. A reduction of incoming liquid
+        // is allowed even if that incoming liquid has since frozen.
+        if (phaseMass_->phaseChangeClosure()!="equilibrium")
+            FatalErrorInFunction
+                << "FS-C08 equilibrium volume Jacobian requires equilibrium "
+                << "phase closure; kinetic derivative not implemented"
+                << exit(FatalError);
+        volScalarField rhoEq("fsC08EquilibriumPressureDensity",rL);
+        forAll(T,i)
+            rhoEq[i]=phaseMass_->equilibriumDensity(T[i]);
+        rhoEq.correctBoundaryConditions();
+        const volScalarField& oldSolid=phaseMass_->solidMass().oldTime();
+        volScalarField projectedL
+        (
+            "fsC08ProjectedTransportedLiquid",
+            phaseMass_->liquidMass().oldTime()-dt*fvc::div(fl)
+        );
         volScalarField projectedG("fsC08ProjectedG",gasMassTrial_);
         volScalarField projectedRhoG("fsC08ProjectedRhoG",rG);
         volScalarField projectedP("fsC08ProjectedP",p);
+        scalar maxEquilibriumMismatch=0;
+        forAll(T,i)
+        {
+            const scalar v=(projectedL[i]+oldSolid[i])/rhoEq[i]
+                +projectedG[i]/rG[i]-1;
+            maxEquilibriumMismatch=max(maxEquilibriumMismatch,
+                mag(v-initialResidual()[i]));
+        }
+        Info<< "FS_C08_EQUILIBRIUM_PRESSURE_INVENTORY"
+            << " corrector=" << iter
+            << " maxPrePostConversionVolumeMismatch=" << maxEquilibriumMismatch
+            << " minTransportedLiquid=" << min(projectedL).value() << nl;
+        if (maxEquilibriumMismatch>volumeTolerance)
+            FatalErrorInFunction << "FS-C08 equilibrium pressure inventory mismatch"
+                << exit(FatalError);
         if (!fsC08::projectTrialInventories
-            (projectedL,mS,projectedG,rL,rS,projectedRhoG,
+            (projectedL,oldSolid,projectedG,rhoEq,rhoEq,projectedRhoG,
              mixture_.thermo2().psi(),projectedP,liquidMobility,
              gasMobility,fl,fg,dp))
             FatalErrorInFunction << "FS-C08 pressure projection rejected "
@@ -260,6 +296,21 @@ void Foam::solvers::fsC08ConservativeVoF::pressureCorrector()
         gasMassTrial_=fsC08::trialMassFromOldTime(gasMassOld,fg,gasSource);
         gasMassTrial_.correctBoundaryConditions();
         phaseMass_->refreshTrialProperties(T,alpha1);
+        const tmp<volScalarField> replayedVolume=fsC08::trialVolumeResidual
+        (
+            phaseMass_->liquidMass(),phaseMass_->solidMass(),gasMassTrial_,
+            phaseMass_->liquidDensity(),phaseMass_->solidDensity(),mixture_.rho2()
+        );
+        scalar fixedTReplayDefect=0;
+        forAll(T,i)
+            fixedTReplayDefect=max(fixedTReplayDefect,mag(replayedVolume()[i]));
+        Info<< "FS_C08_FIXED_T_EQUILIBRIUM_REPLAY"
+            << " corrector=" << iter
+            << " maxResidual=" << fixedTReplayDefect << nl;
+        if (fixedTReplayDefect>2*volumeTolerance)
+            FatalErrorInFunction
+                << "FS-C08 projected inventory and equilibrium replay disagree"
+                << exit(FatalError);
 
         alphaRhoPhi1=phaseMass_->liquidMassFlux();
         alphaRhoPhi2=fg;
