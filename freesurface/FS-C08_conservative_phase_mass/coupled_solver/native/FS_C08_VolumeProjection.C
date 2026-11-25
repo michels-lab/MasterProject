@@ -320,7 +320,62 @@ bool projectTrialInventories
         const volScalarField drg("fsC08ProjectionDRhoG",psiG*dp);
         bool advanced=false;
         label inadmissibleBacktracks=0, nonDescentBacktracks=0;
+        // A finite but tiny donor inventory can make repeated halvings
+        // insufficient. Compute the admissible global step directly
+        // from the actual conservative mass/pressure increments.
+        // Never modify the conserved fields or individual face fluxes.
         scalar step=1;
+        label limitingCell=-1;
+        word limitingField("none");
+        const auto boundStep=[&](scalar value, scalar increment,
+                                 label celli, const word& name)
+        {
+            if (increment<0)
+            {
+                const scalar bound=value/(-increment);
+                if (bound<step)
+                {
+                    step=max(scalar(0),scalar(0.99)*bound);
+                    limitingCell=celli;
+                    limitingField=name;
+                }
+            }
+        };
+        forAll(l,i)
+        {
+            boundStep(l[i],dl[i],i,"liquidMass");
+            boundStep(g[i],dg[i],i,"gasMass");
+            boundStep(rg[i],drg[i],i,"gasDensity");
+            boundStep(p[i],dp[i],i,"pressure");
+        }
+        if (step<1)
+        {
+            Info<< "FS_C08_VOLUME_STEP_BOUND"
+                << " iteration=" << iter
+                << " cell=" << limitingCell
+                << " field=" << limitingField
+                << " boundStep=" << step;
+            if (limitingCell>=0)
+            {
+                const label i=limitingCell;
+                Info<< " liquidMass=" << l[i]
+                    << " liquidIncrement=" << dl[i]
+                    << " gasMass=" << g[i]
+                    << " gasIncrement=" << dg[i]
+                    << " gasDensity=" << rg[i]
+                    << " gasDensityIncrement=" << drg[i]
+                    << " pressure=" << p[i]
+                    << " pressureIncrement=" << dp[i];
+            }
+            Info<< nl;
+        }
+        if (step<=0)
+        {
+            Info<< "FS_C08_VOLUME_PROJECTION_REJECTED"
+                << " reason=zero_admissible_step"
+                << " maxResidual=" << norm << nl;
+            return false;
+        }
         for (label back=0;back<maxBacktracks;++back,step*=0.5)
         {
             const volScalarField lc("fsC08ProjectionCandidateL",l+step*dl);
