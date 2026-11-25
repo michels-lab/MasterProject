@@ -294,7 +294,20 @@ def install_inputs(url):
         need(DENSE.is_dir() and COMPACT.is_dir(),"only one campaign root exists; preserve")
         for name in ORDER:
             a=untouched(DENSE/name);b=read(COMPACT/name/REPORT)
-            need(b["source_input_sha256"]==a["input_sha256"] and input_hashes(COMPACT/name)==b["input_sha256"],"existing compact inputs differ")
+            need(b["source_input_sha256"]==a["input_sha256"],"existing compact provenance differs "+name)
+            if b["status"]=="PREPARED_COMPACT_NOT_RUN":
+                need(input_hashes(COMPACT/name)==b["input_sha256"],"unrun compact inputs differ "+name)
+            else:
+                # A previous run may generate derived fields at t=0. Do not
+                # compare its entire runtime directory to the pre-run tree.
+                # No attempted case is restarted here; completed ones may be
+                # published from their existing evidence only.
+                need(b["case"]==name and isinstance(b["input_sha256"],dict) and b["input_sha256"],
+                     "attempted case missing preparation provenance "+name)
+                for rel,h in b["input_sha256"].items():
+                    if rel.startswith(("constant/","system/")):
+                        q=COMPACT/name/rel
+                        need(q.is_file() and sha(q)==h,"attempted case physical input changed "+name+" "+rel)
         need((HOME/"compact_campaign_200s.py").is_file(),"solver script missing")
         need(all(sha(HOME/"compact_campaign_200s.py")==read(COMPACT/n/REPORT)["implementation_sha256"] for n in ORDER),"existing solver differs from prepared inputs")
         return
