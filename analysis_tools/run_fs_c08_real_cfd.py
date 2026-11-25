@@ -29,6 +29,7 @@ REQUIRED_FINAL_FIELDS = (
     "rhoAlpha.liquid", "rhoAlpha.solid", "alpha.metal",
     "alpha.metal.solid", "internalEnergy.fsC08",
     "Gamma.fsC08", "SvolMaterial.fsC08",
+    "rhoAlpha.airTrial.fsC08", "alpha.air", "rhoLiquid.fsC08", "rhoSolid.fsC08",
 )
 
 
@@ -188,6 +189,52 @@ def inspect_real_cfd_budgets(log: str, final_saved_time_s: float) -> dict:
     }
 
 
+def inspect_coupled_volume_closure(log: str, final_saved_time_s: float) -> dict:
+    """Require real three-phase local closure for every accepted pressure step."""
+    last_iter = {}
+    accepted = []
+    fields = {"maxVolumeResidual": 1e-12, "maxDeltaT_K": 1e-6,
+              "maxPhaseReplayRelative": 1e-10, "maxMetalOverfill": 1e-12,
+              "maxLocalMetalContinuity": 1e-10, "maxLocalGasContinuity": 1e-10}
+    for line in log.splitlines():
+        iteration = "FS_C08_COUPLED_VOLUME_ENERGY_ITER" in line
+        pressure = "FS_C08_NATIVE_PRESSURE_WITH_MASS_DENSITY" in line
+        if not iteration and not pressure:
+            continue
+        entries = dict(re.findall(r"([A-Za-z][A-Za-z0-9_]*)=([^\s]+)", line))
+        try:
+            t = float(entries["time_s"])
+            if not math.isfinite(t) or t <= 0:
+                raise ValueError("invalid coupled time")
+            if iteration:
+                values = {key: float(entries[key]) for key in fields}
+                if not all(math.isfinite(v) and v >= 0 for v in values.values()):
+                    raise ValueError("nonfinite or negative coupled residual")
+                last_iter[t] = values
+            else:
+                if entries.get("pressureVolumeEnergyIterationConverged") != "1":
+                    raise ValueError("old or unconverged pressure path")
+                mismatch = float(entries["gasEOSMismatch"])
+                if not math.isfinite(mismatch) or not 0 <= mismatch <= 2e-12:
+                    raise ValueError("independent gas EOS mismatch")
+                if t not in last_iter or any(last_iter[t][k] > v for k,v in fields.items()):
+                    raise ValueError("accepted pressure step without converged local closure")
+                accepted.append((t, last_iter[t], mismatch))
+        except (KeyError, ValueError) as exc:
+            raise ValueError("invalid coupled volume evidence: " + str(exc)) from exc
+    if not accepted or abs(accepted[-1][0]-final_saved_time_s) > max(1e-9,1e-6*abs(final_saved_time_s)):
+        raise ValueError("no final accepted three-phase pressure-volume closure")
+    return {
+        "accepted_pressure_closure_records": len(accepted),
+        "final_time_s": accepted[-1][0],
+        "final_local_closure": accepted[-1][1],
+        "max_accepted_volume_residual": max(v["maxVolumeResidual"] for _,v,_ in accepted),
+        "max_accepted_gas_eos_mismatch": max(x[2] for x in accepted),
+        "global_energy_verified": False,
+        "physical_shrinkage_validated": False,
+    }
+
+
 def require_native_end_time(control_dict: Path) -> float:
     """Read the staged OpenFOAM controlDict's finite requested endTime."""
     data = control_dict.read_text(encoding="utf-8")
@@ -312,6 +359,9 @@ def execute(source: Path, material: Path, output: Path,
             return report
         try:
             report["native_numeric_budget_gate"] = inspect_real_cfd_budgets(
+                log, finaltime
+            )
+            report["native_coupled_volume_gate"] = inspect_coupled_volume_closure(
                 log, finaltime
             )
         except ValueError as exc:
