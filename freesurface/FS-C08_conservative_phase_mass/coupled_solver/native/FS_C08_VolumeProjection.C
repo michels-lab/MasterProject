@@ -109,6 +109,95 @@ void solveVolumePressureIncrement
     deltaGasMassFlux=gasEqn.flux();
 }
 
+void limitPredictorMassFlux
+(
+    surfaceScalarField& massFlux,
+    const volScalarField& availableMass,
+    const char* stage
+)
+{
+    const fvMesh& mesh=massFlux.mesh();
+    const scalar dt=mesh.time().deltaTValue();
+    if (Pstream::parRun() || !std::isfinite(dt) || dt<=0)
+        FatalErrorInFunction << "FS-C08 predictor limiter requires serial positive dt"
+            << exit(FatalError);
+    const auto& own=mesh.owner();
+    const auto& nei=mesh.neighbour();
+    scalarField outgoing(availableMass.size(),0);
+    forAll(nei,facei)
+    {
+        const scalar q=massFlux[facei];
+        if (!std::isfinite(q))
+            FatalErrorInFunction << "Nonfinite FS-C08 predictor flux" << exit(FatalError);
+        outgoing[q>=0 ? own[facei] : nei[facei]]+=dt*mag(q);
+    }
+    forAll(mesh.boundary(),patchi)
+    {
+        if (mesh.boundary()[patchi].coupled())
+            FatalErrorInFunction << "FS-C08 predictor limiter cannot use coupled patch"
+                << exit(FatalError);
+        const auto& cells=mesh.boundary()[patchi].faceCells();
+        forAll(cells,facei)
+        {
+            const scalar q=massFlux.boundaryField()[patchi][facei];
+            if (!std::isfinite(q))
+                FatalErrorInFunction << "Nonfinite FS-C08 boundary predictor flux"
+                    << exit(FatalError);
+            outgoing[cells[facei]]+=dt*max(scalar(0),q);
+        }
+    }
+    scalarField scale(availableMass.size(),1);
+    label limited=0, firstLimited=-1;
+    scalar minScale=1, maxRequestedRatio=0;
+    forAll(scale,i)
+    {
+        if (!std::isfinite(availableMass[i]) || availableMass[i]<0)
+            FatalErrorInFunction << "FS-C08 invalid predictor inventory cell=" << i
+                << " mass=" << availableMass[i] << " stage=" << stage << exit(FatalError);
+        const scalar inventory=availableMass[i]*mesh.V()[i];
+        const scalar cap=scalar(0.95)*inventory;
+        if (outgoing[i]>cap)
+        {
+            scale[i]=cap/outgoing[i];
+            minScale=min(minScale,scale[i]);
+            if (firstLimited<0) firstLimited=i;
+            if (inventory>0)
+                maxRequestedRatio=max(maxRequestedRatio,outgoing[i]/inventory);
+            ++limited;
+        }
+    }
+    scalar removedOutgoingKg=0;
+    forAll(nei,facei)
+    {
+        const scalar q=massFlux[facei];
+        const scalar factor=scale[q>=0 ? own[facei] : nei[facei]];
+        removedOutgoingKg+=dt*mag(q)*(1-factor);
+        massFlux.primitiveFieldRef()[facei]=q*factor;
+    }
+    forAll(mesh.boundary(),patchi)
+    {
+        const auto& cells=mesh.boundary()[patchi].faceCells();
+        forAll(cells,facei)
+        {
+            const scalar q=massFlux.boundaryField()[patchi][facei];
+            if (q>0)
+            {
+                const scalar factor=scale[cells[facei]];
+                removedOutgoingKg+=dt*q*(1-factor);
+                massFlux.boundaryFieldRef()[patchi][facei]=q*factor;
+            }
+        }
+    }
+    Info<< "FS_C08_PREDICTOR_DONOR_CAPACITY time_s=" << mesh.time().value()
+        << " stage=" << stage << " limitedCells=" << limited
+        << " firstLimitedCell=" << firstLimited
+        << " minScale=" << minScale
+        << " maxRequestedRatioNonzeroInventory=" << maxRequestedRatio
+        << " withheldOutgoingTransfer_kg=" << removedOutgoingKg
+        << " inventoryClipped=0" << nl;
+}
+
+
 tmp<volScalarField> correctedTrialMass
 (
     const volScalarField& candidateMass,
