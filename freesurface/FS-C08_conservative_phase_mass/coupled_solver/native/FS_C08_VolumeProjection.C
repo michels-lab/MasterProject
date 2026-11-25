@@ -70,9 +70,17 @@ void solveVolumePressureIncrement
     // Row scaling by rho_i is important with unequal phase densities.
     // It can make the combined matrix asymmetric even if each diffusion
     // matrix is symmetric. Use an asymmetric-capable solver.
+    if (dp.name()!="pVolumeCorrection.fsC08")
+        FatalErrorInFunction << "Use dedicated FS-C08 pressure increment field"
+            << exit(FatalError);
+    // Foundation fvMatrix cannot row-scale a matrix containing a
+    // nonorthogonal faceFluxCorrection. Use a named orthogonal
+    // projection operator here; the full momentum/pressure iteration
+    // must handle nonorthogonality and re-evaluate the exact residual.
+    const word scheme("laplacian(fsC08VolumeMobility,pVolumeCorrection.fsC08)");
     mesh.schemes().setFluxRequired(dp.name());
-    fvScalarMatrix liquidEqn(-fvm::laplacian(liquidMobility,dp));
-    fvScalarMatrix gasEqn(-fvm::laplacian(gasMobility,dp));
+    fvScalarMatrix liquidEqn(-fvm::laplacian(liquidMobility,dp,scheme));
+    fvScalarMatrix gasEqn(-fvm::laplacian(gasMobility,dp,scheme));
     const volScalarField gasCompressibility
     (
         "fsC08VolumeGasCompressibility",
