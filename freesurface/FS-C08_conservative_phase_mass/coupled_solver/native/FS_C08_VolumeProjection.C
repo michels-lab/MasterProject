@@ -246,15 +246,20 @@ bool projectTrialInventories
 
         dp=dimensionedScalar(dp.dimensions(),0);
         dp.correctBoundaryConditions();
-        // Active-set pressure mobilities. A face with an absent donor
-        // cannot export that phase. Reassemble the pressure Jacobian
-        // instead of clipping the resulting mass or face flux afterwards.
-        // First integrated candidate is serial; coupled patch donor
-        // communication requires a separate implementation.
+        // Capacity-constrained active set. An arbitrarily small positive
+        // phase inventory is not an unlimited donor. Bound aggregate
+        // outgoing correction mass over the entire dt, not each face
+        // separately. Reduce the mobility BEFORE reassembling the FV
+        // Jacobian; the exact matrix face flux remains conservative.
+        // The bound deliberately ignores simultaneous incoming mass,
+        // making it sufficient but possibly restrictive. No trace mass
+        // is deleted and no phase-presence threshold is introduced.
         surfaceScalarField mlFace("fsC08ActiveLiquidMobility",liquidMobility);
         surfaceScalarField mgFace("fsC08ActiveGasMobility",gasMobility);
         bool activeSetStable=false;
-        for (label sweep=0;sweep<12;++sweep)
+        const auto& own=mesh.owner();
+        const auto& nei=mesh.neighbour();
+        for (label sweep=0;sweep<64;++sweep)
         {
             dp=dimensionedScalar(dp.dimensions(),0);
             dp.correctBoundaryConditions();
@@ -263,55 +268,85 @@ bool projectTrialInventories
                 residual(),g,rhoL,rg,psiG,mlFace,mgFace,
                 dp,dfl,dfg,referenceCell
             );
-            bool changed=false;
-            const auto& own=mesh.owner();
-            const auto& nei=mesh.neighbour();
+
+            scalarField outL(l.size(),0), outG(g.size(),0);
             forAll(nei,facei)
             {
                 const label donorL=dfl[facei]>=0 ? own[facei] : nei[facei];
                 const label donorG=dfg[facei]>=0 ? own[facei] : nei[facei];
-                if (dfl[facei]!=0 && l[donorL]<=0 && mlFace[facei]>0)
-                {
-                    mlFace.primitiveFieldRef()[facei]=0;
-                    changed=true;
-                }
-                if (dfg[facei]!=0 && g[donorG]<=0 && mgFace[facei]>0)
-                {
-                    mgFace.primitiveFieldRef()[facei]=0;
-                    changed=true;
-                }
+                outL[donorL]+=dt.value()*mag(dfl[facei]);
+                outG[donorG]+=dt.value()*mag(dfg[facei]);
             }
             forAll(mesh.boundary(),patchi)
             {
                 const auto& cells=mesh.boundary()[patchi].faceCells();
                 forAll(cells,facei)
                 {
-                    if (dfl.boundaryField()[patchi][facei]>0
-                        && l[cells[facei]]<=0
-                        && mlFace.boundaryField()[patchi][facei]>0)
-                    {
-                        mlFace.boundaryFieldRef()[patchi][facei]=0;
-                        changed=true;
-                    }
-                    if (dfg.boundaryField()[patchi][facei]>0
-                        && g[cells[facei]]<=0
-                        && mgFace.boundaryField()[patchi][facei]>0)
-                    {
-                        mgFace.boundaryFieldRef()[patchi][facei]=0;
-                        changed=true;
-                    }
+                    outL[cells[facei]]+=dt.value()
+                        *max(scalar(0),dfl.boundaryField()[patchi][facei]);
+                    outG[cells[facei]]+=dt.value()
+                        *max(scalar(0),dfg.boundaryField()[patchi][facei]);
                 }
             }
-            if (!returnReduce(label(changed),sumOp<label>()))
+
+            scalarField scaleL(l.size(),1), scaleG(g.size(),1);
+            label limitedL=0,limitedG=0;
+            scalar minScaleL=1,minScaleG=1;
+            forAll(l,i)
+            {
+                const scalar capL=scalar(0.95)*l[i]*mesh.V()[i];
+                const scalar capG=scalar(0.95)*g[i]*mesh.V()[i];
+                if (outL[i]>capL)
+                {
+                    scaleL[i]=scalar(0.8)*capL/outL[i];
+                    minScaleL=min(minScaleL,scaleL[i]);
+                    ++limitedL;
+                }
+                if (outG[i]>capG)
+                {
+                    scaleG[i]=scalar(0.8)*capG/outG[i];
+                    minScaleG=min(minScaleG,scaleG[i]);
+                    ++limitedG;
+                }
+            }
+            if (!limitedL && !limitedG)
             {
                 activeSetStable=true;
                 break;
             }
+            forAll(nei,facei)
+            {
+                const label donorL=dfl[facei]>=0 ? own[facei] : nei[facei];
+                const label donorG=dfg[facei]>=0 ? own[facei] : nei[facei];
+                if (dfl[facei]!=0)
+                    mlFace.primitiveFieldRef()[facei]*=scaleL[donorL];
+                if (dfg[facei]!=0)
+                    mgFace.primitiveFieldRef()[facei]*=scaleG[donorG];
+            }
+            forAll(mesh.boundary(),patchi)
+            {
+                const auto& cells=mesh.boundary()[patchi].faceCells();
+                forAll(cells,facei)
+                {
+                    if (dfl.boundaryField()[patchi][facei]>0)
+                        mlFace.boundaryFieldRef()[patchi][facei]*=
+                            scaleL[cells[facei]];
+                    if (dfg.boundaryField()[patchi][facei]>0)
+                        mgFace.boundaryFieldRef()[patchi][facei]*=
+                            scaleG[cells[facei]];
+                }
+            }
+            Info<< "FS_C08_VOLUME_DONOR_CAPACITY"
+                << " iteration=" << iter << " sweep=" << sweep
+                << " limitedLiquidCells=" << limitedL
+                << " limitedGasCells=" << limitedG
+                << " minLiquidMobilityScale=" << minScaleL
+                << " minGasMobilityScale=" << minScaleG << nl;
         }
         if (!activeSetStable)
         {
             Info<< "FS_C08_VOLUME_PROJECTION_REJECTED"
-                << " reason=donor_active_set_limit" << nl;
+                << " reason=donor_capacity_active_set_limit" << nl;
             return false;
         }
 
