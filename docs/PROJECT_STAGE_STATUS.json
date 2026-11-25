@@ -867,5 +867,35 @@
         "C14-2D-200s"
       ]
     }
+  },
+  "integrated_sync_20261125": {
+    "document": "docs/granada/MAESTRIA_ESTADO_INTEGRADO_20261125_ES.md",
+    "evidence_scope": "investigator reported console observations recovered from project conversations; no direct remote log or archived field verification in this sync",
+    "operational_milestones_unchanged": true,
+    "physical_validation": false,
+    "fixed_compact_lab": {
+      "status": "PREPARED_NO_COMPLETED_200S_CONFIRMED",
+      "solver_completed_verified": false
+    },
+    "adaptive_pc": {
+      "status": "SERIAL_INTERRUPTED_AND_MPI_PILOT_REPORTED",
+      "serial_last_time_s": 2.4079,
+      "pilot_mpi": {
+        "ranks": 8,
+        "final_time_s": 3,
+        "steps": 2042,
+        "wall_time_s": 872.54,
+        "Co_max": 0.248564,
+        "maxCo": 0.25,
+        "maxDeltaT_s": 0.025,
+        "completed_reported": true
+      },
+      "full_200s_verified": false
+    },
+    "lab_mpi_launch": {
+      "status": "BLOCKED_BEFORE_NEW_CFD_REPORTED",
+      "error": "RuntimeError: load Foundation14"
+    },
+    "fs_c08_separate": true
   }
 }
