@@ -7,6 +7,8 @@ Result branches carry per-case compressed, SHA256-verified scientific archives.
 from __future__ import annotations
 import argparse
 import hashlib
+import gzip
+from contextlib import contextmanager
 import json
 import os
 from pathlib import Path
@@ -69,11 +71,18 @@ def add(t,p,arc):
     need(p.exists() and not p.is_symlink(),"missing/linked "+str(p))
     def filt(info):
         need(info.isfile() or info.isdir(),"nonregular archive entry "+info.name)
+        info.uid=info.gid=0;info.uname=info.gname="";info.mtime=0
         return info
     t.add(p,arcname=arc,recursive=True,filter=filt)
+@contextmanager
+def deterministic_tar(path):
+    with path.open("xb") as raw:
+        with gzip.GzipFile(filename="",fileobj=raw,mode="wb",compresslevel=3,mtime=0) as zipped:
+            with tarfile.open(fileobj=zipped,mode="w") as t:
+                yield t
 def archive_inputs(path,repo):
     solver=subprocess.check_output(["git","-C",str(repo),"show",PIN+":tools/compact_campaign_200s.py"])
-    with tarfile.open(path,"w:gz",compresslevel=3) as t:
+    with deterministic_tar(path) as t:
         for root in (DENSE,COMPACT):
             for name in ORDER:
                 p=root/name;r=untouched(p)
@@ -95,7 +104,7 @@ def archive_results(path,case):
     need((case/"postProcessing").is_dir() and (case/"log.foamMultiRun").is_file(),"missing analysis evidence")
     # Preserve original folder structure for FoamLens. Mesh and initial inputs
     # are in the transfer branch, NOT duplicated here. No 1..200 field dirs.
-    with tarfile.open(path,"w:gz",compresslevel=3) as t:
+    with deterministic_tar(path) as t:
         for d in ("postProcessing","logs",REPORT,"log.foamMultiRun","log.foamLog"):
             p=case/d
             if p.exists():add(t,p,case.name+"/"+d)
@@ -111,23 +120,30 @@ def init_repo(p,url):
 def publish(url,branch,archive,metadata,work):
     # New independent result branch: no checkout or mutations of MasterProject.
     # Small pushes, even when the final archive is several GB.
-    need(not remote_head(url,branch),"branch already exists; no overwrite: "+branch)
+    exists=bool(remote_head(url,branch))
     work.mkdir()
     init_repo(work,url)
-    parts=[]
+    if exists:
+        git("fetch","--depth=1","origin","refs/heads/"+branch,cwd=work)
+        git("checkout","--detach","FETCH_HEAD",cwd=work)
+        need(not (work/"MANIFEST.json").exists(),"complete branch already exists; no overwrite")
+    parts=[];pending=[]
     with archive.open("rb") as f:
         i=0
         while data:=f.read(CHUNK):
             name=f"archive.tar.gz.part{i:06d}"
-            (work/name).write_bytes(data)
+            chunk=work/name
+            if chunk.exists():need(sha(chunk)==hashlib.sha256(data).hexdigest(),"existing partial chunk differs: "+name)
+            else:chunk.write_bytes(data);pending.append(name)
             parts.append({"name":name,"bytes":len(data),"sha256":hashlib.sha256(data).hexdigest()})
             i+=1
     need(parts,"empty archive")
     manifest={**metadata,"archive_bytes":archive.stat().st_size,"archive_sha256":sha(archive),"parts":parts,
               "archive_format":"tar.gz split into ordered binary chunks","complete":True}
     # Manifest is committed LAST; readers never accept an incomplete upload.
-    for i in range(0,len(parts),BATCH):
-        group=[p["name"] for p in parts[i:i+BATCH]]
+    need(set(q.name for q in work.glob("archive.tar.gz.part*"))==set(p["name"] for p in parts),"unexpected old partial chunks")
+    for i in range(0,len(pending),BATCH):
+        group=pending[i:i+BATCH]
         git("add","--",*group,cwd=work)
         git("commit","-qm",f"Archive chunks {i+1}-{i+len(group)} / {len(parts)}",cwd=work)
         git("push","origin","HEAD:refs/heads/"+branch,cwd=work)
@@ -164,9 +180,19 @@ def extract(archive,dst):
             else:
                 target.parent.mkdir(parents=True,exist_ok=True)
                 with t.extractfile(member) as f,target.open("xb") as out:shutil.copyfileobj(f,out)
+def complete_manifest(url,branch):
+    if not remote_head(url,branch):return None
+    with tempfile.TemporaryDirectory(prefix="manifest-",dir=HOME) as d:
+        p=Path(d);init_repo(p,url)
+        git("fetch","--depth=1","--filter=blob:none","origin","refs/heads/"+branch,cwd=p)
+        proc=subprocess.run(["git","show","FETCH_HEAD:MANIFEST.json"],cwd=p,text=True,stdout=subprocess.PIPE,stderr=subprocess.DEVNULL)
+        if proc.returncode:return None
+        m=json.loads(proc.stdout);need(m.get("complete") is True,"invalid published manifest")
+        return m
 def push_inputs(repo,url):
     HOME.mkdir(exist_ok=True)
-    need(not remote_head(url,INPUT_BRANCH),"input branch already exists; use existing transfer")
+    if complete_manifest(url,INPUT_BRANCH) is not None:
+        print("INPUTS ALREADY PUBLISHED",INPUT_BRANCH);return
     with tempfile.TemporaryDirectory(prefix="campaign-input-",dir=HOME) as d:
         p=Path(d);archive=p/"input.tar.gz"
         archive_inputs(archive,repo)
@@ -180,6 +206,7 @@ def install_inputs(url):
             a=untouched(DENSE/name);b=read(COMPACT/name/REPORT)
             need(b["source_input_sha256"]==a["input_sha256"] and input_hashes(COMPACT/name)==b["input_sha256"],"existing compact inputs differ")
         need((HOME/"compact_campaign_200s.py").is_file(),"solver script missing")
+        need(all(sha(HOME/"compact_campaign_200s.py")==read(COMPACT/n/REPORT)["implementation_sha256"] for n in ORDER),"existing solver differs from prepared inputs")
         return
     with tempfile.TemporaryDirectory(prefix="campaign-receive-",dir=HOME) as d:
         p=Path(d);archive=p/"input.tar.gz"
@@ -207,13 +234,9 @@ def run_all(url):
                 rc=subprocess.run([sys.executable,"-B",str(HOME/"compact_campaign_200s.py"),"--run",name]).returncode
                 r=read(case/REPORT)
                 need(r.get("solver_completed"),f"CFD not completed (exit {rc}); preserve logs")
-            if remote_head(url,branch):
-                # Verify remote manifest exists and matches this local log.
-                with tempfile.TemporaryDirectory(prefix="verify-published-",dir=HOME) as d:
-                    p=Path(d);init_repo(p,url)
-                    git("fetch","--depth=1","origin","refs/heads/"+branch,cwd=p)
-                    manifest=json.loads(git("show","FETCH_HEAD:MANIFEST.json",cwd=p,capture=True))
-                    need(manifest["complete"] and manifest["solver_log_sha256"]==sha(case/"log.foamMultiRun"),"existing publication differs")
+            manifest=complete_manifest(url,branch)
+            if manifest is not None:
+                need(manifest["solver_log_sha256"]==sha(case/"log.foamMultiRun"),"existing publication differs")
                 summary[name]={"status":r["status"],"publication":branch,"already_published":True}
             else:
                 with tempfile.TemporaryDirectory(prefix="campaign-result-",dir=HOME) as d:
@@ -236,8 +259,8 @@ def get_results(url):
     dest.mkdir(exist_ok=True)
     for name in ORDER:
         branch=RESULT_PREFIX+name
-        if not remote_head(url,branch):
-            print("NOT PUBLISHED",name,flush=True);continue
+        if complete_manifest(url,branch) is None:
+            print("NOT PUBLISHED OR INCOMPLETE",name,flush=True);continue
         target=dest/name
         if target.exists():
             print("EXISTING PRESERVED",target,flush=True);continue
