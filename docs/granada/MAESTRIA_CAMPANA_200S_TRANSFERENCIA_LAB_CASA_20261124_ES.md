@@ -1,0 +1,11 @@
+# Campaña compacta 200 s — transferencia laptop / laboratorio / casa
+24-11-2026. Investigador decidió ejecutar CFD en computadora de laboratorio y publicar resultados para análisis en casa.
+
+Ejecutor `tools/transfer_campaign_200s.py`, commit 787b640969b490f0d4dc88c3bfb971ab81b98961; usa la versión compacta fijada 50d3bbd7750756d7d854eaa2a6f8d69157a3341f.
+
+- `push-inputs`: publica 0/constant/system, informes y mallas de los seis casos densos no ejecutados y seis compactos no ejecutados, verifica hashes, excluye resultados anteriores; rama transfer/campaign-200s-compact-inputs-v1.
+- `run-lab`: importa entradas en HOME/OpenFOAM si no existen, conserva originales, ejecuta secuencialmente C14-3DA, C14-2D, B14-2D, B14-3DA, C14-3DB, B14-3DB. Si un caso queda incompleto se preserva, no se reejecuta automáticamente, se intenta continuar con los otros. Publica cada corrida completa a results/campaign-200s-compact-v1/<nombre>. Mantiene cobertura parcial explícita si aplica. No toca main. No MPI implementado.
+- `get-results`: recupera resultados con SHA256, reconstruye carpetas de caso para análisis usando entradas compactas locales, no sobrescribe. Destino CAMPAIGN_200S_HOME_RESULTS_01.
+- Archivos tar.gz deterministas, trozos de 32 MiB, pushes incrementales de hasta diez trozos y manifiesto final; reintento verifica trozos ya subidos. Incluye preview directo de sondas a 0.1 s y reducciones nativas, archivo completo de postProcessing, logs y reporte. NO sube campos volumétricos 1..200 ni garantiza importación FoamLens/visualización 3D sin esos campos. GitHub privado exige autenticación y capacidad de almacenamiento; límites/cuotas pueden bloquear publicación; datos locales se preservan.
+- Comandos: descargar el script exacto mediante git show del commit arriba; python3 -B transfer_campaign_200s.py push-inputs (laptop), run-lab (laboratorio con Foundation14), get-results (casa).
+- Estado: código publicado, transferencia y CFD todavía no ejecutados ni comprobados. 6/6 compactos preparados en laptop; 0/6 corridas confirmadas. Caso A 9/10, 8/10=80%; Caso B 3/7, 2/7=29%. No confundir preparación con validación física. Espacio físico del host del laboratorio aún no verificado.
