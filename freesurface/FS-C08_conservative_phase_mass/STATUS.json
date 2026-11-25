@@ -279,7 +279,7 @@
   "coupled_solver_thermal_latent_one_count_implemented": "u_s(T)=integral CvSolidT from Tref; u_l(T)=L+integral CvLiquidT from same Tref; NO separate Gamma L source",
   "coupled_solver_feeding_implemented": false,
   "coupled_solver_real_cast_iron_properties_integrated": false,
-  "coupled_solver_real_CFD_executed": false,
+  "coupled_solver_real_CFD_executed": true,
   "coupled_solver_experimental_validation": false,
   "coupled_solver_native_code_path": "freesurface/FS-C08_conservative_phase_mass/coupled_solver/native",
   "coupled_solver_native_module_name": "fsC08ConservativeVoF",
@@ -414,7 +414,7 @@
   "coupled_solver_material_regex_bug_fixed": true,
   "coupled_solver_gamma_shadow_regression_required": false,
   "coupled_solver_gas_mass_budget_gate_implemented": true,
-  "coupled_solver_gas_mass_budget_gate_WSL_verified": false,
+  "coupled_solver_gas_mass_budget_gate_WSL_verified": true,
   "coupled_solver_gas_mass_relative_tolerance": 0.000001,
   "coupled_solver_metal_mass_budget_gate_implemented": true,
   "coupled_solver_mechanical_work_field": "mechanicalWorkDensity.fsC08 [W/m3], exact mechanical/pressure/kinetic term assembled in phase thermal equation",
@@ -1370,6 +1370,8 @@
     "physical_shrinkage_validated": false,
     "global_energy_verified": false,
     "clipboard": "tee + clip.exe including failed run exit code",
-    "scope": "Documentation only; FS research branch remains independent of main; no new CFD and no changes to inputs."
+    "scope": "Documentation only; FS research branch remains independent of main; no new CFD and no changes to inputs.",
+    "native_CFD_scope": "Real Foundation14 startup probes only, not full transient; mass and volume gates passed for accepted steps, not general global conservation certification or physical validation.",
+    "current_native_build_scope": "Flux batch at 8fa88ae32 verified; new energy suite uncompiled. Documentation-only commits after f8e356f4."
   }
 }
