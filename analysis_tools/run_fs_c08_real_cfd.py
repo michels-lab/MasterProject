@@ -264,7 +264,8 @@ def numeric_time_dirs(case: Path) -> list[tuple[float, Path]]:
 
 def execute(source: Path, material: Path, output: Path,
             diagnostics: Path, timeout_minutes: int,
-            laminar_reference: bool = False) -> dict:
+            laminar_reference: bool = False,
+            startup_probe_dt: float | None = None) -> dict:
     require(os.environ.get("WM_PROJECT_VERSION") == "14",
             "load OpenFOAM Foundation14 before executing the actual solver")
     require(shutil.which("wmake") is not None, "wmake unavailable")
@@ -294,6 +295,8 @@ def execute(source: Path, material: Path, output: Path,
         "material_sha256": digest(material),
         "transport_reference": "laminar_molecular" if laminar_reference else "inherited_RAS",
         "output_case": str(output),
+        "startup_probe_dt_s": startup_probe_dt,
+        "startup_probe_only": startup_probe_dt is not None,
         "diagnostics": str(diagnostics),
         "native_OpenFOAM14_wmake_verified": False,
         "real_foamMultiRun_started": False,
@@ -320,7 +323,7 @@ def execute(source: Path, material: Path, output: Path,
             return report
 
         report["native_OpenFOAM14_wmake_verified"] = True
-        staged = stage(source, material, output, laminar_reference)
+        staged = stage(source, material, output, laminar_reference, startup_probe_dt)
         report["isolated_case_stage_status"] = staged["status"]
         report["source_sha256_before"] = source_before
         report["source_sha256_after_stage"] = {
@@ -336,12 +339,26 @@ def execute(source: Path, material: Path, output: Path,
         run = run_logged(["foamMultiRun", "-case", str(output)], output,
                          native_log, timeout_minutes)
         report["foamMultiRun"] = run
+        # Always include actionable evidence for a failed native attempt.
+        log = native_log.read_text(encoding="utf-8", errors="replace")
+        markers = ("FS_C08_INITIAL_GAS_INVENTORY", "FS_C08_PRE_ENERGY_VOLUME",
+                   "FS_C08_THERMAL_TRANSPORT_SPLIT", "FS_C08_THREE_PHASE_TRIAL_VOLUME",
+                   "FS_C08_TRIAL_VOLUME_COMPONENTS", "FS_C08_VOLUME_STEP_BOUND",
+                   "FS_C08_VOLUME_PROJECTION_REJECTED",
+                   "FS_C08_FIXED_T_VOLUME_PROJECTION_CONVERGED",
+                   "FS_C08_COUPLED_VOLUME_ENERGY_ITER",
+                   "FS_C08_NATIVE_PRESSURE_WITH_MASS_DENSITY")
+        report["native_diagnostic_tail"] = [
+            line.strip() for line in log.splitlines()
+            if any(marker in line for marker in markers)
+        ][-30:]
+        report["accepted_pressure_records"] = log.count(
+            "pressureVolumeEnergyIterationConverged=1")
         if run["exit_code"] != 0:
             report["status"] = "FS_C08_REAL_CFD_NATIVE_RUN_FAILED_OR_INCOMPLETE"
             report["first_run_error"] = first_native_error(native_log)
             return report
 
-        log = native_log.read_text(encoding="utf-8", errors="replace")
         report["per_patch_budget_records"] = log.count(
             "FS_C08_REAL_CFD_PATCH_BUDGET"
         )
@@ -395,6 +412,8 @@ def execute(source: Path, material: Path, output: Path,
         report["field_evolution_verified"] = False
         report["global_metal_and_gas_mass_verified"] = True
         report["status"] = (
+            "FS_C08_STARTUP_PROBE_CONSERVATION_GATES_PASS__NOT_FULL_TRANSIENT"
+            if startup_probe_dt is not None else
             "FS_C08_REAL_CFD_NATIVE_EXECUTION_WITH_CONSERVATION_GATES_PASS"
             "__NOT_PHYSICAL_SHRINKAGE_VALIDATION"
         )
@@ -423,6 +442,8 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--timeout-minutes", type=int, default=120)
     ap.add_argument("--laminar-reference", action="store_true",
                     help="Controlled molecular transport reference; preserves source RAS")
+    ap.add_argument("--startup-probe-dt", type=float,
+                    help="One fixed real CFD step; not a full casting transient")
     args = ap.parse_args(argv)
     stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
     suffix = secrets.token_hex(4)
@@ -436,13 +457,21 @@ def main(argv: list[str] | None = None) -> int:
     )
     try:
         report = execute(args.source, args.material, output,
-                         diagnostics, args.timeout_minutes, args.laminar_reference)
+                         diagnostics, args.timeout_minutes, args.laminar_reference,
+                         args.startup_probe_dt)
     except (RuntimeError, OSError, ValueError) as exc:
         print(str(exc), file=sys.stderr)
         return 2
     print("FS-C08 REAL NATIVE CFD REPORT:",
           diagnostics.expanduser().absolute() / "FS_C08_REAL_CFD_REPORT.json")
     print("FS-C08 STATUS:", report["status"])
+    for key in ("first_compiler_error", "first_run_error", "budget_gate_error",
+                "accepted_pressure_records", "latest_saved_time_s"):
+        if key in report:
+            print(key + ":", report[key])
+    if not report["real_CFD_completed"] or report.get("startup_probe_only"):
+        for line in report.get("native_diagnostic_tail", []):
+            print(line)
     return 0 if report["real_CFD_completed"] else 2
 
 
