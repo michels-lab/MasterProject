@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
   "audit_kind": "deterministic_full_tracked_tree",
-  "tracked_files_total": 42870,
-  "classified_files_total": 42865,
-  "docs_content_inspected": 230,
+  "tracked_files_total": 42873,
+  "classified_files_total": 42868,
+  "docs_content_inspected": 231,
   "large_docs_skipped": 1,
   "excluded_reports": 5,
   "roles": {
@@ -12,7 +12,7 @@
     "bitacora": 5,
     "config": 21,
     "data": 37,
-    "document": 191,
+    "document": 192,
     "index": 35,
     "license": 1,
     "simulation_case_file": 141,
@@ -20,17 +20,16 @@
     "simulation_log": 3264,
     "simulation_output": 36203,
     "source": 165,
-    "test": 74,
+    "test": 75,
     "web_ui": 1,
-    "workflow": 34
+    "workflow": 35
   },
   "finding_counts": {
-    "BROKEN_RELATIVE_LINK": 7,
-    "POTENTIAL_UNLOGGED_CHANGES": 2
+    "BROKEN_RELATIVE_LINK": 7
   },
-  "finding_total": 9,
-  "inventory_fingerprint": "33fbecca24c25b2da58c64cb93123d68b6118eb34d20bccefd38e40b2ef6d686",
-  "evidence_fingerprint": "487570292fc60b421aa9250d90731a7bec23e3e4c1f5b9c90e69f83192020423",
+  "finding_total": 7,
+  "inventory_fingerprint": "7ee6669ac05314f7e3c3cbc71177acde97edf3badda915769642c08ae38f0b43",
+  "evidence_fingerprint": "a38cca05722cc62f2a19d8787a386e132771345cc8472199f5e39f915b2e8a45",
   "files": [
     {
       "path": ".github/agents/openfoam-solidification.agent.md",
@@ -164,6 +163,13 @@
       "purpose": "GitHub Actions automation",
       "certainty": "rule",
       "blob": "c5a2c0d6b4a0bf02a6f030869a7ec25b06370afd"
+    },
+    {
+      "path": ".github/workflows/compact-campaign-200s-static.yml",
+      "role": "workflow",
+      "purpose": "GitHub Actions automation",
+      "certainty": "rule",
+      "blob": "5768bfbea2480f6401954dc7022c593c476d6f07"
     },
     {
       "path": ".github/workflows/file-governance-audit.yml",
@@ -373,7 +379,7 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "ca3035abcde20f802423bea0370fc7a466bf5d2a"
+      "blob": "7ed433a12ef8b9bdd9c4feb50885fe7d8368fb14"
     },
     {
       "path": "OPENFOAM_COMMAND_MANUAL.md",
@@ -415,14 +421,14 @@
       "role": "bitacora",
       "purpose": "technical/audit change history",
       "certainty": "rule",
-      "blob": "a12264b4a5c59c74a6a8023d230a6a2d1ab62c81"
+      "blob": "c0ba236cfbe26ff98af302a23eeaa3bd9c4c7de3"
     },
     {
       "path": "PROJECT_AUDIT_LOG_ES.md",
       "role": "bitacora",
       "purpose": "technical/audit change history",
       "certainty": "rule",
-      "blob": "1eaee9420fcbc255dcfee9303365aa3925473f8a"
+      "blob": "0b92581e214f71a5e08a28b3d20f38ac6c1b568e"
     },
     {
       "path": "README.md",
@@ -298769,7 +298775,7 @@
       "role": "config",
       "purpose": "machine-readable configuration",
       "certainty": "rule",
-      "blob": "960497b9dc4e64f1537139015de3500278983846"
+      "blob": "543d36b7016b44fab84a88bcacb59e4634056d64"
     },
     {
       "path": "docs/C3D_01_ESTADO_REAL_20261110_ES.md",
@@ -299056,7 +299062,7 @@
       "role": "config",
       "purpose": "machine-readable configuration",
       "certainty": "rule",
-      "blob": "d475206c274038cf8b159cdc8f375f8bba894e93"
+      "blob": "9f075b243f1b40cdb23868874fc2d5c884ad9587"
     },
     {
       "path": "docs/REGLA_INSTRUCCIONES_UNIFICADAS_ES.md",
@@ -299353,18 +299359,25 @@
       "blob": "3436f43a8148e06fd4a2dbd9b40580f67efcf46c"
     },
     {
+      "path": "docs/granada/MAESTRIA_CAMPANA_200S_ALMACENAMIENTO_COMPACTO_20261124_ES.md",
+      "role": "document",
+      "purpose": "manual/decision/report/historical note",
+      "certainty": "inferred",
+      "blob": "b5451d87edcf6958678c2bd584207711e89e0226"
+    },
+    {
       "path": "docs/granada/MAESTRIA_CAMPANA_B14_C14_200S_PLAN_20261124_ES.md",
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "c203a269995c994ed9a4068d546216bd2ac9ba87"
+      "blob": "f4e38089951cb1ba14b7183ba0de9569e3243886"
     },
     {
       "path": "docs/granada/MAESTRIA_ESTADO_INTEGRADO_20261124_ES.md",
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "02c44d1299819dceab03a99358785e9bb629b1fa"
+      "blob": "ad18ccb8826d1584bb9c6f20bacddf3e54da849c"
     },
     {
       "path": "docs/granada/OPENFOAM_HUB_READ_ACCESS_20261021.md",
@@ -300029,7 +300042,7 @@
       "role": "source",
       "purpose": "code/test implementation",
       "certainty": "rule",
-      "blob": "3e63fcea06d22c090c7c23900e60d01525f023b6"
+      "blob": "6957d7eb3425c8c9013846531ce93ece183ffab7"
     },
     {
       "path": "tools/file_governance_audit_proof.py",
@@ -300058,6 +300071,13 @@
       "purpose": "code/test implementation",
       "certainty": "rule",
       "blob": "a2e2dd275c8b272cee6c762f6edfd5d5566d7a2d"
+    },
+    {
+      "path": "tools/test_compact_campaign_200s.py",
+      "role": "test",
+      "purpose": "code/test implementation",
+      "certainty": "rule",
+      "blob": "b73d640c1b4700f390f067f0b16ab0b9bd505c4f"
     },
     {
       "path": "tools/test_energy2_case_provenance.py",
@@ -300150,24 +300170,6 @@
       "path": "docs/granada/C3D05_T0_README_HISTORICAL_BEFORE_SINGLE_FLOW_20261120.md",
       "observation": "Missing: outside-repo",
       "recommendation": "Fix link or restore target",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "806fab75ef239671",
-      "code": "POTENTIAL_UNLOGGED_CHANGES",
-      "severity": "review",
-      "path": "PROJECT_AUDIT_LOG_EN.md",
-      "observation": "1 implementation/config paths changed since this log's last commit; examples: tools/compact_campaign_200s.py",
-      "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "39b185b4a90710e2",
-      "code": "POTENTIAL_UNLOGGED_CHANGES",
-      "severity": "review",
-      "path": "PROJECT_AUDIT_LOG_ES.md",
-      "observation": "1 implementation/config paths changed since this log's last commit; examples: tools/compact_campaign_200s.py",
-      "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     }
   ],
