@@ -262,10 +262,55 @@ def numeric_time_dirs(case: Path) -> list[tuple[float, Path]]:
     return sorted(times)
 
 
+def inspect_fixed_probe_schedule(log: str, snapshots: list[tuple[float, Path]],
+                                 dt: float, steps: int) -> dict:
+    """Require every requested positive step, not merely the final marker."""
+    expected = [dt*i for i in range(1, steps+1)]
+    tol = max(1e-14, dt*1e-6)
+    def matches(times, name, unique=True):
+        values = sorted(times)
+        if unique:
+            if len(values)!=steps or any(abs(a-b)>tol for a,b in zip(values, expected)):
+                raise ValueError("probe schedule mismatch: "+name)
+        elif any(not any(abs(t-e)<=tol for t in values) for e in expected):
+            raise ValueError("probe schedule missing timestep: "+name)
+    matches([t for t,_ in snapshots], "saved fields")
+    marker_names = {
+        "pressure": "FS_C08_NATIVE_PRESSURE_WITH_MASS_DENSITY",
+        "mass_budget": "FS_C08_REAL_CFD_MASS_BUDGET",
+        "mass_pass": "FS_C08_NATIVE_METAL_AND_GAS_CONSERVATION_GATES_PASSED",
+        "thermal": "FS_C08_NATIVE_PHASE_RESOLVED_INTERNAL_ENERGY",
+    }
+    marker_times = {key: [] for key in marker_names}
+    for line in log.splitlines():
+        for key, marker in marker_names.items():
+            if marker in line:
+                m = re.search(r"\btime_s=([^\s]+)", line)
+                if not m:
+                    raise ValueError("missing probe timestamp: "+key)
+                t = float(m.group(1))
+                if not math.isfinite(t):
+                    raise ValueError("nonfinite probe timestamp: "+key)
+                marker_times[key].append(t)
+    for key, times in marker_times.items():
+        matches(times, key, unique=key!="thermal")
+    for time, directory in snapshots:
+        missing = [field for field in REQUIRED_FINAL_FIELDS
+                   if not ((directory/"fluid"/field).is_file()
+                           or (directory/"fluid"/(field+".gz")).is_file())]
+        if missing:
+            raise ValueError(f"probe time {time:g} missing fields: {missing}")
+    return {"expected_steps": steps, "verified_steps": steps,
+            "dt_s": dt, "endTime_s": expected[-1],
+            "all_step_mass_pressure_and_thermal_records_present": True,
+            "all_step_physical_fields_present": True}
+
+
 def execute(source: Path, material: Path, output: Path,
             diagnostics: Path, timeout_minutes: int,
             laminar_reference: bool = False,
-            startup_probe_dt: float | None = None) -> dict:
+            startup_probe_dt: float | None = None,
+            startup_probe_steps: int = 1) -> dict:
     require(os.environ.get("WM_PROJECT_VERSION") == "14",
             "load OpenFOAM Foundation14 before executing the actual solver")
     require(shutil.which("wmake") is not None, "wmake unavailable")
@@ -296,6 +341,7 @@ def execute(source: Path, material: Path, output: Path,
         "transport_reference": "laminar_molecular" if laminar_reference else "inherited_RAS",
         "output_case": str(output),
         "startup_probe_dt_s": startup_probe_dt,
+        "startup_probe_steps": startup_probe_steps if startup_probe_dt is not None else None,
         "startup_probe_only": startup_probe_dt is not None,
         "diagnostics": str(diagnostics),
         "native_OpenFOAM14_wmake_verified": False,
@@ -323,7 +369,7 @@ def execute(source: Path, material: Path, output: Path,
             return report
 
         report["native_OpenFOAM14_wmake_verified"] = True
-        staged = stage(source, material, output, laminar_reference, startup_probe_dt)
+        staged = stage(source, material, output, laminar_reference, startup_probe_dt, startup_probe_steps)
         report["isolated_case_stage_status"] = staged["status"]
         report["source_sha256_before"] = source_before
         report["source_sha256_after_stage"] = {
@@ -358,6 +404,10 @@ def execute(source: Path, material: Path, output: Path,
         ][-30:]
         report["accepted_pressure_records"] = log.count(
             "pressureVolumeEnergyIterationConverged=1")
+        snapshots = numeric_time_dirs(output)
+        report["saved_positive_times_s"] = [t for t,_ in snapshots]
+        if snapshots:
+            report["latest_saved_time_s"] = snapshots[-1][0]
         if run["exit_code"] != 0:
             report["status"] = "FS_C08_REAL_CFD_NATIVE_RUN_FAILED_OR_INCOMPLETE"
             report["first_run_error"] = first_native_error(native_log)
@@ -412,6 +462,14 @@ def execute(source: Path, material: Path, output: Path,
             report["status"] = "FS_C08_REAL_CFD_OUTPUTS_OR_BUDGET_GATES_MISSING"
             return report
 
+        if startup_probe_dt is not None:
+            try:
+                report["fixed_probe_schedule_gate"] = inspect_fixed_probe_schedule(
+                    log, snapshots, startup_probe_dt, startup_probe_steps)
+            except ValueError as exc:
+                report["status"] = "FS_C08_FIXED_PROBE_SCHEDULE_GATE_FAILED"
+                report["budget_gate_error"] = str(exc)
+                return report
         report["real_CFD_completed"] = True
         # The presence of written fields is not proof that any quantity
         # changed or that the casting shrank physically.
@@ -451,6 +509,8 @@ def main(argv: list[str] | None = None) -> int:
                     help="Controlled molecular transport reference; preserves source RAS")
     ap.add_argument("--startup-probe-dt", type=float,
                     help="One fixed real CFD step; not a full casting transient")
+    ap.add_argument("--startup-probe-steps", type=int, default=1,
+                    help="Consecutive fixed-dt steps; every step must pass audits")
     args = ap.parse_args(argv)
     stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
     suffix = secrets.token_hex(4)
@@ -465,7 +525,7 @@ def main(argv: list[str] | None = None) -> int:
     try:
         report = execute(args.source, args.material, output,
                          diagnostics, args.timeout_minutes, args.laminar_reference,
-                         args.startup_probe_dt)
+                         args.startup_probe_dt, args.startup_probe_steps)
     except (RuntimeError, OSError, ValueError) as exc:
         print(str(exc), file=sys.stderr)
         return 2
@@ -476,9 +536,12 @@ def main(argv: list[str] | None = None) -> int:
                 "accepted_pressure_records", "latest_saved_time_s",
                 "missing_final_physical_fields",
                 "metal_gas_conservation_gate_records",
-                "native_thermal_solve_records"):
+                "native_thermal_solve_records", "fixed_probe_schedule_gate"):
         if key in report:
             print(key + ":", report[key])
+    for key in ("native_numeric_budget_gate", "native_coupled_volume_gate"):
+        if key in report:
+            print(key + ":", json.dumps(report[key], sort_keys=True))
     if not report["real_CFD_completed"] or report.get("startup_probe_only"):
         for line in report.get("native_diagnostic_tail", []):
             print(line)
