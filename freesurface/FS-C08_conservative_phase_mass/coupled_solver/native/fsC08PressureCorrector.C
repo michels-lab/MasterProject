@@ -103,6 +103,14 @@ void Foam::solvers::fsC08ConservativeVoF::pressureCorrector()
             << exit(FatalError);
     const bool totalUpwind=fluxMode=="totalUpwind" || fluxMode=="totalUpwindNoDdtCorr";
     const bool noDdtCorr=fluxMode=="incrementalNoDdtCorr" || fluxMode=="totalUpwindNoDdtCorr";
+    const word supportMode=numerics.found("pressureTransportSupport")
+        ? numerics.lookup<word>("pressureTransportSupport") : word("trial");
+    if (supportMode!="trial" && supportMode!="oldLiquid"
+        && supportMode!="oldGas" && supportMode!="oldBoth")
+        FatalErrorInFunction << "FS-C08 unknown pressureTransportSupport "
+            << supportMode << exit(FatalError);
+    const bool oldLiquidSupport=supportMode=="oldLiquid" || supportMode=="oldBoth";
+    const bool oldGasSupport=supportMode=="oldGas" || supportMode=="oldBoth";
     // Native PIMPLE assembles UEqn before the thermal predictor. FS-C08
     // changes the independent densities during that predictor. Rebuild
     // UEqn from the updated inventory and conservative fluxes once,
@@ -408,6 +416,45 @@ void Foam::solvers::fsC08ConservativeVoF::pressureCorrector()
             if (incrementTypes[patchi]=="fixedValue")
                 liquidMobility.boundaryFieldRef()[patchi]=scalar(0);
 
+        // Explicit old-time transport support: a phase cannot be passed
+        // through a face joining two cells that had none of that phase
+        // available at time n. A face bordering an occupied donor is
+        // still open, including the original metal/air interface.
+        // This is an experimental restriction on the flux stencil,
+        // not a cutoff on alpha or a deletion of conserved trace mass.
+        const auto& supportLiquid=phaseMass_->liquidMass().oldTime();
+        label blockedLiquidFaces=0,blockedGasFaces=0;
+        scalar unsupportedLiquidRate=0,unsupportedGasRate=0;
+        forAll(neighbour,facei)
+        {
+            const label o=owner[facei],n=neighbour[facei];
+            if (supportLiquid[o]==0 && supportLiquid[n]==0)
+            {
+                unsupportedLiquidRate+=mag(fl[facei]);
+                if (oldLiquidSupport)
+                {
+                    liquidMobility[facei]=0;
+                    ++blockedLiquidFaces;
+                }
+            }
+            if (gasAvailable[o]==0 && gasAvailable[n]==0)
+            {
+                unsupportedGasRate+=mag(fg[facei]);
+                if (oldGasSupport)
+                {
+                    gasMobility[facei]=0;
+                    ++blockedGasFaces;
+                }
+            }
+        }
+        Info<< "FS_C08_PRESSURE_TRANSPORT_SUPPORT"
+            << " time_s=" << runTime.value() << " corrector=" << iter
+            << " mode=" << supportMode
+            << " blockedLiquidFaces=" << blockedLiquidFaces
+            << " blockedGasFaces=" << blockedGasFaces
+            << " liquidRateOutsideOldSupport_kg_s=" << unsupportedLiquidRate
+            << " gasRateOutsideOldSupport_kg_s=" << unsupportedGasRate << nl;
+
         // The pressure unknown changes transported liquid mass BEFORE
         // equilibrium phase conversion, not the post-conversion mobile
         // liquid. At fixed T, total metal M has volume M*((1-fs)/rhoL
@@ -637,6 +684,7 @@ void Foam::solvers::fsC08ConservativeVoF::pressureCorrector()
     // Audit numerical transport across the original metal/air support.
     // No threshold or deletion of trace inventories is used.
     scalar intoInitiallyGasKg=0,metalInInitiallyGasKg=0,counterflowVolume=0;
+    scalar liquidBeyondOldSupportKg=0,gasBeyondOldSupportKg=0;
     label counterflowFaces=0;
     const auto& own=mesh.owner();
     const auto& nei=mesh.neighbour();
@@ -645,6 +693,10 @@ void Foam::solvers::fsC08ConservativeVoF::pressureCorrector()
     forAll(nei,facei)
     {
         const scalar q=alphaRhoPhi1[facei];
+        if (oldL[own[facei]]==0 && oldL[nei[facei]]==0)
+            liquidBeyondOldSupportKg+=dt.value()*mag(q);
+        if (gasAvailable[own[facei]]==0 && gasAvailable[nei[facei]]==0)
+            gasBeyondOldSupportKg+=dt.value()*mag(alphaRhoPhi2[facei]);
         const label receiver=q>=0 ? nei[facei] : own[facei];
         if (oldL[receiver]==0 && oldS[receiver]==0)
             intoInitiallyGasKg+=dt.value()*mag(q);
@@ -663,6 +715,9 @@ void Foam::solvers::fsC08ConservativeVoF::pressureCorrector()
         << " time_s=" << runTime.value() << " fluxMode=" << fluxMode
         << " grossMetalTransferIntoPreviouslyGasCells_kg=" << intoInitiallyGasKg
         << " retainedMetalInPreviouslyGasCells_kg=" << metalInInitiallyGasKg
+        << " pressureTransportSupport=" << supportMode
+        << " liquidBeyondOldSupport_kg=" << liquidBeyondOldSupportKg
+        << " gasBeyondOldSupport_kg=" << gasBeyondOldSupportKg
         << " counterflowFaces=" << counterflowFaces
         << " counterflowVolume_m3=" << counterflowVolume
         << " diagnosticOnly=1" << nl;
