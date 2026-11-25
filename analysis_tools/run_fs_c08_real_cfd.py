@@ -11,6 +11,8 @@ Requires scientifically sourced alloy tables and an accepted FS-C07 t=0 source.
 from __future__ import annotations
 
 import argparse
+from contextlib import contextmanager
+import fcntl
 from datetime import datetime, timezone
 import hashlib
 import json
@@ -63,6 +65,41 @@ def run_logged(cmd: list[str], cwd: Path, logfile: Path,
         except subprocess.TimeoutExpired:
             fp.write("\nFS_C08_RUNTIME_TIMEOUT — native CFD incomplete\n")
             return {"exit_code": None, "timeout": True}
+
+
+@contextmanager
+def native_library_lock():
+    """Serialize builds and executions using the shared user library.
+    The batch holds this lock until its worker cases have all stopped.
+    External manual wmake commands are outside this lock's protection.
+    """
+    libbin = os.environ.get("FOAM_USER_LIBBIN")
+    require(bool(libbin), "FOAM_USER_LIBBIN missing")
+    directory = Path(libbin).expanduser()
+    directory.mkdir(parents=True, exist_ok=True)
+    with (directory / ".fsC08-native-run.lock").open("a") as lock:
+        fcntl.flock(lock, fcntl.LOCK_EX)
+        try:
+            yield
+        finally:
+            fcntl.flock(lock, fcntl.LOCK_UN)
+
+
+def build_native_library(logfile: Path) -> dict:
+    require(os.environ.get("WM_PROJECT_VERSION") == "14",
+            "load OpenFOAM Foundation14")
+    require(shutil.which("wmake") is not None, "wmake unavailable")
+    libbin = os.environ.get("FOAM_USER_LIBBIN")
+    require(bool(libbin), "FOAM_USER_LIBBIN missing")
+    libfile = Path(libbin).expanduser() / "libfsC08ConservativeVoF.so"
+    print("FS-C08 native build log:", logfile, flush=True)
+    build = run_logged(["wmake", "libso"], BASE_MODULE, logfile, 30)
+    ok = build["exit_code"] == 0 and libfile.is_file()
+    return {"wmake": build, "native_library": str(libfile),
+            "native_library_sha256": digest(libfile) if ok else None,
+            "build_log": str(logfile),
+            "verified": ok,
+            "first_compiler_error": None if ok else first_compiler_error(logfile)}
 
 
 def first_compiler_error(logfile: Path) -> str | None:
@@ -314,7 +351,8 @@ def execute(source: Path, material: Path, output: Path,
             startup_probe_steps: int = 1,
             momentum_face_mobility: str = "linear",
             momentum_matrix_coupling: str = "legacy",
-            phase_pressure_mobility: str = "separate") -> dict:
+            phase_pressure_mobility: str = "separate",
+            *, verified_batch_build: dict | None = None) -> dict:
     require(os.environ.get("WM_PROJECT_VERSION") == "14",
             "load OpenFOAM Foundation14 before executing the actual solver")
     require(shutil.which("wmake") is not None, "wmake unavailable")
@@ -364,17 +402,20 @@ def execute(source: Path, material: Path, output: Path,
 
     compile_log = diagnostics / "native_wmake.log"
     try:
-        print("FS-C08 native build log:", compile_log, flush=True)
-        build = run_logged(["wmake", "libso"], BASE_MODULE, compile_log,
-                           timeout_minutes=30)
-        report["wmake"] = build
+        receipt = (build_native_library(compile_log) if verified_batch_build is None
+                   else verified_batch_build)
+        report["wmake"] = receipt["wmake"]
+        report["native_library"] = receipt["native_library"]
+        report["native_library_sha256"] = receipt["native_library_sha256"]
+        report["native_build_log"] = receipt["build_log"]
+        report["shared_batch_build"] = verified_batch_build is not None
         libfile = Path(libbin).expanduser() / "libfsC08ConservativeVoF.so"
-        report["native_library"] = str(libfile)
-        if build["exit_code"] != 0 or not libfile.is_file():
+        if not receipt["verified"]:
             report["status"] = "FS_C08_ACTUAL_NATIVE_CFD_LIBRARY_COMPILE_FAIL"
-            report["first_compiler_error"] = first_compiler_error(compile_log)
+            report["first_compiler_error"] = receipt["first_compiler_error"]
             return report
-
+        require(libfile.is_file() and digest(libfile) == receipt["native_library_sha256"],
+                "native library differs from verified build")
         report["native_OpenFOAM14_wmake_verified"] = True
         staged = stage(source, material, output, laminar_reference, startup_probe_dt, startup_probe_steps, momentum_face_mobility, momentum_matrix_coupling, phase_pressure_mobility)
         report["isolated_case_stage_status"] = staged["status"]
@@ -518,6 +559,12 @@ def execute(source: Path, material: Path, output: Path,
         report["source_sha256_after"] = {
             part: digest(source / part) for part in tracked
         }
+        if report.get("native_OpenFOAM14_wmake_verified"):
+            library = Path(report["native_library"])
+            if not library.is_file() or digest(library) != report["native_library_sha256"]:
+                report["status"] = "FS_C08_NATIVE_LIBRARY_CHANGED__INVALID_RUN"
+                report["real_CFD_completed"] = False
+                report["global_metal_and_gas_mass_verified"] = False
         if report["source_sha256_after"] != source_before:
             report["status"] = "FS_C08_SOURCE_FS_C07_CHANGED__INVALID_RUN"
             report["real_CFD_completed"] = False
@@ -557,9 +604,10 @@ def main(argv: list[str] | None = None) -> int:
         / f"FS_C08_REAL_CFD_DIAGNOSTICS_{stamp}_{suffix}"
     )
     try:
-        report = execute(args.source, args.material, output,
-                         diagnostics, args.timeout_minutes, args.laminar_reference,
-                         args.startup_probe_dt, args.startup_probe_steps, args.momentum_face_mobility, args.momentum_matrix_coupling, args.phase_pressure_mobility)
+        with native_library_lock():
+            report = execute(args.source, args.material, output,
+                             diagnostics, args.timeout_minutes, args.laminar_reference,
+                             args.startup_probe_dt, args.startup_probe_steps, args.momentum_face_mobility, args.momentum_matrix_coupling, args.phase_pressure_mobility)
     except (RuntimeError, OSError, ValueError) as exc:
         print(str(exc), file=sys.stderr)
         return 2
