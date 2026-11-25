@@ -41,6 +41,30 @@ def edit_key(s,k,old,new):
     p=r"(?m)^([ \t]*"+re.escape(k)+r"[ \t]+)"+re.escape(old)+r"([ \t]*;)"
     s,n=re.subn(p,lambda m:m[1]+new+m[2],s)
     need(n==1,"unexpected "+k);return s
+def convert_cadence(s,name):
+    # Each object is delimited by its unindented name. The compact generator
+    # inserts absent keys at the start, so intervals can precede controls.
+    headers=[m for m in re.finditer(r"(?m)^(\w+)[ \t]*\n\{",s) if m[1]!="FoamFile"]
+    need(headers,"no function objects in "+name)
+    out=[s[:headers[0].start()]]
+    converted=0
+    for i,m in enumerate(headers):
+        block=s[m.start():headers[i+1].start() if i+1<len(headers) else len(s)]
+        for prefix in ("execute","write"):
+            interval=list(re.finditer(r"(?m)^[ \t]+"+prefix+r"Interval[ \t]+([^;\n]+);",block))
+            control=list(re.finditer(r"(?m)^[ \t]+"+prefix+r"Control[ \t]+([^;\n]+);",block))
+            need(len(interval)<=1 and len(control)<=1,"ambiguous cadence "+name+"/"+m[1])
+            if not interval or interval[0][1].strip()!="100":continue
+            need(len(control)==1 and control[0][1].strip()=="timeStep","unexpected 100-step control "+name+"/"+m[1])
+            block=edit_key(block,prefix+"Control","timeStep","adjustableRunTime")
+            block=edit_key(block,prefix+"Interval","100","0.1")
+            converted+=1
+        out.append(block)
+    new="".join(out)
+    need(converted>0,"no .1s controls found in "+name)
+    need(not re.search(r"(?m)^[ \t]*(?:execute|write)Interval[ \t]+100[ \t]*;",new),"unconverted step cadence "+name)
+    return new,converted
+
 def adapt_dicts(case):
     changed={}
     p=case/"system/controlDict";old=p.read_text();s=old
@@ -59,12 +83,8 @@ def adapt_dicts(case):
         p=case/"system"/name
         if not p.is_file():continue
         s=p.read_text()
-        def replace(m):
-            prefix=m[2]
-            return m[1]+prefix+"Control adjustableRunTime;\n"+m[3]+prefix+"Interval 0.1;"
-        new,n=re.subn(r"(?m)^([ \t]*)(execute|write)Control[ \t]+timeStep;[ \t]*\n([ \t]*)\2Interval[ \t]+100[ \t]*;",replace,s)
-        need(n>0,"no .1s controls found in "+name)
-        need(not re.search(r"(?m)^[ \t]*(?:execute|write)Interval[ \t]+100[ \t]*;",new),"unconverted step cadence "+name)
+        new,n=convert_cadence(s,name)
+        print("ADAPTIVE CADENCE",case.name,name,n,flush=True)
         p.write_text(new);changed["system/"+name]=transfer.sha(p)
     return changed
 def native(case,name,args):
