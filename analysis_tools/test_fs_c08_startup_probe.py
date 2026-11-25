@@ -26,6 +26,20 @@ class StartupProbeTest(unittest.TestCase):
         self.assertIn("maxCo 0.1;", staged)
         self.assertIn("endTime 1;", CONTROL)
 
+    def test_ten_steps_keep_original_horizon_and_all_snapshots(self):
+        staged = startup_probe_controls(CONTROL + "\npurgeWrite 2;\n", 1e-6, 10)
+        self.assertIn("endTime 1e-05;", staged)
+        self.assertIn("deltaT 1e-06;", staged)
+        self.assertIn("writeInterval 1;", staged)
+        self.assertIn("purgeWrite 0;", staged)
+
+    def test_reject_bad_step_count_or_horizon(self):
+        for steps in (0, -1, 1001):
+            with self.subTest(steps=steps), self.assertRaises(ValueError):
+                startup_probe_controls(CONTROL, 1e-6, steps)
+        with self.assertRaises(ValueError):
+            startup_probe_controls(CONTROL.replace("endTime 1;", "endTime 1e-6;"), 1e-6, 10)
+
     def test_reject_invalid_dt(self):
         for dt in (0, -1, float("nan"), float("inf"), 2e-4):
             with self.subTest(dt=dt), self.assertRaises(ValueError):
