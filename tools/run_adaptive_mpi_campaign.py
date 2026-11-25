@@ -450,9 +450,8 @@ def run_queued_case(name, url, ranks, max_dt):
                     "case_path":str(case), "reused":True}
     for case, r in full:
         if r and r.get("solver_completed") is True and r.get("final_time_s") == 200:
-            recover_completed(case,r,ranks,max_dt)
-            return {"status":"PUBLISHED","branch":publish_result(case,url,ranks,max_dt),
-                    "case_path":str(case),"recovered":True}
+            return {"status":"POSTSOLVER_RECOVERY_DEFERRED","case_path":str(case),
+                    "note":"continue other cases now; recover separately with --recover-only"}
     if full:
         return {"status":"FULL_ATTEMPT_PRESERVED", "paths":[str(c) for c,_ in full],
                 "note":"incomplete or unaudited; no automatic rerun"}
@@ -466,6 +465,14 @@ def run_queued_case(name, url, ranks, max_dt):
     return {"status":"PUBLISHED", "branch":publish_result(case,url,ranks,max_dt),
             "case_path":str(case)}
 
+def check_queue_storage():
+    # A failed case is not a reason to stop. A non-writable shared
+    # workspace is: every remaining solver and the queue need it.
+    with tempfile.NamedTemporaryFile(prefix=".queue-write-", dir=ROOT) as f:
+        f.write(b"ok")
+        f.flush()
+        os.fsync(f.fileno())
+
 def sequence(url, ranks):
     # Two waves, four cases each, no overlap. A failed pilot/full attempt
     # is recorded and preserved; other cases continue.
@@ -477,16 +484,24 @@ def sequence(url, ranks):
         for name in CASES:
             print("SEQUENCE", tag, name, flush=True)
             try:
+                check_queue_storage()
+            except OSError as exc:
+                raise RuntimeError("Shared campaign storage is not writable; repair WSL before continuing") from exc
+            try:
                 wave[name] = run_queued_case(name,url,ranks,max_dt)
             except (RuntimeError, ValueError, OSError, KeyError, subprocess.SubprocessError) as exc:
-                if isinstance(exc,OSError) and exc.errno in (errno.EROFS,errno.EIO,errno.ENOSPC):
-                    print("FILESYSTEM_FAILURE_STOP: repair storage before continuing; no CFD rerun",flush=True)
-                    raise
                 wave[name] = {"status":"BLOCKED_OR_FAILED_PRESERVED", "error":str(exc)}
-                print(wave[name], flush=True)
+                print("CASE_FAILED_CONTINUE_IF_STORAGE_WRITABLE", wave[name], flush=True)
+                if isinstance(exc,OSError) and exc.errno in (errno.EROFS,errno.EIO,errno.ENOSPC):
+                    try:
+                        check_queue_storage()
+                    except OSError:
+                        print("SHARED_STORAGE_UNAVAILABLE: cannot run remaining cases",flush=True)
+                        raise
             # Atomic replacement only after successful handling; storage failures
             # must stop the queue instead of masking the original exception.
             dump(index, summary)
+            print("CASE_STATUS", tag, name, wave[name]["status"], flush=True)
         print("WAVE_ATTEMPTS_FINISHED", tag, flush=True)
     print(summary, flush=True)
     need(all(summary[cap_tag(dt)][name]["status"] == "PUBLISHED"
