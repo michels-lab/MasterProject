@@ -56,6 +56,7 @@ License
 #include "fvmLaplacian.H"
 #include "harmonic.H"
 #include "upwind.H"
+#include "IOdictionary.H"
 #include "zeroGradientFvPatchFields.H"
 #include "PstreamReduceOps.H"
 
@@ -78,6 +79,20 @@ void Foam::solvers::fsC08ConservativeVoF::thermophysicalPredictor()
     volScalarField& T=mixture_.T();
     T.oldTime();
     alpha2.oldTime();
+    const IOdictionary numerics
+    (
+        IOobject("fsC08Numerics",runTime.constant(),mesh,
+                 IOobject::READ_IF_PRESENT,IOobject::NO_WRITE)
+    );
+    const word energyDonor=numerics.found("energyDonorMode")
+        ? numerics.lookup<word>("energyDonorMode") : word("legacy");
+    if (energyDonor!="legacy" && energyDonor!="oldGas"
+        && energyDonor!="currentLiquid" && energyDonor!="oldGasCurrentLiquid")
+        FatalErrorInFunction << "FS-C08 unknown energyDonorMode " << energyDonor
+            << exit(FatalError);
+    const bool oldGas=energyDonor=="oldGas" || energyDonor=="oldGasCurrentLiquid";
+    const bool currentLiquid=energyDonor=="currentLiquid" || energyDonor=="oldGasCurrentLiquid";
+    const volScalarField& gasEnergyOld=mixture_.thermo2().he().oldTime();
 
     const volScalarField& mL=phaseMass_->liquidMass();
     const volScalarField& mS=phaseMass_->solidMass();
@@ -201,7 +216,7 @@ void Foam::solvers::fsC08ConservativeVoF::thermophysicalPredictor()
             // if the pressure flux establishes a through-flow.
             const scalar oldMetal= mL.oldTime()[i]+mS.oldTime()[i];
             ul[i]=phaseMass_->liquidInternalEnergy
-                (oldMetal>0 ? T.oldTime()[i] : temp[i]);
+                (!currentLiquid && oldMetal>0 ? T.oldTime()[i] : temp[i]);
 
             // CURRENT exact internal-energy inventory at Tguess.
             e[i]=ml[i]*ul_i+ms[i]*us_i+mg[i]*ug[i];
@@ -242,13 +257,38 @@ void Foam::solvers::fsC08ConservativeVoF::thermophysicalPredictor()
         // hot liquid donor with a cold gas receiver or an inert energy
         // reference at the interface. Same flux to owner/neighbour => exact
         // cancellation of internal advective energy at global level.
-        const surfaceScalarField internalEnergyFlux
+        const surfaceScalarField liquidEnergyFlux
         (
-            "FS_C08_internalEnergyFlux",
+            "fsC08LiquidEnergyFlux",
             phaseMass_->liquidMassFlux()
                 *upwind<scalar>(mesh,phaseMass_->liquidMassFlux()).interpolate(uLiquid)
-          + alphaRhoPhi2
+        );
+        surfaceScalarField gasEnergyFlux
+        (
+            "fsC08GasEnergyFlux",
+            alphaRhoPhi2
                 *upwind<scalar>(mesh,alphaRhoPhi2).interpolate(mixture_.thermo2().he())
+        );
+        if (oldGas)
+        {
+            const surfaceScalarField explicitGasFlux
+            (
+                "fsC08OldDonorGasEnergyFlux",
+                alphaRhoPhi2
+                    *upwind<scalar>(mesh,alphaRhoPhi2).interpolate(gasEnergyOld)
+            );
+            gasEnergyFlux.primitiveFieldRef()=explicitGasFlux.primitiveField();
+            // Outflow uses old donor energy; imposed inflow retains
+            // the actual current boundary thermodynamic state.
+            forAll(gasEnergyFlux.boundaryField(),patchi)
+                forAll(gasEnergyFlux.boundaryField()[patchi],facei)
+                    if (alphaRhoPhi2.boundaryField()[patchi][facei]>=0)
+                        gasEnergyFlux.boundaryFieldRef()[patchi][facei]=
+                            explicitGasFlux.boundaryField()[patchi][facei];
+        }
+        const surfaceScalarField internalEnergyFlux
+        (
+            "FS_C08_internalEnergyFlux", liquidEnergyFlux+gasEnergyFlux
         );
 
         // Retain exactly the FV face energy flux used by TEqn.
@@ -430,6 +470,23 @@ void Foam::solvers::fsC08ConservativeVoF::thermophysicalPredictor()
         if (worstThermalCell>=0 && worstThermalChange>1)
         {
             const label i=worstThermalCell;
+            const tmp<volScalarField> liquidDiv=fvc::div(liquidEnergyFlux);
+            const tmp<volScalarField> gasDiv=fvc::div(gasEnergyFlux);
+            Info<< "FS_C08_PHASE_ENERGY_SPLIT"
+                << " time_s=" << runTime.value()
+                << " mode=" << energyDonor
+                << " cell=" << i
+                << " alphaGasGeometry=" << alpha2[i]
+                << " liquidMass_kg_m3=" << mL[i]
+                << " solidMass_kg_m3=" << mS[i]
+                << " gasMass_kg_m3=" << gasMassTrial_[i]
+                << " oldGasSpecificEnergy_J_kg=" << gasEnergyOld[i]
+                << " currentGasSpecificEnergy_J_kg=" << ug[i]
+                << " liquidAdvectionOut_J_m3=" << dt*liquidDiv()[i]
+                << " gasAdvectionOut_J_m3=" << dt*gasDiv()[i]
+                << " conductionOut_J_m3=" << dt*heatDiv[i]
+                << " mechanicalWork_J_m3=" << dt*mechanicalWorkDensity_[i]
+                << " diagnosticOnly=1" << nl;
             const scalar storageLinear=
                 (Eguess[i]-Eold[i]+CVvol[i]*(T[i]-T_before[i]))/dt;
             Info<< "FS_C08_CELL_THERMAL_BUDGET"
