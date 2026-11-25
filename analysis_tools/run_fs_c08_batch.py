@@ -40,6 +40,11 @@ ENERGY_VARIANTS = (
     ("energy_old_gas_current_liquid", "refreshBeforePressure", "separate", "incremental", "oldGasCurrentLiquid"),
 )
 
+SUPPORT_VARIANTS = tuple(
+    ("support_"+mode, "refreshBeforePressure", "separate", "incremental", "legacy", mode)
+    for mode in ("trial","oldLiquid","oldGas","oldBoth")
+)
+
 METRICS = (
     "maxU_m_s", "pMax_Pa", "metalVolume_m3", "solidMass_kg",
     "metalMassResidual_kg", "gasContinuityDefect_kg",
@@ -53,13 +58,16 @@ def numeric(value):
     except (ValueError, TypeError):
         return None
 
-def summarize(name, coupling, mobility, flux_mode, energy_mode, report):
+def summarize(name, coupling, mobility, flux_mode, energy_mode, support_mode, report):
     ledger=report.get("transient_ledger", {})
     last=ledger.get("last_complete_state") or {}
     return {
         "variant": name, "matrix": coupling, "phase_mobility": mobility,
         "momentum_flux_mode": flux_mode,
         "energy_donor_mode": energy_mode,
+        "pressure_transport_support": support_mode,
+        "pressure_transport_support_records_first5": report.get("pressure_transport_support_records", [])[:5],
+        "pressure_transport_support_records_last3": report.get("pressure_transport_support_records", [])[-3:],
         "phase_energy_split_records_last3": report.get("phase_energy_split_records", [])[-3:],
         "phase_energy_split_records_first3": report.get("phase_energy_split_records", [])[:3],
         "interface_transport_records": report.get("interface_transport_records", []),
@@ -116,9 +124,9 @@ def main(argv=None):
     parser.add_argument("--steps",type=int,default=10)
     parser.add_argument("--dt",type=float,default=1e-6)
     parser.add_argument("--timeout-minutes",type=int,default=120)
-    parser.add_argument("--suite",choices=("mobility","flux","energy"),default="energy")
+    parser.add_argument("--suite",choices=("mobility","flux","energy","support"),default="support")
     args=parser.parse_args(argv)
-    variants=ENERGY_VARIANTS if args.suite=="energy" else tuple(v+("legacy",) for v in (FLUX_VARIANTS if args.suite=="flux" else VARIANTS))
+    variants=SUPPORT_VARIANTS if args.suite=="support" else tuple(v+("trial",) for v in (ENERGY_VARIANTS if args.suite=="energy" else tuple(v+("legacy",) for v in (FLUX_VARIANTS if args.suite=="flux" else VARIANTS))))
     if not 1<=args.steps<=1000 or not math.isfinite(args.dt) or args.dt<=0 or args.timeout_minutes<1:
         parser.error("invalid fixed-step controls or timeout")
     source=args.source.expanduser().resolve()
@@ -150,13 +158,13 @@ def main(argv=None):
             batch["status"]="RUNNING"
             write_report(summary_path,batch)
             def worker(variant):
-                name,coupling,mobility,flux_mode,energy_mode=variant
+                name,coupling,mobility,flux_mode,energy_mode,support_mode=variant
                 output=cases/("FS_C08_COUPLED_"+stamp+"_"+name)
                 diag=root/name
                 print("START",name,flush=True)
                 try:
                     report=execute(source,material,output,diag,args.timeout_minutes,
-                        True,args.dt,args.steps,"linear",coupling,mobility,flux_mode,energy_mode,
+                        True,args.dt,args.steps,"linear",coupling,mobility,flux_mode,energy_mode,support_mode,
                         verified_batch_build=receipt)
                 except Exception as exc:
                     # One failed variant must not cancel the remaining cases.
@@ -169,7 +177,7 @@ def main(argv=None):
                         real_CFD_completed=False,batch_worker_error=str(exc),
                         diagnostics=str(diag),output_case=str(output))
                     write_report(report_file,report)
-                result=summarize(name,coupling,mobility,flux_mode,energy_mode,report)
+                result=summarize(name,coupling,mobility,flux_mode,energy_mode,support_mode,report)
                 print("FINISH",name,result["status"],
                       "saved steps",result["saved_steps"],flush=True)
                 return result
