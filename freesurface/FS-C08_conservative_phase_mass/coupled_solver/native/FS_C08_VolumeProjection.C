@@ -318,6 +318,49 @@ bool projectTrialInventories
         const volScalarField dl("fsC08ProjectionDL",-dt*fvc::div(dfl));
         const volScalarField dg("fsC08ProjectionDG",-dt*fvc::div(dfg));
         const volScalarField drg("fsC08ProjectionDRhoG",psiG*dp);
+        // Audit the actual assembled matrix flux against the local
+        // linearized volume equation, including gas EOS. Distinguish
+        // a stiff incompressible startup from a wrong FV Jacobian.
+        if (iter==0)
+        {
+            scalar maxLinearDefect=0, maxMetalResidual=0;
+            label metalCell=-1, minDpCell=-1;
+            scalar minDp=GREAT;
+            forAll(l,i)
+            {
+                const scalar linearDefect=residual()[i]
+                    +dl[i]/rhoL[i]+dg[i]/rg[i]
+                    -g[i]*drg[i]/sqr(rg[i]);
+                maxLinearDefect=max(maxLinearDefect,mag(linearDefect));
+                if (g[i]==0 && l[i]+mS[i]>0
+                    && mag(residual()[i])>maxMetalResidual)
+                {
+                    maxMetalResidual=mag(residual()[i]);
+                    metalCell=i;
+                }
+                if (dp[i]<minDp)
+                {
+                    minDp=dp[i];
+                    minDpCell=i;
+                }
+            }
+            Info<< "FS_C08_VOLUME_JACOBIAN_AUDIT"
+                << " dt_s=" << dt.value()
+                << " maxLinearizedDefect=" << maxLinearDefect
+                << " maxPureMetalResidual=" << maxMetalResidual
+                << " pureMetalCell=" << metalCell;
+            if (metalCell>=0)
+                Info<< " signedMetalResidual=" << residual()[metalCell];
+            if (minDpCell>=0)
+                Info<< " minDpCell=" << minDpCell
+                    << " minDp_Pa=" << minDp
+                    << " residualAtMinDp=" << residual()[minDpCell]
+                    << " gasMassAtMinDp=" << g[minDpCell]
+                    << " metalVolumeAtMinDp="
+                    << l[minDpCell]/rhoL[minDpCell]+mS[minDpCell]/rhoS[minDpCell]
+                    << " liquidMassIncrementAtMinDp=" << dl[minDpCell];
+            Info<< nl;
+        }
         bool advanced=false;
         label inadmissibleBacktracks=0, nonDescentBacktracks=0;
         // A finite but tiny donor inventory can make repeated halvings
