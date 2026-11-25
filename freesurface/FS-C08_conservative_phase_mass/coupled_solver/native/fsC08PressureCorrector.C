@@ -122,7 +122,7 @@ void Foam::solvers::fsC08ConservativeVoF::pressureCorrector()
     );
     const volScalarField gasMassOld
     (
-        "fsC08CoupledGasAtN",alpha2.oldTime()*mixture_.rho2().oldTime()
+        "fsC08CoupledGasAtN",gasMassTrial_.oldTime()
     );
     const volScalarField gasSource
     (
