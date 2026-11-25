@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "audit_kind": "deterministic_full_tracked_tree",
-  "tracked_files_total": 42884,
-  "classified_files_total": 42879,
+  "tracked_files_total": 42885,
+  "classified_files_total": 42880,
   "docs_content_inspected": 234,
   "large_docs_skipped": 1,
   "excluded_reports": 5,
@@ -20,7 +20,7 @@
     "simulation_log": 3264,
     "simulation_output": 36203,
     "source": 169,
-    "test": 77,
+    "test": 78,
     "web_ui": 1,
     "workflow": 37
   },
@@ -29,8 +29,8 @@
     "POTENTIAL_UNLOGGED_CHANGES": 2
   },
   "finding_total": 9,
-  "inventory_fingerprint": "08b7c1250fdfe98be1e2de6ed00c8c27ab629e442276e8d89c7576b8d75bdaa8",
-  "evidence_fingerprint": "7cd5e742e6cebae62fd2a7c99d251a09633afc38d2e3d7b22737d79a1e26ad76",
+  "inventory_fingerprint": "261f032911ae60d8277ee29b161421f2017e10b9ef50b4164efb8ecc33bca1b0",
+  "evidence_fingerprint": "3ec95c6e132cce957ede03868a95e8c25334061f23a4538e4961212cbbba1d33",
   "files": [
     {
       "path": ".github/agents/openfoam-solidification.agent.md",
@@ -299399,7 +299399,7 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "bcc72f4952ca3a9a9fb2fb2586e7beb13ae36a7f"
+      "blob": "4ad349040e0b9debcd7e707ba67740784a71e886"
     },
     {
       "path": "docs/granada/MAESTRIA_CAMPANA_B14_C14_200S_PLAN_20261124_ES.md",
@@ -300120,7 +300120,7 @@
       "role": "source",
       "purpose": "code/test implementation",
       "certainty": "rule",
-      "blob": "38dc44e3be4f3d0215ec9a69a3b1cdc25b738f08"
+      "blob": "66dd0cf7bf582c9630bb4149bab1e5e4d04a0a05"
     },
     {
       "path": "tools/run_case_a_200s_granada.py",
@@ -300135,6 +300135,13 @@
       "purpose": "code/test implementation",
       "certainty": "rule",
       "blob": "c783df91ac4b6d57b5ea49ad73c5d82fc58f1ece"
+    },
+    {
+      "path": "tools/test_adaptive_mpi_sequence.py",
+      "role": "test",
+      "purpose": "code/test implementation",
+      "certainty": "rule",
+      "blob": "8e6197ce964550981206fa605852685c2b6a148c"
     },
     {
       "path": "tools/test_compact_campaign_200s.py",
@@ -300251,20 +300258,20 @@
       "state": "REVIEW_REQUIRED"
     },
     {
-      "id": "f5ebf980e03d81b2",
+      "id": "65f70bfc89516f85",
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_EN.md",
-      "observation": "8 implementation/config paths changed since this log's last commit; examples: .github/workflows/adaptive-campaign-static.yml, docs/C3D04_CASE_A_STATUS.json, docs/PROJECT_STAGE_STATUS.json, tools/run_adaptive_campaign_200s.py, tools/run_adaptive_mpi_campaign.py, tools/run_case_a_200s_granada.py",
+      "observation": "9 implementation/config paths changed since this log's last commit; examples: .github/workflows/adaptive-campaign-static.yml, docs/C3D04_CASE_A_STATUS.json, docs/PROJECT_STAGE_STATUS.json, tools/run_adaptive_campaign_200s.py, tools/run_adaptive_mpi_campaign.py, tools/run_case_a_200s_granada.py",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     },
     {
-      "id": "7fbcaf6e99a9988e",
+      "id": "8ec7a13df1f7a44f",
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_ES.md",
-      "observation": "8 implementation/config paths changed since this log's last commit; examples: .github/workflows/adaptive-campaign-static.yml, docs/C3D04_CASE_A_STATUS.json, docs/PROJECT_STAGE_STATUS.json, tools/run_adaptive_campaign_200s.py, tools/run_adaptive_mpi_campaign.py, tools/run_case_a_200s_granada.py",
+      "observation": "9 implementation/config paths changed since this log's last commit; examples: .github/workflows/adaptive-campaign-static.yml, docs/C3D04_CASE_A_STATUS.json, docs/PROJECT_STAGE_STATUS.json, tools/run_adaptive_campaign_200s.py, tools/run_adaptive_mpi_campaign.py, tools/run_case_a_200s_granada.py",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     }
