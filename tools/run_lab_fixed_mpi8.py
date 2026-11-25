@@ -9,6 +9,7 @@ import shutil
 import signal
 import subprocess
 import sys
+import tempfile
 import time
 
 import compact_campaign_200s as compact
@@ -19,6 +20,7 @@ SRC=transfer.COMPACT
 DST=HOME/"CAMPAIGN_200S_FIXED_MPI_08"
 NAMES=("C14-2D-200s","B14-2D-200s","C14-3DB-200s")
 REPORT=transfer.REPORT
+MPI_CMD=["mpirun","--map-by","hwthread:HWTCPUS","--bind-to","hwthread","-np","8"]
 TIME=re.compile(r"^\s*Time\s*=\s*([0-9.eE+-]+)s?\s*$")
 RANK=re.compile(r"^\s*nProcs\s*:\s*(\d+)")
 def need(ok,msg):
@@ -113,7 +115,12 @@ def native(case,name,args,progress=False,start=0):
                 except subprocess.TimeoutExpired:
                     os.killpg(p.pid,signal.SIGKILL);p.wait()
             raise
-    need(rc==0 and not fatal and end,"native command incomplete "+name)
+    if rc!=0 or fatal or not end:
+        from collections import deque
+        with (case/name).open(errors="replace") as f:
+            tail="".join(deque(f,maxlen=35))
+        print("NATIVE_FAILURE",case,name,"exit",rc,"\n"+tail,flush=True)
+        raise RuntimeError("native command incomplete "+name+" exit="+str(rc))
     if progress:
         need(ranks==8 and count==(200-start)*1000 and abs(last-200)<1e-7,"MPI completion not proven")
     return time.monotonic()-start_wall
@@ -164,7 +171,7 @@ def execute(prepared):
     try:
         meta["status"]="RUNNING";save(path,meta)
         meta["solver_wall_seconds"]=native(case,"log.foamMultiRun",
-            ["mpirun","-np","8","foamMultiRun","-case",str(case),"-parallel"],True,start)
+            MPI_CMD+["foamMultiRun","-case",str(case),"-parallel"],True,start)
         meta["status"]="MPI_SOLVER_COMPLETE_RECONSTRUCT_PENDING";save(path,meta)
         meta["reconstruction_seconds"]=native(case,"log.reconstructPar",
             ["reconstructPar","-allRegions","-time",f"{start+1}:200","-case",str(case)])
@@ -176,16 +183,50 @@ def execute(prepared):
         meta["error"]=str(exc) or type(exc).__name__
         save(path,meta)
         raise
+def mpi_preflight():
+    print("MPI_PREFLIGHT",MPI_CMD,flush=True)
+    p=subprocess.run(MPI_CMD+["sh","-c",'printf "%s\\n" "$OMPI_COMM_WORLD_RANK"'],
+                     stdout=subprocess.PIPE,stderr=subprocess.PIPE,text=True,timeout=45)
+    print(p.stdout,p.stderr,flush=True)
+    need(p.returncode==0 and sorted(p.stdout.split())==list("01234567"),
+         "eight distinct MPI ranks not proven; no case mutation")
+    print("MPI_PREFLIGHT_PASS",flush=True)
+
+def archive_failed_starts():
+    existing=[DST/n for n in NAMES if (DST/n).exists()]
+    if not existing: return
+    index=DST/"QUEUE_STATUS.json"
+    need(index.is_file(),"prior MPI attempt exists without queue status; no overwrite")
+    summary=read(index)
+    for case in existing:
+        need(summary.get(case.name,{}).get("status")=="FAILED_PRESERVED",
+             "prior MPI case not a documented failure; no overwrite")
+        log=case/"log.foamMultiRun"
+        need(log.is_file(),"missing native log; no overwrite")
+        with log.open(errors="replace") as f:
+            need(not any(TIME.match(line) for line in f),"prior MPI CFD time exists; recovery required")
+        meta=read(case/"MPI_RUN_METADATA.json")
+        need(meta["status"]=="RUNNING","prior attempt may contain completed solver; no overwrite")
+    backup=Path(tempfile.mkdtemp(prefix="CAMPAIGN_200S_FIXED_MPI_08_STARTUP_FAILURE_",dir=HOME))
+    for case in existing: case.rename(backup/case.name)
+    index.rename(backup/index.name)
+    print("FAILED_STARTS_ARCHIVED",backup,flush=True)
+
 def main():
     need(os.environ.get("WM_PROJECT_VERSION")=="14","load Foundation14")
     need(len(os.sched_getaffinity(0))>=8,"eight CPUs unavailable")
     for cmd in ("foamMultiRun","mpirun","decomposePar","reconstructPar","foamLog"):
         need(shutil.which(cmd),"missing "+cmd)
     need((HOME/"finalize_lab_fixed_mpi8.py").is_file(),"finalizer missing")
+    mpi_preflight()
     DST.mkdir(exist_ok=True)
-    with (DST/".queue.lock").open("a") as lock:
+    audit=HOME/"CAMPAIGN_200S_FIXED_MPI_08_AUDIT"
+    audit.mkdir(exist_ok=True)
+    print("WAITING_FOR_PREVIOUS_FINALIZER_IF_ANY",flush=True)
+    with (audit/".finalize.lock").open("a") as finalizer_lock, (DST/".queue.lock").open("a") as lock:
+        fcntl.flock(finalizer_lock,fcntl.LOCK_EX)
         fcntl.flock(lock,fcntl.LOCK_EX|fcntl.LOCK_NB)
-        need(not any((DST/n).exists() for n in NAMES),"prior MPI attempt exists; no overwrite")
+        archive_failed_starts()
         r=read(SRC/"C14-3DA-200s"/REPORT)
         need(r["status"]=="SOLVER_COMPLETE_COMPACT_AUDITED" and r["final_time_s"]==200 and r["solver_completed"],"C14-3DA audit not confirmed")
         # Verify MPI decomposition on a stable checkpoint before stopping serial.
