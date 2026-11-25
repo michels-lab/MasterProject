@@ -5,8 +5,8 @@
   "branch": "research/fs-c08-conservative-phase-mass-20261123",
   "parent_branch": "research/fs-c02-metal-air-vof-20261117",
   "scientific_project": "Master's research — cast iron solidification and shrinkage using OpenFOAM Foundation14",
-  "stage": "FS_C08_REAL_WSL_NATIVE_EXECUTION_DEBUGGING",
-  "status": "FS_C08_SECOND_B14_NATIVE_CFD_ATTEMPT_REACHED_PHASE_MASS_SOLVE__SYMMETRIC_PRECONDITIONER_FIX_COMMITTED",
+  "stage": "FS_C08_REDESIGN_COUPLED_PRESSURE_VOLUME_MASS_ENERGY",
+  "status": "FS_C08_THIRD_B14_NATIVE_CFD_ATTEMPT_THERMAL_SOLVES_PASS__PRESSURE_VOLUME_COUPLING_BLOCKED",
   "code": "analysis_tools/fs_c08_conservative_reference.py",
   "tests": "analysis_tools/test_fs_c08_conservative_reference.py",
   "test_count_declared": 18,
@@ -108,8 +108,8 @@
   "cpp_mass_phase_update_gamma_and_volume_closure": true,
   "cpp_pressure_velocity_energy_or_cht": false,
   "CI_cxx_compile_step_declared": true,
-  "last_work": "Second native B14 CFD attempt resolved rhoAlpha.liquidFinal and ran diagonal mass equation, then stopped with symmetric matrix DILU incompatibility. Explicit T/TFinal PCG/DIC and both phase mass regular/final entries with diagonal preconditioner now staged; inherited pressure/momentum unchanged. No completed timestep, no mass/energy validation.",
-  "next_scientific_stage": "Retry isolated B14 native CFD using corrected matrix solver configuration; inspect actual thermal predictor convergence and pressure/gas mass budgets. Preserve all old case/logs.",
+  "last_work": "Third WSL CFD passes mass and seven temperature linear solves but overfills cell 0 after energy density refresh before pressure. Added strict trial-volume diagnostic; no clipping, B14 unchanged. Documented required iterative pressure-volume/phase mass and energy flux correction. NOT a completed fix.",
+  "next_scientific_stage": "Implement coupled trial-state pressure/volume residual and corrected conservative phase mass/energy transport, then verify native build; do not ask researcher to rerun current known-failing algorithm.",
   "Wsl_tests_runner": "python3 -B -m unittest discover -s analysis_tools -p 'test_fs_c08_conservative_reference.py' -v",
   "Wsl_tests_summary": "Ran 18 tests in 0.072s; OK",
   "Wsl_tests_source_head": "eddacd6e9",
@@ -579,5 +579,25 @@
     "fix_commit": "4fbaafdd3921aecfeb8be8ee37f380576feb8836",
     "regression_commit": "e20348ea4fde4993458a9c1edca3236b31abf55c",
     "new_WSL_run_verified": false
-  }
+  },
+  "third_B14_CFD_attempt": {
+    "source_commit": "b6f3018f1cbfa856241ffbca5e75c2ab75fc817f",
+    "report": "/home/michel/OpenFOAM/FS_C08_DIAGNOSTICS/FS_C08_REAL_CFD_DIAGNOSTICS_20261125T023736Z_79e2ebf4/FS_C08_REAL_CFD_REPORT.json",
+    "wmake_exit_code": 0,
+    "foamMultiRun_exit_code": 1,
+    "timeout": false,
+    "first_time_s": 1.19999904e-7,
+    "temperature_linear_solves": 7,
+    "last_temperature_linear_residual": 1.41101331825e-11,
+    "initial_gamma_max": 0,
+    "first_run_error": "FS-C08 saturation violation at 0, alphaL=1.00000690418, alphaS=0; no mass clipping",
+    "failed_function": "PhaseMassTransport::reconstructFractions called by refreshAfterEnergy before pressure correction",
+    "source_three_tracked_sha256_unchanged": true,
+    "completed_positive_timestep": false,
+    "physical_mass_energy_verified": false,
+    "pressure_volume_coupling_implemented_and_verified": false
+  },
+  "pressure_volume_redesign_doc": "freesurface/FS-C08_conservative_phase_mass/coupled_solver/FS_C08_PRESSURE_VOLUME_CLOSURE_20261124_ES.md",
+  "saturation_diagnostic_commit": "fcd896af4a9d06a7db17bf2ed33fe0e0e47e6e62",
+  "saturation_diagnostic_native_build_verified": false
 }
