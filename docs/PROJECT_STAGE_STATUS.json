@@ -640,10 +640,10 @@
       "percent_hitos": 80,
       "percentage_scope": "SOLO_HITOS_OPERATIVOS_DEL_CASO_A_NO_VALIDACION_FISICA",
       "primary_contract": "cases_3d/C3D_04_rounded_multiblock_pilot/AGENTS.md",
-      "next_integrated_milestone": "Priority C14-3DA-200s, same faithful A physics and mesh; targeted preparer+runner published; sensitivity deferred.",
-      "blocker": "200s WSL execution and storage audit pending; independence and discrete conservation remain deferred/unverified.",
-      "CI_status": "C14_3DA_200S_PRIORITY_EXECUTOR_PUBLISHED_WSL_PENDING",
-      "CI_evidence": "docs/C3D04_A_C14_200S_PRIORITY_20261124_ES.md",
+      "next_integrated_milestone": "Integrated experimental capped MPI 3s pilot then 200s only A, analysis and archive; existing evidence reused.",
+      "blocker": "Uncapped A failed; capped A pilot/CFD pending. Cap .025 does not exclude failing dt .02.",
+      "CI_status": "GRANADA_CAPPED_MPI_INTEGRATED_EXECUTOR_PUBLISHED_WSL_PENDING",
+      "CI_evidence": "docs/C3D04_A_GRANADA_200S_ADAPTIVE_CAPPED_20261125_ES.md",
       "git_archive": "cases_3d/C3D_04_rounded_multiblock_pilot/C14_3D_A_faithful"
     },
     {
