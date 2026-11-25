@@ -20,10 +20,17 @@ from run_fs_c08_real_cfd import (
 )
 
 VARIANTS = (
-    ("legacy_separate", "legacy", "separate"),
-    ("refresh_separate", "refreshBeforePressure", "separate"),
-    ("legacy_weighted", "legacy", "phaseWeighted"),
-    ("refresh_weighted", "refreshBeforePressure", "phaseWeighted"),
+    ("legacy_separate", "legacy", "separate", "incremental"),
+    ("refresh_separate", "refreshBeforePressure", "separate", "incremental"),
+    ("legacy_weighted", "legacy", "phaseWeighted", "incremental"),
+    ("refresh_weighted", "refreshBeforePressure", "phaseWeighted", "incremental"),
+)
+
+FLUX_VARIANTS = (
+    ("refresh_reference", "refreshBeforePressure", "separate", "incremental"),
+    ("refresh_total_upwind", "refreshBeforePressure", "separate", "totalUpwind"),
+    ("refresh_no_ddt_corr", "refreshBeforePressure", "separate", "incrementalNoDdtCorr"),
+    ("refresh_total_no_ddt_corr", "refreshBeforePressure", "separate", "totalUpwindNoDdtCorr"),
 )
 
 METRICS = (
@@ -39,11 +46,13 @@ def numeric(value):
     except (ValueError, TypeError):
         return None
 
-def summarize(name, coupling, mobility, report):
+def summarize(name, coupling, mobility, flux_mode, report):
     ledger=report.get("transient_ledger", {})
     last=ledger.get("last_complete_state") or {}
     return {
         "variant": name, "matrix": coupling, "phase_mobility": mobility,
+        "momentum_flux_mode": flux_mode,
+        "interface_transport_records": report.get("interface_transport_records", []),
         "status": report.get("status", "UNKNOWN"),
         "completed": bool(report.get("real_CFD_completed")),
         "accepted_pressure_records": report.get("accepted_pressure_records", 0),
@@ -97,7 +106,9 @@ def main(argv=None):
     parser.add_argument("--steps",type=int,default=10)
     parser.add_argument("--dt",type=float,default=1e-6)
     parser.add_argument("--timeout-minutes",type=int,default=120)
+    parser.add_argument("--suite",choices=("mobility","flux"),default="flux")
     args=parser.parse_args(argv)
+    variants=FLUX_VARIANTS if args.suite=="flux" else VARIANTS
     if not 1<=args.steps<=1000 or not math.isfinite(args.dt) or args.dt<=0 or args.timeout_minutes<1:
         parser.error("invalid fixed-step controls or timeout")
     source=args.source.expanduser().resolve()
@@ -112,7 +123,7 @@ def main(argv=None):
     root.mkdir(parents=True,exist_ok=False)
     summary_path=root/"FS_C08_BATCH_SUMMARY.json"
     batch={"schema":"fs-c08-native-batch-v1","status":"BUILDING","dt_s":args.dt,
-           "steps":args.steps,"requested_parallel_jobs":args.jobs,
+           "steps":args.steps,"requested_parallel_jobs":args.jobs,"suite":args.suite,
            "global_energy_verified":False,"physical_shrinkage_validated":False,
            "variants":[]}
     write_report(summary_path,batch)
@@ -129,13 +140,13 @@ def main(argv=None):
             batch["status"]="RUNNING"
             write_report(summary_path,batch)
             def worker(variant):
-                name,coupling,mobility=variant
+                name,coupling,mobility,flux_mode=variant
                 output=cases/("FS_C08_COUPLED_"+stamp+"_"+name)
                 diag=root/name
                 print("START",name,flush=True)
                 try:
                     report=execute(source,material,output,diag,args.timeout_minutes,
-                        True,args.dt,args.steps,"linear",coupling,mobility,
+                        True,args.dt,args.steps,"linear",coupling,mobility,flux_mode,
                         verified_batch_build=receipt)
                 except Exception as exc:
                     # One failed variant must not cancel the remaining cases.
@@ -148,17 +159,17 @@ def main(argv=None):
                         real_CFD_completed=False,batch_worker_error=str(exc),
                         diagnostics=str(diag),output_case=str(output))
                     write_report(report_file,report)
-                result=summarize(name,coupling,mobility,report)
+                result=summarize(name,coupling,mobility,flux_mode,report)
                 print("FINISH",name,result["status"],
                       "saved steps",result["saved_steps"],flush=True)
                 return result
             finished={}
             with ThreadPoolExecutor(max_workers=args.jobs) as pool:
-                futures={pool.submit(worker,v):v[0] for v in VARIANTS}
+                futures={pool.submit(worker,v):v[0] for v in variants}
                 for future in as_completed(futures):
                     row=future.result()
                     finished[row["variant"]]=row
-                    batch["variants"]=[finished[v[0]] for v in VARIANTS if v[0] in finished]
+                    batch["variants"]=[finished[v[0]] for v in variants if v[0] in finished]
                     write_report(summary_path,batch)
             batch["common_saved_time_comparison"]=common_time_comparison(batch["variants"],args.dt)
             batch["status"]="COMPLETED_ALL_VARIANTS" if all(r["completed"] for r in batch["variants"]) else "COMPLETED_WITH_REJECTED_VARIANTS"
@@ -178,7 +189,7 @@ def main(argv=None):
     print(json.dumps({key:value for key,value in batch.items() if key!="common_saved_time_comparison"},indent=2),flush=True)
     if batch["common_saved_time_comparison"]:
         print("LAST COMMON SAVED TIME:",json.dumps(batch["common_saved_time_comparison"][-1]),flush=True)
-    return 0 if batch["passed_variants"]==len(VARIANTS) else 2
+    return 0 if batch["passed_variants"]==len(variants) else 2
 
 if __name__=="__main__":
     raise SystemExit(main())
