@@ -29,7 +29,7 @@
     "POTENTIAL_UNLOGGED_CHANGES": 2
   },
   "finding_total": 9,
-  "inventory_fingerprint": "2943ac5cf71b9b707133e5a56be7c12b0308f5885949db1f8597b88e5b279e77",
+  "inventory_fingerprint": "9ffa5a0036282c22f65f97d779f34edc56ad261909e83db7aaae664db43769ac",
   "evidence_fingerprint": "c98670f3667900ee295fcde5fd0ec7f66ae44043499e6baaf8280e6f438e82b5",
   "files": [
     {
@@ -300141,7 +300141,7 @@
       "role": "source",
       "purpose": "code/test implementation",
       "certainty": "rule",
-      "blob": "7a3291a6b3b7c7d61da009beffa5493e01b3883c"
+      "blob": "78b29dbeec4cbae89e272761951f97c3087b21f4"
     },
     {
       "path": "tools/test_adaptive_campaign_200s.py",
