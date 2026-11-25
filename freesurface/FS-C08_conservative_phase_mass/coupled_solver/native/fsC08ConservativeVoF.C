@@ -153,8 +153,23 @@ solvers::fsC08ConservativeVoF::fsC08ConservativeVoF(fvMesh& mesh)
             << exit(FatalError);
     }
 
+    // Establish one thermodynamically consistent t=0 state AFTER the
+    // base constructor has initialized pressure/buoyancy. Never rebuild
+    // conserved gas mass from mutable native thermo oldTime fields later.
+    mixture_.correctThermo();
+    mixture_.correct();
+    gasMassTrial_=alpha2*mixture_.rho2();
+    gasMassTrial_.correctBoundaryConditions();
+    gasMassTrial_.oldTime();
+    mixture_.T().oldTime();
     reconcileMixtureDensity();
     rhoMetalEffective_.oldTime();
+    Info<< "FS_C08_INITIAL_GAS_INVENTORY"
+        << " mass_kg=" << gSum(gasMassTrial_.primitiveField()*mesh.V())
+        << " rhoMin=" << min(mixture_.rho2()).value()
+        << " rhoMax=" << max(mixture_.rho2()).value()
+        << " Tmin=" << min(mixture_.T()).value()
+        << " Tmax=" << max(mixture_.T()).value() << nl;
     updatePhaseInternalEnergy();
     phaseInternalEnergy_.oldTime();
     Info<< "FS_C08_COUPLED_SOLVER_MODULE_INSTALLED "
@@ -232,7 +247,7 @@ void solvers::fsC08ConservativeVoF::prePredictor()
     const volScalarField gasMassOld
     (
         "fsC08GasMassAtN",
-        alpha2.oldTime()*mixture_.rho2().oldTime()
+        gasMassTrial_.oldTime()
     );
     // MULES provides a real, all-face metal VOF flux from evolving U.
     compressibleVoF::prePredictor();
@@ -345,8 +360,7 @@ void solvers::fsC08ConservativeVoF::postSolve()
     const auto& s0=phaseMass_->solidMass().oldTime().primitiveField();
     const auto& rGas=mixture_.rho2().primitiveField();
     const auto& aGas=alpha2.primitiveField();
-    const auto& rGas0=mixture_.rho2().oldTime().primitiveField();
-    const auto& aGas0=alpha2.oldTime().primitiveField();
+    const auto& gas0=gasMassTrial_.oldTime().primitiveField();
     scalar M0=0, M=0, Mgas=0, Mgas0=0;
     scalar E0=0,E=0,mechanicalWork_W=0,darcyDissipation_W=0;
     scalar postPressureEnergyJump_J=0;
@@ -359,7 +373,7 @@ void solvers::fsC08ConservativeVoF::postSolve()
         M0+=V[i]*(l0[i]+s0[i]);
         M+=V[i]*(l[i]+s[i]);
         Mgas+=V[i]*aGas[i]*rGas[i];
-        Mgas0+=V[i]*aGas0[i]*rGas0[i];
+        Mgas0+=V[i]*gas0[i];
         E+=V[i]*u[i];
         E0+=V[i]*u0[i];
         postPressureEnergyJump_J+=
