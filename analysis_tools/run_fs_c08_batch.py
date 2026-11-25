@@ -1,0 +1,181 @@
+#!/usr/bin/env python3
+"""Run independent real FS-C08 CFD variants concurrently with a single build.
+Each worker is serial OpenFOAM, not MPI decomposition. Fixed time step only.
+"""
+from __future__ import annotations
+import argparse
+from concurrent.futures import ThreadPoolExecutor, as_completed
+import csv
+from datetime import datetime, timezone
+import json
+import math
+import os
+from pathlib import Path
+import secrets
+import shutil
+import sys
+
+from run_fs_c08_real_cfd import (
+    BASE_MODULE, build_native_library, execute, native_library_lock, write_report,
+)
+
+VARIANTS = (
+    ("legacy_separate", "legacy", "separate"),
+    ("refresh_separate", "refreshBeforePressure", "separate"),
+    ("legacy_weighted", "legacy", "phaseWeighted"),
+    ("refresh_weighted", "refreshBeforePressure", "phaseWeighted"),
+)
+
+METRICS = (
+    "maxU_m_s", "pMax_Pa", "metalVolume_m3", "solidMass_kg",
+    "metalMassResidual_kg", "gasContinuityDefect_kg",
+    "totalInternalEnergyEquationBalance_J", "localEnergyRelativeL1",
+)
+
+def numeric(value):
+    try:
+        x=float(value)
+        return x if math.isfinite(x) else None
+    except (ValueError, TypeError):
+        return None
+
+def summarize(name, coupling, mobility, report):
+    ledger=report.get("transient_ledger", {})
+    last=ledger.get("last_complete_state") or {}
+    return {
+        "variant": name, "matrix": coupling, "phase_mobility": mobility,
+        "status": report.get("status", "UNKNOWN"),
+        "completed": bool(report.get("real_CFD_completed")),
+        "accepted_pressure_records": report.get("accepted_pressure_records", 0),
+        "complete_ledger_steps": ledger.get("complete_native_ledger_times", 0),
+        "saved_steps": len(report.get("saved_positive_times_s", [])),
+        "last_saved_time_s": report.get("latest_saved_time_s"),
+        "last_ledger_time_s": last.get("time_s"),
+        **{key: last.get(key) for key in METRICS},
+        "max_accepted_volume_residual": report.get("native_coupled_volume_gate", {}).get("max_accepted_volume_residual"),
+        "error": report.get("first_run_error") or report.get("budget_gate_error")
+                 or report.get("first_compiler_error") or report.get("batch_worker_error"),
+        "ledger_issues": ledger.get("issues", []),
+        "diagnostics": report.get("diagnostics"),
+        "case": report.get("output_case"),
+        "ledger_csv": ledger.get("csv"),
+        "global_energy_verified": False, "physical_shrinkage_validated": False,
+    }
+
+def common_time_comparison(rows, dt):
+    """Compare only complete ledgers at times actually saved by every case.
+    Include no interpolation, no missing data imputation.
+    """
+    histories=[]
+    for row in rows:
+        file=row.get("ledger_csv")
+        by_step={}
+        if file and Path(file).is_file():
+            with Path(file).open(newline="",encoding="utf-8") as fp:
+                for rec in csv.DictReader(fp):
+                    t=numeric(rec.get("time_s"))
+                    if t is None or rec.get("all_native_ledgers_present")!="True":
+                        continue
+                    step=round(t/dt)
+                    if step<1 or step>row["saved_steps"] or abs(t-step*dt)>max(1e-14,dt*1e-6):
+                        continue
+                    by_step[step]={key:numeric(rec.get(key)) for key in METRICS}
+        histories.append(by_step)
+    shared=set.intersection(*(set(h) for h in histories)) if histories else set()
+    return [{"step": step, "time_s": step*dt,
+             "variants": {row["variant"]: h[step] for row,h in zip(rows,histories)}}
+            for step in sorted(shared)]
+
+def main(argv=None):
+    parser=argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--source",type=Path,default=Path.home()/"OpenFOAM/FS_C07_RUNS/FS_C07_THERMAL_20261123T183217Z_72da1bf4")
+    parser.add_argument("--material",type=Path,default=BASE_MODULE.parent/"materials/B14_reference/fsC08Material")
+    parser.add_argument("--jobs",type=int,default=2,choices=(1,2,3,4))
+    parser.add_argument("--steps",type=int,default=10)
+    parser.add_argument("--dt",type=float,default=1e-6)
+    parser.add_argument("--timeout-minutes",type=int,default=120)
+    args=parser.parse_args(argv)
+    if not 1<=args.steps<=1000 or not math.isfinite(args.dt) or args.dt<=0 or args.timeout_minutes<1:
+        parser.error("invalid fixed-step controls or timeout")
+    source=args.source.expanduser().resolve()
+    material=args.material.expanduser().resolve()
+    if not source.is_dir() or not material.is_file():
+        parser.error(f"source/material missing: {source} | {material}")
+    if os.environ.get("WM_PROJECT_VERSION")!="14" or not shutil.which("foamMultiRun"):
+        parser.error("load OpenFOAM Foundation14 in WSL")
+    stamp=datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")+"_"+secrets.token_hex(4)
+    root=Path.home()/"OpenFOAM/FS_C08_DIAGNOSTICS"/("FS_C08_BATCH_"+stamp)
+    cases=Path.home()/"OpenFOAM/FS_C08_COUPLED_RUNS"
+    root.mkdir(parents=True,exist_ok=False)
+    summary_path=root/"FS_C08_BATCH_SUMMARY.json"
+    batch={"schema":"fs-c08-native-batch-v1","status":"BUILDING","dt_s":args.dt,
+           "steps":args.steps,"requested_parallel_jobs":args.jobs,
+           "global_energy_verified":False,"physical_shrinkage_validated":False,
+           "variants":[]}
+    write_report(summary_path,batch)
+    print("FS-C08 BATCH:",root,flush=True)
+    try:
+        with native_library_lock():
+            receipt=build_native_library(root/"native_wmake.log")
+            batch["build"]=receipt
+            if not receipt["verified"]:
+                batch["status"]="BUILD_FAILED"
+                write_report(summary_path,batch)
+                print(json.dumps(batch,indent=2),flush=True)
+                return 2
+            batch["status"]="RUNNING"
+            write_report(summary_path,batch)
+            def worker(variant):
+                name,coupling,mobility=variant
+                output=cases/("FS_C08_COUPLED_"+stamp+"_"+name)
+                diag=root/name
+                print("START",name,flush=True)
+                try:
+                    report=execute(source,material,output,diag,args.timeout_minutes,
+                        True,args.dt,args.steps,"linear",coupling,mobility,
+                        verified_batch_build=receipt)
+                except Exception as exc:
+                    # One failed variant must not cancel the remaining cases.
+                    report_file=diag/"FS_C08_REAL_CFD_REPORT.json"
+                    try:
+                        report=json.loads(report_file.read_text(encoding="utf-8"))
+                    except (OSError,ValueError):
+                        report={}
+                    report.update(status="FS_C08_BATCH_WORKER_ERROR",
+                        real_CFD_completed=False,batch_worker_error=str(exc),
+                        diagnostics=str(diag),output_case=str(output))
+                    write_report(report_file,report)
+                result=summarize(name,coupling,mobility,report)
+                print("FINISH",name,result["status"],
+                      "saved steps",result["saved_steps"],flush=True)
+                return result
+            finished={}
+            with ThreadPoolExecutor(max_workers=args.jobs) as pool:
+                futures={pool.submit(worker,v):v[0] for v in VARIANTS}
+                for future in as_completed(futures):
+                    row=future.result()
+                    finished[row["variant"]]=row
+                    batch["variants"]=[finished[v[0]] for v in VARIANTS if v[0] in finished]
+                    write_report(summary_path,batch)
+            batch["common_saved_time_comparison"]=common_time_comparison(batch["variants"],args.dt)
+            batch["status"]="COMPLETED_ALL_VARIANTS" if all(r["completed"] for r in batch["variants"]) else "COMPLETED_WITH_REJECTED_VARIANTS"
+            batch["passed_variants"]=sum(r["completed"] for r in batch["variants"])
+            write_report(summary_path,batch)
+    except (RuntimeError,OSError,ValueError) as exc:
+        batch.update(status="BATCH_ERROR",error=str(exc))
+        write_report(summary_path,batch)
+        print("FS-C08 BATCH ERROR:",exc,file=sys.stderr)
+        return 2
+    with (root/"FS_C08_BATCH_SUMMARY.csv").open("w",newline="",encoding="utf-8") as fp:
+        writer=csv.DictWriter(fp,fieldnames=list(batch["variants"][0]))
+        writer.writeheader()
+        writer.writerows(batch["variants"])
+    print("FS-C08 BATCH SUMMARY:",summary_path,flush=True)
+    # Keep terminal output compact, while the report retains all time histories.
+    print(json.dumps({key:value for key,value in batch.items() if key!="common_saved_time_comparison"},indent=2),flush=True)
+    if batch["common_saved_time_comparison"]:
+        print("LAST COMMON SAVED TIME:",json.dumps(batch["common_saved_time_comparison"][-1]),flush=True)
+    return 0 if batch["passed_variants"]==len(VARIANTS) else 2
+
+if __name__=="__main__":
+    raise SystemExit(main())
