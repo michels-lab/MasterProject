@@ -29,7 +29,7 @@
     "POTENTIAL_UNLOGGED_CHANGES": 2
   },
   "finding_total": 9,
-  "inventory_fingerprint": "be2daed5f83cd6875a212dd09d58a1c961ce27ea11cda571b091434d5540c34e",
+  "inventory_fingerprint": "08b7c1250fdfe98be1e2de6ed00c8c27ab629e442276e8d89c7576b8d75bdaa8",
   "evidence_fingerprint": "7cd5e742e6cebae62fd2a7c99d251a09633afc38d2e3d7b22737d79a1e26ad76",
   "files": [
     {
@@ -300120,7 +300120,7 @@
       "role": "source",
       "purpose": "code/test implementation",
       "certainty": "rule",
-      "blob": "7701122dae9f580b0079caf1544b63755119d1ed"
+      "blob": "38dc44e3be4f3d0215ec9a69a3b1cdc25b738f08"
     },
     {
       "path": "tools/run_case_a_200s_granada.py",
