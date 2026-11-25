@@ -108,7 +108,7 @@ def analyze(case,r):
     dest=case/"analysis_results"/"granada_A_200s"
     if dest.exists():
         saved=read(dest/"REPORT.json")
-        need(saved["solver_log_sha256"]==loghash and all(transfer.sha(dest/k)==v for k,v in saved["derived_sha256"].items()),"existing analysis differs")
+        need(saved["solver_log_sha256"]==loghash and all(transfer.sha(dest/k)==v for k,v in saved["derived_sha256"].items()) and all(transfer.sha(case/k)==v for k,v in saved["source_sha256"].items()),"existing analysis differs")
         return dest,saved
     names={"alpha":("metalMeanLiquidFraction","volFieldValue.dat",2),
            "H":("metalSensibleEnthalpy","volFieldValue.dat",2),
@@ -125,6 +125,7 @@ def analyze(case,r):
     for k in probes:sources[str((pp/k).relative_to(case))]=transfer.sha(pp/k)
     n=r["solver_steps"]+1
     need(all(len(v)==n for v in probes.values()),"native probe count mismatch")
+    need(all(len(row)==(4 if k=="U" else 2) for k,v in probes.items() for row in v),"native probe column mismatch")
     # Align on the actual recorded adaptive time series, never interpolate.
     need(all(all(abs(a[0]-b[0])<=5.1e-4 for a,b in zip(probes["T"],v)) for v in probes.values()),"probe alignment mismatch")
     need(all(len(row)==2 and row[1]>0 for row in probes["T"]),"invalid probe T")
@@ -228,7 +229,7 @@ def main():
         try:
             # A valid full run needs no new pilot or CFD.
             full=existing(a.ranks,a.max_dt,200)
-            if not any(r.get("status")=="SOLVER_COMPLETE_ADAPTIVE_AUDITED" for _,r in full):
+            if not any(r.get("solver_completed") for _,r in full):
                 pilot,pr=pick_or_run(url,a.ranks,a.max_dt,3,a.retry_preserved)
                 summary["pilot"]={"path":str(pilot),"status":pr["status"],"steps":pr["solver_steps"],
                                   "statistics":pr.get("adaptive_statistics")}
