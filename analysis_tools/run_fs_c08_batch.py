@@ -58,6 +58,14 @@ EOS_MODULI={"eos_incompressible":0.0,"eos_half_K":0.5*EOS_REFERENCE_K,
 EOS_VARIANTS=tuple((name,"refreshBeforePressure","separate","incremental","legacy","trial")
                    for name in EOS_MODULI)
 
+EOS_TEMPORAL_VARIANTS=tuple(
+    ("eos_"+v[0], *v[1:]) for v in TEMPORAL_VARIANTS
+)
+EOS_TEMPORAL_FACTORS={"eos_"+name:factor for name,factor in TEMPORAL_FACTORS.items()}
+
+def bulk_modulus(name):
+    return EOS_REFERENCE_K if name in EOS_TEMPORAL_FACTORS else EOS_MODULI.get(name,0.0)
+
 METRICS = (
     "maxU_m_s", "pMax_Pa", "metalVolume_m3", "solidMass_kg",
     "metalMassResidual_kg", "gasContinuityDefect_kg",
@@ -80,7 +88,7 @@ def summarize(name, coupling, mobility, flux_mode, energy_mode, support_mode, re
         "momentum_flux_mode": flux_mode,
         "energy_donor_mode": energy_mode,
         "pressure_transport_support": support_mode,
-        "metal_bulk_modulus_pa":report.get("metal_bulk_modulus_pa",EOS_MODULI.get(name,0.0)),
+        "metal_bulk_modulus_pa":report.get("metal_bulk_modulus_pa",bulk_modulus(name)),
         "metal_eos_records":report.get("metal_eos_records",[]),
         "caloric_pressure_dependence_validated":False,
         "fixed_dt_s": case_dt, "scheduled_steps": case_steps,
@@ -151,19 +159,20 @@ def main(argv=None):
     parser.add_argument("--steps",type=int,default=10)
     parser.add_argument("--dt",type=float,default=1e-6)
     parser.add_argument("--timeout-minutes",type=int,default=120)
-    parser.add_argument("--suite",choices=("mobility","flux","energy","support","temporal","eos"),default="support")
+    parser.add_argument("--suite",choices=("mobility","flux","energy","support","temporal","eos","eos_temporal"),default="support")
+    parser.add_argument("--compact-output",action="store_true",help="Print concise clipboard report; full JSON/CSV and native logs remain on disk")
     args=parser.parse_args(argv)
     variants=SUPPORT_VARIANTS if args.suite=="support" else tuple(v+("trial",) for v in (ENERGY_VARIANTS if args.suite=="energy" else tuple(v+("legacy",) for v in (FLUX_VARIANTS if args.suite=="flux" else VARIANTS))))
     if not 1<=args.steps<=1000 or not math.isfinite(args.dt) or args.dt<=0 or args.timeout_minutes<1:
         parser.error("invalid fixed-step controls or timeout")
-    if args.suite=="temporal":
+    if args.suite in ("temporal","eos_temporal"):
         if args.steps%2 or args.steps*4>1000:
             parser.error("temporal suite requires an even reference step count <=250")
-        variants=TEMPORAL_VARIANTS
+        variants=EOS_TEMPORAL_VARIANTS if args.suite=="eos_temporal" else TEMPORAL_VARIANTS
     if args.suite=="eos":
         variants=EOS_VARIANTS
     def controls(name):
-        factor=TEMPORAL_FACTORS[name] if args.suite=="temporal" else 1.0
+        factor=TEMPORAL_FACTORS.get(name,EOS_TEMPORAL_FACTORS.get(name,1.0))
         return args.dt*factor, int(args.steps/factor)
     comparison_dt=min(controls(v[0])[0] for v in variants)
     source=args.source.expanduser().resolve()
@@ -184,7 +193,7 @@ def main(argv=None):
            "comparison_tick_s":comparison_dt,
            "per_variant_controls":{v[0]:{"dt_s":controls(v[0])[0],"steps":controls(v[0])[1]} for v in variants},
            "adaptive_timestep":False,
-           "per_variant_bulk_modulus_pa":{v[0]:EOS_MODULI.get(v[0],0.0) for v in variants},
+           "per_variant_bulk_modulus_pa":{v[0]:bulk_modulus(v[0]) for v in variants},
            "global_energy_verified":False,"physical_shrinkage_validated":False,
            "variants":[]}
     write_report(summary_path,batch)
@@ -208,7 +217,7 @@ def main(argv=None):
                 print("START",name,flush=True)
                 try:
                     report=execute(source,material,output,diag,args.timeout_minutes,
-                        True,case_dt,case_steps,"linear",coupling,mobility,flux_mode,energy_mode,support_mode,EOS_MODULI.get(name,0.0),
+                        True,case_dt,case_steps,"linear",coupling,mobility,flux_mode,energy_mode,support_mode,bulk_modulus(name),
                         verified_batch_build=receipt)
                 except Exception as exc:
                     # One failed variant must not cancel the remaining cases.
@@ -221,7 +230,7 @@ def main(argv=None):
                         real_CFD_completed=False,batch_worker_error=str(exc),
                         diagnostics=str(diag),output_case=str(output))
                     write_report(report_file,report)
-                result=summarize(name,coupling,mobility,flux_mode,energy_mode,support_mode,report,case_dt,case_steps,args.suite in ("temporal","eos"))
+                result=summarize(name,coupling,mobility,flux_mode,energy_mode,support_mode,report,case_dt,case_steps,args.suite in ("temporal","eos","eos_temporal"))
                 print("FINISH",name,result["status"],
                       "saved steps",result["saved_steps"],flush=True)
                 return result
@@ -234,6 +243,9 @@ def main(argv=None):
                     batch["variants"]=[finished[v[0]] for v in variants if v[0] in finished]
                     write_report(summary_path,batch)
             batch["common_saved_time_comparison"]=common_time_comparison(batch["variants"],comparison_dt)
+            completed=[row for row in batch["variants"] if row["completed"]]
+            batch["completed_variants_common_saved_time_comparison"]=common_time_comparison(completed,comparison_dt)
+            batch["completed_variants_compared"]=[row["variant"] for row in completed]
             batch["status"]="COMPLETED_ALL_VARIANTS" if all(r["completed"] for r in batch["variants"]) else "COMPLETED_WITH_REJECTED_VARIANTS"
             batch["passed_variants"]=sum(r["completed"] for r in batch["variants"])
             write_report(summary_path,batch)
@@ -248,9 +260,22 @@ def main(argv=None):
         writer.writerows(batch["variants"])
     print("FS-C08 BATCH SUMMARY:",summary_path,flush=True)
     # Keep terminal output compact, while the report retains all time histories.
-    print(json.dumps({key:value for key,value in batch.items() if key!="common_saved_time_comparison"},indent=2),flush=True)
+    excluded={"common_saved_time_comparison","completed_variants_common_saved_time_comparison"}
+    printable={key:value for key,value in batch.items() if key not in excluded}
+    if args.compact_output:
+        # This is a presentation filter only, not an acceptance test.
+        keys=("variant","fixed_dt_s","scheduled_steps","metal_bulk_modulus_pa",
+              "metal_eos_records","status","completed","saved_steps","complete_ledger_steps",
+              "last_saved_time_s","max_accepted_volume_residual","error","ledger_issues",
+              "diagnostics","case","ledger_csv","native_diagnostic_tail_on_failure",
+              *METRICS)
+        printable["variants"]=[{k:row.get(k) for k in keys} for row in batch["variants"]]
+        printable["completed_variant_common_times_count"]=len(batch["completed_variants_common_saved_time_comparison"])
+    print(json.dumps(printable,indent=2),flush=True)
     if batch["common_saved_time_comparison"]:
         print("LAST COMMON SAVED TIME:",json.dumps(batch["common_saved_time_comparison"][-1]),flush=True)
+    if batch["completed_variants_common_saved_time_comparison"] and not batch["common_saved_time_comparison"]:
+        print("LAST COMMON TIME OF COMPLETED VARIANTS ONLY:",json.dumps(batch["completed_variants_common_saved_time_comparison"][-1]),flush=True)
     return 0 if batch["passed_variants"]==len(variants) else 2
 
 if __name__=="__main__":
