@@ -479,6 +479,11 @@ def execute(source: Path, material: Path, output: Path,
             line.strip() for line in log.splitlines()
             if "FS_C08_PHASE_PRESSURE_MOBILITY" in line
         ]
+        report["startup_pressure_attribution_records"] = [
+            line.strip() for line in log.splitlines()
+            if "FS_C08_STARTUP_PRESSURE_COMPONENT" in line
+            or "FS_C08_STARTUP_PRESSURE_ATTRIBUTION" in line
+        ]
         report["initial_projection_jacobian_records"] = [
             line.strip() for line in log.splitlines()
             if "FS_C08_VOLUME_JACOBIAN_AUDIT" in line
