@@ -577,7 +577,7 @@ void solvers::fsC08ConservativeVoF::postSolve()
     // into an acceptance claim. Integrate actual conserved phase masses
     // and intrinsic densities, not thresholded interface cells.
     scalar liquidKg=0,solidKg=0,liquidV=0,solidV=0,gasV=0;
-    scalar oldMetalV=0,phaseRate=0,thermalRate=0,domainV=0,independentGasKg=0;
+    scalar oldMetalV=0,phaseRate=0,thermalRate=0,pressureRate=0,domainV=0,independentGasKg=0;
     scalar maxLocalEnergy=0,absLocalEnergy=0,energyScale=0,maxU=0;
     scalar maxLocalEnergyRelative=0;
     label worstEnergyCell=-1,maxUCell=-1,maxGasHeatingCell=-1;
@@ -592,6 +592,7 @@ void solvers::fsC08ConservativeVoF::postSolve()
     const auto& aOld=alpha1.oldTime().primitiveField();
     const auto& phaseSource=phaseMass_->phaseVolumeSource().primitiveField();
     const auto& thermalSource=phaseMass_->thermalVolumeSource().primitiveField();
+    const auto& pressureSource=phaseMass_->pressureVolumeSource().primitiveField();
     forAll(V,i)
     {
         domainV+=V[i];
@@ -604,6 +605,7 @@ void solvers::fsC08ConservativeVoF::postSolve()
         oldMetalV+=V[i]*aOld[i];
         phaseRate+=V[i]*phaseSource[i];
         thermalRate+=V[i]*thermalSource[i];
+        pressureRate+=V[i]*pressureSource[i];
         const scalar speed=mag(finalU[i]);
         if (speed>maxU)
         {
@@ -648,6 +650,8 @@ void solvers::fsC08ConservativeVoF::postSolve()
         << " deltaMetalVolume_m3=" << liquidV+solidV-oldMetalV
         << " phaseVolumeRate_m3_s=" << phaseRate
         << " thermalVolumeRate_m3_s=" << thermalRate
+        << " pressureVolumeRate_m3_s=" << pressureRate
+        << " metalBulkModulus_Pa=" << phaseMass_->bulkModulusPa()
         << " Tmin_K=" << min(mixture_.T()).value()
         << " Tmax_K=" << max(mixture_.T()).value()
         << " pMin_Pa=" << min(p).value() << " pMax_Pa=" << max(p).value()
