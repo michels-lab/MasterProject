@@ -55,6 +55,9 @@ class fsC08ConservativeVoF : public compressibleVoF
     // alpha.metal * rho_liquid alone. Gas remains native compressibleVoF.
     void reconcileMixtureDensity();
     void updatePhaseInternalEnergy();
+    // At frozen T, evaluate and cache the same discrete energy balance
+    // without solving the temperature matrix. No state accepted here.
+    bool thermalPredictorImpl(const bool auditOnly);
 
 protected:
     virtual void prePredictor() override;
