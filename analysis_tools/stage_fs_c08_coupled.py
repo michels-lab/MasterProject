@@ -152,7 +152,13 @@ def stage(source: Path, material: Path, output: Path,
           momentum_flux_mode: str = "incremental",
           energy_donor_mode: str = "legacy",
           pressure_transport_support: str = "trial",
-          metal_bulk_modulus_pa: float = 0.0) -> dict:
+          metal_bulk_modulus_pa: float = 0.0,
+          energy_linear_tolerance: float = 0.0) -> dict:
+    require(math.isfinite(energy_linear_tolerance) and 0<=energy_linear_tolerance<=1,
+            "invalid energy linear tolerance")
+    require(energy_linear_tolerance==0 or
+            (metal_bulk_modulus_pa>0 and laminar_reference and startup_probe_dt is not None),
+            "residual-controlled energy is restricted to finite-K fixed-step probes")
     require(math.isfinite(metal_bulk_modulus_pa) and metal_bulk_modulus_pa>=0,
             "invalid metal bulk modulus")
     require(metal_bulk_modulus_pa==0 or
@@ -337,7 +343,8 @@ def stage(source: Path, material: Path, output: Path,
         f"phasePressureMobility {phase_pressure_mobility};\n"
         f"momentumFluxMode {momentum_flux_mode};\n"
         f"energyDonorMode {energy_donor_mode};\n"
-        f"pressureTransportSupport {pressure_transport_support};\n",
+        f"pressureTransportSupport {pressure_transport_support};\n"
+        f"energyLinearTolerance {energy_linear_tolerance:.16g};\n",
         encoding="utf-8")
     staged_material=output/"constant/fluid/fsC08Material"
     shutil.copy2(material,staged_material)
@@ -370,6 +377,7 @@ def stage(source: Path, material: Path, output: Path,
         "energy_donor_mode":energy_donor_mode,
         "pressure_transport_support":pressure_transport_support,
         "metal_bulk_modulus_pa":metal_bulk_modulus_pa,
+        "energy_linear_tolerance":energy_linear_tolerance,
         "staged_material_SHA256":sha(staged_material),
         "caloric_pressure_dependence_validated":False,
         "startup_probe_dt_s":startup_probe_dt,
@@ -405,6 +413,7 @@ def main(argv=None) -> int:
     ap.add_argument("--energy-donor-mode",choices=("legacy","oldGas","currentLiquid","oldGasCurrentLiquid"),default="legacy")
     ap.add_argument("--pressure-transport-support",choices=("trial","oldLiquid","oldGas","oldBoth"),default="trial")
     ap.add_argument("--metal-bulk-modulus-pa",type=float,default=0.0)
+    ap.add_argument("--energy-linear-tolerance",type=float,default=0.0)
     args=ap.parse_args(argv)
     output=args.destination or (
         Path.home()/"OpenFOAM"/"FS_C08_COUPLED_RUNS"/
@@ -413,7 +422,7 @@ def main(argv=None) -> int:
     )
     try:
         report=stage(args.source,args.material,output,args.laminar_reference,
-                     args.startup_probe_dt,args.startup_probe_steps,args.momentum_face_mobility,args.momentum_matrix_coupling,args.phase_pressure_mobility,args.momentum_flux_mode,args.energy_donor_mode,args.pressure_transport_support,args.metal_bulk_modulus_pa)
+                     args.startup_probe_dt,args.startup_probe_steps,args.momentum_face_mobility,args.momentum_matrix_coupling,args.phase_pressure_mobility,args.momentum_flux_mode,args.energy_donor_mode,args.pressure_transport_support,args.metal_bulk_modulus_pa,args.energy_linear_tolerance)
         print(json.dumps(report,indent=2))
         return 0
     except (ValueError,OSError) as e:
