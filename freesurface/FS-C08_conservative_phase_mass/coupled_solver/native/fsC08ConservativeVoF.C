@@ -24,7 +24,7 @@ solvers::fsC08ConservativeVoF::fsC08ConservativeVoF(fvMesh& mesh)
     compressibleVoF(mesh),
     phaseMass_
     (
-        new fsC08::PhaseMassTransport(mesh,alpha1,mixture_.T())
+        new fsC08::PhaseMassTransport(mesh,alpha1,mixture_.T(),&p)
     ),
     gasMassTrial_
     (
@@ -166,6 +166,7 @@ solvers::fsC08ConservativeVoF::fsC08ConservativeVoF(fvMesh& mesh)
     // for independent inspection of the conservative gas inventory.
     mixture_.alpha2().writeOpt()=IOobject::AUTO_WRITE;
     mixture_.T().oldTime();
+    p.oldTime();
     // Establish native gas energy history at t=0, before thermal correction.
     mixture_.thermo2().he().oldTime();
     reconcileMixtureDensity();
