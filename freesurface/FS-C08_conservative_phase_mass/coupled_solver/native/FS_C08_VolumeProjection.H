@@ -92,7 +92,8 @@ bool projectTrialInventories
     surfaceScalarField& gasMassFlux,
     volScalarField& dp,
     const label referenceCell = -1,
-    const PtrList<volScalarField>* startupResidualComponents = nullptr
+    const PtrList<volScalarField>* startupResidualComponents = nullptr,
+    const scalar metalBulkModulusPa = 0
 );
 
 }} // namespace Foam::fsC08
