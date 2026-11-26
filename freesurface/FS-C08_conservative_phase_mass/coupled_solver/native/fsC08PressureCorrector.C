@@ -323,6 +323,9 @@ void Foam::solvers::fsC08ConservativeVoF::pressureCorrector()
     const scalar temperatureTolerance=1e-6;
     const scalar phaseReplayTolerance=1e-10;
     const label maxCoupledCorrectors=30;
+    const bool residualEnergyControlled=numerics.found("energyLinearTolerance")
+        && numerics.lookup<scalar>("energyLinearTolerance")>0;
+    bool acceptedByFixedStateAudit=false;
     bool converged=false;
     for (label iter=0;iter<maxCoupledCorrectors;++iter)
     {
@@ -588,7 +591,15 @@ void Foam::solvers::fsC08ConservativeVoF::pressureCorrector()
         const scalarField temperatureBefore(T.primitiveField());
         const scalarField liquidBefore(phaseMass_->liquidMass().primitiveField());
         const scalarField solidBefore(phaseMass_->solidMass().primitiveField());
-        thermophysicalPredictor();
+        // If pressure has already closed the volume, first test the
+        // SAME candidate against the nonlinear energy residual. Avoid
+        // needlessly solving T again when its current balance already
+        // meets the strict criterion. If not, perform the normal solve.
+        const bool fixedStateAuditPass=residualEnergyControlled && iter>0
+            && fixedTReplayDefect<=volumeTolerance
+            && thermalPredictorImpl(true);
+        if (!fixedStateAuditPass)
+            thermophysicalPredictor();
         phaseMass_->replayTrialFromFlux(T,alpha1,fl);
         phaseMass_->refreshTrialProperties(T,alpha1);
         const tmp<volScalarField> residual=fsC08::trialVolumeResidual
@@ -682,6 +693,7 @@ void Foam::solvers::fsC08ConservativeVoF::pressureCorrector()
             mixture_.correct();
             reconcileMixtureDensity();
             updatePhaseInternalEnergy();
+            acceptedByFixedStateAudit=fixedStateAuditPass;
             converged=true;
             break;
         }
@@ -850,6 +862,7 @@ void Foam::solvers::fsC08ConservativeVoF::pressureCorrector()
         << " time_s=" << runTime.value()
         << " gasEOSMismatch=" << gasMismatch
         << " pressureVolumeEnergyIterationConverged=1"
+        << " fixedStateEnergyAuditAccepted=" << acceptedByFixedStateAudit
         << " independentGasTrialMass=1"
         << " frozenMomentumMatrixApproximation=1"
         << " physicalShrinkageValidated=0" << nl;
