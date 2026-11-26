@@ -39,6 +39,10 @@ def extract(log: str) -> tuple[list[dict], list[str]]:
             try:
                 t = float(entries["time_s"])
                 values = {key: float(entries[key]) for key in REQUIRED[kind]}
+                if kind=="state":
+                    for key in ("pressureVolumeRate_m3_s","metalBulkModulus_Pa"):
+                        if key in entries:
+                            values[key]=float(entries[key])
                 if t <= 0 or not math.isfinite(t) or not all(map(math.isfinite, values.values())):
                     raise ValueError("invalid numeric ledger")
             except (KeyError, ValueError) as exc:
