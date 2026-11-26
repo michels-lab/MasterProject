@@ -326,6 +326,39 @@ void Foam::solvers::fsC08ConservativeVoF::pressureCorrector()
     const bool residualEnergyControlled=numerics.found("energyLinearTolerance")
         && numerics.lookup<scalar>("energyLinearTolerance")>0;
     bool acceptedByFixedStateAudit=false;
+    // Geometry synchronized only for a volume-admissible candidate.
+    // These are internal iterates, not published physical time steps.
+    auto synchronizeClosedGeometry = [&]()
+    {
+        phaseMass_->acceptTrialFractions(T);
+        // Only roundoff-level closure mismatch remains. The native
+        // VOF pair must sum to exactly one. Normalize the geometry
+        // by the total volume, NEVER the independent mass fields.
+        // Reject larger corrections before this operation.
+        scalar geometryCorrection=0;
+        forAll(gasMassTrial_,i)
+        {
+            const scalar am=phaseMass_->alphaMetal()[i];
+            const scalar ag=gasMassTrial_[i]/mixture_.rho2()[i];
+            const scalar total=am+ag;
+            if (!std::isfinite(total) || total<=0
+                || mag(total-scalar(1))>volumeTolerance
+                || am<0 || ag<0)
+                FatalErrorInFunction << "FS-C08 inadmissible accepted geometry "
+                    << i << exit(FatalError);
+            alpha1[i]=am/total;
+            alpha2[i]=scalar(1)-alpha1[i];
+            geometryCorrection=max(geometryCorrection,mag(alpha1[i]-am));
+        }
+        reduce(geometryCorrection,maxOp<scalar>());
+        Info<< "FS_C08_NATIVE_VOF_ROUNDOFF_CLOSURE maxCorrection="
+            << geometryCorrection << " conservedMassModified=0" << nl;
+        alpha1.correctBoundaryConditions();
+        alpha2.correctBoundaryConditions();
+        correctInterface();
+        mixture_.correct();
+        reconcileMixtureDensity();
+    };
     bool converged=false;
     for (label iter=0;iter<maxCoupledCorrectors;++iter)
     {
@@ -566,6 +599,12 @@ void Foam::solvers::fsC08ConservativeVoF::pressureCorrector()
                 << "FS-C08 projected inventory and equilibrium replay disagree"
                 << exit(FatalError);
 
+        // The fixed-T projection is admissible; synchronize geometry
+        // before assembling either the thermal predictor or its audit.
+        // Legacy arithmetic is unchanged when strict mode is disabled.
+        if (residualEnergyControlled && fixedTReplayDefect<=volumeTolerance)
+            synchronizeClosedGeometry();
+
         alphaRhoPhi1=phaseMass_->liquidMassFlux();
         alphaRhoPhi2=fg;
         alphaPhi1=alphaRhoPhi1/fvc::interpolate(phaseMass_->liquidDensity());
@@ -668,34 +707,30 @@ void Foam::solvers::fsC08ConservativeVoF::pressureCorrector()
             // state, not just pass a thermal solve before the phase replay.
             if (residualEnergyControlled && !fixedStateAuditPass)
                 continue;
-            phaseMass_->acceptTrialFractions(T);
-            // Only roundoff-level closure mismatch remains. The native
-            // VOF pair must sum to exactly one. Normalize the geometry
-            // by the total volume, NEVER the independent mass fields.
-            // Reject larger corrections before this operation.
-            scalar geometryCorrection=0;
-            forAll(gasMassTrial_,i)
+            // Recheck final fields before any accepted marker.
+            synchronizeClosedGeometry();
+            if (residualEnergyControlled)
             {
-                const scalar am=phaseMass_->alphaMetal()[i];
-                const scalar ag=gasMassTrial_[i]/mixture_.rho2()[i];
-                const scalar total=am+ag;
-                if (!std::isfinite(total) || total<=0
-                    || mag(total-scalar(1))>volumeTolerance
-                    || am<0 || ag<0)
-                    FatalErrorInFunction << "FS-C08 inadmissible accepted geometry "
-                        << i << exit(FatalError);
-                alpha1[i]=am/total;
-                alpha2[i]=scalar(1)-alpha1[i];
-                geometryCorrection=max(geometryCorrection,mag(alpha1[i]-am));
+                alphaRhoPhi1=phaseMass_->liquidMassFlux();
+                alphaRhoPhi2=fg;
+                alphaPhi1=alphaRhoPhi1/fvc::interpolate(phaseMass_->liquidDensity());
+                alphaPhi2=alphaRhoPhi2/fvc::interpolate(mixture_.rho2());
+                phi=alphaPhi1+alphaPhi2;
+                rhoPhi=alphaRhoPhi1+alphaRhoPhi2;
+                U=HbyA+rAU()*fvc::reconstruct((phi-phiHbyA+phig)/rAUf);
+                U.correctBoundaryConditions();
+                fvConstraints().constrain(U);
+                K=0.5*magSqr(U);
+                p_rgh=p-rho*buoyancy.gh-buoyancy.pRef;
+                p_rgh.correctBoundaryConditions();
+                if (!thermalPredictorImpl(true))
+                {
+                    Info<< "FS_C08_FINAL_STATE_REITERATE time_s="
+                        << runTime.value() << " corrector=" << iter+1 << nl;
+                    thermophysicalPredictor();
+                    continue;
+                }
             }
-            reduce(geometryCorrection,maxOp<scalar>());
-            Info<< "FS_C08_NATIVE_VOF_ROUNDOFF_CLOSURE maxCorrection="
-                << geometryCorrection << " conservedMassModified=0" << nl;
-            alpha1.correctBoundaryConditions();
-            alpha2.correctBoundaryConditions();
-            correctInterface();
-            mixture_.correct();
-            reconcileMixtureDensity();
             updatePhaseInternalEnergy();
             acceptedByFixedStateAudit=fixedStateAuditPass;
             converged=true;
