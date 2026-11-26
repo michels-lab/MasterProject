@@ -63,8 +63,13 @@ EOS_TEMPORAL_VARIANTS=tuple(
 )
 EOS_TEMPORAL_FACTORS={"eos_"+name:factor for name,factor in TEMPORAL_FACTORS.items()}
 
+ENERGY_RESIDUAL_TOLERANCES={"thermal_native":0.0,"thermal_tol10":1e-10,
+                           "thermal_tol12":1e-12,"thermal_tol14":1e-14}
+THERMAL_VARIANTS=tuple((name,"refreshBeforePressure","separate","incremental","legacy","trial")
+                       for name in ENERGY_RESIDUAL_TOLERANCES)
+
 def bulk_modulus(name):
-    return EOS_REFERENCE_K if name in EOS_TEMPORAL_FACTORS else EOS_MODULI.get(name,0.0)
+    return EOS_REFERENCE_K if name in EOS_TEMPORAL_FACTORS or name in ENERGY_RESIDUAL_TOLERANCES else EOS_MODULI.get(name,0.0)
 
 METRICS = (
     "maxU_m_s", "pMax_Pa", "metalVolume_m3", "solidMass_kg",
@@ -90,6 +95,9 @@ def summarize(name, coupling, mobility, flux_mode, energy_mode, support_mode, re
         "pressure_transport_support": support_mode,
         "metal_bulk_modulus_pa":report.get("metal_bulk_modulus_pa",bulk_modulus(name)),
         "metal_eos_records":report.get("metal_eos_records",[]),
+        "energy_linear_tolerance":ENERGY_RESIDUAL_TOLERANCES.get(name,0.0),
+        "thermal_residual_first2":report.get("thermal_residual_control_records",[])[:2],
+        "thermal_residual_last3":report.get("thermal_residual_control_records",[])[-3:],
         "caloric_pressure_dependence_validated":False,
         "fixed_dt_s": case_dt, "scheduled_steps": case_steps,
         "requested_end_time_s": case_dt*case_steps,
@@ -159,7 +167,7 @@ def main(argv=None):
     parser.add_argument("--steps",type=int,default=10)
     parser.add_argument("--dt",type=float,default=1e-6)
     parser.add_argument("--timeout-minutes",type=int,default=120)
-    parser.add_argument("--suite",choices=("mobility","flux","energy","support","temporal","eos","eos_temporal"),default="support")
+    parser.add_argument("--suite",choices=("mobility","flux","energy","support","temporal","eos","eos_temporal","thermal_residual"),default="support")
     parser.add_argument("--compact-output",action="store_true",help="Print concise clipboard report; full JSON/CSV and native logs remain on disk")
     args=parser.parse_args(argv)
     variants=SUPPORT_VARIANTS if args.suite=="support" else tuple(v+("trial",) for v in (ENERGY_VARIANTS if args.suite=="energy" else tuple(v+("legacy",) for v in (FLUX_VARIANTS if args.suite=="flux" else VARIANTS))))
@@ -171,6 +179,8 @@ def main(argv=None):
         variants=EOS_TEMPORAL_VARIANTS if args.suite=="eos_temporal" else TEMPORAL_VARIANTS
     if args.suite=="eos":
         variants=EOS_VARIANTS
+    if args.suite=="thermal_residual":
+        variants=THERMAL_VARIANTS
     def controls(name):
         factor=TEMPORAL_FACTORS.get(name,EOS_TEMPORAL_FACTORS.get(name,1.0))
         return args.dt*factor, int(args.steps/factor)
@@ -217,7 +227,7 @@ def main(argv=None):
                 print("START",name,flush=True)
                 try:
                     report=execute(source,material,output,diag,args.timeout_minutes,
-                        True,case_dt,case_steps,"linear",coupling,mobility,flux_mode,energy_mode,support_mode,bulk_modulus(name),
+                        True,case_dt,case_steps,"linear",coupling,mobility,flux_mode,energy_mode,support_mode,bulk_modulus(name),ENERGY_RESIDUAL_TOLERANCES.get(name,0.0),
                         verified_batch_build=receipt)
                 except Exception as exc:
                     # One failed variant must not cancel the remaining cases.
@@ -230,7 +240,7 @@ def main(argv=None):
                         real_CFD_completed=False,batch_worker_error=str(exc),
                         diagnostics=str(diag),output_case=str(output))
                     write_report(report_file,report)
-                result=summarize(name,coupling,mobility,flux_mode,energy_mode,support_mode,report,case_dt,case_steps,args.suite in ("temporal","eos","eos_temporal"))
+                result=summarize(name,coupling,mobility,flux_mode,energy_mode,support_mode,report,case_dt,case_steps,args.suite in ("temporal","eos","eos_temporal","thermal_residual"))
                 print("FINISH",name,result["status"],
                       "saved steps",result["saved_steps"],flush=True)
                 return result
@@ -290,7 +300,7 @@ def main(argv=None):
     if args.compact_output:
         # This is a presentation filter only, not an acceptance test.
         keys=("variant","fixed_dt_s","scheduled_steps","metal_bulk_modulus_pa",
-              "metal_eos_records","status","completed","saved_steps","complete_ledger_steps",
+              "metal_eos_records","energy_linear_tolerance","thermal_residual_first2","thermal_residual_last3","status","completed","saved_steps","complete_ledger_steps",
               "last_saved_time_s","max_accepted_volume_residual","error","ledger_issues",
               "diagnostics","case","ledger_csv","native_diagnostic_tail_on_failure",
               *METRICS)
