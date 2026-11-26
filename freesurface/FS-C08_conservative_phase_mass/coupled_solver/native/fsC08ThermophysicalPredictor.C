@@ -64,6 +64,11 @@ License
 
 void Foam::solvers::fsC08ConservativeVoF::thermophysicalPredictor()
 {
+    thermalPredictorImpl(false);
+}
+
+bool Foam::solvers::fsC08ConservativeVoF::thermalPredictorImpl(const bool auditOnly)
+{
     // We explicitly transport INTERNAL energies with a pressure-work term.
     // A mixture configured for total enthalpy would require a distinct
     // pressure-work formulation, and MUST NOT be run with this equation.
@@ -444,6 +449,8 @@ void Foam::solvers::fsC08ConservativeVoF::thermophysicalPredictor()
           - fvc::div(internalEnergyFlux)
         );
 
+        if (!auditOnly)
+        {
         TEqn.relax();
         fvConstraints().constrain(TEqn);
         if (residualControlled)
@@ -457,6 +464,7 @@ void Foam::solvers::fsC08ConservativeVoF::thermophysicalPredictor()
         else
             TEqn.solve();
         fvConstraints().constrain(T);
+        }
 
         // Outward-positive conductive energy flux W on all faces,
         // especially the fluid-mold CHT interface.
@@ -558,6 +566,21 @@ void Foam::solvers::fsC08ConservativeVoF::thermophysicalPredictor()
             << " absBalance_J=" << absBalance
             << " relativeL1=" << absBalance/max(scalar(VSMALL),absTerms)
             << " residualGateEnabled=" << residualControlled << nl;
+        if (auditOnly)
+        {
+            // Current masses, pressure, flux, velocity and temperature
+            // already define the candidate. No TEqn relaxation, solve,
+            // or temperature constraint is performed in this path.
+            // The pressure caller still enforces all volume, phase and
+            // continuity gates after this audit; no acceptance here.
+            const bool pass=lastResidualEquivalentK<=energyToleranceK;
+            Info<< "FS_C08_THERMAL_FIXED_STATE_AUDIT time_s=" << runTime.value()
+                << " maxResidualEquivalent_K=" << lastResidualEquivalentK
+                << " absBalance_J=" << absBalance
+                << " relativeL1=" << absBalance/max(scalar(VSMALL),absTerms)
+                << " pass=" << pass << " temperatureSolved=0" << nl;
+            return pass;
+        }
         lastDeltaT=0;
         const auto& Tnew=T.primitiveField();
         forAll(Tnew,i)
@@ -646,5 +669,6 @@ void Foam::solvers::fsC08ConservativeVoF::thermophysicalPredictor()
         << " singleLatentReferenceOffset=1"
         << " originalVoFSolidificationMeltingMustBeDisabled=1"
         << " globalEnergyBalanceNotYetValidated=1" << nl;
+    return true;
 }
 // ************************************************************************* //
