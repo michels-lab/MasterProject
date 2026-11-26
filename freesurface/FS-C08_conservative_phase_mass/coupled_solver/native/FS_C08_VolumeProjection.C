@@ -289,7 +289,7 @@ bool projectTrialInventories
 (
     volScalarField& mL, const volScalarField& mS,
     volScalarField& mG,
-    const volScalarField& rhoL, const volScalarField& rhoS,
+    const volScalarField& initialRhoL, const volScalarField& initialRhoS,
     volScalarField& rhoG, const volScalarField& psiG,
     volScalarField& pressure,
     const surfaceScalarField& liquidMobility,
@@ -298,11 +298,17 @@ bool projectTrialInventories
     surfaceScalarField& gasMassFlux,
     volScalarField& dp,
     const label referenceCell,
-    const PtrList<volScalarField>* startupResidualComponents
+    const PtrList<volScalarField>* startupResidualComponents,
+    const scalar metalBulkModulusPa
 )
 {
     // Local transaction: a failed Newton trial cannot poison the
     // conservative inventories or the caller's physical pressure.
+    volScalarField rhoL("fsC08ProjectionTrialRhoL",initialRhoL);
+    volScalarField rhoS("fsC08ProjectionTrialRhoS",initialRhoS);
+    if (!std::isfinite(metalBulkModulusPa) || metalBulkModulusPa<0)
+        FatalErrorInFunction << "Invalid FS-C08 metal bulk modulus" << exit(FatalError);
+    const bool finiteK=metalBulkModulusPa>0;
     volScalarField l("fsC08ProjectionTrialL",mL);
     volScalarField g("fsC08ProjectionTrialG",mG);
     volScalarField rg("fsC08ProjectionTrialRhoG",rhoG);
@@ -354,6 +360,13 @@ bool projectTrialInventories
         // is deleted and no phase-presence threshold is introduced.
         surfaceScalarField mlFace("fsC08ActiveLiquidMobility",liquidMobility);
         surfaceScalarField mgFace("fsC08ActiveGasMobility",gasMobility);
+        const dimensionedScalar modulus("fsC08BulkModulus",dimPressure,
+            finiteK ? metalBulkModulusPa : scalar(1));
+        const volScalarField metalStorage
+        (
+            "fsC08ActiveMetalStorage",
+            (l/rhoL+mS/rhoS)/(modulus*dt)
+        );
         bool activeSetStable=false;
         const auto& own=mesh.owner();
         const auto& nei=mesh.neighbour();
@@ -364,7 +377,7 @@ bool projectTrialInventories
             solveVolumePressureIncrement
             (
                 residual(),g,rhoL,rg,psiG,mlFace,mgFace,
-                dp,dfl,dfg,referenceCell
+                dp,dfl,dfg,referenceCell,finiteK ? &metalStorage : nullptr
             );
 
             std::vector<long double> outL(l.size(),0), outG(g.size(),0);
@@ -481,7 +494,7 @@ bool projectTrialInventories
                 solveVolumePressureIncrement
                 (
                     components[k],g,rhoL,rg,psiG,mlFace,mgFace,
-                    dp,dfl,dfg,referenceCell
+                    dp,dfl,dfg,referenceCell,finiteK ? &metalStorage : nullptr
                 );
                 forAll(dp,i) sumDp[i]+=dp[i];
                 Info<< "FS_C08_STARTUP_PRESSURE_COMPONENT"
@@ -513,7 +526,7 @@ bool projectTrialInventories
             // Apply equivalent equilibrium metal volume storage on the
             // frozen operator. No change to the accepted metal EOS.
             const scalar kt=109.7e9/(1+9e-5*1.9*1811);
-            for (label trial=0;trial<3;++trial)
+            for (label trial=0;!finiteK && trial<3;++trial)
             {
                 const scalar K=kt*(trial==0 ? 0.5 : (trial==1 ? 1.0 : 2.0));
                 const dimensionedScalar modulus("diagnosticBulkModulus",dimPressure,K);
@@ -573,7 +586,8 @@ bool projectTrialInventories
             {
                 const scalar linearDefect=residual()[i]
                     +dl[i]/rhoL[i]+dg[i]/rg[i]
-                    -g[i]*drg[i]/sqr(rg[i]);
+                    -g[i]*drg[i]/sqr(rg[i])
+                    -(finiteK ? dt.value()*metalStorage[i]*dp[i] : scalar(0));
                 maxLinearDefect=max(maxLinearDefect,mag(linearDefect));
                 if (g[i]==0 && l[i]+mS[i]>0
                     && mag(residual()[i])>maxMetalResidual)
@@ -668,13 +682,28 @@ bool projectTrialInventories
             const volScalarField gc("fsC08ProjectionCandidateG",g+step*dg);
             const volScalarField rc("fsC08ProjectionCandidateRhoG",rg+step*drg);
             const volScalarField pc("fsC08ProjectionCandidateP",p+step*dp);
-            if (!admissibleTrial(lc,mS,gc,rhoL,rhoS,rc,pc,false))
+            volScalarField rlc("fsC08CandidateRhoL",rhoL);
+            volScalarField rsc("fsC08CandidateRhoS",rhoS);
+            if (finiteK)
+            {
+                forAll(rlc,i)
+                {
+                    // Re-evaluate from the fixed-T input reference to
+                    // avoid accumulating roundoff over Newton steps.
+                    const scalar scale=std::exp((pc[i]-pressure[i])/metalBulkModulusPa);
+                    rlc[i]=initialRhoL[i]*scale;
+                    rsc[i]=initialRhoS[i]*scale;
+                }
+                rlc.correctBoundaryConditions();
+                rsc.correctBoundaryConditions();
+            }
+            if (!admissibleTrial(lc,mS,gc,rlc,rsc,rc,pc,false))
             {
                 ++inadmissibleBacktracks;
                 continue;
             }
             const tmp<volScalarField> candidate=
-                trialVolumeResidual(lc,mS,gc,rhoL,rhoS,rc);
+                trialVolumeResidual(lc,mS,gc,rlc,rsc,rc);
             const scalar nextNorm=residualNorm(candidate());
             if (nextNorm>=norm && nextNorm>tolerance)
             {
@@ -689,6 +718,7 @@ bool projectTrialInventories
                 << " inadmissibleBacktracks=" << inadmissibleBacktracks
                 << " nonDescentBacktracks=" << nonDescentBacktracks << nl;
             l=lc; g=gc; rg=rc; p=pc;
+            rhoL=rlc; rhoS=rsc;
             fl+=step*dfl; fg+=step*dfg;
             advanced=true;
             break;
