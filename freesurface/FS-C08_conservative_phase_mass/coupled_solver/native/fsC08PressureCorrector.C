@@ -721,8 +721,16 @@ void Foam::solvers::fsC08ConservativeVoF::pressureCorrector()
                 U.correctBoundaryConditions();
                 fvConstraints().constrain(U);
                 K=0.5*magSqr(U);
+                vDot=fvc::ddt(alpha1)()()+fvc::div(alphaPhi1)()()
+                    -alpha1()*fvc::div(phi)()();
+                fvc::correctUf(Uf,U,fvc::absolute(phi,U),MRF);
                 p_rgh=p-rho*buoyancy.gh-buoyancy.pRef;
                 p_rgh.correctBoundaryConditions();
+                contErr1=(fvc::ddt(phaseMass_->liquidMass())()()
+                         +fvc::ddt(phaseMass_->solidMass())()()
+                         +fvc::div(alphaRhoPhi1)()());
+                contErr2=(((gasMassTrial_-gasMassOld)/dt)()()
+                         +fvc::div(alphaRhoPhi2)()()-gasSource());
                 if (!thermalPredictorImpl(true))
                 {
                     Info<< "FS_C08_FINAL_STATE_REITERATE time_s="
@@ -751,21 +759,26 @@ void Foam::solvers::fsC08ConservativeVoF::pressureCorrector()
     if (gasMismatch>2*volumeTolerance)
         FatalErrorInFunction << "FS-C08 accepted gas EOS mismatch " << gasMismatch
             << exit(FatalError);
-    alphaRhoPhi1=phaseMass_->liquidMassFlux();
-    alphaRhoPhi2=fg;
-    alphaPhi1=alphaRhoPhi1/fvc::interpolate(phaseMass_->liquidDensity());
-    alphaPhi2=alphaRhoPhi2/fvc::interpolate(mixture_.rho2());
-    phi=alphaPhi1+alphaPhi2;
-    rhoPhi=alphaRhoPhi1+alphaRhoPhi2;
-    U=HbyA+rAU()*fvc::reconstruct((phi-phiHbyA+phig)/rAUf);
-    U.correctBoundaryConditions();
-    fvConstraints().constrain(U);
-    K=0.5*magSqr(U);
-    vDot=fvc::ddt(alpha1)()()+fvc::div(alphaPhi1)()()
-        -alpha1()*fvc::div(phi)()();
-    fvc::correctUf(Uf,U,fvc::absolute(phi,U),MRF);
-    p_rgh=p-rho*buoyancy.gh-buoyancy.pRef;
-    p_rgh.correctBoundaryConditions();
+    // The strict path has already assembled these exact final fields
+    // inside the nonlinear loop. Do not change them after the gate.
+    if (!residualEnergyControlled)
+    {
+        alphaRhoPhi1=phaseMass_->liquidMassFlux();
+        alphaRhoPhi2=fg;
+        alphaPhi1=alphaRhoPhi1/fvc::interpolate(phaseMass_->liquidDensity());
+        alphaPhi2=alphaRhoPhi2/fvc::interpolate(mixture_.rho2());
+        phi=alphaPhi1+alphaPhi2;
+        rhoPhi=alphaRhoPhi1+alphaRhoPhi2;
+        U=HbyA+rAU()*fvc::reconstruct((phi-phiHbyA+phig)/rAUf);
+        U.correctBoundaryConditions();
+        fvConstraints().constrain(U);
+        K=0.5*magSqr(U);
+        vDot=fvc::ddt(alpha1)()()+fvc::div(alphaPhi1)()()
+            -alpha1()*fvc::div(phi)()();
+        fvc::correctUf(Uf,U,fvc::absolute(phi,U),MRF);
+        p_rgh=p-rho*buoyancy.gh-buoyancy.pRef;
+        p_rgh.correctBoundaryConditions();
+    }
     // The accepted geometry, reconstructed velocity and density can
     // differ from the trial values used by the first audit. Reassemble
     // energy terms at this final state and retain those exact fluxes.
@@ -775,6 +788,18 @@ void Foam::solvers::fsC08ConservativeVoF::pressureCorrector()
         if (!thermalPredictorImpl(true))
             FatalErrorInFunction << "FS-C08 final published geometry/velocity energy audit rejected"
                 << exit(FatalError);
+        const tmp<volScalarField> finalVolume=fsC08::trialVolumeResidual
+        (
+            phaseMass_->liquidMass(),phaseMass_->solidMass(),gasMassTrial_,
+            phaseMass_->liquidDensity(),phaseMass_->solidDensity(),mixture_.rho2()
+        );
+        scalar finalResidual=0;
+        forAll(T,i)
+            finalResidual=max(finalResidual,mag(finalVolume()[i]));
+        reduce(finalResidual,maxOp<scalar>());
+        if (finalResidual>volumeTolerance)
+            FatalErrorInFunction << "FS-C08 final energy audit reopened volume closure "
+                << finalResidual << exit(FatalError);
         Info<< "FS_C08_FINAL_COUPLED_ENERGY_AUDIT_PASS time_s="
             << runTime.value() << " physicalEnergyValidated=0" << nl;
     }
