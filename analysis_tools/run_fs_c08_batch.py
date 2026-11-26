@@ -68,6 +68,10 @@ ENERGY_RESIDUAL_TOLERANCES={"thermal_native":0.0,"thermal_tol10":1e-10,
 THERMAL_VARIANTS=tuple((name,"refreshBeforePressure","separate","incremental","legacy","trial")
                        for name in ENERGY_RESIDUAL_TOLERANCES)
 
+CLOSURE_VARIANTS=tuple(("closure_"+v[0], *v[1:]) for v in TEMPORAL_VARIANTS)
+CLOSURE_FACTORS={"closure_"+name:factor for name,factor in TEMPORAL_FACTORS.items()}
+ENERGY_RESIDUAL_TOLERANCES.update({v[0]:1e-12 for v in CLOSURE_VARIANTS})
+
 def bulk_modulus(name):
     return EOS_REFERENCE_K if name in EOS_TEMPORAL_FACTORS or name in ENERGY_RESIDUAL_TOLERANCES else EOS_MODULI.get(name,0.0)
 
@@ -96,6 +100,9 @@ def summarize(name, coupling, mobility, flux_mode, energy_mode, support_mode, re
         "metal_bulk_modulus_pa":report.get("metal_bulk_modulus_pa",bulk_modulus(name)),
         "metal_eos_records":report.get("metal_eos_records",[]),
         "energy_linear_tolerance":ENERGY_RESIDUAL_TOLERANCES.get(name,0.0),
+        "final_coupled_energy_audit_count":len(report.get("final_coupled_energy_audit_records",[])),
+        "final_coupled_energy_audit_gate_verified":report.get("final_coupled_energy_audit_gate_verified",False),
+        "fixed_state_energy_audit_last3":report.get("fixed_state_energy_audit_records",[])[-3:],
         "thermal_residual_first2":report.get("thermal_residual_control_records",[])[:2],
         "thermal_residual_last3":report.get("thermal_residual_control_records",[])[-3:],
         "caloric_pressure_dependence_validated":False,
@@ -167,22 +174,22 @@ def main(argv=None):
     parser.add_argument("--steps",type=int,default=10)
     parser.add_argument("--dt",type=float,default=1e-6)
     parser.add_argument("--timeout-minutes",type=int,default=120)
-    parser.add_argument("--suite",choices=("mobility","flux","energy","support","temporal","eos","eos_temporal","thermal_residual"),default="support")
+    parser.add_argument("--suite",choices=("mobility","flux","energy","support","temporal","eos","eos_temporal","thermal_residual","thermal_closure"),default="support")
     parser.add_argument("--compact-output",action="store_true",help="Print concise clipboard report; full JSON/CSV and native logs remain on disk")
     args=parser.parse_args(argv)
     variants=SUPPORT_VARIANTS if args.suite=="support" else tuple(v+("trial",) for v in (ENERGY_VARIANTS if args.suite=="energy" else tuple(v+("legacy",) for v in (FLUX_VARIANTS if args.suite=="flux" else VARIANTS))))
     if not 1<=args.steps<=1000 or not math.isfinite(args.dt) or args.dt<=0 or args.timeout_minutes<1:
         parser.error("invalid fixed-step controls or timeout")
-    if args.suite in ("temporal","eos_temporal"):
+    if args.suite in ("temporal","eos_temporal","thermal_closure"):
         if args.steps%2 or args.steps*4>1000:
             parser.error("temporal suite requires an even reference step count <=250")
-        variants=EOS_TEMPORAL_VARIANTS if args.suite=="eos_temporal" else TEMPORAL_VARIANTS
+        variants=CLOSURE_VARIANTS if args.suite=="thermal_closure" else (EOS_TEMPORAL_VARIANTS if args.suite=="eos_temporal" else TEMPORAL_VARIANTS)
     if args.suite=="eos":
         variants=EOS_VARIANTS
     if args.suite=="thermal_residual":
         variants=THERMAL_VARIANTS
     def controls(name):
-        factor=TEMPORAL_FACTORS.get(name,EOS_TEMPORAL_FACTORS.get(name,1.0))
+        factor=TEMPORAL_FACTORS.get(name,EOS_TEMPORAL_FACTORS.get(name,CLOSURE_FACTORS.get(name,1.0)))
         return args.dt*factor, int(args.steps/factor)
     comparison_dt=min(controls(v[0])[0] for v in variants)
     source=args.source.expanduser().resolve()
@@ -240,7 +247,7 @@ def main(argv=None):
                         real_CFD_completed=False,batch_worker_error=str(exc),
                         diagnostics=str(diag),output_case=str(output))
                     write_report(report_file,report)
-                result=summarize(name,coupling,mobility,flux_mode,energy_mode,support_mode,report,case_dt,case_steps,args.suite in ("temporal","eos","eos_temporal","thermal_residual"))
+                result=summarize(name,coupling,mobility,flux_mode,energy_mode,support_mode,report,case_dt,case_steps,args.suite in ("temporal","eos","eos_temporal","thermal_residual","thermal_closure"))
                 print("FINISH",name,result["status"],
                       "saved steps",result["saved_steps"],flush=True)
                 return result
@@ -272,7 +279,7 @@ def main(argv=None):
                         value,t=mode(valid,key=lambda pair:pair[0])
                         extrema[key]={"value":value,"time_s":t}
                 batch["accepted_history_extrema"][name]=extrema
-            if args.suite=="eos_temporal":
+            if args.suite in ("eos_temporal","thermal_closure"):
                 shared=batch["common_saved_time_comparison"] or batch["completed_variants_common_saved_time_comparison"]
                 target=batch["common_target_time_s"]
                 batch["milestone_comparison_scope"]=("all_variants" if batch["common_saved_time_comparison"]
@@ -300,7 +307,7 @@ def main(argv=None):
     if args.compact_output:
         # This is a presentation filter only, not an acceptance test.
         keys=("variant","fixed_dt_s","scheduled_steps","metal_bulk_modulus_pa",
-              "metal_eos_records","energy_linear_tolerance","thermal_residual_first2","thermal_residual_last3","status","completed","saved_steps","complete_ledger_steps",
+              "metal_eos_records","energy_linear_tolerance","final_coupled_energy_audit_count","final_coupled_energy_audit_gate_verified","fixed_state_energy_audit_last3","thermal_residual_first2","thermal_residual_last3","status","completed","saved_steps","complete_ledger_steps",
               "last_saved_time_s","max_accepted_volume_residual","error","ledger_issues",
               "diagnostics","case","ledger_csv","native_diagnostic_tail_on_failure",
               *METRICS)
