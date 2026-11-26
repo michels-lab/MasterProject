@@ -469,7 +469,7 @@ void Foam::solvers::fsC08ConservativeVoF::pressureCorrector()
                 << exit(FatalError);
         volScalarField rhoEq("fsC08EquilibriumPressureDensity",rL);
         forAll(T,i)
-            rhoEq[i]=phaseMass_->equilibriumDensity(T[i]);
+            rhoEq[i]=phaseMass_->equilibriumDensity(T[i],p[i]);
         rhoEq.correctBoundaryConditions();
         const volScalarField& oldSolid=phaseMass_->solidMass().oldTime();
         volScalarField projectedL
@@ -531,7 +531,8 @@ void Foam::solvers::fsC08ConservativeVoF::pressureCorrector()
         if (!fsC08::projectTrialInventories
             (projectedL,oldSolid,projectedG,rhoEq,rhoEq,projectedRhoG,
              mixture_.thermo2().psi(),projectedP,liquidMobility,
-             gasMobility,fl,fg,dp,-1,auditStartup ? &startupComponents : nullptr))
+             gasMobility,fl,fg,dp,-1,auditStartup ? &startupComponents : nullptr,
+             phaseMass_->bulkModulusPa()))
             FatalErrorInFunction << "FS-C08 pressure projection rejected "
                 << "at corrector " << iter << "; no accepted time step"
                 << exit(FatalError);
