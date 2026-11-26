@@ -79,6 +79,7 @@ def summarize(name, coupling, mobility, flux_mode, energy_mode, support_mode, re
         "momentum_force_last4": report.get("momentum_force_records", [])[-4:],
         "momentum_consistency_first2": report.get("momentum_consistency_records", [])[:2],
         "momentum_consistency_last2": report.get("momentum_consistency_records", [])[-2:],
+        "startup_pressure_attribution_records": report.get("startup_pressure_attribution_records", []),
         "initial_projection_jacobian_records": report.get("initial_projection_jacobian_records", []),
         "native_diagnostic_tail_on_failure": report.get("native_diagnostic_tail", [])[-10:] if not report.get("real_CFD_completed") else [],
         "pressure_transport_support_records_first5": report.get("pressure_transport_support_records", [])[:5],
