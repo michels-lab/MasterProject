@@ -31,6 +31,9 @@ class PhaseMassTransport
     const fvMesh& mesh_;
 
     IOdictionary material_;
+    const volScalarField* pressure_;
+    scalar bulkModulusPa_;
+    scalar pressureScale(scalar p) const;
 
     // Mandatory material/composition provenance and valid temperature domain
     word materialId_;
@@ -76,6 +79,7 @@ class PhaseMassTransport
 
     // Fixed-metal-mass thermal contraction/expansion rate [1/s].
     volScalarField SvolThermal_;
+    volScalarField SvolPressure_;
 
     // Combined local material volume rate [1/s], not a net metal sink.
     volScalarField SvolMaterial_;
@@ -105,7 +109,8 @@ public:
     (
         const fvMesh& mesh,
         const volScalarField& initialAlphaMetal,
-        const volScalarField& initialT
+        const volScalarField& initialT,
+        const volScalarField* pressure = nullptr
     );
 
     // Call once per physical time step from the REAL fluid solver.
@@ -144,6 +149,8 @@ public:
     // The transported liquid inventory is evaluated BEFORE phase exchange.
     const word& phaseChangeClosure() const { return phaseChangeClosure_; }
     scalar equilibriumDensity(const scalar T) const;
+    scalar equilibriumDensity(const scalar T, const scalar p) const;
+    scalar bulkModulusPa() const { return bulkModulusPa_; }
 
     const volScalarField& liquidMass() const { return mLiquid_; }
     const volScalarField& solidMass() const { return mSolid_; }
