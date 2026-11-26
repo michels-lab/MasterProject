@@ -294,7 +294,8 @@ bool projectTrialInventories
     surfaceScalarField& liquidMassFlux,
     surfaceScalarField& gasMassFlux,
     volScalarField& dp,
-    const label referenceCell
+    const label referenceCell,
+    const PtrList<volScalarField>* startupResidualComponents
 )
 {
     // Local transaction: a failed Newton trial cannot poison the
@@ -444,6 +445,68 @@ bool projectTrialInventories
             Info<< "FS_C08_VOLUME_PROJECTION_REJECTED"
                 << " reason=donor_capacity_active_set_limit" << nl;
             return false;
+        }
+
+        // Attribute the first accepted ACTIVE-SET linear operator's
+        // response to the separate volume forcing terms. These additional
+        // linear solves are observational: restore the original dp and
+        // both face increments before computing the Newton line search.
+        if (iter==0 && startupResidualComponents)
+        {
+            const auto& components=*startupResidualComponents;
+            if (components.size()!=4)
+                FatalErrorInFunction << "FS-C08 expected four startup residual components"
+                    << exit(FatalError);
+            const volScalarField fullDp("fsC08DiagnosticFullDp",dp);
+            const surfaceScalarField fullL("fsC08DiagnosticFullL",dfl);
+            const surfaceScalarField fullG("fsC08DiagnosticFullG",dfg);
+            scalarField sumDp(dp.size(),0);
+            label minCell=0;
+            forAll(dp,i)
+                if (dp[i]<dp[minCell]) minCell=i;
+            scalar sourceClosure=0;
+            forAll(dp,i)
+            {
+                scalar sum=0;
+                forAll(components,k) sum+=components[k][i];
+                sourceClosure=max(sourceClosure,mag(sum-residual()[i]));
+            }
+            scalarList componentAtMin(components.size(),0);
+            forAll(components,k)
+            {
+                dp=dimensionedScalar(dp.dimensions(),0);
+                dp.correctBoundaryConditions();
+                solveVolumePressureIncrement
+                (
+                    components[k],g,rhoL,rg,psiG,mlFace,mgFace,
+                    dp,dfl,dfg,referenceCell
+                );
+                forAll(dp,i) sumDp[i]+=dp[i];
+                componentAtMin[k]=dp[minCell];
+                Info<< "FS_C08_STARTUP_PRESSURE_COMPONENT"
+                    << " dt_s=" << dt.value()
+                    << " source=" << components[k].name()
+                    << " minDpCell=" << minCell
+                    << " dpAtMinCell_Pa=" << dp[minCell]
+                    << " minDp_Pa=" << min(dp).value()
+                    << " maxDp_Pa=" << max(dp).value()
+                    << " localResidual=" << components[k][minCell]
+                    << " diagnosticOnly=1" << nl;
+            }
+            scalar pressureClosure=0;
+            forAll(dp,i)
+                pressureClosure=max(pressureClosure,mag(sumDp[i]-fullDp[i]));
+            Info<< "FS_C08_STARTUP_PRESSURE_ATTRIBUTION"
+                << " dt_s=" << dt.value()
+                << " minDpCell=" << minCell
+                << " fullDpAtMinCell_Pa=" << fullDp[minCell]
+                << " sumComponentDpAtMinCell_Pa=" << sumDp[minCell]
+                << " maxResidualDecompositionError=" << sourceClosure
+                << " maxPressureSuperpositionError_Pa=" << pressureClosure
+                << " diagnosticOnly=1" << nl;
+            dp=fullDp;
+            dfl=fullL;
+            dfg=fullG;
         }
 
         // Uniform damping of all pressure and face mass increments:
