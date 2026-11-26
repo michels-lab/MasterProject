@@ -62,6 +62,7 @@ METRICS = (
     "maxU_m_s", "pMax_Pa", "metalVolume_m3", "solidMass_kg",
     "metalMassResidual_kg", "gasContinuityDefect_kg",
     "totalInternalEnergyEquationBalance_J", "localEnergyRelativeL1",
+    "pressureVolumeRate_m3_s", "thermalVolumeRate_m3_s", "phaseVolumeRate_m3_s", "pMin_Pa",
 )
 
 def numeric(value):
