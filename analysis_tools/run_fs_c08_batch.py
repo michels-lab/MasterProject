@@ -246,6 +246,31 @@ def main(argv=None):
             completed=[row for row in batch["variants"] if row["completed"]]
             batch["completed_variants_common_saved_time_comparison"]=common_time_comparison(completed,comparison_dt)
             batch["completed_variants_compared"]=[row["variant"] for row in completed]
+            # Preserve peaks even if a case is rejected before the target.
+            # These are maxima/minima over saved complete accepted ledgers,
+            # not over rejected trials, or an estimate of continuous peaks.
+            batch["accepted_history_extrema"]={}
+            for row in batch["variants"]:
+                hist=common_time_comparison([row],comparison_dt)
+                name=row["variant"]
+                extrema={}
+                for key,mode in (("maxU_m_s",max),("pMax_Pa",max),("pMin_Pa",min),
+                                 ("localEnergyRelativeL1",max)):
+                    valid=[(h["variants"][name][key],h["time_s"]) for h in hist
+                           if h["variants"][name].get(key) is not None]
+                    if valid:
+                        value,t=mode(valid,key=lambda pair:pair[0])
+                        extrema[key]={"value":value,"time_s":t}
+                batch["accepted_history_extrema"][name]=extrema
+            if args.suite=="eos_temporal":
+                shared=batch["common_saved_time_comparison"] or batch["completed_variants_common_saved_time_comparison"]
+                target=batch["common_target_time_s"]
+                batch["milestone_comparison_scope"]=("all_variants" if batch["common_saved_time_comparison"]
+                    else "completed_variants_only")
+                batch["milestone_comparison"]=[h for h in shared if any(
+                    abs(h["time_s"]-fraction*target)<=max(1e-14,comparison_dt*1e-6)
+                    for fraction in (0.1,0.2,0.5,1.0))]
+
             batch["status"]="COMPLETED_ALL_VARIANTS" if all(r["completed"] for r in batch["variants"]) else "COMPLETED_WITH_REJECTED_VARIANTS"
             batch["passed_variants"]=sum(r["completed"] for r in batch["variants"])
             write_report(summary_path,batch)
