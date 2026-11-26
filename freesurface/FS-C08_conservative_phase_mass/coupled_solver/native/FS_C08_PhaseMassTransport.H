@@ -181,6 +181,7 @@ public:
     {
         return SvolThermal_;
     }
+    const volScalarField& pressureVolumeSource() const { return SvolPressure_; }
     const volScalarField& materialVolumeSource() const
     {
         return SvolMaterial_;
