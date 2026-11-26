@@ -460,7 +460,7 @@ bool projectTrialInventories
             const volScalarField fullDp("fsC08DiagnosticFullDp",dp);
             const surfaceScalarField fullL("fsC08DiagnosticFullL",dfl);
             const surfaceScalarField fullG("fsC08DiagnosticFullG",dfg);
-            scalarField sumDp(dp.size(),0);
+            scalarField sumDp(dp.size(),scalar(0));
             label minCell=0;
             forAll(dp,i)
                 if (dp[i]<dp[minCell]) minCell=i;
@@ -471,7 +471,6 @@ bool projectTrialInventories
                 forAll(components,k) sum+=components[k][i];
                 sourceClosure=max(sourceClosure,mag(sum-residual()[i]));
             }
-            scalarList componentAtMin(components.size(),0);
             forAll(components,k)
             {
                 dp=dimensionedScalar(dp.dimensions(),0);
@@ -482,7 +481,6 @@ bool projectTrialInventories
                     dp,dfl,dfg,referenceCell
                 );
                 forAll(dp,i) sumDp[i]+=dp[i];
-                componentAtMin[k]=dp[minCell];
                 Info<< "FS_C08_STARTUP_PRESSURE_COMPONENT"
                     << " dt_s=" << dt.value()
                     << " source=" << components[k].name()
