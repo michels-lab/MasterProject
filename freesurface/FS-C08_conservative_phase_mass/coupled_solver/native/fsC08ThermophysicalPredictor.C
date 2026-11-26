@@ -168,7 +168,13 @@ void Foam::solvers::fsC08ConservativeVoF::thermophysicalPredictor()
 
     // Purely numerical nonlinear solver controls; these are NOT material
     // constants or kinetic coefficients and cannot validate cast iron.
-    const label maxEnergyCorrectors=18;
+    const scalar linearTolerance=numerics.found("energyLinearTolerance")
+        ? numerics.lookup<scalar>("energyLinearTolerance") : scalar(0);
+    if (!std::isfinite(linearTolerance) || linearTolerance<0 || linearTolerance>1)
+        FatalErrorInFunction << "Invalid FS-C08 energyLinearTolerance" << exit(FatalError);
+    const bool residualControlled=linearTolerance>0;
+    const label maxEnergyCorrectors=residualControlled ? 36 : 18;
+    scalar lastResidualEquivalentK=GREAT;
     const scalar energyToleranceK=1e-6;
     scalar lastDeltaT=GREAT;
     bool converged=false;
@@ -440,7 +446,16 @@ void Foam::solvers::fsC08ConservativeVoF::thermophysicalPredictor()
 
         TEqn.relax();
         fvConstraints().constrain(TEqn);
-        TEqn.solve();
+        if (residualControlled)
+        {
+            dictionary controls(mesh.solution().solverDict(T.name()));
+            controls.set("tolerance",linearTolerance);
+            controls.set("relTol",scalar(0));
+            controls.set("minIter",label(1));
+            TEqn.solve(controls);
+        }
+        else
+            TEqn.solve();
         fvConstraints().constrain(T);
 
         // Outward-positive conductive energy flux W on all faces,
@@ -509,6 +524,40 @@ void Foam::solvers::fsC08ConservativeVoF::thermophysicalPredictor()
                 << nl;
         }
 
+        // Audit the actual nonlinear inventory at updated T, with the
+        // same mass and cached face fluxes as this energy solve.
+        // A small temperature change alone is not evidence of balance.
+        mixture_.correctThermo();
+        const auto& newUg=mixture_.thermo2().he().primitiveField();
+        scalar absBalance=0,absTerms=0;
+        lastResidualEquivalentK=0;
+        forAll(T_before,i)
+        {
+            scalar updatedEnergy=gasMassTrial_[i]*newUg[i];
+            if (mL[i]+mS[i]>0)
+                updatedEnergy+=mL[i]*phaseMass_->liquidInternalEnergy(T[i])
+                    +mS[i]*phaseMass_->solidInternalEnergy(T[i]);
+            const scalar storage=updatedEnergy-Eold[i];
+            const scalar advection=dt*energyDiv[i];
+            const scalar conduction=dt*heatDiv[i];
+            const scalar work=dt*mechanicalWorkDensity_[i];
+            const scalar imbalance=mag(storage+advection+conduction+work);
+            if (!std::isfinite(imbalance))
+                FatalErrorInFunction << "Nonfinite FS-C08 thermal residual" << exit(FatalError);
+            absBalance+=mesh.V()[i]*imbalance;
+            absTerms+=mesh.V()[i]*(mag(storage)+mag(advection)+mag(conduction)+mag(work));
+            lastResidualEquivalentK=max(lastResidualEquivalentK,imbalance/CVvol[i]);
+        }
+        reduce(lastResidualEquivalentK,maxOp<scalar>());
+        reduce(absBalance,sumOp<scalar>());
+        reduce(absTerms,sumOp<scalar>());
+        Info<< "FS_C08_THERMAL_RESIDUAL_CONTROL time_s=" << runTime.value()
+            << " corrector=" << corrector
+            << " linearTolerance=" << linearTolerance
+            << " maxResidualEquivalent_K=" << lastResidualEquivalentK
+            << " absBalance_J=" << absBalance
+            << " relativeL1=" << absBalance/max(scalar(VSMALL),absTerms)
+            << " residualGateEnabled=" << residualControlled << nl;
         lastDeltaT=0;
         const auto& Tnew=T.primitiveField();
         forAll(Tnew,i)
@@ -521,7 +570,8 @@ void Foam::solvers::fsC08ConservativeVoF::thermophysicalPredictor()
             lastDeltaT=max(lastDeltaT,mag(Tnew[i]-T_before[i]));
         }
         reduce(lastDeltaT,maxOp<scalar>());
-        if (lastDeltaT<=energyToleranceK)
+        if (lastDeltaT<=energyToleranceK
+            && (!residualControlled || lastResidualEquivalentK<=energyToleranceK))
         {
             converged=true;
             break;
@@ -533,7 +583,8 @@ void Foam::solvers::fsC08ConservativeVoF::thermophysicalPredictor()
             << "FS-C08 phase-resolved nonlinear energy predictor "
             << "did not converge after " << maxEnergyCorrectors
             << " correctors. MaxDeltaT=" << lastDeltaT
-            << " K. No thermodynamic validation claim."
+            << " K, residualEquivalentK=" << lastResidualEquivalentK
+            << ". No thermodynamic validation claim."
             << exit(FatalError);
     }
 
