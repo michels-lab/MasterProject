@@ -37,7 +37,8 @@ void solveVolumePressureIncrement
     volScalarField& dp,
     surfaceScalarField& deltaLiquidMassFlux,
     surfaceScalarField& deltaGasMassFlux,
-    const label referenceCell = -1
+    const label referenceCell = -1,
+    const volScalarField* diagnosticMetalStorage = nullptr
 );
 
 // Bound a PREDICTOR mass flux before transport, against the old-time
