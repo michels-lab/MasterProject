@@ -29,7 +29,7 @@
     "POTENTIAL_UNLOGGED_CHANGES": 2
   },
   "finding_total": 9,
-  "inventory_fingerprint": "ba9a842af84c43541e7ee9037d01823273cc17c4a6434fdac460a142cf9425cf",
+  "inventory_fingerprint": "0a39f31cc86a9788e6c5cd175a83265e804f5c590cc119e57bab8b16cfd706bc",
   "evidence_fingerprint": "85e91a2cb4a13355e925e7efa3e0a95fcc6c93051344b79ab2ba2c0750f785a0",
   "files": [
     {
@@ -450,7 +450,7 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "3775b632a4ab6ba4142719981a6a2ce44bbdb599"
+      "blob": "7ccf1513aac70d4ce08200c04f233af1d2c169c6"
     },
     {
       "path": "RUN_CASE_REGISTRY.csv",
@@ -299420,7 +299420,7 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "efab7b96d7f471f7b1e05893a7cc4cac4edbece8"
+      "blob": "7cba29405e60a91205f2211edbfaca2ae3ac2261"
     },
     {
       "path": "docs/granada/OPENFOAM_HUB_READ_ACCESS_20261021.md",
