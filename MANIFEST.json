@@ -1,0 +1,132 @@
+{
+  "kind": "adaptive_scientific_results",
+  "case": "C14-3DB-200s",
+  "time_mode": "adaptive_uncapped",
+  "mpi_ranks": 8,
+  "validation_class": "experimental_adaptive_uncapped_mpi",
+  "physical_validation": false,
+  "max_co": 0.25,
+  "max_dt_s": null,
+  "solver_steps": 15012,
+  "final_time_s": 200,
+  "solver_log_sha256": "7ab8f54590471463cc5e0d65c7bb8fe2e5c598c330ea573ab9bbfb3273c6d1ad",
+  "report_sha256": "100beff7dd8621c9d1b594906600a6fecd49dd1478c2a7058979d0aa87fa24ea",
+  "native_runtime_coverage_complete": true,
+  "volume_fields_included": false,
+  "archive_bytes": 708853905,
+  "archive_sha256": "24b06a27fd307cf51f591280da9c57368330d0954b4d5c5927f4138cbfd084f7",
+  "parts": [
+    {
+      "name": "archive.tar.gz.part000000",
+      "bytes": 33554432,
+      "sha256": "750cf6688b543e70ff6495d0ef37d02324b16230251804df057e6ba0f682155c"
+    },
+    {
+      "name": "archive.tar.gz.part000001",
+      "bytes": 33554432,
+      "sha256": "fcd21d8f6f9bb33b1e6539a1e4e9600394304afa6b5ab805574d020cfe21e243"
+    },
+    {
+      "name": "archive.tar.gz.part000002",
+      "bytes": 33554432,
+      "sha256": "138a055e6a2ca7a0f0d504022f66724500adf78083ec145df224853078c7d084"
+    },
+    {
+      "name": "archive.tar.gz.part000003",
+      "bytes": 33554432,
+      "sha256": "bebd31fcd24a9ec173ab7af5edccb86ce415af101a34d1498e1636e968921ce7"
+    },
+    {
+      "name": "archive.tar.gz.part000004",
+      "bytes": 33554432,
+      "sha256": "c91a11b117443ca7e1ad5d2674e5ebb57d35614e8995a0a042a3a21e8181749d"
+    },
+    {
+      "name": "archive.tar.gz.part000005",
+      "bytes": 33554432,
+      "sha256": "8c1d56d2480f1f09a18013a83bda87e131b717a3338116cd78bd2b00cba05a4e"
+    },
+    {
+      "name": "archive.tar.gz.part000006",
+      "bytes": 33554432,
+      "sha256": "9d19f742be2ed1fd9ee5d2ddb2cb4a6aa50a28d607b477ff8f2e516e69481f91"
+    },
+    {
+      "name": "archive.tar.gz.part000007",
+      "bytes": 33554432,
+      "sha256": "762423b1731c5030c036d105db31b4638a28b7cc7f15600a6db2fa46dbe145db"
+    },
+    {
+      "name": "archive.tar.gz.part000008",
+      "bytes": 33554432,
+      "sha256": "f225e90a7d86ed3a4d95dd983fef448e9e04c41ece9798ed6f35d2c5419340f1"
+    },
+    {
+      "name": "archive.tar.gz.part000009",
+      "bytes": 33554432,
+      "sha256": "e6aa0c673c66d388ceb9f2b0db629385846700fea020c890ffc2123abdec5825"
+    },
+    {
+      "name": "archive.tar.gz.part000010",
+      "bytes": 33554432,
+      "sha256": "bc2c69d695577de2c138080b5e3f6ba6d6eb9254ea0a1ae3e6e4ef3492c46761"
+    },
+    {
+      "name": "archive.tar.gz.part000011",
+      "bytes": 33554432,
+      "sha256": "2d6ab9f3a0a8c5bb75d8882b0054291f5ed03b613bb58b6c404b995206fb08b4"
+    },
+    {
+      "name": "archive.tar.gz.part000012",
+      "bytes": 33554432,
+      "sha256": "2d0b225560d08ea92333188c1672a14ddbdc9dab9dcb7394cc1734451c3ed88d"
+    },
+    {
+      "name": "archive.tar.gz.part000013",
+      "bytes": 33554432,
+      "sha256": "d2f094bc111860b05cb4349828c0c5dc86e29dc87c4e05e4c895029bafbc582c"
+    },
+    {
+      "name": "archive.tar.gz.part000014",
+      "bytes": 33554432,
+      "sha256": "364b123b632f802b6873b68f66dde5052e4be0adcc3b897b14f65a0addd4e5dc"
+    },
+    {
+      "name": "archive.tar.gz.part000015",
+      "bytes": 33554432,
+      "sha256": "81b13bc1eb9f505c2547da322f80626c1d73649f76702bc6eb832ef0efc0138f"
+    },
+    {
+      "name": "archive.tar.gz.part000016",
+      "bytes": 33554432,
+      "sha256": "805ca037f6b42c0547dd2f9e5ae9b053c396c19302df6349e681ffe7ecc6fae3"
+    },
+    {
+      "name": "archive.tar.gz.part000017",
+      "bytes": 33554432,
+      "sha256": "42c21e0376dcf25ba2305e5927a395819cfaa8247a3d90058622c1772a5f588c"
+    },
+    {
+      "name": "archive.tar.gz.part000018",
+      "bytes": 33554432,
+      "sha256": "33df4abb30e833cbd7da9cb44704c75b7d79692fa81aa8adfc2b07203fd073ec"
+    },
+    {
+      "name": "archive.tar.gz.part000019",
+      "bytes": 33554432,
+      "sha256": "787adb175c09c3faf8382f8b2ff538960ead258c76e56336c797e7440f9dfb48"
+    },
+    {
+      "name": "archive.tar.gz.part000020",
+      "bytes": 33554432,
+      "sha256": "82b865b6a05a11efdfd0c820714d20bcc42b536db615e8a3076ec8753f52f273"
+    },
+    {
+      "name": "archive.tar.gz.part000021",
+      "bytes": 4210833,
+      "sha256": "1d33deac7da61ae85d73de50a98fb3de543384f89596126ec1b37b66febbc249"
+    }
+  ],
+  "archive_format": "tar.gz split into ordered binary chunks",
+  "complete": true
+}

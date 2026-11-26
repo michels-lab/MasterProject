@@ -1,0 +1,617 @@
+{
+  "case": "C14-3DB-200s",
+  "formulation": "C14",
+  "geometry": "3DB",
+  "purpose": "solidification",
+  "source_sha256": {
+    "constant/metal/fvModels": "a4747af8974998e3fe69e3931b80f6d82f92d3ee4d19f471d5179936fa8e6525",
+    "constant/metal/g": "db959afd41e2d820e400f3f2aa14636f99728d4ddb9681215c4c3c2d58bb0f7c",
+    "constant/metal/momentumTransport": "8450e231c052adbe5745d6a9cb161c44604ce2052b054c3f4b3e895a51febea1",
+    "constant/metal/pRef": "e9563a89f8cc4ca56b54b759e573b268dd1202dafdfde9213d5cd83f564e03ca",
+    "constant/metal/physicalProperties": "c1e6fee75446178cdf6aea46e9a16b78431822645847c72e486a224d7dc7c327",
+    "constant/mold/physicalProperties": "a6b8c2d7e89247b117b6a4d4c98515a0bd083b7c31e81eabb068861ff79009cd",
+    "constant/mold/materials/silica": "8182cd007f50e4a55d430d7397b68778efd8de56dc93f298e9befa44f2dda022",
+    "constant/mold/materials/steel4140": "273c53f9bb7c1bd3b18ab2b71dcdb1c4fbfca64a56b80f30f2b22369b49cda9c",
+    "constant/mold/materials/steel4140cons": "bb467eb3dcdb765b6e0434592cc64efd0b581704df4cf1cc451fc8e3dc641418",
+    "constant/metal/materials/castIron": "e8afabda3f03b9f7b8b2d906179b008b4ef722c1ba8be23323d98de31126ac93",
+    "system/momentumPostProcessing": "d603f39e1c4ce63dcc63bcb25cf0a362137f2156c16b0348e71648f107baadd0",
+    "system/fvSolution": "0f9ee24b9fcad38c49f2e65bf3eda08ed4ad4b66e227ed851307e50ef68c7c2d",
+    "system/lineProfilesDict": "5b771ea0a4f5e63032d6657f8addb7319e6f024d17ea8b09cafbf7586fd4c7b5",
+    "system/researchDiagnostics": "58cf0db3e07fce65ba7b2cb797ef9cb62949dc233a716ad63d64af491a6d1ff3",
+    "system/controlDict": "c6db4389d758c31259285e18c8b3cef9fe945767ace1ee3fe147a8e286d7a9ec",
+    "system/functions": "adbefd65a71f796ec724b016a879b849ecaad720dc69aef3a6fda2dcc3d86d7f",
+    "system/createZonesDict": "924e47e2c74592b1eb17fa8dc588ad929c7309f1a5f55551c91c731d368e3df1",
+    "system/lineProfiles": "b3c9e99e54aefd757a11537da7fce02f77d8c08807d1d85f265c6dfbe019ca74",
+    "system/blockMeshDict": "118fd86fc9457cc5a2e7b456e0effcbaf0c0440dc377973a1b8aabd48c29a198",
+    "system/metal/fvSolution": "d276cf0c699572fcb8afca0d5e969c2d556cd89c0c42dffe94554fff5e99684c",
+    "system/metal/fvSchemes": "ee39332d4f97ffd8a40b7ab27e4b64faa9e3324c83a7398aeac68b67219ff4d3",
+    "system/mold/fvSolution": "1f71770f90ecbc61cccc81f4be908efd6c363b1dc06c320c0a35320f2b3f7106",
+    "system/mold/fvSchemes": "b238619957aa2117e2b3763605ad97f43bb47dd99bce2390fe1dee4dc82582f5"
+  },
+  "input_sha256": {
+    "0/metal/phaseChangeSolidFraction": "45c6f3b83b867e87b351d6e92c6bf257fc8c3304017d8b46e50a461c72611423",
+    "0/metal/T": "f63c9f62ce0fd7b804a28fa50d7d99de716a6de8bbed73876dc55742474e7f6b",
+    "0/metal/p_rgh": "6298411fa99792d63d33116219759e32a40ca9ace81b85ec53da1f3aab8ce827",
+    "0/metal/p": "3c68b7744e1eec377423d97bf9935d1b31ed5b1e6e08b61fce51cff83fe8f0c8",
+    "0/metal/U": "48417b7a0afc17349778c547f526f7cd1ebbcd2a809ce501bc9955c94c5076ed",
+    "0/metal/latentHeat": "2533519ba3848e2ba663adf3ac26268001bbbe880dbb6d30e70d1f832bbe459c",
+    "0/metal/phaseChangeSource:alpha1": "059873d8e2c606c36b3912e30065330c14b3ec489c6197c1a59c0d72b0949a40",
+    "0/mold/T": "706e6655b12928ff9ee426abaab7d34c7ba194e53a7b751c2f80345e5f62b8be",
+    "constant/metal/fvModels": "a4747af8974998e3fe69e3931b80f6d82f92d3ee4d19f471d5179936fa8e6525",
+    "constant/metal/g": "db959afd41e2d820e400f3f2aa14636f99728d4ddb9681215c4c3c2d58bb0f7c",
+    "constant/metal/momentumTransport": "8450e231c052adbe5745d6a9cb161c44604ce2052b054c3f4b3e895a51febea1",
+    "constant/metal/pRef": "e9563a89f8cc4ca56b54b759e573b268dd1202dafdfde9213d5cd83f564e03ca",
+    "constant/metal/physicalProperties": "c1e6fee75446178cdf6aea46e9a16b78431822645847c72e486a224d7dc7c327",
+    "constant/mold/physicalProperties": "a6b8c2d7e89247b117b6a4d4c98515a0bd083b7c31e81eabb068861ff79009cd",
+    "constant/mold/polyMesh/cellZones": "f2bb49397443deefa8ffbd1650a83d4a56fd949226ebcec5276b6df7d16422f6",
+    "constant/mold/polyMesh/boundary": "f58828c450cdfffcf9b1dc121c77997f9b61bd22a7d7061f9ca53765780e5928",
+    "constant/mold/polyMesh/neighbour": "2df2745f0d7415543f2391f9e4baefdefdac1c5065ef250472a0be9d49d22aed",
+    "constant/mold/polyMesh/points": "52660bb8b202913f7ccd9f97094fad0a58b61f1e4d04432c1af995bfa29d1018",
+    "constant/mold/polyMesh/faceZones": "23d19f3028242f060a69f10b141013bb8d3f35d3a2e99df9d2308c974cc5433a",
+    "constant/mold/polyMesh/faces": "a260e227848302289e943f91e12398a7223b055397a1f6a415cc54a0d6e71eda",
+    "constant/mold/polyMesh/owner": "36d071bb122253c5583ceafdc9926cc02a0c6ec50f84f3d6e6fb30a6e4980fc5",
+    "constant/mold/materials/silica": "8182cd007f50e4a55d430d7397b68778efd8de56dc93f298e9befa44f2dda022",
+    "constant/mold/polyMesh/sets/nonOrthoFaces": "f153a82438aed9626f8fcd84bed5fa6fa1105e68416e07ba7d174bb907d45938",
+    "constant/metal/polyMesh/cellZones": "cc46598e5cb1ee023d0980810c2d1d0463530d19768877d678a885693e691be6",
+    "constant/metal/polyMesh/boundary": "f9f51979fa89c4c0ba8816b5684cf07ada329852d0abd187cab506bb998e9a06",
+    "constant/metal/polyMesh/neighbour": "5a82837472c0a8346342be20532a2977a9436347b86bd9c329d743781182d48f",
+    "constant/metal/polyMesh/points": "f68092dd078b0ea6a5c9e614eab8aea229c59eb35b2fb1d04bee1cf05b26c7fa",
+    "constant/metal/polyMesh/faceZones": "179b721bd97ab578453940afccc670a99d1c94528fbc55c105ce2ec12f3cc4eb",
+    "constant/metal/polyMesh/faces": "60201270d902d912b3f288668e1d7b59141a71052bb6dbbfff89e8a2aa693fdf",
+    "constant/metal/polyMesh/owner": "f5058ae5b343f15f48a6d0640a3e54303df187217bfe94a3300db0539f74edd0",
+    "constant/metal/materials/castIron": "e8afabda3f03b9f7b8b2d906179b008b4ef722c1ba8be23323d98de31126ac93",
+    "constant/metal/polyMesh/sets/nonOrthoFaces": "c087fb47e6b751368fa1ad3dfe25bc3513d07b65a218fc6f45cb473b01a2adb9",
+    "system/momentumPostProcessing": "bbcfb50eb5a02ad6d142a3d8b165393df32f24bee8ad93cc797b389a92c613a5",
+    "system/fvSolution": "0f9ee24b9fcad38c49f2e65bf3eda08ed4ad4b66e227ed851307e50ef68c7c2d",
+    "system/researchDiagnostics": "e585e1f402a068bce4a11d8914bab52598d42cffccc595738d4f26967ef9693b",
+    "system/controlDict": "945b434351966e8f5640c4f8a711b4c19fc8eaf98d698a5b38d245a929bc14de",
+    "system/functions": "8e383d6621db1082c58ffbe635016598d864b2509a3adde762d0b99fd50b8977",
+    "system/decomposeParDict": "3ec0718c4a7d6a2b095071f0c41f6d4a454ac0a53354b98dd0dfbb395b9f5dab",
+    "system/additional3DProfiles": "4a4da92a441393630a222500380025489c38d1bb077fc006a194b40e40724bb9",
+    "system/lineProfiles": "1678602281f12b09ffed8de4edb475b63e942e4f6d215009024501d44106519a",
+    "system/topSurfaceFlowPostProcessing": "8fc53188f8e01864cf359ff3063b65425c9a9de71afe09a9a3872e8d840cd6f6",
+    "system/compactNearTop": "fc2f14e6fbac53ddb9bb847c62bf30b8e5f30993a96c6b81d8a954c2f3df397c",
+    "system/metal/fvSolution": "086f88787a0cb22b41afeb84f7ce3a682029aa21e5992bc593cfd58b1641fbd1",
+    "system/metal/fvSchemes": "ee39332d4f97ffd8a40b7ab27e4b64faa9e3324c83a7398aeac68b67219ff4d3",
+    "system/mold/fvSolution": "1f71770f90ecbc61cccc81f4be908efd6c363b1dc06c320c0a35320f2b3f7106",
+    "system/mold/fvSchemes": "b238619957aa2117e2b3763605ad97f43bb47dd99bce2390fe1dee4dc82582f5"
+  },
+  "mesh_sha256": {
+    "constant/metal/polyMesh/points": "f68092dd078b0ea6a5c9e614eab8aea229c59eb35b2fb1d04bee1cf05b26c7fa",
+    "constant/metal/polyMesh/faces": "60201270d902d912b3f288668e1d7b59141a71052bb6dbbfff89e8a2aa693fdf",
+    "constant/metal/polyMesh/owner": "f5058ae5b343f15f48a6d0640a3e54303df187217bfe94a3300db0539f74edd0",
+    "constant/metal/polyMesh/neighbour": "5a82837472c0a8346342be20532a2977a9436347b86bd9c329d743781182d48f",
+    "constant/metal/polyMesh/boundary": "f9f51979fa89c4c0ba8816b5684cf07ada329852d0abd187cab506bb998e9a06",
+    "constant/metal/polyMesh/cellZones": "cc46598e5cb1ee023d0980810c2d1d0463530d19768877d678a885693e691be6",
+    "constant/mold/polyMesh/points": "52660bb8b202913f7ccd9f97094fad0a58b61f1e4d04432c1af995bfa29d1018",
+    "constant/mold/polyMesh/faces": "a260e227848302289e943f91e12398a7223b055397a1f6a415cc54a0d6e71eda",
+    "constant/mold/polyMesh/owner": "36d071bb122253c5583ceafdc9926cc02a0c6ec50f84f3d6e6fb30a6e4980fc5",
+    "constant/mold/polyMesh/neighbour": "2df2745f0d7415543f2391f9e4baefdefdac1c5065ef250472a0be9d49d22aed",
+    "constant/mold/polyMesh/boundary": "f58828c450cdfffcf9b1dc121c77997f9b61bd22a7d7061f9ca53765780e5928",
+    "constant/mold/polyMesh/cellZones": "f2bb49397443deefa8ffbd1650a83d4a56fd949226ebcec5276b6df7d16422f6"
+  },
+  "sampling": {
+    "probe_xyz_m": [
+      0.0259,
+      -0.02,
+      0.0259
+    ],
+    "original_profiles": {
+      "line_y10mm": {
+        "axis": "x",
+        "start": [
+          0.006149999999999999,
+          -0.03,
+          0.0259
+        ],
+        "end": [
+          0.045649999999999996,
+          -0.03,
+          0.0259
+        ],
+        "points": 80
+      },
+      "line_y20mm": {
+        "axis": "x",
+        "start": [
+          0.006149999999999999,
+          -0.02,
+          0.0259
+        ],
+        "end": [
+          0.045649999999999996,
+          -0.02,
+          0.0259
+        ],
+        "points": 80
+      },
+      "line_y30mm": {
+        "axis": "x",
+        "start": [
+          0.006149999999999999,
+          -0.010000000000000002,
+          0.0259
+        ],
+        "end": [
+          0.045649999999999996,
+          -0.010000000000000002,
+          0.0259
+        ],
+        "points": 80
+      },
+      "line_x20mm": {
+        "axis": "y",
+        "start": [
+          0.0259,
+          -0.03975,
+          0.0259
+        ],
+        "end": [
+          0.0259,
+          -0.0002500000000000002,
+          0.0259
+        ],
+        "points": 80
+      }
+    },
+    "additional_3D_profiles": {
+      "height10_angle45": {
+        "axis": "x",
+        "start": [
+          0.011934641071565685,
+          -0.03,
+          0.011934641071565687
+        ],
+        "end": [
+          0.03986535892843431,
+          -0.03,
+          0.03986535892843431
+        ],
+        "points": 80
+      },
+      "height10_angle90": {
+        "axis": "z",
+        "start": [
+          0.0259,
+          -0.03,
+          0.006149999999999999
+        ],
+        "end": [
+          0.0259,
+          -0.03,
+          0.045649999999999996
+        ],
+        "points": 80
+      },
+      "height10_angle135": {
+        "axis": "x",
+        "start": [
+          0.011934641071565687,
+          -0.03,
+          0.03986535892843431
+        ],
+        "end": [
+          0.03986535892843431,
+          -0.03,
+          0.011934641071565685
+        ],
+        "points": 80
+      },
+      "height20_angle45": {
+        "axis": "x",
+        "start": [
+          0.011934641071565685,
+          -0.02,
+          0.011934641071565687
+        ],
+        "end": [
+          0.03986535892843431,
+          -0.02,
+          0.03986535892843431
+        ],
+        "points": 80
+      },
+      "height20_angle90": {
+        "axis": "z",
+        "start": [
+          0.0259,
+          -0.02,
+          0.006149999999999999
+        ],
+        "end": [
+          0.0259,
+          -0.02,
+          0.045649999999999996
+        ],
+        "points": 80
+      },
+      "height20_angle135": {
+        "axis": "x",
+        "start": [
+          0.011934641071565687,
+          -0.02,
+          0.03986535892843431
+        ],
+        "end": [
+          0.03986535892843431,
+          -0.02,
+          0.011934641071565685
+        ],
+        "points": 80
+      },
+      "height30_angle45": {
+        "axis": "x",
+        "start": [
+          0.011934641071565685,
+          -0.010000000000000002,
+          0.011934641071565687
+        ],
+        "end": [
+          0.03986535892843431,
+          -0.010000000000000002,
+          0.03986535892843431
+        ],
+        "points": 80
+      },
+      "height30_angle90": {
+        "axis": "z",
+        "start": [
+          0.0259,
+          -0.010000000000000002,
+          0.006149999999999999
+        ],
+        "end": [
+          0.0259,
+          -0.010000000000000002,
+          0.045649999999999996
+        ],
+        "points": 80
+      },
+      "height30_angle135": {
+        "axis": "x",
+        "start": [
+          0.011934641071565687,
+          -0.010000000000000002,
+          0.03986535892843431
+        ],
+        "end": [
+          0.03986535892843431,
+          -0.010000000000000002,
+          0.011934641071565685
+        ],
+        "points": 80
+      },
+      "vertical_xplus10": {
+        "axis": "y",
+        "start": [
+          0.0359,
+          -0.03975,
+          0.0259
+        ],
+        "end": [
+          0.0359,
+          -0.0002500000000000002,
+          0.0259
+        ],
+        "points": 80
+      },
+      "vertical_xminus10": {
+        "axis": "y",
+        "start": [
+          0.015899999999999997,
+          -0.03975,
+          0.0259
+        ],
+        "end": [
+          0.015899999999999997,
+          -0.0002500000000000002,
+          0.0259
+        ],
+        "points": 80
+      },
+      "vertical_zplus10": {
+        "axis": "y",
+        "start": [
+          0.0259,
+          -0.03975,
+          0.0359
+        ],
+        "end": [
+          0.0259,
+          -0.0002500000000000002,
+          0.0359
+        ],
+        "points": 80
+      },
+      "vertical_zminus10": {
+        "axis": "y",
+        "start": [
+          0.0259,
+          -0.03975,
+          0.015899999999999997
+        ],
+        "end": [
+          0.0259,
+          -0.0002500000000000002,
+          0.015899999999999997
+        ],
+        "points": 80
+      }
+    },
+    "source_hashes": {
+      "functions": "adbefd65a71f796ec724b016a879b849ecaad720dc69aef3a6fda2dcc3d86d7f",
+      "researchDiagnostics": "58cf0db3e07fce65ba7b2cb797ef9cb62949dc233a716ad63d64af491a6d1ff3",
+      "lineProfiles": "b3c9e99e54aefd757a11537da7fce02f77d8c08807d1d85f265c6dfbe019ca74",
+      "controlDict": "c6db4389d758c31259285e18c8b3cef9fe945767ace1ee3fe147a8e286d7a9ec"
+    },
+    "runtime_hashes": {
+      "functions": "2c9a45b2c2fffb062244140fa3239eb006b1987518b33e692c73ea2eac0496cb",
+      "researchDiagnostics": "58cf0db3e07fce65ba7b2cb797ef9cb62949dc233a716ad63d64af491a6d1ff3",
+      "lineProfiles": "37805d3833ea48ef44ca04c53a0a1b9d8aa76094a83da318d610e0cd90175b73",
+      "additional3DProfiles": "7304539cdd1ae040a2f6df78a287ce5140665cb886d9cc9c9b8a1971fc0b26da",
+      "controlDict": "c6db4389d758c31259285e18c8b3cef9fe945767ace1ee3fe147a8e286d7a9ec"
+    },
+    "diagonal_axis_note": "45/135 degree raw coordinate is global X projection; 90 is global Z; actual endpoints in manifest. 135 oriented increasing X."
+  },
+  "end_s": 200,
+  "dt_s": 0.001,
+  "saved_dt_s": 1.0,
+  "disk_projection": {
+    "field_estimate_bytes": 16397075432,
+    "diagnostic_estimate_bytes": 40544370375,
+    "projected_bytes_with_50pct_margin": 85412168711,
+    "prior_projected_bytes": 300142613142,
+    "method": "201/2001 prior volume bytes; retain all diagnostics/logs +10%, 50% margin; not a guaranteed bound"
+  },
+  "physical_validation": false,
+  "source_input_sha256": {
+    "0/metal/phaseChangeSolidFraction": "45c6f3b83b867e87b351d6e92c6bf257fc8c3304017d8b46e50a461c72611423",
+    "0/metal/T": "f63c9f62ce0fd7b804a28fa50d7d99de716a6de8bbed73876dc55742474e7f6b",
+    "0/metal/p_rgh": "6298411fa99792d63d33116219759e32a40ca9ace81b85ec53da1f3aab8ce827",
+    "0/metal/p": "3c68b7744e1eec377423d97bf9935d1b31ed5b1e6e08b61fce51cff83fe8f0c8",
+    "0/metal/U": "48417b7a0afc17349778c547f526f7cd1ebbcd2a809ce501bc9955c94c5076ed",
+    "0/metal/latentHeat": "2533519ba3848e2ba663adf3ac26268001bbbe880dbb6d30e70d1f832bbe459c",
+    "0/metal/phaseChangeSource:alpha1": "059873d8e2c606c36b3912e30065330c14b3ec489c6197c1a59c0d72b0949a40",
+    "0/mold/T": "706e6655b12928ff9ee426abaab7d34c7ba194e53a7b751c2f80345e5f62b8be",
+    "constant/metal/fvModels": "a4747af8974998e3fe69e3931b80f6d82f92d3ee4d19f471d5179936fa8e6525",
+    "constant/metal/g": "db959afd41e2d820e400f3f2aa14636f99728d4ddb9681215c4c3c2d58bb0f7c",
+    "constant/metal/momentumTransport": "8450e231c052adbe5745d6a9cb161c44604ce2052b054c3f4b3e895a51febea1",
+    "constant/metal/pRef": "e9563a89f8cc4ca56b54b759e573b268dd1202dafdfde9213d5cd83f564e03ca",
+    "constant/metal/physicalProperties": "c1e6fee75446178cdf6aea46e9a16b78431822645847c72e486a224d7dc7c327",
+    "constant/mold/physicalProperties": "a6b8c2d7e89247b117b6a4d4c98515a0bd083b7c31e81eabb068861ff79009cd",
+    "constant/mold/polyMesh/cellZones": "f2bb49397443deefa8ffbd1650a83d4a56fd949226ebcec5276b6df7d16422f6",
+    "constant/mold/polyMesh/boundary": "f58828c450cdfffcf9b1dc121c77997f9b61bd22a7d7061f9ca53765780e5928",
+    "constant/mold/polyMesh/neighbour": "2df2745f0d7415543f2391f9e4baefdefdac1c5065ef250472a0be9d49d22aed",
+    "constant/mold/polyMesh/points": "52660bb8b202913f7ccd9f97094fad0a58b61f1e4d04432c1af995bfa29d1018",
+    "constant/mold/polyMesh/faceZones": "23d19f3028242f060a69f10b141013bb8d3f35d3a2e99df9d2308c974cc5433a",
+    "constant/mold/polyMesh/faces": "a260e227848302289e943f91e12398a7223b055397a1f6a415cc54a0d6e71eda",
+    "constant/mold/polyMesh/owner": "36d071bb122253c5583ceafdc9926cc02a0c6ec50f84f3d6e6fb30a6e4980fc5",
+    "constant/mold/materials/silica": "8182cd007f50e4a55d430d7397b68778efd8de56dc93f298e9befa44f2dda022",
+    "constant/mold/polyMesh/sets/nonOrthoFaces": "f153a82438aed9626f8fcd84bed5fa6fa1105e68416e07ba7d174bb907d45938",
+    "constant/metal/polyMesh/cellZones": "cc46598e5cb1ee023d0980810c2d1d0463530d19768877d678a885693e691be6",
+    "constant/metal/polyMesh/boundary": "f9f51979fa89c4c0ba8816b5684cf07ada329852d0abd187cab506bb998e9a06",
+    "constant/metal/polyMesh/neighbour": "5a82837472c0a8346342be20532a2977a9436347b86bd9c329d743781182d48f",
+    "constant/metal/polyMesh/points": "f68092dd078b0ea6a5c9e614eab8aea229c59eb35b2fb1d04bee1cf05b26c7fa",
+    "constant/metal/polyMesh/faceZones": "179b721bd97ab578453940afccc670a99d1c94528fbc55c105ce2ec12f3cc4eb",
+    "constant/metal/polyMesh/faces": "60201270d902d912b3f288668e1d7b59141a71052bb6dbbfff89e8a2aa693fdf",
+    "constant/metal/polyMesh/owner": "f5058ae5b343f15f48a6d0640a3e54303df187217bfe94a3300db0539f74edd0",
+    "constant/metal/materials/castIron": "e8afabda3f03b9f7b8b2d906179b008b4ef722c1ba8be23323d98de31126ac93",
+    "constant/metal/polyMesh/sets/nonOrthoFaces": "c087fb47e6b751368fa1ad3dfe25bc3513d07b65a218fc6f45cb473b01a2adb9",
+    "system/momentumPostProcessing": "bbcfb50eb5a02ad6d142a3d8b165393df32f24bee8ad93cc797b389a92c613a5",
+    "system/fvSolution": "0f9ee24b9fcad38c49f2e65bf3eda08ed4ad4b66e227ed851307e50ef68c7c2d",
+    "system/researchDiagnostics": "58cf0db3e07fce65ba7b2cb797ef9cb62949dc233a716ad63d64af491a6d1ff3",
+    "system/controlDict": "910f6bd65282fafa8752f482d54bef068f7c7ba578703b9cad875d819afe1381",
+    "system/functions": "2c9a45b2c2fffb062244140fa3239eb006b1987518b33e692c73ea2eac0496cb",
+    "system/additional3DProfiles": "7304539cdd1ae040a2f6df78a287ce5140665cb886d9cc9c9b8a1971fc0b26da",
+    "system/lineProfiles": "37805d3833ea48ef44ca04c53a0a1b9d8aa76094a83da318d610e0cd90175b73",
+    "system/topSurfaceFlowPostProcessing": "8fc53188f8e01864cf359ff3063b65425c9a9de71afe09a9a3872e8d840cd6f6",
+    "system/metal/fvSolution": "086f88787a0cb22b41afeb84f7ce3a682029aa21e5992bc593cfd58b1641fbd1",
+    "system/metal/fvSchemes": "ee39332d4f97ffd8a40b7ab27e4b64faa9e3324c83a7398aeac68b67219ff4d3",
+    "system/mold/fvSolution": "1f71770f90ecbc61cccc81f4be908efd6c363b1dc06c320c0a35320f2b3f7106",
+    "system/mold/fvSchemes": "b238619957aa2117e2b3763605ad97f43bb47dd99bce2390fe1dee4dc82582f5"
+  },
+  "changed_io_files": {
+    "system/controlDict": {
+      "old_sha256": "910f6bd65282fafa8752f482d54bef068f7c7ba578703b9cad875d819afe1381",
+      "new_sha256": "212b6d0db8523e2c6d539be09a6fde578dddf6bbf501c42cee846bee628f5b70"
+    },
+    "system/researchDiagnostics": {
+      "old_sha256": "58cf0db3e07fce65ba7b2cb797ef9cb62949dc233a716ad63d64af491a6d1ff3",
+      "new_sha256": "4169e101ac26fcb49bb3d96041876310683fa4bf51b5a2acb713b595174b1fa3"
+    },
+    "system/functions": {
+      "old_sha256": "2c9a45b2c2fffb062244140fa3239eb006b1987518b33e692c73ea2eac0496cb",
+      "new_sha256": "b9778ec91e8e2964c078a06a19f31131020370c272088c0db48d282ef155a3f0"
+    },
+    "system/lineProfiles": {
+      "old_sha256": "37805d3833ea48ef44ca04c53a0a1b9d8aa76094a83da318d610e0cd90175b73",
+      "new_sha256": "90edf1ef35f26f3fcd62e5d05ccc75fc71b24ab4a913742062c7b814ad1c0447"
+    },
+    "system/additional3DProfiles": {
+      "old_sha256": "7304539cdd1ae040a2f6df78a287ce5140665cb886d9cc9c9b8a1971fc0b26da",
+      "new_sha256": "6eed3928bcfd3ef0a3b285d5817865b4b55afce368442f253beb4740eca4f063"
+    },
+    "system/compactNearTop": {
+      "new_sha256": "e5b078c70351129329b660153b86474b0d21deeb6820d6b8b99d9d82196bf5b3"
+    }
+  },
+  "volume_saved_dt_s": 1.0,
+  "profile_and_reduction_dt_s": 0.1,
+  "probe_dt_s": 0.001,
+  "momentum_volume_dt_s": 1.0,
+  "volume_states_target": 201,
+  "profile_states_target": 2001,
+  "probe_samples_target": null,
+  "implementation_sha256": "3754304197874212b655b72f540d3cbc58eabdbfae91426be59b48bd1dd0fe84",
+  "status": "SOLVER_COMPLETE_ADAPTIVE_AUDITED",
+  "solver_completed": true,
+  "transfer_snapshot": {
+    "original_status": "PREPARED_COMPACT_NOT_RUN",
+    "original_solver_completed": false,
+    "original_report_sha256": "96dd65d768293f579d7827c44945cc46259a0162d0815c7eb8f83588d2c0a38a",
+    "recovered_exact_sha_inputs": [],
+    "runtime_outputs_excluded": true
+  },
+  "source_dense_case": "/home/michel/OpenFOAM/CAMPAIGN_200S_01/C14-3DB-200s",
+  "source_dense_report_sha256": "3fa4d6b0a2aac99449f9df4aa28b2a419ee8f376330a4af91cd0375edf61e693",
+  "original_dense_case_preserved": true,
+  "execution_mode": "mpi",
+  "mpi_ranks": 8,
+  "target_time_s": 200,
+  "time_mode": "adaptive_uncapped",
+  "validation_class": "experimental_adaptive_uncapped_mpi",
+  "production_approved": false,
+  "initial_dt_s": 0.001,
+  "max_co": 0.25,
+  "max_dt_s": null,
+  "max_co_policy": "explicit 0.25",
+  "max_deltaT_policy": "no explicit maxDeltaT; native solver and output restrictions retained",
+  "fixed_input_sha256": {
+    "0/metal/phaseChangeSolidFraction": "45c6f3b83b867e87b351d6e92c6bf257fc8c3304017d8b46e50a461c72611423",
+    "0/metal/T": "f63c9f62ce0fd7b804a28fa50d7d99de716a6de8bbed73876dc55742474e7f6b",
+    "0/metal/p_rgh": "6298411fa99792d63d33116219759e32a40ca9ace81b85ec53da1f3aab8ce827",
+    "0/metal/p": "3c68b7744e1eec377423d97bf9935d1b31ed5b1e6e08b61fce51cff83fe8f0c8",
+    "0/metal/U": "48417b7a0afc17349778c547f526f7cd1ebbcd2a809ce501bc9955c94c5076ed",
+    "0/metal/latentHeat": "2533519ba3848e2ba663adf3ac26268001bbbe880dbb6d30e70d1f832bbe459c",
+    "0/metal/phaseChangeSource:alpha1": "059873d8e2c606c36b3912e30065330c14b3ec489c6197c1a59c0d72b0949a40",
+    "0/mold/T": "706e6655b12928ff9ee426abaab7d34c7ba194e53a7b751c2f80345e5f62b8be",
+    "constant/metal/fvModels": "a4747af8974998e3fe69e3931b80f6d82f92d3ee4d19f471d5179936fa8e6525",
+    "constant/metal/g": "db959afd41e2d820e400f3f2aa14636f99728d4ddb9681215c4c3c2d58bb0f7c",
+    "constant/metal/momentumTransport": "8450e231c052adbe5745d6a9cb161c44604ce2052b054c3f4b3e895a51febea1",
+    "constant/metal/pRef": "e9563a89f8cc4ca56b54b759e573b268dd1202dafdfde9213d5cd83f564e03ca",
+    "constant/metal/physicalProperties": "c1e6fee75446178cdf6aea46e9a16b78431822645847c72e486a224d7dc7c327",
+    "constant/mold/physicalProperties": "a6b8c2d7e89247b117b6a4d4c98515a0bd083b7c31e81eabb068861ff79009cd",
+    "constant/mold/polyMesh/cellZones": "f2bb49397443deefa8ffbd1650a83d4a56fd949226ebcec5276b6df7d16422f6",
+    "constant/mold/polyMesh/boundary": "f58828c450cdfffcf9b1dc121c77997f9b61bd22a7d7061f9ca53765780e5928",
+    "constant/mold/polyMesh/neighbour": "2df2745f0d7415543f2391f9e4baefdefdac1c5065ef250472a0be9d49d22aed",
+    "constant/mold/polyMesh/points": "52660bb8b202913f7ccd9f97094fad0a58b61f1e4d04432c1af995bfa29d1018",
+    "constant/mold/polyMesh/faceZones": "23d19f3028242f060a69f10b141013bb8d3f35d3a2e99df9d2308c974cc5433a",
+    "constant/mold/polyMesh/faces": "a260e227848302289e943f91e12398a7223b055397a1f6a415cc54a0d6e71eda",
+    "constant/mold/polyMesh/owner": "36d071bb122253c5583ceafdc9926cc02a0c6ec50f84f3d6e6fb30a6e4980fc5",
+    "constant/mold/materials/silica": "8182cd007f50e4a55d430d7397b68778efd8de56dc93f298e9befa44f2dda022",
+    "constant/mold/polyMesh/sets/nonOrthoFaces": "f153a82438aed9626f8fcd84bed5fa6fa1105e68416e07ba7d174bb907d45938",
+    "constant/metal/polyMesh/cellZones": "cc46598e5cb1ee023d0980810c2d1d0463530d19768877d678a885693e691be6",
+    "constant/metal/polyMesh/boundary": "f9f51979fa89c4c0ba8816b5684cf07ada329852d0abd187cab506bb998e9a06",
+    "constant/metal/polyMesh/neighbour": "5a82837472c0a8346342be20532a2977a9436347b86bd9c329d743781182d48f",
+    "constant/metal/polyMesh/points": "f68092dd078b0ea6a5c9e614eab8aea229c59eb35b2fb1d04bee1cf05b26c7fa",
+    "constant/metal/polyMesh/faceZones": "179b721bd97ab578453940afccc670a99d1c94528fbc55c105ce2ec12f3cc4eb",
+    "constant/metal/polyMesh/faces": "60201270d902d912b3f288668e1d7b59141a71052bb6dbbfff89e8a2aa693fdf",
+    "constant/metal/polyMesh/owner": "f5058ae5b343f15f48a6d0640a3e54303df187217bfe94a3300db0539f74edd0",
+    "constant/metal/materials/castIron": "e8afabda3f03b9f7b8b2d906179b008b4ef722c1ba8be23323d98de31126ac93",
+    "constant/metal/polyMesh/sets/nonOrthoFaces": "c087fb47e6b751368fa1ad3dfe25bc3513d07b65a218fc6f45cb473b01a2adb9",
+    "system/momentumPostProcessing": "bbcfb50eb5a02ad6d142a3d8b165393df32f24bee8ad93cc797b389a92c613a5",
+    "system/fvSolution": "0f9ee24b9fcad38c49f2e65bf3eda08ed4ad4b66e227ed851307e50ef68c7c2d",
+    "system/researchDiagnostics": "4169e101ac26fcb49bb3d96041876310683fa4bf51b5a2acb713b595174b1fa3",
+    "system/controlDict": "212b6d0db8523e2c6d539be09a6fde578dddf6bbf501c42cee846bee628f5b70",
+    "system/functions": "b9778ec91e8e2964c078a06a19f31131020370c272088c0db48d282ef155a3f0",
+    "system/additional3DProfiles": "6eed3928bcfd3ef0a3b285d5817865b4b55afce368442f253beb4740eca4f063",
+    "system/lineProfiles": "90edf1ef35f26f3fcd62e5d05ccc75fc71b24ab4a913742062c7b814ad1c0447",
+    "system/topSurfaceFlowPostProcessing": "8fc53188f8e01864cf359ff3063b65425c9a9de71afe09a9a3872e8d840cd6f6",
+    "system/compactNearTop": "e5b078c70351129329b660153b86474b0d21deeb6820d6b8b99d9d82196bf5b3",
+    "system/metal/fvSolution": "086f88787a0cb22b41afeb84f7ce3a682029aa21e5992bc593cfd58b1641fbd1",
+    "system/metal/fvSchemes": "ee39332d4f97ffd8a40b7ab27e4b64faa9e3324c83a7398aeac68b67219ff4d3",
+    "system/mold/fvSolution": "1f71770f90ecbc61cccc81f4be908efd6c363b1dc06c320c0a35320f2b3f7106",
+    "system/mold/fvSchemes": "b238619957aa2117e2b3763605ad97f43bb47dd99bce2390fe1dee4dc82582f5"
+  },
+  "changed_time_control_files": {
+    "system/controlDict": "945b434351966e8f5640c4f8a711b4c19fc8eaf98d698a5b38d245a929bc14de",
+    "system/functions": "8e383d6621db1082c58ffbe635016598d864b2509a3adde762d0b99fd50b8977",
+    "system/researchDiagnostics": "e585e1f402a068bce4a11d8914bab52598d42cffccc595738d4f26967ef9693b",
+    "system/lineProfiles": "1678602281f12b09ffed8de4edb475b63e942e4f6d215009024501d44106519a",
+    "system/additional3DProfiles": "4a4da92a441393630a222500380025489c38d1bb077fc006a194b40e40724bb9",
+    "system/compactNearTop": "fc2f14e6fbac53ddb9bb847c62bf30b8e5f30993a96c6b81d8a954c2f3df397c",
+    "system/decomposeParDict": "3ec0718c4a7d6a2b095071f0c41f6d4a454ac0a53354b98dd0dfbb395b9f5dab"
+  },
+  "source_transfer_sha256": "c7687e03296e7e310512e6a61f8b436052430226dee3c51fb61d27c6fb23ea9d",
+  "profile_target_interval_s": 0.1,
+  "volume_target_interval_s": 1.0,
+  "probe_cadence": "every actual solver step",
+  "solver_steps_target": null,
+  "decomposition_seconds": 9.837558643999728,
+  "solver_wall_seconds": 5626.915944906999,
+  "final_time_s": 200.0,
+  "solver_steps": 15012,
+  "observed_mpi_ranks": 8,
+  "benchmark_stations": {
+    "1.0": {
+      "actual_time_s": 1.0,
+      "steps": 260,
+      "wall_from_launch_s": 128.15606236300027,
+      "wall_since_first_step_s": 94.5240454599998
+    },
+    "2.0": {
+      "actual_time_s": 2.0,
+      "steps": 1021,
+      "wall_from_launch_s": 403.31177258800017,
+      "wall_since_first_step_s": 369.6797556849997
+    },
+    "2.4": {
+      "actual_time_s": 2.4,
+      "steps": 1406,
+      "wall_from_launch_s": 537.112283208,
+      "wall_since_first_step_s": 503.48026630499953
+    },
+    "3.0": {
+      "actual_time_s": 3.0,
+      "steps": 2041,
+      "wall_from_launch_s": 757.8465784680002,
+      "wall_since_first_step_s": 724.2145615649997
+    }
+  },
+  "first_step_wall_seconds": 33.632016903000476,
+  "adaptive_statistics": {
+    "min_dt_s": 0.0009345794389998829,
+    "max_dt_s": 0.020000000000010232,
+    "mean_dt_s": 0.01332267519317879,
+    "max_logged_Courant": 0.268245,
+    "wall_seconds": 5626.915944906999
+  },
+  "reconstruction_seconds": 1501.0315437670015,
+  "runtime_audit": {
+    "counts": {
+      "probe/T": 15013,
+      "probe/U": 15013,
+      "probe/p_rgh": 15013,
+      "probe/rho": 15013,
+      "probe/phaseChangeSource:alpha1": 15013,
+      "reduction/metalTopPhiSum": 2001,
+      "reduction/metalTopEnergyPower": 2001,
+      "reduction/metalMoldEnergyPower": 2001,
+      "reduction/metalBoundaryEnergyPower": 2001,
+      "reduction/metalSensibleEnthalpy": 2001,
+      "reduction/metalMeanLiquidFraction": 2001,
+      "reduction/metalLatentHeatPower": 2001,
+      "reduction/metalMeanCoolingRate": 2001,
+      "reduction/metalMeanSolidificationRate": 2001,
+      "reduction/metalMaxCourant": 2001,
+      "reduction/metalMaxThermalGradient": 2001,
+      "reduction/metalMaxDensityGradient": 2001,
+      "horizontalProfiles": {
+        "times": 2001,
+        "lines": 3
+      },
+      "verticalProfiles": {
+        "times": 2001,
+        "lines": 1
+      },
+      "nearTopInternalLine": {
+        "times": 2001,
+        "lines": 1
+      },
+      "additional3DProfiles": {
+        "times": 2001,
+        "lines": 13
+      },
+      "volume": 201,
+      "topFlow": 2000
+    },
+    "errors": [],
+    "native_runtime_coverage_complete": true
+  },
+  "failed_phase": "audit",
+  "error": "full output audit failed",
+  "last_reported_time_s": 200.0,
+  "recovery_reconstruct_from_s": 200,
+  "recovery_backup_path": "/home/michel/OpenFOAM/CAMPAIGN_200S_ADAPTIVE_MPI_01/r8-200s-Co025-dtuncapped-uxp9p5g_/postsolver-recovery-t9uix7_3",
+  "recovered_postsolver": true
+}
