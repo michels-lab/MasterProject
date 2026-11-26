@@ -15,11 +15,15 @@ PhaseMassTransport::PhaseMassTransport
 (
     const fvMesh& mesh,
     const volScalarField& metal,
-    const volScalarField& T
+    const volScalarField& T,
+    const volScalarField* pressure
 ):
     mesh_(mesh),
     material_(IOobject("fsC08Material",mesh.time().constant(),mesh,
                        IOobject::MUST_READ,IOobject::NO_WRITE)),
+    pressure_(pressure),
+    bulkModulusPa_(material_.found("experimentalBulkModulusPa")
+        ? material_.lookup<scalar>("experimentalBulkModulusPa") : scalar(0)),
     materialId_(material_.lookup<word>("materialId")),
     propertySource_(material_.lookup<word>("propertySource")),
     Tmin_K_(material_.lookup<scalar>("Tmin_K")),
@@ -106,6 +110,13 @@ PhaseMassTransport::PhaseMassTransport
         mesh,dimensionedScalar(dimless/dimTime,0),
         zeroGradientFvPatchScalarField::typeName
     ),
+    SvolPressure_
+    (
+        IOobject("SvolPressure.fsC08",mesh.time().name(),mesh,
+                 IOobject::NO_READ,IOobject::AUTO_WRITE),
+        mesh,dimensionedScalar(dimless/dimTime,0),
+        zeroGradientFvPatchScalarField::typeName
+    ),
     SvolMaterial_
     (
         IOobject("SvolMaterial.fsC08",mesh.time().name(),mesh,
@@ -165,6 +176,14 @@ PhaseMassTransport::PhaseMassTransport
           << "range and relaxation in (0,1]. Synthetic fixture refused."
           << exit(FatalError);
     }
+    if (!std::isfinite(bulkModulusPa_) || bulkModulusPa_<0
+        || (bulkModulusPa_>0 && (!pressure_ || massFieldsRestarted_
+            || phaseChangeClosure_!="equilibrium")))
+        FatalErrorInFunction << "FS-C08 finite K requires pristine equilibrium case and pressure"
+            << exit(FatalError);
+    Info<< "FS_C08_METAL_EOS bulkModulus_Pa=" << bulkModulusPa_
+        << " referencePressure_Pa=100000 sharedPhaseK=1 "
+        << " caloricPressureDependenceValidated=0" << nl;
     // Thermodynamic Cv(T) is a sourced material function, NOT a
     // numerical coefficient. Check the entire supported domain with
     // a minimum grid of 257 samples to catch negative/NaN input.
@@ -247,6 +266,16 @@ PhaseMassTransport::PhaseMassTransport
     }
 }
 
+scalar PhaseMassTransport::pressureScale(scalar p) const
+{
+    if (bulkModulusPa_==0) return 1;
+    const scalar scale=std::exp((p-100000.0)/bulkModulusPa_);
+    if (!std::isfinite(p) || p<=0 || !std::isfinite(scale) || scale<=0)
+        FatalErrorInFunction << "FS-C08 inadmissible metal EOS pressure " << p
+            << exit(FatalError);
+    return scale;
+}
+
 void PhaseMassTransport::checkAndUpdateProperties
 (
     const volScalarField& T,
@@ -276,8 +305,9 @@ void PhaseMassTransport::checkAndUpdateProperties
         if (!std::isfinite(t[i]) || t[i]<Tmin_K_ || t[i]>Tmax_K_)
             FatalErrorInFunction << "T out of sourced range at cell " << i
                                  << " T=" << t[i] << exit(FatalError);
-        rl[i]=rhoLiquidT_->value(t[i]);
-        rs[i]=rhoSolidT_->value(t[i]);
+        const scalar scale=bulkModulusPa_>0 ? pressureScale((*pressure_)[i]) : scalar(1);
+        rl[i]=rhoLiquidT_->value(t[i])*scale;
+        rs[i]=rhoSolidT_->value(t[i])*scale;
         if (!std::isfinite(rl[i]) || !std::isfinite(rs[i])
             || rl[i]<=0 || rs[i]<=0)
             FatalErrorInFunction << "Invalid material density at " << i
@@ -407,12 +437,14 @@ void PhaseMassTransport::updateVolumeSources(const volScalarField& T)
     auto& spc=SvolPhaseChange_.primitiveFieldRef();
     auto& sth=SvolThermal_.primitiveFieldRef();
     auto& smat=SvolMaterial_.primitiveFieldRef();
+    auto& spr=SvolPressure_.primitiveFieldRef();
 
     forAll(spc,i)
     {
         spc[i]=0;
         sth[i]=0;
         smat[i]=0;
+        spr[i]=0;
         if (ml[i]+ms[i]<=0) continue;
 
         // Equal and opposite Gamma removes NO METAL MASS. Only the
@@ -438,8 +470,12 @@ void PhaseMassTransport::updateVolumeSources(const volScalarField& T)
                     << "FS-C08 positive previous metal mass outside "
                     << "sourced material T range. cell=" << i
                     << " Told=" << t0[i] << exit(FatalError);
-            const scalar rl0=rhoLiquidT_->value(t0[i]);
-            const scalar rs0=rhoSolidT_->value(t0[i]);
+            const scalar scale=bulkModulusPa_>0 ? pressureScale((*pressure_)[i]) : scalar(1);
+            const scalar oldScale=bulkModulusPa_>0 ? pressureScale(pressure_->oldTime()[i]) : scalar(1);
+            const scalar rl0=rhoLiquidT_->value(t0[i])*scale;
+            const scalar rs0=rhoSolidT_->value(t0[i])*scale;
+            spr[i]=(ml[i]/rhoLiquidT_->value(t0[i])+ms[i]/rhoSolidT_->value(t0[i]))
+                *(1.0/scale-1.0/oldScale)/dt;
             if
             (
                 !std::isfinite(rl0) || rl0<=0
@@ -454,10 +490,11 @@ void PhaseMassTransport::updateVolumeSources(const volScalarField& T)
               + ms[i]*(1.0/rs[i]-1.0/rs0)
             )/dt;
         }
-        smat[i]=spc[i]+sth[i];
+        smat[i]=spc[i]+sth[i]+spr[i];
     }
     SvolPhaseChange_.correctBoundaryConditions();
     SvolThermal_.correctBoundaryConditions();
+    SvolPressure_.correctBoundaryConditions();
     SvolMaterial_.correctBoundaryConditions();
 }
 
@@ -743,6 +780,11 @@ scalar PhaseMassTransport::equilibriumDensity(const scalar T) const
     return scalar(1)/((scalar(1)-fs)/rl+fs/rs);
 }
 
+
+scalar PhaseMassTransport::equilibriumDensity(const scalar T,const scalar p) const
+{
+    return equilibriumDensity(T)*pressureScale(p);
+}
 
 scalar PhaseMassTransport::liquidCv(const scalar T) const
 {
