@@ -497,6 +497,7 @@ def execute(source: Path, material: Path, output: Path,
             line.strip() for line in log.splitlines()
             if "FS_C08_STARTUP_PRESSURE_COMPONENT" in line
             or "FS_C08_STARTUP_PRESSURE_ATTRIBUTION" in line
+            or "FS_C08_STARTUP_COMPLIANCE_DIAGNOSTIC" in line
         ]
         report["initial_projection_jacobian_records"] = [
             line.strip() for line in log.splitlines()
