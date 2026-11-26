@@ -482,6 +482,14 @@ def execute(source: Path, material: Path, output: Path,
             line.strip() for line in log.splitlines()
             if any(marker in line for marker in markers)
         ][-30:]
+        report["final_coupled_energy_audit_records"] = [
+            line.strip() for line in log.splitlines()
+            if "FS_C08_FINAL_COUPLED_ENERGY_AUDIT_PASS" in line
+        ]
+        report["fixed_state_energy_audit_records"] = [
+            line.strip() for line in log.splitlines()
+            if "FS_C08_THERMAL_FIXED_STATE_AUDIT" in line
+        ]
         report["thermal_residual_control_records"] = [
             line.strip() for line in log.splitlines()
             if "FS_C08_THERMAL_RESIDUAL_CONTROL" in line
@@ -594,6 +602,18 @@ def execute(source: Path, material: Path, output: Path,
                 report["status"] = "FS_C08_FIXED_PROBE_SCHEDULE_GATE_FAILED"
                 report["budget_gate_error"] = str(exc)
                 return report
+        if energy_linear_tolerance>0:
+            records=report["final_coupled_energy_audit_records"]
+            times=[float(m.group(1)) for line in records
+                   if (m:=re.search(r"time_s=([0-9.eE+-]+)",line))]
+            expected=[t for t,_ in snapshots]
+            if len(times)!=len(expected) or any(
+                not math.isclose(a,b,rel_tol=1e-9,abs_tol=1e-15)
+                for a,b in zip(times,expected)):
+                report["status"]="FS_C08_FINAL_COUPLED_ENERGY_AUDIT_MISSING"
+                report["budget_gate_error"]="Expected exactly one final energy audit at each saved step"
+                return report
+            report["final_coupled_energy_audit_gate_verified"]=True
         report["real_CFD_completed"] = True
         # The presence of written fields is not proof that any quantity
         # changed or that the casting shrank physically.
