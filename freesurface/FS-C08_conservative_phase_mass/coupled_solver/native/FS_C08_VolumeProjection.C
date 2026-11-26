@@ -53,7 +53,8 @@ void solveVolumePressureIncrement
     volScalarField& dp,
     surfaceScalarField& deltaLiquidMassFlux,
     surfaceScalarField& deltaGasMassFlux,
-    const label referenceCell
+    const label referenceCell,
+    const volScalarField* diagnosticMetalStorage
 )
 {
     const fvMesh& mesh=dp.mesh();
@@ -99,6 +100,8 @@ void solveVolumePressureIncrement
       + fvm::Sp(gasCompressibility,dp)
      == residual/dt
     );
+    if (diagnosticMetalStorage)
+        volumeEqn += fvm::Sp(*diagnosticMetalStorage,dp);
     // Only supply a reference when the pressure BC and EOS require it.
     // The caller must check closed-domain compatibility; a reference
     // cannot repair a nonzero net expansion in a rigid sealed cavity.
@@ -502,6 +505,51 @@ bool projectTrialInventories
                 << " maxResidualDecompositionError=" << sourceClosure
                 << " maxPressureSuperpositionError_Pa=" << pressureClosure
                 << " diagnosticOnly=1" << nl;
+            // Auxiliary linear acoustic-compliance experiment ONLY.
+            // Pure Fe reference, not measured cast-iron K_T:
+            // Anderson & Ahrens 1994, doi:10.1029/93JB03158, K_S=109.7 GPa.
+            // Sanloup et al. 2004 doi:10.1029/2004GL019526:
+            // K_S/K_T=1+alpha*gamma*T, alpha=9e-5, gamma=1.9, T=1811 K.
+            // Apply equivalent equilibrium metal volume storage on the
+            // frozen operator. No change to the accepted metal EOS.
+            const scalar kt=109.7e9/(1+9e-5*1.9*1811);
+            for (label trial=0;trial<3;++trial)
+            {
+                const scalar K=kt*(trial==0 ? 0.5 : (trial==1 ? 1.0 : 2.0));
+                const dimensionedScalar modulus("diagnosticBulkModulus",dimPressure,K);
+                const volScalarField storage
+                (
+                    "fsC08DiagnosticMetalStorage",
+                    (l/rhoL+mS/rhoS)/(modulus*dt)
+                );
+                dp=dimensionedScalar(dp.dimensions(),0);
+                dp.correctBoundaryConditions();
+                solveVolumePressureIncrement
+                (
+                    residual(),g,rhoL,rg,psiG,mlFace,mgFace,
+                    dp,dfl,dfg,referenceCell,&storage
+                );
+                const volScalarField testDL("fsC08DiagnosticDL",-dt*fvc::div(dfl));
+                const volScalarField testDG("fsC08DiagnosticDG",-dt*fvc::div(dfg));
+                scalar defect=0, minTrialP=GREAT;
+                forAll(dp,i)
+                {
+                    const scalar balance=residual()[i]+testDL[i]/rhoL[i]
+                        +testDG[i]/rg[i]-g[i]*psiG[i]*dp[i]/sqr(rg[i])
+                        -dt.value()*storage[i]*dp[i];
+                    defect=max(defect,mag(balance));
+                    minTrialP=min(minTrialP,p[i]+dp[i]);
+                }
+                Info<< "FS_C08_STARTUP_COMPLIANCE_DIAGNOSTIC"
+                    << " dt_s=" << dt.value()
+                    << " bulkModulus_Pa=" << K
+                    << " dpAtOriginalMinCell_Pa=" << dp[minCell]
+                    << " minDp_Pa=" << min(dp).value()
+                    << " maxDp_Pa=" << max(dp).value()
+                    << " minLinearTrialPressure_Pa=" << minTrialP
+                    << " maxLinearizedVolumeDefect=" << defect
+                    << " diagnosticOnly=1" << nl;
+            }
             dp=fullDp;
             dfl=fullL;
             dfg=fullG;
