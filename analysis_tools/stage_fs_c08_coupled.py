@@ -151,7 +151,16 @@ def stage(source: Path, material: Path, output: Path,
           phase_pressure_mobility: str = "separate",
           momentum_flux_mode: str = "incremental",
           energy_donor_mode: str = "legacy",
-          pressure_transport_support: str = "trial") -> dict:
+          pressure_transport_support: str = "trial",
+          metal_bulk_modulus_pa: float = 0.0) -> dict:
+    require(math.isfinite(metal_bulk_modulus_pa) and metal_bulk_modulus_pa>=0,
+            "invalid metal bulk modulus")
+    require(metal_bulk_modulus_pa==0 or
+            (laminar_reference and startup_probe_dt is not None and momentum_face_mobility=="linear"
+             and momentum_matrix_coupling=="refreshBeforePressure" and phase_pressure_mobility=="separate"
+             and momentum_flux_mode=="incremental" and energy_donor_mode=="legacy"
+             and pressure_transport_support=="trial"),
+            "finite K restricted to the controlled reference startup probe")
     require(pressure_transport_support in ("trial","oldLiquid","oldGas","oldBoth"),
             "unknown pressure transport support")
     require(pressure_transport_support=="trial" or
@@ -214,6 +223,7 @@ def stage(source: Path, material: Path, output: Path,
     require(material.is_file() and material != source,
             "sourced alloy property dictionary must exist outside case")
     mt=material.read_text(encoding="utf-8")
+    require("experimentalBulkModulusPa" not in mt,"supply unmodified reference material; K is staged explicitly")
     for key in REQUIRED_MATERIAL:
         require(re.search(r"(?m)^\s*"+re.escape(key)+r"\s+",mt) is not None,
                 "mandatory physical property entry absent: "+key)
@@ -329,7 +339,11 @@ def stage(source: Path, material: Path, output: Path,
         f"energyDonorMode {energy_donor_mode};\n"
         f"pressureTransportSupport {pressure_transport_support};\n",
         encoding="utf-8")
-    shutil.copy2(material,output/"constant/fluid/fsC08Material")
+    staged_material=output/"constant/fluid/fsC08Material"
+    shutil.copy2(material,staged_material)
+    if metal_bulk_modulus_pa>0:
+        with staged_material.open("a",encoding="utf-8") as fp:
+            fp.write(f"\n// Experimental pure-Fe sensitivity; not calibrated alloy EOS.\nexperimentalBulkModulusPa {metal_bulk_modulus_pa:.16g};\n")
     # An old legacy solid field must NOT be misinterpreted as rhoAlpha.solid.
     legacy=output/"0/fluid/alpha.metal.solid"
     if legacy.is_file():
@@ -355,6 +369,9 @@ def stage(source: Path, material: Path, output: Path,
         "momentum_flux_mode":momentum_flux_mode,
         "energy_donor_mode":energy_donor_mode,
         "pressure_transport_support":pressure_transport_support,
+        "metal_bulk_modulus_pa":metal_bulk_modulus_pa,
+        "staged_material_SHA256":sha(staged_material),
+        "caloric_pressure_dependence_validated":False,
         "startup_probe_dt_s":startup_probe_dt,
         "startup_probe_steps":startup_probe_steps if startup_probe_dt is not None else None,
         "startup_probe_only":startup_probe_dt is not None,
@@ -387,6 +404,7 @@ def main(argv=None) -> int:
     ap.add_argument("--momentum-flux-mode",choices=("incremental","totalUpwind","incrementalNoDdtCorr","totalUpwindNoDdtCorr"),default="incremental")
     ap.add_argument("--energy-donor-mode",choices=("legacy","oldGas","currentLiquid","oldGasCurrentLiquid"),default="legacy")
     ap.add_argument("--pressure-transport-support",choices=("trial","oldLiquid","oldGas","oldBoth"),default="trial")
+    ap.add_argument("--metal-bulk-modulus-pa",type=float,default=0.0)
     args=ap.parse_args(argv)
     output=args.destination or (
         Path.home()/"OpenFOAM"/"FS_C08_COUPLED_RUNS"/
@@ -395,7 +413,7 @@ def main(argv=None) -> int:
     )
     try:
         report=stage(args.source,args.material,output,args.laminar_reference,
-                     args.startup_probe_dt,args.startup_probe_steps,args.momentum_face_mobility,args.momentum_matrix_coupling,args.phase_pressure_mobility,args.momentum_flux_mode,args.energy_donor_mode,args.pressure_transport_support)
+                     args.startup_probe_dt,args.startup_probe_steps,args.momentum_face_mobility,args.momentum_matrix_coupling,args.phase_pressure_mobility,args.momentum_flux_mode,args.energy_donor_mode,args.pressure_transport_support,args.metal_bulk_modulus_pa)
         print(json.dumps(report,indent=2))
         return 0
     except (ValueError,OSError) as e:
