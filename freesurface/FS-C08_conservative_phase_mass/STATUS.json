@@ -6,7 +6,7 @@
   "parent_branch": "research/fs-c02-metal-air-vof-20261117",
   "scientific_project": "Master's research — cast iron solidification and shrinkage using OpenFOAM Foundation14",
   "stage": "FS_C08_INTEGRATED_COUPLED_PRESSURE_VOLUME_MASS_ENERGY_CANDIDATE",
-  "status": "FS_C08_SUPPORT_BATCH_FOUR_PASS__FIXED_TIME_REFINEMENT_READY",
+  "status": "FS_C08_TEMPORAL_REFINEMENT_NOT_INDEPENDENT__STARTUP_PRESSURE_ATTRIBUTION_READY",
   "code": "analysis_tools/fs_c08_conservative_reference.py",
   "tests": "analysis_tools/test_fs_c08_conservative_reference.py",
   "test_count_declared": 18,
@@ -108,8 +108,8 @@
   "cpp_mass_phase_update_gamma_and_volume_closure": true,
   "cpp_pressure_velocity_energy_or_cht": false,
   "CI_cxx_compile_step_declared": true,
-  "last_work": "Support suite passed 40/40; unsupported liquid flux zero already; negligible gas flux removed without resolving acceleration. Four suites cumulative 159/160 steps, 15/16 variants. Next controlled temporal refinement compares same 10 us horizon without changing physics or adaptive dt; includes early pressure and momentum records.",
-  "next_scientific_stage": "Run temporal suite; examine actual common saved times, early pressure projection and momentum contributions. Distinguish time-discretization sensitivity from model/initial-state defect. No physical validation or adaptive timestep.",
+  "last_work": "Temporal batch 3/4 complete, 35/75 steps, finest dt rejected at first projection. Five suites total 194/235 accepted steps and 18/20 complete variants. Published diagnostic attribution of first pressure increment; pending compile/run. No adaptive dt or fabricated metal compressibility.",
+  "next_scientific_stage": "Short temporal suite 2 us target, same four fixed dt values, extract exact startup pressure source contributions and closure; determine whether material volume response or gas EOS/transport dominates. Consider physically sourced compressible metal or cavitation closure only if evidence supports it; do not impose pressure floor.",
   "Wsl_tests_runner": "python3 -B -m unittest discover -s analysis_tools -p 'test_fs_c08_conservative_reference.py' -v",
   "Wsl_tests_summary": "Ran 18 tests in 0.072s; OK",
   "Wsl_tests_source_head": "eddacd6e9",
@@ -1415,6 +1415,11 @@
         "accepted_steps": 40,
         "scheduled_steps": 40,
         "complete_variants": 4
+      },
+      "temporal": {
+        "accepted_steps": 35,
+        "scheduled_steps": 75,
+        "complete_variants": 3
       }
     },
     "energy_suite": "NATIVE_WSL_STARTUP_PROBE_4_OF_4_PASS",
@@ -1493,7 +1498,69 @@
     "reference": "refreshBeforePressure/separate/linear/incremental/legacy/trial",
     "native_equations_changed": false,
     "common_times": "actual saved complete ledgers only; comparison grid ticks are not per-case step counts",
-    "native_CFD_verified": false,
-    "python_runner_execution_verified": false
+    "native_CFD_verified": true,
+    "python_runner_execution_verified": true,
+    "verified_attempt": {
+      "tested_commit": "b2c5cc1f176ef86d7ed0ef43053e25a0989e74a4",
+      "diagnostics": "FS_C08_BATCH_20261125T235504Z_f32def1d",
+      "native_build_verified": true,
+      "passed_variants": 3,
+      "accepted_steps": 35,
+      "scheduled_steps": 75,
+      "common_time_completed_variants_s": 0.00001,
+      "common_time_all_variants_s": null,
+      "variants": [
+        {
+          "dt_s": 0.000002,
+          "accepted_steps": 5,
+          "maxU_m_s": 160.818666654,
+          "pMax_Pa": 210905.106683,
+          "solidMass_kg": 0.00000211895908824
+        },
+        {
+          "dt_s": 0.000001,
+          "accepted_steps": 10,
+          "maxU_m_s": 143.896183998,
+          "pMax_Pa": 183428.424976,
+          "solidMass_kg": 0.00000120418186905
+        },
+        {
+          "dt_s": 5e-7,
+          "accepted_steps": 20,
+          "maxU_m_s": 118.655982567,
+          "pMax_Pa": 345312.838605,
+          "solidMass_kg": 7.64908278163e-7
+        },
+        {
+          "dt_s": 2.5e-7,
+          "accepted_steps": 0,
+          "initial_minDp_Pa": -164225.92138,
+          "error": "no_admissible_descent; pressure positivity in initially gas-free metal cell; no accepted time step",
+          "last_trial_volume_residual": 0.00000617181640683
+        }
+      ],
+      "interpretation": "No temporal independence. Refinement reduces U at 10 us but pressure nonmonotone, finest run rejected. Initial dp minimum approximately -38904 Pa at 1 us, -80680 Pa at 0.5 us, -164226 Pa at 0.25 us, consistent with stiff startup pressure response; cause not yet uniquely attributed."
+    }
+  },
+  "startup_pressure_attribution": {
+    "commits": [
+      "c5b845c985e203294491167eef2f37415898fe34",
+      "f56a3aa87cb69a2249a9f3d2f229cf6ad270368b",
+      "6082e799329c9a3cb04eb28044263ab2950af425",
+      "31c815e74cfb5b159ac3c1a92f5fd3f826ceb872",
+      "a8a67f72ba3f37ce805fe15aa79deecf4ed19fca"
+    ],
+    "components": [
+      "metalMaterial",
+      "metalTransport",
+      "gasEOS",
+      "gasTransportAndSource"
+    ],
+    "description": "First Newton iteration of first pressure corrector at first time step: solve each exact residual component on same frozen active-set linear operator; report superposition errors; restore full pressure and flux increments before physical line search. Metal material includes equilibrium conversion and thermal density change of old metal inventory; gas EOS includes intrinsic density change; gas transport includes source. No new material constants, no pressure floor, no change to physical equations.",
+    "planned_command": "--suite temporal --steps 2 --jobs 2",
+    "common_target_s": 0.000002,
+    "scheduled_steps": 15,
+    "native_build_verified": false,
+    "CFD_verified": false
   }
 }
