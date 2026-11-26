@@ -52,6 +52,12 @@ TEMPORAL_VARIANTS = tuple(
 TEMPORAL_FACTORS = {"temporal_double_dt":2.0,"temporal_reference":1.0,
                     "temporal_half_dt":0.5,"temporal_quarter_dt":0.25}
 
+EOS_REFERENCE_K=109.7e9/(1+9e-5*1.9*1811)
+EOS_MODULI={"eos_incompressible":0.0,"eos_half_K":0.5*EOS_REFERENCE_K,
+            "eos_reference_K":EOS_REFERENCE_K,"eos_double_K":2*EOS_REFERENCE_K}
+EOS_VARIANTS=tuple((name,"refreshBeforePressure","separate","incremental","legacy","trial")
+                   for name in EOS_MODULI)
+
 METRICS = (
     "maxU_m_s", "pMax_Pa", "metalVolume_m3", "solidMass_kg",
     "metalMassResidual_kg", "gasContinuityDefect_kg",
@@ -73,6 +79,9 @@ def summarize(name, coupling, mobility, flux_mode, energy_mode, support_mode, re
         "momentum_flux_mode": flux_mode,
         "energy_donor_mode": energy_mode,
         "pressure_transport_support": support_mode,
+        "metal_bulk_modulus_pa":report.get("metal_bulk_modulus_pa",EOS_MODULI.get(name,0.0)),
+        "metal_eos_records":report.get("metal_eos_records",[]),
+        "caloric_pressure_dependence_validated":False,
         "fixed_dt_s": case_dt, "scheduled_steps": case_steps,
         "requested_end_time_s": case_dt*case_steps,
         "momentum_force_first4": report.get("momentum_force_records", [])[:4],
@@ -141,7 +150,7 @@ def main(argv=None):
     parser.add_argument("--steps",type=int,default=10)
     parser.add_argument("--dt",type=float,default=1e-6)
     parser.add_argument("--timeout-minutes",type=int,default=120)
-    parser.add_argument("--suite",choices=("mobility","flux","energy","support","temporal"),default="support")
+    parser.add_argument("--suite",choices=("mobility","flux","energy","support","temporal","eos"),default="support")
     args=parser.parse_args(argv)
     variants=SUPPORT_VARIANTS if args.suite=="support" else tuple(v+("trial",) for v in (ENERGY_VARIANTS if args.suite=="energy" else tuple(v+("legacy",) for v in (FLUX_VARIANTS if args.suite=="flux" else VARIANTS))))
     if not 1<=args.steps<=1000 or not math.isfinite(args.dt) or args.dt<=0 or args.timeout_minutes<1:
@@ -150,6 +159,8 @@ def main(argv=None):
         if args.steps%2 or args.steps*4>1000:
             parser.error("temporal suite requires an even reference step count <=250")
         variants=TEMPORAL_VARIANTS
+    if args.suite=="eos":
+        variants=EOS_VARIANTS
     def controls(name):
         factor=TEMPORAL_FACTORS[name] if args.suite=="temporal" else 1.0
         return args.dt*factor, int(args.steps/factor)
@@ -172,6 +183,7 @@ def main(argv=None):
            "comparison_tick_s":comparison_dt,
            "per_variant_controls":{v[0]:{"dt_s":controls(v[0])[0],"steps":controls(v[0])[1]} for v in variants},
            "adaptive_timestep":False,
+           "per_variant_bulk_modulus_pa":{v[0]:EOS_MODULI.get(v[0],0.0) for v in variants},
            "global_energy_verified":False,"physical_shrinkage_validated":False,
            "variants":[]}
     write_report(summary_path,batch)
@@ -195,7 +207,7 @@ def main(argv=None):
                 print("START",name,flush=True)
                 try:
                     report=execute(source,material,output,diag,args.timeout_minutes,
-                        True,case_dt,case_steps,"linear",coupling,mobility,flux_mode,energy_mode,support_mode,
+                        True,case_dt,case_steps,"linear",coupling,mobility,flux_mode,energy_mode,support_mode,EOS_MODULI.get(name,0.0),
                         verified_batch_build=receipt)
                 except Exception as exc:
                     # One failed variant must not cancel the remaining cases.
@@ -208,7 +220,7 @@ def main(argv=None):
                         real_CFD_completed=False,batch_worker_error=str(exc),
                         diagnostics=str(diag),output_case=str(output))
                     write_report(report_file,report)
-                result=summarize(name,coupling,mobility,flux_mode,energy_mode,support_mode,report,case_dt,case_steps,args.suite=="temporal")
+                result=summarize(name,coupling,mobility,flux_mode,energy_mode,support_mode,report,case_dt,case_steps,args.suite in ("temporal","eos"))
                 print("FINISH",name,result["status"],
                       "saved steps",result["saved_steps"],flush=True)
                 return result
