@@ -664,6 +664,10 @@ void Foam::solvers::fsC08ConservativeVoF::pressureCorrector()
             && maxReplay<=phaseReplayTolerance && maxOverfill<=volumeTolerance
             && maxLocalMetal<=localMassTolerance && maxLocalGas<=localMassTolerance)
         {
+            // Strict candidates must reach a common pressure/energy
+            // state, not just pass a thermal solve before the phase replay.
+            if (residualEnergyControlled && !fixedStateAuditPass)
+                continue;
             phaseMass_->acceptTrialFractions(T);
             // Only roundoff-level closure mismatch remains. The native
             // VOF pair must sum to exactly one. Normalize the geometry
@@ -727,6 +731,18 @@ void Foam::solvers::fsC08ConservativeVoF::pressureCorrector()
     fvc::correctUf(Uf,U,fvc::absolute(phi,U),MRF);
     p_rgh=p-rho*buoyancy.gh-buoyancy.pRef;
     p_rgh.correctBoundaryConditions();
+    // The accepted geometry, reconstructed velocity and density can
+    // differ from the trial values used by the first audit. Reassemble
+    // energy terms at this final state and retain those exact fluxes.
+    // Never publish a strict candidate that fails the final audit.
+    if (residualEnergyControlled)
+    {
+        if (!thermalPredictorImpl(true))
+            FatalErrorInFunction << "FS-C08 final published geometry/velocity energy audit rejected"
+                << exit(FatalError);
+        Info<< "FS_C08_FINAL_COUPLED_ENERGY_AUDIT_PASS time_s="
+            << runTime.value() << " physicalEnergyValidated=0" << nl;
+    }
     // Audit numerical transport across the original metal/air support.
     // No threshold or deletion of trace inventories is used.
     scalar intoInitiallyGasKg=0,metalInInitiallyGasKg=0,counterflowVolume=0;
