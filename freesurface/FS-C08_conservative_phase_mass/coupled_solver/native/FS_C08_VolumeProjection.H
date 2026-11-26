@@ -7,6 +7,7 @@
 #include "fvMesh.H"
 #include "volFields.H"
 #include "surfaceFields.H"
+#include "PtrList.H"
 
 namespace Foam { namespace fsC08 {
 
@@ -89,7 +90,8 @@ bool projectTrialInventories
     surfaceScalarField& liquidMassFlux,
     surfaceScalarField& gasMassFlux,
     volScalarField& dp,
-    const label referenceCell = -1
+    const label referenceCell = -1,
+    const PtrList<volScalarField>* startupResidualComponents = nullptr
 );
 
 }} // namespace Foam::fsC08
