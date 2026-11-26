@@ -99,7 +99,8 @@ def build_native_library(logfile: Path) -> dict:
             "native_library_sha256": digest(libfile) if ok else None,
             "build_log": str(logfile),
             "verified": ok,
-            "first_compiler_error": None if ok else first_compiler_error(logfile)}
+            "first_compiler_error": None if ok else first_compiler_error(logfile),
+            "compiler_error_context": [] if ok else compiler_error_context(logfile)}
 
 
 def first_compiler_error(logfile: Path) -> str | None:
@@ -112,6 +113,19 @@ def first_compiler_error(logfile: Path) -> str | None:
         if pattern.search(line):
             return line.strip()[:1000]
     return None
+
+
+def compiler_error_context(logfile: Path) -> list[str]:
+    """Preserve template instantiation context and trailing build failure."""
+    lines = logfile.read_text(encoding="utf-8", errors="replace").splitlines()
+    first = next((i for i, line in enumerate(lines)
+                  if re.search(r"fatal error:|(?<![a-z])error:|undefined reference",
+                               line, re.IGNORECASE)), None)
+    if first is None:
+        return lines[-40:]
+    indices = sorted(set(range(max(0, first-25), min(len(lines), first+35)))
+                     | set(range(max(0, len(lines)-12), len(lines))))
+    return [lines[i][:2000] for i in indices]
 
 
 def first_native_error(logfile: Path) -> str | None:
