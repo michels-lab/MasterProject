@@ -495,10 +495,43 @@ void Foam::solvers::fsC08ConservativeVoF::pressureCorrector()
         if (maxEquilibriumMismatch>volumeTolerance)
             FatalErrorInFunction << "FS-C08 equilibrium pressure inventory mismatch"
                 << exit(FatalError);
+        // Exact algebraic split of the initial projection residual.
+        // The material term contains thermal AND equilibrium conversion
+        // of the old metal mass. Gas EOS includes the change in intrinsic
+        // gas density at the pre-projection pressure. The remaining two
+        // terms include the net transport (and gas mass source).
+        // Use the complementary old metal geometry to close the split
+        // exactly; no old gas EOS field history is inferred.
+        const bool auditStartup=(iter==0 && runTime.value()<=1.000001*dt.value());
+        PtrList<volScalarField> startupComponents(auditStartup ? 4 : 0);
+        if (auditStartup)
+        {
+            const auto& oldLiquid=phaseMass_->liquidMass().oldTime();
+            startupComponents.set(0,new volScalarField
+            (
+                "metalMaterial",
+                (oldLiquid+oldSolid)/rhoEq-alpha1.oldTime()
+            ));
+            startupComponents.set(1,new volScalarField
+            (
+                "metalTransport",
+                (projectedL-oldLiquid)/rhoEq
+            ));
+            startupComponents.set(2,new volScalarField
+            (
+                "gasEOS",
+                gasMassOld/rG-(dimensionedScalar(dimless,1)-alpha1.oldTime())
+            ));
+            startupComponents.set(3,new volScalarField
+            (
+                "gasTransportAndSource",
+                (projectedG-gasMassOld)/rG
+            ));
+        }
         if (!fsC08::projectTrialInventories
             (projectedL,oldSolid,projectedG,rhoEq,rhoEq,projectedRhoG,
              mixture_.thermo2().psi(),projectedP,liquidMobility,
-             gasMobility,fl,fg,dp))
+             gasMobility,fl,fg,dp,-1,auditStartup ? &startupComponents : nullptr))
             FatalErrorInFunction << "FS-C08 pressure projection rejected "
                 << "at corrector " << iter << "; no accepted time step"
                 << exit(FatalError);
