@@ -22,6 +22,7 @@ SOURCE=HOME/"CAMPAIGN_200S_01"
 TARGET=HOME/"CAMPAIGN_200S_COMPACT_01"
 REPORT="CAMPAIGN_200S_REPORT.json"
 CASES=tuple(f"{f}-{g}-200s" for g in ("2D","3DA","3DB") for f in ("C14","B14"))
+RUN_CASES=("C14-3DA-200s","C14-2D-200s","B14-2D-200s","C14-3DB-200s")
 STEPS=200000
 VOLUME_TIMES=list(range(201))
 TABLE_TIMES=[i/10 for i in range(2001)]
@@ -49,14 +50,32 @@ def sha(p):
     with p.open("rb") as f:
         for b in iter(lambda:f.read(1024*1024),b""):h.update(b)
     return h.hexdigest()
+def checked(root,rel):
+    rp=Path(rel)
+    need(root.is_dir() and not root.is_symlink(),"unsafe root "+str(root))
+    need(not rp.is_absolute() and rp.parts and ".." not in rp.parts,"unsafe relative path "+str(rel))
+    q=root
+    for part in rp.parts:
+        q=q/part
+        need(not q.is_symlink(),"linked path refused "+str(q))
+    need(q.resolve().is_relative_to(root.resolve()),"path outside root "+str(q))
+    return q
 def json_out(p,x):
-    tmp=p.with_name("."+p.name+".tmp")
-    tmp.write_text(json.dumps(x,indent=2)+"\n");tmp.replace(p)
+    need(not p.is_symlink(),"linked JSON "+str(p))
+    with tempfile.NamedTemporaryFile(mode="w",dir=p.parent,prefix="."+p.name+".",delete=False) as f:
+        tmp=Path(f.name)
+        try:f.write(json.dumps(x,indent=2,allow_nan=False)+"\n")
+        except BaseException:
+            tmp.unlink(missing_ok=True);raise
+    try:tmp.replace(p)
+    finally:tmp.unlink(missing_ok=True)
 def inputs(p):
     result={}
     for d in ("0","constant","system"):
-        for q in (p/d).rglob("*"):
-            need(not q.is_symlink(),"linked input refused "+str(q))
+        folder=checked(p,d)
+        need(folder.is_dir(),"missing input directory "+str(folder))
+        for q in folder.rglob("*"):
+            checked(p,q.relative_to(p))
             if q.is_file():result[str(q.relative_to(p))]=sha(q)
     return result
 def exact_replace(s,pattern,replacement):
@@ -135,10 +154,13 @@ def check_native(case,name,args):
     with (case/name).open(errors="replace") as f:fatal=any("FOAM FATAL" in l for l in f)
     need(rc==0 and not fatal,"native command failed: "+str(case/name))
 def numeric_time(p):
-    try:return float(p.name)
+    try:t=float(p.name)
     except ValueError:return None
+    need(math.isfinite(t),"invalid numeric time "+str(p))
+    return t
 def unrun(case):
-    r=json.loads((case/REPORT).read_text())
+    r=json.loads(checked(case,REPORT).read_text())
+    for name in ("log.foamMultiRun","postProcessing"):checked(case,name)
     need(r["status"]=="PREPARED_NOT_RUN" and not r.get("solver_completed"),"source not unrun: "+str(case))
     need(not (case/"log.foamMultiRun").exists() and not (case/"postProcessing").exists(),
          "source solver/diagnostic evidence exists: "+str(case))
@@ -181,7 +203,7 @@ def prepare_case(src,dst):
     json_out(tmp/REPORT,report);(tmp/(dst.name+".foam")).touch()
     tmp.rename(dst);return report
 def lock(root):
-    f=(root/".execution.lock").open("a")
+    f=checked(root,".execution.lock").open("a")
     try:fcntl.flock(f,fcntl.LOCK_EX|fcntl.LOCK_NB)
     except BlockingIOError:
         f.close();raise ValueError("active campaign; no concurrent operation: "+str(root))
@@ -194,16 +216,16 @@ def prepare():
         reports={}
         for name in CASES:
             try:
-                dst=TARGET/name
+                dst=checked(TARGET,name)
                 if dst.exists():
-                    r=json.loads((dst/REPORT).read_text())
+                    r=json.loads(checked(dst,REPORT).read_text())
                     need(r["case"]==name and r["status"]=="PREPARED_COMPACT_NOT_RUN" and inputs(dst)==r["input_sha256"],"existing compact case preserved; not an unrun matching preparation")
                     reports[name]=r
-                else:reports[name]=prepare_case(SOURCE/name,dst)
+                else:reports[name]=prepare_case(checked(SOURCE,name),dst)
             except (ValueError,OSError,KeyError,subprocess.SubprocessError) as e:
                 reports[name]={"status":"BLOCKED_PRESERVED","error":str(e)}
             print(name,reports[name]["status"],flush=True)
-            json_out(TARGET/"CAMPAIGN_INDEX.json",reports)
+            json_out(checked(TARGET,"CAMPAIGN_INDEX.json"),reports)
         ready={k:r["disk_projection"] for k,r in reports.items() if r["status"]=="PREPARED_COMPACT_NOT_RUN"}
         total=sum(r["projected_bytes_with_50pct_margin"] for r in ready.values())
         old=sum(r["prior_projected_bytes"] for r in ready.values())
@@ -212,7 +234,7 @@ def prepare():
                  "free_bytes_WSL":shutil.disk_usage(TARGET).free,"per_case":ready,
                  "all_fit_WSL_estimate":len(ready)==6 and shutil.disk_usage(TARGET).free>=total+RESERVE,
                  "windows_physical_capacity_verified":False,"solver_executed":False}
-        json_out(TARGET/"CAMPAIGN_RESOURCES.json",summary);print(json.dumps(summary,indent=2),flush=True)
+        json_out(checked(TARGET,"CAMPAIGN_RESOURCES.json"),summary);print(json.dumps(summary,indent=2),flush=True)
         need(len(ready)==6,"some cases blocked; preserve originals and inspect CAMPAIGN_INDEX.json")
         print("ALL_SIX_COMPACT_PREPARED_NO_CFD",flush=True)
 def rows(p):
@@ -220,7 +242,7 @@ def rows(p):
         for l in f:
             if not l.strip() or l.lstrip().startswith("#"):continue
             v=[float(x) for x in l.replace("("," ").replace(")"," ").split()]
-            need(all(math.isfinite(x) and abs(x)<1e100 for x in v),"invalid value "+str(p))
+            need(v and all(math.isfinite(x) and abs(x)<1e100 for x in v),"invalid value "+str(p))
             yield v
 def cadence(p,expected,width=None):
     n=0
@@ -236,8 +258,19 @@ def xy(p,columns,canonical=None):
     need(all(b[0]>a[0] for a,b in zip(data,data[1:])),"nonmonotone coordinate "+str(p))
     if canonical:
         canonical.parent.mkdir(parents=True,exist_ok=True)
-        with p.open() as raw,canonical.open("x") as out:
-            next(raw);out.write("# "+h[0]+" "+" ".join(columns)+"\n");shutil.copyfileobj(raw,out)
+        need(not canonical.is_symlink(),"linked canonical profile "+str(canonical))
+        with p.open() as raw:
+            next(raw);expected="# "+h[0]+" "+" ".join(columns)+"\n"+raw.read()
+        if canonical.exists():
+            need(canonical.is_file() and canonical.read_text()==expected,"existing canonical profile differs "+str(canonical))
+        else:
+            with tempfile.NamedTemporaryFile(mode="w",dir=canonical.parent,prefix="."+canonical.name+".",delete=False) as out:
+                tmp=Path(out.name)
+                try:out.write(expected)
+                except BaseException:
+                    tmp.unlink(missing_ok=True);raise
+            try:os.link(tmp,canonical)
+            finally:tmp.unlink(missing_ok=True)
     return len(data)
 def profile_groups(report):
     g={"horizontalProfiles":["line_y10mm","line_y20mm","line_y30mm"],"verticalProfiles":["line_x20mm"]}
@@ -276,7 +309,8 @@ def audit(case,r):
                 for t in TABLE_TIMES:
                     p=pp/g/format(t,"g")/(name+".xy")
                     cols=NEAR if g=="nearTopInternalLine" else CANON
-                    counts.append(xy(p,cols,pp/("CompactCanonical"+g)/format(t,"g")/p.name))
+                    dst=pp/("CompactCanonical"+g)/format(t,"g")/p.name
+                    counts.append(xy(checked(case,p.relative_to(case)),cols,checked(case,dst.relative_to(case))))
                 return {"times":len(counts),"min_points":min(counts),"max_points":max(counts)}
             guard(g+"/"+name,all_xy)
     for region,fields in (("metal",("T","U","p","p_rgh","phaseChangeSource:alpha1")+DERIVED),("mold",("T",))):
@@ -293,10 +327,12 @@ def audit(case,r):
     return {"coverage":results,"errors":errors,"unexpected_volume_times":unexpected,
             "native_runtime_coverage_complete":not errors}
 def execute(name):
+    need(name in RUN_CASES,"case not authorized for current campaign")
     need(TARGET.is_dir() and not TARGET.is_symlink(),"compact campaign not prepared")
     with lock(SOURCE),lock(TARGET):
-        case=TARGET/name;r=json.loads((case/REPORT).read_text())
-        original=unrun(SOURCE/name)
+        case=checked(TARGET,name);r=json.loads(checked(case,REPORT).read_text())
+        for n in ("log.foamMultiRun","log.foamLog","postProcessing"):checked(case,n)
+        original=unrun(checked(SOURCE,name))
         need(original["input_sha256"]==r["source_input_sha256"],"dense source changed since compact preparation")
         need(r["status"]=="PREPARED_COMPACT_NOT_RUN" and not (case/"log.foamMultiRun").exists(),"already attempted; preserve")
         need(inputs(case)==r["input_sha256"],"compact inputs changed")
@@ -337,10 +373,10 @@ def execute(name):
             r["error"]=str(e);raise
         finally:
             json_out(case/REPORT,r)
-            idx=TARGET/"CAMPAIGN_INDEX.json";allr=json.loads(idx.read_text());allr[name]=r;json_out(idx,allr)
+            idx=checked(TARGET,"CAMPAIGN_INDEX.json");allr=json.loads(idx.read_text());allr[name]=r;json_out(idx,allr)
 def main():
     p=argparse.ArgumentParser(description=__doc__)
-    p.add_argument("--run",choices=CASES)
+    p.add_argument("--run",choices=RUN_CASES)
     a=p.parse_args()
     need(os.environ.get("WM_PROJECT_VERSION")=="14","source Foundation14")
     if a.run:execute(a.run)
