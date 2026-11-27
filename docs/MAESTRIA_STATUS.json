@@ -174,5 +174,40 @@
     "recursive_api_truncated": true,
     "observed_blobs_lower_bound": 30416,
     "scientific_validation_added": false
+  },
+  "native_mesh_check_observed_20261127": {
+    "metal": {
+      "cells": 8960,
+      "max_nonorth_deg": 77.9304,
+      "mean_nonorth_deg": 15.1948,
+      "faces_above_70": 276,
+      "min_volume_m3": 1.16841e-10,
+      "min_edge_m": 0.00018,
+      "max_aspect": 20.1147,
+      "max_skewness": 2.04495,
+      "mesh_ok": true
+    },
+    "mold": {
+      "cells": 12352,
+      "max_nonorth_deg": 82.0581,
+      "mean_nonorth_deg": 22.1571,
+      "faces_above_70": 232,
+      "min_volume_m3": 2.61448e-10,
+      "max_aspect": 22.711,
+      "max_skewness": 2.84161,
+      "mesh_ok": true
+    },
+    "phase": {
+      "Tsol_K": 1423,
+      "Tliq_K": 1473,
+      "L_J_kg": 228600,
+      "Cp_J_kgK": 827,
+      "rho_kg_m3": 6820,
+      "relax": 0.1,
+      "alpha1e": 0.8
+    },
+    "root_cause_proven": false,
+    "mesh_modified": false,
+    "new_solver_run": false
   }
 }

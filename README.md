@@ -1,3 +1,5 @@
+> **27-11-2026 — A:** checkMesh nativo metal y molde `Mesh OK`, 276/232 caras >70°. No defecto local demostrado, no nueva CFD ni cambio de controles. A 8/10, campaña 6/8. [Evidencia](https://github.com/michels-lab/MasterProject/blob/main/docs/granada/C3D04_A_NATIVE_THERMAL_OBSERVED_20261127_ES.md).
+
 > **27-11-2026 — Auditoría incremental por archivo:** [protocolo y registro](docs/review/README.md). El estado vigente es el [JSON consolidado](docs/MAESTRIA_STATUS.json): 6/8 adaptativas laptop publicadas, 2 fallidas; A 9/10 (8/10 hitos), B 3/7 (2/7 hitos). La revisión documental no añade validación física. Las cabeceras de cortes anteriores son históricas.
 
 > **27-11-2026 — A instrumentación nativa observada:** MPI8 reprodujo fallo térmico metal .68 s; 51 pasos completos, último .66 s. A 8/10=80%, B 2/7=29%, campaña 6/8 publicada. Sin validación física ni cambio de controles. [Evidencia](https://github.com/michels-lab/MasterProject/blob/main/docs/granada/C3D04_A_NATIVE_THERMAL_OBSERVED_20261127_ES.md).
