@@ -1,4 +1,4 @@
-# Auditoría incremental de MasterProject
+# Operación Uva — Auditoría incremental de MasterProject
 
 Fecha de inicio: 2026-11-27. Corte inicial de revisión: `5ed9f38245647f1270d7fdffbf00f06a79db95cd`.
 
@@ -29,3 +29,7 @@ Se registran siete inspecciones reales, dos de alcance completo documental y cin
 ## Verificación poscommit y ramas históricas
 
 Las versiones actualizadas de AGENTS.md y MAESTRIA_STATUS.json se verificaron contra el padre y tienen recibos nuevos. Para una rama histórica que no contiene el ledger, usar `--ref <rama-o-commit> --ledger-ref origin/main`; no hace checkout. Para otro alcance usar `--include-closed` y registrar reapertura justificada si corresponde. La prueba de regresión de la cola es sintética, no CFD; su ejecución queda pendiente de verificación.
+
+## Nombre operativo: Uva
+
+Cuando el investigador diga «Operación Uva» o «Uva», continuar la cola incremental en bloques independientes, consultar primero el ledger y registrar cada revisión por ruta/blob. Priorizar archivos vigentes cambiados, corregir incoherencias demostrables y conservar evidencia histórica. No reiniciar la auditoría ni repetir archivos cerrados sin reapertura justificada. Publicar el balance real de cada bloque y sus bloqueos; Uva no ejecuta CFD ni sustituye Granada.
