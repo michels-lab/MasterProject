@@ -156,7 +156,7 @@ T_final = 1463.4174976491418 K
 f_s (de masa metálica) = 0.1916500470  [19.165 %, NO valor de hierro real]
 Γ inferida = 804.9301974720928 kg/(m3 s)   [synthetic only]
 E_final - E_target = -5.82077e-11 J
-ΔV_metal = -4.72561759768e-8 m³  [synthetic only, ≈ -0.0472562 mm³]
+ΔV_metal = -4.72561759768e-8 m³  [synthetic only, ≈ -47.2562 mm³]
 ```
 
 También se comprobaron en **18 tests sintéticos locales** inversión adiabática del proceso, **refusión** con `Γ<0`, expansión por `ρ_s<ρ_l`, dos celdas con caras internas, fronteras abiertas, propiedades `ρ(T),cp(T)` y bloqueos de entradas inválidas. El **workflow GitHub Actions** los ejecutará en la rama nueva, pero el estado de CI aún debe verificarse; sin `wmake` ni `foamMultiRun` para FS-C08.
