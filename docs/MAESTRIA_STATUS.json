@@ -273,6 +273,14 @@
       "synthetic_regressions_added": 10,
       "ci_verified": false,
       "scientific_gates_changed": false
+    },
+    "last_c14_diagnostic_integrity": {
+      "date": "2026-11-27",
+      "report": "docs/review/UVA_C14_DIAGNOSTIC_INTEGRITY_20261127_ES.md",
+      "ledger_commit": "63ee6224b9dd9bc119d2e25f51fac2a9515014ff",
+      "synthetic_regressions_added": 7,
+      "ci_verified": false,
+      "scientific_gates_changed": false
     }
   },
   "native_mesh_check_observed_20261127": {
