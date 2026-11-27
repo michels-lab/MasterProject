@@ -173,7 +173,11 @@
     "partial": 5,
     "recursive_api_truncated": true,
     "observed_blobs_lower_bound": 30416,
-    "scientific_validation_added": false
+    "scientific_validation_added": false,
+    "initial_documentary_scope_counts": true,
+    "current_counts_source": "docs/review/FILE_REVIEW_LEDGER.jsonl",
+    "current_counts_command": "python3 tools/file_review_queue.py --ref origin/main --ledger-ref origin/main --limit 1",
+    "current_counts_note": "Initial full_documentary_scopes and partial counts are historical, not live totals; use ledger_summary. No thesis or repository coverage percentage inferred."
   },
   "native_mesh_check_observed_20261127": {
     "metal": {
