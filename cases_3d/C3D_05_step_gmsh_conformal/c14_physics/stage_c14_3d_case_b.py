@@ -214,11 +214,12 @@ def files_for_real_mesh(nmetal: int, *, has_zone: bool) -> dict[str,str]:
 
 def protect(source: Path, output: Path) -> None:
     s=source.resolve()
-    o=output.absolute()
+    raw=output.expanduser().absolute()
+    o=raw.resolve(strict=False)
     require(o!=s and s not in o.parents and o not in s.parents,
             "source and target cannot overlap")
-    require(not o.exists() and not o.is_symlink(),
-            "output already exists; NO overwrite/no second solver run "+str(o))
+    require(not raw.exists() and not raw.is_symlink() and not o.exists(),
+            "output already exists; NO overwrite/no second solver run "+str(raw))
 
 
 def environment() -> None:
@@ -237,6 +238,7 @@ def stage(source: Path, output: Path) -> dict:
     source=source.expanduser().resolve()
     output=output.expanduser().absolute()
     protect(source,output)
+    output=output.resolve(strict=False)
     environment()
     gate=source_gate(source)
     files=files_for_real_mesh(EXPECTED["metal"],has_zone=gate["metal_full_cellZone_exists"])
