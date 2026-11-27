@@ -252,7 +252,15 @@
     "initial_documentary_scope_counts": true,
     "current_counts_source": "docs/review/FILE_REVIEW_LEDGER.jsonl",
     "current_counts_command": "python3 tools/file_review_queue.py --ref origin/main --ledger-ref origin/main --limit 1",
-    "current_counts_note": "Initial full_documentary_scopes and partial counts are historical, not live totals; use ledger_summary. No thesis or repository coverage percentage inferred."
+    "current_counts_note": "Initial full_documentary_scopes and partial counts are historical, not live totals; use ledger_summary. No thesis or repository coverage percentage inferred.",
+    "last_case_b_offline_integrity": {
+      "date": "2026-11-27",
+      "report": "docs/review/UVA_CASE_B_OFFLINE_INTEGRITY_20261127_ES.md",
+      "ledger_commit": "321a9f17c93496851019a5f7f3994420ac4a0613",
+      "synthetic_regressions_added": 10,
+      "ci_verified": false,
+      "scientific_gates_changed": false
+    }
   },
   "native_mesh_check_observed_20261127": {
     "metal": {
