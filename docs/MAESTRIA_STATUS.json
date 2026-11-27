@@ -339,5 +339,58 @@
     "new_solver_run": false,
     "root_cause_proven": false,
     "physical_validation": false
+  },
+  "native_fixed_mpi_control_observed_20261127": {
+    "source": "Investigator WSL pasted output Pasted text(20261127-110906).txt",
+    "case_dir": "~/OpenFOAM/C14_A_FIXED_MPI_CONTROL/run-BVjb4qLT",
+    "source_dir": "~/OpenFOAM/C14_A_THERMAL_DIAGNOSTICS/run-1yPa6StR",
+    "solver": "foamMultiRun",
+    "mpi_ranks_requested": 8,
+    "adjustTimeStep": false,
+    "deltaT_s": 0.001,
+    "endTime_s": 0.7,
+    "solver_exit": 0,
+    "native_end": true,
+    "finalising_parallel_run": true,
+    "completed_steps_expected": 700,
+    "completed_steps_independently_counted": false,
+    "constant_initial_system_except_controlDict_diff_pass": true,
+    "partition_addressing_byte_identity_verified": false,
+    "times_s": [
+      0.1,
+      0.2,
+      0.3,
+      0.4,
+      0.5,
+      0.6,
+      0.7
+    ],
+    "metal_Tmin_K": [
+      1484.91,
+      1476.29,
+      1470.44,
+      1466.3,
+      1462.72,
+      1459.57,
+      1456.73
+    ],
+    "metal_Tmax_K": [
+      1499.98,
+      1499.98,
+      1499.98,
+      1499.98,
+      1499.98,
+      1499.98,
+      1499.98
+    ],
+    "final_alpha1_min": 0.936123,
+    "final_alpha1_max": 1,
+    "final_mold_Tmin_K": 299.765,
+    "final_mold_Tmax_K": 478.617,
+    "physical_validation": false,
+    "root_cause_exclusive_proven": false,
+    "adaptive_production_resolved": false,
+    "original_campaign_modified": false,
+    "next_decision": "Retain original failures as evidence. No unilateral A-only numerical settings changes. A new uniform adaptive sensitivity pilot for all four cases requires investigator approval; candidate common cap 0.005 s, not established stable."
   }
 }
