@@ -4,6 +4,8 @@ on:
     branches: [main]
     paths:
       - 'tools/run_adaptive_campaign_200s.py'
+      - 'tools/run_adaptive_mpi_campaign.py'
+      - 'tools/test_adaptive_mpi_sequence.py'
       - 'tools/test_adaptive_campaign_200s.py'
       - 'tools/compact_campaign_200s.py'
       - 'tools/test_compact_campaign_200s.py'
@@ -17,6 +19,8 @@ on:
     branches: [main]
     paths:
       - 'tools/run_adaptive_campaign_200s.py'
+      - 'tools/run_adaptive_mpi_campaign.py'
+      - 'tools/test_adaptive_mpi_sequence.py'
       - 'tools/test_adaptive_campaign_200s.py'
       - 'tools/compact_campaign_200s.py'
       - 'tools/test_compact_campaign_200s.py'
@@ -42,3 +46,4 @@ jobs:
             cases_controlled_buoyancy/C14_topFixedFlux_explicitRef/system
             cases_3d/C3D_04_rounded_multiblock_pilot/C14_3D_A_faithful/system
       - run: python3 -B tools/test_adaptive_campaign_200s.py -v
+      - run: python3 -B tools/test_adaptive_mpi_sequence.py -v

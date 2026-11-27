@@ -1,0 +1,6 @@
+# Uva + Granada — variantes MPI y recuperación poscorrida (2026-11-27)
+Base inmutable: 278623f290e30015660337e5217f774e7f474d87. Lectura íntegra del ejecutor MPI (572 líneas) y suite de secuencia. Comparación con manifests históricos capped y uncapped de C14-3DB: campos de identidad presentes.
+
+Correcciones: comprobar identidad de publicación (modo, rango, cap, clase, alcance, hashes y número de pasos); verificar todos los tiempos de la bitácora nativa frente al CSV antes de recuperar, no solo el final; comprobar espacio y fuentes antes de mover directorios de evidencia; guardar ruta del respaldo antes del movimiento; rechazar enlaces en intentos y rutas específicas. Se añaden cuatro regresiones sintéticas y se integra la suite MPI existente en CI adaptativa, antes omitida. No se cambia ningún control físico/numerico, no se lanza CFD, no se reescribe ningún resultado publicado. No se confirma ejecución de las pruebas hasta observar CI del commit.
+
+Alcance parcial: no se demuestra recuperación real WSL ni espacio suficiente para toda la reconstrucción (solo piso de reserva), ni resistencia a cambios concurrentes de rutas. Pendiente revisión de cobertura temporal, preflight integral de todos los campos y recuperación transaccional. Hitos A 8/10, B 2/7 sin cambio. Siguiente: finalizadores y recuperación de campaña fija de laboratorio.

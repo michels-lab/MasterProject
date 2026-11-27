@@ -38,10 +38,43 @@ def result_branch(name, ranks, max_dt):
     return f"results/campaign-200s-adaptive-mpi-r{ranks}-Co025-dt{cap_tag(max_dt)}-v1/{name}"
 
 
+def checked_case(case):
+    need(case.name in CASES and case.parent.parent == ROOT,"unexpected MPI attempt path")
+    need(transfer.checked_relative(ROOT,case.relative_to(ROOT)).is_dir(),"missing MPI attempt")
+    for name in (adaptive.REPORT,adaptive.TIMELINE,"log.foamMultiRun","postProcessing","logs"):
+        transfer.checked_relative(case,name)
+
+def check_manifest(m,name,ranks,max_dt):
+    expected={"complete":True,"kind":"adaptive_scientific_results","case":name,
+              "mpi_ranks":ranks,"max_co":.25,"max_dt_s":max_dt,
+              "time_mode":time_mode(max_dt),"validation_class":experiment(max_dt),
+              "physical_validation":False,"final_time_s":200,
+              "native_runtime_coverage_complete":True,"volume_fields_included":False}
+    need(all(k in m and m[k]==v for k,v in expected.items()),"published manifest does not match experiment")
+    need(type(m.get("solver_steps")) is int and m["solver_steps"]>0,"invalid manifest step count")
+    for k in ("solver_log_sha256","report_sha256"):
+        need(isinstance(m.get(k),str) and re.fullmatch(r"[0-9a-f]{64}",m[k]),"invalid manifest "+k)
+
+def check_native_timeline(log,steps,ranks):
+    ended=False;fatal=False;native_ranks=None;actual=[]
+    with log.open(errors="replace") as f:
+        for line in f:
+            ended |= line.strip()=="End"
+            fatal |= "FOAM FATAL" in line
+            m=re.match(r"^\s*nProcs\s*:\s*(\d+)",line)
+            if m:
+                native_ranks=int(m[1])
+                need(native_ranks==ranks,"native rank mismatch")
+            m=re.match(r"^\s*Time\s*=\s*("+adaptive.NUM+r")\s*s?\s*$",line)
+            if m:actual.append(float(m[1]))
+    need(ended and not fatal and native_ranks==ranks and len(actual)==len(steps)
+         and all(math.isfinite(a) and abs(a-b)<1e-9 for a,b in zip(actual,steps)),
+         "native log and recovered timeline disagree")
+
 def execute(case, filename, args, on_line=None):
     print("START", filename, " ".join(args), flush=True)
     started = time.monotonic()
-    with (case / filename).open("x", buffering=1) as log:
+    with transfer.checked_relative(case,filename).open("x", buffering=1) as log:
         p = subprocess.Popen(args, cwd=case, stdout=subprocess.PIPE,
                              stderr=subprocess.STDOUT, text=True,
                              errors="replace", start_new_session=True)
@@ -67,6 +100,7 @@ def execute(case, filename, args, on_line=None):
     return time.monotonic() - started
 
 def prepare(case, url, ranks, end, max_dt=.025):
+    checked_case(case)
     # Fetch original verified inputs, never copy a live or previously run case.
     with tempfile.TemporaryDirectory(prefix="mpi-input-", dir=case.parent) as tmp:
         p = Path(tmp)
@@ -122,6 +156,7 @@ def prepare(case, url, ranks, end, max_dt=.025):
         return r
 
 def run(case, r, ranks, end):
+    checked_case(case)
     steps, dts, cos = [], [], []
     last = 0.
     dt_log = co_log = None
@@ -270,8 +305,9 @@ def reports_for(name, ranks, max_dt, end):
     prefix = f"r{ranks}-{end}s-Co025-dt{cap_tag(max_dt)}-"
     for parent in sorted(ROOT.glob(prefix + "*")):
         case = parent / name
-        if not case.is_dir():
+        if not case.exists() and not case.is_symlink():
             continue
+        checked_case(case)
         p = case / adaptive.REPORT
         if not p.exists():
             yield case, None
@@ -300,12 +336,14 @@ def new_attempt(name, url, ranks, max_dt, end):
     return case
 
 def publish_result(case, url, ranks, max_dt):
+    checked_case(case)
     branch = result_branch(case.name, ranks, max_dt)
     report = read(case / adaptive.REPORT)
     need(report["status"] == "SOLVER_COMPLETE_ADAPTIVE_AUDITED", "publication requires full audit")
     manifest = transfer.complete_manifest(url, branch)
     if manifest is not None:
-        need(manifest["solver_log_sha256"] == transfer.sha(case / "log.foamMultiRun")
+        check_manifest(manifest,case.name,ranks,max_dt)
+        need(manifest["solver_steps"] == report["solver_steps"] and manifest["solver_log_sha256"] == transfer.sha(case / "log.foamMultiRun")
              and manifest["report_sha256"] == transfer.sha(case / adaptive.REPORT),
              "published result differs from local result")
         return branch
@@ -332,6 +370,7 @@ def publish_result(case, url, ranks, max_dt):
 
 def recover_completed(case, r, ranks, max_dt):
     """Recover post-solver stages only; never launch foamMultiRun."""
+    checked_case(case)
     need(r.get("solver_completed") is True and r.get("final_time_s") == 200
          and r.get("observed_mpi_ranks") == ranks and r.get("max_dt_s") == max_dt,
          "no proven completed solver to recover")
@@ -348,25 +387,16 @@ def recover_completed(case, r, ranks, max_dt):
             steps.append(t)
     need(len(steps) == r["solver_steps"] and steps and abs(steps[-1]-200)<1e-7,
          "incomplete recovered timeline")
-    ended = fatal = False
-    native_ranks = None
-    last = None
-    with (case / "log.foamMultiRun").open(errors="replace") as f:
-        for line in f:
-            ended |= line.strip() == "End"
-            fatal |= "FOAM FATAL" in line
-            m = re.match(r"^\s*nProcs\s*:\s*(\d+)", line)
-            if m: native_ranks = int(m[1])
-            m = re.match(r"^\s*Time\s*=\s*(" + adaptive.NUM + r")\s*s?\s*$", line)
-            if m: last = float(m[1])
-    need(ended and not fatal and native_ranks == ranks and last is not None
-         and abs(last-200)<1e-7, "native log does not prove completion")
+    check_native_timeline(case/"log.foamMultiRun",steps,ranks)
+    need(shutil.disk_usage(case).free > adaptive.RESERVE,"insufficient free space for recovery")
     backup = Path(tempfile.mkdtemp(prefix="postsolver-recovery-", dir=case.parent))
     print("RECOVER_POSTSOLVER", case, "evidence backup", backup, flush=True)
     required = {"metal":("T","U","p","p_rgh","phaseChangeSource:alpha1")+adaptive.DERIVED,
                 "mold":("T",)}
     def has_fields(folder):
-        return all((folder/reg/field).is_file() and (folder/reg/field).stat().st_size>0
+        if not folder.exists() and not folder.is_symlink():return False
+        transfer.checked_relative(case,folder.relative_to(case))
+        return all((q:=transfer.checked_relative(case,(folder/reg/field).relative_to(case))).is_file() and q.stat().st_size>0
                    for reg, fields in required.items() for field in fields)
     if ranks > 1:
         # Reconstruct from the last time in the interrupted native log
@@ -388,15 +418,22 @@ def recover_completed(case, r, ranks, max_dt):
             start = max(1,min([200]+[int(t) for t in attempted if 1<=t<=200]))
         # Check all processor sources before moving any reconstructed output.
         for n in range(ranks):
-            proc = case/f"processor{n}"
+            proc = transfer.checked_relative(case,f"processor{n}")
             need(proc.is_dir(), "missing processor directory "+str(proc))
             for t in range(start,201):
                 need(has_fields(proc/str(t)), "missing distributed fields "+str(proc/str(t)))
-        for t in range(start,201):
-            folder = case/str(t)
-            if folder.exists(): folder.rename(backup/str(t))
+        # Check all destinations and zero-time sources before moving evidence.
+        folders=[transfer.checked_relative(case,str(t)) for t in range(start,201)]
+        if not has_fields(case/"0"):
+            need(all(has_fields(case/f"processor{n}"/"0") for n in range(ranks)),
+                 "native zero-time fields unavailable; do not fabricate them")
         need(shutil.disk_usage(case).free > adaptive.RESERVE,
              "insufficient free space for recovery")
+        r["recovery_backup_path"]=str(backup)
+        r["status"]="MPI_SOLVER_COMPLETE_AUDIT_PENDING"
+        dump(case/adaptive.REPORT,r)
+        for folder in folders:
+            if folder.exists(): folder.rename(backup/folder.name)
         r["recovery_reconstruct_from_s"] = start
         name = "log.reconstructPar.recovery-" + backup.name
         execute(case,name,["reconstructPar","-allRegions","-time",f"{start}:200","-case",str(case)])
@@ -409,8 +446,9 @@ def recover_completed(case, r, ranks, max_dt):
             execute(case,"log.reconstructZero.recovery-"+backup.name,
                     ["reconstructPar","-allRegions","-withZero","-time","0","-case",str(case)])
     # Preserve partial previous audit products; audit uses exclusive creation.
-    pp = case/"postProcessing/metal"
+    pp = transfer.checked_relative(case,"postProcessing/metal")
     for p in pp.glob("CompactCanonical*"):
+        transfer.checked_relative(case,p.relative_to(case))
         if p.is_dir(): p.rename(backup/p.name)
     if (case/"logs").exists(): (case/"logs").rename(backup/"logs")
     adaptive.early_gate(case,r)
@@ -432,12 +470,7 @@ def run_queued_case(name, url, ranks, max_dt):
     full = list(reports_for(name, ranks, max_dt, 200))
     manifest = transfer.complete_manifest(url, branch)
     if manifest is not None:
-        need(manifest.get("case") == name and manifest.get("mpi_ranks") == ranks
-             and manifest.get("max_co") == .25 and manifest.get("max_dt_s") == max_dt
-             and manifest.get("time_mode") == time_mode(max_dt)
-             and manifest.get("final_time_s") == 200
-             and manifest.get("native_runtime_coverage_complete") is True,
-             "published manifest does not match requested experiment")
+        check_manifest(manifest,name,ranks,max_dt)
         if full:
             need(any(r is not None and (c / "log.foamMultiRun").is_file()
                      and transfer.sha(c / "log.foamMultiRun") == manifest["solver_log_sha256"]
@@ -476,7 +509,7 @@ def check_queue_storage():
 def sequence(url, ranks):
     # Two waves, four cases each, no overlap. A failed pilot/full attempt
     # is recorded and preserved; other cases continue.
-    index = ROOT / f"MPI_SEQUENCE_R{ranks}.json"
+    index = transfer.checked_relative(ROOT,f"MPI_SEQUENCE_R{ranks}.json")
     summary = read(index) if index.is_file() else {}
     for max_dt in (.025, None):
         tag = cap_tag(max_dt)
@@ -534,7 +567,7 @@ def main():
     ROOT.mkdir(exist_ok=True)
     adaptive.ROOT.mkdir(exist_ok=True)
     url = transfer.root_url(a.repo)
-    with (adaptive.ROOT / ".execution.lock").open("a") as lock:
+    with transfer.checked_relative(adaptive.ROOT,".execution.lock").open("a") as lock:
         try:
             if a.sequence:
                 print("WAITING_FOR_ACTIVE_CAMPAIGN_IF_ANY", flush=True)
