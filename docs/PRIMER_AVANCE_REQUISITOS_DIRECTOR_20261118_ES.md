@@ -1,3 +1,5 @@
+> **27-11-2026 — Estado vigente:** campaña laptop adaptativa 6/8 calculadas y publicadas, 0 recuperaciones 2D pendientes, 2 variantes A fallidas; A 8/10=80% y B 2/7=29% hitos, no validación física. FS-C08 lote 12: 75/75 pasos de arranque. La campaña fija del laboratorio permanece separada. [Historia científica](https://github.com/michels-lab/MasterProject/blob/main/docs/MAESTRIA_HISTORIA_CIENTIFICA_ES.md) · [Estado vigente](https://github.com/michels-lab/MasterProject/blob/main/docs/MAESTRIA_STATUS.json). Los estados anteriores son históricos.
+
 # Primer avance de maestría — requisitos expresos del director y trazabilidad OpenFOAM
 
 **Registro:** 18-11-2026. **Proyecto:** MasterProject / QuickCup, solidificación de hierro hipoeutéctico en arena. **Carácter:** lista obligatoria para la primera presentación; no indica que todas las pruebas estén concluidas. **Prioridad científica:** distinguir resultados CFD verificados del **caso 2D de referencia C14** de experimentos de **malla 3D C3D-02, todavía rechazados**. Los criterios anteriores de los proyectos B/C y C14 no se reemplazan.
