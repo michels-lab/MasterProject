@@ -1,6 +1,8 @@
+> **27-11-2026 — Operación Uva, estado vigente:** EVIDENCE_PUSHED / PRELIMINARY_COMPARISON. Series publicadas en el commit `25e7cf8cb4a30fb0fe5ece5bd9a2e451815ab232` leídas completas: 1473 pasos, sonda hasta 10 s (T=1463.89 K), Co máximo reportado 0.258115. [Recálculo y límites](../../analysis_results/v15_v16_postpush_20261015/README.md). No se confirmó End/retorno del runner ni cierre físico; no RUN_VERIFIED/ANALYSIS_VERIFIED. No repetir CFD automáticamente. Las notas de preparación siguientes son históricas.
+
 # C15 — adaptive time-step experiment
 
-**Status:** PREPARED_NOT_RUN (2026-10-08). **Parent:** C14_topFixedFlux_explicitRef.
+**Historical preparation status:** PREPARED_NOT_RUN (2026-10-08). **Parent:** C14_topFixedFlux_explicitRef.
 **Execution:** Only on the researcher's laptop with OpenFOAM Foundation 14. Never execute CFD on GitHub.
 
 ## Controlled intervention
