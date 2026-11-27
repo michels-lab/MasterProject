@@ -1,0 +1,128 @@
+{
+  "date": "2026-11-27",
+  "source": "docs/granada/MAESTRIA_ESTADO_INTEGRADO_20261127_ES.md",
+  "scope": "observed solver completion vs audited publication, not physical validation",
+  "historical_2d": {
+    "completed": 26,
+    "total": 26
+  },
+  "case_A": {
+    "stage": 9,
+    "total": 10,
+    "done": 8,
+    "percent": 80,
+    "fixed_laptop_200s_observed": true,
+    "fixed_lab_200s_reported_audited": true,
+    "fixed_lab_manifest_verified": false,
+    "adaptive_capped_failure_s": 0.68,
+    "adaptive_uncapped_failure_s": 0.7,
+    "physical_validation": false
+  },
+  "case_B": {
+    "stage": 3,
+    "total": 7,
+    "done": 2,
+    "percent": 29,
+    "original_10s_saved_states": 101,
+    "adaptive_200s_publications": 2,
+    "physical_validation": false
+  },
+  "adaptive_laptop": {
+    "planned_combinations": 8,
+    "solver_complete": 6,
+    "published": 3,
+    "audit_pending": 3,
+    "failed": 2,
+    "mpi_homogeneous": false,
+    "rows": [
+      [
+        "C14-3DB",
+        "mpi8_cap",
+        15013,
+        200,
+        "published"
+      ],
+      [
+        "C14-3DB",
+        "mpi8_uncapped",
+        15012,
+        200,
+        "published"
+      ],
+      [
+        "C14-2D",
+        "serial_uncapped",
+        11028,
+        200,
+        "published"
+      ],
+      [
+        "C14-2D",
+        "mpi8_cap",
+        11029,
+        200,
+        "audit_pending"
+      ],
+      [
+        "B14-2D",
+        "mpi8_cap",
+        14276,
+        200,
+        "audit_pending"
+      ],
+      [
+        "B14-2D",
+        "mpi8_uncapped",
+        14275,
+        200,
+        "audit_pending"
+      ],
+      [
+        "C14-3DA",
+        "mpi8_cap",
+        null,
+        0.68,
+        "failed"
+      ],
+      [
+        "C14-3DA",
+        "mpi8_uncapped",
+        null,
+        0.7,
+        "failed"
+      ]
+    ],
+    "last_recovery_attempt": "SyntaxError before Python execution; corrected handoff outcome unknown",
+    "native_files_modified": false
+  },
+  "fixed_lab": {
+    "authorized_cases": [
+      "C14-3DA",
+      "C14-2D",
+      "B14-2D",
+      "C14-3DB"
+    ],
+    "confirmed_manifest_count": 0,
+    "reported_complete": [
+      "C14-3DA"
+    ],
+    "others": "not verified at cutoff"
+  },
+  "FS_C08": {
+    "branch": "research/fs-c08-conservative-phase-mass-20261123",
+    "batch": 12,
+    "completed_variants": 4,
+    "scheduled_variants": 4,
+    "accepted_steps": 75,
+    "scheduled_steps": 75,
+    "unique_accumulated_accepted_steps": 501,
+    "unique_accumulated_scheduled_steps": 757,
+    "unique_accumulated_complete_variants": 36,
+    "unique_accumulated_scheduled_variants": 48,
+    "target_s": 0.000005,
+    "temporal_independence": false,
+    "global_energy_verified": false,
+    "physical_shrinkage_validated": false
+  },
+  "thesis_total_percent": null
+}
