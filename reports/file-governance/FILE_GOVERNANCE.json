@@ -31,8 +31,8 @@
     "UNKNOWN_PURPOSE": 1
   },
   "finding_total": 10,
-  "inventory_fingerprint": "0423ced103e8c2c2d8793428a6a0b82b557ffdab869f3b7db98e914787112b4d",
-  "evidence_fingerprint": "adbf0821018bd737520d471946990344e4b06f0e8b985cbd1a23d6021d22e1ae",
+  "inventory_fingerprint": "bac527d6d0a3170462f3f0d06541e1d31f3a275c14b83fcb561b90af9724fbf9",
+  "evidence_fingerprint": "a624aadd6b26e828ad8117afd31d624258d56a67d70878142a22d45db5d0f6f0",
   "files": [
     {
       "path": ".github/agents/openfoam-solidification.agent.md",
@@ -466,14 +466,14 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "3d0ea60ac26ac1e6dea59be221ea10fff6c7b572"
+      "blob": "a77c523a295f74fe5d9bbf9d6b24b81b9244e985"
     },
     {
       "path": "VALIDATION_MATRIX.md",
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "9812503a97d3f2e4535a4e0db0ee9cbf41d4aaa7"
+      "blob": "e0cabd8e878124ddabb96fa7b733e047fb515455"
     },
     {
       "path": "VALIDATION_MATRIX_EN.md",
@@ -226398,7 +226398,7 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "9c48c13023003834329ca6def47da795c2eb2db4"
+      "blob": "4c9d57d2fd89f0297f45965b7c305f0b21d1c770"
     },
     {
       "path": "cases_controlled_buoyancy/C16_phaseRelax025_fromC14/CASE_VARIANT.md",
@@ -299121,14 +299121,14 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "8479bede7427e6e5b17da59db60bc50376be773a"
+      "blob": "082f16c3d43068e5b862dc3c5d1edeb6e8d3b23c"
     },
     {
       "path": "docs/PROJECT_STAGE_STATUS.json",
       "role": "config",
       "purpose": "machine-readable configuration",
       "certainty": "rule",
-      "blob": "1e317210715e2fefe56be31735fab0a2988ef322"
+      "blob": "2efc502ac9b39b7dbbb8f32d2cfafa2c7439b2ce"
     },
     {
       "path": "docs/REGLA_INSTRUCCIONES_UNIFICADAS_ES.md",
@@ -299548,7 +299548,7 @@
       "role": "unknown",
       "purpose": "function unknown: owner classification required",
       "certainty": "unknown",
-      "blob": "fbb9925c3cb83f352cb2ee7a45d46617f0f9ebe5"
+      "blob": "9dcc31e0843b595c06c6c9bc362277bac09e919f"
     },
     {
       "path": "docs/review/README.md",
@@ -300442,20 +300442,20 @@
       "state": "REVIEW_REQUIRED"
     },
     {
-      "id": "90747b4a56bd76e3",
+      "id": "147a5b759f4e3687",
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_EN.md",
-      "observation": "4 implementation/config paths changed since this log's last commit; examples: docs/C3D04_CASE_A_STATUS.json, docs/MAESTRIA_STATUS.json, tools/file_review_queue.py, tools/tests/test_file_review_queue.py",
+      "observation": "5 implementation/config paths changed since this log's last commit; examples: docs/C3D04_CASE_A_STATUS.json, docs/MAESTRIA_STATUS.json, docs/PROJECT_STAGE_STATUS.json, tools/file_review_queue.py, tools/tests/test_file_review_queue.py",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     },
     {
-      "id": "e60d729accbd0c70",
+      "id": "19eff206435d3e71",
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_ES.md",
-      "observation": "4 implementation/config paths changed since this log's last commit; examples: docs/C3D04_CASE_A_STATUS.json, docs/MAESTRIA_STATUS.json, tools/file_review_queue.py, tools/tests/test_file_review_queue.py",
+      "observation": "5 implementation/config paths changed since this log's last commit; examples: docs/C3D04_CASE_A_STATUS.json, docs/MAESTRIA_STATUS.json, docs/PROJECT_STAGE_STATUS.json, tools/file_review_queue.py, tools/tests/test_file_review_queue.py",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     },
