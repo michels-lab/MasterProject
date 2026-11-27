@@ -146,5 +146,14 @@
     "all_34_controlled_case_tree_scans_complete": true,
     "scope": "metadata and provenance index; not line-by-line review or raw CFD binary validation",
     "branch_history_dir": "docs/history"
+  },
+  "adaptive_startup_forensics": {
+    "source": "tools/audit_case_a_adaptive_startup.py",
+    "report": "docs/granada/C3D04_A_ADAPTIVE_STARTUP_FORENSICS_20261127_ES.md",
+    "source_prepared": true,
+    "wsl_verified": false,
+    "tests_verified": false,
+    "solver_rerun": false,
+    "physical_validation": false
   }
 }

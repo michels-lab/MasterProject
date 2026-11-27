@@ -1618,5 +1618,14 @@
       "last_time_s": 0.7
     },
     "scientific_gates_changed": false
+  },
+  "adaptive_startup_forensics": {
+    "source": "tools/audit_case_a_adaptive_startup.py",
+    "report": "docs/granada/C3D04_A_ADAPTIVE_STARTUP_FORENSICS_20261127_ES.md",
+    "source_prepared": true,
+    "wsl_verified": false,
+    "tests_verified": false,
+    "solver_rerun": false,
+    "physical_validation": false
   }
 }
