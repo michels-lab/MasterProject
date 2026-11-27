@@ -281,6 +281,19 @@ def main(argv=None):
             completed=[row for row in batch["variants"] if row["completed"]]
             batch["completed_variants_common_saved_time_comparison"]=common_time_comparison(completed,comparison_dt)
             batch["completed_variants_compared"]=[row["variant"] for row in completed]
+            # Diagnostic-only postprocessing of existing logs and saved fields.
+            # A diagnostic failure does not reclassify solver acceptance.
+            try:
+                from compare_fs_c08_momentum import compare_batch
+                joined=compare_batch(batch)
+                joined_path=root/"FS_C08_COMMON_MOMENTUM.json"
+                joined_path.write_text(json.dumps(joined,indent=2,allow_nan=False)+"\n",encoding="utf-8")
+                batch["common_momentum"]={"status":joined["status"],
+                    "json":str(joined_path),"common_times_count":len(joined["common_times"]),
+                    "physical_shrinkage_validated":False}
+            except (OSError,ValueError,TypeError,KeyError) as exc:
+                batch["common_momentum"]={"status":"DIAGNOSTIC_EXTRACTION_FAILED","error":str(exc)}
+
             # Preserve peaks even if a case is rejected before the target.
             # These are maxima/minima over saved complete accepted ledgers,
             # not over rejected trials, or an estimate of continuous peaks.
