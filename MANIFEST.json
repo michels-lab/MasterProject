@@ -1,0 +1,63 @@
+{
+  "kind": "fixed_lab_scientific_results",
+  "case": "C14-2D-200s",
+  "solver_steps": 200000,
+  "final_time_s": 200,
+  "deltaT_s": 0.001,
+  "time_mode": "fixed",
+  "execution_mode": "mpi",
+  "mpi_ranks": 8,
+  "solver_log_sha256": "06f3ba964287ed94994ed23effdcc4e5b2e05a07c45ede17ee557087b88b102d",
+  "report_sha256": "9bc0f7aa3e4ef7abcefc490053539aa76bec36933dc19541ed92addc17d0a207",
+  "native_runtime_coverage_complete": true,
+  "status": "SOLVER_COMPLETE_FIXED_MPI_AUDITED",
+  "volume_fields_included": false,
+  "physical_validation": false,
+  "recovered_profiles": true,
+  "archive_bytes": 267401563,
+  "archive_sha256": "1c05fc4f8ab29de11d206d7cc5a7e4cb8cd5827ebeb952782174a4d693eeebaf",
+  "parts": [
+    {
+      "name": "archive.tar.gz.part000000",
+      "bytes": 33554432,
+      "sha256": "c8c537b236b0745ba28276579cffe8e89ab7b168049dc8d6ec7ceadf53da6405"
+    },
+    {
+      "name": "archive.tar.gz.part000001",
+      "bytes": 33554432,
+      "sha256": "2d6ae042c1718c2c06b1d427c0d1ebcf51583d859acdad5821e54e58fc697e7b"
+    },
+    {
+      "name": "archive.tar.gz.part000002",
+      "bytes": 33554432,
+      "sha256": "502b41850fa3ba6d636d48a8cfd97668b1b0f35579c6b2596ea8596340752875"
+    },
+    {
+      "name": "archive.tar.gz.part000003",
+      "bytes": 33554432,
+      "sha256": "5d132485ead89a4d2a0277b7e1ad981114bd4c846bd1f8a464d7c1102bdbfb3a"
+    },
+    {
+      "name": "archive.tar.gz.part000004",
+      "bytes": 33554432,
+      "sha256": "8c29764ef6de7ea1218ec72d2e0c95010582d2a95ca0590cb07d68977d23abd6"
+    },
+    {
+      "name": "archive.tar.gz.part000005",
+      "bytes": 33554432,
+      "sha256": "1f19e379096510a158098c1feb35cf55208a11ab11fb8d91bee0fad0c61ab2c3"
+    },
+    {
+      "name": "archive.tar.gz.part000006",
+      "bytes": 33554432,
+      "sha256": "7e7989e57479e8f006f1e49581dddef77d6d32ee11a7c491cea4027ee39a3b5b"
+    },
+    {
+      "name": "archive.tar.gz.part000007",
+      "bytes": 32520539,
+      "sha256": "bcc1828cfced910eca6938ca99572a7a13aa9097b228179e116989a954c50dd8"
+    }
+  ],
+  "archive_format": "tar.gz split into ordered binary chunks",
+  "complete": true
+}
