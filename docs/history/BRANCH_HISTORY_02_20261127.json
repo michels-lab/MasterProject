@@ -1,0 +1,1325 @@
+{
+  "snapshot": "134ac9bf6f631320630212274fd26cb8c31b5c31",
+  "scope": "exclusive commits relative to main at snapshot; parent closure explicitly checked",
+  "branches": [
+    {
+      "name": "feat/c3d04-a-c14-native-stage-fluid-solid-20261120",
+      "sha": "6fd389d77a171ef0c652cbc9d4b7780dfee76650",
+      "main_reachable": false,
+      "commits": [
+        {
+          "sha": "6fd389d77a171ef0c652cbc9d4b7780dfee76650",
+          "date": "2026-11-21T03:10:44Z",
+          "subject": "status(c3d04-a): distinguish successful native C14 synthetic fluid-solid from unrun V4/T02 and reset roadmap labels",
+          "parents": [
+            "b3eca4b9de10b26efb635c5d644f02e9c44c2c4c"
+          ]
+        },
+        {
+          "sha": "b3eca4b9de10b26efb635c5d644f02e9c44c2c4c",
+          "date": "2026-11-21T03:10:27Z",
+          "subject": "docs(c3d04-a): record real Foundation14 C14 fluid-solid phase source and U/p_rgh/enthalpy fields, not V4/T02",
+          "parents": [
+            "f7e96136332b062c5e484f06ad78121820f04f94"
+          ]
+        },
+        {
+          "sha": "f7e96136332b062c5e484f06ad78121820f04f94",
+          "date": "2026-11-21T03:10:11Z",
+          "subject": "test(c3d04-a): reject false C14 CFD PASS without original phase-change selection, pressure, U and enthalpy evidence",
+          "parents": [
+            "be82bc36a7c5de04d0e4568c5786c13ce9c3caa0"
+          ]
+        },
+        {
+          "sha": "be82bc36a7c5de04d0e4568c5786c13ce9c3caa0",
+          "date": "2026-11-21T03:09:59Z",
+          "subject": "status(c3d04-a): lock original C14 physics/timing with geometry-only 3D adaptation",
+          "parents": [
+            "b3dbf2f38eb0f89818114e45c56c72a507567aaa"
+          ]
+        },
+        {
+          "sha": "b3dbf2f38eb0f89818114e45c56c72a507567aaa",
+          "date": "2026-11-21T03:09:50Z",
+          "subject": "science(c3d04-a): require actual native phase model, enthalpy, pressure and U/T/alpha fields for solver PASS",
+          "parents": [
+            "3d989e5c04ef840b05c267eb602c15eaba810f05"
+          ]
+        },
+        {
+          "sha": "3d989e5c04ef840b05c267eb602c15eaba810f05",
+          "date": "2026-11-21T03:09:48Z",
+          "subject": "policy(c3d04-a): researcher mandates C14 identical in all physics; ONLY necessary 2D-to-3D geometry differences",
+          "parents": [
+            "838c3b7fe070d16a1c6b7f76e2965eb6393979f7"
+          ]
+        },
+        {
+          "sha": "838c3b7fe070d16a1c6b7f76e2965eb6393979f7",
+          "date": "2026-11-21T03:09:34Z",
+          "subject": "test(c3d04-a): reject ANY non-geometric C14 changes, physical values/timing/phase fields protected",
+          "parents": [
+            "b879cdcace6476ce337f3e2f5892f75bcf96dc42"
+          ]
+        },
+        {
+          "sha": "b879cdcace6476ce337f3e2f5892f75bcf96dc42",
+          "date": "2026-11-21T03:09:25Z",
+          "subject": "science(c3d04-a): enforce ONLY 2D-to-3D geometry delta, all C14 original inputs byte-preserved",
+          "parents": [
+            "6ccca113a868105cf425a282f5f879052b43ad4d"
+          ]
+        },
+        {
+          "sha": "6ccca113a868105cf425a282f5f879052b43ad4d",
+          "date": "2026-11-21T03:07:30Z",
+          "subject": "ci(c3d04-a): archive genuine C14 colon-bearing phase fields inside ZIP to preserve logs on failure",
+          "parents": [
+            "ddb4c7e528f4427e692bf93c14eadfd414cd4d00"
+          ]
+        },
+        {
+          "sha": "ddb4c7e528f4427e692bf93c14eadfd414cd4d00",
+          "date": "2026-11-21T03:07:22Z",
+          "subject": "fix(c3d04-a): use nondegenerate 3x3x3 F14 synthetic fluid region to avoid one-cell pressure zero diagonal",
+          "parents": [
+            "633967b77632afc661531ed5b9915d451a420133"
+          ]
+        },
+        {
+          "sha": "633967b77632afc661531ed5b9915d451a420133",
+          "date": "2026-11-21T03:05:44Z",
+          "subject": "test(c3d04-a): guard real Foundation14 owner=6{0} and neighbour=0() compact encoding",
+          "parents": [
+            "6fa1dc4f6da6287367f056e3e8e1f842423b4971"
+          ]
+        },
+        {
+          "sha": "6fa1dc4f6da6287367f056e3e8e1f842423b4971",
+          "date": "2026-11-21T03:05:31Z",
+          "subject": "fix(c3d04-a): correct raw regexp escapes in native Foundation14 labelList parser",
+          "parents": [
+            "f7d9bd732a4e78631628449661968fdcfb36f303"
+          ]
+        },
+        {
+          "sha": "f7d9bd732a4e78631628449661968fdcfb36f303",
+          "date": "2026-11-21T03:05:18Z",
+          "subject": "fix(c3d04-a): parse native F14 owner/neighbour compact uniform 6{0} and empty 0() safely",
+          "parents": [
+            "5355ebbdf011fcffe2cd6cf25adbe251d1d5a3dd"
+          ]
+        },
+        {
+          "sha": "5355ebbdf011fcffe2cd6cf25adbe251d1d5a3dd",
+          "date": "2026-11-21T03:03:05Z",
+          "subject": "docs(c3d04-a): document single native WSL C14 fluid-solid run, exact source and geometric-only adaptations",
+          "parents": [
+            "22a0491b850ebab148ec63aff562d16d9e09b96c"
+          ]
+        },
+        {
+          "sha": "22a0491b850ebab148ec63aff562d16d9e09b96c",
+          "date": "2026-11-21T03:02:46Z",
+          "subject": "feat(c3d04-a): one protected WSL invocation for original C14 native 3D fluid-solid preflight/smoke",
+          "parents": [
+            "cd973a424559bd62fab2085db648cfec6e7dd171"
+          ]
+        },
+        {
+          "sha": "cd973a424559bd62fab2085db648cfec6e7dd171",
+          "date": "2026-11-21T03:02:10Z",
+          "subject": "ci(c3d04-a): execute actual F14 C14 fluid-solid with original solidification on disposable 3D native mesh",
+          "parents": [
+            "98ef299f043f362e65c00922ac6fc4d41047a532"
+          ]
+        },
+        {
+          "sha": "98ef299f043f362e65c00922ac6fc4d41047a532",
+          "date": "2026-11-21T03:02:00Z",
+          "subject": "test(c3d04-a): enforce real C14 23-file staging, exact physics, full-cell metal zone and non-destructive isolation",
+          "parents": [
+            "47b8bb82b797ac4333991cdc7bd9dd4f2137d737"
+          ]
+        },
+        {
+          "sha": "47b8bb82b797ac4333991cdc7bd9dd4f2137d737",
+          "date": "2026-11-21T03:01:35Z",
+          "subject": "ci(c3d04-a): real F14 fluid + mold + C14 phase change smoke on disposable 3D cubes",
+          "parents": [
+            "0f5d06d185bffea57ea4bb2dd27447c9fe29e8d1"
+          ]
+        },
+        {
+          "sha": "0f5d06d185bffea57ea4bb2dd27447c9fe29e8d1",
+          "date": "2026-11-21T03:01:18Z",
+          "subject": "feat(c3d04-a): native isolated C14 fluid-solid stage with real-polyMesh zone and pressure reference",
+          "parents": [
+            "034cd26453693cf4e9473988126a73d7ab016292"
+          ]
+        }
+      ],
+      "unresolved_parents": [],
+      "coverage_complete": true
+    },
+    {
+      "name": "feat/c3d04-a-f14-coupled-runtime-smoke-20261120",
+      "sha": "13c0f860a5da00a8f7ddb4db594a56479f273639",
+      "main_reachable": false,
+      "commits": [
+        {
+          "sha": "13c0f860a5da00a8f7ddb4db594a56479f273639",
+          "date": "2026-11-21T00:39:32Z",
+          "subject": "docs(c3d04-a): preserve actual Foundation14 synthetic T0 temperatures and artifact",
+          "parents": [
+            "9ec7ad09903c1d52f9a93392dc796e0d59bd142f"
+          ]
+        },
+        {
+          "sha": "9ec7ad09903c1d52f9a93392dc796e0d59bd142f",
+          "date": "2026-11-21T00:39:22Z",
+          "subject": "status(c3d04-a): record genuine F14 synthetic two-solid T0 thermal run, no V4/T02 claim",
+          "parents": [
+            "ff529dfac52d570036bf479c7ef5e622ef89ee60"
+          ]
+        },
+        {
+          "sha": "ff529dfac52d570036bf479c7ef5e622ef89ee60",
+          "date": "2026-11-21T00:37:43Z",
+          "subject": "status(c3d04-a): preserve native h constant initialization failure and corrected production F14 BC",
+          "parents": [
+            "e31824045f67e49ae20548ad22324080da8d4358"
+          ]
+        },
+        {
+          "sha": "e31824045f67e49ae20548ad22324080da8d4358",
+          "date": "2026-11-21T00:37:37Z",
+          "subject": "docs(c3d04-a): record native F14 externalTemperature h field runtime failure and production fix",
+          "parents": [
+            "210c196cefceaaca39f7746f276e0a7cd65dfd2c"
+          ]
+        },
+        {
+          "sha": "210c196cefceaaca39f7746f276e0a7cd65dfd2c",
+          "date": "2026-11-21T00:37:25Z",
+          "subject": "test(c3d04-a): reject h constant legacy and assert h uniform native F14 boundary fields",
+          "parents": [
+            "82ac0e151c8f6cf20393c4fb7f002161ee02aed4"
+          ]
+        },
+        {
+          "sha": "82ac0e151c8f6cf20393c4fb7f002161ee02aed4",
+          "date": "2026-11-21T00:37:18Z",
+          "subject": "fix(c3d04-a): use F14 externalTemperature h uniform field while keeping Ta constant Function1",
+          "parents": [
+            "ff724ffc358b1bdecb11652b2a559d31a42fec55"
+          ]
+        },
+        {
+          "sha": "ff724ffc358b1bdecb11652b2a559d31a42fec55",
+          "date": "2026-11-21T00:35:07Z",
+          "subject": "test(c3d04-a): reject legacy mappedWall mode incompatible with F14 native blockMesh",
+          "parents": [
+            "e2659634c15b1464ab85d60dd8eae94aa5e41c02"
+          ]
+        },
+        {
+          "sha": "e2659634c15b1464ab85d60dd8eae94aa5e41c02",
+          "date": "2026-11-21T00:35:01Z",
+          "subject": "fix(c3d04-a): use F14 mappedWall neighbourRegion/neighborPatch and matching method",
+          "parents": [
+            "89e80ab50c0ec24f3ffe320ad1a87d3a5c9547a8"
+          ]
+        },
+        {
+          "sha": "89e80ab50c0ec24f3ffe320ad1a87d3a5c9547a8",
+          "date": "2026-11-21T00:33:11Z",
+          "subject": "status(c3d04-a): track synthetic F14 runtime CI separately from stage06 native V4/T02",
+          "parents": [
+            "851f6c19b62e3509d005eb138bb6ec3fd0e693d4"
+          ]
+        },
+        {
+          "sha": "851f6c19b62e3509d005eb138bb6ec3fd0e693d4",
+          "date": "2026-11-21T00:33:04Z",
+          "subject": "docs(c3d04-a): separate F14 synthetic runtime gate from V4/T02 native stage06",
+          "parents": [
+            "9d277ba8f930c00c1d4cb34a5fa504e5f9944679"
+          ]
+        },
+        {
+          "sha": "9d277ba8f930c00c1d4cb34a5fa504e5f9944679",
+          "date": "2026-11-21T00:32:07Z",
+          "subject": "ci(c3d04-a): run actual F14 two-solid synthetic 3D solver after ten native dictionary parses",
+          "parents": [
+            "5e071d6da615b6a16c4d77a317442eaaa9213cab"
+          ]
+        },
+        {
+          "sha": "5e071d6da615b6a16c4d77a317442eaaa9213cab",
+          "date": "2026-11-21T00:32:00Z",
+          "subject": "test(c3d04-a): guard synthetic native two-region mesh and F14-only runtime isolation",
+          "parents": [
+            "bc801efde05b4ccc1747c669fbe81b21d17a429b"
+          ]
+        },
+        {
+          "sha": "bc801efde05b4ccc1747c669fbe81b21d17a429b",
+          "date": "2026-11-21T00:31:49Z",
+          "subject": "feat(c3d04-a): native F14 two-solid coupled runtime smoke on isolated synthetic cubes",
+          "parents": [
+            "f817f157a9b0ff163a8d0f015d7f4e43c535f9cc"
+          ]
+        }
+      ],
+      "unresolved_parents": [],
+      "coverage_complete": true
+    },
+    {
+      "name": "feat/c3d04-a-native-10s-phase-results-20261123",
+      "sha": "52ae2150f241071b3ff24a8d869523eeadd35bd6",
+      "main_reachable": false,
+      "commits": [
+        {
+          "sha": "52ae2150f241071b3ff24a8d869523eeadd35bd6",
+          "date": "2026-11-23T18:07:26Z",
+          "subject": "fix(governance): permit evidence-backed REAL V4/T02 CFD_run while blocking unproven energy, grid, physical validation",
+          "parents": [
+            "8c4490115aa567934f054b7c9f47d62c691db11f"
+          ]
+        },
+        {
+          "sha": "8c4490115aa567934f054b7c9f47d62c691db11f",
+          "date": "2026-11-23T18:05:44Z",
+          "subject": "policy(c3d04-a): preserve actual alpha1/temperature findings, no C14 changes or unjustified milestone closure",
+          "parents": [
+            "65872d7c5c8c6d3efb4385c54b5517023a99ca86"
+          ]
+        },
+        {
+          "sha": "65872d7c5c8c6d3efb4385c54b5517023a99ca86",
+          "date": "2026-11-23T18:05:14Z",
+          "subject": "docs(c3d04-a): real 10s T/alpha1 all-log results and separate phase time-window postprocessing",
+          "parents": [
+            "dfb7971770816b9484d1b574e9ad63c60e511ac5"
+          ]
+        },
+        {
+          "sha": "dfb7971770816b9484d1b574e9ad63c60e511ac5",
+          "date": "2026-11-23T18:04:45Z",
+          "subject": "status(c3d04-a): record real WSL 10s all-step Courant/alpha1/T values, stage07 60pct until energy audit",
+          "parents": [
+            "35bdf0ece573824ab37539b71344d7d7fbd54175"
+          ]
+        },
+        {
+          "sha": "35bdf0ece573824ab37539b71344d7d7fbd54175",
+          "date": "2026-11-23T18:04:09Z",
+          "subject": "ci(c3d04-a): run field-phase timeline regression and native result provenance checks with no CFD",
+          "parents": [
+            "c8f8d2e9765356c8b1f6392db6e46b31f1a6b205"
+          ]
+        },
+        {
+          "sha": "c8f8d2e9765356c8b1f6392db6e46b31f1a6b205",
+          "date": "2026-11-23T18:03:52Z",
+          "subject": "test(c3d04-a): verify saved-state onset brackets, liquid fraction and negative time-series gates without CFD",
+          "parents": [
+            "a671d74e67f624f49c5b94ca4dde0b2c1569198f"
+          ]
+        },
+        {
+          "sha": "a671d74e67f624f49c5b94ca4dde0b2c1569198f",
+          "date": "2026-11-23T18:03:23Z",
+          "subject": "feat(c3d04-a): derive saved-phase onset windows and cooling trends from existing 101-state C14 CSV, read-only",
+          "parents": [
+            "4829a0f0dc7d3c4c8113d4154661f0786924a102"
+          ]
+        },
+        {
+          "sha": "4829a0f0dc7d3c4c8113d4154661f0786924a102",
+          "date": "2026-11-23T18:02:30Z",
+          "subject": "science(c3d04-a): document REAL WSL C14 3D 10s temperature, phase, all-step Courant/residual results with limits",
+          "parents": [
+            "b53d2ec5f67dbc69f02d4fa1c9983795b276ec2c"
+          ]
+        }
+      ],
+      "unresolved_parents": [],
+      "coverage_complete": true
+    },
+    {
+      "name": "feat/c3d04-a-native-f14-ci-20261120",
+      "sha": "474c0fd44c1ef7c4c4e9b465117d5c48b3efbc8c",
+      "main_reachable": false,
+      "commits": [
+        {
+          "sha": "474c0fd44c1ef7c4c4e9b465117d5c48b3efbc8c",
+          "date": "2026-11-20T22:00:30Z",
+          "subject": "ci(c3d04-a): cancel superseded native F14 installer runs on the same PR, avoid wasting runner time and redundant tests",
+          "parents": [
+            "d108c0b2c5f44bfcbc88b8f518e8e9d7175a7c87"
+          ]
+        },
+        {
+          "sha": "d108c0b2c5f44bfcbc88b8f518e8e9d7175a7c87",
+          "date": "2026-11-20T21:59:43Z",
+          "subject": "test(c3d04-a): require actual Foundation14 environment variable plus 10 native foamDictionary calls, reject missing executables and wrong version",
+          "parents": [
+            "c35fdb8f4d86e8e3fb985fc725e280a7b3ed890d"
+          ]
+        },
+        {
+          "sha": "c35fdb8f4d86e8e3fb985fc725e280a7b3ed890d",
+          "date": "2026-11-20T21:59:33Z",
+          "subject": "fix(c3d04-a): use official WM_PROJECT_VERSION=14 and real foamDictionary/foamMultiRun binary presence; foamVersion executable is not guaranteed",
+          "parents": [
+            "134d0b6b197e60c3c7a147f873b44b451a7b422a"
+          ]
+        },
+        {
+          "sha": "134d0b6b197e60c3c7a147f873b44b451a7b422a",
+          "date": "2026-11-20T21:58:11Z",
+          "subject": "test(c3d04-a): guard native stage runner against Ubuntu26.04 HWLOC hang and duplicate OF14 environment sourcing",
+          "parents": [
+            "969236ca87dfe787412462bf19902da48e4bb323"
+          ]
+        },
+        {
+          "sha": "969236ca87dfe787412462bf19902da48e4bb323",
+          "date": "2026-11-20T21:58:01Z",
+          "subject": "fix(c3d04-a): protect Ubuntu26.04 WSL from official OpenFOAM14 pvdataserver hang with HWLOC_COMPONENTS=-gl; load environment once",
+          "parents": [
+            "a417cd13292dfef244f5d181998e8e5226fbc849"
+          ]
+        },
+        {
+          "sha": "a417cd13292dfef244f5d181998e8e5226fbc849",
+          "date": "2026-11-20T21:56:52Z",
+          "subject": "test(c3d04-a): integrate all-ten-file native F14 CI orchestration and reject wrong OpenFOAM version before writing or CFD",
+          "parents": [
+            "4f30d837930885082dd54d02bb951ab343cc3b9f"
+          ]
+        },
+        {
+          "sha": "4f30d837930885082dd54d02bb951ab343cc3b9f",
+          "date": "2026-11-20T21:55:53Z",
+          "subject": "ci(c3d04-a): automatically install real Foundation14 and parse ten C14-derived T0 dictionaries with archived source-parity evidence",
+          "parents": [
+            "ed1fa87052efa64d8689475695014dda1d58fccc"
+          ]
+        },
+        {
+          "sha": "ed1fa87052efa64d8689475695014dda1d58fccc",
+          "date": "2026-11-20T21:55:36Z",
+          "subject": "feat(c3d04-a): native Foundation14 CI syntax check for ten C14-derived thermal T0 dictionaries, no CFD",
+          "parents": [
+            "904156da9fb10b79933030d9bdff1e2b428cf332"
+          ]
+        }
+      ],
+      "unresolved_parents": [],
+      "coverage_complete": true
+    },
+    {
+      "name": "feat/c3d04-a-real-v4t02-c14-10s-audit-20261123",
+      "sha": "64bfd595d09510041a95536c918c3f7b6a218f53",
+      "main_reachable": false,
+      "commits": [
+        {
+          "sha": "64bfd595d09510041a95536c918c3f7b6a218f53",
+          "date": "2026-11-23T17:47:49Z",
+          "subject": "docs(c3d04-a): record REAL V4/T02 C14 10s completion and prohibit wasteful reruns; stage07 60pct",
+          "parents": [
+            "b9c33698b5dd8914eff40bc683411b326270bd73"
+          ]
+        },
+        {
+          "sha": "b9c33698b5dd8914eff40bc683411b326270bd73",
+          "date": "2026-11-23T17:47:45Z",
+          "subject": "docs(c3d04-a): record REAL V4/T02 C14 10s completion and prohibit wasteful reruns; stage07 60pct",
+          "parents": [
+            "9b6341a830c0aacc498bc22b355029c377916146"
+          ]
+        },
+        {
+          "sha": "9b6341a830c0aacc498bc22b355029c377916146",
+          "date": "2026-11-23T17:46:30Z",
+          "subject": "fix(ci): keep actual CFD and physical-validation gates independent without adding new assumptions",
+          "parents": [
+            "767ff358ad075829bab2fe92664bcea2e533b225"
+          ]
+        },
+        {
+          "sha": "767ff358ad075829bab2fe92664bcea2e533b225",
+          "date": "2026-11-23T17:46:03Z",
+          "subject": "fix(ci c3d04-a): real C14 CFD_run closes mesh native gate, not unvalidated energy-analysis stage07",
+          "parents": [
+            "a4ce755d46bbe43373cf9c9175727a3308cdc9e8"
+          ]
+        },
+        {
+          "sha": "a4ce755d46bbe43373cf9c9175727a3308cdc9e8",
+          "date": "2026-11-23T17:45:12Z",
+          "subject": "ci(c3d04-a): verify real WSL 10s evidence milestone and read-only phase/temperature audit without any CFD run",
+          "parents": [
+            "0599d52cfb094e2ac0833a1359995c2d4a85eb31"
+          ]
+        },
+        {
+          "sha": "0599d52cfb094e2ac0833a1359995c2d4a85eb31",
+          "date": "2026-11-23T17:44:49Z",
+          "subject": "test(c3d04-a): explicitly reject nonuniform native scalar field with wrong cell count",
+          "parents": [
+            "b20891cb3d8b9a8fced758520190aed7de1c8ab1"
+          ]
+        },
+        {
+          "sha": "b20891cb3d8b9a8fced758520190aed7de1c8ab1",
+          "date": "2026-11-23T17:44:23Z",
+          "subject": "test(c3d04-a): validate read-only 10s scalar fields, complete log metrics, immutable CFD source",
+          "parents": [
+            "78e761580cc42b204c9002e14575ce5fa390f977"
+          ]
+        },
+        {
+          "sha": "78e761580cc42b204c9002e14575ce5fa390f977",
+          "date": "2026-11-23T17:43:25Z",
+          "subject": "feat(c3d04-a): read-only existing 10s WSL C14 V4/T02 time-series and all-log diagnostics, no CFD rerun",
+          "parents": [
+            "aa87c99ca8c742d5956ea21c14c6c166aa5a5815"
+          ]
+        },
+        {
+          "sha": "aa87c99ca8c742d5956ea21c14c6c166aa5a5815",
+          "date": "2026-11-23T17:41:14Z",
+          "subject": "status(c3d04-a): close native V4/T02 C14 stage06 from WSL 10s End; stage07 analyzing results, 6/10=60%",
+          "parents": [
+            "c399af54c4602ef90299a1de7a7ebef56937b920"
+          ]
+        },
+        {
+          "sha": "c399af54c4602ef90299a1de7a7ebef56937b920",
+          "date": "2026-11-23T17:40:25Z",
+          "subject": "evidence(c3d04-a): record actual user WSL V4/T02 C14 full 10s native solver completion, separate physical validation",
+          "parents": [
+            "bb07914015231a3ac72ab3f0c25238748b6727bb"
+          ]
+        }
+      ],
+      "unresolved_parents": [],
+      "coverage_complete": true
+    },
+    {
+      "name": "feat/granada-file-steward-head-proof-pilot-20261021",
+      "sha": "28546d8516289349c4eb89003c753c2d2dc22641",
+      "main_reachable": false,
+      "commits": [
+        {
+          "sha": "28546d8516289349c4eb89003c753c2d2dc22641",
+          "date": "2026-10-21T19:03:53Z",
+          "subject": "ci(granada): isolate offline attestation regressions without release/CFD",
+          "parents": [
+            "fe964fe8b034541c446216fb9cea600a271c0698"
+          ]
+        },
+        {
+          "sha": "fe964fe8b034541c446216fb9cea600a271c0698",
+          "date": "2026-10-21T18:59:55Z",
+          "subject": "ci(granada): require tested scan proof, stage only safe local attestation with file audit report",
+          "parents": [
+            "044613cbc116cfb55b55b37f8fac18b9987ca8b7"
+          ]
+        },
+        {
+          "sha": "044613cbc116cfb55b55b37f8fac18b9987ca8b7",
+          "date": "2026-10-21T18:59:24Z",
+          "subject": "test(granada): fail closed on forged run SHA, local execution and unavailable audit evidence",
+          "parents": [
+            "b88a74ddb99b7beab1a282880165190f79a834ac"
+          ]
+        },
+        {
+          "sha": "b88a74ddb99b7beab1a282880165190f79a834ac",
+          "date": "2026-10-21T18:58:52Z",
+          "subject": "feat(granada): issue constrained File Steward scan proof bound to exact git HEAD and Actions run",
+          "parents": [
+            "eae0421376288e41c6d5e5353eee4610fd8bad0e"
+          ]
+        }
+      ],
+      "unresolved_parents": [],
+      "coverage_complete": true
+    },
+    {
+      "name": "feat/granada-openfoam-optin-csv-export-v1-20261021",
+      "sha": "a50e02422dc0f195d0cea2ccd1025ffb58cc936c",
+      "main_reachable": true,
+      "commits": [],
+      "unresolved_parents": [],
+      "coverage_complete": true
+    },
+    {
+      "name": "feat/granada-scientific-critical-review-20261021",
+      "sha": "cb8c6992c8816cb1074cecbd8e8b2f1b708e4103",
+      "main_reachable": false,
+      "commits": [
+        {
+          "sha": "cb8c6992c8816cb1074cecbd8e8b2f1b708e4103",
+          "date": "2026-10-21T13:28:39Z",
+          "subject": "docs(granada): index independent scientific skepticism and counterfactual agents",
+          "parents": [
+            "4aafe228b320965b81132e9221fb3f6a8efc906b"
+          ]
+        },
+        {
+          "sha": "4aafe228b320965b81132e9221fb3f6a8efc906b",
+          "date": "2026-10-21T13:27:03Z",
+          "subject": "feat(granada): add independent scientific blind-spot review and specialized agents",
+          "parents": [
+            "11052dae7f8384be06c4816edddfeefbe8ecf43d"
+          ]
+        },
+        {
+          "sha": "11052dae7f8384be06c4816edddfeefbe8ecf43d",
+          "date": "2026-10-21T13:27:00Z",
+          "subject": "feat(granada): add independent scientific blind-spot review and specialized agents",
+          "parents": [
+            "5700e38071d3d8fbb10af6caea3e7add2cdb472a"
+          ]
+        },
+        {
+          "sha": "5700e38071d3d8fbb10af6caea3e7add2cdb472a",
+          "date": "2026-10-21T13:26:57Z",
+          "subject": "feat(granada): add independent scientific blind-spot review and specialized agents",
+          "parents": [
+            "6ae040a609d6ad520f70e003894f65f236b46a82"
+          ]
+        },
+        {
+          "sha": "6ae040a609d6ad520f70e003894f65f236b46a82",
+          "date": "2026-10-21T13:26:54Z",
+          "subject": "feat(granada): add independent scientific blind-spot review and specialized agents",
+          "parents": [
+            "b195c5dd8621caeadc1c0713030bd73aedf26462"
+          ]
+        }
+      ],
+      "unresolved_parents": [],
+      "coverage_complete": true
+    },
+    {
+      "name": "feat/isolate-concurrent-wsl-openfoam-worktrees-20261123",
+      "sha": "3bc539b39a9bef4f44514dfbef95a69942b91847",
+      "main_reachable": false,
+      "commits": [
+        {
+          "sha": "3bc539b39a9bef4f44514dfbef95a69942b91847",
+          "date": "2026-11-23T19:51:41Z",
+          "subject": "docs(wsl): log verified concurrent A/B/FS source-isolation policy without claiming user WSL execution",
+          "parents": [
+            "9c42c09d2296937dcc9ab34fd504e34bbcbb8cee"
+          ]
+        },
+        {
+          "sha": "9c42c09d2296937dcc9ab34fd504e34bbcbb8cee",
+          "date": "2026-11-23T19:51:38Z",
+          "subject": "docs(wsl): log verified concurrent A/B/FS source-isolation policy without claiming user WSL execution",
+          "parents": [
+            "b7efec196b34a5580f1c37ad18c73c4f3707e21f"
+          ]
+        },
+        {
+          "sha": "b7efec196b34a5580f1c37ad18c73c4f3707e21f",
+          "date": "2026-11-23T19:51:35Z",
+          "subject": "docs(wsl): log verified concurrent A/B/FS source-isolation policy without claiming user WSL execution",
+          "parents": [
+            "cafe66f43a096a838a8923870738eaf6cc991492"
+          ]
+        },
+        {
+          "sha": "cafe66f43a096a838a8923870738eaf6cc991492",
+          "date": "2026-11-23T19:51:33Z",
+          "subject": "docs(wsl): log verified concurrent A/B/FS source-isolation policy without claiming user WSL execution",
+          "parents": [
+            "af608e948dc6542137ac2f69c3595a44e2a3f048"
+          ]
+        },
+        {
+          "sha": "af608e948dc6542137ac2f69c3595a44e2a3f048",
+          "date": "2026-11-23T19:51:25Z",
+          "subject": "docs(wsl): log verified concurrent A/B/FS source-isolation policy without claiming user WSL execution",
+          "parents": [
+            "b266e6cd9322d9ec9b5aacb0c2e186b555df933e"
+          ]
+        },
+        {
+          "sha": "b266e6cd9322d9ec9b5aacb0c2e186b555df933e",
+          "date": "2026-11-23T19:50:53Z",
+          "subject": "policy(wsl): require independent concurrent case worktrees; ban global pull/cleanup on running CFD source",
+          "parents": [
+            "2836d6ef79ee44117876a9e87c46956d39858d1c"
+          ]
+        },
+        {
+          "sha": "2836d6ef79ee44117876a9e87c46956d39858d1c",
+          "date": "2026-11-23T19:50:51Z",
+          "subject": "policy(wsl): require independent concurrent case worktrees; ban global pull/cleanup on running CFD source",
+          "parents": [
+            "64f1d70bf2b7b78534fbb44ae8c34b706b7f5dcc"
+          ]
+        },
+        {
+          "sha": "64f1d70bf2b7b78534fbb44ae8c34b706b7f5dcc",
+          "date": "2026-11-23T19:50:48Z",
+          "subject": "policy(wsl): require independent concurrent case worktrees; ban global pull/cleanup on running CFD source",
+          "parents": [
+            "fdd088161271c1f0824428e88b214897a5636168"
+          ]
+        },
+        {
+          "sha": "fdd088161271c1f0824428e88b214897a5636168",
+          "date": "2026-11-23T19:50:46Z",
+          "subject": "policy(wsl): require independent concurrent case worktrees; ban global pull/cleanup on running CFD source",
+          "parents": [
+            "21a32294c50a8288d7cc0ad57b7ef4595c67c8f3"
+          ]
+        },
+        {
+          "sha": "21a32294c50a8288d7cc0ad57b7ef4595c67c8f3",
+          "date": "2026-11-23T19:50:43Z",
+          "subject": "policy(wsl): require independent concurrent case worktrees; ban global pull/cleanup on running CFD source",
+          "parents": [
+            "e940b8b70c85e96fd7ca5474bbdcb568d8b42140"
+          ]
+        },
+        {
+          "sha": "e940b8b70c85e96fd7ca5474bbdcb568d8b42140",
+          "date": "2026-11-23T19:49:59Z",
+          "subject": "docs(wsl): one-shot no-checkout worktree isolation of A/B and preservation of active contraction FS-C02 with explicit risk boundaries",
+          "parents": [
+            "7276cc9052c222c616d6d25bb4f369bc633b19f5"
+          ]
+        },
+        {
+          "sha": "7276cc9052c222c616d6d25bb4f369bc633b19f5",
+          "date": "2026-11-23T19:49:09Z",
+          "subject": "ci(wsl): run disposable Git integration tests for worktree isolation, no solver or destructive operations",
+          "parents": [
+            "0ebca0554590dbbabbeb38cb0d5f2d5b509c84b8"
+          ]
+        },
+        {
+          "sha": "0ebca0554590dbbabbeb38cb0d5f2d5b509c84b8",
+          "date": "2026-11-23T19:48:55Z",
+          "subject": "test(wsl): exercise real disposable Git worktrees; verify idempotency, no upstream, zero active-run touches and blocked unsafe destinations",
+          "parents": [
+            "50c6266318df4f4fbf3519a6be8fa8f995688d1d"
+          ]
+        },
+        {
+          "sha": "50c6266318df4f4fbf3519a6be8fa8f995688d1d",
+          "date": "2026-11-23T19:48:17Z",
+          "subject": "feat(wsl): isolate A/B worktrees, preserve active FS-C02 contraction and existing runs, prevent implicit pull upstream",
+          "parents": [
+            "05e6cfad8fe5c02bf16feee00522f963ac645f03"
+          ]
+        }
+      ],
+      "unresolved_parents": [],
+      "coverage_complete": true
+    },
+    {
+      "name": "feature/v8-v9-controlled-tests",
+      "sha": "4a57044f9232cadff813d3e0558b7462c464f4d2",
+      "main_reachable": false,
+      "commits": [
+        {
+          "sha": "4a57044f9232cadff813d3e0558b7462c464f4d2",
+          "date": "2026-09-28T08:13:02Z",
+          "subject": "cases: add V8 adaptive outer4 and V9 top fixed-flux tests",
+          "parents": [
+            "be60e15793d8bc52f728f8656692bd85abb3ba19"
+          ]
+        },
+        {
+          "sha": "be60e15793d8bc52f728f8656692bd85abb3ba19",
+          "date": "2026-09-28T08:12:21Z",
+          "subject": "ci: add V8/V9 case generation workflow",
+          "parents": [
+            "918a7560bdaa622a7bd73dc81eed3e60d95ca6fe"
+          ]
+        },
+        {
+          "sha": "918a7560bdaa622a7bd73dc81eed3e60d95ca6fe",
+          "date": "2026-09-28T08:12:09Z",
+          "subject": "analysis: add generator for V8/V9 controlled tests",
+          "parents": [
+            "2560ca8a3e706af98d98ee0f9559b076ca4ee6eb"
+          ]
+        }
+      ],
+      "unresolved_parents": [],
+      "coverage_complete": true
+    },
+    {
+      "name": "fix/c3d01-native-meshing-no-python-20261019",
+      "sha": "18936478d60f447e80182c69b5ded802a992a04d",
+      "main_reachable": false,
+      "commits": [
+        {
+          "sha": "18936478d60f447e80182c69b5ded802a992a04d",
+          "date": "2026-10-19T21:57:18Z",
+          "subject": "docs(c3d): record Python-free OpenFOAM mesh workflow in permanent audit log",
+          "parents": [
+            "7faca0024e3a8105421d89678f6db8ad02849edc"
+          ]
+        },
+        {
+          "sha": "7faca0024e3a8105421d89678f6db8ad02849edc",
+          "date": "2026-10-19T21:57:14Z",
+          "subject": "docs(c3d): record Python-free OpenFOAM mesh workflow in permanent audit log",
+          "parents": [
+            "7813f4fd9e4e633cbfbabec7d3333708e30e7ec6"
+          ]
+        },
+        {
+          "sha": "7813f4fd9e4e633cbfbabec7d3333708e30e7ec6",
+          "date": "2026-10-19T21:56:47Z",
+          "subject": "docs(c3d): document direct native-mm STL copying and optional audits",
+          "parents": [
+            "ea0996de950740996adc0e80f663caac007a2e7a"
+          ]
+        },
+        {
+          "sha": "ea0996de950740996adc0e80f663caac007a2e7a",
+          "date": "2026-10-19T21:56:28Z",
+          "subject": "docs(c3d): default to direct STL copies and native OpenFOAM mesh commands, optional Python audit",
+          "parents": [
+            "3e59038f5911f564e24e1974970cb3dc202d7f4d"
+          ]
+        },
+        {
+          "sha": "3e59038f5911f564e24e1974970cb3dc202d7f4d",
+          "date": "2026-10-19T21:55:52Z",
+          "subject": "test(c3d): prevent mandatory Python geometry gate or STL prerequisites in mesh-only runner",
+          "parents": [
+            "c2ecc6450f5c5130fa04722584dfb825c60a1629"
+          ]
+        },
+        {
+          "sha": "c2ecc6450f5c5130fa04722584dfb825c60a1629",
+          "date": "2026-10-19T21:55:27Z",
+          "subject": "fix(c3d): run only blockMesh/checkMesh without Python or STL prerequisites",
+          "parents": [
+            "514bc832256af39eeb790162f4c1064d5d11be35"
+          ]
+        }
+      ],
+      "unresolved_parents": [],
+      "coverage_complete": true
+    },
+    {
+      "name": "fix/c3d02-always-auto-error-zones-20261117",
+      "sha": "315f3ad1a51535f32b8f3ce00c1aa6de5e9a6d45",
+      "main_reachable": false,
+      "commits": [
+        {
+          "sha": "315f3ad1a51535f32b8f3ce00c1aa6de5e9a6d45",
+          "date": "2026-11-17T21:02:28Z",
+          "subject": "docs(c3d02): always-on automatic location of errors in builder, full audit trail and commands",
+          "parents": [
+            "28bdf6a17010ae6b0e7db9f795d1cd1c5f3e21a0"
+          ]
+        },
+        {
+          "sha": "28bdf6a17010ae6b0e7db9f795d1cd1c5f3e21a0",
+          "date": "2026-11-17T21:02:25Z",
+          "subject": "docs(c3d02): always-on automatic location of errors in builder, full audit trail and commands",
+          "parents": [
+            "53c411555d9f56126c69e4147adcdbf26c19e4d4"
+          ]
+        },
+        {
+          "sha": "53c411555d9f56126c69e4147adcdbf26c19e4d4",
+          "date": "2026-11-17T21:02:22Z",
+          "subject": "docs(c3d02): always-on automatic location of errors in builder, full audit trail and commands",
+          "parents": [
+            "6cd58e07cff8c31a9243150193c627023bbc4245"
+          ]
+        },
+        {
+          "sha": "6cd58e07cff8c31a9243150193c627023bbc4245",
+          "date": "2026-11-17T21:02:18Z",
+          "subject": "docs(c3d02): always-on automatic location of errors in builder, full audit trail and commands",
+          "parents": [
+            "a312d456bb7bef5e7e30cc9bd72e994f9e311bbf"
+          ]
+        },
+        {
+          "sha": "a312d456bb7bef5e7e30cc9bd72e994f9e311bbf",
+          "date": "2026-11-17T21:02:14Z",
+          "subject": "docs(c3d02): always-on automatic location of errors in builder, full audit trail and commands",
+          "parents": [
+            "e09f99df338be628097b97cbb0857e09865cb670"
+          ]
+        },
+        {
+          "sha": "e09f99df338be628097b97cbb0857e09865cb670",
+          "date": "2026-11-17T21:02:10Z",
+          "subject": "docs(c3d02): always-on automatic location of errors in builder, full audit trail and commands",
+          "parents": [
+            "004ea432ad4fa78acccbb2d96754c94fa9caa6da"
+          ]
+        },
+        {
+          "sha": "004ea432ad4fa78acccbb2d96754c94fa9caa6da",
+          "date": "2026-11-17T21:02:07Z",
+          "subject": "docs(c3d02): always-on automatic location of errors in builder, full audit trail and commands",
+          "parents": [
+            "416bf6893e808d8d223278fe7ef1d807c012b700"
+          ]
+        },
+        {
+          "sha": "416bf6893e808d8d223278fe7ef1d807c012b700",
+          "date": "2026-11-17T21:01:08Z",
+          "subject": "docs(masterproject): permanent automatic mesh error-localization policy for integrated OpenFOAM commands",
+          "parents": [
+            "8cd5a8ae778e0c082f12336e621e762cf3cbc22e"
+          ]
+        },
+        {
+          "sha": "8cd5a8ae778e0c082f12336e621e762cf3cbc22e",
+          "date": "2026-11-17T21:00:22Z",
+          "subject": "test(c3d02): enforce always-on error localization and synthetic pre-mesh reports in CI",
+          "parents": [
+            "903b1e763a08ad15b71bbefda59e1bf9eaee93ce"
+          ]
+        },
+        {
+          "sha": "903b1e763a08ad15b71bbefda59e1bf9eaee93ce",
+          "date": "2026-11-17T20:59:05Z",
+          "subject": "feat(c3d02): mandatory ERROR_ZONES JSON/Markdown from the one-command builder at every stage",
+          "parents": [
+            "5c4695cd3a2e78422c03cdd434d5b861d74d9cbb"
+          ]
+        },
+        {
+          "sha": "5c4695cd3a2e78422c03cdd434d5b861d74d9cbb",
+          "date": "2026-11-17T20:58:18Z",
+          "subject": "feat(c3d02): mandatory spatial mesh-error reports with automatic checkMesh VTK exports at any failure stage",
+          "parents": [
+            "be287491820b6526d1f34a77c61ad23e08a0ec0a"
+          ]
+        }
+      ],
+      "unresolved_parents": [],
+      "coverage_complete": true
+    },
+    {
+      "name": "fix/c3d02-mold-insidepoint-off-face-20261112",
+      "sha": "b0f588a260dcf55ed7d1cbfa85bc12aca502d6d8",
+      "main_reachable": false,
+      "commits": [
+        {
+          "sha": "b0f588a260dcf55ed7d1cbfa85bc12aca502d6d8",
+          "date": "2026-11-13T01:02:42Z",
+          "subject": "docs(c3d02): surface independent mesh retry status and off-face mold trial",
+          "parents": [
+            "76a664ce84b0a3a19162458c5d84a4c35acf400b"
+          ]
+        },
+        {
+          "sha": "76a664ce84b0a3a19162458c5d84a4c35acf400b",
+          "date": "2026-11-13T01:02:40Z",
+          "subject": "docs(c3d02): surface independent mesh retry status and off-face mold trial",
+          "parents": [
+            "b399bcce1ea9500086c8c6f8e2aea2d4e4de6b25"
+          ]
+        },
+        {
+          "sha": "b399bcce1ea9500086c8c6f8e2aea2d4e4de6b25",
+          "date": "2026-11-13T01:02:12Z",
+          "subject": "docs(c3d02): record metal success on volume, mold exterior leak, and off-face seed",
+          "parents": [
+            "67e5c6ef48d30ee39724b6a3cabfc22d9df62412"
+          ]
+        },
+        {
+          "sha": "67e5c6ef48d30ee39724b6a3cabfc22d9df62412",
+          "date": "2026-11-13T01:02:10Z",
+          "subject": "docs(c3d02): record metal success on volume, mold exterior leak, and off-face seed",
+          "parents": [
+            "0b7c2c732d5a2df2915efdbe8321fc27426fe0c7"
+          ]
+        },
+        {
+          "sha": "0b7c2c732d5a2df2915efdbe8321fc27426fe0c7",
+          "date": "2026-11-13T01:02:06Z",
+          "subject": "docs(c3d02): record metal success on volume, mold exterior leak, and off-face seed",
+          "parents": [
+            "a28b2a39824c830e2f0dd7b64fbcde9f29d8547d"
+          ]
+        },
+        {
+          "sha": "a28b2a39824c830e2f0dd7b64fbcde9f29d8547d",
+          "date": "2026-11-13T01:02:03Z",
+          "subject": "docs(c3d02): record metal success on volume, mold exterior leak, and off-face seed",
+          "parents": [
+            "b32352364095880e2bcc729b682597dbc6a95af0"
+          ]
+        },
+        {
+          "sha": "b32352364095880e2bcc729b682597dbc6a95af0",
+          "date": "2026-11-13T01:02:00Z",
+          "subject": "docs(c3d02): record metal success on volume, mold exterior leak, and off-face seed",
+          "parents": [
+            "a9fa3c7fe66fd45f2291c33a0536e22b498fb260"
+          ]
+        },
+        {
+          "sha": "a9fa3c7fe66fd45f2291c33a0536e22b498fb260",
+          "date": "2026-11-13T01:01:56Z",
+          "subject": "docs(c3d02): record metal success on volume, mold exterior leak, and off-face seed",
+          "parents": [
+            "4bef85ffd0d00523131d9e725e39bffda6603e85"
+          ]
+        },
+        {
+          "sha": "4bef85ffd0d00523131d9e725e39bffda6603e85",
+          "date": "2026-11-13T01:01:52Z",
+          "subject": "docs(c3d02): record metal success on volume, mold exterior leak, and off-face seed",
+          "parents": [
+            "3fadd22b2f170f3efd3023d2a110c7ccd6684a07"
+          ]
+        },
+        {
+          "sha": "3fadd22b2f170f3efd3023d2a110c7ccd6684a07",
+          "date": "2026-11-13T01:01:49Z",
+          "subject": "docs(c3d02): record metal success on volume, mold exterior leak, and off-face seed",
+          "parents": [
+            "bead76505f9034df78c18175d3db17d2169c1093"
+          ]
+        },
+        {
+          "sha": "bead76505f9034df78c18175d3db17d2169c1093",
+          "date": "2026-11-13T01:00:27Z",
+          "subject": "test(c3d02): forbid mold seed on background cell face",
+          "parents": [
+            "f0df39fe5798d36cda48f38a2554e93a80872785"
+          ]
+        },
+        {
+          "sha": "f0df39fe5798d36cda48f38a2554e93a80872785",
+          "date": "2026-11-13T00:59:54Z",
+          "subject": "fix(c3d02): use off-face mold insidePoint for future fresh runs",
+          "parents": [
+            "890c3eea453124b5b18fc97748565239c4fe767a"
+          ]
+        },
+        {
+          "sha": "890c3eea453124b5b18fc97748565239c4fe767a",
+          "date": "2026-11-13T00:59:33Z",
+          "subject": "feat(c3d02): controlled mold-only mesh with off-face insidePoint",
+          "parents": [
+            "ef3d7b09193ad5bef350a7797609213a39fe0009"
+          ]
+        }
+      ],
+      "unresolved_parents": [],
+      "coverage_complete": true
+    },
+    {
+      "name": "fix/c3d02-mold-leak-evidence-20261112",
+      "sha": "0561acbdde8348ee0c1a729feca35cde2a1992a5",
+      "main_reachable": false,
+      "commits": [
+        {
+          "sha": "0561acbdde8348ee0c1a729feca35cde2a1992a5",
+          "date": "2026-11-13T01:22:44Z",
+          "subject": "test(c3d02): ensure mold leak diagnostic never remeshes or runs solver",
+          "parents": [
+            "13cf1eb503ecf3fca8ad87cbf13939caf521527f"
+          ]
+        },
+        {
+          "sha": "13cf1eb503ecf3fca8ad87cbf13939caf521527f",
+          "date": "2026-11-13T01:22:29Z",
+          "subject": "docs(c3d02): record identical off-face failure and target true mold leak causes",
+          "parents": [
+            "35a412d10d7501b009e949eed7f1434c7eaeb75d"
+          ]
+        },
+        {
+          "sha": "35a412d10d7501b009e949eed7f1434c7eaeb75d",
+          "date": "2026-11-13T01:22:26Z",
+          "subject": "docs(c3d02): record identical off-face failure and target true mold leak causes",
+          "parents": [
+            "86cba8222d51d53cd0537b7ef1f7e7e456aad714"
+          ]
+        },
+        {
+          "sha": "86cba8222d51d53cd0537b7ef1f7e7e456aad714",
+          "date": "2026-11-13T01:22:24Z",
+          "subject": "docs(c3d02): record identical off-face failure and target true mold leak causes",
+          "parents": [
+            "c788be4b3224dbffffaa97df7b6b95719e5a888e"
+          ]
+        },
+        {
+          "sha": "c788be4b3224dbffffaa97df7b6b95719e5a888e",
+          "date": "2026-11-13T01:22:21Z",
+          "subject": "docs(c3d02): record identical off-face failure and target true mold leak causes",
+          "parents": [
+            "6e224950c690fd5e3e8e3d7339ed84f49914ac42"
+          ]
+        },
+        {
+          "sha": "6e224950c690fd5e3e8e3d7339ed84f49914ac42",
+          "date": "2026-11-13T01:22:17Z",
+          "subject": "docs(c3d02): record identical off-face failure and target true mold leak causes",
+          "parents": [
+            "ee9d3e38b4d66bf6da85611ebb19e8e754015b94"
+          ]
+        },
+        {
+          "sha": "ee9d3e38b4d66bf6da85611ebb19e8e754015b94",
+          "date": "2026-11-13T01:22:14Z",
+          "subject": "docs(c3d02): record identical off-face failure and target true mold leak causes",
+          "parents": [
+            "8f6f67b439d56d9a4a007d30581d93dadf162724"
+          ]
+        },
+        {
+          "sha": "8f6f67b439d56d9a4a007d30581d93dadf162724",
+          "date": "2026-11-13T01:22:12Z",
+          "subject": "docs(c3d02): record identical off-face failure and target true mold leak causes",
+          "parents": [
+            "a74b9a3dc5c7a29243490068168d5cbaa114f1a0"
+          ]
+        },
+        {
+          "sha": "a74b9a3dc5c7a29243490068168d5cbaa114f1a0",
+          "date": "2026-11-13T01:22:09Z",
+          "subject": "docs(c3d02): record identical off-face failure and target true mold leak causes",
+          "parents": [
+            "52ede41336b87665c0e4e5091375c1c175ebffe5"
+          ]
+        },
+        {
+          "sha": "52ede41336b87665c0e4e5091375c1c175ebffe5",
+          "date": "2026-11-13T01:22:05Z",
+          "subject": "docs(c3d02): record identical off-face failure and target true mold leak causes",
+          "parents": [
+            "302784986e1fde5ec3f5b9255b621976d1e26240"
+          ]
+        },
+        {
+          "sha": "302784986e1fde5ec3f5b9255b621976d1e26240",
+          "date": "2026-11-13T01:22:02Z",
+          "subject": "docs(c3d02): record identical off-face failure and target true mold leak causes",
+          "parents": [
+            "0998abdd93b4c47b8799a8d1a22a7d85297f09a0"
+          ]
+        },
+        {
+          "sha": "0998abdd93b4c47b8799a8d1a22a7d85297f09a0",
+          "date": "2026-11-13T01:20:19Z",
+          "subject": "feat(c3d02): inspect existing mold leak logs and STL self-intersection without remeshing",
+          "parents": [
+            "c33622022e091f1023657d611e27bb903e33aa3f"
+          ]
+        }
+      ],
+      "unresolved_parents": [],
+      "coverage_complete": true
+    },
+    {
+      "name": "fix/c3d02-resume-missing-zonefaces-20261112",
+      "sha": "e320ff0482e07ebda6da604f5cc73ab29fdc5d96",
+      "main_reachable": false,
+      "commits": [
+        {
+          "sha": "e320ff0482e07ebda6da604f5cc73ab29fdc5d96",
+          "date": "2026-11-13T00:37:05Z",
+          "subject": "docs(c3d02): record missing required key and exact safe retry workflow",
+          "parents": [
+            "ae124309039037c473bddc07b1a920e018f0139c"
+          ]
+        },
+        {
+          "sha": "ae124309039037c473bddc07b1a920e018f0139c",
+          "date": "2026-11-13T00:37:03Z",
+          "subject": "docs(c3d02): record missing required key and exact safe retry workflow",
+          "parents": [
+            "a8b2659d4ac5246fda69742b419231a8b8446b6c"
+          ]
+        },
+        {
+          "sha": "a8b2659d4ac5246fda69742b419231a8b8446b6c",
+          "date": "2026-11-13T00:36:59Z",
+          "subject": "docs(c3d02): record missing required key and exact safe retry workflow",
+          "parents": [
+            "aa9165a5aebcbeef1f622f40e1309d68930da92b"
+          ]
+        },
+        {
+          "sha": "aa9165a5aebcbeef1f622f40e1309d68930da92b",
+          "date": "2026-11-13T00:36:56Z",
+          "subject": "docs(c3d02): record missing required key and exact safe retry workflow",
+          "parents": [
+            "594c3940d18e2e390a7f5ab22610d926f1c12c80"
+          ]
+        },
+        {
+          "sha": "594c3940d18e2e390a7f5ab22610d926f1c12c80",
+          "date": "2026-11-13T00:36:53Z",
+          "subject": "docs(c3d02): record missing required key and exact safe retry workflow",
+          "parents": [
+            "9cc2511c1f7f6969caa7a709693947fc6d0f17a4"
+          ]
+        },
+        {
+          "sha": "9cc2511c1f7f6969caa7a709693947fc6d0f17a4",
+          "date": "2026-11-13T00:36:50Z",
+          "subject": "docs(c3d02): record missing required key and exact safe retry workflow",
+          "parents": [
+            "88f33f3a31b079e23b46ae5763afa5257198f128"
+          ]
+        },
+        {
+          "sha": "88f33f3a31b079e23b46ae5763afa5257198f128",
+          "date": "2026-11-13T00:36:47Z",
+          "subject": "docs(c3d02): record missing required key and exact safe retry workflow",
+          "parents": [
+            "a546e0d5e452a849aa8fe5c7d5edc5f93f7775db"
+          ]
+        },
+        {
+          "sha": "a546e0d5e452a849aa8fe5c7d5edc5f93f7775db",
+          "date": "2026-11-13T00:36:44Z",
+          "subject": "docs(c3d02): record missing required key and exact safe retry workflow",
+          "parents": [
+            "635642b9a8e7fc19b140d58ccb52733a21182b85"
+          ]
+        },
+        {
+          "sha": "635642b9a8e7fc19b140d58ccb52733a21182b85",
+          "date": "2026-11-13T00:36:01Z",
+          "subject": "test(c3d02): simplify mandatory-key and safe-resume regression",
+          "parents": [
+            "c0e8ad52d944d03a95ffc125a70d05875d6e233b"
+          ]
+        },
+        {
+          "sha": "c0e8ad52d944d03a95ffc125a70d05875d6e233b",
+          "date": "2026-11-13T00:35:51Z",
+          "subject": "test(c3d02): require zone-face key and guarded resume regression",
+          "parents": [
+            "3a1600b3b21690408fa04bf67bd95c5c4f525893"
+          ]
+        },
+        {
+          "sha": "3a1600b3b21690408fa04bf67bd95c5c4f525893",
+          "date": "2026-11-13T00:35:29Z",
+          "subject": "fix(c3d02): recover missing-key abort in-place while preserving all logs",
+          "parents": [
+            "130843ed868348c9c7616b17fc542d5ff2fed679"
+          ]
+        },
+        {
+          "sha": "130843ed868348c9c7616b17fc542d5ff2fed679",
+          "date": "2026-11-13T00:34:30Z",
+          "subject": "fix(c3d02): specify mandatory Foundation 14 zone-face option",
+          "parents": [
+            "69918958bbb70e2a1dc24a74e70f9b06dbd9cb31"
+          ]
+        }
+      ],
+      "unresolved_parents": [],
+      "coverage_complete": true
+    },
+    {
+      "name": "fix/c3d02-surfacecheck-scratch-20261112",
+      "sha": "a54bc8e2b4b218981a854f2f24f7f439518ee165",
+      "main_reachable": false,
+      "commits": [
+        {
+          "sha": "a54bc8e2b4b218981a854f2f24f7f439518ee165",
+          "date": "2026-11-13T01:33:42Z",
+          "subject": "docs(c3d02): capture one-cell-removal evidence and native surfaceCheck fallback",
+          "parents": [
+            "13dec18d6ae9ca458d2e0ab46930648e5e928082"
+          ]
+        },
+        {
+          "sha": "13dec18d6ae9ca458d2e0ab46930648e5e928082",
+          "date": "2026-11-13T01:33:38Z",
+          "subject": "docs(c3d02): capture one-cell-removal evidence and native surfaceCheck fallback",
+          "parents": [
+            "d58325c428bdcb70280ba91f1f98a79212040b4b"
+          ]
+        },
+        {
+          "sha": "d58325c428bdcb70280ba91f1f98a79212040b4b",
+          "date": "2026-11-13T01:33:35Z",
+          "subject": "docs(c3d02): capture one-cell-removal evidence and native surfaceCheck fallback",
+          "parents": [
+            "6e26fad5082939de7101ab19c80f7bf763a36dcd"
+          ]
+        },
+        {
+          "sha": "6e26fad5082939de7101ab19c80f7bf763a36dcd",
+          "date": "2026-11-13T01:33:32Z",
+          "subject": "docs(c3d02): capture one-cell-removal evidence and native surfaceCheck fallback",
+          "parents": [
+            "40b269d2518ec99ea4404f2926eac2be9c1e5bd9"
+          ]
+        },
+        {
+          "sha": "40b269d2518ec99ea4404f2926eac2be9c1e5bd9",
+          "date": "2026-11-13T01:33:29Z",
+          "subject": "docs(c3d02): capture one-cell-removal evidence and native surfaceCheck fallback",
+          "parents": [
+            "8ad402f31a37d533c8b6ba317fd7db98634bf8a9"
+          ]
+        },
+        {
+          "sha": "8ad402f31a37d533c8b6ba317fd7db98634bf8a9",
+          "date": "2026-11-13T01:33:25Z",
+          "subject": "docs(c3d02): capture one-cell-removal evidence and native surfaceCheck fallback",
+          "parents": [
+            "64109c554f362dc36852db3cf476c22427798da5"
+          ]
+        },
+        {
+          "sha": "64109c554f362dc36852db3cf476c22427798da5",
+          "date": "2026-11-13T01:33:21Z",
+          "subject": "docs(c3d02): capture one-cell-removal evidence and native surfaceCheck fallback",
+          "parents": [
+            "2db4af1975843d0f2ebb2d904abd01fda66ecb3f"
+          ]
+        },
+        {
+          "sha": "2db4af1975843d0f2ebb2d904abd01fda66ecb3f",
+          "date": "2026-11-13T01:32:19Z",
+          "subject": "test(c3d02): verify isolated temporary surfaceCheck and cross-version option compatibility",
+          "parents": [
+            "2cda1427b342d5e9781c5204944a33b1192d7d36"
+          ]
+        },
+        {
+          "sha": "2cda1427b342d5e9781c5204944a33b1192d7d36",
+          "date": "2026-11-13T01:32:00Z",
+          "subject": "fix(c3d02): run Foundation surfaceCheck in isolated temporary directory without unsupported flags",
+          "parents": [
+            "79e57deccafe5cf241c1d3d60ba27c994bd97608"
+          ]
+        }
+      ],
+      "unresolved_parents": [],
+      "coverage_complete": true
+    }
+  ]
+}
