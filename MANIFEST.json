@@ -1,0 +1,47 @@
+{
+  "kind": "adaptive_scientific_results",
+  "case": "B14-2D-200s",
+  "time_mode": "adaptive_uncapped",
+  "mpi_ranks": 8,
+  "validation_class": "experimental_adaptive_uncapped_mpi",
+  "physical_validation": false,
+  "max_co": 0.25,
+  "max_dt_s": null,
+  "solver_steps": 14275,
+  "final_time_s": 200,
+  "solver_log_sha256": "d9f4d1aec3510ccaa68bde551cca937a0d7cb21dc0327dcd9fe39b8d6f896f94",
+  "report_sha256": "9b7effbd9817d0f086c2f85c256bfc8023a577494f61bac6b5d6927ade637138",
+  "native_runtime_coverage_complete": true,
+  "volume_fields_included": false,
+  "archive_bytes": 154479412,
+  "archive_sha256": "5c328e8a8e435999962f94505cf199c61370385d7648c66b8c4cc07903d65e67",
+  "parts": [
+    {
+      "name": "archive.tar.gz.part000000",
+      "bytes": 33554432,
+      "sha256": "4f699ac9ffe7f605215713a49d5129e2033fb7908c9843e0dffaa47e9f43b38f"
+    },
+    {
+      "name": "archive.tar.gz.part000001",
+      "bytes": 33554432,
+      "sha256": "c6f0e685a94481b711ae4f61ed6ce937378766eef0380248ef1f2ab5fc484026"
+    },
+    {
+      "name": "archive.tar.gz.part000002",
+      "bytes": 33554432,
+      "sha256": "23c1d640d9b91a08155e9d4fab975230bf548ec8d8c10799e91f8b12faf45a56"
+    },
+    {
+      "name": "archive.tar.gz.part000003",
+      "bytes": 33554432,
+      "sha256": "1e342a07d23854fe739a4afcfb99f9c7fdb4c0142767f5bc785af510b0f25302"
+    },
+    {
+      "name": "archive.tar.gz.part000004",
+      "bytes": 20261684,
+      "sha256": "64e531e31f815a3197deac5ba76a5048b4776ecf56839428e821d54d0ddfe410"
+    }
+  ],
+  "archive_format": "tar.gz split into ordered binary chunks",
+  "complete": true
+}
