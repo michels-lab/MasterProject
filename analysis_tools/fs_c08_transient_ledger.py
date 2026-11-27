@@ -36,10 +36,13 @@ def extract(log: str) -> tuple[list[dict], list[str]]:
         for marker, kind in MARKERS.items():
             if marker not in line:
                 continue
-            entries = dict(re.findall(r"([A-Za-z][A-Za-z0-9_]*)=([^\s]+)", line))
+            pairs = re.findall(r"([A-Za-z][A-Za-z0-9_]*)=([^\s]+)", line)
+            entries = dict(pairs)
             t = None
             try:
                 t = float(entries["time_s"])
+                if len(pairs) != len(entries):
+                    raise ValueError("duplicate ledger key")
                 values = {key: float(entries[key]) for key in REQUIRED[kind]}
                 if kind=="state":
                     for key in ("pressureVolumeRate_m3_s","metalBulkModulus_Pa"):
@@ -47,12 +50,15 @@ def extract(log: str) -> tuple[list[dict], list[str]]:
                             values[key]=float(entries[key])
                 if t <= 0 or not math.isfinite(t) or not all(map(math.isfinite, values.values())):
                     raise ValueError("invalid numeric ledger")
+                if kind == "state" and values["dt_s"] <= 0:
+                    raise ValueError("non-positive native dt")
                 if kind == "pressure" and values["pressureVolumeEnergyIterationConverged"] != 1:
                     raise ValueError("pressure closure not converged")
             except (KeyError, ValueError) as exc:
                 issues.append(f"{kind}: {exc}")
                 if t is not None and math.isfinite(t) and t > 0:
                     invalid_times.add(t)
+                    by_time.setdefault(t, {"time_s": t, "kinds": set()})
                 continue
             row = by_time.setdefault(t, {"time_s": t, "kinds": set()})
             if kind in row["kinds"]:
@@ -76,6 +82,12 @@ def extract(log: str) -> tuple[list[dict], list[str]]:
             row["metalInventoryAgreement_kg"] = row["liquidMass_kg"] + row["solidMass_kg"] - row["liquidSolidMetalMass_kg"]
             row["gasInventoryAgreement_kg"] = row["independentGasMass_kg"] - row["nativeGasInventory_kg"]
             row["localEnergyRelativeL1"] = row["sumAbsCellResidual_J"] / max(1e-300, row["sumAbsCellTerms_J"])
+            if prev is not None:
+                dt = row["dt_s"]
+                gap = t-prev["time_s"]
+                if abs(gap-dt) > max(1e-14, 1e-6*dt):
+                    issues.append(f"time {t:g}: noncontiguous native history; gap {gap:g}, dt {dt:g}")
+                    prev = None
             if prev is not None:
                 row["metalHistoryMismatch_kg"] = row["previousMetalMass_kg"] - prev["liquidSolidMetalMass_kg"]
                 row["gasHistoryMismatch_kg"] = row["previousGasInventory_kg"] - prev["nativeGasInventory_kg"]
