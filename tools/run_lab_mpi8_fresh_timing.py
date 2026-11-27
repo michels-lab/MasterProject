@@ -3,7 +3,9 @@
 Preserve old attempts. All fresh inputs are verified against original manifests.
 No network publication blocks the CFD queue.
 """
+import argparse
 import csv
+import math
 import fcntl
 import json
 import os
@@ -40,8 +42,10 @@ def ours(a):
 def signal_stop(pid):
     try:os.kill(pid,signal.SIGTERM);os.kill(pid,signal.SIGCONT)
     except ProcessLookupError:pass
-def stop_previous():
+def stop_previous(allow_takeover=False):
     active=list(q.procs())
+    need(allow_takeover or not any(solver(a) or manager(a) for _,a in active),
+         "active campaign; explicit --allow-takeover required")
     need(not any(solver(a) and not ours(a) for _,a in active),"unrelated CFD active; refusing takeover")
     # Stop queue controllers before solver so they cannot start another case.
     for name in ("recover_lab_mpi_reference.py","resume_lab_mpi8_deadline.py","run_lab_fixed_mpi8.py",
@@ -118,7 +122,7 @@ def rank_samples(case,writer,t,wall):
         except (OSError,ValueError,StopIteration,IndexError):pass
 
 def solve(case):
-    started=time.monotonic();count=0;ranks=None;end=fatal=False;tail=deque(maxlen=35)
+    started=time.monotonic();count=0;timed=0;last_execution=last_clock=0.;ranks=None;end=fatal=False;tail=deque(maxlen=35)
     with (case/"log.foamMultiRun").open("x",buffering=1) as log, \
          (case/"TIMING_STEPS.csv").open("x",buffering=1) as tf, \
          (case/"TIMING_MPI_RANKS.csv").open("x",buffering=1) as rf:
@@ -135,11 +139,17 @@ def solve(case):
                 if m:ranks=int(m[1]);need(ranks==8,"unexpected MPI ranks")
                 m=q.TIME.match(line)
                 if m:
+                    need(current is None,"missing timing record for previous native step")
                     count+=1;t=float(m[1]);need(abs(t-count/1000)<1e-7,"time grid drift")
                     current=t
                 m=re.search(r"ExecutionTime\s*=\s*([0-9.eE+-]+)\s*s\s+ClockTime\s*=\s*([0-9.eE+-]+)\s*s",line)
                 if m and current is not None:
                     wall=time.monotonic()-started
+                    execution,clock=map(float,m.groups())
+                    need(all(math.isfinite(v) and v>=0 for v in (execution,clock)) and execution>=last_execution and clock>=last_clock,
+                         "invalid or decreasing native timing counter")
+                    last_execution,last_clock=execution,clock
+                    timed+=1
                     w.writerow((count,current,wall,m[1],m[2]))
                     if count==1 or count%1000==0:
                         print(f"{case.name}: {current:g}/200 s | MPI 8 | wall {wall:.1f}s",flush=True)
@@ -157,6 +167,7 @@ def solve(case):
         print("NATIVE_FAILURE",case,"".join(tail),flush=True)
         raise RuntimeError("native solver failed: "+str(rc))
     need(ranks==8 and count==200000,"incomplete native fixed-step run")
+    need(timed==count and current is None,"incomplete native timing coverage")
     return time.monotonic()-started
 
 def execute(case,r):
@@ -187,12 +198,16 @@ def audit(case,r):
     return r
 
 def main():
+    ap=argparse.ArgumentParser(description=__doc__)
+    ap.add_argument("--allow-takeover",action="store_true",help="explicitly authorize stopping prior campaign")
+    a=ap.parse_args()
     need(os.environ.get("WM_PROJECT_VERSION")=="14","load Foundation14")
     need(len(os.sched_getaffinity(0))>=8,"eight CPUs unavailable")
     for cmd in ("foamMultiRun","decomposePar","reconstructPar","foamLog","mpirun"):
         need(shutil.which(cmd),"missing "+cmd)
+    need(not ROOT.is_symlink(),"unsafe fresh campaign root")
     ROOT.mkdir(exist_ok=True)
-    with (ROOT/".queue.lock").open("a") as lock:
+    with q.transfer.checked_relative(ROOT,".queue.lock").open("a") as lock:
         fcntl.flock(lock,fcntl.LOCK_EX|fcntl.LOCK_NB)
         need(q.read(q.SRC/"C14-3DA-200s"/REPORT)["status"]=="SOLVER_COMPLETE_COMPACT_AUDITED","completed reference not confirmed")
         q.mpi_preflight()
@@ -202,7 +217,7 @@ def main():
         prepared={}
         for name in ORDER:
             prepared[name]=fresh_inputs(name,run/name)
-        stop_previous()
+        stop_previous(a.allow_takeover)
         summary={"C14-3DA-200s":{"status":"SERIAL_COMPLETE_PRESERVED","path":str(q.SRC/"C14-3DA-200s")}}
         index=run/"QUEUE_STATUS.json";save(index,summary)
         completed=[]
@@ -235,4 +250,6 @@ def main():
                 summary[case.name].update(status="POSTSOLVER_BLOCKED_PRESERVED",error=str(exc))
             save(index,summary);print("AUDIT_STATUS",case.name,summary[case.name],flush=True)
         print("FRESH_QUEUE_FINISHED",index,flush=True)
+        need(all(summary.get(n,{}).get("status")=="SOLVER_COMPLETE_FIXED_MPI_AUDITED" for n in ORDER),
+             "fresh campaign incomplete; consult "+str(index))
 if __name__=="__main__":main()
