@@ -252,10 +252,13 @@ def temporal_mass_screening(records:list[dict])->dict:
     cumulative=0.0
     contiguous=True
     prev=None
+    integrated_intervals=0
     for r in records:
         if r["time_s"]<first["time_s"]:
             continue
-        if r["rho_mass_kg"] is None or r["phi_metalTop_kg_s_if_readable"] is None:
+        if (r["rho_mass_kg"] is None
+                or r["phi_metalTop_kg_s_if_readable"] is None
+                or r["phi_metal_to_mold_kg_s_if_readable"] is None):
             contiguous=False
             continue
         if not contiguous:
@@ -270,13 +273,15 @@ def temporal_mass_screening(records:list[dict])->dict:
             curflux=(r["phi_metalTop_kg_s_if_readable"]+
                      r["phi_metal_to_mold_kg_s_if_readable"])
             cumulative+=.5*dt*(oldflux+curflux)
+            integrated_intervals+=1
         r["sampled_cumulative_exterior_phi_kg_NOT_SOLVER_DT_INTEGRAL"]=cumulative
         r["mass_delta_plus_sampled_exterior_phi_kg_NOT_CONTINUITY_RESIDUAL"]=(
             r["rho_mass_kg"]-first["rho_mass_kg"]+cumulative)
         prev=r
     last=prev
     screened.update({
-        "saved_time_screening_available":last is not None,
+        "saved_time_screening_available":integrated_intervals > 0,
+        "integrated_contiguous_intervals":integrated_intervals,
         "last_contiguous_joint_time_s":last["time_s"] if last else None,
         "sampled_cumulative_exterior_phi_kg":
             last["sampled_cumulative_exterior_phi_kg_NOT_SOLVER_DT_INTEGRAL"]
@@ -287,7 +292,7 @@ def temporal_mass_screening(records:list[dict])->dict:
             last["mass_delta_plus_sampled_exterior_phi_kg_NOT_CONTINUITY_RESIDUAL"]
             if last else None,
         "complete_uninterrupted_joint_coverage_to_10s":
-            last is not None and last["time_s"]==10.0,
+            integrated_intervals > 0 and last is not None and last["time_s"]==10.0,
     })
     return screened
 
