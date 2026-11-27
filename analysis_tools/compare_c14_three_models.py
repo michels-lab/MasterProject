@@ -36,6 +36,31 @@ def revision(path):
     return subprocess.check_output(
         ["git", "-C", str(path), "rev-parse", "HEAD"], text=True).strip()
 
+def pinned_inventory(root):
+    """Tracked blob IDs at HEAD, relative to the selected case directory."""
+    raw = subprocess.check_output(
+        ["git","-C",str(root),"ls-tree","-r","-z","HEAD","--","."])
+    result={}
+    for entry in raw.split(b"\0"):
+        if not entry:
+            continue
+        meta,name=entry.split(b"\t",1)
+        mode,kind,blob=meta.decode("ascii").split()
+        if kind=="blob" and mode in ("100644","100755"):
+            result[name.decode("utf-8")]=blob
+    return result
+
+
+def pinned_sha(root, path, inventory):
+    require(not path.is_symlink() and path.resolve().is_relative_to(root),
+            "source path escapes archive or is linked")
+    data=path.read_bytes()
+    blob=hashlib.sha1(("blob "+str(len(data))+"\0").encode("ascii")+data).hexdigest()
+    require(inventory.get(str(path.relative_to(root)))==blob,
+            "source differs from pinned Git blob: "+str(path))
+    return hashlib.sha256(data).hexdigest()
+
+
 def nominal_lines(path):
     text = re.sub(r"/\*[\s\S]*?\*/|//[^\n]*", "", path.read_text())
     lines = {}
@@ -126,9 +151,11 @@ def run(a,b,c,out):
         "output must be a new independent directory")
     refs = {k:revision(p) for k,p in roots.items()}
     require(refs == {"A":A_REF,"B":B_REF,"2D":C_REF}, "source revision mismatch")
+    inventories={k:pinned_inventory(p) for k,p in roots.items()}
     ap = roots["A"]/"system"
     cp = roots["2D"]/"system/lineProfiles"
     bp = roots["B"]/"C3D05_B_C14_CORRECTED_SAMPLING_REPORT.json"
+    pinned_sha(roots["B"],bp,inventories["B"])
     br = json.loads(bp.read_text())
     require(br["status"]=="CORRECTED_SAVED_TIME_SAMPLING_VALID" and
             br["checked_original_evidence_unchanged"] and
@@ -143,7 +170,7 @@ def run(a,b,c,out):
     manifest = {"A":{},"B":{},"2D":{}}
     for model,path in [("A",ap/"lineProfiles"),("A",ap/"additional3DProfiles"),
                        ("B",bp),("2D",cp)]:
-        manifest[model][str(path.relative_to(roots[model]))]=sha(path)
+        manifest[model][str(path.relative_to(roots[model]))]=pinned_sha(roots[model],path,inventories[model])
     line_rows, pair_rows = [], []
     for group, lines in br["profiles"].items():
         ag = {"horizontalProfilesB3D":"horizontalProfiles",
@@ -163,12 +190,15 @@ def run(a,b,c,out):
                 for model,rel in relative.items():
                     path = roots[model]/rel
                     require(path.resolve().is_relative_to(roots[model]), "source path escapes archive")
+                    digest=pinned_sha(roots[model],path,inventories[model])
                     rows = read_xy(path,axis,REQUIRED)
+                    require(sha(path)==digest,"source changed during profile read")
                     offset = (.0059 if axis=="x" else -.04) if model=="2D" else 0.
                     maps[model]=station_map(rows,axis,offset)
-                    manifest[model][str(rel)]=sha(path)
+                    manifest[model][str(rel)]=digest
                 matched,keys=match_stations(maps)
-                signature={k:tuple(m) for k,m in maps.items()}
+                signature={k:tuple(sorted((key,value[0]) for key,value in m.items()))
+                           for k,m in maps.items()}
                 require(prior is None or prior==signature, "station grid changed "+name)
                 prior=signature
                 for model,rs in matched.items():
