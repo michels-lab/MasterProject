@@ -3,6 +3,7 @@
 Preserve serial and MPI attempts, then retry only zero-step pressure-reference
 failures. Never run a benchmark or wait for GitHub before CFD.
 """
+import argparse
 import fcntl
 import os
 from pathlib import Path
@@ -40,9 +41,11 @@ def terminate(pid):
     try: os.kill(pid,signal.SIGTERM); os.kill(pid,signal.SIGCONT)
     except ProcessLookupError: pass
 
-def stop_serial():
+def stop_serial(allow_takeover=False):
     names={"run_lab_serial_deadline.py","compact_campaign_200s.py"}
     active=processes()
+    need(allow_takeover or not any(solver(a) or manager(a,names) for _,a in active),
+         "active campaign; explicit --allow-takeover required")
     allowed=[str(q.SRC/n) for n in q.NAMES]
     need(not any(solver(a) and not any(p in a for p in allowed) for _,a in active),
          "unrelated solver active; no interruption")
@@ -159,12 +162,17 @@ def run(start,stage):
         meta["error"]=str(exc) or type(exc).__name__;q.save(p,meta);raise
 
 def main():
+    ap=argparse.ArgumentParser(description=__doc__)
+    ap.add_argument("--allow-takeover",action="store_true",help="explicitly authorize stopping the serial queue")
+    a=ap.parse_args()
     need(os.environ.get("WM_PROJECT_VERSION")=="14","load Foundation14")
     need(len(os.sched_getaffinity(0))>=8,"eight CPUs unavailable")
     need((q.DST/".queue.lock").is_file(),"previous MPI queue missing")
     need(q.read(q.SRC/"C14-3DA-200s"/REPORT)["status"]=="SOLVER_COMPLETE_COMPACT_AUDITED","C14-3DA audit missing")
-    audit=q.HOME/"CAMPAIGN_200S_FIXED_MPI_08_AUDIT";audit.mkdir(exist_ok=True)
-    with (audit/".finalize.lock").open("a") as al,(q.DST/".queue.lock").open("a") as lk:
+    audit=q.HOME/"CAMPAIGN_200S_FIXED_MPI_08_AUDIT"
+    need(not audit.is_symlink() and not q.DST.is_symlink(),"unsafe recovery root")
+    audit.mkdir(exist_ok=True)
+    with q.transfer.checked_relative(audit,".finalize.lock").open("a") as al,q.transfer.checked_relative(q.DST,".queue.lock").open("a") as lk:
         fcntl.flock(al,fcntl.LOCK_EX|fcntl.LOCK_NB)
         fcntl.flock(lk,fcntl.LOCK_EX|fcntl.LOCK_NB)
         q.mpi_preflight()
@@ -173,7 +181,7 @@ def main():
         need(shutil.disk_usage(q.HOME).free>q.transfer.RESERVE+2*q.read(SERIAL/REPORT)["disk_projection"]["projected_bytes_with_50pct_margin"],"insufficient disk budget")
         stage=prepare(start)
         # Only stop the serial queue after the MPI preflight and copied checkpoint pass.
-        stop_serial()
+        stop_serial(a.allow_takeover)
         index=q.DST/"QUEUE_STATUS.json"
         summary=q.read(index) if index.is_file() else {}
         try:summary[NAME]=run(start,stage)
