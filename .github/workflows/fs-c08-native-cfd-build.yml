@@ -13,6 +13,8 @@ on:
       - 'analysis_tools/test_fs_c08_transient_ledger.py'
       - 'analysis_tools/run_fs_c08_batch.py'
       - 'analysis_tools/test_run_fs_c08_batch.py'
+      - 'analysis_tools/fs_c08_momentum_diagnostics.py'
+      - 'analysis_tools/test_fs_c08_momentum_diagnostics.py'
       - '.github/workflows/fs-c08-native-cfd-build.yml'
   pull_request:
     paths:
@@ -24,6 +26,8 @@ on:
       - 'analysis_tools/test_fs_c08_transient_ledger.py'
       - 'analysis_tools/run_fs_c08_batch.py'
       - 'analysis_tools/test_run_fs_c08_batch.py'
+      - 'analysis_tools/fs_c08_momentum_diagnostics.py'
+      - 'analysis_tools/test_fs_c08_momentum_diagnostics.py'
       - '.github/workflows/fs-c08-native-cfd-build.yml'
   workflow_dispatch:
 
@@ -50,6 +54,7 @@ jobs:
           python3 -B -m unittest discover -s analysis_tools -p 'test_run_fs_c08_real_cfd.py' -v
           python3 -B -m unittest discover -s analysis_tools -p 'test_fs_c08_transient_ledger.py' -v
           python3 -B -m unittest discover -s analysis_tools -p 'test_run_fs_c08_batch.py' -v
+          python3 -B -m unittest discover -s analysis_tools -p 'test_fs_c08_momentum_diagnostics.py' -v
 
       # Public setup-openfoam action supports the Foundation org version 14
       # on ubuntu-24.04. It installs the actual headers and shared libraries,
