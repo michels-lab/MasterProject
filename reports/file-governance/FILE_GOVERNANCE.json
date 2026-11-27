@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
   "audit_kind": "deterministic_full_tracked_tree",
-  "tracked_files_total": 42925,
-  "classified_files_total": 42920,
-  "docs_content_inspected": 245,
+  "tracked_files_total": 42927,
+  "classified_files_total": 42922,
+  "docs_content_inspected": 246,
   "large_docs_skipped": 1,
   "excluded_reports": 5,
   "roles": {
@@ -12,14 +12,14 @@
     "bitacora": 5,
     "config": 33,
     "data": 39,
-    "document": 204,
+    "document": 205,
     "index": 37,
     "license": 1,
     "simulation_case_file": 141,
     "simulation_input": 2683,
     "simulation_log": 3264,
     "simulation_output": 36203,
-    "source": 179,
+    "source": 180,
     "test": 81,
     "unknown": 1,
     "web_ui": 1,
@@ -31,8 +31,8 @@
     "UNKNOWN_PURPOSE": 1
   },
   "finding_total": 10,
-  "inventory_fingerprint": "925223cbae5cdd70dc9c110e0267ef5a82a7d7c6fd75b4572d069635652d8a49",
-  "evidence_fingerprint": "ba5c4d0c55b4fc7311d0efac33129172d8c21bb0dca531af0de5829c7c9ee2aa",
+  "inventory_fingerprint": "6dc8e4299f589cfc9fa20f56682757243e23193af19c9c3f15089df1da34266d",
+  "evidence_fingerprint": "5d5b906518a6e1d8eaf708ed30e0f787a5eb2e477bddc8c6fc9b8bc8debcc04e",
   "files": [
     {
       "path": ".github/agents/openfoam-solidification.agent.md",
@@ -298848,7 +298848,7 @@
       "role": "config",
       "purpose": "machine-readable configuration",
       "certainty": "rule",
-      "blob": "4fa01e88abd426522f89095147ae09725969a747"
+      "blob": "da3c8b713f204f36dc32835442e255c2cbef6a72"
     },
     {
       "path": "docs/C3D_01_ESTADO_REAL_20261110_ES.md",
@@ -299227,6 +299227,13 @@
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
       "blob": "62070912470bd0d05960158723d92e463088ec2b"
+    },
+    {
+      "path": "docs/granada/C3D04_A2_FOAMLENS_PILOT_20261127_ES.md",
+      "role": "document",
+      "purpose": "manual/decision/report/historical note",
+      "certainty": "inferred",
+      "blob": "43a27c5dbcab5fe51573206d2701122bd3fa563a"
     },
     {
       "path": "docs/granada/C3D04_A_NATIVE_THERMAL_OBSERVED_20261127_ES.md",
@@ -300342,6 +300349,13 @@
       "blob": "643f37ef18fa58542cf839adef9d1988a0ab02c9"
     },
     {
+      "path": "tools/recover_published_200s.py",
+      "role": "source",
+      "purpose": "code/test implementation",
+      "certainty": "rule",
+      "blob": "57138d53a126da3ab6ff27f2613cc81812beb58b"
+    },
+    {
       "path": "tools/repository_file_auditor.py",
       "role": "source",
       "purpose": "code/test implementation",
@@ -300540,20 +300554,20 @@
       "state": "REVIEW_REQUIRED"
     },
     {
-      "id": "756dec5822a829e9",
+      "id": "5cd66010f8e762e5",
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_EN.md",
-      "observation": "17 implementation/config paths changed since this log's last commit; examples: .github/workflows/c14-three-model-comparison.yml, analysis_tools/check_run_registry.py, analysis_tools/compare_c14_three_models.py, analysis_tools/full_campaign_audit.py, analysis_tools/test_compare_c14_three_models.py, cases_3d/C3D_05_step_gmsh_conformal/c14_physics/analyze_existing_case_b_c14_metal_mass_phi.py",
+      "observation": "18 implementation/config paths changed since this log's last commit; examples: .github/workflows/c14-three-model-comparison.yml, analysis_tools/check_run_registry.py, analysis_tools/compare_c14_three_models.py, analysis_tools/full_campaign_audit.py, analysis_tools/test_compare_c14_three_models.py, cases_3d/C3D_05_step_gmsh_conformal/c14_physics/analyze_existing_case_b_c14_metal_mass_phi.py",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     },
     {
-      "id": "d20baf27e40e7d09",
+      "id": "66ab6006058b82b6",
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_ES.md",
-      "observation": "17 implementation/config paths changed since this log's last commit; examples: .github/workflows/c14-three-model-comparison.yml, analysis_tools/check_run_registry.py, analysis_tools/compare_c14_three_models.py, analysis_tools/full_campaign_audit.py, analysis_tools/test_compare_c14_three_models.py, cases_3d/C3D_05_step_gmsh_conformal/c14_physics/analyze_existing_case_b_c14_metal_mass_phi.py",
+      "observation": "18 implementation/config paths changed since this log's last commit; examples: .github/workflows/c14-three-model-comparison.yml, analysis_tools/check_run_registry.py, analysis_tools/compare_c14_three_models.py, analysis_tools/full_campaign_audit.py, analysis_tools/test_compare_c14_three_models.py, cases_3d/C3D_05_step_gmsh_conformal/c14_physics/analyze_existing_case_b_c14_metal_mass_phi.py",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     },
