@@ -161,6 +161,18 @@ object cellZones;
             with self.assertRaisesRegex(ValueError,"overlap"):
                 S.protect(source,source/"nested")
 
+    def test_ancestor_symlink_and_dotdot_cannot_bypass_source_guard(self):
+        with TemporaryDirectory() as folder:
+            root=Path(folder)
+            source=root/"source"
+            source.mkdir()
+            alias=root/"alias"
+            alias.symlink_to(source, target_is_directory=True)
+            with self.assertRaisesRegex(ValueError,"overlap"):
+                S.protect(source,alias/"new_parent"/"new_case")
+            with self.assertRaisesRegex(ValueError,"overlap"):
+                S.protect(source,root/"other"/".."/"source"/"new_case")
+
     def test_original_C14_only_full_timing_and_no_shrinkage_claim(self):
         inputdict=self.bcase["system/controlDict"]
         self.assertRegex(inputdict,r"\bendTime\s+10\s*;")
