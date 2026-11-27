@@ -1,0 +1,233 @@
+#!/usr/bin/env python3
+"""Stream verified 200 s native logs without running OpenFOAM.
+
+Continuity and linear solver residuals are diagnostics, not conservation
+certificates. Record every occurrence, without assuming a fixed PIMPLE count.
+"""
+from __future__ import annotations
+import argparse
+import csv
+import hashlib
+import json
+import math
+from pathlib import Path
+import re
+import tempfile
+
+NUM = r"[-+]?(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][-+]?\d+)?"
+VALUE = r"(?:(" + NUM + r")|([-+]?(?:nan|inf(?:inity)?)))"
+TIME = re.compile(r"^\s*Time\s*=\s*("+NUM+r")\s*s?\s*$")
+CONT = re.compile(r"time step continuity errors\s*:\s*sum local\s*=\s*("+NUM+r"),\s*global\s*=\s*("+NUM+r"),\s*cumulative\s*=\s*("+NUM+r")",re.I)
+SOLVE = re.compile(r"Solving for\s+([^,]+),\s*Initial residual\s*=\s*("+NUM+r"),\s*Final residual\s*=\s*("+NUM+r"),\s*No Iterations\s+(\d+)",re.I)
+CO = re.compile(r"Courant Number\s+mean\s*:\s*("+NUM+r")\s+max\s*:\s*("+NUM+r")",re.I)
+REGION = re.compile(r"^\s*Solving for\s+(?:fluid|solid)\s+region\s+(\S+)\s*$",re.I)
+REGION_OTHER = re.compile(r"^\s*Solving for\s+region\s+(\S+)\s*$",re.I)
+END = re.compile(r"^\s*End\s*$")
+FATAL = re.compile(r"FOAM FATAL|Floating point exception|MPI_ABORT|Segmentation fault",re.I)
+EXEC = re.compile(r"^\s*ExecutionTime\s*=")
+
+def need(ok, message):
+    if not ok:
+        raise ValueError(message)
+
+def sha(path):
+    h=hashlib.sha256()
+    with path.open("rb") as f:
+        for block in iter(lambda:f.read(1024*1024),b""):
+            h.update(block)
+    return h.hexdigest()
+
+def finite(*values):
+    return all(math.isfinite(x) for x in values)
+
+def parse_log(stream, writers):
+    """Retain native line ordering, including multiple events per physical step."""
+    time=None
+    step=0
+    region=""
+    end_count=0
+    last_end_line=0
+    completed=0
+    current_exec=0
+    malformed=0
+    fatal_count=0
+    unassigned=0
+    pre_time_co=0
+    cont_count=0
+    pressure_count=0
+    co_count=0
+    cont_steps=0
+    pressure_steps=0
+    has_cont=False
+    has_pressure=False
+    max_local=None
+    max_global_abs=None
+    last_cumulative=None
+    max_pressure_final=None
+    max_co=None
+    for line_no,line in enumerate(stream,1):
+        if FATAL.search(line):
+            fatal_count+=1
+        match=TIME.match(line)
+        if match:
+            new=float(match[1])
+            need(math.isfinite(new) and new>=0 and (time is None or new>time),
+                 "non-increasing or invalid native Time at line "+str(line_no))
+            if time is not None:
+                completed+=int(current_exec==1)
+                cont_steps+=int(has_cont)
+                pressure_steps+=int(has_pressure)
+            time=new
+            step+=1
+            region=""
+            current_exec=0
+            has_cont=False
+            has_pressure=False
+            continue
+        marker=REGION.match(line) or REGION_OTHER.match(line)
+        if marker:
+            region=marker[1]
+            continue
+        if END.match(line):
+            end_count+=1
+            last_end_line=line_no
+        if EXEC.match(line) and time is not None:
+            current_exec+=1
+        if "time step continuity errors" in line.lower():
+            match=CONT.search(line)
+            if not match:
+                malformed+=1
+                continue
+            local,global_,cumulative=map(float,match.groups())
+            if not finite(local,global_,cumulative) or local<0:
+                malformed+=1
+                continue
+            if time is None:
+                unassigned+=1
+                continue
+            cont_count+=1
+            has_cont=True
+            max_local=local if max_local is None else max(max_local,local)
+            max_global_abs=abs(global_) if max_global_abs is None else max(max_global_abs,abs(global_))
+            last_cumulative=cumulative
+            writers["continuity"].writerow([line_no,step,time,region,local,global_,cumulative])
+        elif "Solving for" in line and "residual" in line:
+            match=SOLVE.search(line)
+            if not match:
+                malformed+=1
+                continue
+            field=match[1].strip()
+            initial,final=float(match[2]),float(match[3])
+            if not finite(initial,final) or min(initial,final)<0:
+                malformed+=1
+                continue
+            if time is None:
+                unassigned+=1
+                continue
+            writers["linear_solves"].writerow([line_no,step,time,region,field,initial,final,int(match[4])])
+            if field=="p_rgh":
+                pressure_count+=1
+                has_pressure=True
+                max_pressure_final=final if max_pressure_final is None else max(max_pressure_final,final)
+        elif "Courant Number" in line:
+            match=CO.search(line)
+            if not match:
+                malformed+=1
+                continue
+            mean,maximum=map(float,match.groups())
+            if not finite(mean,maximum) or min(mean,maximum)<0:
+                malformed+=1
+                continue
+            co_count+=1
+            max_co=maximum if max_co is None else max(max_co,maximum)
+            pre_time_co+=int(time is None)
+            # Co can be printed BEFORE the next Time marker; do not claim
+            # the previous marker is the physical time of the Co calculation.
+            writers["courant"].writerow([line_no,step if time is not None else "",time if time is not None else "",region,mean,maximum])
+    if time is not None:
+        completed+=int(current_exec==1)
+        cont_steps+=int(has_cont)
+        pressure_steps+=int(has_pressure)
+    return {"time_markers":step,"last_time_s":time,"steps_with_exactly_one_execution_time":completed,
+            "end_markers":end_count,"last_end_line":last_end_line,"fatal_markers":fatal_count,
+            "malformed_diagnostic_lines":malformed,"unassigned_continuity_or_solve_lines":unassigned,
+            "continuity_events":cont_count,"steps_with_continuity":cont_steps,
+            "pressure_events":pressure_count,"steps_with_p_rgh_solve":pressure_steps,
+            "max_continuity_sum_local":max_local,"max_abs_continuity_global":max_global_abs,
+            "last_cumulative_continuity_as_printed":last_cumulative,
+            "max_p_rgh_final_residual":max_pressure_final,"courant_events":co_count,
+            "courant_before_first_time":pre_time_co,"max_logged_courant":max_co}
+
+def audit(root,out,index):
+    root=root.resolve(strict=True)
+    raw=out.expanduser().absolute()
+    out=raw.resolve()
+    need(not raw.is_symlink() and not out.exists() and out!=root and
+         root not in out.parents and out not in root.parents,
+         "choose a new output outside the recovered archive")
+    receipt=json.loads((root/"VERIFIED_RECOVERY.json").read_text())
+    m=receipt["manifest"]
+    match=[e for e in index["branches"] if e.get("sha")==receipt["source_commit"]
+           and e.get("complete") is True and e.get("manifest_blob_sha")==receipt["manifest_blob"]]
+    need(len(match)==1,"recovery not pinned in current index")
+    e=match[0]
+    need(all(m.get(k)==e.get(k) for k in
+             ("case","kind","solver_steps","final_time_s","archive_sha256","report_sha256","time_mode")),
+         "recovery manifest metadata mismatch")
+    need(m["case"] in {"B14-2D-200s","C14-2D-200s","C14-3DA-200s","C14-3DB-200s"},
+         "unexpected case")
+    case=root/m["case"]
+    log=case/"log.foamMultiRun"
+    report=case/"CAMPAIGN_200S_REPORT.json"
+    need(log.resolve().is_relative_to(root) and report.resolve().is_relative_to(root)
+         and sha(log)==m["solver_log_sha256"] and sha(report)==m["report_sha256"],
+         "native log or report provenance mismatch")
+    need(out.parent.is_dir(),"output parent must exist")
+    with tempfile.TemporaryDirectory(prefix=".native_log_audit_",dir=out.parent) as tmp:
+        staged=Path(tmp)/"report"
+        staged.mkdir()
+        headers={
+            "continuity":["line","step","time_s","last_explicit_region_marker","sum_local","global","cumulative"],
+            "linear_solves":["line","step","time_s","last_explicit_region_marker","field","initial_residual","final_residual","iterations"],
+            "courant":["line","previous_time_marker_step","previous_time_marker_s","last_explicit_region_marker","mean","max"]}
+        from contextlib import ExitStack
+        with ExitStack() as stack:
+            writers={}
+            for name,header in headers.items():
+                f=stack.enter_context((staged/(name+".csv")).open("x",newline=""))
+                writers[name]=csv.writer(f)
+                writers[name].writerow(header)
+            with log.open(encoding="utf-8",errors="strict") as stream:
+                summary=parse_log(stream,writers)
+        expected=m["solver_steps"]
+        gates={"step_count_matches":summary["time_markers"]==expected,
+               "execution_markers_match":summary["steps_with_exactly_one_execution_time"]==expected,
+               "final_time_matches":summary["last_time_s"]==m["final_time_s"],
+               "one_end_no_fatal":summary["end_markers"]==1 and summary["fatal_markers"]==0,
+               "no_malformed_diagnostics":summary["malformed_diagnostic_lines"]==0,
+               "continuity_each_step":summary["steps_with_continuity"]==expected,
+               "pressure_each_step":summary["steps_with_p_rgh_solve"]==expected}
+        result={"source_commit":e["sha"],"case":m["case"],"source_log_sha256":sha(log),
+                "expected_steps":expected,"diagnostics":summary,"gates":gates,
+                "status":"LOG_DIAGNOSTICS_COVERAGE_OK" if all(gates.values()) else "LOG_DIAGNOSTICS_REVIEW_REQUIRED",
+                "mass_conservation_verified":False,"energy_conservation_verified":False,
+                "physical_validation":False,"solver_rerun":False,
+                "notes":"Native cumulative continuity as printed, not integrated mass. Region label is last explicit marker only. Co rows use previous Time marker, not necessarily physical time. No fixed iteration count assumed.",
+                "output_sha256":{p.name:sha(p) for p in staged.iterdir()}}
+        (staged/"REPORT.json").write_text(json.dumps(result,indent=2)+"\n")
+        need(not out.exists(),"destination appeared during audit")
+        staged.rename(out)
+    print(result["status"],out)
+    return all(gates.values())
+
+def main():
+    p=argparse.ArgumentParser(description=__doc__)
+    p.add_argument("--recovered",type=Path,required=True)
+    p.add_argument("--out",type=Path,required=True)
+    p.add_argument("--index",type=Path,default=Path(__file__).resolve().parents[1]/"docs/MAESTRIA_RESULT_MANIFEST_INDEX_20261127.json")
+    a=p.parse_args()
+    if not audit(a.recovered,a.out,json.loads(a.index.read_text())):
+        raise SystemExit(2)
+
+if __name__=="__main__":
+    main()
