@@ -10,6 +10,7 @@ import hashlib
 import gzip
 from contextlib import contextmanager
 import json
+import math
 import os
 from pathlib import Path
 import re
@@ -47,11 +48,25 @@ def sha(p):
     return h.hexdigest()
 def read(p):return json.loads(p.read_text())
 def dump(p,x):p.write_text(json.dumps(x,indent=2)+"\n")
+def checked_relative(root,rel):
+    """Reject traversal and every symlink within the supplied root."""
+    rp=Path(rel)
+    need(not rp.is_absolute() and rp.parts and ".." not in rp.parts,
+         "invalid relative path "+str(rel))
+    need(root.is_dir() and not root.is_symlink(),"unsafe root "+str(root))
+    q=root
+    for part in rp.parts:
+        q=q/part
+        need(not q.is_symlink(),"symlink path "+str(q))
+    need(q.resolve().is_relative_to(root.resolve()),"outside root "+str(q))
+    return q
 def input_hashes(p):
     h={}
     for d in ("0","constant","system"):
-        for q in (p/d).rglob("*"):
-            need(not q.is_symlink(),"symlink input: "+str(q))
+        folder=checked_relative(p,d)
+        need(folder.is_dir(),"missing input directory "+str(folder))
+        for q in folder.rglob("*"):
+            checked_relative(p,q.relative_to(p))
             if q.is_file():h[str(q.relative_to(p))]=sha(q)
     return h
 def root_url(repo):
@@ -90,24 +105,24 @@ def snapshot_inputs(src,dst,peer,expected_name,compact,solver_sha):
     more files in 0 or changed the local report. Recover a missing input from
     its dense/compact counterpart only when the exact expected SHA matches.
     """
-    r=read(src/REPORT)
+    r=read(checked_relative(src,REPORT))
     need(r["case"]==expected_name,"wrong identity "+str(src))
     manifest=r["input_sha256"]
     need(isinstance(manifest,dict) and manifest,"missing original input manifest "+str(src))
     if compact:
-        dense=read(peer/REPORT)
+        dense=read(checked_relative(peer,REPORT))
         need(r["source_input_sha256"]==dense["input_sha256"],"dense provenance mismatch "+expected_name)
         need(r["implementation_sha256"]==solver_sha,"prepared solver differs from pinned script")
     dst.mkdir(parents=True)
     recovered=[]
     for rel,h in sorted(manifest.items()):
         rp=Path(rel)
-        need(not rp.is_absolute() and ".." not in rp.parts and rp.parts[0] in ("0","constant","system"),"invalid input path "+rel)
-        p=src/rp
+        need(not rp.is_absolute() and len(rp.parts)>1 and ".." not in rp.parts and rp.parts[0] in ("0","constant","system"),"invalid input path "+rel)
+        p=checked_relative(src,rp)
         def exact(q,root):
             return q.is_file() and not q.is_symlink() and q.resolve().is_relative_to(root.resolve()) and sha(q)==h
         if not exact(p,src):
-            p=peer/rp
+            p=checked_relative(peer,rp)
             need(exact(p,peer),"original input SHA unavailable: "+expected_name+" / "+rel+" (neither source nor counterpart matches)")
             recovered.append(rel)
         target=dst/rp;target.parent.mkdir(parents=True,exist_ok=True)
@@ -190,6 +205,7 @@ def preview(case,work):
                 if not line.strip():continue
                 try:t=float(line.split()[0])
                 except ValueError:continue
+                need(math.isfinite(t) and math.isfinite(t*10),"nonfinite probe time "+str(p))
                 if abs(t*10-round(t*10))<1e-7:out.write(line)
     for group in ("metalTopPhiSum","metalTopEnergyPower","metalMoldEnergyPower","metalBoundaryEnergyPower",
                   "metalSensibleEnthalpy","metalMeanLiquidFraction","metalLatentHeatPower","metalMeanCoolingRate",
@@ -258,9 +274,7 @@ def extract(archive,dst):
         for member in t:
             p=Path(member.name)
             need(not p.is_absolute() and ".." not in p.parts and (member.isdir() or member.isfile()),"unsafe archive path")
-            target=dst/p
-            need(not target.is_symlink(),"symlink destination")
-            need(target.resolve().is_relative_to(dst.resolve()),"outside extraction")
+            target=checked_relative(dst,p)
             if member.isdir():target.mkdir(parents=True,exist_ok=True)
             else:
                 target.parent.mkdir(parents=True,exist_ok=True)
@@ -290,6 +304,7 @@ def push_inputs(repo,url):
 def install_inputs(url):
     HOME.mkdir(exist_ok=True)
     # Existing copies must match the pinned input archive; never overwrite.
+    need(not DENSE.is_symlink() and not COMPACT.is_symlink(),"unsafe campaign root")
     if DENSE.exists() or COMPACT.exists():
         need(DENSE.is_dir() and COMPACT.is_dir(),"only one campaign root exists; preserve")
         for name in ORDER:
@@ -306,7 +321,7 @@ def install_inputs(url):
                      "attempted case missing preparation provenance "+name)
                 for rel,h in b["input_sha256"].items():
                     if rel.startswith(("constant/","system/")):
-                        q=COMPACT/name/rel
+                        q=checked_relative(COMPACT/name,rel)
                         need(q.is_file() and sha(q)==h,"attempted case physical input changed "+name+" "+rel)
         need((HOME/"compact_campaign_200s.py").is_file(),"solver script missing")
         need(all(sha(HOME/"compact_campaign_200s.py")==read(COMPACT/n/REPORT)["implementation_sha256"] for n in ORDER),"existing solver differs from prepared inputs")
@@ -324,6 +339,13 @@ def install_inputs(url):
         if script.exists():need(sha(script)==sha(stage/script.name),"existing script differs")
         else:shutil.copy2(stage/script.name,script)
         (stage/DENSE.name).rename(DENSE);(stage/COMPACT.name).rename(COMPACT)
+def verify_existing_result(manifest,case):
+    need(manifest.get("complete") is True and manifest.get("kind")=="scientific_results"
+         and manifest.get("case")==case.name and manifest.get("final_time_s")==200
+         and manifest.get("solver_steps")==200000,"existing publication identity differs")
+    for field,name in (("solver_log_sha256","log.foamMultiRun"),("report_sha256",REPORT)):
+        need(manifest.get(field)==sha(checked_relative(case,name)),
+             "existing publication differs: "+field)
 def run_all(url):
     need(os.environ.get("WM_PROJECT_VERSION")=="14","load Foundation14 first")
     install_inputs(url)
@@ -341,7 +363,7 @@ def run_all(url):
                 need(r.get("solver_completed"),f"CFD not completed (exit {rc}); preserve logs")
             manifest=complete_manifest(url,branch)
             if manifest is not None:
-                need(manifest["solver_log_sha256"]==sha(case/"log.foamMultiRun"),"existing publication differs")
+                verify_existing_result(manifest,case)
                 summary[name]={"status":r["status"],"publication":branch,"already_published":True}
             else:
                 with tempfile.TemporaryDirectory(prefix="campaign-result-",dir=HOME) as d:
@@ -361,12 +383,13 @@ def run_all(url):
 def get_results(url):
     dest=HOME/"CAMPAIGN_200S_HOME_RESULTS_01"
     need(COMPACT.is_dir(),"prepared laptop compact inputs required")
+    need(not dest.is_symlink(),"unsafe result root")
     dest.mkdir(exist_ok=True)
     for name in RUN_ORDER:
         branch=RESULT_PREFIX+name
         if complete_manifest(url,branch) is None:
             print("NOT PUBLISHED OR INCOMPLETE",name,flush=True);continue
-        target=dest/name
+        target=checked_relative(dest,name)
         if target.exists():
             print("EXISTING PRESERVED",target,flush=True);continue
         with tempfile.TemporaryDirectory(prefix="home-results-",dir=HOME) as d:
@@ -377,6 +400,7 @@ def get_results(url):
             need(sha(case/REPORT)==m["report_sha256"] and sha(case/"log.foamMultiRun")==m["solver_log_sha256"],"result provenance mismatch")
             r=read(case/REPORT)
             need(r["solver_completed"] and r["final_time_s"]==200,"incomplete result")
+            input_hashes(COMPACT/name) # reject linked source directories before copying
             for folder in ("0","constant","system"):shutil.copytree(COMPACT/name/folder,case/folder)
             need(input_hashes(case)==r["input_sha256"],"home mesh/input differs from laboratory result")
             (case/(name+".foam")).touch()
