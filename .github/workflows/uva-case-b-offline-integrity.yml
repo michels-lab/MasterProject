@@ -1,0 +1,34 @@
+name: Case B offline integrity
+on:
+  push:
+    paths:
+      - 'cases_3d/C3D_05_step_gmsh_conformal/c14_physics/POSTPROCESAR_CASO_B_C14_EXISTENTE.py'
+      - 'cases_3d/C3D_05_step_gmsh_conformal/c14_physics/EJECUTAR_CASO_B_C14_COMPLETO.sh'
+      - 'cases_3d/C3D_05_step_gmsh_conformal/c14_physics/test_uva_case_b_offline_integrity.py'
+      - '.github/workflows/uva-case-b-offline-integrity.yml'
+  pull_request:
+    paths:
+      - 'cases_3d/C3D_05_step_gmsh_conformal/c14_physics/**'
+      - '.github/workflows/uva-case-b-offline-integrity.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  synthetic:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Static syntax and synthetic isolation only
+        working-directory: cases_3d/C3D_05_step_gmsh_conformal/c14_physics
+        run: |
+          python -m py_compile POSTPROCESAR_CASO_B_C14_EXISTENTE.py
+          python -m unittest -v test_uva_case_b_offline_integrity
+          bash -n EJECUTAR_CASO_B_C14_COMPLETO.sh
+          set +e
+          bash EJECUTAR_CASO_B_C14_COMPLETO.sh --post-only invalid
+          code=$?
+          set -e
+          test "$code" -eq 2
