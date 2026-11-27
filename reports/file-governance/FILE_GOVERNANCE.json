@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
   "audit_kind": "deterministic_full_tracked_tree",
-  "tracked_files_total": 42951,
-  "classified_files_total": 42946,
-  "docs_content_inspected": 257,
+  "tracked_files_total": 42952,
+  "classified_files_total": 42947,
+  "docs_content_inspected": 258,
   "large_docs_skipped": 1,
   "excluded_reports": 5,
   "roles": {
@@ -12,7 +12,7 @@
     "bitacora": 5,
     "config": 33,
     "data": 43,
-    "document": 216,
+    "document": 217,
     "index": 37,
     "license": 1,
     "simulation_case_file": 141,
@@ -31,8 +31,8 @@
     "UNKNOWN_PURPOSE": 1
   },
   "finding_total": 10,
-  "inventory_fingerprint": "950ec110cc6c80e302a698eceacc0ab4e7f1fcb9ff37ab5066867552f664b09c",
-  "evidence_fingerprint": "207a1bb14955f550e6837a6de79181bd0472af45dd45b3f6ed01de4fc0e09f44",
+  "inventory_fingerprint": "5b6e9daa22ccbf2f95951cd4087380d8d31413fe870bfcad5cddce542dc0db52",
+  "evidence_fingerprint": "6b5a2a066d2b521e66d1a4dec130cca8b06dbc0fac140565bdcd9b0eda6ba596",
   "files": [
     {
       "path": ".github/agents/openfoam-solidification.agent.md",
@@ -270,7 +270,7 @@
       "role": "workflow",
       "purpose": "GitHub Actions automation",
       "certainty": "rule",
-      "blob": "9f4064db5f2bb2a27de111aaea3142d472eb6e22"
+      "blob": "548666268e98e8801753c689b8c38534709455f5"
     },
     {
       "path": ".github/workflows/quickcup-research-audit.yml",
@@ -480,7 +480,7 @@
       "role": "data",
       "purpose": "structured/research data (semantics not validated)",
       "certainty": "rule",
-      "blob": "6bf48f133a7dcf448b291b52a1a3d6bec51e6d1f"
+      "blob": "fbdad9d98ca9256f05daab87342e9bfb19c8b569"
     },
     {
       "path": "RUN_MASTER_PROTOCOL.md",
@@ -543,7 +543,7 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "cd3224a68e7581d662144237319a37552d5b0505"
+      "blob": "a4be88c33631300c5491069fdb0995f097253963"
     },
     {
       "path": "analysis_results/evidence_catalog_20261127/alpha200s_comparison.csv",
@@ -557,14 +557,14 @@
       "role": "data",
       "purpose": "structured/research data (semantics not validated)",
       "certainty": "rule",
-      "blob": "aba1af6aa7a7c3afe26ca1b4985a4babf46c006e"
+      "blob": "d046f8e8239d8a6f7eccb02de7c0875e9cee01d0"
     },
     {
       "path": "analysis_results/evidence_catalog_20261127/case_evidence_catalog.csv",
       "role": "data",
       "purpose": "structured/research data (semantics not validated)",
       "certainty": "rule",
-      "blob": "279f0f30426034b79b6996990b10c51801801662"
+      "blob": "6c2ba058b538f3c735d23bf3fc721c8fb4db6847"
     },
     {
       "path": "analysis_results/evidence_catalog_20261127/partial_energy200s_screening.csv",
@@ -872,7 +872,7 @@
       "role": "source",
       "purpose": "code/test implementation",
       "certainty": "rule",
-      "blob": "e8c88a5c0a9dd649f986e17a9087af29ebe7d0eb"
+      "blob": "6811bb5af31c55f054d1a3680940b5961d6ed231"
     },
     {
       "path": "analysis_tools/boundary_flux_audit.py",
@@ -299716,7 +299716,7 @@
       "role": "unknown",
       "purpose": "function unknown: owner classification required",
       "certainty": "unknown",
-      "blob": "48e7de63eeee5fd74313cdc2f61822be555c4fee"
+      "blob": "013c12c1b1987528a26f923fc35c6ac395fac3c0"
     },
     {
       "path": "docs/review/GENERAL_REGISTRY_AUDIT_20261127_ES.md",
@@ -299787,6 +299787,13 @@
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
       "blob": "ae694986d4f4d69080aa1f6f3282861bf1b6b1ef"
+    },
+    {
+      "path": "docs/review/UVA_RECOVERY_CATALOG_20261127_ES.md",
+      "role": "document",
+      "purpose": "manual/decision/report/historical note",
+      "certainty": "inferred",
+      "blob": "2b93afb5a81df6a035f6dfe56d52d7e9098f59e7"
     },
     {
       "path": "docs/review/UVA_TRANSFER_INTEGRITY_20261127_ES.md",
@@ -300437,7 +300444,7 @@
       "role": "source",
       "purpose": "code/test implementation",
       "certainty": "rule",
-      "blob": "d27115cdad8dd67c8695b1013f614665288bfe85"
+      "blob": "6aef92b5e8a04ebf7f2f590b847b3707927bb24e"
     },
     {
       "path": "tools/check_project_delivery_contract.py",
@@ -300619,7 +300626,7 @@
       "role": "test",
       "purpose": "code/test implementation",
       "certainty": "rule",
-      "blob": "4d9a56a0ba8f6062c36dcb4c440b11908cd4380f"
+      "blob": "3f0916322e2885d9f0183726c536a2cbddbcd987"
     },
     {
       "path": "tools/test_repository_file_auditor.py",
@@ -300722,20 +300729,20 @@
       "state": "REVIEW_REQUIRED"
     },
     {
-      "id": "ab345dcd04cc872f",
+      "id": "63b7acfda3b799b3",
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_EN.md",
-      "observation": "1 implementation/config paths changed since this log's last commit; examples: tools/recover_published_200s.py",
+      "observation": "5 implementation/config paths changed since this log's last commit; examples: .github/workflows/project-delivery-contract.yml, analysis_tools/audit_recovered_200s_log.py, tools/check_lab_manifest_consistency.py, tools/recover_published_200s.py, tools/test_recover_published_200s.py",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     },
     {
-      "id": "8c7e00b52bd63f3f",
+      "id": "129de1a3fc5d5ea5",
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_ES.md",
-      "observation": "1 implementation/config paths changed since this log's last commit; examples: tools/recover_published_200s.py",
+      "observation": "5 implementation/config paths changed since this log's last commit; examples: .github/workflows/project-delivery-contract.yml, analysis_tools/audit_recovered_200s_log.py, tools/check_lab_manifest_consistency.py, tools/recover_published_200s.py, tools/test_recover_published_200s.py",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     },
