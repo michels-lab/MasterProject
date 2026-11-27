@@ -31,7 +31,7 @@
     "UNKNOWN_PURPOSE": 1
   },
   "finding_total": 10,
-  "inventory_fingerprint": "037f0087e5dcb948d870484b94a6c41657a70e7aa566c9aff01294a91f1649c6",
+  "inventory_fingerprint": "6a5ed997305c1f1aca1d6c83f5f7280a891b2c011ee957a4a1b6c7bfec047f4a",
   "evidence_fingerprint": "be28100cac072ba45c54343b07616c06b66f4ffb92b0537985aa36d282dd3071",
   "files": [
     {
@@ -466,7 +466,7 @@
       "role": "data",
       "purpose": "structured/research data (semantics not validated)",
       "certainty": "rule",
-      "blob": "9ebacf7e5c9c864b6e10dbe7ba31713fcafdacf6"
+      "blob": "6bf48f133a7dcf448b291b52a1a3d6bec51e6d1f"
     },
     {
       "path": "RUN_MASTER_PROTOCOL.md",
