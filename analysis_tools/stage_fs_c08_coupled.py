@@ -37,6 +37,21 @@ def require(flag: bool, why: str) -> None:
         raise ValueError("FS-C08 COUPLED STAGING BLOCKED: "+why)
 
 
+def isolated_new_directory(path: Path, *protected: Path) -> Path:
+    """Resolve parent aliases before checking that a new destination is isolated."""
+    raw = path.expanduser().absolute()
+    require(not raw.exists() and not raw.is_symlink(),
+            "destination already exists; never overwrite a CFD run")
+    resolved = raw.resolve(strict=False)
+    require(not resolved.exists(), "resolved destination already exists")
+    for item in protected:
+        guard = item.expanduser().resolve()
+        require(resolved != guard and guard not in resolved.parents
+                and resolved not in guard.parents,
+                "destination overlaps protected path: " + str(guard))
+    return resolved
+
+
 def sha(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
@@ -202,7 +217,7 @@ def stage(source: Path, material: Path, output: Path,
             "harmonic mobility is restricted to controlled laminar startup probes")
     source=source.expanduser().resolve()
     material=material.expanduser().resolve()
-    output=output.expanduser().absolute()
+    output=isolated_new_directory(output, source, ROOT)
     require(source.is_dir() and source.name.startswith("FS_C07_THERMAL_"),
             "requires preserved, accepted FS-C07 native input source")
     require(source!=ROOT and ROOT not in source.parents,
