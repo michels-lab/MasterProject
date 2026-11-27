@@ -41,5 +41,25 @@ class LedgerTest(unittest.TestCase):
             self.assertFalse(report["global_energy_verified"])
             self.assertTrue((Path(tmp)/"FS_C08_TRANSIENT_LEDGER.csv").is_file())
 
+    def test_duplicate_marker_is_not_complete(self):
+        log = log_at(1e-6)
+        rows, issues = extract(log + "\n" + log.splitlines()[0])
+        self.assertFalse(rows[0]["all_native_ledgers_present"])
+        self.assertTrue(any("duplicate state" in x for x in issues))
+
+    def test_unconverged_pressure_is_not_complete(self):
+        rows, issues = extract(log_at(1e-6).replace(
+            "pressureVolumeEnergyIterationConverged=1.0",
+            "pressureVolumeEnergyIterationConverged=0.0"))
+        self.assertFalse(rows[0]["all_native_ledgers_present"])
+        self.assertTrue(any("pressure closure not converged" in x for x in issues))
+
+    def test_history_not_compared_across_incomplete_time(self):
+        rows, issues = extract("\n".join((
+            log_at(1e-6), log_at(2e-6, skip="energy"), log_at(3e-6))))
+        self.assertFalse(rows[1]["all_native_ledgers_present"])
+        self.assertTrue(rows[2]["all_native_ledgers_present"])
+        self.assertNotIn("metalHistoryMismatch_kg", rows[2])
+
 if __name__ == "__main__":
     unittest.main()
