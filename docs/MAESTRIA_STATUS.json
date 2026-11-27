@@ -163,5 +163,16 @@
       -139.172
     ],
     "physical_validation": false
+  },
+  "file_review": {
+    "protocol": "docs/review/README.md",
+    "ledger": "docs/review/FILE_REVIEW_LEDGER.jsonl",
+    "queue": "tools/file_review_queue.py",
+    "initial_snapshot": "5ed9f38245647f1270d7fdffbf00f06a79db95cd",
+    "full_documentary_scopes": 2,
+    "partial": 5,
+    "recursive_api_truncated": true,
+    "observed_blobs_lower_bound": 30416,
+    "scientific_validation_added": false
   }
 }

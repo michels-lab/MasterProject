@@ -1,3 +1,7 @@
+## 27-11-2026 — Auditoría incremental por archivo y versión
+
+Para mantenimiento integral, consultar primero [registro incremental](docs/review/README.md) y su ledger JSONL. Comparar cada ruta y blob SHA en un commit explícito; no repetir una revisión completa vigente del mismo alcance. Inventario, lectura parcial, comprobación de metadatos y validación científica son niveles distintos. Reabrir si cambia el blob o una dependencia relevante; conservar evidencia histórica y resultados nativos. No marcar archivos pendientes como revisados ni ejecutar CFD para una auditoría documental.
+
 ## Historical provenance maintenance — 2026-11-27
 
 Use docs/MAESTRIA_HISTORIA_CIENTIFICA_ES.md and docs/DOCUMENTATION_INDEX.md as historical entrypoints, docs/MAESTRIA_STATUS.json as current state, and the frozen history indices under docs/history/ and docs/HISTORICAL_INVENTORY_20261127.json for provenance. Preserve historical source files and branch tips; update current state and run registry with verified manifests in every delivery. Historical index is a dated snapshot, not a reason to rewrite immutable branch history. Never infer experimental validation from manifest or commit count.
