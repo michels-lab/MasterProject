@@ -1,0 +1,51 @@
+{
+  "scope": "new result branches during documentation audit; immutable tips, main documentation edits intentionally outside initial snapshot",
+  "branches": [
+    {
+      "name": "results/campaign-200s-adaptive-mpi-r8-Co025-dt0p025-v1/B14-2D-200s",
+      "sha": "b02ef4a97670ba8b43e05447dcc55b7342edd767",
+      "commits": [
+        {
+          "sha": "b02ef4a97670ba8b43e05447dcc55b7342edd767",
+          "date": "2026-11-27T08:37:23Z",
+          "subject": "Complete archive SHA256 manifest",
+          "parents": [
+            "c0e50272c13913c370ff5258597196c31ca7468e"
+          ]
+        },
+        {
+          "sha": "c0e50272c13913c370ff5258597196c31ca7468e",
+          "date": "2026-11-27T08:34:41Z",
+          "subject": "Archive chunks 1-5 / 5",
+          "parents": []
+        }
+      ],
+      "unresolved_parents": [],
+      "coverage_complete": true
+    },
+    {
+      "name": "results/campaign-200s-adaptive-mpi-r8-Co025-dtuncapped-v1/B14-2D-200s",
+      "sha": "e066adf90a62988f7b8bd416115055af8d586811",
+      "commits": [
+        {
+          "sha": "e066adf90a62988f7b8bd416115055af8d586811",
+          "date": "2026-11-27T08:43:32Z",
+          "subject": "Complete archive SHA256 manifest",
+          "parents": [
+            "63febf5c58626ca1e10af95488f8522dbe46415f"
+          ]
+        },
+        {
+          "sha": "63febf5c58626ca1e10af95488f8522dbe46415f",
+          "date": "2026-11-27T08:40:50Z",
+          "subject": "Archive chunks 1-5 / 5",
+          "parents": []
+        }
+      ],
+      "unresolved_parents": [],
+      "coverage_complete": true
+    }
+  ],
+  "unique_initial_commits": 3811,
+  "unique_total_including_delta": 3815
+}
