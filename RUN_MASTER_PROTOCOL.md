@@ -184,7 +184,7 @@ Solo después de completar y auditar las cuatro variantes V15/V16 se bifurca el 
 - [ ] Persistir `logs/`, `postProcessing/`, CSV/TSV, resumen por experimento, notas de caso, variantes y decisiones; sincronizar sin sobrescribir datos locales válidos.
 - [ ] Actualizar **registro de casos + bitácoras ES/EN** y todas las guías/matrices afectadas.
 - [ ] Revisar la lista de casos incluida en `full_campaign_audit.py` y las 5 salidas de `full_campaign_audit/`. Si los nuevos casos no están integrados, declararlo **PENDIENTE DE CONSOLIDACIÓN** con un informe de brecha, no «actualizado».
-- [ ] Confirmar estado y cobertura con `python3 analysis_tools/check_run_registry.py`. La opción `--require-consolidated` es una puerta estricta para cuando el objetivo sea tener **todos** los casos verificados dentro de los CSV globales; **hoy falla justificadamente por tres casos**.
+- [ ] Confirmar estado y cobertura con `python3 analysis_tools/check_run_registry.py`. La opción `--require-consolidated` es una puerta estricta para cuando el objetivo sea tener **todos** los casos verificados dentro de los CSV globales; **al corte 27-11-2026 quedan cinco casos RUN_VERIFIED + ANALYSIS_VERIFIED fuera del CSV histórico de 26: B14, C14, C11_energy2_test, C3D-04 y C3D-05; consultar el comprobador para cifras vigentes**.
 - [ ] Auditar `git status`, `git diff`, `git log`, archivos ignorados/rastreados, enlaces y consistencia documentación↔datos. Comprobar readback tras commit/push.
 - [ ] Responder al usuario con **qué corrió**, resultados/conclusión, qué archivos se actualizaron, pendientes reales, commit y **qué NO quedó validado**.
 
@@ -202,7 +202,7 @@ Solo después de completar y auditar las cuatro variantes V15/V16 se bifurca el 
 Lee el registro, carpetas de casos y CSV de campaña; informa casos omitidos, discrepancias y estados pendientes **sin ejecutar OpenFOAM ni modificar datos**.
 
 `python3 analysis_tools/check_run_registry.py --require-consolidated`  
-Hace la misma lectura pero termina con error si cualquier caso `RUN_VERIFIED + ANALYSIS_VERIFIED` carece de fila en `case_metrics.csv`. Es la condición necesaria para declarar que el consolidado incluye todos los casos.
+Hace la misma lectura pero termina con error si cualquier caso `RUN_VERIFIED + ANALYSIS_VERIFIED` carece de fila en `case_metrics.csv`. Es una condición de cobertura de los casos con ambas etiquetas exactas, no una certificación de las publicaciones adaptativas externas ni de toda la tesis. Las filas de ejecuciones externas de 200 s se registran por evidencia y no necesitan una carpeta local en el checkout.
 
 **Importante:** esta comprobación verifica *cobertura administrativa*, no la validez física de una corrida, la calidad del CSV ni que las métricas sean de una ejecución genuinamente distinta.
 
