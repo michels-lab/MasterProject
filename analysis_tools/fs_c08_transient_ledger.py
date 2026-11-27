@@ -31,11 +31,13 @@ REQUIRED = {
 def extract(log: str) -> tuple[list[dict], list[str]]:
     by_time = {}
     issues = []
+    invalid_times = set()
     for line in log.splitlines():
         for marker, kind in MARKERS.items():
             if marker not in line:
                 continue
             entries = dict(re.findall(r"([A-Za-z][A-Za-z0-9_]*)=([^\s]+)", line))
+            t = None
             try:
                 t = float(entries["time_s"])
                 values = {key: float(entries[key]) for key in REQUIRED[kind]}
@@ -45,22 +47,28 @@ def extract(log: str) -> tuple[list[dict], list[str]]:
                             values[key]=float(entries[key])
                 if t <= 0 or not math.isfinite(t) or not all(map(math.isfinite, values.values())):
                     raise ValueError("invalid numeric ledger")
+                if kind == "pressure" and values["pressureVolumeEnergyIterationConverged"] != 1:
+                    raise ValueError("pressure closure not converged")
             except (KeyError, ValueError) as exc:
                 issues.append(f"{kind}: {exc}")
+                if t is not None and math.isfinite(t) and t > 0:
+                    invalid_times.add(t)
                 continue
             row = by_time.setdefault(t, {"time_s": t, "kinds": set()})
             if kind in row["kinds"]:
                 issues.append(f"duplicate {kind} at {t:g}")
+                invalid_times.add(t)
+                continue
             row["kinds"].add(kind)
             row.update(values)
     result = []
     prev = None
     for t, row in sorted(by_time.items()):
         missing = set(REQUIRED) - row.pop("kinds")
-        row["all_native_ledgers_present"] = not missing
+        row["all_native_ledgers_present"] = not missing and t not in invalid_times
         if missing:
             issues.append(f"time {t:g}: missing {sorted(missing)}")
-        else:
+        if row["all_native_ledgers_present"]:
             metal_v = row["liquidVolume_m3"] + row["solidVolume_m3"]
             row["metalVolume_m3"] = metal_v
             row["solidMassFraction"] = row["solidMass_kg"] / max(1e-300, row["liquidMass_kg"] + row["solidMass_kg"])
@@ -74,6 +82,8 @@ def extract(log: str) -> tuple[list[dict], list[str]]:
                 row["energyHistoryMismatch_J"] = row["previousInternalEnergy_J"] - prev["phaseResolvedInternalEnergy_J"]
                 row["volumeHistoryMismatch_m3"] = row["previousMetalVolume_m3"] - prev["metalVolume_m3"]
             prev = row
+        else:
+            prev = None  # No history comparison across incomplete records.
         result.append(row)
     return result, issues
 
