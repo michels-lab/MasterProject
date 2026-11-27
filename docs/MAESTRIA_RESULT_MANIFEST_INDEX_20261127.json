@@ -155,7 +155,8 @@
       "archive_format": "tar.gz split into ordered binary chunks",
       "complete": true,
       "part_count": 25,
-      "manifest_blob_sha": "58a509cfaafcc6f82694029a4c96dd721f2a2fb9"
+      "manifest_blob_sha": "58a509cfaafcc6f82694029a4c96dd721f2a2fb9",
+      "sha": "6b012725c860c16cbe3a72cfe7c4a57a6824685c"
     },
     {
       "branch": "results/campaign-200s-fixed-lab-v2/B14-2D-200s",
@@ -179,7 +180,8 @@
       "archive_format": "tar.gz split into ordered binary chunks",
       "complete": true,
       "part_count": 9,
-      "manifest_blob_sha": "de1308a419cc64a8f64627133bcb99cd803cd005"
+      "manifest_blob_sha": "de1308a419cc64a8f64627133bcb99cd803cd005",
+      "sha": "18262a16a19d96decd0b54b39775dd98f28f9a79"
     },
     {
       "branch": "results/campaign-200s-fixed-lab-v2/C14-2D-200s",
@@ -203,7 +205,8 @@
       "archive_format": "tar.gz split into ordered binary chunks",
       "complete": true,
       "part_count": 8,
-      "manifest_blob_sha": "5336090a406e8cc2178ca716be8f5737940635ec"
+      "manifest_blob_sha": "5336090a406e8cc2178ca716be8f5737940635ec",
+      "sha": "f2b4b1901bcde5f22f6625e3554244235b137ea7"
     }
   ]
 }
