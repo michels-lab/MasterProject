@@ -1618,5 +1618,22 @@
       "last_time_s": 0.7
     },
     "scientific_gates_changed": false
+  },
+  "native_thermal_diagnostic_observed": {
+    "report": "docs/granada/C3D04_A_NATIVE_THERMAL_OBSERVED_20261127_ES.md",
+    "solver_exit": 1,
+    "foamLog_exit": 0,
+    "completed_steps": 51,
+    "failed_step": 52,
+    "last_completed_s": 0.66,
+    "failed_s": 0.68,
+    "max_dt_s": 0.025,
+    "dt_failure_s": 0.02,
+    "co_before_failure": 0.188631,
+    "negative_T0_K": [
+      -134.195,
+      -139.172
+    ],
+    "physical_validation": false
   }
 }
