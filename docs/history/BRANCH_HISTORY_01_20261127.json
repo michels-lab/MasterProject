@@ -1,0 +1,710 @@
+{
+  "snapshot": "134ac9bf6f631320630212274fd26cb8c31b5c31",
+  "scope": "exclusive commits relative to main at snapshot; parent closure explicitly checked",
+  "branches": [
+    {
+      "name": "analysis/physics-diagnostics-run",
+      "sha": "2f6221a2172ca6f4dd3d157220afffa9db205496",
+      "main_reachable": false,
+      "commits": [
+        {
+          "sha": "2f6221a2172ca6f4dd3d157220afffa9db205496",
+          "date": "2026-09-28T07:38:46Z",
+          "subject": "analysis: rerun diagnostics with printed summaries",
+          "parents": [
+            "6ed03667218e8004d42cf92af0afb6ef4603a317"
+          ]
+        },
+        {
+          "sha": "6ed03667218e8004d42cf92af0afb6ef4603a317",
+          "date": "2026-09-28T07:37:29Z",
+          "subject": "analysis: rerun physics and coupling diagnostics",
+          "parents": [
+            "99351717df966aac96d0a114ac808a92472b5894"
+          ]
+        },
+        {
+          "sha": "99351717df966aac96d0a114ac808a92472b5894",
+          "date": "2026-09-28T07:34:10Z",
+          "subject": "analysis: trigger physics diagnostics run",
+          "parents": [
+            "7b816cf7014cf43228ba0ec0a06b429764cb4a77"
+          ]
+        }
+      ],
+      "unresolved_parents": [],
+      "coverage_complete": true
+    },
+    {
+      "name": "analysis/uy-temporal-run",
+      "sha": "e3247194b5c82c0c8be5c282a78cc5e6f146de20",
+      "main_reachable": false,
+      "commits": [
+        {
+          "sha": "e3247194b5c82c0c8be5c282a78cc5e6f146de20",
+          "date": "2026-09-28T07:20:23Z",
+          "subject": "analysis: trigger exhaustive temporal Uy run",
+          "parents": [
+            "a970e70375c384da714148260f04e8aab705dcbb"
+          ]
+        }
+      ],
+      "unresolved_parents": [],
+      "coverage_complete": true
+    },
+    {
+      "name": "analysis/v8-comprehensive-run",
+      "sha": "7e56031e4118dda4ea17175d1065720ad3d6275f",
+      "main_reachable": false,
+      "commits": [
+        {
+          "sha": "7e56031e4118dda4ea17175d1065720ad3d6275f",
+          "date": "2026-09-28T08:41:18Z",
+          "subject": "analysis: rerun V8 comparison after analyzer fix",
+          "parents": [
+            "b7663fd524905c0df96103b0c13afaec957e9bfa"
+          ]
+        },
+        {
+          "sha": "b7663fd524905c0df96103b0c13afaec957e9bfa",
+          "date": "2026-09-28T08:40:07Z",
+          "subject": "analysis: trigger V8 comprehensive run",
+          "parents": [
+            "66e6107ab5a812692d256bc5a349cf0104a7e52b"
+          ]
+        }
+      ],
+      "unresolved_parents": [],
+      "coverage_complete": true
+    },
+    {
+      "name": "analysis/v9-flow-causality-run",
+      "sha": "df49accb04db74101b8a991123a0a3f20c967218",
+      "main_reachable": false,
+      "commits": [
+        {
+          "sha": "df49accb04db74101b8a991123a0a3f20c967218",
+          "date": "2026-09-28T18:16:34Z",
+          "subject": "analysis: trigger V9 flow-causality run",
+          "parents": [
+            "07f98be62b218dfabd6b7d7e583dd724a409d1ed"
+          ]
+        }
+      ],
+      "unresolved_parents": [],
+      "coverage_complete": true
+    },
+    {
+      "name": "analysis/v9-reversal-causality-run",
+      "sha": "3d188ca768efa44b81b36e02aa2a9eed8e87e330",
+      "main_reachable": false,
+      "commits": [
+        {
+          "sha": "3d188ca768efa44b81b36e02aa2a9eed8e87e330",
+          "date": "2026-09-28T17:56:56Z",
+          "subject": "analysis: trigger V9 reversal causality",
+          "parents": [
+            "b2932beb8884b7a9fdae33ae34f95a828d22350a"
+          ]
+        }
+      ],
+      "unresolved_parents": [],
+      "coverage_complete": true
+    },
+    {
+      "name": "analysis/v9-top-fixedflux-run",
+      "sha": "0755ed71242df9e40ab0ac6e7b6d67f84bb88a3b",
+      "main_reachable": false,
+      "commits": [
+        {
+          "sha": "0755ed71242df9e40ab0ac6e7b6d67f84bb88a3b",
+          "date": "2026-09-28T09:41:28Z",
+          "subject": "analysis: trigger V9 comparison",
+          "parents": [
+            "e135295f8f61259c5081e5de5b9fb221e8bfcefb"
+          ]
+        }
+      ],
+      "unresolved_parents": [],
+      "coverage_complete": true
+    },
+    {
+      "name": "analysis/v9-velocity-profiles-run",
+      "sha": "18f9106f44182207640d5abbcacb0485481f8548",
+      "main_reachable": false,
+      "commits": [
+        {
+          "sha": "18f9106f44182207640d5abbcacb0485481f8548",
+          "date": "2026-09-28T09:53:59Z",
+          "subject": "analysis: trigger V9 velocity-profile morphology",
+          "parents": [
+            "ac729d548ab0900544c1a8a7241cc98080ff7993"
+          ]
+        }
+      ],
+      "unresolved_parents": [],
+      "coverage_complete": true
+    },
+    {
+      "name": "audit/v14-v16-logs-20261014",
+      "sha": "9a396873a3a9d2a06c861f85139fd2ba6e0010b9",
+      "main_reachable": false,
+      "commits": [
+        {
+          "sha": "9a396873a3a9d2a06c861f85139fd2ba6e0010b9",
+          "date": "2026-10-15T00:18:51Z",
+          "subject": "ci(audit): test solver log parsing without launching CFD",
+          "parents": [
+            "5b48ff9207d26e51066e42fb4357741d3b769543"
+          ]
+        },
+        {
+          "sha": "5b48ff9207d26e51066e42fb4357741d3b769543",
+          "date": "2026-10-15T00:18:36Z",
+          "subject": "test(audit): protect indented End detection",
+          "parents": [
+            "32bfe1748cfd165d11fff14aa8475db7235e7737"
+          ]
+        },
+        {
+          "sha": "32bfe1748cfd165d11fff14aa8475db7235e7737",
+          "date": "2026-10-15T00:18:05Z",
+          "subject": "fix(campaign): handle OpenFOAM indented End log lines",
+          "parents": [
+            "bc1e8d666530dc6b59391790134033b3e3b4d836"
+          ]
+        },
+        {
+          "sha": "bc1e8d666530dc6b59391790134033b3e3b4d836",
+          "date": "2026-10-15T00:17:57Z",
+          "subject": "fix(audit): recognize indented OpenFOAM End markers",
+          "parents": [
+            "a3abdb59efb6f04b1777b881acb81d601a8013cb"
+          ]
+        }
+      ],
+      "unresolved_parents": [],
+      "coverage_complete": true
+    },
+    {
+      "name": "audit/v15-v16-preflight-20261015",
+      "sha": "b4a30d58007afc58690c4917f14eb994e88828a1",
+      "main_reachable": false,
+      "commits": [
+        {
+          "sha": "b4a30d58007afc58690c4917f14eb994e88828a1",
+          "date": "2026-10-15T20:02:00Z",
+          "subject": "fix(preflight): defer whitespace normalization until all controlled assignments are masked",
+          "parents": [
+            "5a0db92f09a948ffba53b1aff96e195ec7b02016"
+          ]
+        },
+        {
+          "sha": "5a0db92f09a948ffba53b1aff96e195ec7b02016",
+          "date": "2026-10-15T20:00:02Z",
+          "subject": "docs: record V15/V16 preflight and laptop-only scientific gate",
+          "parents": [
+            "5546cf24e5e883615cd1a2444911b5920a4ecd70"
+          ]
+        },
+        {
+          "sha": "5546cf24e5e883615cd1a2444911b5920a4ecd70",
+          "date": "2026-10-15T19:59:59Z",
+          "subject": "docs: record V15/V16 preflight and laptop-only scientific gate",
+          "parents": [
+            "61f65bbb7e295d422dde673378ea20531555c5d5"
+          ]
+        },
+        {
+          "sha": "61f65bbb7e295d422dde673378ea20531555c5d5",
+          "date": "2026-10-15T19:59:56Z",
+          "subject": "docs: record V15/V16 preflight and laptop-only scientific gate",
+          "parents": [
+            "5b91d02b2021c4af315b003efbe8af37a6a10b90"
+          ]
+        },
+        {
+          "sha": "5b91d02b2021c4af315b003efbe8af37a6a10b90",
+          "date": "2026-10-15T19:59:51Z",
+          "subject": "docs: record V15/V16 preflight and laptop-only scientific gate",
+          "parents": [
+            "7498474aae0ebfdfba857cc0863235a5ec7275fe"
+          ]
+        },
+        {
+          "sha": "7498474aae0ebfdfba857cc0863235a5ec7275fe",
+          "date": "2026-10-15T19:59:48Z",
+          "subject": "docs: record V15/V16 preflight and laptop-only scientific gate",
+          "parents": [
+            "38872d92f44be26cb48529aaceb56f4a33fb58da"
+          ]
+        },
+        {
+          "sha": "38872d92f44be26cb48529aaceb56f4a33fb58da",
+          "date": "2026-10-15T19:59:04Z",
+          "subject": "docs: fix Markdown code formatting in preflight report",
+          "parents": [
+            "157b7f68b1d445381c1338140d3d2097cbf11db5"
+          ]
+        },
+        {
+          "sha": "157b7f68b1d445381c1338140d3d2097cbf11db5",
+          "date": "2026-10-15T19:58:50Z",
+          "subject": "docs: record V15/V16 input provenance and unchanged scientific gate",
+          "parents": [
+            "f61f7c442140a5e5580cd24702ff46ba649183bd"
+          ]
+        },
+        {
+          "sha": "f61f7c442140a5e5580cd24702ff46ba649183bd",
+          "date": "2026-10-15T19:58:19Z",
+          "subject": "ci: enforce V15/V16 preflight without running CFD",
+          "parents": [
+            "9bb2747360f49506177fc113db4e9a87f575013f"
+          ]
+        },
+        {
+          "sha": "9bb2747360f49506177fc113db4e9a87f575013f",
+          "date": "2026-10-15T19:58:03Z",
+          "subject": "test: exercise V15/V16 parity failures with synthetic fixtures",
+          "parents": [
+            "dc0dc3b146269527e73957b7e7f9bf290fa950d1"
+          ]
+        },
+        {
+          "sha": "dc0dc3b146269527e73957b7e7f9bf290fa950d1",
+          "date": "2026-10-15T19:56:56Z",
+          "subject": "test: add read-only controlled-input preflight for V15/V16",
+          "parents": [
+            "6d195e5aef9bdae109e0e9196417ff11b28c505e"
+          ]
+        }
+      ],
+      "unresolved_parents": [],
+      "coverage_complete": true
+    },
+    {
+      "name": "cases/v14-doctor-reference-20261003",
+      "sha": "a37d08e88420660ba4b36a3edff945b43201f549",
+      "main_reachable": false,
+      "commits": [
+        {
+          "sha": "a37d08e88420660ba4b36a3edff945b43201f549",
+          "date": "2026-10-03T07:04:43Z",
+          "subject": "analysis: add V14 results publisher",
+          "parents": [
+            "b937d3adb316376b09d601905b34324ec9b4e54c"
+          ]
+        },
+        {
+          "sha": "b937d3adb316376b09d601905b34324ec9b4e54c",
+          "date": "2026-10-03T07:04:40Z",
+          "subject": "analysis: add V14 two-case runner",
+          "parents": [
+            "262ca7e2fc63b367ad45d0b2f085c926e8069bf7"
+          ]
+        },
+        {
+          "sha": "262ca7e2fc63b367ad45d0b2f085c926e8069bf7",
+          "date": "2026-10-03T07:03:12Z",
+          "subject": "docs: log V14 controlled configuration",
+          "parents": [
+            "a883545f2e61c562192adf6dc870ce148c1ec55d"
+          ]
+        },
+        {
+          "sha": "a883545f2e61c562192adf6dc870ce148c1ec55d",
+          "date": "2026-10-03T07:03:10Z",
+          "subject": "docs: log V14 controlled configuration",
+          "parents": [
+            "58d07ff17d41ccb664a3eeca62ecd83e70a53fbf"
+          ]
+        },
+        {
+          "sha": "58d07ff17d41ccb664a3eeca62ecd83e70a53fbf",
+          "date": "2026-10-03T07:01:34Z",
+          "subject": "cases: add V14 explicit pressure-reference controls",
+          "parents": [
+            "d4e0a2773e21677ea240f5f555a699f599291d68"
+          ]
+        }
+      ],
+      "unresolved_parents": [],
+      "coverage_complete": true
+    },
+    {
+      "name": "docs/c3d01-corrected-solidworks-paths-20261019",
+      "sha": "7d267ca4723404096cc9f3521bf296354469fbad",
+      "main_reachable": false,
+      "commits": [
+        {
+          "sha": "7d267ca4723404096cc9f3521bf296354469fbad",
+          "date": "2026-10-19T21:10:53Z",
+          "subject": "docs(c3d): record actual STL names and snappyHexMesh execution boundary",
+          "parents": [
+            "37789d98e450d63531ffb509bc442052b26625a6"
+          ]
+        },
+        {
+          "sha": "37789d98e450d63531ffb509bc442052b26625a6",
+          "date": "2026-10-19T21:10:48Z",
+          "subject": "docs(c3d): record actual STL names and snappyHexMesh execution boundary",
+          "parents": [
+            "16f83dcc86865c2922ab142e5370a84b09588617"
+          ]
+        },
+        {
+          "sha": "16f83dcc86865c2922ab142e5370a84b09588617",
+          "date": "2026-10-19T21:10:24Z",
+          "subject": "docs(c3d): align geometry source filenames without weakening checksum validation",
+          "parents": [
+            "9f3264c14d1d728d28ada646d7beb6b1783de159"
+          ]
+        },
+        {
+          "sha": "9f3264c14d1d728d28ada646d7beb6b1783de159",
+          "date": "2026-10-19T21:10:20Z",
+          "subject": "docs(c3d): align geometry source filenames without weakening checksum validation",
+          "parents": [
+            "a9ebefc2188c387a5a706b1ca7def5de212ef199"
+          ]
+        },
+        {
+          "sha": "a9ebefc2188c387a5a706b1ca7def5de212ef199",
+          "date": "2026-10-19T21:10:17Z",
+          "subject": "docs(c3d): align geometry source filenames without weakening checksum validation",
+          "parents": [
+            "02bedabf59bb088b9c7ac15e5bfc2fde976de64e"
+          ]
+        },
+        {
+          "sha": "02bedabf59bb088b9c7ac15e5bfc2fde976de64e",
+          "date": "2026-10-19T21:10:02Z",
+          "subject": "docs(c3d): use actual QuickCup.STL and metal.STL names with WSL and native Ubuntu paths",
+          "parents": [
+            "a75fddcacc0673f04e9f63935146f447d63a868d"
+          ]
+        }
+      ],
+      "unresolved_parents": [],
+      "coverage_complete": true
+    },
+    {
+      "name": "docs/c3d-sync-manuals-logs-20261110",
+      "sha": "ad613f8773bbb37d41219abd45ea1c0a8043703c",
+      "main_reachable": false,
+      "commits": [
+        {
+          "sha": "ad613f8773bbb37d41219abd45ea1c0a8043703c",
+          "date": "2026-11-10T17:40:02Z",
+          "subject": "docs(c3d): isolate six documents owned by active PRs for reconciliation",
+          "parents": [
+            "641d3a2d97bc52aac0c4f8f5c8a77670ed4d7c59"
+          ]
+        }
+      ],
+      "unresolved_parents": [],
+      "coverage_complete": true
+    },
+    {
+      "name": "docs/case-code-comments-20261002",
+      "sha": "0dce34c93221e190ce1a1d14d798b522c7bb6406",
+      "main_reachable": false,
+      "commits": [
+        {
+          "sha": "0dce34c93221e190ce1a1d14d798b522c7bb6406",
+          "date": "2026-10-03T00:16:05Z",
+          "subject": "cleanup: remove temporary annotation tooling (analysis_tools/validate_case_annotations.py)",
+          "parents": [
+            "5da970de56c0cfed0149932b91bb04211803980a"
+          ]
+        },
+        {
+          "sha": "5da970de56c0cfed0149932b91bb04211803980a",
+          "date": "2026-10-03T00:16:02Z",
+          "subject": "cleanup: remove temporary annotation tooling (analysis_tools/annotate_case_sources.py)",
+          "parents": [
+            "0607769a6124ad8caadf7c036039bcd7787208a3"
+          ]
+        },
+        {
+          "sha": "0607769a6124ad8caadf7c036039bcd7787208a3",
+          "date": "2026-10-03T00:16:00Z",
+          "subject": "cleanup: remove temporary annotation tooling (.github/workflows/annotate-case-sources-v2.yml)",
+          "parents": [
+            "e2b4d159f2fdbd1cf80328986ea3b45b96e38a2a"
+          ]
+        },
+        {
+          "sha": "e2b4d159f2fdbd1cf80328986ea3b45b96e38a2a",
+          "date": "2026-10-03T00:15:57Z",
+          "subject": "cleanup: remove temporary annotation tooling (.github/workflows/annotate-case-sources.yml)",
+          "parents": [
+            "74494742cba4e05586975b5395de009faa7706dc"
+          ]
+        },
+        {
+          "sha": "74494742cba4e05586975b5395de009faa7706dc",
+          "date": "2026-10-03T00:15:24Z",
+          "subject": "docs: append explanatory comments to all case source files",
+          "parents": [
+            "f026a281b43757907810cc44e27e80999ce8216f"
+          ]
+        },
+        {
+          "sha": "f026a281b43757907810cc44e27e80999ce8216f",
+          "date": "2026-10-03T00:14:49Z",
+          "subject": "ci: validate and commit case annotations safely",
+          "parents": [
+            "9aed52bf86bef16c150695d7074a9aa4c8ae1c99"
+          ]
+        },
+        {
+          "sha": "9aed52bf86bef16c150695d7074a9aa4c8ae1c99",
+          "date": "2026-10-03T00:14:40Z",
+          "subject": "docs: add exact-prefix validator for case annotations",
+          "parents": [
+            "7ae2a2a4a88e3980d54e1e41bdfc7bf6990d6ffc"
+          ]
+        },
+        {
+          "sha": "7ae2a2a4a88e3980d54e1e41bdfc7bf6990d6ffc",
+          "date": "2026-10-03T00:13:04Z",
+          "subject": "ci: run case source documentation pass",
+          "parents": [
+            "2d2c307f545b375b59da8e495a8e7d3d9e00e5b8"
+          ]
+        },
+        {
+          "sha": "2d2c307f545b375b59da8e495a8e7d3d9e00e5b8",
+          "date": "2026-10-03T00:12:45Z",
+          "subject": "docs: add reproducible case source annotator",
+          "parents": [
+            "5eb6ecb12d82cb90bd7a7e5c0af61c09e3007076"
+          ]
+        }
+      ],
+      "unresolved_parents": [],
+      "coverage_complete": true
+    },
+    {
+      "name": "docs/wsl-three-worktrees-real-accepted-20261123",
+      "sha": "49d318c035d8c7c32b7e0235905e6a7547344e3a",
+      "main_reachable": false,
+      "commits": [
+        {
+          "sha": "49d318c035d8c7c32b7e0235905e6a7547344e3a",
+          "date": "2026-11-23T20:05:34Z",
+          "subject": "docs(wsl): reconcile earlier planned-only CI caveat with later verified real WSL installation",
+          "parents": [
+            "24ba33a2db9d14342cf5d6a4b01edc95f1193f12"
+          ]
+        },
+        {
+          "sha": "24ba33a2db9d14342cf5d6a4b01edc95f1193f12",
+          "date": "2026-11-23T20:05:22Z",
+          "subject": "docs(wsl): record user-observed APPLIED_AND_VERIFIED for A/B/FS isolated worktrees, nine preserved directories and verified HEADs",
+          "parents": [
+            "4d11e7bb3339e10db8329cbcd0674b1db2bc49f7"
+          ]
+        }
+      ],
+      "unresolved_parents": [],
+      "coverage_complete": true
+    },
+    {
+      "name": "feat/c3d04-a-c14-exact-fluid-physics-20261120",
+      "sha": "07177b4d0c82682130c22bb96a1d04c53cb196a7",
+      "main_reachable": false,
+      "commits": [
+        {
+          "sha": "07177b4d0c82682130c22bb96a1d04c53cb196a7",
+          "date": "2026-11-21T02:40:14Z",
+          "subject": "test(c3d04-a): verify all 14 copied C14 inputs preserve original bytes exactly",
+          "parents": [
+            "92d6852999882c7de491b78bc8f364dccc32c60d"
+          ]
+        },
+        {
+          "sha": "92d6852999882c7de491b78bc8f364dccc32c60d",
+          "date": "2026-11-21T02:40:07Z",
+          "subject": "fix(c3d04-a): preserve exact C14 source bytes and original line endings in 14-file candidate",
+          "parents": [
+            "e58a27fb488adda005ef03f78637565536101143"
+          ]
+        },
+        {
+          "sha": "e58a27fb488adda005ef03f78637565536101143",
+          "date": "2026-11-21T02:38:50Z",
+          "subject": "ci(c3d04-a): independently gate real C14 fluid-solid source parity and 22-file 3D input candidate",
+          "parents": [
+            "928efba527379256ce7847b14119bb1e23a74fdb"
+          ]
+        },
+        {
+          "sha": "928efba527379256ce7847b14119bb1e23a74fdb",
+          "date": "2026-11-21T02:38:30Z",
+          "subject": "docs(c3d04-a): lead with exact C14 source physics, not two-solid T0",
+          "parents": [
+            "6a771d28347ea0f25fc383ac6b96d6782f4a301b"
+          ]
+        },
+        {
+          "sha": "6a771d28347ea0f25fc383ac6b96d6782f4a301b",
+          "date": "2026-11-21T02:38:21Z",
+          "subject": "status(c3d04-a): enforce C14 fluid-solid fidelity and disallow auxiliary Cp-as-Cv as research physics",
+          "parents": [
+            "6187bd331544209c732ec64689db7c80f784720e"
+          ]
+        },
+        {
+          "sha": "6187bd331544209c732ec64689db7c80f784720e",
+          "date": "2026-11-21T02:38:05Z",
+          "subject": "policy(c3d04-a): require exact C14 fluid-solid variables and forbid Cp-to-Cv/T0 substitution",
+          "parents": [
+            "e3e1c382af9c8501b74732d53c53b6efe7b978c2"
+          ]
+        },
+        {
+          "sha": "e3e1c382af9c8501b74732d53c53b6efe7b978c2",
+          "date": "2026-11-21T02:37:48Z",
+          "subject": "test(c3d04-a): verify 22-file original-C14 fluid-solid physical package, no false WSL readiness",
+          "parents": [
+            "d91fc7a9648c20abed0967bc9a5e574ea03d4c0a"
+          ]
+        },
+        {
+          "sha": "d91fc7a9648c20abed0967bc9a5e574ea03d4c0a",
+          "date": "2026-11-21T02:37:40Z",
+          "subject": "science(c3d04-a): bind all C14 BC, initial U/alpha/L and pRef values to actual source",
+          "parents": [
+            "d78278e0061cd541f01b7031397802d686b5b910"
+          ]
+        },
+        {
+          "sha": "d78278e0061cd541f01b7031397802d686b5b910",
+          "date": "2026-11-21T02:37:16Z",
+          "subject": "docs(c3d04-a): distinguish actual C14 fluid-solid physical transfer from auxiliary two-solid T0",
+          "parents": [
+            "2796799b61e1a8e201c5c9e96e3ffe5898d70ad4"
+          ]
+        },
+        {
+          "sha": "2796799b61e1a8e201c5c9e96e3ffe5898d70ad4",
+          "date": "2026-11-21T02:36:38Z",
+          "subject": "fix(c3d04-a): use actual raw-regex for original C14 initial U=0 source check",
+          "parents": [
+            "31cc5123c3ae6f18b9a5931ecd0a10cb0e0e5287"
+          ]
+        },
+        {
+          "sha": "31cc5123c3ae6f18b9a5931ecd0a10cb0e0e5287",
+          "date": "2026-11-21T02:36:11Z",
+          "subject": "feat(c3d04-a): compose 22-file exact C14 fluid+solid native input candidate without WSL assumptions",
+          "parents": [
+            "bbb101e0b0f9074dba23119eb179c5fcf94bad9d"
+          ]
+        },
+        {
+          "sha": "bbb101e0b0f9074dba23119eb179c5fcf94bad9d",
+          "date": "2026-11-21T02:35:44Z",
+          "subject": "test(c3d04-a): enforce exact C14 fluid-solid model and reject changes to Cp/Cv/alpha1e/g/solver",
+          "parents": [
+            "080370398902e26de4636ec0467e55c7e1d23579"
+          ]
+        },
+        {
+          "sha": "080370398902e26de4636ec0467e55c7e1d23579",
+          "date": "2026-11-21T02:35:27Z",
+          "subject": "fix(c3d04-a): read original C14 gravity, velocity and layer coefficient numbers directly",
+          "parents": [
+            "c1b0bbcdc46f973f8d6f09da3884cd2c0e083ba1"
+          ]
+        },
+        {
+          "sha": "c1b0bbcdc46f973f8d6f09da3884cd2c0e083ba1",
+          "date": "2026-11-21T02:35:15Z",
+          "subject": "feat(c3d04-a): audit actual C14 executable physics and render 3D fluid fields without Cp-as-Cv",
+          "parents": [
+            "15d103b086b3a4341e111c2fb6d81c815115e587"
+          ]
+        },
+        {
+          "sha": "15d103b086b3a4341e111c2fb6d81c815115e587",
+          "date": "2026-11-21T02:34:08Z",
+          "subject": "science(c3d04-a): pin exact C14 fluid-solid equations and parameters, forbid T0 surrogate substitution",
+          "parents": [
+            "c143a6b927f06e1d6f578cd4e83118281bd93fa5"
+          ]
+        }
+      ],
+      "unresolved_parents": [],
+      "coverage_complete": true
+    },
+    {
+      "name": "feat/c3d04-a-c14-full10s-staging-verification-20261120",
+      "sha": "99716cd4b4b480057e31b94eaf104cc5dc29367d",
+      "main_reachable": false,
+      "commits": [
+        {
+          "sha": "99716cd4b4b480057e31b94eaf104cc5dc29367d",
+          "date": "2026-11-21T03:19:21Z",
+          "subject": "test(c3d04-a): native full 10s run accepts only byte-identical C14 controls and rejects diagnostic horizon",
+          "parents": [
+            "75a3b1bea1eb3fe521a87b4126f1f3d9376bf783"
+          ]
+        },
+        {
+          "sha": "75a3b1bea1eb3fe521a87b4126f1f3d9376bf783",
+          "date": "2026-11-21T03:19:10Z",
+          "subject": "feat(c3d04-a): expose single safe WSL --run-full 10s original C14 option with separate output",
+          "parents": [
+            "9614cc6054a5c877455f06be476f4aaee50eef37"
+          ]
+        },
+        {
+          "sha": "9614cc6054a5c877455f06be476f4aaee50eef37",
+          "date": "2026-11-21T03:19:00Z",
+          "subject": "fix(c3d04-a): exact native full-10s End/Time regex and valid newline-terminated JSON report",
+          "parents": [
+            "e2aa3850a4abe211cbdc46c57e9e12255d585575"
+          ]
+        },
+        {
+          "sha": "e2aa3850a4abe211cbdc46c57e9e12255d585575",
+          "date": "2026-11-21T03:18:44Z",
+          "subject": "feat(c3d04-a): one protected full 10s OpenFOAM14 C14-original 3D run with native evidence, no physics change",
+          "parents": [
+            "d31277a176dead816298b04bbfd926a6e397af47"
+          ]
+        },
+        {
+          "sha": "d31277a176dead816298b04bbfd926a6e397af47",
+          "date": "2026-11-21T03:18:15Z",
+          "subject": "ci(c3d04-a): validate all native C14 scripts syntax before costly F14 installation",
+          "parents": [
+            "c83a70b599c195f7c7d22cb18c7b05dd3a38a0d7"
+          ]
+        },
+        {
+          "sha": "c83a70b599c195f7c7d22cb18c7b05dd3a38a0d7",
+          "date": "2026-11-21T03:18:09Z",
+          "subject": "fix(c3d04-a): correct Python syntax in full C14 10s native staging verification",
+          "parents": [
+            "bcdd11725c2b71269fc6e9988e41c3845800ceaa"
+          ]
+        },
+        {
+          "sha": "bcdd11725c2b71269fc6e9988e41c3845800ceaa",
+          "date": "2026-11-21T03:16:41Z",
+          "subject": "ci(c3d04-a): native-parse full C14 original 10s inputs on separate synthetic mesh without changing science",
+          "parents": [
+            "ace1d2630f86e0fd37ee82d316ac187500f1c482"
+          ]
+        }
+      ],
+      "unresolved_parents": [],
+      "coverage_complete": true
+    }
+  ]
+}
