@@ -1,0 +1,1262 @@
+{
+  "snapshot": "134ac9bf6f631320630212274fd26cb8c31b5c31",
+  "scope": "exclusive commits relative to main at snapshot; parent closure explicitly checked",
+  "branches": [
+    {
+      "name": "results/campaign-200s-adaptive-mpi-r8-Co025-dtuncapped-v1/C14-3DB-200s",
+      "sha": "d416a79f30ca3fa66db00bfc215af59e4855e2f8",
+      "main_reachable": false,
+      "commits": [
+        {
+          "sha": "d416a79f30ca3fa66db00bfc215af59e4855e2f8",
+          "date": "2026-11-26T00:49:51Z",
+          "subject": "Complete archive SHA256 manifest",
+          "parents": [
+            "90a4c53fce99212a59e0d3464986acf2eb95b0e6"
+          ]
+        },
+        {
+          "sha": "90a4c53fce99212a59e0d3464986acf2eb95b0e6",
+          "date": "2026-11-26T00:49:31Z",
+          "subject": "Archive chunks 21-22 / 22",
+          "parents": [
+            "b7fc6900338b781f1a3ef0d1387f78877518f4a2"
+          ]
+        },
+        {
+          "sha": "b7fc6900338b781f1a3ef0d1387f78877518f4a2",
+          "date": "2026-11-26T00:42:21Z",
+          "subject": "Archive chunks 11-20 / 22",
+          "parents": [
+            "3616a8aaf42821644e0c0481bab02ee49355ef1d"
+          ]
+        },
+        {
+          "sha": "3616a8aaf42821644e0c0481bab02ee49355ef1d",
+          "date": "2026-11-26T00:34:06Z",
+          "subject": "Archive chunks 1-10 / 22",
+          "parents": []
+        }
+      ],
+      "unresolved_parents": [],
+      "coverage_complete": true
+    },
+    {
+      "name": "results/campaign-200s-adaptive-uncapped-v1/C14-2D-200s",
+      "sha": "936e890789d0037b199cb13eda9b9222ca425b1e",
+      "main_reachable": false,
+      "commits": [
+        {
+          "sha": "936e890789d0037b199cb13eda9b9222ca425b1e",
+          "date": "2026-11-25T02:20:49Z",
+          "subject": "Complete archive SHA256 manifest",
+          "parents": [
+            "d47100a269524e04906a6eb14ca8b30df5994cdb"
+          ]
+        },
+        {
+          "sha": "d47100a269524e04906a6eb14ca8b30df5994cdb",
+          "date": "2026-11-25T02:18:19Z",
+          "subject": "Archive chunks 1-4 / 4",
+          "parents": []
+        }
+      ],
+      "unresolved_parents": [],
+      "coverage_complete": true
+    },
+    {
+      "name": "results/campaign-200s-compact-v1/C14-3DA-200s",
+      "sha": "86d7b6114d7cf114bd48131ac630bff635b397a5",
+      "error": "UNKNOWN: Error code: UNKNOWN; Error: RemoteProtocolError: Server disconnected without sending a response.",
+      "coverage_complete": false,
+      "commits": []
+    },
+    {
+      "name": "results/full-campaign-20261002-182632",
+      "sha": "1d14bda8ed16eea42446d94a9ac60aabc1067b98",
+      "main_reachable": false,
+      "commits": [
+        {
+          "sha": "1d14bda8ed16eea42446d94a9ac60aabc1067b98",
+          "date": "2026-10-03T00:30:03Z",
+          "subject": "results: publish completed 26-case controlled-buoyancy campaign",
+          "parents": [
+            "d51ef5670e8084d5c1e8078e22e625a3de2a6d6c"
+          ]
+        },
+        {
+          "sha": "d51ef5670e8084d5c1e8078e22e625a3de2a6d6c",
+          "date": "2026-09-30T19:34:23Z",
+          "subject": "test: add complete B13 OpenFOAM case for FoamLens validation",
+          "parents": [
+            "ef1bf9d0b5d7c31b9692dd5a6986bba05041450c"
+          ]
+        }
+      ],
+      "unresolved_parents": [],
+      "coverage_complete": true
+    },
+    {
+      "name": "results/v14-20261003-015313",
+      "sha": "6c90a129fb86e981beb2a684ce464e6b973f9891",
+      "main_reachable": false,
+      "commits": [
+        {
+          "sha": "6c90a129fb86e981beb2a684ce464e6b973f9891",
+          "date": "2026-10-03T07:53:52Z",
+          "subject": "results: publish V14 B/C controlled runs",
+          "parents": [
+            "836cc9de294e4f685a1caad1e808d2808af39a3c"
+          ]
+        },
+        {
+          "sha": "836cc9de294e4f685a1caad1e808d2808af39a3c",
+          "date": "2026-10-03T07:19:18Z",
+          "subject": "cases: add V14 explicit pressure reference test",
+          "parents": [
+            "9124e9077d50a0ca6cae4bb43f9b1e423909d8aa"
+          ]
+        },
+        {
+          "sha": "9124e9077d50a0ca6cae4bb43f9b1e423909d8aa",
+          "date": "2026-10-03T00:54:32Z",
+          "subject": "Merge remote-tracking branch 'origin/main' into foamlens-real-fixture-b13",
+          "parents": [
+            "d51ef5670e8084d5c1e8078e22e625a3de2a6d6c",
+            "d4e0a2773e21677ea240f5f555a699f599291d68"
+          ]
+        },
+        {
+          "sha": "d51ef5670e8084d5c1e8078e22e625a3de2a6d6c",
+          "date": "2026-09-30T19:34:23Z",
+          "subject": "test: add complete B13 OpenFOAM case for FoamLens validation",
+          "parents": [
+            "ef1bf9d0b5d7c31b9692dd5a6986bba05041450c"
+          ]
+        }
+      ],
+      "unresolved_parents": [],
+      "coverage_complete": true
+    },
+    {
+      "name": "science/c3d04-a-c14-postprocessing-parity-stage07",
+      "sha": "a0111372d51e00c40ff7f13dd84095dc67ac6b2e",
+      "main_reachable": false,
+      "commits": [
+        {
+          "sha": "a0111372d51e00c40ff7f13dd84095dc67ac6b2e",
+          "date": "2026-11-23T18:52:36Z",
+          "subject": "docs(c3d04-a): preserve metric C14 10/20/30mm stations where 3D physically allows, validate all profile points",
+          "parents": [
+            "da020ada414963f7ee657cd60a4d98daece91490"
+          ]
+        },
+        {
+          "sha": "da020ada414963f7ee657cd60a4d98daece91490",
+          "date": "2026-11-23T18:52:14Z",
+          "subject": "test(c3d04-a): confirm original C14 heights preserved when valid and reject partial or nonfinite 3D profile samples",
+          "parents": [
+            "14d6d2f0c43eede875903d39871d4569833bf832"
+          ]
+        },
+        {
+          "sha": "14d6d2f0c43eede875903d39871d4569833bf832",
+          "date": "2026-11-23T18:52:02Z",
+          "subject": "test(c3d04-a): gate all 3D C14 line profiles on 80 finite native sampled points at t10",
+          "parents": [
+            "084955405b1d2d326b4c3557e0e3946f151b20f8"
+          ]
+        },
+        {
+          "sha": "084955405b1d2d326b4c3557e0e3946f151b20f8",
+          "date": "2026-11-23T18:51:33Z",
+          "subject": "science(c3d04-a): prioritize exact C14 10/20/30mm sampling stations when 3D geometry permits, audit fallbacks",
+          "parents": [
+            "ce66e5adadce209d895f621972e40519680ae30f"
+          ]
+        },
+        {
+          "sha": "ce66e5adadce209d895f621972e40519680ae30f",
+          "date": "2026-11-23T18:49:39Z",
+          "subject": "docs(c3d04-a): define physical sign and native C14 energy closure candidate with honest validation boundary",
+          "parents": [
+            "3f4c5e8725e1c971e0d611f101f2baaea0673a0d"
+          ]
+        },
+        {
+          "sha": "3f4c5e8725e1c971e0d611f101f2baaea0673a0d",
+          "date": "2026-11-23T18:49:10Z",
+          "subject": "ci(c3d04-a): run real archived C14 native energy table integration regression alongside geometry tests",
+          "parents": [
+            "7bad91084c38625a8f3f1771fe4b2526ca4e2a8e"
+          ]
+        },
+        {
+          "sha": "7bad91084c38625a8f3f1771fe4b2526ca4e2a8e",
+          "date": "2026-11-23T18:49:00Z",
+          "subject": "feat(c3d04-a): calculate native postrun C14 metal energy-flux closure candidate after isolated diagnostics",
+          "parents": [
+            "45d1da2c7590674ef0dae4c6a9ef2e53acf1cfc9"
+          ]
+        },
+        {
+          "sha": "45d1da2c7590674ef0dae4c6a9ef2e53acf1cfc9",
+          "date": "2026-11-23T18:48:35Z",
+          "subject": "test(c3d04-a): execute energy-closure parser against REAL archived C14 native postProcessing reference",
+          "parents": [
+            "0bcfc6626dc15fae4bb2ccf1995e403f337ca804"
+          ]
+        },
+        {
+          "sha": "0bcfc6626dc15fae4bb2ccf1995e403f337ca804",
+          "date": "2026-11-23T18:48:14Z",
+          "subject": "science(c3d04-a): integrate original C14 native enthalpy, latent power, wall/interface energy-flux tables without false conservation claim",
+          "parents": [
+            "668069ca2b3acb5e66665eb333dc831565308a2b"
+          ]
+        },
+        {
+          "sha": "668069ca2b3acb5e66665eb333dc831565308a2b",
+          "date": "2026-11-23T18:46:46Z",
+          "subject": "fix(c3d04-a): prevent false native postProcessing parity from copied stale dirs; check derived saved fields",
+          "parents": [
+            "af2f6f61eb7798ca19dfc44cdb53a4b10365f0d4"
+          ]
+        },
+        {
+          "sha": "af2f6f61eb7798ca19dfc44cdb53a4b10365f0d4",
+          "date": "2026-11-23T18:45:25Z",
+          "subject": "docs(c3d04-a): specify full isolated offline native C14 postProcess one-shot and remaining verification gates",
+          "parents": [
+            "32b97f2106777acf800325facb99017204cad819"
+          ]
+        },
+        {
+          "sha": "32b97f2106777acf800325facb99017204cad819",
+          "date": "2026-11-23T18:44:59Z",
+          "subject": "ci(c3d04-a): compile and regression-test full C14 native offline postprocess recipe",
+          "parents": [
+            "ba4805b529767ca09e550e02e19d580037835275"
+          ]
+        },
+        {
+          "sha": "ba4805b529767ca09e550e02e19d580037835275",
+          "date": "2026-11-23T18:44:49Z",
+          "subject": "test(c3d04-a): validate isolated C14 function-object parity and geometrically adapted 3D probes/profiles",
+          "parents": [
+            "4b4656c296699a3e1d6cb1984bd235af0fe7cb3f"
+          ]
+        },
+        {
+          "sha": "4b4656c296699a3e1d6cb1984bd235af0fe7cb3f",
+          "date": "2026-11-23T18:44:27Z",
+          "subject": "fix(c3d04-a): compare native postProcessing directories to actual recorded C14 outputs, not field-only objects",
+          "parents": [
+            "42843c172528d44153590d06a2e0c592646a4435"
+          ]
+        },
+        {
+          "sha": "42843c172528d44153590d06a2e0c592646a4435",
+          "date": "2026-11-23T18:43:49Z",
+          "subject": "feat(c3d04-a): stage native original C14 complete postProcessing on isolated 3D run copy only",
+          "parents": [
+            "865be8f1088dce9ddae550c9349fe07919de5080"
+          ]
+        },
+        {
+          "sha": "865be8f1088dce9ddae550c9349fe07919de5080",
+          "date": "2026-11-23T18:41:20Z",
+          "subject": "fix(c3d04-a): close 28MB solver-log stream safely during residual chronology audit",
+          "parents": [
+            "f842af91032f8306eaaf078bd876e07b8bd5bc28"
+          ]
+        },
+        {
+          "sha": "f842af91032f8306eaaf078bd876e07b8bd5bc28",
+          "date": "2026-11-23T18:41:10Z",
+          "subject": "test(c3d04-a): use expanded valid empty neighbour polyMesh fixture in boundary-volume crosscheck",
+          "parents": [
+            "5ec7b57c58867fd5482328b8c9f03d1e67966e35"
+          ]
+        },
+        {
+          "sha": "5ec7b57c58867fd5482328b8c9f03d1e67966e35",
+          "date": "2026-11-23T18:39:25Z",
+          "subject": "docs(c3d04-a): persist full C14 2D to 3D postprocessing parity rule and scientific limits",
+          "parents": [
+            "3cce85b2b7e06519752a0e35fd9c355a55703e44"
+          ]
+        },
+        {
+          "sha": "3cce85b2b7e06519752a0e35fd9c355a55703e44",
+          "date": "2026-11-23T18:39:22Z",
+          "subject": "docs(c3d04-a): persist full C14 2D to 3D postprocessing parity rule and scientific limits",
+          "parents": [
+            "e05f9bc7407d0d5c0564ac6ed892948874d3d01f"
+          ]
+        },
+        {
+          "sha": "e05f9bc7407d0d5c0564ac6ed892948874d3d01f",
+          "date": "2026-11-23T18:39:00Z",
+          "subject": "track(c3d04-a): require original C14 postprocessing parity without incrementing 60pct milestone",
+          "parents": [
+            "1866ba964155312d3b4b9d1b0f7e4fe3d7b4dfd5"
+          ]
+        },
+        {
+          "sha": "1866ba964155312d3b4b9d1b0f7e4fe3d7b4dfd5",
+          "date": "2026-11-23T18:38:41Z",
+          "subject": "docs(c3d04-a): require full original C14 postprocessing parity and track actual 3D gaps",
+          "parents": [
+            "d9e2b62df6ad7e77297eaddf6e6778730d13bf5a"
+          ]
+        },
+        {
+          "sha": "d9e2b62df6ad7e77297eaddf6e6778730d13bf5a",
+          "date": "2026-11-23T18:37:21Z",
+          "subject": "ci(c3d04-a): test C14-derived postrun 3D volumetric parity without CFD",
+          "parents": [
+            "aa0c84c58761ae462de6a60538c207ba1af14c1e"
+          ]
+        },
+        {
+          "sha": "aa0c84c58761ae462de6a60538c207ba1af14c1e",
+          "date": "2026-11-23T18:37:01Z",
+          "subject": "test(c3d04-a): verify native cell-volume orientation, U parsing, residual chronology, and C14 diagnostic inventory",
+          "parents": [
+            "dfce5d3b7d8790923437f13dcddfe5d74c4057b5"
+          ]
+        },
+        {
+          "sha": "dfce5d3b7d8790923437f13dcddfe5d74c4057b5",
+          "date": "2026-11-23T18:36:08Z",
+          "subject": "science(c3d04-a): add read-only 3D volume-weighted C14 postrun diagnostics and parity inventory",
+          "parents": [
+            "85ddf1a6f14a65077ea01d4046d74f0ee291ec08"
+          ]
+        }
+      ],
+      "unresolved_parents": [],
+      "coverage_complete": true
+    },
+    {
+      "name": "science/c3d04-a-f14-three-times-standalone-vs-sequential-20261124",
+      "sha": "9295328d43c279222e72242c2546b95dbb704a1f",
+      "main_reachable": false,
+      "commits": [
+        {
+          "sha": "9295328d43c279222e72242c2546b95dbb704a1f",
+          "date": "2026-11-24T07:38:28Z",
+          "subject": "docs(C3D04-A): actual WSL source and _03 full metal zone authentic, Foundation14 multitime registry suspected, isolate three snapshots without CFD rerun",
+          "parents": [
+            "f258e5fc4c054d94b3a3ca4086c287c560460893"
+          ]
+        },
+        {
+          "sha": "f258e5fc4c054d94b3a3ca4086c287c560460893",
+          "date": "2026-11-24T07:38:25Z",
+          "subject": "docs(C3D04-A): actual WSL source and _03 full metal zone authentic, Foundation14 multitime registry suspected, isolate three snapshots without CFD rerun",
+          "parents": [
+            "83a87d2d4a68d744734f1a2e50123ddeb76a2f0a"
+          ]
+        },
+        {
+          "sha": "83a87d2d4a68d744734f1a2e50123ddeb76a2f0a",
+          "date": "2026-11-24T07:38:22Z",
+          "subject": "docs(C3D04-A): actual WSL source and _03 full metal zone authentic, Foundation14 multitime registry suspected, isolate three snapshots without CFD rerun",
+          "parents": [
+            "d70f2cf55668578d8afbc3a7514673c0d57e2b07"
+          ]
+        },
+        {
+          "sha": "d70f2cf55668578d8afbc3a7514673c0d57e2b07",
+          "date": "2026-11-24T07:38:19Z",
+          "subject": "docs(C3D04-A): actual WSL source and _03 full metal zone authentic, Foundation14 multitime registry suspected, isolate three snapshots without CFD rerun",
+          "parents": [
+            "8d9e7bb98b21d5e5fb33f675838e923cbb6a4a6c"
+          ]
+        },
+        {
+          "sha": "8d9e7bb98b21d5e5fb33f675838e923cbb6a4a6c",
+          "date": "2026-11-24T07:38:16Z",
+          "subject": "docs(C3D04-A): actual WSL source and _03 full metal zone authentic, Foundation14 multitime registry suspected, isolate three snapshots without CFD rerun",
+          "parents": [
+            "99cfc6096458f681ca331d54627e2efc67934b71"
+          ]
+        },
+        {
+          "sha": "99cfc6096458f681ca331d54627e2efc67934b71",
+          "date": "2026-11-24T07:38:11Z",
+          "subject": "docs(C3D04-A): actual WSL source and _03 full metal zone authentic, Foundation14 multitime registry suspected, isolate three snapshots without CFD rerun",
+          "parents": [
+            "f005859e8f2819e08d112ba85fb6fdcced3b2c2e"
+          ]
+        },
+        {
+          "sha": "f005859e8f2819e08d112ba85fb6fdcced3b2c2e",
+          "date": "2026-11-24T07:37:28Z",
+          "subject": "docs(C3D04-A): F14 official multitime solver registry source investigation and guarded three authentic snapshot native single-vs-loop probe, no CFD rerun",
+          "parents": [
+            "f76876e27838fc755d1e4b269993c688657e050b"
+          ]
+        },
+        {
+          "sha": "f76876e27838fc755d1e4b269993c688657e050b",
+          "date": "2026-11-24T07:36:43Z",
+          "subject": "fix(C3D04-A): preflight ALL selected snapshot/constant/system symlinks before creating any isolated output directory",
+          "parents": [
+            "d068964e2204074f14af637f6c8ecbf4dd429c7f"
+          ]
+        },
+        {
+          "sha": "d068964e2204074f14af637f6c8ecbf4dd429c7f",
+          "date": "2026-11-24T07:36:02Z",
+          "subject": "status(C3D04-A): record verified 8960 valid metal zones in actual 101-state WSL source/_03, 400 persistent multi-time fatals, prepare non-destructive 3-snapshot C14 F14 time-loop isolation",
+          "parents": [
+            "178a17f8e9d00e063acf64b40be66044384640e8"
+          ]
+        },
+        {
+          "sha": "178a17f8e9d00e063acf64b40be66044384640e8",
+          "date": "2026-11-24T07:35:13Z",
+          "subject": "ci(C3D04-A): compile and test native 3-standalone-vs-combined C14 saved time probe with source SHA/safety and no CFD",
+          "parents": [
+            "ca0bd7c158b2195deafa638f3b7117516dcac706"
+          ]
+        },
+        {
+          "sha": "ca0bd7c158b2195deafa638f3b7117516dcac706",
+          "date": "2026-11-24T07:34:58Z",
+          "subject": "ci(C3D04-A): run real F14 original C14 metal/mold three independently initialized times vs combined time-loop on disposable 27-cell case",
+          "parents": [
+            "f19983600b35883a73da974846f0d8dbc4d5d895"
+          ]
+        },
+        {
+          "sha": "f19983600b35883a73da974846f0d8dbc4d5d895",
+          "date": "2026-11-24T07:34:38Z",
+          "subject": "test(C3D04-A): stand-alone vs sequential F14 timeloop with fake fatal, verified SHA source invariance, symlink and occupied-output protection",
+          "parents": [
+            "9399f1bcb5b8e6abccc3daa2770b5c7b83d92dab"
+          ]
+        },
+        {
+          "sha": "9399f1bcb5b8e6abccc3daa2770b5c7b83d92dab",
+          "date": "2026-11-24T07:34:04Z",
+          "subject": "science(C3D04-A): isolate native Foundation14 one-time vs multi-time registry behavior on three authentic saved snapshots and original C14 rho*h, no 101-state rerun",
+          "parents": [
+            "d262def48a2ba3949aa51fa66af5cb7414449038"
+          ]
+        }
+      ],
+      "unresolved_parents": [],
+      "coverage_complete": true
+    },
+    {
+      "name": "science/c3d04-a-f14-time-isolation-codeonly-20261124",
+      "sha": "0422b104c745b1cfa57d5ecba8c554f63259472a",
+      "main_reachable": false,
+      "commits": [
+        {
+          "sha": "0422b104c745b1cfa57d5ecba8c554f63259472a",
+          "date": "2026-11-24T07:43:59Z",
+          "subject": "ci(C3D04-A): add real F14 27+27 native and Python single-vs-multi saved-state tests on concurrent-main-safe branch",
+          "parents": [
+            "96432cfbe01301f891ef374c6dbc19b690ecdbb8"
+          ]
+        },
+        {
+          "sha": "96432cfbe01301f891ef374c6dbc19b690ecdbb8",
+          "date": "2026-11-24T07:43:54Z",
+          "subject": "ci(C3D04-A): add real F14 27+27 native and Python single-vs-multi saved-state tests on concurrent-main-safe branch",
+          "parents": [
+            "3c5187b65e0531386871f540edebb5e49a6146b3"
+          ]
+        },
+        {
+          "sha": "3c5187b65e0531386871f540edebb5e49a6146b3",
+          "date": "2026-11-24T07:43:51Z",
+          "subject": "science(C3D04-A): add native single-vs-multi three-snapshot isolated F14 diagnosis without modifying shared project status",
+          "parents": [
+            "f702d5a605f0b406dc902d7faf02bb1b8426451c"
+          ]
+        },
+        {
+          "sha": "f702d5a605f0b406dc902d7faf02bb1b8426451c",
+          "date": "2026-11-24T07:43:48Z",
+          "subject": "science(C3D04-A): add native single-vs-multi three-snapshot isolated F14 diagnosis without modifying shared project status",
+          "parents": [
+            "f76b1eef9181e6f7f37ae078782003b1cbb43981"
+          ]
+        },
+        {
+          "sha": "f76b1eef9181e6f7f37ae078782003b1cbb43981",
+          "date": "2026-11-24T07:43:44Z",
+          "subject": "science(C3D04-A): add native single-vs-multi three-snapshot isolated F14 diagnosis without modifying shared project status",
+          "parents": [
+            "bba72264f2f9c31cc8d975f2eb9c5e5e3f9dc60c"
+          ]
+        }
+      ],
+      "unresolved_parents": [],
+      "coverage_complete": true
+    },
+    {
+      "name": "science/c3d04-a-native-stage07-forensics-real-20261123",
+      "sha": "d0473c6defb0f20264e2ffeef8e0d5f5ffab7c1e",
+      "main_reachable": false,
+      "commits": [
+        {
+          "sha": "d0473c6defb0f20264e2ffeef8e0d5f5ffab7c1e",
+          "date": "2026-11-23T20:34:49Z",
+          "subject": "audit(c3d04-a): recognize real WSL 101-state values and native incomplete parity with read-only integrated forensic QA",
+          "parents": [
+            "6be66315522b36b60ba97b7ecceef445215736d6"
+          ]
+        },
+        {
+          "sha": "6be66315522b36b60ba97b7ecceef445215736d6",
+          "date": "2026-11-23T20:34:20Z",
+          "subject": "test(c3d04-a): preserve multiline native FATAL root cause via bounded failed-log tail in the same forensic output",
+          "parents": [
+            "6585dce0f0ed282037854c64ba90bf0c24c4fde6"
+          ]
+        },
+        {
+          "sha": "6585dce0f0ed282037854c64ba90bf0c24c4fde6",
+          "date": "2026-11-23T20:34:08Z",
+          "subject": "fix(c3d04-a): include bounded tail of failed native logs to capture multiline OpenFOAM FATAL cause in a single WSL pass",
+          "parents": [
+            "1e9e8457927b08edc493ce3050c802ba0f62e07a"
+          ]
+        },
+        {
+          "sha": "1e9e8457927b08edc493ce3050c802ba0f62e07a",
+          "date": "2026-11-23T20:33:38Z",
+          "subject": "docs(c3d04-a): integrate real WSL kinetics, native diagnostics blocker and required SHA-bound offline forensics across logs",
+          "parents": [
+            "61c6b7873427086ec76a1d5a1919472ea82df55b"
+          ]
+        },
+        {
+          "sha": "61c6b7873427086ec76a1d5a1919472ea82df55b",
+          "date": "2026-11-23T20:33:35Z",
+          "subject": "docs(c3d04-a): integrate real WSL kinetics, native diagnostics blocker and required SHA-bound offline forensics across logs",
+          "parents": [
+            "2ac96ad0ac5a676d2e86952fc34a67b244f8b693"
+          ]
+        },
+        {
+          "sha": "2ac96ad0ac5a676d2e86952fc34a67b244f8b693",
+          "date": "2026-11-23T20:33:32Z",
+          "subject": "docs(c3d04-a): integrate real WSL kinetics, native diagnostics blocker and required SHA-bound offline forensics across logs",
+          "parents": [
+            "a70a58f0ceb5606d2e38e211a437fc4528d0553e"
+          ]
+        },
+        {
+          "sha": "a70a58f0ceb5606d2e38e211a437fc4528d0553e",
+          "date": "2026-11-23T20:33:29Z",
+          "subject": "docs(c3d04-a): integrate real WSL kinetics, native diagnostics blocker and required SHA-bound offline forensics across logs",
+          "parents": [
+            "cc351c20b3f39ae1419e38341f7bffa9c7df1bc3"
+          ]
+        },
+        {
+          "sha": "cc351c20b3f39ae1419e38341f7bffa9c7df1bc3",
+          "date": "2026-11-23T20:33:26Z",
+          "subject": "docs(c3d04-a): integrate real WSL kinetics, native diagnostics blocker and required SHA-bound offline forensics across logs",
+          "parents": [
+            "981f51700f1da520c460e23f499acbf4bc5edfd2"
+          ]
+        },
+        {
+          "sha": "981f51700f1da520c460e23f499acbf4bc5edfd2",
+          "date": "2026-11-23T20:33:23Z",
+          "subject": "docs(c3d04-a): integrate real WSL kinetics, native diagnostics blocker and required SHA-bound offline forensics across logs",
+          "parents": [
+            "fb9e3381dd5dbdd4d7509741823f43cf3e6e6600"
+          ]
+        },
+        {
+          "sha": "fb9e3381dd5dbdd4d7509741823f43cf3e6e6600",
+          "date": "2026-11-23T20:32:35Z",
+          "subject": "docs(C3D04-A): record real 101-state WSL kinetics and integrated native-failure/energy forensic gate with exact scientific limits",
+          "parents": [
+            "67b193652db8f39ef84e9c1ac61abdb2f6f978a3"
+          ]
+        },
+        {
+          "sha": "67b193652db8f39ef84e9c1ac61abdb2f6f978a3",
+          "date": "2026-11-23T20:31:50Z",
+          "subject": "status(C3D04-A): log real WSL 101-state kinetic evidence and native incomplete findings; 7/10 stage 6/10=60pct unchanged",
+          "parents": [
+            "1197809d10366e37f70ed0525d30ec47089c2bf6"
+          ]
+        },
+        {
+          "sha": "1197809d10366e37f70ed0525d30ec47089c2bf6",
+          "date": "2026-11-23T20:31:13Z",
+          "subject": "ci(c3d04-a): regress real native failure classification, source SHA and offline limits without running solver",
+          "parents": [
+            "4744b407bd439a1249898f3ae3cc8bcfe3cb7ed5"
+          ]
+        },
+        {
+          "sha": "4744b407bd439a1249898f3ae3cc8bcfe3cb7ed5",
+          "date": "2026-11-23T20:30:55Z",
+          "subject": "test(c3d04-a): synthetic native failure classification, SHA, energy boundaries, source protections, negative regressions",
+          "parents": [
+            "c204110b92af93ee80faae2cc7daf359b564389f"
+          ]
+        },
+        {
+          "sha": "c204110b92af93ee80faae2cc7daf359b564389f",
+          "date": "2026-11-23T20:30:08Z",
+          "subject": "science(c3d04-a): single-pass native offline failure forensics, source SHA/profiles/energy/log evidence without CFD rerun",
+          "parents": [
+            "41ad3d67776bb69325d1212170d3f617520c159e"
+          ]
+        }
+      ],
+      "unresolved_parents": [],
+      "coverage_complete": true
+    },
+    {
+      "name": "science/c3d04-a-offline-v14-solver-backed-energy-parity-20261123",
+      "sha": "43afb22a7bf20deed585241300d91ef241cb655c",
+      "main_reachable": false,
+      "commits": [
+        {
+          "sha": "43afb22a7bf20deed585241300d91ef241cb655c",
+          "date": "2026-11-23T20:52:22Z",
+          "subject": "status(C3D04-A): record actual native Foundation14 energy flux C14 synthetic PASS while WSL V4/T02 remains unverified and stage 7/10=60pct",
+          "parents": [
+            "7eae4eeb573aa75a4d58ec2dcb4bf3dba0b64912"
+          ]
+        },
+        {
+          "sha": "7eae4eeb573aa75a4d58ec2dcb4bf3dba0b64912",
+          "date": "2026-11-23T20:52:12Z",
+          "subject": "evidence(C3D04-A): record actual F14 27+27 native solver-backed rho*h and three C14 energy face-power outputs PASS in Actions 45263380861",
+          "parents": [
+            "36824a0dc93b7023501a3c795182fad2c4a0a82a"
+          ]
+        },
+        {
+          "sha": "36824a0dc93b7023501a3c795182fad2c4a0a82a",
+          "date": "2026-11-23T20:49:03Z",
+          "subject": "fix(nativeF14): construct existing six-object energy group from real C14 researchDiagnostics for disposable completed smoke",
+          "parents": [
+            "013388ca88e1dc7a9dbfb92d56c83160b3b8bdfd"
+          ]
+        },
+        {
+          "sha": "013388ca88e1dc7a9dbfb92d56c83160b3b8bdfd",
+          "date": "2026-11-23T20:48:52Z",
+          "subject": "test(native F14): assert energyAdvectiveFlux, heatFlux, energyFlux and contact/top/total surface power tables on disposable completed 3D C14 solver",
+          "parents": [
+            "45739ca2a8b3463b1c679960795d97ac256f7a7a"
+          ]
+        },
+        {
+          "sha": "45739ca2a8b3463b1c679960795d97ac256f7a7a",
+          "date": "2026-11-23T20:48:07Z",
+          "subject": "docs(C3D04-A): record real F14 rho fatal, solver-backed offline cure design, science limits and new copy-only execution policy",
+          "parents": [
+            "78c7e5411a7f8086936d726cdd3eb11b0604f0e3"
+          ]
+        },
+        {
+          "sha": "78c7e5411a7f8086936d726cdd3eb11b0604f0e3",
+          "date": "2026-11-23T20:48:04Z",
+          "subject": "docs(C3D04-A): record real F14 rho fatal, solver-backed offline cure design, science limits and new copy-only execution policy",
+          "parents": [
+            "7e457087b5730e5f5fa8f1d2a02eacb62cb43181"
+          ]
+        },
+        {
+          "sha": "7e457087b5730e5f5fa8f1d2a02eacb62cb43181",
+          "date": "2026-11-23T20:48:01Z",
+          "subject": "docs(C3D04-A): record real F14 rho fatal, solver-backed offline cure design, science limits and new copy-only execution policy",
+          "parents": [
+            "e82a9f089aebb62c374b3d55c7108d1fd542b2eb"
+          ]
+        },
+        {
+          "sha": "e82a9f089aebb62c374b3d55c7108d1fd542b2eb",
+          "date": "2026-11-23T20:47:57Z",
+          "subject": "docs(C3D04-A): record real F14 rho fatal, solver-backed offline cure design, science limits and new copy-only execution policy",
+          "parents": [
+            "a3c8662d3833731bc00482f801c3301d0c51a85f"
+          ]
+        },
+        {
+          "sha": "a3c8662d3833731bc00482f801c3301d0c51a85f",
+          "date": "2026-11-23T20:47:54Z",
+          "subject": "docs(C3D04-A): record real F14 rho fatal, solver-backed offline cure design, science limits and new copy-only execution policy",
+          "parents": [
+            "ad41156f4784be73d8aae1a4400168ab9620f715"
+          ]
+        },
+        {
+          "sha": "ad41156f4784be73d8aae1a4400168ab9620f715",
+          "date": "2026-11-23T20:47:51Z",
+          "subject": "docs(C3D04-A): record real F14 rho fatal, solver-backed offline cure design, science limits and new copy-only execution policy",
+          "parents": [
+            "df2b35898f4a72d0c3565b16240ad27c5ae90bea"
+          ]
+        },
+        {
+          "sha": "df2b35898f4a72d0c3565b16240ad27c5ae90bea",
+          "date": "2026-11-23T20:47:15Z",
+          "subject": "science(status C3D04-A): record actual WSL rho registry fatal and official F14 solver-backed offline recovery with 6/10 milestones unchanged",
+          "parents": [
+            "9a2475606c63ad2353670fffeec47de3d9b7afab"
+          ]
+        },
+        {
+          "sha": "9a2475606c63ad2353670fffeec47de3d9b7afab",
+          "date": "2026-11-23T20:46:36Z",
+          "subject": "docs(C3D04-A): analyze observed rho fatal in F14 and define safe six-pass solver-backed offline C14 energy/profiles recovery without CFD rerun",
+          "parents": [
+            "60ca9103ba70c3eed64ce65c457a7be0b43699d8"
+          ]
+        },
+        {
+          "sha": "60ca9103ba70c3eed64ce65c457a7be0b43699d8",
+          "date": "2026-11-23T20:45:46Z",
+          "subject": "ci(native F14): execute genuine C14 fluid solver-backed offline rho*h postprocessing smoke on disposable completed 27-cell CFD",
+          "parents": [
+            "ac1f1230e1c94a5e74df5afb064ecb6e480bfd37"
+          ]
+        },
+        {
+          "sha": "ac1f1230e1c94a5e74df5afb064ecb6e480bfd37",
+          "date": "2026-11-23T20:45:34Z",
+          "subject": "test(nativeF14): prove C14 rho*h postprocessing with -solver fluid on disposable genuine 27-cell C14 two-step native solver case",
+          "parents": [
+            "16443b545e9958038ff79178c40859aee5383797"
+          ]
+        },
+        {
+          "sha": "16443b545e9958038ff79178c40859aee5383797",
+          "date": "2026-11-23T20:44:33Z",
+          "subject": "ci(C3D04-A): test isolated Foundation14 solver-backed offline C14 field registry, energy tables and safe native six-pass staging",
+          "parents": [
+            "5d4828ee451ee757319b9f113a028d39b2906253"
+          ]
+        },
+        {
+          "sha": "5d4828ee451ee757319b9f113a028d39b2906253",
+          "date": "2026-11-23T20:44:03Z",
+          "subject": "test(C3D04-A): native offline solver-backed C14 energy groups, primitive profiles, SHA-bound WSL provenance and 101-state patch-power reconciliation",
+          "parents": [
+            "228342618a9b2f849a03011e1406b60b50c91293"
+          ]
+        },
+        {
+          "sha": "228342618a9b2f849a03011e1406b60b50c91293",
+          "date": "2026-11-23T20:43:18Z",
+          "subject": "science(C3D04-A): one-shot separate offline Foundation14 solver-backed fluid thermo and isolated C14 power/phase/profile/momentum groups; zero original CFD writes",
+          "parents": [
+            "0cf3eeee670d88014f69d0b60461cb4cb92d91fb"
+          ]
+        }
+      ],
+      "unresolved_parents": [],
+      "coverage_complete": true
+    },
+    {
+      "name": "science/c3d04-a-stage07-immutable-recovery-kinetics-20261123",
+      "sha": "9ea5e32580a422d072f71407d0b922088b28e6f8",
+      "main_reachable": false,
+      "commits": [
+        {
+          "sha": "9ea5e32580a422d072f71407d0b922088b28e6f8",
+          "date": "2026-11-23T20:21:07Z",
+          "subject": "docs(c3d04-a): distinguish incomplete archived volumetric output from mismatched evidence; rebuild only in fresh location",
+          "parents": [
+            "f61d385c920dd4d218cd334792f95b23d4634514"
+          ]
+        },
+        {
+          "sha": "f61d385c920dd4d218cd334792f95b23d4634514",
+          "date": "2026-11-23T20:21:03Z",
+          "subject": "docs(c3d04-a): distinguish incomplete archived volumetric output from mismatched evidence; rebuild only in fresh location",
+          "parents": [
+            "5a05c66881665d7b3f7fa760a89739fa88b8cc33"
+          ]
+        },
+        {
+          "sha": "5a05c66881665d7b3f7fa760a89739fa88b8cc33",
+          "date": "2026-11-23T20:20:44Z",
+          "subject": "test(c3d04-a): simulate incomplete preexisting volume output, detached rebuild into new folder, no overwrite or source changes",
+          "parents": [
+            "643592c0c64642eb1fd21870753fe44d54f24490"
+          ]
+        },
+        {
+          "sha": "643592c0c64642eb1fd21870753fe44d54f24490",
+          "date": "2026-11-23T20:20:20Z",
+          "subject": "feat(c3d04-a): recover missing volume JSON/CSV into a new non-overwriting folder from existing 101 CFD snapshots only",
+          "parents": [
+            "e1e5b5c3ec319ee2a4cae2ba68675df9137fdaa1"
+          ]
+        },
+        {
+          "sha": "e1e5b5c3ec319ee2a4cae2ba68675df9137fdaa1",
+          "date": "2026-11-23T20:18:45Z",
+          "subject": "docs(c3d04-a): publish immutable stage07 recovery procedure and real-worktree evidentiary limits",
+          "parents": [
+            "05266d4bde7efbba7de205f7371d85b0dabc1032"
+          ]
+        },
+        {
+          "sha": "05266d4bde7efbba7de205f7371d85b0dabc1032",
+          "date": "2026-11-23T20:18:41Z",
+          "subject": "docs(c3d04-a): publish immutable stage07 recovery procedure and real-worktree evidentiary limits",
+          "parents": [
+            "c038af91a12b661d56a8d3e96607196e24e0eed4"
+          ]
+        },
+        {
+          "sha": "c038af91a12b661d56a8d3e96607196e24e0eed4",
+          "date": "2026-11-23T20:18:38Z",
+          "subject": "docs(c3d04-a): publish immutable stage07 recovery procedure and real-worktree evidentiary limits",
+          "parents": [
+            "a1739a10d22a7c7933e8f39755be6a012db00a7c"
+          ]
+        },
+        {
+          "sha": "a1739a10d22a7c7933e8f39755be6a012db00a7c",
+          "date": "2026-11-23T20:18:35Z",
+          "subject": "docs(c3d04-a): publish immutable stage07 recovery procedure and real-worktree evidentiary limits",
+          "parents": [
+            "06fc3b20f61ef0830c35681645bda1eb5d598eb4"
+          ]
+        },
+        {
+          "sha": "06fc3b20f61ef0830c35681645bda1eb5d598eb4",
+          "date": "2026-11-23T20:18:32Z",
+          "subject": "docs(c3d04-a): publish immutable stage07 recovery procedure and real-worktree evidentiary limits",
+          "parents": [
+            "057c4815f364df49211d778fbe43edf0734ea7fb"
+          ]
+        },
+        {
+          "sha": "057c4815f364df49211d778fbe43edf0734ea7fb",
+          "date": "2026-11-23T20:17:51Z",
+          "subject": "status(c3d04-a): register 101-state immutable recovery as code-only pending real WSL; preserve stage07 and 60pct",
+          "parents": [
+            "fa89fb74b633da3bbc8fefdfb1f7688885e398e6"
+          ]
+        },
+        {
+          "sha": "fa89fb74b633da3bbc8fefdfb1f7688885e398e6",
+          "date": "2026-11-23T20:17:34Z",
+          "subject": "test(c3d04-a): changed native-copy logs cannot reuse immutable forensic report; explicit new destination only",
+          "parents": [
+            "a3c082fa173d336a69a48f7052e78057ab1507f4"
+          ]
+        },
+        {
+          "sha": "a3c082fa173d336a69a48f7052e78057ab1507f4",
+          "date": "2026-11-23T20:17:16Z",
+          "subject": "fix(c3d04-a): bind immutable recovery idempotence to existing native log/report hashes; never silently reuse stale audit",
+          "parents": [
+            "d524de2ac9ecdf83ef682592d3a1dd759a737a72"
+          ]
+        },
+        {
+          "sha": "d524de2ac9ecdf83ef682592d3a1dd759a737a72",
+          "date": "2026-11-23T20:16:47Z",
+          "subject": "docs(c3d04-a): scientific recovery of existing C14 101-state thermal kinetics and immutable native output forensics with exact limits",
+          "parents": [
+            "28f4c3fda295b5900a12a5f9fc39ce78fbe935a9"
+          ]
+        },
+        {
+          "sha": "28f4c3fda295b5900a12a5f9fc39ce78fbe935a9",
+          "date": "2026-11-23T20:16:07Z",
+          "subject": "ci(c3d04-a): compile and exercise 101-state recovery and partial-copy provenance with no native CFD writes",
+          "parents": [
+            "da12cac7279a0cba7f7067a3ce573d58b31ec712"
+          ]
+        },
+        {
+          "sha": "da12cac7279a0cba7f7067a3ce573d58b31ec712",
+          "date": "2026-11-23T20:15:55Z",
+          "subject": "test(c3d04-a): use correctly derived 0.8 at t10 for synthetic 0.002 per snapshot model fraction",
+          "parents": [
+            "50ec4378bd176968e6eec814e196c8f2bc7100e8"
+          ]
+        },
+        {
+          "sha": "50ec4378bd176968e6eec814e196c8f2bc7100e8",
+          "date": "2026-11-23T20:15:42Z",
+          "subject": "test(c3d04-a): synthetic 101-state immutable recovery, onset interval bounds, partial copy, untrusted report, idempotent output and corrupt data blocks",
+          "parents": [
+            "8c073920010a8bd793ec1ab47a6070ac3b8d8cab"
+          ]
+        },
+        {
+          "sha": "8c073920010a8bd793ec1ab47a6070ac3b8d8cab",
+          "date": "2026-11-23T20:14:51Z",
+          "subject": "science(c3d04-a): recover existing 101-state thermal solidification kinetics and read-only native copy status without rerun",
+          "parents": [
+            "8c9e16d1bffbdc96ec4253e21b8b489a378eac57"
+          ]
+        }
+      ],
+      "unresolved_parents": [],
+      "coverage_complete": true
+    },
+    {
+      "name": "science/c3d04-a-stage07-timed-mesh-rootcause-readonly-20261124",
+      "sha": "1e49a23dcf2ad86225bb91748a4a8ab4e9f2ff99",
+      "main_reachable": false,
+      "commits": [
+        {
+          "sha": "1e49a23dcf2ad86225bb91748a4a8ab4e9f2ff99",
+          "date": "2026-11-24T06:51:21Z",
+          "subject": "test(C3D04-A): output completeness remains false even when native groups have zero FATAL and complete SHA reports",
+          "parents": [
+            "3f60a406e10dca8a136308444a4b85f6163fe1ac"
+          ]
+        },
+        {
+          "sha": "3f60a406e10dca8a136308444a4b85f6163fe1ac",
+          "date": "2026-11-24T06:51:11Z",
+          "subject": "fix(C3D04-A): explicit native execution vs scientific completeness; 3-of-4 profiles and one-row energy are NOT acceptable even if no FATAL",
+          "parents": [
+            "e1ac2773c6c32fcb1635b35e77cc05a57cdff24f"
+          ]
+        },
+        {
+          "sha": "e1ac2773c6c32fcb1635b35e77cc05a57cdff24f",
+          "date": "2026-11-24T06:50:33Z",
+          "subject": "docs(C3D04-A): record actual _03 WSL zone fatal persistence, 80/27 profile and one-row power, enforce read-only root cause gate",
+          "parents": [
+            "2f106870ab13094fe17a6999dbe5edaefab35eea"
+          ]
+        },
+        {
+          "sha": "2f106870ab13094fe17a6999dbe5edaefab35eea",
+          "date": "2026-11-24T06:50:29Z",
+          "subject": "docs(C3D04-A): record actual _03 WSL zone fatal persistence, 80/27 profile and one-row power, enforce read-only root cause gate",
+          "parents": [
+            "f9a2b405a08d053671d8f57c85f3cd92c95eef0d"
+          ]
+        },
+        {
+          "sha": "f9a2b405a08d053671d8f57c85f3cd92c95eef0d",
+          "date": "2026-11-24T06:50:26Z",
+          "subject": "docs(C3D04-A): record actual _03 WSL zone fatal persistence, 80/27 profile and one-row power, enforce read-only root cause gate",
+          "parents": [
+            "a62d90e01ef0c1203e161a1749f1838e492a9ff4"
+          ]
+        },
+        {
+          "sha": "a62d90e01ef0c1203e161a1749f1838e492a9ff4",
+          "date": "2026-11-24T06:50:23Z",
+          "subject": "docs(C3D04-A): record actual _03 WSL zone fatal persistence, 80/27 profile and one-row power, enforce read-only root cause gate",
+          "parents": [
+            "b3d346500ed8a0725d3dc6f08b45604ae24248d7"
+          ]
+        },
+        {
+          "sha": "b3d346500ed8a0725d3dc6f08b45604ae24248d7",
+          "date": "2026-11-24T06:50:20Z",
+          "subject": "docs(C3D04-A): record actual _03 WSL zone fatal persistence, 80/27 profile and one-row power, enforce read-only root cause gate",
+          "parents": [
+            "25c790ba60a4e6fb65de0e9c81d3473a3dc7e2da"
+          ]
+        },
+        {
+          "sha": "25c790ba60a4e6fb65de0e9c81d3473a3dc7e2da",
+          "date": "2026-11-24T06:49:57Z",
+          "subject": "docs(C3D04-A): real WSL _03 400 F14 cellZone fatals, one-row native energies and vertical 27pt; deploy read-only active mesh instance audit before new copy",
+          "parents": [
+            "73f0b12ce21261ded17c4220e747e849de1570a3"
+          ]
+        },
+        {
+          "sha": "73f0b12ce21261ded17c4220e747e849de1570a3",
+          "date": "2026-11-24T06:49:12Z",
+          "subject": "status(C3D04-A): record authentic WSL _03 four hundred metal zone fatals, three 80-point horizontal profiles, 27pt vertical, only t0 energy and no scientific progress inflation",
+          "parents": [
+            "da9ab7ee233680834546853b13ac13a91c2463cd"
+          ]
+        },
+        {
+          "sha": "da9ab7ee233680834546853b13ac13a91c2463cd",
+          "date": "2026-11-24T06:48:57Z",
+          "subject": "ci(C3D04-A): test strict WSL _03 mesh-instance zone inspection and forbid any native execution/writes from audit",
+          "parents": [
+            "b9c86f1377205907008c1b119bcedc8616cfa845"
+          ]
+        },
+        {
+          "sha": "b9c86f1377205907008c1b119bcedc8616cfa845",
+          "date": "2026-11-24T06:48:35Z",
+          "subject": "test(C3D04-A): _03 read-only active zone and time-instance audit, four F14 fatals, one-row surface powers, 27pt vertical profile, no data writes",
+          "parents": [
+            "a391fafee583ccb54ece823f6e2ff3fbd6a1a044"
+          ]
+        },
+        {
+          "sha": "a391fafee583ccb54ece823f6e2ff3fbd6a1a044",
+          "date": "2026-11-24T06:48:14Z",
+          "subject": "science(C3D04-A): identify all time-local metal polyMesh files lacking full metal zone, including absent cellZones, without assuming runtime precedence",
+          "parents": [
+            "dd3deb3fa453f2f85efa80f3513122bbc5208433"
+          ]
+        },
+        {
+          "sha": "dd3deb3fa453f2f85efa80f3513122bbc5208433",
+          "date": "2026-11-24T06:47:43Z",
+          "subject": "science(C3D04-A): SHA-backed read-only forensic of real _03 constant/time mesh cellzone instances, 100 native fatals per group, energy one-row and 27pt profile",
+          "parents": [
+            "51e4f83386f773a340e93980ab11e4ee1d170d12"
+          ]
+        }
+      ],
+      "unresolved_parents": [],
+      "coverage_complete": true
+    },
+    {
+      "name": "science/c3d04-a-stage07-zone-forensics-clean-main-20261124",
+      "sha": "0fef63a1eaf01dfb78bd37e0467d0c5c593e2ab8",
+      "main_reachable": false,
+      "commits": [
+        {
+          "sha": "0fef63a1eaf01dfb78bd37e0467d0c5c593e2ab8",
+          "date": "2026-11-24T06:53:33Z",
+          "subject": "docs(C3D04-A): port _03 actual WSL active mesh zone audit and 60pct scientific blocker atop current main without clobbering other logs",
+          "parents": [
+            "aa9c817d0ba5089316fa533c934636877de3adc0"
+          ]
+        },
+        {
+          "sha": "aa9c817d0ba5089316fa533c934636877de3adc0",
+          "date": "2026-11-24T06:53:30Z",
+          "subject": "docs(C3D04-A): port _03 actual WSL active mesh zone audit and 60pct scientific blocker atop current main without clobbering other logs",
+          "parents": [
+            "edd15f9522350abde76ebfd63adf0a2c34dee6b4"
+          ]
+        },
+        {
+          "sha": "edd15f9522350abde76ebfd63adf0a2c34dee6b4",
+          "date": "2026-11-24T06:53:27Z",
+          "subject": "docs(C3D04-A): port _03 actual WSL active mesh zone audit and 60pct scientific blocker atop current main without clobbering other logs",
+          "parents": [
+            "e6865feb14f2a03f7a97201010a08be64afbd660"
+          ]
+        },
+        {
+          "sha": "e6865feb14f2a03f7a97201010a08be64afbd660",
+          "date": "2026-11-24T06:53:24Z",
+          "subject": "docs(C3D04-A): port _03 actual WSL active mesh zone audit and 60pct scientific blocker atop current main without clobbering other logs",
+          "parents": [
+            "6f8bca188cb3a669ae51e1b7aaa4742847eaa047"
+          ]
+        },
+        {
+          "sha": "6f8bca188cb3a669ae51e1b7aaa4742847eaa047",
+          "date": "2026-11-24T06:53:21Z",
+          "subject": "docs(C3D04-A): port _03 actual WSL active mesh zone audit and 60pct scientific blocker atop current main without clobbering other logs",
+          "parents": [
+            "a13461af8680d51f3a6a3f18a54b2b71bdbbcc8a"
+          ]
+        },
+        {
+          "sha": "a13461af8680d51f3a6a3f18a54b2b71bdbbcc8a",
+          "date": "2026-11-24T06:53:10Z",
+          "subject": "status(C3D04-A): port real WSL _03 400 fatal zone, 3/4 profile and t0-only native power without losing concurrent case updates",
+          "parents": [
+            "079f4a3bff03b0fa09f008555cf569dc2a7384cf"
+          ]
+        },
+        {
+          "sha": "079f4a3bff03b0fa09f008555cf569dc2a7384cf",
+          "date": "2026-11-24T06:53:02Z",
+          "subject": "science(C3D04-A): add read-only _03 active polyMesh/cellZone forensic and no-write regression with documented WSL findings",
+          "parents": [
+            "afcad8a8f1928549f7ab7933ca6fb2f4e927ec78"
+          ]
+        },
+        {
+          "sha": "afcad8a8f1928549f7ab7933ca6fb2f4e927ec78",
+          "date": "2026-11-24T06:52:59Z",
+          "subject": "science(C3D04-A): add read-only _03 active polyMesh/cellZone forensic and no-write regression with documented WSL findings",
+          "parents": [
+            "d9342db3bd164e47479a591cff34ceaf3ab51ea9"
+          ]
+        },
+        {
+          "sha": "d9342db3bd164e47479a591cff34ceaf3ab51ea9",
+          "date": "2026-11-24T06:52:57Z",
+          "subject": "science(C3D04-A): add read-only _03 active polyMesh/cellZone forensic and no-write regression with documented WSL findings",
+          "parents": [
+            "bc6d8eb7282f1b75dcfed0a4d4197aaee51143b3"
+          ]
+        },
+        {
+          "sha": "bc6d8eb7282f1b75dcfed0a4d4197aaee51143b3",
+          "date": "2026-11-24T06:52:54Z",
+          "subject": "science(C3D04-A): rebase active metal time mesh audit and scientific profile/power completeness onto current main",
+          "parents": [
+            "c6d31a40fc007259d4172dbc67cf9025f77edb3b"
+          ]
+        },
+        {
+          "sha": "c6d31a40fc007259d4172dbc67cf9025f77edb3b",
+          "date": "2026-11-24T06:52:52Z",
+          "subject": "science(C3D04-A): rebase active metal time mesh audit and scientific profile/power completeness onto current main",
+          "parents": [
+            "c9a3d72f7d4b87c30399c2ebe296ced07485aeeb"
+          ]
+        },
+        {
+          "sha": "c9a3d72f7d4b87c30399c2ebe296ced07485aeeb",
+          "date": "2026-11-24T06:52:48Z",
+          "subject": "science(C3D04-A): rebase active metal time mesh audit and scientific profile/power completeness onto current main",
+          "parents": [
+            "77dddd2e9349cfe4eac7068f51ea506ffa0e0814"
+          ]
+        }
+      ],
+      "unresolved_parents": [],
+      "coverage_complete": true
+    },
+    {
+      "name": "science/c3d04-a-three-time-probe-clean-main-20261124",
+      "sha": "cf98c683048be5b2fe0eb7686a4bca037a975b6b",
+      "main_reachable": false,
+      "commits": [
+        {
+          "sha": "cf98c683048be5b2fe0eb7686a4bca037a975b6b",
+          "date": "2026-11-24T07:41:37Z",
+          "subject": "docs(C3D04-A): retain concurrent main updates and record real WSL metal zone validity plus F14 native 3-time model-registry proof",
+          "parents": [
+            "29aac389e44fe7cee1075ea495eba76cd7d4b9c2"
+          ]
+        },
+        {
+          "sha": "29aac389e44fe7cee1075ea495eba76cd7d4b9c2",
+          "date": "2026-11-24T07:41:33Z",
+          "subject": "docs(C3D04-A): retain concurrent main updates and record real WSL metal zone validity plus F14 native 3-time model-registry proof",
+          "parents": [
+            "49f2e325e7428fc5701113b1a66c1285fd85f1ba"
+          ]
+        },
+        {
+          "sha": "49f2e325e7428fc5701113b1a66c1285fd85f1ba",
+          "date": "2026-11-24T07:41:29Z",
+          "subject": "docs(C3D04-A): retain concurrent main updates and record real WSL metal zone validity plus F14 native 3-time model-registry proof",
+          "parents": [
+            "3f77d217278bb0a7f2fdd4011de32d62beb376b1"
+          ]
+        },
+        {
+          "sha": "3f77d217278bb0a7f2fdd4011de32d62beb376b1",
+          "date": "2026-11-24T07:41:25Z",
+          "subject": "docs(C3D04-A): retain concurrent main updates and record real WSL metal zone validity plus F14 native 3-time model-registry proof",
+          "parents": [
+            "38369c9a65035fb4afb6b852c015418e083dccfb"
+          ]
+        },
+        {
+          "sha": "38369c9a65035fb4afb6b852c015418e083dccfb",
+          "date": "2026-11-24T07:41:21Z",
+          "subject": "docs(C3D04-A): retain concurrent main updates and record real WSL metal zone validity plus F14 native 3-time model-registry proof",
+          "parents": [
+            "fcff0266caefa74d7fd312bd87cedf5980c92eef"
+          ]
+        },
+        {
+          "sha": "fcff0266caefa74d7fd312bd87cedf5980c92eef",
+          "date": "2026-11-24T07:41:16Z",
+          "subject": "docs(C3D04-A): retain concurrent main updates and record real WSL metal zone validity plus F14 native 3-time model-registry proof",
+          "parents": [
+            "b9d228e80545d8baa4ec63148e4660a1a81a7dcc"
+          ]
+        },
+        {
+          "sha": "b9d228e80545d8baa4ec63148e4660a1a81a7dcc",
+          "date": "2026-11-24T07:40:57Z",
+          "subject": "status(C3D04-A): port WSL source/_03 authentic 8960-zone and controlled F14 3-time registry experiment without overwriting current main B/FS progress",
+          "parents": [
+            "af15e6a7ba265fa9ed3f4ee6c665f13ad23c1e5d"
+          ]
+        },
+        {
+          "sha": "af15e6a7ba265fa9ed3f4ee6c665f13ad23c1e5d",
+          "date": "2026-11-24T07:40:45Z",
+          "subject": "ci(C3D04-A): rebase synthetic and actual native F14 three-snapshot independent-vs-combined regression onto concurrent main",
+          "parents": [
+            "4fe24c44d35a79be1533ffe378b1cdf20df21b89"
+          ]
+        },
+        {
+          "sha": "4fe24c44d35a79be1533ffe378b1cdf20df21b89",
+          "date": "2026-11-24T07:40:42Z",
+          "subject": "ci(C3D04-A): rebase synthetic and actual native F14 three-snapshot independent-vs-combined regression onto concurrent main",
+          "parents": [
+            "2b7ee16e833c1ac47286920c6562ddd1b24522ed"
+          ]
+        },
+        {
+          "sha": "2b7ee16e833c1ac47286920c6562ddd1b24522ed",
+          "date": "2026-11-24T07:40:38Z",
+          "subject": "science(C3D04-A): port original C14 F14 single-time vs multitime minimal native three-state verification atop current main",
+          "parents": [
+            "157995d071dd40bbc47d09db0013d072db7fc484"
+          ]
+        },
+        {
+          "sha": "157995d071dd40bbc47d09db0013d072db7fc484",
+          "date": "2026-11-24T07:40:34Z",
+          "subject": "science(C3D04-A): port original C14 F14 single-time vs multitime minimal native three-state verification atop current main",
+          "parents": [
+            "adb91b1573f09e623f7f4cfcf801aea4e16f6b50"
+          ]
+        },
+        {
+          "sha": "adb91b1573f09e623f7f4cfcf801aea4e16f6b50",
+          "date": "2026-11-24T07:40:31Z",
+          "subject": "science(C3D04-A): port original C14 F14 single-time vs multitime minimal native three-state verification atop current main",
+          "parents": [
+            "7d8138a7492f14a8d17000cf621c668327c3f816"
+          ]
+        }
+      ],
+      "unresolved_parents": [],
+      "coverage_complete": true
+    },
+    {
+      "name": "transfer/campaign-200s-compact-inputs-v1",
+      "sha": "ca7db498b0cfd8760c63e28c8b9b1e093268e085",
+      "main_reachable": false,
+      "commits": [
+        {
+          "sha": "ca7db498b0cfd8760c63e28c8b9b1e093268e085",
+          "date": "2026-11-25T01:10:43Z",
+          "subject": "Complete archive SHA256 manifest",
+          "parents": [
+            "c06a9e66952930b9774c234909e4e10d87d7a6ca"
+          ]
+        },
+        {
+          "sha": "c06a9e66952930b9774c234909e4e10d87d7a6ca",
+          "date": "2026-11-25T01:09:06Z",
+          "subject": "Archive chunks 1-3 / 3",
+          "parents": []
+        }
+      ],
+      "unresolved_parents": [],
+      "coverage_complete": true
+    }
+  ]
+}
