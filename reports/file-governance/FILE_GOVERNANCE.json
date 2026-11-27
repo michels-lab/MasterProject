@@ -1,18 +1,18 @@
 {
   "schema_version": 1,
   "audit_kind": "deterministic_full_tracked_tree",
-  "tracked_files_total": 42895,
-  "classified_files_total": 42890,
-  "docs_content_inspected": 236,
+  "tracked_files_total": 42898,
+  "classified_files_total": 42893,
+  "docs_content_inspected": 237,
   "large_docs_skipped": 1,
   "excluded_reports": 5,
   "roles": {
     "agent": 9,
     "analysis_tool": 1,
     "bitacora": 5,
-    "config": 23,
+    "config": 25,
     "data": 37,
-    "document": 197,
+    "document": 198,
     "index": 35,
     "license": 1,
     "simulation_case_file": 141,
@@ -25,12 +25,11 @@
     "workflow": 37
   },
   "finding_counts": {
-    "BROKEN_RELATIVE_LINK": 7,
-    "POTENTIAL_UNLOGGED_CHANGES": 2
+    "BROKEN_RELATIVE_LINK": 7
   },
-  "finding_total": 9,
-  "inventory_fingerprint": "1161e2005b3d3554b57ded7d2bf08906b5e48012e92d94e5249ff40c61ce733b",
-  "evidence_fingerprint": "279be742ac6ecd47f96c11e978653a01cd8c57efc862982261775e03ed447650",
+  "finding_total": 7,
+  "inventory_fingerprint": "80f2c0ca0ea7f769d5b0b7305037764216dc526cf6a1e8b24c11bcc6dc95651e",
+  "evidence_fingerprint": "a38cca05722cc62f2a19d8787a386e132771345cc8472199f5e39f915b2e8a45",
   "files": [
     {
       "path": ".github/agents/openfoam-solidification.agent.md",
@@ -429,21 +428,21 @@
       "role": "bitacora",
       "purpose": "technical/audit change history",
       "certainty": "rule",
-      "blob": "9602c455db7bf3c6ebe458c937b6caa2c90b332b"
+      "blob": "7396676b7e1e32e3992b47a95ab0aa95b53a05b8"
     },
     {
       "path": "PROJECT_AUDIT_LOG_EN.md",
       "role": "bitacora",
       "purpose": "technical/audit change history",
       "certainty": "rule",
-      "blob": "b3234677d0850721e9c30f1a53cd7b0b5c726b64"
+      "blob": "245a4a22c913bd4f4febc9a110c89ed70ebb1495"
     },
     {
       "path": "PROJECT_AUDIT_LOG_ES.md",
       "role": "bitacora",
       "purpose": "technical/audit change history",
       "certainty": "rule",
-      "blob": "f3ae2531fc0c32ee41f014fe0ec5ddd235890491"
+      "blob": "ec32c40f56209329e2e6da005c5ef63b72aa2267"
     },
     {
       "path": "README.md",
@@ -485,7 +484,7 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "5f7f17d45be9c33f421e5907483f34c117ba70f7"
+      "blob": "e5d6768d0775646282d8be610b3f58461c87a763"
     },
     {
       "path": "analysis_results/c11_energy2_test/summary.md",
@@ -299049,7 +299048,28 @@
       "role": "config",
       "purpose": "machine-readable configuration",
       "certainty": "rule",
-      "blob": "7e471b08fceb1d3c12ab4f580761d88998a1adaf"
+      "blob": "f0eeec305539a771d25acd5a16754928684767e5"
+    },
+    {
+      "path": "docs/MAESTRIA_COMMIT_HISTORY_20261127.json",
+      "role": "config",
+      "purpose": "machine-readable configuration",
+      "certainty": "rule",
+      "blob": "670dff114da942d5193b22fd56696fb9873ef274"
+    },
+    {
+      "path": "docs/MAESTRIA_COMMIT_HISTORY_20261127_PART2.json",
+      "role": "config",
+      "purpose": "machine-readable configuration",
+      "certainty": "rule",
+      "blob": "c59fe0d8ad80bd329a12f2e00c335d17ca0d4b21"
+    },
+    {
+      "path": "docs/MAESTRIA_HISTORIA_CIENTIFICA_ES.md",
+      "role": "document",
+      "purpose": "manual/decision/report/historical note",
+      "certainty": "inferred",
+      "blob": "b0728965eef0b8a736ca6aae5214a8f1956603be"
     },
     {
       "path": "docs/MAESTRIA_STATUS.json",
@@ -300325,24 +300345,6 @@
       "path": "docs/granada/C3D05_T0_README_HISTORICAL_BEFORE_SINGLE_FLOW_20261120.md",
       "observation": "Missing: outside-repo",
       "recommendation": "Fix link or restore target",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "d31f270dfdb1c3f0",
-      "code": "POTENTIAL_UNLOGGED_CHANGES",
-      "severity": "review",
-      "path": "PROJECT_AUDIT_LOG_EN.md",
-      "observation": "17 implementation/config paths changed since this log's last commit; examples: .github/workflows/adaptive-campaign-static.yml, docs/C3D04_CASE_A_STATUS.json, docs/HISTORICAL_INVENTORY_20261127.json, docs/MAESTRIA_STATUS.json, docs/PROJECT_STAGE_STATUS.json, tools/finalize_lab_fixed_mpi8.py",
-      "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "6e31783356f666eb",
-      "code": "POTENTIAL_UNLOGGED_CHANGES",
-      "severity": "review",
-      "path": "PROJECT_AUDIT_LOG_ES.md",
-      "observation": "17 implementation/config paths changed since this log's last commit; examples: .github/workflows/adaptive-campaign-static.yml, docs/C3D04_CASE_A_STATUS.json, docs/HISTORICAL_INVENTORY_20261127.json, docs/MAESTRIA_STATUS.json, docs/PROJECT_STAGE_STATUS.json, tools/finalize_lab_fixed_mpi8.py",
-      "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     }
   ],
