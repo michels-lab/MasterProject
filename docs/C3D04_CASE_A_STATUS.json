@@ -2,7 +2,7 @@
   "schema": "C3D04_CASE_A_PROGRESS_V1",
   "project": "MasterProject",
   "scope": "CASE_A_C3D_04_V4_T02_ONLY",
-  "updated_local_date": "2026-11-24",
+  "updated_local_date": "2026-11-27",
   "source_of_truth": "AGENTS.md + cases_3d/C3D_04_rounded_multiblock_pilot/AGENTS.md",
   "reference_mesh": "~/OpenFOAM/C3D04_V4_TRANSITION_REPAIR_01/T02",
   "current_stage": "09_VERIFICATION_AND_GRID",
@@ -1596,5 +1596,27 @@
       "error": "RuntimeError: load Foundation14"
     },
     "fs_c08_separate": true
+  },
+  "integrated_history": "docs/granada/MAESTRIA_ESTADO_INTEGRADO_20261127_ES.md",
+  "campaign_200s_update_20261127": {
+    "fixed_laptop": {
+      "solver_completed_observed": true,
+      "final_time_s": 200,
+      "volume_times": 201,
+      "audit_and_publication_verified": false
+    },
+    "fixed_lab": {
+      "reported_audited": true,
+      "manifest_verified": false
+    },
+    "adaptive_mpi_capped": {
+      "solver_completed": false,
+      "last_time_s": 0.68
+    },
+    "adaptive_mpi_uncapped": {
+      "solver_completed": false,
+      "last_time_s": 0.7
+    },
+    "scientific_gates_changed": false
   }
 }
