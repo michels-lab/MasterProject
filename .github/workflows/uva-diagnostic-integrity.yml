@@ -1,0 +1,24 @@
+name: Uva archived diagnostic integrity
+on:
+  push:
+    paths:
+      - 'cases_3d/C3D_05_step_gmsh_conformal/c14_physics/**.py'
+      - 'analysis_tools/compare_c14_three_models.py'
+      - 'analysis_tools/test_compare_c14_three_models.py'
+      - '.github/workflows/uva-diagnostic-integrity.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  synthetic:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            analysis_tools
+            cases_3d/C3D_05_step_gmsh_conformal/c14_physics/
+      - name: Synthetic tests only
+        run: |
+          python3 -B -m unittest discover -s analysis_tools -p test_compare_c14_three_models.py -v
+          python3 -B -m unittest discover -s cases_3d/C3D_05_step_gmsh_conformal/c14_physics/ -p test_uva_case_b_diagnostic_integrity.py -v
