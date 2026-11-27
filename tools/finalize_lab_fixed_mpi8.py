@@ -33,9 +33,7 @@ def need(ok, msg):
         raise RuntimeError(msg)
 
 def save(path, value):
-    tmp = path.with_name("." + path.name + ".tmp")
-    tmp.write_text(json.dumps(value, indent=2) + "\n")
-    tmp.replace(path)
+    compact.json_out(path,value)
 
 def number(name):
     try:
@@ -154,7 +152,8 @@ def combine_log(case, src, mpi, start):
         shutil.copy2(mpi_log,out)
         return
     serial_log = src/"log.foamMultiRun"
-    steps0,_,_,fatal0 = native_log(serial_log)
+    steps0,serial_ranks,_,fatal0 = native_log(serial_log)
+    need(serial_ranks==1,"serial prefix rank identity not confirmed")
     need(complete_steps([t for t in steps0 if t<=start+EPS],0,start),
          "serial prefix has missing/duplicate steps")
     with out.open("x") as f, serial_log.open(errors="replace") as s:
@@ -166,14 +165,16 @@ def combine_log(case, src, mpi, start):
         f.write("\n# Restart boundary: serial to eight MPI ranks at "+str(start)+" s\n")
         with mpi_log.open(errors="replace") as m:
             shutil.copyfileobj(m,f)
-    need(complete_steps(native_log(out)[0],0,200), "merged native log time grid invalid")
+    merged,rank,ended,fatal=native_log(out)
+    need(rank==8 and ended and not fatal and complete_steps(merged,0,200), "merged native log time grid invalid or fatal")
 
 def stage_mpi(name):
-    src,mpi = SERIAL/name,MPI/name
-    report = read(src/REPORT)
-    metadata = read(mpi/"MPI_RUN_METADATA.json")
+    need(name in NAMES,"unknown lab case")
+    src,mpi = transfer.checked_relative(SERIAL,name),transfer.checked_relative(MPI,name)
+    report = read(transfer.checked_relative(src,REPORT))
+    metadata = read(transfer.checked_relative(mpi,"MPI_RUN_METADATA.json"))
     start = metadata["restart_time_s"]
-    need(isinstance(start,int) and 0<=start<200 and
+    need(type(start) is int and 0<=start<200 and
          metadata["mpi_ranks"]==8 and metadata["deltaT"]==.001 and
          metadata["end_time_s"]==200, "unexpected MPI metadata")
     need(metadata["status"]=="MPI_COMPLETE_RECONSTRUCTED",
@@ -288,14 +289,15 @@ def main():
     ap.add_argument("--audit-only",action="store_true")
     a=ap.parse_args()
     need(os.environ.get("WM_PROJECT_VERSION")=="14","load Foundation14")
+    need(not OUT.is_symlink(),"unsafe finalization root")
     OUT.mkdir(exist_ok=True)
     url=transfer.root_url(a.repo)
-    with (OUT/".finalize.lock").open("a") as own:
+    with transfer.checked_relative(OUT,".finalize.lock").open("a") as own:
         fcntl.flock(own,fcntl.LOCK_EX|fcntl.LOCK_NB)
         if not a.serial_only:
             need((MPI/".queue.lock").is_file(),"MPI queue has not been launched")
             print("WAITING_FOR_MPI_QUEUE_TO_RELEASE_LOCK",flush=True)
-            with (MPI/".queue.lock").open("a") as queue:
+            with transfer.checked_relative(MPI,".queue.lock").open("a") as queue:
                 fcntl.flock(queue,fcntl.LOCK_EX)
                 need((MPI/"QUEUE_STATUS.json").is_file(),"queue status unavailable")
                 finish(url,NAMES,a.audit_only)
@@ -303,13 +305,13 @@ def main():
             finish(url,NAMES[:1],a.audit_only)
 
 def finish(url,names,audit_only):
-    index=OUT/"FINALIZATION_STATUS.json"
+    index=transfer.checked_relative(OUT,"FINALIZATION_STATUS.json")
     summary=read(index) if index.is_file() else {}
     for name in names:
         case=None
         try:
-            src=SERIAL/name
-            r=read(src/REPORT)
+            src=transfer.checked_relative(SERIAL,name)
+            r=read(transfer.checked_relative(src,REPORT))
             if r.get("solver_completed") and r.get("final_time_s")==200:
                 need(r["status"]=="SOLVER_COMPLETE_COMPACT_AUDITED",
                      "serial solver is not fully audited")
@@ -321,7 +323,10 @@ def finish(url,names,audit_only):
                 branch=MPI_PREFIX+name
                 previous=summary.get(name,{})
                 old=Path(previous["audit_path"]) if previous.get("audit_path") else None
-                if old and old.is_dir() and (old/REPORT).is_file() and read(old/REPORT).get("status")=="SOLVER_COMPLETE_FIXED_MPI_AUDITED":
+                if old is not None:
+                    need(old.is_absolute() and old.is_relative_to(OUT) and old.name==name,"invalid prior audit path")
+                    transfer.checked_relative(OUT,old.relative_to(OUT))
+                if old and old.is_dir() and transfer.checked_relative(old,REPORT).is_file() and read(old/REPORT).get("status")=="SOLVER_COMPLETE_FIXED_MPI_AUDITED":
                     case=old
                 else:
                     case=stage_mpi(name)
@@ -335,6 +340,9 @@ def finish(url,names,audit_only):
                            "audit_path":str(case) if case else None}
         save(index,summary)
         print(name,summary[name],flush=True)
+    expected="AUDITED" if audit_only else "PUBLISHED"
+    need(all(summary.get(n,{}).get("status")==expected for n in names),
+         "finalization incomplete; consult "+str(index))
 
 if __name__=="__main__":
     main()
