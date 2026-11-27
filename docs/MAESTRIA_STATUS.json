@@ -104,9 +104,46 @@
     ],
     "confirmed_manifest_count": 0,
     "reported_complete": [
-      "C14-3DA"
+      "C14-3DA",
+      "C14-3DB",
+      "B14-2D",
+      "C14-2D"
     ],
-    "others": "not verified at cutoff"
+    "solver_complete": 4,
+    "coverage_audit_complete": 4,
+    "steps_per_case": 200000,
+    "total_solver_steps": 800000,
+    "final_time_s": 200,
+    "deltaT_s": 0.001,
+    "execution_modes": {
+      "C14-3DA": "serial",
+      "C14-3DB": "MPI8",
+      "B14-2D": "MPI8",
+      "C14-2D": "MPI8"
+    },
+    "solver_wall_s": {
+      "C14-3DA": null,
+      "C14-3DB": 58392.772611205,
+      "B14-2D": 2937.2692574890098,
+      "C14-2D": 35482.560213681994
+    },
+    "recovery": {
+      "cases": [
+        "B14-2D",
+        "C14-2D"
+      ],
+      "profiles_per_case": 2001,
+      "identical_duplicates_removed_per_case": 2001,
+      "unique_points_per_profile": 80,
+      "errors": [],
+      "interpolation": false,
+      "averaging": false,
+      "original_modified": false,
+      "view_uses_symlinks": true
+    },
+    "publication": "pending; prior A branch incomplete at previous inspection",
+    "evidence": "Investigator WSL console 2026-11-27; original report and recovery summary, not direct access to WSL",
+    "physical_validation": false
   },
   "FS_C08": {
     "branch": "research/fs-c08-conservative-phase-mass-20261123",
