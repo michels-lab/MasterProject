@@ -1,3 +1,5 @@
+> **27-11-2026 — Corrección de publicación, segundo corte documental:** campaña laptop 6/8 calculadas, 5/8 con manifiesto completo, 1/8 B14-2D sin tope pendiente, 2/8 A adaptativo fallidas. C14-2D MPI con tope (11029 pasos, 3dbcbee4) y B14-2D MPI con tope (14276 pasos, b02ef4a9) ya están publicados y auditados según sus manifiestos, sin nueva validación física. A 8/10=80% hitos, B 2/7=29%, FS-C08 lote 12 75/75 pasos. [Historia completa](https://github.com/michels-lab/MasterProject/blob/main/docs/MAESTRIA_HISTORIA_CIENTIFICA_ES.md) · [Manifiestos inspeccionados](https://github.com/michels-lab/MasterProject/blob/main/docs/MAESTRIA_RESULT_MANIFEST_INDEX_20261127.json). Las entradas anteriores quedan como historia.
+
 # Historia integrada de investigación y estado vigente — 27-11-2026
 
 Este registro consolida la historia disponible, sin sustituir los registros originales. Es una actualización documental, no una ejecución CFD. Fecha de corte: 27 de noviembre de 2026, hora local de México. Evidencia: archivos y manifiestos GitHub consultados en esta actualización, bitácoras anteriores, y salidas de consola aportadas por el investigador (no acceso directo a WSL ni al laboratorio). No se publican transcripciones personales ni credenciales.
@@ -10,7 +12,7 @@ Este registro consolida la historia disponible, sin sustituir los registros orig
 | 3D-A C3D04 V4/T02 | 9/10, 8/10 = 80% hitos operativos | C14 fiel de 10 s archivado; fijo 200 s observado en laptop y reportado auditado en laboratorio; adaptación fallida. Conservación discreta, independencia y QuickCup pendientes. |
 | 3D-B C3D05 | 3/7, 2/7 = 29% hitos técnicos | C14 10 s /101 estados; dos corridas adaptativas MPI de 200 s publicadas. No equivalen a cierre físico. |
 | FS-C08 | Lote 12: 4/4 variantes, 75/75 pasos de arranque | Cierre acoplado local aprobado; dependencia temporal, energía global y contracción física no validadas. |
-| Campaña adaptativa laptop | 6/8 combinaciones calculadas, 3/8 publicadas, 3/8 pendientes de auditoría, 2/8 fallidas | Una combinación sin tope usa serial; no es una matriz MPI homogénea. |
+| Campaña adaptativa laptop | 6/8 combinaciones calculadas, 5/8 publicadas, 1/8 pendiente de auditoría/publicación, 2/8 fallidas | Una combinación sin tope usa serial; no es una matriz MPI homogénea. |
 | Campaña fija laboratorio | C14-3DA reportado completo/auditado; otras tres sin final verificado en este corte | Rama A existe, MANIFEST.json no disponible al consultar; no afirmar publicación completa. |
 
 No hay porcentaje único de tesis. Un hito no se cierra por un commit, una prueba fuente, una corrida finalizada o un manifiesto por sí solo.
@@ -44,13 +46,13 @@ No hay porcentaje único de tesis. Un hito no se cierra por un commit, una prueb
 | C14-3DB | MPI8 cap .025 | 15013 / 200 s | [MANIFEST](https://github.com/michels-lab/MasterProject/blob/results/campaign-200s-adaptive-mpi-r8-Co025-dt0p025-v1/C14-3DB-200s/MANIFEST.json), complete y cobertura true |
 | C14-3DB | MPI8 sin tope | 15012 / 200 s | [MANIFEST](https://github.com/michels-lab/MasterProject/blob/results/campaign-200s-adaptive-mpi-r8-Co025-dtuncapped-v1/C14-3DB-200s/MANIFEST.json), complete y cobertura true |
 | C14-2D | serial sin tope | 11028 / 200 s | [MANIFEST](https://github.com/michels-lab/MasterProject/blob/results/campaign-200s-adaptive-uncapped-v1/C14-2D-200s/MANIFEST.json), complete y cobertura true |
-| C14-2D | MPI8 cap .025 | 11029 / 200 s | solver completo; auditoría pendiente; intento lafue34t |
-| B14-2D | MPI8 cap .025 | 14276 / 200 s | solver completo; auditoría pendiente; intento 0a_f23k4 |
+| C14-2D | MPI8 cap .025 | 11029 / 200 s | [MANIFEST](https://github.com/michels-lab/MasterProject/blob/results/campaign-200s-adaptive-mpi-r8-Co025-dt0p025-v1/C14-2D-200s/MANIFEST.json), complete y cobertura true; intento lafue34t |
+| B14-2D | MPI8 cap .025 | 14276 / 200 s | [MANIFEST](https://github.com/michels-lab/MasterProject/blob/results/campaign-200s-adaptive-mpi-r8-Co025-dt0p025-v1/B14-2D-200s/MANIFEST.json), complete y cobertura true; intento 0a_f23k4 |
 | B14-2D | MPI8 sin tope | 14275 / 200 s | solver completo; auditoría pendiente; intento 8fd7lt71 |
 | C14-3DA | MPI8 cap .025 | .68 s | fallo térmico; intento ckuf84dm |
 | C14-3DA | MPI8 sin tope | .70 s | fallo térmico; intento fp6has9o |
 
-3/8 manifiestos leídos directamente, no se descargaron/revalidaron sus partes binarias. Volúmenes completos no incluidos en esos archivos de transferencia. 3/8 calculadas adicionales confirmadas por terminal, no publicadas. 2/8 fallidas. A fijo laptop separado. C14-3DA cap T0 aproximada -139.17 K; sin tope -602.49 K, no temperaturas físicas aceptadas. Co no controla por sí solo la estabilidad térmica. No inferir causa única del fallo sin analizar ecuaciones/estados.
+5/8 manifiestos leídos directamente, no se descargaron/revalidaron sus partes binarias. Volúmenes completos no incluidos. 1/8 calculada adicional (B14-2D sin tope) confirmada por terminal, sin publicación verificada. 2/8 fallidas. A fijo laptop separado. C14-3DA cap T0 aproximada -139.17 K; sin tope -602.49 K, no temperaturas físicas aceptadas. Co no controla por sí solo la estabilidad térmica. No inferir causa única del fallo sin analizar ecuaciones/estados.
 
 ## Laboratorio: política fija separada
 
@@ -73,7 +75,7 @@ Todas las auditorías finales del estado acoplado pasan en los pasos guardados; 
 
 ## Próximos hitos y mantenimiento
 
-1. Recuperar y publicar los tres 2D ya calculados, validar duplicados exactos en cada perfil y restantes diagnósticos. No CFD nuevo para ellos.
+1. Completar la recuperación y publicación del B14-2D sin tope; C14-2D y B14-2D con tope ya publicados; verificar, validar duplicados exactos en cada perfil y restantes diagnósticos. No CFD nuevo para ellos.
 2. A: resolver estabilidad adaptativa sin cambiar silenciosamente la definición del experimento; preservar fijo 200 s. A 8/10 y B 2/7 se mantienen.
 3. Confirmar laboratorio mediante manifiestos y logs; no repetir casos activos ni completos.
 4. Comparar curvas T, alpha1, U y energía con cadencias y coordenadas homologadas; FoamLens primero, ParaView complementario. Verificar importación real, no afirmarla por estructura de archivos.
