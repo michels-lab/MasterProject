@@ -11,7 +11,7 @@ def log_at(t, skip=None):
             continue
         fields={key: 1.0 for key in REQUIRED[kind]}
         if kind=="state":
-            fields.update(liquidMass_kg=2.0,solidMass_kg=1.0,
+            fields.update(dt_s=1e-6,liquidMass_kg=2.0,solidMass_kg=1.0,
                           liquidVolume_m3=2e-4,solidVolume_m3=1e-4,
                           gasVolume_m3=7e-4,domainVolume_m3=1e-3)
         if kind=="budget":
@@ -60,6 +60,26 @@ class LedgerTest(unittest.TestCase):
         self.assertFalse(rows[1]["all_native_ledgers_present"])
         self.assertTrue(rows[2]["all_native_ledgers_present"])
         self.assertNotIn("metalHistoryMismatch_kg", rows[2])
+
+    def test_history_not_compared_across_missing_time(self):
+        rows,issues=extract(log_at(1e-6)+"\n"+log_at(3e-6))
+        self.assertTrue(rows[1]["all_native_ledgers_present"])
+        self.assertNotIn("metalHistoryMismatch_kg",rows[1])
+        self.assertTrue(any("noncontiguous native history" in x for x in issues))
+
+    def test_invalid_only_time_retained(self):
+        bad="FS_C08_ACCEPTED_STATE_LEDGER time_s=2e-6 dt_s=nan"
+        rows,issues=extract("\n".join((log_at(1e-6),bad,log_at(3e-6))))
+        self.assertEqual(len(rows),3)
+        self.assertFalse(rows[1]["all_native_ledgers_present"])
+        self.assertNotIn("metalHistoryMismatch_kg",rows[2])
+
+    def test_duplicate_key_and_nonpositive_dt(self):
+        for log in (log_at(1e-6).replace("dt_s=1e-06","dt_s=0"),
+                    log_at(1e-6).replace("dt_s=1e-06","dt_s=1e-06 dt_s=1e-06")):
+            rows,issues=extract(log)
+            self.assertFalse(rows[0]["all_native_ledgers_present"])
+            self.assertTrue(issues)
 
 if __name__ == "__main__":
     unittest.main()
