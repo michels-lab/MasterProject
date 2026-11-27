@@ -36,7 +36,34 @@ def need(ok,msg):
     if not ok:raise RuntimeError(msg)
 def read(p):return json.loads(p.read_text())
 def dump(p,d):
-    q=p.with_suffix(".tmp");q.write_text(json.dumps(d,indent=2)+"\n");q.replace(p)
+    need(not p.is_symlink(),"linked report "+str(p))
+    # Unique same-directory temporary file; never follow a pre-existing .tmp link.
+    with tempfile.NamedTemporaryFile(mode="w",dir=p.parent,prefix="."+p.name+".",delete=False) as f:
+        q=Path(f.name)
+        try:
+            f.write(json.dumps(d,indent=2,allow_nan=False)+"\n")
+            f.flush()
+            os.fsync(f.fileno())
+        except BaseException:
+            q.unlink(missing_ok=True)
+            raise
+    try:q.replace(p)
+    finally:q.unlink(missing_ok=True)
+def case_guard(case):
+    need(case.parent==ROOT and case.name in ORDER,"unexpected adaptive case "+str(case))
+    need(transfer.checked_relative(ROOT,case.name).is_dir(),"missing case "+str(case))
+    for name in (REPORT,"log.foamMultiRun",TIMELINE,"log.foamLog","postProcessing","logs"):
+        transfer.checked_relative(case,name)
+def manifest_matches(m,case,r):
+    expected={"kind":"adaptive_scientific_results","case":case.name,
+              "time_mode":"adaptive_uncapped","solver_steps":r["solver_steps"],
+              "final_time_s":200,"solver_log_sha256":transfer.sha(case/"log.foamMultiRun"),
+              "report_sha256":transfer.sha(case/REPORT),
+              "native_runtime_coverage_complete":r.get("runtime_audit",{}).get("native_runtime_coverage_complete",False),
+              "volume_fields_included":False}
+    need(m.get("complete") is True and all(m.get(k)==v for k,v in expected.items()),
+         "remote adaptive result identity differs; preserved")
+    return expected
 def edit_key(s,k,old,new):
     p=r"(?m)^([ \t]*"+re.escape(k)+r"[ \t]+)"+re.escape(old)+r"([ \t]*;)"
     s,n=re.subn(p,lambda m:m[1]+new+m[2],s)
@@ -93,8 +120,9 @@ def native(case,name,args):
     need(rc==0,"native command failed "+str(case/name))
 def prepare(repo,url):
     if all((ROOT/n/REPORT).is_file() for n in ORDER):
+        for n in ORDER:case_guard(ROOT/n)
         print("ADAPTIVE INPUTS EXIST; preserved",flush=True);return
-    need(not any((ROOT/n).exists() for n in ORDER),"partial preparation preserved")
+    need(not any((ROOT/n).exists() or (ROOT/n).is_symlink() for n in ORDER),"partial preparation preserved")
     # Download the verified published input archive, not the live fixed cases.
     with tempfile.TemporaryDirectory(prefix="adaptive-input-",dir=ROOT) as tmp:
         p=Path(tmp);archive=p/"input.tar.gz"
@@ -137,10 +165,11 @@ def times_table(p,expected,tol):
 def directories(p):
     result=[]
     for q in p.iterdir():
-        if not q.is_dir():continue
+        if not q.is_dir() and not q.is_symlink():continue
         try:v=float(q.name)
         except ValueError:continue
-        if math.isfinite(v):result.append((v,q))
+        need(math.isfinite(v) and q.is_dir() and not q.is_symlink(),"invalid numeric directory "+str(q))
+        result.append((v,q))
     return sorted(result)
 def profile_groups(r):
     groups={"horizontalProfiles":["line_y10mm","line_y20mm","line_y30mm"],
@@ -155,8 +184,21 @@ def profile(p,cols,dest=None):
     need(1<len(v)<=80 and all(len(row)==len(h) for row in v),"invalid spatial coverage "+str(p))
     if dest:
         dest.parent.mkdir(parents=True,exist_ok=True)
-        with p.open() as src,dest.open("x") as out:
-            next(src);out.write("# "+h[0]+" "+" ".join(cols)+"\n");shutil.copyfileobj(src,out)
+        need(not dest.is_symlink(),"linked canonical profile "+str(dest))
+        with p.open() as src:
+            next(src);canonical="# "+h[0]+" "+" ".join(cols)+"\n"+src.read()
+        if dest.exists():
+            need(dest.is_file() and dest.read_text()==canonical,"existing canonical profile differs "+str(dest))
+        else:
+            # Publish a complete file atomically without replacing existing evidence.
+            with tempfile.NamedTemporaryFile(mode="w",dir=dest.parent,prefix="."+dest.name+".",delete=False) as out:
+                tmp=Path(out.name)
+                try:out.write(canonical)
+                except BaseException:
+                    tmp.unlink(missing_ok=True)
+                    raise
+            try:os.link(tmp,dest)
+            finally:tmp.unlink(missing_ok=True)
     return len(v)
 def early_gate(case,r):
     pp=case/"postProcessing/metal"
@@ -192,7 +234,7 @@ def audit(case,r,steps):
             need(all(abs(x-y)<5e-7 for (x,_),y in zip(dirs,target)),"profile cadence differs")
             for _,d in dirs:
                 for n in names:
-                    profile(d/(n+".xy"),NEAR if g=="nearTopInternalLine" else CANON,pp/("CompactCanonical"+g)/d.name/(n+".xy"))
+                    profile(transfer.checked_relative(case,(d/(n+".xy")).relative_to(case)),NEAR if g=="nearTopInternalLine" else CANON,transfer.checked_relative(case,(pp/("CompactCanonical"+g)/d.name/(n+".xy")).relative_to(case)))
             return {"times":len(dirs),"lines":len(names)}
         guard(g,profiles)
     def volume():
@@ -211,6 +253,7 @@ def audit(case,r,steps):
     guard("topFlow",top)
     return {"counts":counts,"errors":errors,"native_runtime_coverage_complete":not errors}
 def run(case):
+    case_guard(case)
     r=read(case/REPORT)
     need(r["status"]=="ADAPTIVE_PREPARED_NOT_RUN" and not (case/"log.foamMultiRun").exists(),"attempted case preserved "+case.name)
     need(transfer.input_hashes(case)==r["input_sha256"],"input hash mismatch")
@@ -260,12 +303,13 @@ def run(case):
         r["error"]=str(e) or type(e).__name__;raise
     finally:dump(case/REPORT,r)
 def publish(case,url):
+    case_guard(case)
     r=read(case/REPORT)
     need(r.get("solver_completed") and r.get("final_time_s")==200,"no complete adaptive CFD")
     branch=RESULT_PREFIX+case.name
     m=transfer.complete_manifest(url,branch)
     if m is not None:
-        need(m["solver_log_sha256"]==transfer.sha(case/"log.foamMultiRun"),"remote result differs");return
+        manifest_matches(m,case,r);return
     with tempfile.TemporaryDirectory(prefix="adaptive-publish-",dir=ROOT) as d:
         p=Path(d);archive=p/"result.tar.gz"
         with transfer.deterministic_tar(archive) as t:
@@ -286,7 +330,7 @@ def main():
     need(os.environ.get("WM_PROJECT_VERSION")=="14","load Foundation14")
     need(not ROOT.is_symlink(),"unsafe root");ROOT.mkdir(exist_ok=True)
     url=transfer.root_url(a.repo)
-    with (ROOT/".execution.lock").open("a") as lock:
+    with transfer.checked_relative(ROOT,".execution.lock").open("a") as lock:
         fcntl.flock(lock,fcntl.LOCK_EX|fcntl.LOCK_NB)
         prepare(a.repo,url)
         if a.prepare_only:return
@@ -294,14 +338,15 @@ def main():
         for name in ORDER:
             case=ROOT/name
             try:
+                case_guard(case)
                 r=read(case/REPORT)
                 if not r.get("solver_completed"):run(case)
                 if a.publish:publish(case,url)
                 summary[name]=read(case/REPORT)["status"]
             except (RuntimeError,ValueError,OSError,subprocess.SubprocessError) as e:
                 summary[name]="BLOCKED_OR_FAILED_PRESERVED: "+str(e);print(name,summary[name],flush=True)
-            dump(ROOT/"ADAPTIVE_CAMPAIGN_INDEX.json",summary)
+            dump(transfer.checked_relative(ROOT,"ADAPTIVE_CAMPAIGN_INDEX.json"),summary)
         print(json.dumps(summary,indent=2),flush=True)
+        need(all(not v.startswith("BLOCKED") for v in summary.values()),"some cases blocked or incomplete; preserved")
         need(all(read(ROOT/n/REPORT).get("solver_completed") for n in ORDER),"some cases incomplete; preserved")
-        if a.publish:need(all(not v.startswith("BLOCKED") for v in summary.values()),"publication incomplete; rerun only publishes completed cases")
 if __name__=="__main__":main()
