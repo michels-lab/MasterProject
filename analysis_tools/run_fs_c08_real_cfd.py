@@ -327,26 +327,33 @@ def comparison_ready_times(log: str, snapshots: list[tuple[float, Path]],
     if strict_energy:
         markers["energy"] = "FS_C08_FINAL_COUPLED_ENERGY_AUDIT_PASS"
     times = {key: [] for key in markers}
+    invalid = []
     for line in log.splitlines():
         for key, marker in markers.items():
             if marker not in line:
                 continue
+            matches = re.findall(r"\btime_s=([^\s]+)", line)
+            if len(matches) != 1:
+                # An ambiguous or missing timestamp cannot be safely attributed.
+                return []
+            try:
+                t = float(matches[0])
+            except ValueError:
+                return []
+            if not math.isfinite(t) or t <= 0:
+                return []
+            times[key].append(t)
             if key == "pressure" and not re.search(
                     r"\bpressureVolumeEnergyIterationConverged=1(?:\s|$)", line):
-                continue
-            match = re.search(r"\btime_s=([^\s]+)", line)
-            if match:
-                try:
-                    t = float(match.group(1))
-                except ValueError:
-                    continue
-                if math.isfinite(t) and t > 0:
-                    times[key].append(t)
+                invalid.append(t)
     ready = []
     for t, directory in snapshots:
         tol = max(1e-14, 1e-6 * (dt if dt is not None else abs(t)))
-        if any(sum(abs(x-t) <= tol for x in values) != 1
-               for values in times.values()):
+        if (not math.isfinite(t) or t <= 0
+                or sum(abs(other-t) <= tol for other,_ in snapshots) != 1
+                or any(abs(x-t) <= tol for x in invalid)
+                or any(sum(abs(x-t) <= tol for x in values) != 1
+                       for values in times.values())):
             continue
         if any(not ((directory/"fluid"/field).is_file()
                     or (directory/"fluid"/(field+".gz")).is_file())
