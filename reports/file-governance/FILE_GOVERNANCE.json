@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "audit_kind": "deterministic_full_tracked_tree",
-  "tracked_files_total": 42931,
-  "classified_files_total": 42926,
+  "tracked_files_total": 42932,
+  "classified_files_total": 42927,
   "docs_content_inspected": 246,
   "large_docs_skipped": 1,
   "excluded_reports": 5,
@@ -11,7 +11,7 @@
     "analysis_tool": 1,
     "bitacora": 5,
     "config": 33,
-    "data": 42,
+    "data": 43,
     "document": 205,
     "index": 37,
     "license": 1,
@@ -31,7 +31,7 @@
     "UNKNOWN_PURPOSE": 1
   },
   "finding_total": 10,
-  "inventory_fingerprint": "0757d1a50e294cea4b53795d90db3504591a9fe0472ef0aa35e266cffad1b1fd",
+  "inventory_fingerprint": "39c91463272f762ccd15460aeb7a8f6129165e3814176fd15469299d5db185bf",
   "evidence_fingerprint": "67fd3cb27c03faec8057ec3396ffb9afb8feb7427f70fa8b2030544764318e93",
   "files": [
     {
@@ -529,7 +529,7 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "d13e84ffea11103173aa4105760ffe34806483b9"
+      "blob": "9f019d1af03b93936bfa48b9af67a486cf0a3bf4"
     },
     {
       "path": "analysis_results/evidence_catalog_20261127/alpha200s_comparison.csv",
@@ -558,6 +558,13 @@
       "purpose": "structured/research data (semantics not validated)",
       "certainty": "rule",
       "blob": "1f7f8055cbddfc3e953c0081712b70a40c0409c0"
+    },
+    {
+      "path": "analysis_results/evidence_catalog_20261127/stability200s_comparison.csv",
+      "role": "data",
+      "purpose": "structured/research data (semantics not validated)",
+      "certainty": "rule",
+      "blob": "f8015866679bbc9f57e2388e967884c96ab4b9d7"
     },
     {
       "path": "analysis_results/evidence_catalog_20261127/thermal_flow_energy200s_comparison.csv",
@@ -299653,7 +299660,7 @@
       "role": "unknown",
       "purpose": "function unknown: owner classification required",
       "certainty": "unknown",
-      "blob": "b286e1175b50987609083bde9202409da401d24f"
+      "blob": "b8b31cac1b796e4e0f66b09696c46ee033c90ca5"
     },
     {
       "path": "docs/review/GENERAL_REGISTRY_AUDIT_20261127_ES.md",
