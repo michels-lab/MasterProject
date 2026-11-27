@@ -30,8 +30,8 @@
   "adaptive_laptop": {
     "planned_combinations": 8,
     "solver_complete": 6,
-    "published": 3,
-    "audit_pending": 3,
+    "published": 5,
+    "audit_pending": 1,
     "failed": 2,
     "mpi_homogeneous": false,
     "rows": [
@@ -61,14 +61,14 @@
         "mpi8_cap",
         11029,
         200,
-        "audit_pending"
+        "published"
       ],
       [
         "B14-2D",
         "mpi8_cap",
         14276,
         200,
-        "audit_pending"
+        "published"
       ],
       [
         "B14-2D",
@@ -92,7 +92,7 @@
         "failed"
       ]
     ],
-    "last_recovery_attempt": "SyntaxError before Python execution; corrected handoff outcome unknown",
+    "last_recovery_attempt": "Two capped 2D results now have verified complete remote manifests; uncapped B14-2D pending at manifest snapshot",
     "native_files_modified": false
   },
   "fixed_lab": {
@@ -124,5 +124,12 @@
     "global_energy_verified": false,
     "physical_shrinkage_validated": false
   },
-  "thesis_total_percent": null
+  "thesis_total_percent": null,
+  "history_index": "docs/MAESTRIA_HISTORIA_CIENTIFICA_ES.md",
+  "manifest_index": "docs/MAESTRIA_RESULT_MANIFEST_INDEX_20261127.json",
+  "historical_inventory": "docs/HISTORICAL_INVENTORY_20261127.json",
+  "commit_history": [
+    "docs/MAESTRIA_COMMIT_HISTORY_20261127.json",
+    "docs/MAESTRIA_COMMIT_HISTORY_20261127_PART2.json"
+  ]
 }
