@@ -1,0 +1,1110 @@
+{
+  "snapshot": "134ac9bf6f631320630212274fd26cb8c31b5c31",
+  "scope": "exclusive commits relative to main at snapshot; parent closure explicitly checked",
+  "branches": [
+    {
+      "name": "fix/c3d04-a-existing-solver-backed-copy-readonly-inspection-20261123",
+      "sha": "771cf27161467ab53cd54b14fcdaf45a1391cf28",
+      "main_reachable": false,
+      "commits": [
+        {
+          "sha": "771cf27161467ab53cd54b14fcdaf45a1391cf28",
+          "date": "2026-11-23T21:45:52Z",
+          "subject": "docs(C3D04-A): record real occupied _02 WSL output and require read-only old native report inspection before any retry",
+          "parents": [
+            "a9431448534d7fddd8850e5b64677c863dd55857"
+          ]
+        },
+        {
+          "sha": "a9431448534d7fddd8850e5b64677c863dd55857",
+          "date": "2026-11-23T21:45:50Z",
+          "subject": "docs(C3D04-A): record real occupied _02 WSL output and require read-only old native report inspection before any retry",
+          "parents": [
+            "1d689cb148208c8b799ed3ec4b083f92e51d3cd5"
+          ]
+        },
+        {
+          "sha": "1d689cb148208c8b799ed3ec4b083f92e51d3cd5",
+          "date": "2026-11-23T21:45:47Z",
+          "subject": "docs(C3D04-A): record real occupied _02 WSL output and require read-only old native report inspection before any retry",
+          "parents": [
+            "343ddd20b89808880d652b1a7b4dfff4c3a33f55"
+          ]
+        },
+        {
+          "sha": "343ddd20b89808880d652b1a7b4dfff4c3a33f55",
+          "date": "2026-11-23T21:45:43Z",
+          "subject": "docs(C3D04-A): record real occupied _02 WSL output and require read-only old native report inspection before any retry",
+          "parents": [
+            "8ed5fd37cdf5d0a30f1f0621e527c8d20aff1938"
+          ]
+        },
+        {
+          "sha": "8ed5fd37cdf5d0a30f1f0621e527c8d20aff1938",
+          "date": "2026-11-23T21:45:40Z",
+          "subject": "docs(C3D04-A): record real occupied _02 WSL output and require read-only old native report inspection before any retry",
+          "parents": [
+            "50e8dc291ab1aae85833a9030b9a080798732c61"
+          ]
+        },
+        {
+          "sha": "50e8dc291ab1aae85833a9030b9a080798732c61",
+          "date": "2026-11-23T21:45:37Z",
+          "subject": "docs(C3D04-A): record real occupied _02 WSL output and require read-only old native report inspection before any retry",
+          "parents": [
+            "b215fa272d8ad00b1d65fa5fef025863dad08594"
+          ]
+        },
+        {
+          "sha": "b215fa272d8ad00b1d65fa5fef025863dad08594",
+          "date": "2026-11-23T21:44:57Z",
+          "subject": "docs(C3D04-A): preserve occupied _02 WSL result and distinguish trusted completed native groups from partial/possibly active copy",
+          "parents": [
+            "844dd0224f9858c16bc8af49aaae320232a1d0ae"
+          ]
+        },
+        {
+          "sha": "844dd0224f9858c16bc8af49aaae320232a1d0ae",
+          "date": "2026-11-23T21:44:36Z",
+          "subject": "status(C3D04-A): record observed occupied _02 safe preflight and implement read-only complete/partial/active distinction; maintain 60pct",
+          "parents": [
+            "05c634f796d05023a731af8f58e854332709bb9e"
+          ]
+        },
+        {
+          "sha": "05c634f796d05023a731af8f58e854332709bb9e",
+          "date": "2026-11-23T21:44:20Z",
+          "subject": "test(c3d04-a): regression for occupied _02 complete, partial, mismatched log/source and symlink; never rerun on inspection",
+          "parents": [
+            "73af50e91ebe8379946e13c6e04539756cefaf99"
+          ]
+        },
+        {
+          "sha": "73af50e91ebe8379946e13c6e04539756cefaf99",
+          "date": "2026-11-23T21:43:47Z",
+          "subject": "fix(c3d04-a): inspect occupied _02 read-only, authenticate existing 6-group completion and logs, preserve partial/in-progress instead of blind re-copy",
+          "parents": [
+            "087b2d6f08fa2b61d49daa7a23e217066b74e5e1"
+          ]
+        }
+      ],
+      "unresolved_parents": [],
+      "coverage_complete": true
+    },
+    {
+      "name": "fix/c3d04-a-f14-cellzone-native-fatal-clean-rebase-20261123",
+      "sha": "fc72a77407a18bee424658e5c49380096baf65bd",
+      "main_reachable": false,
+      "commits": [
+        {
+          "sha": "fc72a77407a18bee424658e5c49380096baf65bd",
+          "date": "2026-11-24T03:19:50Z",
+          "subject": "docs(C3D04-A): isolate native F14 cellzone semantic failure and successful synthetic repair on current main without losing other CFD branch work",
+          "parents": [
+            "d12754eb2574d45c18d126096e0da7cd4afeb1f6"
+          ]
+        },
+        {
+          "sha": "d12754eb2574d45c18d126096e0da7cd4afeb1f6",
+          "date": "2026-11-24T03:19:47Z",
+          "subject": "docs(C3D04-A): isolate native F14 cellzone semantic failure and successful synthetic repair on current main without losing other CFD branch work",
+          "parents": [
+            "dba2a8847a919e38ea9a64f76e05cd8c9bc887f8"
+          ]
+        },
+        {
+          "sha": "dba2a8847a919e38ea9a64f76e05cd8c9bc887f8",
+          "date": "2026-11-24T03:19:44Z",
+          "subject": "docs(C3D04-A): isolate native F14 cellzone semantic failure and successful synthetic repair on current main without losing other CFD branch work",
+          "parents": [
+            "b8bae43c2d2fe6e62c81f577d820c9d92e878043"
+          ]
+        },
+        {
+          "sha": "b8bae43c2d2fe6e62c81f577d820c9d92e878043",
+          "date": "2026-11-24T03:19:40Z",
+          "subject": "docs(C3D04-A): isolate native F14 cellzone semantic failure and successful synthetic repair on current main without losing other CFD branch work",
+          "parents": [
+            "184f22663ea5edbb2f4aa4171126ea1ca9a65420"
+          ]
+        },
+        {
+          "sha": "184f22663ea5edbb2f4aa4171126ea1ca9a65420",
+          "date": "2026-11-24T03:19:37Z",
+          "subject": "docs(C3D04-A): isolate native F14 cellzone semantic failure and successful synthetic repair on current main without losing other CFD branch work",
+          "parents": [
+            "3d37c13695db9ee9965d93cd4014920dbf182641"
+          ]
+        },
+        {
+          "sha": "3d37c13695db9ee9965d93cd4014920dbf182641",
+          "date": "2026-11-24T03:19:19Z",
+          "subject": "status(C3D04-A): merge real _02 four fatal-log false positives and proven native F14 zone repair into newest main without dropping concurrent B/FS updates",
+          "parents": [
+            "69b797dc282a3cacfd5bb354618a1175417518b6"
+          ]
+        },
+        {
+          "sha": "69b797dc282a3cacfd5bb354618a1175417518b6",
+          "date": "2026-11-24T03:19:08Z",
+          "subject": "science(C3D04-A): add F14 27-cell negative/positive zone smoke and real WSL scientific procedure on latest main",
+          "parents": [
+            "5dddff79a6dd6dc59f08520ac9fbdf920f444f87"
+          ]
+        },
+        {
+          "sha": "5dddff79a6dd6dc59f08520ac9fbdf920f444f87",
+          "date": "2026-11-24T03:19:05Z",
+          "subject": "science(C3D04-A): add F14 27-cell negative/positive zone smoke and real WSL scientific procedure on latest main",
+          "parents": [
+            "1b1f85b5f3f4651714bd91f9afe543e800cefd36"
+          ]
+        },
+        {
+          "sha": "1b1f85b5f3f4651714bd91f9afe543e800cefd36",
+          "date": "2026-11-24T03:19:03Z",
+          "subject": "fix(C3D04-A): port validated F14 cellZone semantic-fatal correction atop latest main without overwriting other cases",
+          "parents": [
+            "22e98fe4dd7db456d29a922a5985cbd3f25fb85b"
+          ]
+        },
+        {
+          "sha": "22e98fe4dd7db456d29a922a5985cbd3f25fb85b",
+          "date": "2026-11-24T03:18:59Z",
+          "subject": "fix(C3D04-A): port validated F14 cellZone semantic-fatal correction atop latest main without overwriting other cases",
+          "parents": [
+            "403f64e24d8b6740a3cb32bcb05f9b98e2e87e3a"
+          ]
+        },
+        {
+          "sha": "403f64e24d8b6740a3cb32bcb05f9b98e2e87e3a",
+          "date": "2026-11-24T03:18:57Z",
+          "subject": "fix(C3D04-A): port validated F14 cellZone semantic-fatal correction atop latest main without overwriting other cases",
+          "parents": [
+            "a9306d84633812a61692530144d1a73261532b89"
+          ]
+        }
+      ],
+      "unresolved_parents": [],
+      "coverage_complete": true
+    },
+    {
+      "name": "fix/c3d04-a-f14-selftest-20261120",
+      "sha": "7b2931e62ad9187fcc38b0ce1280d1daadc2a9a8",
+      "main_reachable": false,
+      "commits": [
+        {
+          "sha": "7b2931e62ad9187fcc38b0ce1280d1daadc2a9a8",
+          "date": "2026-11-21T00:14:19Z",
+          "subject": "docs(c3d04-a): record Foundation14 self-test drift fix without advancing stage",
+          "parents": [
+            "b9f92a06d95940bf3d386b87775c641b88621edf"
+          ]
+        },
+        {
+          "sha": "b9f92a06d95940bf3d386b87775c641b88621edf",
+          "date": "2026-11-21T00:14:17Z",
+          "subject": "test(c3d04-a): run builtin T0 self-test in integrated regression suite",
+          "parents": [
+            "6333f4da5fc2dfcd364dc89022ec2975071db5fa"
+          ]
+        },
+        {
+          "sha": "6333f4da5fc2dfcd364dc89022ec2975071db5fa",
+          "date": "2026-11-21T00:14:14Z",
+          "subject": "fix(c3d04-a): align built-in self-test with Foundation14 thermal BC",
+          "parents": [
+            "766985ea8b56aba8b7787ed12819ffbdd2677a83"
+          ]
+        }
+      ],
+      "unresolved_parents": [],
+      "coverage_complete": true
+    },
+    {
+      "name": "fix/c3d04-a-native-polymesh-labels-offline-postprocessing-20261123",
+      "sha": "fc6137b9171fb1124b80fd29224060a2cacc2d49",
+      "main_reachable": false,
+      "commits": [
+        {
+          "sha": "fc6137b9171fb1124b80fd29224060a2cacc2d49",
+          "date": "2026-11-23T19:07:30Z",
+          "subject": "docs(c3d04-a): record actual WSL owner labelList blocker, correction and preserved 60pct stage status",
+          "parents": [
+            "6378774202ee569f0cfec64afc62bcbba5f1c26b"
+          ]
+        },
+        {
+          "sha": "6378774202ee569f0cfec64afc62bcbba5f1c26b",
+          "date": "2026-11-23T19:05:55Z",
+          "subject": "test(c3d04-a): reproduce actual OpenFOAM14 owner banner and compact neighbour 0() in cell-volume regression",
+          "parents": [
+            "42042298a42edd86c8f8edc3cccab4718283f488"
+          ]
+        },
+        {
+          "sha": "42042298a42edd86c8f8edc3cccab4718283f488",
+          "date": "2026-11-23T19:05:38Z",
+          "subject": "fix(c3d04-a): parse actual OpenFOAM14 polyMesh owner/neighbour after header banners; accept compact 0() and preserve volume crosscheck",
+          "parents": [
+            "465e063b28a1c8455c1cadd9380afccd15f19aca"
+          ]
+        }
+      ],
+      "unresolved_parents": [],
+      "coverage_complete": true
+    },
+    {
+      "name": "fix/c3d04-a-native-volume-fallback-20261120",
+      "sha": "324e293d1402b87f329fdf47ae37406810613296",
+      "main_reachable": false,
+      "commits": [
+        {
+          "sha": "324e293d1402b87f329fdf47ae37406810613296",
+          "date": "2026-11-20T22:08:30Z",
+          "subject": "docs(c3d04-a): preserve native mesh volume via boundary surface fallback when optional T02 TSV missing, no extra WSL microtest",
+          "parents": [
+            "1756581975bdd45475fa96f824e872885ac3aaff"
+          ]
+        },
+        {
+          "sha": "1756581975bdd45475fa96f824e872885ac3aaff",
+          "date": "2026-11-20T22:08:08Z",
+          "subject": "test(c3d04-a): integrated geometry-derived volume from missing T02 TSV with two closed native polyMesh cubes and negative face orientation",
+          "parents": [
+            "9712429dc58e918e726e51e31f472561c813c1b8"
+          ]
+        },
+        {
+          "sha": "9712429dc58e918e726e51e31f472561c813c1b8",
+          "date": "2026-11-20T22:07:51Z",
+          "subject": "fix(c3d04-a): derive exact signed region volume from preserved native polyMesh boundary if optional T02 TSV is absent, no guessed values",
+          "parents": [
+            "a66d80d67b83f120e2b4eb1d2474e5a63a087958"
+          ]
+        }
+      ],
+      "unresolved_parents": [],
+      "coverage_complete": true
+    },
+    {
+      "name": "fix/c3d04-a-stage07-native-zone-fatal-honesty-20261123",
+      "sha": "18960c176914a4e085ff963be66fc4988ae83597",
+      "main_reachable": false,
+      "commits": [
+        {
+          "sha": "18960c176914a4e085ff963be66fc4988ae83597",
+          "date": "2026-11-24T03:17:40Z",
+          "subject": "status(C3D04-A): record proven native F14 negative cellZone exit0 fatal / positive isolated zone repair synthetic, WSL 8960 case still pending",
+          "parents": [
+            "797050cf270dada3db5ff34f470f75ad3df1ae31"
+          ]
+        },
+        {
+          "sha": "797050cf270dada3db5ff34f470f75ad3df1ae31",
+          "date": "2026-11-24T03:17:31Z",
+          "subject": "docs(C3D04-A): record proven real F14 negative missing zone exit0/fatal and new-copy positive rho*h native smoke on disposable 27-cell metal",
+          "parents": [
+            "4f93aaa9757f683148aee6cba732e607acef60d1"
+          ]
+        },
+        {
+          "sha": "4f93aaa9757f683148aee6cba732e607acef60d1",
+          "date": "2026-11-24T03:17:06Z",
+          "subject": "docs(C3D04-A): record WSL native cellZone fatal semantic fail and isolated _03 remedy without resetting 60pct",
+          "parents": [
+            "8bae65329a02de4803ee562bb2235f85160083d9"
+          ]
+        },
+        {
+          "sha": "8bae65329a02de4803ee562bb2235f85160083d9",
+          "date": "2026-11-24T03:17:04Z",
+          "subject": "docs(C3D04-A): record WSL native cellZone fatal semantic fail and isolated _03 remedy without resetting 60pct",
+          "parents": [
+            "91794588a43bfc929b59ad20e58e1e6a26110847"
+          ]
+        },
+        {
+          "sha": "91794588a43bfc929b59ad20e58e1e6a26110847",
+          "date": "2026-11-24T03:17:01Z",
+          "subject": "docs(C3D04-A): record WSL native cellZone fatal semantic fail and isolated _03 remedy without resetting 60pct",
+          "parents": [
+            "4c2bdfc3b41cfbc2e2beb48f803f464b48f3133e"
+          ]
+        },
+        {
+          "sha": "4c2bdfc3b41cfbc2e2beb48f803f464b48f3133e",
+          "date": "2026-11-24T03:16:58Z",
+          "subject": "docs(C3D04-A): record WSL native cellZone fatal semantic fail and isolated _03 remedy without resetting 60pct",
+          "parents": [
+            "f9f7aa8b71c41b5d9cfaedc16a80c66e27526c85"
+          ]
+        },
+        {
+          "sha": "f9f7aa8b71c41b5d9cfaedc16a80c66e27526c85",
+          "date": "2026-11-24T03:16:55Z",
+          "subject": "docs(C3D04-A): record WSL native cellZone fatal semantic fail and isolated _03 remedy without resetting 60pct",
+          "parents": [
+            "4cbe5a703ad257ae909e3e2bb257d515e6e0ecb5"
+          ]
+        },
+        {
+          "sha": "4cbe5a703ad257ae909e3e2bb257d515e6e0ecb5",
+          "date": "2026-11-24T03:16:51Z",
+          "subject": "docs(C3D04-A): record WSL native cellZone fatal semantic fail and isolated _03 remedy without resetting 60pct",
+          "parents": [
+            "6dc50a609779d19450be6a8a41d8540ead880b08"
+          ]
+        },
+        {
+          "sha": "6dc50a609779d19450be6a8a41d8540ead880b08",
+          "date": "2026-11-24T03:15:45Z",
+          "subject": "docs(C3D04-A): document real WSL 4 false-positive native FATAL IO groups, missing metal zone, safe full-cell zone only in new _03, strict 100/101 face energy rows",
+          "parents": [
+            "aeae2e8bf18167d54906f0b54fbb8bc1841abe62"
+          ]
+        },
+        {
+          "sha": "aeae2e8bf18167d54906f0b54fbb8bc1841abe62",
+          "date": "2026-11-24T03:15:09Z",
+          "subject": "test(C3D04-A): mock native-mesh metadata only in provenance-only fixture; real full-metal zone and 8960 preflight remain enforced in production",
+          "parents": [
+            "8f8858c3b192941a48128d05683299e91c124ede"
+          ]
+        },
+        {
+          "sha": "8f8858c3b192941a48128d05683299e91c124ede",
+          "date": "2026-11-24T03:14:46Z",
+          "subject": "status(C3D04-A): record real _02 4 native FATAL IO zero-exit false positives, exact absent metal zone, incomplete 101 native energy rows, 60pct unchanged",
+          "parents": [
+            "2944ed009fd9f405b859c5e5b7637f672718798a"
+          ]
+        },
+        {
+          "sha": "2944ed009fd9f405b859c5e5b7637f672718798a",
+          "date": "2026-11-24T03:14:22Z",
+          "subject": "ci(nativeF14 C3D04-A): prove missing-zone failure and precise full-metal cellZone repair in independent synthetic offline copy",
+          "parents": [
+            "645f8085036ab2e880acc27b11e2908af035b4ab"
+          ]
+        },
+        {
+          "sha": "645f8085036ab2e880acc27b11e2908af035b4ab",
+          "date": "2026-11-24T03:14:14Z",
+          "subject": "test(nativeF14 C3D04-A): reproduce actual missing-metal-cellZone fatal on disposable 27-cell saved C14 and verify read-only source new-copy zone fix",
+          "parents": [
+            "18e018100d928aeb0b7182c6227e4d81d6ee3b64"
+          ]
+        },
+        {
+          "sha": "18e018100d928aeb0b7182c6227e4d81d6ee3b64",
+          "date": "2026-11-24T03:13:35Z",
+          "subject": "fix(C3D04-A): verify real original 8960-metal cell count and optional full metal zone before large isolated copy",
+          "parents": [
+            "e8ff9cf88ce33e3d9ed8795b528bccfbd3f5cee5"
+          ]
+        },
+        {
+          "sha": "e8ff9cf88ce33e3d9ed8795b528bccfbd3f5cee5",
+          "date": "2026-11-24T03:12:52Z",
+          "subject": "test(C3D04-A): validate 100 valid native 0.1..10s face-power rows without fictitious t0, reject 99 missing rows, preserve global-energy false",
+          "parents": [
+            "f719f5c42ce94daa1656a1bd7480cf850b541f1c"
+          ]
+        },
+        {
+          "sha": "f719f5c42ce94daa1656a1bd7480cf850b541f1c",
+          "date": "2026-11-24T03:12:37Z",
+          "subject": "science(C3D04-A): inspect real native face table coverage and 80-point profiles; accept only exact 100 or 101 saved times, no fabricated 0s power or energy conservation",
+          "parents": [
+            "26678d4d873a5327a351c1197aba0933202f5b83"
+          ]
+        },
+        {
+          "sha": "26678d4d873a5327a351c1197aba0933202f5b83",
+          "date": "2026-11-24T03:11:32Z",
+          "subject": "test(C3D04-A): real _02 six exit0+four FOAM FATAL reclassified core/energy/flow/momentum FAIL; new semantic status reconciles faithfully",
+          "parents": [
+            "ab7b2ef83b31ec708c0ab96d217e67d8379620ec"
+          ]
+        },
+        {
+          "sha": "ab7b2ef83b31ec708c0ab96d217e67d8379620ec",
+          "date": "2026-11-24T03:11:14Z",
+          "subject": "test(C3D04-A): reproduce real Foundation14 zero-exit FOAM FATAL IO, full-region cellzone metadata creation ONLY in new isolated copy and existing zone preservation",
+          "parents": [
+            "2c1dfb5989efd5ba1fc4fa3e3018ab05f321315b"
+          ]
+        },
+        {
+          "sha": "2c1dfb5989efd5ba1fc4fa3e3018ab05f321315b",
+          "date": "2026-11-24T03:10:50Z",
+          "subject": "fix(C3D04-A): authenticate both historical exit-only and new semantic-fatal native six-group reports without rejecting valid new zero-exit fatal results",
+          "parents": [
+            "6a1f142711da6c5f6bfe8b14fe8131d01a620793"
+          ]
+        },
+        {
+          "sha": "6a1f142711da6c5f6bfe8b14fe8131d01a620793",
+          "date": "2026-11-24T03:10:27Z",
+          "subject": "fix(C3D04-A): reclassify existing _02 native group PASS by semantic FOAM FATAL log scanning, keep provenance and old report immutable",
+          "parents": [
+            "60047550895c003039f88fb8436ea66ad1e8321e"
+          ]
+        },
+        {
+          "sha": "60047550895c003039f88fb8436ea66ad1e8321e",
+          "date": "2026-11-24T03:10:15Z",
+          "subject": "fix(C3D04-A): add full all-metal cellZone only to fresh C14 copy and verify native FOAM FATAL even with os rc=0",
+          "parents": [
+            "5494c4b16f6932a077196d5aa0a13abf76d574d3"
+          ]
+        }
+      ],
+      "unresolved_parents": [],
+      "coverage_complete": true
+    },
+    {
+      "name": "fix/c3d04-a-t0-integral-qa-20261120",
+      "sha": "6ce0dcebdbe0b67cf2b90b0fa19032b53d4eaa05",
+      "main_reachable": false,
+      "commits": [
+        {
+          "sha": "6ce0dcebdbe0b67cf2b90b0fa19032b53d4eaa05",
+          "date": "2026-11-20T18:47:56Z",
+          "subject": "docs(c3d04-a): record integrated CI-discovered preflight false success and duplicate native geometry budget root-cause fixes, stage 5/10",
+          "parents": [
+            "463aeefdc7ec6137219ed8960b930277a537c320"
+          ]
+        },
+        {
+          "sha": "463aeefdc7ec6137219ed8960b930277a537c320",
+          "date": "2026-11-20T18:47:00Z",
+          "subject": "test(c3d04-a): reuse verified native thermal budget in atomic test, prevent duplicate polygon parsing and reject missing preflight evidence",
+          "parents": [
+            "6595d2d2b66022dbe5dcced5e3946475dc510f84"
+          ]
+        },
+        {
+          "sha": "6595d2d2b66022dbe5dcced5e3946475dc510f84",
+          "date": "2026-11-20T18:46:43Z",
+          "subject": "fix(c3d04-a): compute native 3D thermal budget once in full preflight and publish identical verified evidence atomically",
+          "parents": [
+            "4711485daac58859258848b5feff9fee27d9b218"
+          ]
+        },
+        {
+          "sha": "4711485daac58859258848b5feff9fee27d9b218",
+          "date": "2026-11-20T18:44:49Z",
+          "subject": "test(c3d04-a): assert integrated invalid T0 preflight exits nonzero and valid sourced C14 preflight stays read-only",
+          "parents": [
+            "1483c65dd4f1e042b46e9f78a28e32a147c17933"
+          ]
+        },
+        {
+          "sha": "1483c65dd4f1e042b46e9f78a28e32a147c17933",
+          "date": "2026-11-20T18:44:14Z",
+          "subject": "fix(c3d04-a): hard-fail invalid T0 preflight before costly native I/O; never report false success",
+          "parents": [
+            "07c4c33eabc6c4c6bb0acb7a060ceee18b1f389c"
+          ]
+        }
+      ],
+      "unresolved_parents": [],
+      "coverage_complete": true
+    },
+    {
+      "name": "fix/granada-j0-jmatpro-source-gate-20261103",
+      "sha": "12fedc82b6160d91ff87f173f83781dcde3a31dc",
+      "main_reachable": false,
+      "commits": [
+        {
+          "sha": "12fedc82b6160d91ff87f173f83781dcde3a31dc",
+          "date": "2026-11-03T14:42:52Z",
+          "subject": "docs(jmatpro): source contract, WSL commands and open physical gates",
+          "parents": [
+            "36d885b14bd75b1cd8a054e81c6974d3c9a81b8c"
+          ]
+        },
+        {
+          "sha": "36d885b14bd75b1cd8a054e81c6974d3c9a81b8c",
+          "date": "2026-11-03T14:42:21Z",
+          "subject": "ci(jmatpro): synthetic source audit only, never run CFD",
+          "parents": [
+            "5713901fc4fbe14c813c26664112369387a5fb2a"
+          ]
+        },
+        {
+          "sha": "5713901fc4fbe14c813c26664112369387a5fb2a",
+          "date": "2026-11-03T14:41:36Z",
+          "subject": "test(jmatpro): negative numeric, physical-range and immutable-source regressions",
+          "parents": [
+            "e46f1e2cbec6172dc282be6b90304f12511a8a0e"
+          ]
+        },
+        {
+          "sha": "e46f1e2cbec6172dc282be6b90304f12511a8a0e",
+          "date": "2026-11-03T14:40:18Z",
+          "subject": "fix(jmatpro): reject invalid numeric exports and prevent silent rho extrapolation",
+          "parents": [
+            "f91e92e7ad0af7f78bd3d21953ffaff2cd3b18da"
+          ]
+        }
+      ],
+      "unresolved_parents": [],
+      "coverage_complete": true
+    },
+    {
+      "name": "fix/postpush-results-20261015",
+      "sha": "05e46a3890754e30c638ba0e6af799fc280805bf",
+      "main_reachable": false,
+      "commits": [
+        {
+          "sha": "05e46a3890754e30c638ba0e6af799fc280805bf",
+          "date": "2026-10-15T21:55:56Z",
+          "subject": "docs: record pushed-case numerical evidence and remaining scientific gates",
+          "parents": [
+            "55feecd6933842946cf61500b53ce2a427a44608"
+          ]
+        },
+        {
+          "sha": "55feecd6933842946cf61500b53ce2a427a44608",
+          "date": "2026-10-15T21:55:53Z",
+          "subject": "docs: record pushed-case numerical evidence and remaining scientific gates",
+          "parents": [
+            "6c1fadd6c73e88a7748b8b43cf2314a30b54712f"
+          ]
+        },
+        {
+          "sha": "6c1fadd6c73e88a7748b8b43cf2314a30b54712f",
+          "date": "2026-10-15T21:55:48Z",
+          "subject": "docs: record pushed-case numerical evidence and remaining scientific gates",
+          "parents": [
+            "78e9fbf064900b79d8d31d7ef5e0d19b085950cf"
+          ]
+        },
+        {
+          "sha": "78e9fbf064900b79d8d31d7ef5e0d19b085950cf",
+          "date": "2026-10-15T21:55:45Z",
+          "subject": "docs: record pushed-case numerical evidence and remaining scientific gates",
+          "parents": [
+            "950d34f969f7ce23b372ae72cb9ecd529baf6933"
+          ]
+        },
+        {
+          "sha": "950d34f969f7ce23b372ae72cb9ecd529baf6933",
+          "date": "2026-10-15T21:55:18Z",
+          "subject": "fix(preflight): classify missing variants safely in auto mode",
+          "parents": [
+            "90bcde794c374748ecb6a9c66cf3a58fbcdefd76"
+          ]
+        },
+        {
+          "sha": "90bcde794c374748ecb6a9c66cf3a58fbcdefd76",
+          "date": "2026-10-15T21:55:00Z",
+          "subject": "analysis: record evidence-backed initial V15/V16 comparisons and open scientific checks",
+          "parents": [
+            "21e3387784a75428a771ce59566e0d6f14c163a3"
+          ]
+        },
+        {
+          "sha": "21e3387784a75428a771ce59566e0d6f14c163a3",
+          "date": "2026-10-15T21:54:03Z",
+          "subject": "ci: use post-run-aware V15/V16 dictionary audit on pushed results",
+          "parents": [
+            "09d97f2652f71667072bbf994c6c946db45c1f05"
+          ]
+        },
+        {
+          "sha": "09d97f2652f71667072bbf994c6c946db45c1f05",
+          "date": "2026-10-15T21:53:55Z",
+          "subject": "test: distinguish prepared-input checks and post-run dictionary parity",
+          "parents": [
+            "55ac2dee9221cfccea630db92ea2ee32b00db67a"
+          ]
+        },
+        {
+          "sha": "55ac2dee9221cfccea630db92ea2ee32b00db67a",
+          "date": "2026-10-15T21:53:43Z",
+          "subject": "fix(preflight): audit controlled dictionaries after laptop results without treating output as copied evidence",
+          "parents": [
+            "b3818547e1e33e2d6cefde3503db313609031f62"
+          ]
+        },
+        {
+          "sha": "b3818547e1e33e2d6cefde3503db313609031f62",
+          "date": "2026-10-15T21:52:06Z",
+          "subject": "safety: retire restored GitHub CFD workflows; laptop runs only",
+          "parents": [
+            "353d3a27a4aa779b6e251244ad7d91d669d390f7"
+          ]
+        },
+        {
+          "sha": "353d3a27a4aa779b6e251244ad7d91d669d390f7",
+          "date": "2026-10-15T21:52:04Z",
+          "subject": "safety: retire restored GitHub CFD workflows; laptop runs only",
+          "parents": [
+            "caa41b068c0557b27473eb17802c97cec6c6fc5c"
+          ]
+        },
+        {
+          "sha": "caa41b068c0557b27473eb17802c97cec6c6fc5c",
+          "date": "2026-10-15T21:52:01Z",
+          "subject": "safety: retire restored GitHub CFD workflows; laptop runs only",
+          "parents": [
+            "25e7cf8cb4a30fb0fe5ece5bd9a2e451815ab232"
+          ]
+        }
+      ],
+      "unresolved_parents": [],
+      "coverage_complete": true
+    },
+    {
+      "name": "fix/wsl-contraction-detached-head-worktree-isolation-20261123",
+      "sha": "84fd834715b1a86d35d3d03d7f71686cc7576e22",
+      "main_reachable": false,
+      "commits": [
+        {
+          "sha": "84fd834715b1a86d35d3d03d7f71686cc7576e22",
+          "date": "2026-11-23T19:59:01Z",
+          "subject": "fix(wsl): report actual null branch for detached FS_C02 worktree rather than misleading expected ref",
+          "parents": [
+            "ecbbb6c7ae7776ee578334910b3559282e6cf90e"
+          ]
+        },
+        {
+          "sha": "ecbbb6c7ae7776ee578334910b3559282e6cf90e",
+          "date": "2026-11-23T19:58:42Z",
+          "subject": "policy(wsl): permit original detached FS-C02 contraction worktree after lineage proof; forbid reattaching HEAD",
+          "parents": [
+            "d6fda37b469a931a773146a07e6b86ff88742441"
+          ]
+        },
+        {
+          "sha": "d6fda37b469a931a773146a07e6b86ff88742441",
+          "date": "2026-11-23T19:58:28Z",
+          "subject": "docs(wsl): recognize real detached FS contraction HEAD and preserve its worktree without checkout or reruns",
+          "parents": [
+            "a9f624d5279019b6ad85a97bf11642a64c29c08f"
+          ]
+        },
+        {
+          "sha": "a9f624d5279019b6ad85a97bf11642a64c29c08f",
+          "date": "2026-11-23T19:58:25Z",
+          "subject": "docs(wsl): recognize real detached FS contraction HEAD and preserve its worktree without checkout or reruns",
+          "parents": [
+            "23065872798fd281d50e522a95b5d64ae3645c38"
+          ]
+        },
+        {
+          "sha": "23065872798fd281d50e522a95b5d64ae3645c38",
+          "date": "2026-11-23T19:58:00Z",
+          "subject": "test(wsl): simulate real detached FS-C02 HEAD with dirty live files; preserve and guard unrelated/unpublished detached states",
+          "parents": [
+            "0d62a9862abbba087e04da6ed4fce8fffa3ed549"
+          ]
+        },
+        {
+          "sha": "0d62a9862abbba087e04da6ed4fce8fffa3ed549",
+          "date": "2026-11-23T19:57:34Z",
+          "subject": "fix(wsl): recognize verified FS contraction detached HEAD ancestry without switching branches or modifying live worktree",
+          "parents": [
+            "54a25eb368238b83c5c4fc8c29284732349a196f"
+          ]
+        }
+      ],
+      "unresolved_parents": [],
+      "coverage_complete": true
+    },
+    {
+      "name": "foamlens-real-fixture-b13",
+      "sha": "55a0a83b9a5dab12dc7763498e9cd72ca55f1cd8",
+      "main_reachable": false,
+      "commits": [
+        {
+          "sha": "55a0a83b9a5dab12dc7763498e9cd72ca55f1cd8",
+          "date": "2026-09-30T07:22:51Z",
+          "subject": "test: add complete B13 OpenFOAM case for FoamLens validation",
+          "parents": [
+            "8a37c42e1cd2cfc280f5b34d09a152e1a5c6c77d"
+          ]
+        }
+      ],
+      "unresolved_parents": [],
+      "coverage_complete": true
+    },
+    {
+      "name": "governance/granada-prevent-recurring-agent-errors-20261021",
+      "sha": "7678b9293d8a9eefa71c8c929cdb81145df96bb2",
+      "main_reachable": false,
+      "commits": [
+        {
+          "sha": "7678b9293d8a9eefa71c8c929cdb81145df96bb2",
+          "date": "2026-10-21T20:52:36Z",
+          "subject": "governance: establish preventive agent contract for this repository",
+          "parents": [
+            "754fd9d7f82c010afded294e2a3adba5e47b239d"
+          ]
+        }
+      ],
+      "unresolved_parents": [],
+      "coverage_complete": true
+    },
+    {
+      "name": "granada/c3d02-controlled-mold-snap-l2-20261117",
+      "sha": "ca1156a1181510fd22107ac5b0881e623b9a4720",
+      "main_reachable": false,
+      "commits": [
+        {
+          "sha": "ca1156a1181510fd22107ac5b0881e623b9a4720",
+          "date": "2026-11-17T20:33:30Z",
+          "subject": "test(c3d02): verify exact controlled snap AB configuration and compile embedded Python",
+          "parents": [
+            "ed7d9eb8e1d29f9011d8860afa2ed187be815621"
+          ]
+        },
+        {
+          "sha": "ed7d9eb8e1d29f9011d8860afa2ed187be815621",
+          "date": "2026-11-17T20:32:39Z",
+          "subject": "feat(c3d02): controlled A/B L2 mold snapped extraction in fresh physical case, strict geometry gate",
+          "parents": [
+            "74826321c6a50c0dcf986fa81c1b465054f33088"
+          ]
+        }
+      ],
+      "unresolved_parents": [],
+      "coverage_complete": true
+    },
+    {
+      "name": "granada/c3d02-extract-mold-volume-copy-20261115",
+      "sha": "6a01c0247ecd8aa55e659c6f1e42f070d22fbfd7",
+      "main_reachable": false,
+      "commits": [
+        {
+          "sha": "6a01c0247ecd8aa55e659c6f1e42f070d22fbfd7",
+          "date": "2026-11-16T02:05:50Z",
+          "subject": "docs(c3d02): record zone-only volume 103.409cm3 and copied subsetMesh validation gate",
+          "parents": [
+            "9f6815545513c2ad0ff2a8563fdc5706d9c7efec"
+          ]
+        },
+        {
+          "sha": "9f6815545513c2ad0ff2a8563fdc5706d9c7efec",
+          "date": "2026-11-16T02:05:48Z",
+          "subject": "docs(c3d02): record zone-only volume 103.409cm3 and copied subsetMesh validation gate",
+          "parents": [
+            "3cad53329794534ba1af359d3e7651be78c9f14d"
+          ]
+        },
+        {
+          "sha": "3cad53329794534ba1af359d3e7651be78c9f14d",
+          "date": "2026-11-16T02:05:45Z",
+          "subject": "docs(c3d02): record zone-only volume 103.409cm3 and copied subsetMesh validation gate",
+          "parents": [
+            "3bb54eff47b997f2203e842789d6ad3cc3333bca"
+          ]
+        },
+        {
+          "sha": "3bb54eff47b997f2203e842789d6ad3cc3333bca",
+          "date": "2026-11-16T02:05:42Z",
+          "subject": "docs(c3d02): record zone-only volume 103.409cm3 and copied subsetMesh validation gate",
+          "parents": [
+            "49364b579c3b1bbdd9422026c37c88f55e7e4c3c"
+          ]
+        },
+        {
+          "sha": "49364b579c3b1bbdd9422026c37c88f55e7e4c3c",
+          "date": "2026-11-16T02:05:38Z",
+          "subject": "docs(c3d02): record zone-only volume 103.409cm3 and copied subsetMesh validation gate",
+          "parents": [
+            "ba0b5424d7a8ef68233c6dcf1a43a77d54485370"
+          ]
+        },
+        {
+          "sha": "ba0b5424d7a8ef68233c6dcf1a43a77d54485370",
+          "date": "2026-11-16T02:05:35Z",
+          "subject": "docs(c3d02): record zone-only volume 103.409cm3 and copied subsetMesh validation gate",
+          "parents": [
+            "e6940b465c698fc8352f5b2d767e9166c0546cd9"
+          ]
+        },
+        {
+          "sha": "e6940b465c698fc8352f5b2d767e9166c0546cd9",
+          "date": "2026-11-16T02:05:33Z",
+          "subject": "docs(c3d02): record zone-only volume 103.409cm3 and copied subsetMesh validation gate",
+          "parents": [
+            "787ce782f6638b601b9fe140ebbbbf231fed5c48"
+          ]
+        },
+        {
+          "sha": "787ce782f6638b601b9fe140ebbbbf231fed5c48",
+          "date": "2026-11-16T02:05:29Z",
+          "subject": "docs(c3d02): record zone-only volume 103.409cm3 and copied subsetMesh validation gate",
+          "parents": [
+            "3367efcd5f8289a59e7a4eb8241253bb1eb7092c"
+          ]
+        },
+        {
+          "sha": "3367efcd5f8289a59e7a4eb8241253bb1eb7092c",
+          "date": "2026-11-16T02:05:25Z",
+          "subject": "docs(c3d02): record zone-only volume 103.409cm3 and copied subsetMesh validation gate",
+          "parents": [
+            "1327b3d5304b550a8d475b92e2fc51a752eaf457"
+          ]
+        },
+        {
+          "sha": "1327b3d5304b550a8d475b92e2fc51a752eaf457",
+          "date": "2026-11-16T02:04:02Z",
+          "subject": "test(c3d02): guard extracted mold mesh from writing outside its new copy",
+          "parents": [
+            "9a5da7c6c4d9f17bb2195c2052c9cc93cfe8e619"
+          ]
+        },
+        {
+          "sha": "9a5da7c6c4d9f17bb2195c2052c9cc93cfe8e619",
+          "date": "2026-11-16T02:03:42Z",
+          "subject": "fix(c3d02): separate two commented setup notes",
+          "parents": [
+            "67fd927ca27f417df33252137236b8ff5991b6f3"
+          ]
+        },
+        {
+          "sha": "67fd927ca27f417df33252137236b8ff5991b6f3",
+          "date": "2026-11-16T02:03:27Z",
+          "subject": "fix(c3d02): use Foundation14 default overwrite only inside copied case",
+          "parents": [
+            "a60a884d7007a71a70fb1dedf31d863c9f46448e"
+          ]
+        },
+        {
+          "sha": "a60a884d7007a71a70fb1dedf31d863c9f46448e",
+          "date": "2026-11-16T02:03:01Z",
+          "subject": "feat(c3d02): extract measured mold cellZone into isolated physical copy and validate",
+          "parents": [
+            "a7c4b2411bdc6086ec9cfe0790eea6ab90bae258"
+          ]
+        }
+      ],
+      "unresolved_parents": [],
+      "coverage_complete": true
+    },
+    {
+      "name": "granada/c3d02-extracted-mesh-quality-evidence-20261115",
+      "sha": "32dfb5a5c22132afcd315e6de5e1a0884398a706",
+      "main_reachable": false,
+      "commits": [
+        {
+          "sha": "32dfb5a5c22132afcd315e6de5e1a0884398a706",
+          "date": "2026-11-16T02:58:47Z",
+          "subject": "docs(c3d02): record extracted mold quality failures and protected VTK evidence step",
+          "parents": [
+            "266ca55c3fad3b962c404b48809cb291db7d0af1"
+          ]
+        },
+        {
+          "sha": "266ca55c3fad3b962c404b48809cb291db7d0af1",
+          "date": "2026-11-16T02:58:44Z",
+          "subject": "docs(c3d02): record extracted mold quality failures and protected VTK evidence step",
+          "parents": [
+            "76eeaef492bb5be80e34da54542d5bf0ab0e1aab"
+          ]
+        },
+        {
+          "sha": "76eeaef492bb5be80e34da54542d5bf0ab0e1aab",
+          "date": "2026-11-16T02:58:41Z",
+          "subject": "docs(c3d02): record extracted mold quality failures and protected VTK evidence step",
+          "parents": [
+            "210d8eb0891b5b568208de2a670d3d766d81edd5"
+          ]
+        },
+        {
+          "sha": "210d8eb0891b5b568208de2a670d3d766d81edd5",
+          "date": "2026-11-16T02:58:38Z",
+          "subject": "docs(c3d02): record extracted mold quality failures and protected VTK evidence step",
+          "parents": [
+            "8964687bd125cf5051fcfe9f752331e858757c8f"
+          ]
+        },
+        {
+          "sha": "8964687bd125cf5051fcfe9f752331e858757c8f",
+          "date": "2026-11-16T02:58:36Z",
+          "subject": "docs(c3d02): record extracted mold quality failures and protected VTK evidence step",
+          "parents": [
+            "b80c888e4c501681425eec1518e03e4201e94b86"
+          ]
+        },
+        {
+          "sha": "b80c888e4c501681425eec1518e03e4201e94b86",
+          "date": "2026-11-16T02:58:33Z",
+          "subject": "docs(c3d02): record extracted mold quality failures and protected VTK evidence step",
+          "parents": [
+            "b35b234ece294e7075eaf5a57fd29227c52245fa"
+          ]
+        },
+        {
+          "sha": "b35b234ece294e7075eaf5a57fd29227c52245fa",
+          "date": "2026-11-16T02:58:29Z",
+          "subject": "docs(c3d02): record extracted mold quality failures and protected VTK evidence step",
+          "parents": [
+            "28c1c92e05d10033f1279da25c22dcaef7d38bad"
+          ]
+        },
+        {
+          "sha": "28c1c92e05d10033f1279da25c22dcaef7d38bad",
+          "date": "2026-11-16T02:58:23Z",
+          "subject": "docs(c3d02): record extracted mold quality failures and protected VTK evidence step",
+          "parents": [
+            "eea404e0166931c325568a173f9b67e09ee3ec63"
+          ]
+        },
+        {
+          "sha": "eea404e0166931c325568a173f9b67e09ee3ec63",
+          "date": "2026-11-16T02:57:07Z",
+          "subject": "test(c3d02): protect extracted source meshes during quality evidence export",
+          "parents": [
+            "e968688cfffebae0790dd38722a2ca7470a68f5a"
+          ]
+        },
+        {
+          "sha": "e968688cfffebae0790dd38722a2ca7470a68f5a",
+          "date": "2026-11-16T02:56:48Z",
+          "subject": "feat(c3d02): localize metal and extracted-mold mesh defects on protected copies",
+          "parents": [
+            "0d8a526d07ef76762b017005e6de1e9b8cace920"
+          ]
+        }
+      ],
+      "unresolved_parents": [],
+      "coverage_complete": true
+    },
+    {
+      "name": "granada/c3d02-independent-material-mesh-20261112",
+      "sha": "ee2b3ecb67a4432dd8a613899377b402b314b423",
+      "main_reachable": false,
+      "commits": [
+        {
+          "sha": "ee2b3ecb67a4432dd8a613899377b402b314b423",
+          "date": "2026-11-12T23:54:51Z",
+          "subject": "docs(c3d02): align two-closed-solid mesh approach with scientific logs",
+          "parents": [
+            "096be9c7799d6350b2bb950f6f99de6531ec763b"
+          ]
+        },
+        {
+          "sha": "096be9c7799d6350b2bb950f6f99de6531ec763b",
+          "date": "2026-11-12T23:54:48Z",
+          "subject": "docs(c3d02): align two-closed-solid mesh approach with scientific logs",
+          "parents": [
+            "d74b8ac39713688d92e0fcf39d398a94eb2fc2f6"
+          ]
+        },
+        {
+          "sha": "d74b8ac39713688d92e0fcf39d398a94eb2fc2f6",
+          "date": "2026-11-12T23:54:45Z",
+          "subject": "docs(c3d02): align two-closed-solid mesh approach with scientific logs",
+          "parents": [
+            "cb913039cfc93c54e4eb660244e951886a0d58b8"
+          ]
+        },
+        {
+          "sha": "cb913039cfc93c54e4eb660244e951886a0d58b8",
+          "date": "2026-11-12T23:54:42Z",
+          "subject": "docs(c3d02): align two-closed-solid mesh approach with scientific logs",
+          "parents": [
+            "7e86767611d48d6a2cd849063bb41a865fe39108"
+          ]
+        },
+        {
+          "sha": "7e86767611d48d6a2cd849063bb41a865fe39108",
+          "date": "2026-11-12T23:54:39Z",
+          "subject": "docs(c3d02): align two-closed-solid mesh approach with scientific logs",
+          "parents": [
+            "7a0b4e091e8ec5681d5ab63301d3b6f56550c197"
+          ]
+        },
+        {
+          "sha": "7a0b4e091e8ec5681d5ab63301d3b6f56550c197",
+          "date": "2026-11-12T23:54:36Z",
+          "subject": "docs(c3d02): align two-closed-solid mesh approach with scientific logs",
+          "parents": [
+            "409f909e912a30b98cde564b406e9f6c30405068"
+          ]
+        },
+        {
+          "sha": "409f909e912a30b98cde564b406e9f6c30405068",
+          "date": "2026-11-12T23:54:34Z",
+          "subject": "docs(c3d02): align two-closed-solid mesh approach with scientific logs",
+          "parents": [
+            "975c60ef4acfabda0683a761ef32b5183df72b32"
+          ]
+        },
+        {
+          "sha": "975c60ef4acfabda0683a761ef32b5183df72b32",
+          "date": "2026-11-12T23:54:31Z",
+          "subject": "docs(c3d02): align two-closed-solid mesh approach with scientific logs",
+          "parents": [
+            "40a4746c64255db783486c29d74ed65dba4e3a2c"
+          ]
+        },
+        {
+          "sha": "40a4746c64255db783486c29d74ed65dba4e3a2c",
+          "date": "2026-11-12T23:54:29Z",
+          "subject": "docs(c3d02): align two-closed-solid mesh approach with scientific logs",
+          "parents": [
+            "f53045874fdef18dc1c1989f2a3e42ec2e001e17"
+          ]
+        },
+        {
+          "sha": "f53045874fdef18dc1c1989f2a3e42ec2e001e17",
+          "date": "2026-11-12T23:53:53Z",
+          "subject": "docs(c3d02): explain independent metal/sand mesh approach and strict gates",
+          "parents": [
+            "facd0178b7769bd13f96058107ca24d6d7a83745"
+          ]
+        },
+        {
+          "sha": "facd0178b7769bd13f96058107ca24d6d7a83745",
+          "date": "2026-11-12T23:53:24Z",
+          "subject": "test(c3d02): guard independent iron and mold meshing source",
+          "parents": [
+            "9291874ab0ecbfa7a6bc26a6508dcf68f20a6cbd"
+          ]
+        },
+        {
+          "sha": "9291874ab0ecbfa7a6bc26a6508dcf68f20a6cbd",
+          "date": "2026-11-12T23:53:12Z",
+          "subject": "fix(c3d02): use sed capture group for material physical volume",
+          "parents": [
+            "896e12dc44d518916c9803f92bfb6f921a748f44"
+          ]
+        },
+        {
+          "sha": "896e12dc44d518916c9803f92bfb6f921a748f44",
+          "date": "2026-11-12T23:52:58Z",
+          "subject": "fix(c3d02): parse total volume rather than first min-volume field",
+          "parents": [
+            "f2b77bb590eda9bfaf8ae351a0cc3e3bec052ca7"
+          ]
+        },
+        {
+          "sha": "f2b77bb590eda9bfaf8ae351a0cc3e3bec052ca7",
+          "date": "2026-11-12T23:52:40Z",
+          "subject": "feat(c3d02): mesh iron and sand independently from verified closed STLs",
+          "parents": [
+            "0f5b491af526ad250687b2262b9f966b1275819d"
+          ]
+        },
+        {
+          "sha": "0f5b491af526ad250687b2262b9f966b1275819d",
+          "date": "2026-11-12T23:52:06Z",
+          "subject": "feat(c3d02): define physically isolated solid STL meshing template",
+          "parents": [
+            "5369cb54bc57138ed65ff961b781f0eeade51d28"
+          ]
+        }
+      ],
+      "unresolved_parents": [],
+      "coverage_complete": true
+    }
+  ]
+}
