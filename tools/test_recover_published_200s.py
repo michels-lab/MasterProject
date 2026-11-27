@@ -5,7 +5,7 @@ from pathlib import Path
 import tarfile
 import tempfile
 import unittest
-from recover_published_200s import validate_manifest, safe_members
+from recover_published_200s import validate_manifest, safe_members, entries, checked_destination, validate_report
 
 class RecoveryTests(unittest.TestCase):
     def setUp(self):
@@ -61,6 +61,39 @@ class RecoveryTests(unittest.TestCase):
                 p=self.archive(Path(d),names,linked)
                 with self.assertRaises(ValueError):
                     safe_members(p,self.m["case"],100)
+
+    def test_manifest_mode_metadata_and_steps(self):
+        for key,value in (("mpi_ranks",8),("max_dt_s",.025),("archive_bytes",5),("part_count",2)):
+            e={**self.e,key:value}
+            with self.assertRaises(ValueError):validate_manifest(self.m,e)
+        for value in (0,True,-1):
+            m={**self.m,"solver_steps":value}
+            with self.assertRaises(ValueError):validate_manifest(m,m)
+
+    def test_complete_index_missing_pin_and_duplicate(self):
+        e={**self.e,"sha":"a"*40,"manifest_blob_sha":"b"*40}
+        self.assertEqual(entries({"branches":[e]}),[e])
+        with self.assertRaises(ValueError):entries({"branches":[{**e,"sha":""}]})
+        with self.assertRaises(ValueError):entries({"branches":[e,e]})
+
+    def test_linked_destination_parent(self):
+        with tempfile.TemporaryDirectory() as d:
+            root=Path(d);repo=root/"repo";repo.mkdir()
+            real=root/"real";real.mkdir();link=root/"link";link.symlink_to(real,target_is_directory=True)
+            self.assertEqual(checked_destination(repo,real/"new"),real/"new")
+            with self.assertRaises(ValueError):checked_destination(repo,link/"new")
+
+    def test_file_as_parent_rejected(self):
+        with tempfile.TemporaryDirectory() as d:
+            p=self.archive(Path(d),[self.m["case"]+"/a",self.m["case"]+"/a/b"])
+            with self.assertRaises(ValueError):safe_members(p,self.m["case"],100)
+
+    def test_report_case_and_coverage(self):
+        report={"case":self.m["case"],"solver_completed":True,"solver_steps":200000,
+                "final_time_s":200,"runtime_audit":{"native_runtime_coverage_complete":True,"errors":[]}}
+        validate_report(report,self.m)
+        with self.assertRaises(ValueError):validate_report({**report,"case":"B14-2D-200s"},self.m)
+        with self.assertRaises(ValueError):validate_report({**report,"physical_validation":True},self.m)
 
 if __name__=="__main__":
     unittest.main()
