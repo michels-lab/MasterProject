@@ -1,7 +1,10 @@
 """Software-only regression tests; no CFD or fabricated research results."""
 import unittest
+import tempfile
+import subprocess
+from pathlib import Path
 from compare_c14_three_models import (
-    station_map, match_stations, metrics, differences, check_nominal)
+    station_map, match_stations, metrics, differences, check_nominal, pinned_inventory, pinned_sha)
 
 def row(x,t=1500.,alpha=1.,uy=0.):
     return {"x":x,"T":t,"phaseChangeSource:alpha1":alpha,
@@ -39,6 +42,29 @@ class CommonStationsTests(unittest.TestCase):
         self.assertAlmostEqual(d["bias_T"],-5)
         self.assertAlmostEqual(d["rmse_T"],50**.5)
         self.assertEqual(d["opposite_Uy_sign_points"],1)
+
+    def test_pinned_nested_case_rejects_dirty_and_untracked_files(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root=Path(tmp)
+            def git(*args):
+                subprocess.run(["git","-C",tmp,*args],check=True,
+                               stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
+            git("init")
+            case=root/"nested"/"case"
+            case.mkdir(parents=True)
+            p=case/"profile.xy"
+            p.write_text("original")
+            git("add",".")
+            git("-c","user.name=Test","-c","user.email=test@example.invalid","commit","-m","fixture")
+            inv=pinned_inventory(case)
+            self.assertEqual(len(pinned_sha(case,p,inv)),64)
+            p.write_text("modified")
+            with self.assertRaisesRegex(ValueError,"pinned Git blob"):
+                pinned_sha(case,p,inv)
+            q=case/"untracked.xy"
+            q.write_text("original")
+            with self.assertRaises(ValueError):
+                pinned_sha(case,q,inv)
 
     def test_wrong_nominal_inventory_rejected(self):
         with self.assertRaisesRegex(ValueError,"inventory"):
