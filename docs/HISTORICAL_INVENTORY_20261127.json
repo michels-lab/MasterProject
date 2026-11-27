@@ -93,6 +93,11 @@
       "entries": 632,
       "documents": 0,
       "truncated": false
+    },
+    {
+      "dir": "cases_controlled_buoyancy/C9_topFixedFlux",
+      "entries": 1856,
+      "truncated": false
     }
   ],
   "branches": [
@@ -1109,6 +1114,46 @@
       "size": 656
     },
     {
+      "path": "cases_controlled_buoyancy/C9_topFixedFlux/CASE_NOTES.md",
+      "sha": "44c16fc11f341270f692404aa89b7771482f612d",
+      "size": 2738
+    },
+    {
+      "path": "cases_controlled_buoyancy/C9_topFixedFlux/CASE_VARIANT.md",
+      "sha": "fdf1f4f8e4f4574f9a090954f36c5546a7f1164b",
+      "size": 627
+    },
+    {
+      "path": "cases_controlled_buoyancy/README_AIRGAP_OF14_TESTS.md",
+      "sha": "8f511383b44eaa19e0cbe979ebc2cfae27b96823",
+      "size": 923
+    },
+    {
+      "path": "cases_controlled_buoyancy/README_V10_V11_TESTS.md",
+      "sha": "b5c576fc6a6ae0cd6e5fb2d42f353859164729f7",
+      "size": 1055
+    },
+    {
+      "path": "cases_controlled_buoyancy/README_V12_V13_TESTS.md",
+      "sha": "4262a349c381377832c6168cfdd5be63b75a99b7",
+      "size": 8234
+    },
+    {
+      "path": "cases_controlled_buoyancy/README_V8_V9_TESTS.md",
+      "sha": "104477a058021695cdc94b7aa4c59a823bf4d8db",
+      "size": 984
+    },
+    {
+      "path": "cases_controlled_buoyancy/README.md",
+      "sha": "b4a768d452e25cd04baedefad53c19dbc6eca1a1",
+      "size": 36871
+    },
+    {
+      "path": "cases_controlled_buoyancy/VERSION_LOG.md",
+      "sha": "70652ad7e2ea071ef2e15513e58bc28af5537a42",
+      "size": 3432
+    },
+    {
       "path": "docs/audits/FILE_GOVERNANCE_LOG.md",
       "sha": "a8ad6e4cfb41243699d0b4ede05629a31e16d746",
       "size": 206471
@@ -1802,6 +1847,144 @@
       "path": "VALIDATION_MATRIX.md",
       "sha": "9fe2b90113b1efe6af1397a5e87de9da5a6bcd1b",
       "size": 17093
+    }
+  ],
+  "controlled_case_directories": [
+    {
+      "path": "B10_airGapOF14",
+      "sha": "29c2fc063dc774996a4e77dc11d2e157ea2a665c"
+    },
+    {
+      "path": "B11_energy2_test",
+      "sha": "cb8cedaf2869f70dd5c9dcb298fa9316a490d220"
+    },
+    {
+      "path": "B11_topFixedFlux_airGapOF14",
+      "sha": "fed0c8a2177a648095c0947ec70cb6baa0a4140a"
+    },
+    {
+      "path": "B12_topFixedValue_airGapOF14",
+      "sha": "3100996ac860056d7e1a84c8538a69b774dd7324"
+    },
+    {
+      "path": "B13_prghPressure_airGapOF14",
+      "sha": "c3583822eabd8d58354fed46c84b064c38e348c8"
+    },
+    {
+      "path": "B14_topFixedFlux_explicitRef",
+      "sha": "cea1918ce163f79870751deb846cd95425fe0897"
+    },
+    {
+      "path": "B15_adaptiveDt_fromB14",
+      "sha": "8ea4b5dd10900438a51e5d96d4c2622cb3d5c1b3"
+    },
+    {
+      "path": "B16_phaseRelax025_fromB14",
+      "sha": "b5702a79de1f5f3a2ecd9cf9a5828cc5a855dc29"
+    },
+    {
+      "path": "B3_reference",
+      "sha": "f036a6ad5dd19a36b9244f910b343ada68c5e17d"
+    },
+    {
+      "path": "B4_energy2",
+      "sha": "b6528b70b33bd82fca1c1b6a90461876831f26e6"
+    },
+    {
+      "path": "B5_airGapOF14",
+      "sha": "31334e9e88db674da541d5d34988b1e3801e0a99"
+    },
+    {
+      "path": "B5_outer3",
+      "sha": "4615ca15b9c768f0c0f55d91edb9b592507b0997"
+    },
+    {
+      "path": "B6_adaptiveDt",
+      "sha": "471302d104513b15ea29387130445281659d6de2"
+    },
+    {
+      "path": "B7_outer4",
+      "sha": "9a0270d8293bd3c55cf155bd351923438fa957ad"
+    },
+    {
+      "path": "B8_adaptiveOuter4",
+      "sha": "f93d08f21c1c784a23077b6331c06c6daa58f3c5"
+    },
+    {
+      "path": "B9_airGapOF14",
+      "sha": "fcb0c8b7fdc39577a02ce4a611de0739c8140758"
+    },
+    {
+      "path": "B9_topFixedFlux",
+      "sha": "dd0aa86b7b84a1b51db357b2ed395e5898fc713e"
+    },
+    {
+      "path": "C10_airGapOF14",
+      "sha": "0b208c2c5539d8b3448f7807e83253a13af39ea3"
+    },
+    {
+      "path": "C11_energy2_test",
+      "sha": "b4ad9a351677b4c28a307d506f814ed4be69b2f3"
+    },
+    {
+      "path": "C11_topFixedFlux_airGapOF14",
+      "sha": "34e5d70ab9abd4c78906602baef023d92e9b8bd6"
+    },
+    {
+      "path": "C12_topFixedValue_airGapOF14",
+      "sha": "2adf02f90f0cc982e842c103761e27219f1ee289"
+    },
+    {
+      "path": "C13_prghPressure_airGapOF14",
+      "sha": "8d860f052f665aa633c28c0778a24d709bddbad3"
+    },
+    {
+      "path": "C14_topFixedFlux_explicitRef",
+      "sha": "7d2699200a19c783730ab261df0a0cb543be846f"
+    },
+    {
+      "path": "C15_adaptiveDt_fromC14",
+      "sha": "e8db810c34bacda9684a765733941dc1f3b951ed"
+    },
+    {
+      "path": "C16_phaseRelax025_fromC14",
+      "sha": "8af6e23937f48083a4b6e2026fcb411d6cda3a83"
+    },
+    {
+      "path": "C3_reference",
+      "sha": "6071b328ca3a0ca463e2c88335a5cbf49543aeeb"
+    },
+    {
+      "path": "C4_energy2",
+      "sha": "91a896294ad43b1c9935a2a2fe1b293663073ce5"
+    },
+    {
+      "path": "C5_airGapOF14",
+      "sha": "52eeced1fb07b6684e6538a2eb230a87484ee38b"
+    },
+    {
+      "path": "C5_outer3",
+      "sha": "eeb5b6df25aeefe0d7a8d70aedb06ba08d28e1fb"
+    },
+    {
+      "path": "C6_adaptiveDt",
+      "sha": "dd25f99ba8d31a712159ddb7fdc93a68f136472c"
+    },
+    {
+      "path": "C7_outer4",
+      "sha": "5cdfb48a7499721b4e992a851ea84410f7d97be1"
+    },
+    {
+      "path": "C8_adaptiveOuter4",
+      "sha": "c9cab00d044e8c9d83deb179061c2203c65e1550"
+    },
+    {
+      "path": "C9_airGapOF14",
+      "sha": "098fb0dea6bccd666d2cdc34cb70476e7a454eb7"
+    },
+    {
+      "path": "C9_topFixedFlux",
+      "sha": "04ce01767a81d943df24d1786b281634e7ab0e22"
     }
   ]
 }
