@@ -385,9 +385,9 @@ def main() -> int:
             return 0
         result=stage(args.source,args.out)
         if args.run_full:
-            result=run_full(args.out.expanduser().absolute(),result)
+            result=run_full(Path(result["output"]),result)
         print(json.dumps({
-            "status":result["status"],"stage_report":str(args.out/REPORT),
+            "status":result["status"],"stage_report":str(Path(result["output"])/REPORT),
             "native_C14_F14_solver_run":result["native_solver_run"],
             "solidification_or_experiment_accepted":False,
         },indent=2))
