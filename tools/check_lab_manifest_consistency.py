@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Offline consistency guard. No GitHub requests, solver or binary validation."""
+import csv
 import json
 from pathlib import Path
 import re
@@ -37,16 +38,57 @@ def validate(index, state, a, b):
         assert owner["manifest_verified"] is True and owner["manifest_blob_sha"]==e["manifest_blob_sha"]
         assert owner["physical_validation"] is False
 
+def read_csv(path):
+    with (ROOT/path).open(newline="",encoding="utf-8") as f:
+        return list(csv.DictReader(f))
+
+def validate_catalog(index,metrics,registry,general):
+    results=[e for e in index["branches"] if e.get("complete") is True
+             and e.get("kind") in ("adaptive_scientific_results","fixed_lab_scientific_results")]
+    published=[r for r in metrics if r["evidence_status"]=="manifest_complete"]
+    assert len({r["registry_case"] for r in metrics})==len(metrics),"duplicate campaign row"
+    assert len({r["source_commit"] for r in published})==len(published),"duplicate published row"
+    assert {r["source_commit"] for r in published}=={e["sha"] for e in results},"catalog publication set drift"
+    by_pin={e["sha"]:e for e in results}
+    for r in published:
+        e=by_pin[r["source_commit"]]
+        for rk,ek in (("branch","branch"),("manifest_blob","manifest_blob_sha"),
+                      ("archive_sha256","archive_sha256"),("report_sha256","report_sha256"),
+                      ("time_mode","time_mode"),("solver_steps","solver_steps")):
+            assert r[rk]==str(e[ek]),"catalog metadata drift: "+rk
+        assert r["registry_case"].split("__")[0]==e["case"],"catalog case drift"
+        for rk,ek in (("archive_bytes","archive_bytes"),("part_count","part_count")):
+            if ek in e:assert int(r[rk])==e[ek],"catalog size drift"
+        if e["kind"]=="fixed_lab_scientific_results":
+            assert r["mpi_ranks"]==str(e["mpi_ranks"]),"fixed rank drift"
+            for collection in (registry,general):
+                match=[x for x in collection if x["case"]==r["registry_case"]]
+                assert len(match)==1 and match[0]["run_status"]=="RUN_VERIFIED" and match[0]["analysis_status"]=="AUDIT_MANIFEST_VERIFIED","fixed registry state drift"
+
 class Consistency(unittest.TestCase):
     def setUp(self):
         self.index=read("MAESTRIA_RESULT_MANIFEST_INDEX_20261127.json")
         self.state=read("MAESTRIA_STATUS.json")
         self.a=read("C3D04_CASE_A_STATUS.json")
         self.b=read("PROJECT_STAGE_STATUS.json")
+        base="analysis_results/evidence_catalog_20261127/"
+        self.metrics=read_csv(base+"campaign_200s_manifest_metrics.csv")
+        self.registry=read_csv("RUN_CASE_REGISTRY.csv")
+        self.general=read_csv(base+"case_evidence_catalog.csv")
     def check(self):
         validate(self.index,self.state,self.a,self.b)
     def test_current_records(self):
         self.check()
+    def test_catalog_matches_index(self):
+        validate_catalog(self.index,self.metrics,self.registry,self.general)
+    def test_catalog_missing_publication_rejected(self):
+        self.metrics=[r for r in self.metrics if r["registry_case"]!="C14-3DA-200s__fixed_lab"]
+        with self.assertRaisesRegex(AssertionError,"publication set drift"):
+            validate_catalog(self.index,self.metrics,self.registry,self.general)
+    def test_catalog_registry_stale_rejected(self):
+        next(r for r in self.registry if r["case"]=="C14-3DA-200s__fixed_lab")["analysis_status"]="AUDIT_REPORTED_MANIFEST_PENDING"
+        with self.assertRaisesRegex(AssertionError,"registry state drift"):
+            validate_catalog(self.index,self.metrics,self.registry,self.general)
     def test_missing_pin_rejected(self):
         next(e for e in self.index["branches"] if e.get("kind")=="fixed_lab_scientific_results").pop("sha")
         with self.assertRaisesRegex(AssertionError,"missing immutable"):
