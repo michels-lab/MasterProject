@@ -31,7 +31,7 @@
     "UNKNOWN_PURPOSE": 1
   },
   "finding_total": 10,
-  "inventory_fingerprint": "c9eb15d48db9d760def36ddbf9b41c1384fc220cb7b5f9b643b01cd98b09fbe0",
+  "inventory_fingerprint": "ac8f8ae641cf2dec0458803fcf6045f98d8fc719f0ee3adf25256e9243f9e0e1",
   "evidence_fingerprint": "a624aadd6b26e828ad8117afd31d624258d56a67d70878142a22d45db5d0f6f0",
   "files": [
     {
@@ -725,7 +725,7 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "14a82cb6f39b800281de292841be103828b644b6"
+      "blob": "7c1bbd68407b73b5365d72d7a6de02416dec85a6"
     },
     {
       "path": "analysis_results/v15_v16_preflight/README.md",
