@@ -87,3 +87,18 @@ Origen inmutable: `25e7cf8cb4a30fb0fe5ece5bd9a2e451815ab232`. Se leyeron complet
 Referencias: B14 Co máximo 0.0673434 (etiqueta 2.678 s); C14 Co máximo 0.0650864 (etiqueta 2.963 s). El primer registro CourantMax_0 tiene columna temporal vacía y valor cero; se interpreta como arranque t=0. Las etiquetas posteriores llevan sufijo s. El último Co precede a 10 s; no se inventa un registro Co a 10 s. Los pasos inferidos de las sondas adaptativas oscilan aproximadamente entre 0.00119048 y 0.02 s, con precisión temporal de escritura limitada.
 
 El cribado de octubre queda reproducido a la precisión de los datos. Estado propuesto para los cinco casos: EVIDENCE_PUSHED / PRELIMINARY_COMPARISON; no RUN_VERIFIED ni ANALYSIS_VERIFIED. El log nativo completo supera el límite de transferencia del conector al intentar leerlo; no se confirmó End, retorno del runner ni ausencia de errores. No se contrastaron aquí todos los diccionarios, perfiles, flujos cara a cara, campos de fase ni cierre energético. No repetir automáticamente CFD: primero recuperar y auditar la evidencia existente. No se modificaron resultados, solver ni configuraciones.
+
+## 27-11-2026 — Uva: sonda de fracción líquida y alcance de conservación
+
+Se leyeron completas las seis series `postProcessing/metal/temperatureProbe/0/phaseChangeSource:alpha1` de V14–V16. Todas empiezan en (0 s, 1), terminan en 10 s, tienen tiempos estrictamente crecientes, valores finitos dentro de [0,1], máximo 1 y mínimo igual al valor final. El punto de sonda definido en `system/functions` es (0.02, 0.02, 0.005) m.
+
+| Caso | Muestras | alphaL final | Incrementos consecutivos | Decrementos consecutivos |
+|---|---:|---:|---:|---:|
+| B14 | 10001 | 0.988414 | 919 | 2011 |
+| B15 | 1685 | 0.988861 | 152 | 352 |
+| B16 | 10001 | 0.98836 | 921 | 1995 |
+| C14 | 10001 | 0.964815 | 0 | 5281 |
+| C15 | 1474 | 0.964022 | 0 | 621 |
+| C16 | 10001 | 0.964914 | 0 | 5278 |
+
+Los incrementos se cuentan con comparación estricta de valores impresos; no son eventos independientes, ni magnitudes de refusión, ni prueba de recalescencia. El número de muestras y la precisión escrita difieren entre series; no comparar conteos como tasas físicas. La sonda no representa el promedio volumétrico o másico. Los tres diccionarios de diagnóstico son idénticos en los seis casos; se configura topFlow cara por cara, sum(phi) superior, potencias energéticas del metal y entalpía sensible. No se verificaron sus salidas completas ni un cierre de conservación. Para masa hace falta integrar rho en todo el dominio y contrastar con flujo de masa por todas las fronteras; para energía, contrastar inventarios, flujos y fuentes nativas con signos, unidades y tiempos consistentes, incluyendo el molde y el calor latente sin doble conteo. El diagnóstico rho*L*(-ddt(alphaL)) no sustituye la fuente nativa comprobada. En familia B el cociente Darcy/flotación del modelo de fase no representa la flotación total (beta de fvModels=0). No se ejecutó CFD ni se modificaron entradas. Estado de validación no promovido.
