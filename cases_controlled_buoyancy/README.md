@@ -1,3 +1,5 @@
+> **27-11-2026 — Estado vigente:** campaña laptop adaptativa 6/8 calculadas y publicadas, 0 recuperaciones 2D pendientes, 2 variantes A fallidas; A 8/10=80% y B 2/7=29% hitos, no validación física. FS-C08 lote 12: 75/75 pasos de arranque. La campaña fija del laboratorio permanece separada. [Historia científica](https://github.com/michels-lab/MasterProject/blob/main/docs/MAESTRIA_HISTORIA_CIENTIFICA_ES.md) · [Estado vigente](https://github.com/michels-lab/MasterProject/blob/main/docs/MAESTRIA_STATUS.json). Los estados anteriores son históricos.
+
 > **24-11-2026 | ESTADO VIGENTE — SINCRONIZACIÓN MAESTRÍA:** Campaña histórica 26/26 corridas completas, sin perfiles faltantes. C14 verificado, referencia para contrastar A y B. C15/C16 no se declaran ejecutados. Nueva comparación 2D/B: 404 métricas de estaciones comunes en 101 tiempos; no equivale a independencia de malla. [Registro integrado](https://github.com/michels-lab/MasterProject/blob/main/docs/granada/MAESTRIA_ESTADO_INTEGRADO_20261124_ES.md).
 
 # Controlled Buoyancy Comparison Cases
