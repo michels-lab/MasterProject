@@ -7,6 +7,7 @@ from __future__ import annotations
 import argparse
 import csv
 import json
+import math
 import re
 import subprocess
 from datetime import datetime, timezone
@@ -20,7 +21,13 @@ def tail(path: Path, limit=131072):
         return ""
     with path.open("rb") as f:
         f.seek(0, 2)
-        f.seek(max(0, f.tell()-limit))
+        offset=max(0,f.tell()-limit)
+        if offset:
+            f.seek(offset-1)
+            if f.read(1)!=b"\n":
+                f.readline() # Never interpret a truncated first line as a record.
+        else:
+            f.seek(0)
         return f.read().decode("utf-8", "replace")
 
 def last_row(path: Path):
@@ -30,9 +37,10 @@ def last_row(path: Path):
         parts = line.split()
         if len(parts) >= 2:
             try:
-                return [float(x) for x in parts]
+                values=[float(x) for x in parts]
             except ValueError:
-                continue
+                return None # A malformed final data row is not a previous valid sample.
+            return values if all(math.isfinite(v) for v in values) else None
     return None
 
 def get_registry():
@@ -65,22 +73,40 @@ def audit_case(case,reg):
     if control.is_file():
         match=re.search(r"(?m)^\s*endTime\s+([0-9.eE+-]+)\s*;",control.read_text(errors="replace"))
         if match:
-            target=float(match.group(1))
+            try:target=float(match.group(1))
+            except ValueError:target=None
+            if target is not None and (not math.isfinite(target) or target<=0):target=None
+    if target is None:
+        check.append("Requested endTime unavailable or invalid")
     probe=case/"postProcessing/metal/temperatureProbe/0/T"
     values=last_row(probe)
     probe_time=values[0] if values else None
     if not values:
         check.append("Temperature probe unavailable in committed files")
-    elif target is not None and probe_time < target-1e-5:
+    elif target is not None and abs(probe_time-target)>1e-5:
         check.append("Temperature probe not at requested endTime")
+    if values and (probe_time<0 or any(v<=0 for v in values[1:])):
+        check.append("Nonphysical temperature or invalid probe time in final row")
     log=case/"log.foamMultiRun"
     log_size=log.stat().st_size if log.is_file() else 0
     data=tail(log)
     if log_size==0:
         notes.append("Full foamMultiRun log missing or empty in checkout")
+        if status=="RUN_VERIFIED":
+            check.append("Verified registry run has no full native log in checkout")
     else:
-        if not re.search(r"(?m)^\s*End\s*$",data):
+        end=list(re.finditer(r"(?m)^\s*End\s*$",data))
+        times=list(re.finditer(r"(?m)^\s*Time\s*=\s*([-+0-9.eE]+)\s*s?\s*$",data))
+        if not end:
             notes.append("End marker not found near saved log tail")
+            check.append("Native solver completion not demonstrated by saved tail")
+        if end and times and end[-1].start()<times[-1].start():
+            check.append("End precedes last native Time marker")
+        if target is not None and times:
+            try:observed=float(times[-1][1])
+            except ValueError:observed=float("nan")
+            if not math.isfinite(observed) or abs(observed-target)>1e-5:
+                check.append("Last native Time differs from requested endTime")
         if re.search(r"FOAM FATAL|segmentation fault|floating point exception|failed wmake",data,re.I):
             check.append("Fatal/error marker in saved log tail")
     logs=case/"logs"
@@ -115,6 +141,7 @@ def audit_case(case,reg):
         check.append("Registry says prepared/not run, but committed output exists: verify provenance")
     if status=="PREPARED_NOT_RUN":
         notes.append("Prepared case: do not invent a run or classify as verified")
+    notes.append("Tail inspection only; earlier fatal events and complete step coverage are not independently verified")
     notes.append("Missing Git evidence does not imply the user failed to run locally")
     notes.append("Numerical completion does not establish physical/experimental validity")
     notes.append("energyFlux includes heatFlux and energyAdvectiveFlux, do not add all three")
