@@ -67,9 +67,56 @@
     {
       "name": "results/campaign-200s-compact-v1/C14-3DA-200s",
       "sha": "86d7b6114d7cf114bd48131ac630bff635b397a5",
-      "error": "UNKNOWN: Error code: UNKNOWN; Error: RemoteProtocolError: Server disconnected without sending a response.",
-      "coverage_complete": false,
-      "commits": []
+      "coverage_complete": true,
+      "commits": [
+        {
+          "sha": "86d7b6114d7cf114bd48131ac630bff635b397a5",
+          "date": "2026-11-25T21:13:03Z",
+          "subject": "Archive chunks 6-6 / 24",
+          "parents": [
+            "b1f6d94643363b46938cfdbee423faf2d5eb58cd"
+          ]
+        },
+        {
+          "sha": "b1f6d94643363b46938cfdbee423faf2d5eb58cd",
+          "date": "2026-11-25T21:11:24Z",
+          "subject": "Archive chunks 5-5 / 24",
+          "parents": [
+            "37edcd47bc8b324e6fd91c26ca1aa20e6b6c1091"
+          ]
+        },
+        {
+          "sha": "37edcd47bc8b324e6fd91c26ca1aa20e6b6c1091",
+          "date": "2026-11-25T21:10:37Z",
+          "subject": "Archive chunks 4-4 / 24",
+          "parents": [
+            "4ad852562e974b9301e2a97df9e287218824dcd4"
+          ]
+        },
+        {
+          "sha": "4ad852562e974b9301e2a97df9e287218824dcd4",
+          "date": "2026-11-25T21:09:38Z",
+          "subject": "Archive chunks 3-3 / 24",
+          "parents": [
+            "a74842fd2dccaa6d7cb1938117dedaa6dd180794"
+          ]
+        },
+        {
+          "sha": "a74842fd2dccaa6d7cb1938117dedaa6dd180794",
+          "date": "2026-11-25T21:08:49Z",
+          "subject": "Archive chunks 2-2 / 24",
+          "parents": [
+            "0b65a68129b97810904fdb2415b3f6ec7472b832"
+          ]
+        },
+        {
+          "sha": "0b65a68129b97810904fdb2415b3f6ec7472b832",
+          "date": "2026-11-25T21:07:42Z",
+          "subject": "Archive chunks 1-1 / 24",
+          "parents": []
+        }
+      ],
+      "unresolved_parents": []
     },
     {
       "name": "results/full-campaign-20261002-182632",
