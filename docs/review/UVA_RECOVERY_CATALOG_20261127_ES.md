@@ -1,0 +1,9 @@
+# Uva + Granada — recuperación selectiva y catálogo 200 s (27-11-2026)
+
+Base consultada: main al inicio; ref reportado b52f53f085ab30a0e70b9a9a3b05c634e30eee (la consulta por SHA devolvió 404; blobs de entrada leídos por main). Corte verificado e8410590b5175930debf105e5a88d9c16357e373.
+
+Hallazgo: índice ya contiene diez publicaciones, pero registro general y ambos catálogos conservaban A fijo laboratorio pendiente. Se actualiza únicamente esa fila: pin ba0d4d29a434fa0576372bbdd14385b1663498d7, serial, 200000 pasos, 200 s, 24 fragmentos, 778685468 bytes. Las métricas físicas no importadas permanecen vacías. Verificación de los diez registros publicados contra índice por commit, rama, blob de manifiesto, hash de archivo/reporte, modo y pasos: sin discrepancias. Total 13 filas, 10 manifiestos completos, 128 fragmentos y 4140582991 bytes declarados; los restantes son dos fallos adaptativos A y fijo laptop A con auditoría pendiente. Se conservan comparaciones físicas históricas de nueve publicaciones.
+
+Recuperador: rechaza índices completos sin pin y duplicados; coteja metadatos adicionales disponibles, número de pasos válido y cobertura; exige identidad del reporte, ruta de destino no enlazada, espacio durante descarga y miembros de tar compatibles sin archivo usado como directorio. Configura el remoto promisor para recuperación parcial. Cinco regresiones nuevas de recuperación y tres de catálogo. CI de consistencia previa 46067689291 aprobada; nueva CI 46075770922 pendiente al corte.
+
+Límites: no se descargaron partes binarias, no se ejecutó recuperación real, no se ejecutó CFD, no se validó experimentalmente. Los controles no constituyen aislamiento contra modificaciones concurrentes de rutas por otro proceso. Hitos A 8/10, B 2/7 intactos. Siguiente: auditor de logs recuperados, series temporales y compatibilidad FoamLens sin inventar datos ausentes.
