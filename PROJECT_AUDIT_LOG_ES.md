@@ -1,3 +1,5 @@
+> **27-11-2026 — Uva + Granada C14:** comprobación de blobs fijados, cobertura temporal y rutas de salida de diagnósticos; siete regresiones nuevas, CI pendiente; sin CFD ni cambios de hitos. [Informe](docs/review/UVA_C14_DIAGNOSTIC_INTEGRITY_20261127_ES.md).
+
 > **27-11-2026 — Uva + Granada B 10 s:** protección de rutas, locks y reanudación; código de salida parcial y marcas DONE comprobables; diez regresiones escritas, CI pendiente. Sin CFD ni cambio de hitos. [Informe](docs/review/UVA_CASE_B_OFFLINE_INTEGRITY_20261127_ES.md).
 
 > **27-11-2026 — Auditoría incremental:** registro por ruta/blob y alcance, siete inspecciones iniciales (dos completas documentales y cinco parciales); seis publicaciones adaptativas contrastadas por pasos con el índice de manifiestos. Sin cambios de física ni validación nueva. [Protocolo](docs/review/README.md).
