@@ -31,7 +31,7 @@
     "UNKNOWN_PURPOSE": 1
   },
   "finding_total": 10,
-  "inventory_fingerprint": "fd50bedf4a856225fcd5ad70635b7dc437c53ec0e7f4893a2e2e07f12c69b6af",
+  "inventory_fingerprint": "b4779ee5496e712d938de9b4ad55ee53dc63c5087c719f9eb534cd8759594710",
   "evidence_fingerprint": "adbf0821018bd737520d471946990344e4b06f0e8b985cbd1a23d6021d22e1ae",
   "files": [
     {
@@ -299478,7 +299478,7 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "b85ecf9a1cd8d4c90cdb6ce9368bc4252514219b"
+      "blob": "cb7f65ecb24658b6d14466ef6593703da68c12a4"
     },
     {
       "path": "docs/granada/OPENFOAM_HUB_READ_ACCESS_20261021.md",
@@ -299548,7 +299548,7 @@
       "role": "unknown",
       "purpose": "function unknown: owner classification required",
       "certainty": "unknown",
-      "blob": "aece76124cafffc51996576fc80bab6ff41034f8"
+      "blob": "fbb9925c3cb83f352cb2ee7a45d46617f0f9ebe5"
     },
     {
       "path": "docs/review/README.md",
