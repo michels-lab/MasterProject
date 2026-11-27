@@ -2113,5 +2113,34 @@
     "scheduled_steps": 757,
     "scope": "historical unique batches, not thesis progress",
     "next": "identify acceleration/time-step dependence, preserve strict coupled gates, calibrated alloy and global CHT closure pending"
+  },
+  "uva_current_scope_20261127": {
+    "date": "2026-11-27",
+    "scope": "Canonical current readout; earlier keys describe historical stage or named subsystem, not current overall native solver state.",
+    "native_startup_build_and_execution_reported": true,
+    "evidence_basis": "investigator-supplied terminal summaries; raw WSL files not mounted",
+    "latest_batch": {
+      "complete_variants": 4,
+      "accepted_steps": 75,
+      "scheduled_steps": 75,
+      "common_time_s": 0.000005,
+      "replicate_counted_again": false
+    },
+    "historical_counts": {
+      "unique_batch": 12,
+      "complete_variants": 36,
+      "scheduled_variants": 48,
+      "accepted_steps": 501,
+      "scheduled_steps": 757,
+      "scope": "historical unique batches, not thesis progress",
+      "next": "identify acceleration/time-step dependence, preserve strict coupled gates, calibrated alloy and global CHT closure pending"
+    },
+    "local_final_coupled_audits_pass": true,
+    "temporal_independence": false,
+    "global_CHT_energy_verified": false,
+    "physical_shrinkage_validated": false,
+    "alloy_calibrated": false,
+    "raw_wsl_artifacts_independently_inspected": false,
+    "priority": "Investigate startup acceleration and temporal dependence with strict gates, no tolerance relaxation or repeat of read-only/shadow milestones."
   }
 }
