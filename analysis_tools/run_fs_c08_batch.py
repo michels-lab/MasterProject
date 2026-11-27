@@ -126,6 +126,7 @@ def summarize(name, coupling, mobility, flux_mode, energy_mode, support_mode, re
         "complete_ledger_steps": ledger.get("complete_native_ledger_times", 0),
         "saved_steps": len(report.get("saved_positive_times_s", [])),
         "saved_positive_times_s": report.get("saved_positive_times_s", []),
+        "comparison_ready_times_s": report.get("comparison_ready_times_s", []),
         "last_saved_time_s": report.get("latest_saved_time_s"),
         "last_ledger_time_s": last.get("time_s"),
         **{key: last.get(key) for key in METRICS},
@@ -143,12 +144,18 @@ def common_time_comparison(rows, dt):
     """Compare only complete ledgers at times actually saved by every case.
     Include no interpolation, no missing data imputation.
     """
+    if not math.isfinite(dt) or dt <= 0:
+        raise ValueError("invalid comparison time grid")
+    if len({row["variant"] for row in rows}) != len(rows):
+        raise ValueError("duplicate comparison variant")
     histories=[]
     for row in rows:
         file=row.get("ledger_csv")
         by_step={}
-        saved={round(t/dt) for t in row["saved_positive_times_s"]
-               if abs(t-round(t/dt)*dt)<=max(1e-14,dt*1e-6)}
+        saved={round(t/dt) for t in row.get("comparison_ready_times_s", [])
+               if math.isfinite(t) and t > 0
+               and abs(t-round(t/dt)*dt)<=max(1e-14,dt*1e-6)}
+        duplicate_steps=set()
         if file and Path(file).is_file():
             with Path(file).open(newline="",encoding="utf-8") as fp:
                 for rec in csv.DictReader(fp):
@@ -157,6 +164,17 @@ def common_time_comparison(rows, dt):
                         continue
                     step=round(t/dt)
                     if step<1 or step not in saved or abs(t-step*dt)>max(1e-14,dt*1e-6):
+                        continue
+                    actual_dt=row["fixed_dt_s"]
+                    if not math.isfinite(actual_dt) or actual_dt <= 0:
+                        raise ValueError("invalid variant time step")
+                    actual_step=round(t/actual_dt)
+                    if (actual_step<1 or actual_step>row["scheduled_steps"]
+                            or abs(t-actual_step*actual_dt)>max(1e-14,actual_dt*1e-6)):
+                        continue
+                    if step in by_step or step in duplicate_steps:
+                        duplicate_steps.add(step)
+                        by_step.pop(step,None)
                         continue
                     by_step[step]={key:numeric(rec.get(key)) for key in METRICS}
         histories.append(by_step)
@@ -290,6 +308,11 @@ def main(argv=None):
 
             batch["status"]="COMPLETED_ALL_VARIANTS" if all(r["completed"] for r in batch["variants"]) else "COMPLETED_WITH_REJECTED_VARIANTS"
             batch["passed_variants"]=sum(r["completed"] for r in batch["variants"])
+            batch["scheduled_variant_steps"]=sum(r["scheduled_steps"] for r in batch["variants"])
+            batch["comparison_eligible_saved_steps"]=sum(
+                len(common_time_comparison([r],comparison_dt)) for r in batch["variants"])
+            batch["complete_ledger_record_count"]=sum(r["complete_ledger_steps"] for r in batch["variants"])
+            batch["comparison_scope_note"]="Saved native gate markers + required fields + complete unique ledger; not independent physical validation."
             write_report(summary_path,batch)
     except (RuntimeError,OSError,ValueError) as exc:
         batch.update(status="BATCH_ERROR",error=str(exc))
