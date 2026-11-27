@@ -15,7 +15,6 @@ import re
 import tempfile
 
 NUM = r"[-+]?(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][-+]?\d+)?"
-VALUE = r"(?:(" + NUM + r")|([-+]?(?:nan|inf(?:inity)?)))"
 TIME = re.compile(r"^\s*Time\s*=\s*("+NUM+r")\s*s?\s*$")
 CONT = re.compile(r"time step continuity errors\s*:\s*sum local\s*=\s*("+NUM+r"),\s*global\s*=\s*("+NUM+r"),\s*cumulative\s*=\s*("+NUM+r")",re.I)
 SOLVE = re.compile(r"Solving for\s+([^,]+),\s*Initial residual\s*=\s*("+NUM+r"),\s*Final residual\s*=\s*("+NUM+r"),\s*No Iterations\s+(\d+)",re.I)
@@ -47,6 +46,8 @@ def parse_log(stream, writers):
     region=""
     end_count=0
     last_end_line=0
+    last_time_line=0
+    last_execution_line=0
     completed=0
     current_exec=0
     malformed=0
@@ -78,6 +79,7 @@ def parse_log(stream, writers):
                 cont_steps+=int(has_cont)
                 pressure_steps+=int(has_pressure)
             time=new
+            last_time_line=line_no
             step+=1
             region=""
             current_exec=0
@@ -93,6 +95,7 @@ def parse_log(stream, writers):
             last_end_line=line_no
         if EXEC.match(line) and time is not None:
             current_exec+=1
+            last_execution_line=line_no
         if "time step continuity errors" in line.lower():
             match=CONT.search(line)
             if not match:
@@ -150,6 +153,7 @@ def parse_log(stream, writers):
         pressure_steps+=int(has_pressure)
     return {"time_markers":step,"last_time_s":time,"steps_with_exactly_one_execution_time":completed,
             "end_markers":end_count,"last_end_line":last_end_line,"fatal_markers":fatal_count,
+            "last_time_line":last_time_line,"last_execution_line":last_execution_line,
             "malformed_diagnostic_lines":malformed,"unassigned_continuity_or_solve_lines":unassigned,
             "continuity_events":cont_count,"steps_with_continuity":cont_steps,
             "pressure_events":pressure_count,"steps_with_p_rgh_solve":pressure_steps,
@@ -166,6 +170,9 @@ def audit(root,out,index):
          root not in out.parents and out not in root.parents,
          "choose a new output outside the recovered archive")
     receipt=json.loads((root/"VERIFIED_RECOVERY.json").read_text())
+    need(receipt.get("archive_parts_sha256_verified") is True and
+         receipt.get("report_and_log_sha256_verified") is True,
+         "missing successful recovery receipt")
     m=receipt["manifest"]
     match=[e for e in index["branches"] if e.get("sha")==receipt["source_commit"]
            and e.get("complete") is True and e.get("manifest_blob_sha")==receipt["manifest_blob"]]
@@ -203,8 +210,11 @@ def audit(root,out,index):
         gates={"step_count_matches":summary["time_markers"]==expected,
                "execution_markers_match":summary["steps_with_exactly_one_execution_time"]==expected,
                "final_time_matches":summary["last_time_s"]==m["final_time_s"],
-               "one_end_no_fatal":summary["end_markers"]==1 and summary["fatal_markers"]==0,
-               "no_malformed_diagnostics":summary["malformed_diagnostic_lines"]==0,
+               "one_end_no_fatal":summary["end_markers"]==1 and summary["fatal_markers"]==0 and
+                   summary["last_end_line"]>summary["last_execution_line"]>summary["last_time_line"],
+               "no_malformed_diagnostics":summary["malformed_diagnostic_lines"]==0 and
+                   summary["unassigned_continuity_or_solve_lines"]==0,
+               "courant_observed":summary["courant_events"]>0,
                "continuity_each_step":summary["steps_with_continuity"]==expected,
                "pressure_each_step":summary["steps_with_p_rgh_solve"]==expected}
         result={"source_commit":e["sha"],"case":m["case"],"source_log_sha256":sha(log),
