@@ -1,5 +1,6 @@
 """Synthetic regressions only: no OpenFOAM, no CFD, no original case."""
 import importlib.util
+import os
 from pathlib import Path
 import tempfile
 import unittest
@@ -44,6 +45,22 @@ class OfflineIntegrity(unittest.TestCase):
         (self.work / "dangling").symlink_to(self.root / "missing")
         with self.assertRaises(ValueError):
             offline.reject_links(self.work)
+
+    def test_exclusive_output_lock(self):
+        fd = offline.acquire_output_lock(self.work)
+        try:
+            with self.assertRaises(BlockingIOError):
+                offline.acquire_output_lock(self.work)
+        finally:
+            os.close(fd)
+        os.close(offline.acquire_output_lock(self.work))
+
+    def test_linked_lock_rejected(self):
+        lock = self.work.with_name(self.work.name + ".UVA.lock")
+        lock.symlink_to(self.source / "unmodified")
+        with self.assertRaises(OSError):
+            offline.acquire_output_lock(self.work)
+        self.assertFalse((self.source / "unmodified").exists())
 
     def test_native_done_without_log(self):
         self.work.mkdir()
