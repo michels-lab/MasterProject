@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
   "audit_kind": "deterministic_full_tracked_tree",
-  "tracked_files_total": 42941,
-  "classified_files_total": 42936,
-  "docs_content_inspected": 252,
+  "tracked_files_total": 42945,
+  "classified_files_total": 42940,
+  "docs_content_inspected": 254,
   "large_docs_skipped": 1,
   "excluded_reports": 5,
   "roles": {
@@ -12,7 +12,7 @@
     "bitacora": 5,
     "config": 33,
     "data": 43,
-    "document": 211,
+    "document": 213,
     "index": 37,
     "license": 1,
     "simulation_case_file": 141,
@@ -20,10 +20,10 @@
     "simulation_log": 3264,
     "simulation_output": 36203,
     "source": 181,
-    "test": 84,
+    "test": 85,
     "unknown": 1,
     "web_ui": 1,
-    "workflow": 38
+    "workflow": 39
   },
   "finding_counts": {
     "BROKEN_RELATIVE_LINK": 7,
@@ -31,8 +31,8 @@
     "UNKNOWN_PURPOSE": 1
   },
   "finding_total": 10,
-  "inventory_fingerprint": "531fd7768b7623075ee8e0cdc5d229f77fba5baf197f7b3a867a00084c47dfec",
-  "evidence_fingerprint": "8caae4e670c120c289be13401929285ddd3a58886e8106190b29a5b2509ff9ce",
+  "inventory_fingerprint": "e972d2a952a9ae9db732d8c2278a6d156aebbf98f354a576c378cc3d18d8eb45",
+  "evidence_fingerprint": "81916edf23aaa9f5a0b592f7a47e6a4596c899859d39ed70b48e08a03ffdf093",
   "files": [
     {
       "path": ".github/agents/openfoam-solidification.agent.md",
@@ -287,6 +287,13 @@
       "blob": "577a096e1bab3a12c637e35c4b4aac22653bf240"
     },
     {
+      "path": ".github/workflows/uva-case-b-offline-integrity.yml",
+      "role": "workflow",
+      "purpose": "GitHub Actions automation",
+      "certainty": "rule",
+      "blob": "cdbc77a466a0d3cc59b79d9a3ddfbdf62eea752e"
+    },
+    {
       "path": ".github/workflows/uy-temporal-analysis.yml",
       "role": "workflow",
       "purpose": "GitHub Actions automation",
@@ -445,21 +452,21 @@
       "role": "bitacora",
       "purpose": "technical/audit change history",
       "certainty": "rule",
-      "blob": "d9a3b4dc53d095058218114b6cf3f3b7bac843fe"
+      "blob": "a515ceb1a82ae86a57f658001af84c1afe25fe8a"
     },
     {
       "path": "PROJECT_AUDIT_LOG_ES.md",
       "role": "bitacora",
       "purpose": "technical/audit change history",
       "certainty": "rule",
-      "blob": "f4419f7ccf26d5f1e86dac3fc6ea1f0b0ad634a0"
+      "blob": "eba6d86b52c6228ffe9ed0d06aa9411c590055a9"
     },
     {
       "path": "README.md",
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "450192b2bcfbfa18c6278834ff95c748a2d4b317"
+      "blob": "e8b5a46f44b070dbbc893b2d1b2bc3af2a45d44b"
     },
     {
       "path": "RUN_CASE_REGISTRY.csv",
@@ -28424,14 +28431,14 @@
       "role": "source",
       "purpose": "code/test implementation",
       "certainty": "rule",
-      "blob": "1cd3b5482151b2a52bd412ccfc8bff1cb9045aea"
+      "blob": "327c9ff9e4e369af6adedfd8c93ef128b62372bf"
     },
     {
       "path": "cases_3d/C3D_05_step_gmsh_conformal/c14_physics/POSTPROCESAR_CASO_B_C14_EXISTENTE.py",
       "role": "source",
       "purpose": "code/test implementation",
       "certainty": "rule",
-      "blob": "8cfd7c63af39a3a3d4ebdf92ce114da621a71e8c"
+      "blob": "99a648c74646d62523fb16a35c6ed7a32c4326fd"
     },
     {
       "path": "cases_3d/C3D_05_step_gmsh_conformal/c14_physics/POSTPROCESAR_CASO_B_C14_EXISTENTE.sh",
@@ -28558,6 +28565,13 @@
       "purpose": "code/test implementation",
       "certainty": "rule",
       "blob": "89f7a6bf3f630a75e2ec445df37bfaaac4e214d8"
+    },
+    {
+      "path": "cases_3d/C3D_05_step_gmsh_conformal/c14_physics/test_uva_case_b_offline_integrity.py",
+      "role": "test",
+      "purpose": "code/test implementation",
+      "certainty": "rule",
+      "blob": "4d5172861be8be728893488c9f8c8381b28677da"
     },
     {
       "path": "cases_3d/C3D_05_step_gmsh_conformal/c14_physics/tests/test_existing_case_b_c14.py",
@@ -298890,7 +298904,7 @@
       "role": "config",
       "purpose": "machine-readable configuration",
       "certainty": "rule",
-      "blob": "da3c8b713f204f36dc32835442e255c2cbef6a72"
+      "blob": "0b206eb75dacdfedd698571f15f0c81055b4de67"
     },
     {
       "path": "docs/C3D_01_ESTADO_REAL_20261110_ES.md",
@@ -299170,14 +299184,14 @@
       "role": "config",
       "purpose": "machine-readable configuration",
       "certainty": "rule",
-      "blob": "dbcde7135aa396b8ac5d8e1995e9aaa08ac1198f"
+      "blob": "e09bdd43bf479e825bf38b5083a9fb3e390bc91a"
     },
     {
       "path": "docs/MAESTRIA_STATUS.json",
       "role": "config",
       "purpose": "machine-readable configuration",
       "certainty": "rule",
-      "blob": "377ca5b742b86c2f3af3de662adb352daf6cc861"
+      "blob": "ba50987e36019fbff0547aafb292733a8d03fedd"
     },
     {
       "path": "docs/MASTERPROJECT_IDENTITY_ES.md",
@@ -299219,7 +299233,7 @@
       "role": "config",
       "purpose": "machine-readable configuration",
       "certainty": "rule",
-      "blob": "2efc502ac9b39b7dbbb8f32d2cfafa2c7439b2ce"
+      "blob": "f19a0b845653b8b16cc920f5b03ee301135ecd57"
     },
     {
       "path": "docs/REGLA_INSTRUCCIONES_UNIFICADAS_ES.md",
@@ -299576,7 +299590,7 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "3fbda10cb1b974442462044100fc13681ab5bf2e"
+      "blob": "d1d2a6ae827cde844df51ed3e707e96f17d7e8b6"
     },
     {
       "path": "docs/granada/OPENFOAM_HUB_READ_ACCESS_20261021.md",
@@ -299674,7 +299688,7 @@
       "role": "unknown",
       "purpose": "function unknown: owner classification required",
       "certainty": "unknown",
-      "blob": "92e39f437937487e53f5c9141fca4d94108b13c8"
+      "blob": "9ba5b735eee0801f9a36c73f4c35a46dba0dd795"
     },
     {
       "path": "docs/review/GENERAL_REGISTRY_AUDIT_20261127_ES.md",
@@ -299705,6 +299719,13 @@
       "blob": "3d790b4168c698a72fe2c2f41d9638080180c94c"
     },
     {
+      "path": "docs/review/UVA_CASE_B_OFFLINE_INTEGRITY_20261127_ES.md",
+      "role": "document",
+      "purpose": "manual/decision/report/historical note",
+      "certainty": "inferred",
+      "blob": "d715a2e205860018befc183738ec3f9eb495c311"
+    },
+    {
       "path": "docs/review/UVA_COMPACT_INTEGRITY_20261127_ES.md",
       "role": "document",
       "purpose": "manual/decision/report/historical note",
@@ -299717,6 +299738,13 @@
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
       "blob": "9cfb7379ea024b5f06292462285ce305bb436a8f"
+    },
+    {
+      "path": "docs/review/UVA_LAB_MANIFEST_RECONCILIATION_20261127_ES.md",
+      "role": "document",
+      "purpose": "manual/decision/report/historical note",
+      "certainty": "inferred",
+      "blob": "af0f6e749d36102ca58f9d74937bf7c3451861ca"
     },
     {
       "path": "docs/review/UVA_MPI_RECOVERY_20261127_ES.md",
@@ -300652,20 +300680,20 @@
       "state": "REVIEW_REQUIRED"
     },
     {
-      "id": "759ac276f357cf6f",
+      "id": "f6fdf8268ec27344",
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_EN.md",
-      "observation": "39 implementation/config paths changed since this log's last commit; examples: .github/workflows/adaptive-campaign-static.yml, .github/workflows/c14-three-model-comparison.yml, .github/workflows/compact-campaign-200s-static.yml, .github/workflows/transfer-campaign-200s-static.yml, analysis_tools/audit_recovered_200s_log.py, analysis_tools/check_run_registry.py",
+      "observation": "4 implementation/config paths changed since this log's last commit; examples: docs/C3D04_CASE_A_STATUS.json, docs/MAESTRIA_RESULT_MANIFEST_INDEX_20261127.json, docs/MAESTRIA_STATUS.json, docs/PROJECT_STAGE_STATUS.json",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     },
     {
-      "id": "207363ef81a5af35",
+      "id": "2e27a9a324104f7d",
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_ES.md",
-      "observation": "39 implementation/config paths changed since this log's last commit; examples: .github/workflows/adaptive-campaign-static.yml, .github/workflows/c14-three-model-comparison.yml, .github/workflows/compact-campaign-200s-static.yml, .github/workflows/transfer-campaign-200s-static.yml, analysis_tools/audit_recovered_200s_log.py, analysis_tools/check_run_registry.py",
+      "observation": "4 implementation/config paths changed since this log's last commit; examples: docs/C3D04_CASE_A_STATUS.json, docs/MAESTRIA_RESULT_MANIFEST_INDEX_20261127.json, docs/MAESTRIA_STATUS.json, docs/PROJECT_STAGE_STATUS.json",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     },
