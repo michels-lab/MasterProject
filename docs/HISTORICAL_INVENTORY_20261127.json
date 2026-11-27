@@ -1,0 +1,1807 @@
+{
+  "schema": "MASTERPROJECT_HISTORICAL_INVENTORY_V1",
+  "snapshot_main": "134ac9bf6f631320630212274fd26cb8c31b5c31",
+  "date": "2026-11-27",
+  "scope": "tree metadata, not full-text review; branch tips frozen for reproducibility; CSV included only in selected small source trees, not full CFD data",
+  "scans": [
+    {
+      "dir": "docs",
+      "entries": 116,
+      "documents": 114,
+      "truncated": false
+    },
+    {
+      "dir": "freesurface",
+      "entries": 29,
+      "documents": 4,
+      "truncated": false
+    },
+    {
+      "dir": "reports",
+      "entries": 9,
+      "documents": 2,
+      "truncated": false
+    },
+    {
+      "dir": "thermodynamics",
+      "entries": 4,
+      "documents": 3,
+      "truncated": false
+    },
+    {
+      "dir": "analysis_results",
+      "entries": 65,
+      "documents": 36,
+      "truncated": false
+    },
+    {
+      "dir": "backups",
+      "entries": 4,
+      "documents": 0,
+      "truncated": false
+    },
+    {
+      "dir": "cleanproy",
+      "entries": 50,
+      "documents": 0,
+      "truncated": false
+    },
+    {
+      "dir": "doctor_original",
+      "entries": 83,
+      "documents": 0,
+      "truncated": false
+    },
+    {
+      "dir": "analysis_tools",
+      "entries": 43,
+      "documents": 1,
+      "truncated": false
+    },
+    {
+      "dir": "tools",
+      "entries": 25,
+      "documents": 0,
+      "truncated": false
+    },
+    {
+      "dir": ".github",
+      "entries": 44,
+      "documents": 5,
+      "truncated": false
+    },
+    {
+      "dir": ".michelslab",
+      "entries": 4,
+      "documents": 2,
+      "truncated": false
+    },
+    {
+      "dir": "cases_3d",
+      "entries": 4824,
+      "documents": 23,
+      "truncated": false
+    },
+    {
+      "dir": "cases_controlled_buoyancy",
+      "entries": 55855,
+      "documents": 56,
+      "truncated": true
+    },
+    {
+      "dir": "cases_buoyancy",
+      "entries": 632,
+      "documents": 0,
+      "truncated": false
+    }
+  ],
+  "branches": [
+    {
+      "name": "analysis/physics-diagnostics-run",
+      "sha": "2f6221a2172ca6f4dd3d157220afffa9db205496"
+    },
+    {
+      "name": "analysis/uy-temporal-run",
+      "sha": "e3247194b5c82c0c8be5c282a78cc5e6f146de20"
+    },
+    {
+      "name": "analysis/v8-comprehensive-run",
+      "sha": "7e56031e4118dda4ea17175d1065720ad3d6275f"
+    },
+    {
+      "name": "analysis/v9-flow-causality-run",
+      "sha": "df49accb04db74101b8a991123a0a3f20c967218"
+    },
+    {
+      "name": "analysis/v9-reversal-causality-run",
+      "sha": "3d188ca768efa44b81b36e02aa2a9eed8e87e330"
+    },
+    {
+      "name": "analysis/v9-top-fixedflux-run",
+      "sha": "0755ed71242df9e40ab0ac6e7b6d67f84bb88a3b"
+    },
+    {
+      "name": "analysis/v9-velocity-profiles-run",
+      "sha": "18f9106f44182207640d5abbcacb0485481f8548"
+    },
+    {
+      "name": "audit/v14-v16-logs-20261014",
+      "sha": "9a396873a3a9d2a06c861f85139fd2ba6e0010b9"
+    },
+    {
+      "name": "audit/v15-v16-preflight-20261015",
+      "sha": "b4a30d58007afc58690c4917f14eb994e88828a1"
+    },
+    {
+      "name": "cases/v14-doctor-reference-20261003",
+      "sha": "a37d08e88420660ba4b36a3edff945b43201f549"
+    },
+    {
+      "name": "docs/c3d01-corrected-solidworks-paths-20261019",
+      "sha": "7d267ca4723404096cc9f3521bf296354469fbad"
+    },
+    {
+      "name": "docs/c3d-sync-manuals-logs-20261110",
+      "sha": "ad613f8773bbb37d41219abd45ea1c0a8043703c"
+    },
+    {
+      "name": "docs/case-code-comments-20261002",
+      "sha": "0dce34c93221e190ce1a1d14d798b522c7bb6406"
+    },
+    {
+      "name": "docs/wsl-three-worktrees-real-accepted-20261123",
+      "sha": "49d318c035d8c7c32b7e0235905e6a7547344e3a"
+    },
+    {
+      "name": "feat/c3d04-a-c14-exact-fluid-physics-20261120",
+      "sha": "07177b4d0c82682130c22bb96a1d04c53cb196a7"
+    },
+    {
+      "name": "feat/c3d04-a-c14-full10s-staging-verification-20261120",
+      "sha": "99716cd4b4b480057e31b94eaf104cc5dc29367d"
+    },
+    {
+      "name": "feat/c3d04-a-c14-native-stage-fluid-solid-20261120",
+      "sha": "6fd389d77a171ef0c652cbc9d4b7780dfee76650"
+    },
+    {
+      "name": "feat/c3d04-a-f14-coupled-runtime-smoke-20261120",
+      "sha": "13c0f860a5da00a8f7ddb4db594a56479f273639"
+    },
+    {
+      "name": "feat/c3d04-a-native-10s-phase-results-20261123",
+      "sha": "52ae2150f241071b3ff24a8d869523eeadd35bd6"
+    },
+    {
+      "name": "feat/c3d04-a-native-f14-ci-20261120",
+      "sha": "474c0fd44c1ef7c4c4e9b465117d5c48b3efbc8c"
+    },
+    {
+      "name": "feat/c3d04-a-real-v4t02-c14-10s-audit-20261123",
+      "sha": "64bfd595d09510041a95536c918c3f7b6a218f53"
+    },
+    {
+      "name": "feat/granada-file-steward-head-proof-pilot-20261021",
+      "sha": "28546d8516289349c4eb89003c753c2d2dc22641"
+    },
+    {
+      "name": "feat/granada-openfoam-optin-csv-export-v1-20261021",
+      "sha": "a50e02422dc0f195d0cea2ccd1025ffb58cc936c"
+    },
+    {
+      "name": "feat/granada-scientific-critical-review-20261021",
+      "sha": "cb8c6992c8816cb1074cecbd8e8b2f1b708e4103"
+    },
+    {
+      "name": "feat/isolate-concurrent-wsl-openfoam-worktrees-20261123",
+      "sha": "3bc539b39a9bef4f44514dfbef95a69942b91847"
+    },
+    {
+      "name": "feature/v8-v9-controlled-tests",
+      "sha": "4a57044f9232cadff813d3e0558b7462c464f4d2"
+    },
+    {
+      "name": "fix/c3d01-native-meshing-no-python-20261019",
+      "sha": "18936478d60f447e80182c69b5ded802a992a04d"
+    },
+    {
+      "name": "fix/c3d02-always-auto-error-zones-20261117",
+      "sha": "315f3ad1a51535f32b8f3ce00c1aa6de5e9a6d45"
+    },
+    {
+      "name": "fix/c3d02-mold-insidepoint-off-face-20261112",
+      "sha": "b0f588a260dcf55ed7d1cbfa85bc12aca502d6d8"
+    },
+    {
+      "name": "fix/c3d02-mold-leak-evidence-20261112",
+      "sha": "0561acbdde8348ee0c1a729feca35cde2a1992a5"
+    },
+    {
+      "name": "fix/c3d02-resume-missing-zonefaces-20261112",
+      "sha": "e320ff0482e07ebda6da604f5cc73ab29fdc5d96"
+    },
+    {
+      "name": "fix/c3d02-surfacecheck-scratch-20261112",
+      "sha": "a54bc8e2b4b218981a854f2f24f7f439518ee165"
+    },
+    {
+      "name": "fix/c3d04-a-existing-solver-backed-copy-readonly-inspection-20261123",
+      "sha": "771cf27161467ab53cd54b14fcdaf45a1391cf28"
+    },
+    {
+      "name": "fix/c3d04-a-f14-cellzone-native-fatal-clean-rebase-20261123",
+      "sha": "fc72a77407a18bee424658e5c49380096baf65bd"
+    },
+    {
+      "name": "fix/c3d04-a-f14-selftest-20261120",
+      "sha": "7b2931e62ad9187fcc38b0ce1280d1daadc2a9a8"
+    },
+    {
+      "name": "fix/c3d04-a-native-polymesh-labels-offline-postprocessing-20261123",
+      "sha": "fc6137b9171fb1124b80fd29224060a2cacc2d49"
+    },
+    {
+      "name": "fix/c3d04-a-native-volume-fallback-20261120",
+      "sha": "324e293d1402b87f329fdf47ae37406810613296"
+    },
+    {
+      "name": "fix/c3d04-a-stage07-native-zone-fatal-honesty-20261123",
+      "sha": "18960c176914a4e085ff963be66fc4988ae83597"
+    },
+    {
+      "name": "fix/c3d04-a-t0-integral-qa-20261120",
+      "sha": "6ce0dcebdbe0b67cf2b90b0fa19032b53d4eaa05"
+    },
+    {
+      "name": "fix/granada-j0-jmatpro-source-gate-20261103",
+      "sha": "12fedc82b6160d91ff87f173f83781dcde3a31dc"
+    },
+    {
+      "name": "fix/postpush-results-20261015",
+      "sha": "05e46a3890754e30c638ba0e6af799fc280805bf"
+    },
+    {
+      "name": "fix/wsl-contraction-detached-head-worktree-isolation-20261123",
+      "sha": "84fd834715b1a86d35d3d03d7f71686cc7576e22"
+    },
+    {
+      "name": "foamlens-real-fixture-b13",
+      "sha": "55a0a83b9a5dab12dc7763498e9cd72ca55f1cd8"
+    },
+    {
+      "name": "governance/granada-prevent-recurring-agent-errors-20261021",
+      "sha": "7678b9293d8a9eefa71c8c929cdb81145df96bb2"
+    },
+    {
+      "name": "granada/c3d02-controlled-mold-snap-l2-20261117",
+      "sha": "ca1156a1181510fd22107ac5b0881e623b9a4720"
+    },
+    {
+      "name": "granada/c3d02-extract-mold-volume-copy-20261115",
+      "sha": "6a01c0247ecd8aa55e659c6f1e42f070d22fbfd7"
+    },
+    {
+      "name": "granada/c3d02-extracted-mesh-quality-evidence-20261115",
+      "sha": "32dfb5a5c22132afcd315e6de5e1a0884398a706"
+    },
+    {
+      "name": "granada/c3d02-independent-material-mesh-20261112",
+      "sha": "ee2b3ecb67a4432dd8a613899377b402b314b423"
+    },
+    {
+      "name": "granada/c3d02-measure-zoned-mold-volume-20261113",
+      "sha": "741f04cb43afae27cd23b2a273786209c20da13d"
+    },
+    {
+      "name": "granada/c3d02-meshing-source-v1-20261112",
+      "sha": "320265090f9d0dfac542760e91b8973b4426355c"
+    },
+    {
+      "name": "granada/c3d02-mold-castellation-l3-20261113",
+      "sha": "5d9d6b1c248e932b64d482aae44215c4f5d5ab29"
+    },
+    {
+      "name": "granada/c3d02-mold-zone-classification-20261113",
+      "sha": "9bb42d839b4cc62ada16e102ff9e98a207c909cb"
+    },
+    {
+      "name": "granada/c3d02-one-command-conformal-regions-20261117",
+      "sha": "29ef14492dc72b7c6f44e7531128c752c07f2283"
+    },
+    {
+      "name": "granada/c3d02-readonly-diagnostic-20261112",
+      "sha": "fe108d9f83fa6ce5b1ddb888102855327c225e8c"
+    },
+    {
+      "name": "granada/c3d02-spatial-vtk-audit-20261115",
+      "sha": "6f1f3dc901b7b610199783ff1c33c9ae892e2e44"
+    },
+    {
+      "name": "granada/c3d-clean-restart-20261112",
+      "sha": "d74ef13767468de1e3087da21db2206f9d57b86a"
+    },
+    {
+      "name": "granada/fix-foreign-life-file-steward-fixtures-20261021",
+      "sha": "378955064bc6143a1951d3fd2d2a4755581454dd"
+    },
+    {
+      "name": "granada/fs-c06-native-gate-20261120",
+      "sha": "4d2323ee93cee2d6122c332d4ead5d4f4fdcbba8"
+    },
+    {
+      "name": "main",
+      "sha": "134ac9bf6f631320630212274fd26cb8c31b5c31"
+    },
+    {
+      "name": "research/c3d01-metal-mold-background-20261019",
+      "sha": "2d28f59da3bab93049fcefda106bc0bcc60927f8"
+    },
+    {
+      "name": "research/c3d01-native-mm-units-openfoam14-20261019",
+      "sha": "a41d1e161e5866131cf39d3d5f77dc3d2722f87b"
+    },
+    {
+      "name": "research/c3d01-refinement-max05mm-20261019",
+      "sha": "146687a17b435e9ec5be241b4d2147eefd4e9a9f"
+    },
+    {
+      "name": "research/c3d01-stl-meshing-gate-20261019",
+      "sha": "4674892507675908c720facf1bb0b2dbbf7cbf26"
+    },
+    {
+      "name": "research/fs-c01-isolated-execution-20261117",
+      "sha": "57c747a9cbf8115deb5ca62612c6ea7bac2c706c"
+    },
+    {
+      "name": "research/fs-c02-metal-air-vof-20261117",
+      "sha": "99c79b7f6f4f0b5e3ace07c8b16edf452f6356ae"
+    },
+    {
+      "name": "research/fs-c08-conservative-phase-mass-20261123",
+      "sha": "4cb2601f888e9a6dd7aab5ebeeaa4a1c15d269f6"
+    },
+    {
+      "name": "research/granada-add-freesurface-testcase-20261020",
+      "sha": "8913b1b87ee9a46314f3cbf8fb7abc738ffe8791"
+    },
+    {
+      "name": "research/granada-bfs01-vof-benchmark-20261020",
+      "sha": "099f2f377c44bb70932d76de9c25221157ed666c"
+    },
+    {
+      "name": "research/granada-bfs-bsh-foundation14-feasibility-20261020",
+      "sha": "11cf5f43658da5bb325c34a586f8bab40ebb0a8b"
+    },
+    {
+      "name": "research/granada-boundary-spatial-integrity-20261020",
+      "sha": "16f778d37a96dc0e1a80cfc07fc366d831a538d3"
+    },
+    {
+      "name": "research/granada-c3d-science-gates-20261019",
+      "sha": "9f2ced732c43b8fc3632096e7d3d972caa3e07cf"
+    },
+    {
+      "name": "research/granada-energy-phase-evidence-20261020",
+      "sha": "baa59e75d3cf6c5d5d64bef415f0c5fb1f423ad1"
+    },
+    {
+      "name": "research/granada-mold-bilateral-readiness-20261020",
+      "sha": "dd27c60155f6381cb45fdc0672d15bc4ed0b5cf1"
+    },
+    {
+      "name": "research/granada-mold-face-power-contract-20261020",
+      "sha": "653c302e746fe609ab21dac8eceee162ae0ca48e"
+    },
+    {
+      "name": "research/granada-plan-d-case3d01-mesh-evidence-20261021",
+      "sha": "f4579137f614d76d1fe4fa92cb970f40644ca207"
+    },
+    {
+      "name": "research/granada-v15v16-postrun-evidence-20261020",
+      "sha": "47c6dcd04c725bce97232b430dd0b0ddfaa54cfe"
+    },
+    {
+      "name": "results/c3d05-b-c14-20261124-160234",
+      "sha": "2257ac295981c081391a23b318ee9f766bd32145"
+    },
+    {
+      "name": "results/c3d05-b-c14-corrected-20261124-162048",
+      "sha": "8f8135876275434363f8cd37a32f73190417f578"
+    },
+    {
+      "name": "results/campaign-200s-adaptive-mpi-r8-Co025-dt0p025-v1/C14-2D-200s",
+      "sha": "3dbcbee41095d42b38b7b4c3dab46ea7bfee3da6"
+    },
+    {
+      "name": "results/campaign-200s-adaptive-mpi-r8-Co025-dt0p025-v1/C14-3DB-200s",
+      "sha": "e763cdd5debb16177071be4016b66049266bdc79"
+    },
+    {
+      "name": "results/campaign-200s-adaptive-mpi-r8-Co025-dtuncapped-v1/C14-3DB-200s",
+      "sha": "d416a79f30ca3fa66db00bfc215af59e4855e2f8"
+    },
+    {
+      "name": "results/campaign-200s-adaptive-uncapped-v1/C14-2D-200s",
+      "sha": "936e890789d0037b199cb13eda9b9222ca425b1e"
+    },
+    {
+      "name": "results/campaign-200s-compact-v1/C14-3DA-200s",
+      "sha": "86d7b6114d7cf114bd48131ac630bff635b397a5"
+    },
+    {
+      "name": "results/full-campaign-20261002-182632",
+      "sha": "1d14bda8ed16eea42446d94a9ac60aabc1067b98"
+    },
+    {
+      "name": "results/v14-20261003-015313",
+      "sha": "6c90a129fb86e981beb2a684ce464e6b973f9891"
+    },
+    {
+      "name": "science/c3d04-a-c14-postprocessing-parity-stage07",
+      "sha": "a0111372d51e00c40ff7f13dd84095dc67ac6b2e"
+    },
+    {
+      "name": "science/c3d04-a-f14-three-times-standalone-vs-sequential-20261124",
+      "sha": "9295328d43c279222e72242c2546b95dbb704a1f"
+    },
+    {
+      "name": "science/c3d04-a-f14-time-isolation-codeonly-20261124",
+      "sha": "0422b104c745b1cfa57d5ecba8c554f63259472a"
+    },
+    {
+      "name": "science/c3d04-a-native-stage07-forensics-real-20261123",
+      "sha": "d0473c6defb0f20264e2ffeef8e0d5f5ffab7c1e"
+    },
+    {
+      "name": "science/c3d04-a-offline-v14-solver-backed-energy-parity-20261123",
+      "sha": "43afb22a7bf20deed585241300d91ef241cb655c"
+    },
+    {
+      "name": "science/c3d04-a-stage07-immutable-recovery-kinetics-20261123",
+      "sha": "9ea5e32580a422d072f71407d0b922088b28e6f8"
+    },
+    {
+      "name": "science/c3d04-a-stage07-timed-mesh-rootcause-readonly-20261124",
+      "sha": "1e49a23dcf2ad86225bb91748a4a8ab4e9f2ff99"
+    },
+    {
+      "name": "science/c3d04-a-stage07-zone-forensics-clean-main-20261124",
+      "sha": "0fef63a1eaf01dfb78bd37e0467d0c5c593e2ab8"
+    },
+    {
+      "name": "science/c3d04-a-three-time-probe-clean-main-20261124",
+      "sha": "cf98c683048be5b2fe0eb7686a4bca037a975b6b"
+    },
+    {
+      "name": "transfer/campaign-200s-compact-inputs-v1",
+      "sha": "ca7db498b0cfd8760c63e28c8b9b1e093268e085"
+    }
+  ],
+  "documents": [
+    {
+      "path": ".github/agents/openfoam-solidification.agent.md",
+      "sha": "4cd37c7680e92b1dc34906985d3f0457503c1a78",
+      "size": 36343
+    },
+    {
+      "path": ".github/agents/quickcup-documentation-steward.agent.md",
+      "sha": "2ea406b78ed70ef469bc2d5ffbee70a0816ca559",
+      "size": 2287
+    },
+    {
+      "path": ".github/agents/quickcup-live-observer.agent.md",
+      "sha": "4a594b5e8949e69fc545af475d33c03d8e42ab59",
+      "size": 1612
+    },
+    {
+      "path": ".github/agents/quickcup-physics-verifier.agent.md",
+      "sha": "661cb73ead340b2a6ca158b266a7d242d729c4f7",
+      "size": 1912
+    },
+    {
+      "path": ".github/agents/quickcup-postprocess-forensics.agent.md",
+      "sha": "7354d84cf189bc96af49b2472a78ff729ce7a480",
+      "size": 1608
+    },
+    {
+      "path": ".michelslab/agents/file-steward.md",
+      "sha": "b1d01e48c04023ad108846e6f554987ed2fd56aa",
+      "size": 2196
+    },
+    {
+      "path": ".michelslab/GRANADA.md",
+      "sha": "a5437572866ccd6bc169591860fd504a23803b87",
+      "size": 10380
+    },
+    {
+      "path": "AGENTS.md",
+      "sha": "8989ddacc5aa0768e81e4025542a62926b0a19da",
+      "size": 9266
+    },
+    {
+      "path": "analysis_results/c11_energy2_test/summary.md",
+      "sha": "44072e7018a455f2b89b75a2d039a1692bb15247",
+      "size": 2318
+    },
+    {
+      "path": "analysis_results/c3d_01_geometry/README.md",
+      "sha": "27d768543a8c67060c516ae28c5979b2a27fc7d5",
+      "size": 5257
+    },
+    {
+      "path": "analysis_results/coupling/coupling_summary.md",
+      "sha": "8da5a8975e2e813a52a6cbf7ab86dc4ab9b2c868",
+      "size": 4346
+    },
+    {
+      "path": "analysis_results/full_campaign_audit/bc_pair_metrics.csv",
+      "sha": "fea218c1c97d6bfaa6c98419a4b557d12ba1be93",
+      "size": 5342
+    },
+    {
+      "path": "analysis_results/full_campaign_audit/bc_profile_metrics.csv",
+      "sha": "a915e803dc09366ab035079fce8cf0f3a40a0c49",
+      "size": 29717
+    },
+    {
+      "path": "analysis_results/full_campaign_audit/case_metrics.csv",
+      "sha": "084210e0fc6184a023faa0feb13ef8dbd4526d1f",
+      "size": 8998
+    },
+    {
+      "path": "analysis_results/full_campaign_audit/profile_inventory.csv",
+      "sha": "72b8eec99ea752c86c0da94c30eae466b28907f9",
+      "size": 3949
+    },
+    {
+      "path": "analysis_results/full_campaign_audit/README.md",
+      "sha": "5b9b9547965d6f32581b93553a3e1c2b5a3f6ca7",
+      "size": 1201
+    },
+    {
+      "path": "analysis_results/full_campaign_audit/summary.md",
+      "sha": "819eb1284be807e025b1885de1057c67bf92a81a",
+      "size": 5980
+    },
+    {
+      "path": "analysis_results/granada_boundary_spatial_20261020/profile_screen.csv",
+      "sha": "cd4757e1de7dd1639e92622cd739daf5e99b2ba6",
+      "size": 746
+    },
+    {
+      "path": "analysis_results/granada_boundary_spatial_20261020/README.md",
+      "sha": "d1abc89859f07a3f6c9091fbc2fe65be839a5142",
+      "size": 4150
+    },
+    {
+      "path": "analysis_results/granada_energy_phase_v14_v16_20261020/case_metrics.csv",
+      "sha": "beeed0e77b43c2956e83fb4b1e3457c959cdb59b",
+      "size": 948
+    },
+    {
+      "path": "analysis_results/granada_energy_phase_v14_v16_20261020/README.md",
+      "sha": "7a5380fa2c811673dedcb7528f281bf95e992f2f",
+      "size": 3724
+    },
+    {
+      "path": "analysis_results/granada_mold_bilateral_readiness_20261020/case_matrix.csv",
+      "sha": "bba929f2d20e0c64b159bf9d13cb892aa39d6919",
+      "size": 899
+    },
+    {
+      "path": "analysis_results/granada_mold_bilateral_readiness_20261020/README.md",
+      "sha": "77e724a4327dde170a2ccc7d6223f036e4b1536e",
+      "size": 3093
+    },
+    {
+      "path": "analysis_results/granada_plan_d_case3d01_20261021/README.md",
+      "sha": "a67004b928e1cdedd1b2a703dc3e3c22e782638e",
+      "size": 2352
+    },
+    {
+      "path": "analysis_results/granada_v15v16_postrun_20261020/summary.md",
+      "sha": "611d649a4df8efb814e442f9bc1a369e629e26e0",
+      "size": 3912
+    },
+    {
+      "path": "analysis_results/jmatpro_openfoam_audit/current_model_matrix.csv",
+      "sha": "f3fd4eaf0532878fea6b64db40bc873d96e0329b",
+      "size": 1804
+    },
+    {
+      "path": "analysis_results/jmatpro_openfoam_audit/derived_checks.csv",
+      "sha": "1b19f346ebe8f1a4e08998d5c61cdb64274cce1c",
+      "size": 535
+    },
+    {
+      "path": "analysis_results/physics_diagnostics/physics_diagnostics_summary.md",
+      "sha": "c16626441c6f2a530b780aa6719eda78c3d6d966",
+      "size": 5376
+    },
+    {
+      "path": "analysis_results/uy_temporal/uy_temporal_metrics.csv",
+      "sha": "99de28e69756d9cd52da85d868ceca8b0360eae4",
+      "size": 688210
+    },
+    {
+      "path": "analysis_results/uy_temporal/uy_temporal_summary.md",
+      "sha": "6b6cc87eb3040aa0d44dec5cceb82a7756b6e3eb",
+      "size": 14038
+    },
+    {
+      "path": "analysis_results/v10_v13_closure/case_metrics.csv",
+      "sha": "b753c7bf2326ee61a3389de779414576e50319cc",
+      "size": 1795
+    },
+    {
+      "path": "analysis_results/v10_v13_closure/pair_metrics.csv",
+      "sha": "e7696672ea584e245c8bfc4d6695c38938d9a616",
+      "size": 788
+    },
+    {
+      "path": "analysis_results/v10_v13_closure/profile_metrics.csv",
+      "sha": "48f283c0ac1c2d18e39e7b4e374111e044d27968",
+      "size": 1560
+    },
+    {
+      "path": "analysis_results/v10_v13_closure/summary.md",
+      "sha": "7daa7cfa6f0df07f512c563de38d0fc45c9a5364",
+      "size": 6879
+    },
+    {
+      "path": "analysis_results/v12_v13_pressure_bc/metrics.csv",
+      "sha": "c397a939b1c747c5adbb326d5a8ae1057728d313",
+      "size": 1272
+    },
+    {
+      "path": "analysis_results/v12_v13_pressure_bc/summary.md",
+      "sha": "53486803574fc65ca25f067f7d826842035bf299",
+      "size": 10442
+    },
+    {
+      "path": "analysis_results/v14_bc_comparison/summary.md",
+      "sha": "cdeed9dcb55aff00c65f32b5e2506574476cac5f",
+      "size": 3705
+    },
+    {
+      "path": "analysis_results/v15_v16_postpush_20261015/README.md",
+      "sha": "14a82cb6f39b800281de292841be103828b644b6",
+      "size": 3966
+    },
+    {
+      "path": "analysis_results/v15_v16_preflight/README.md",
+      "sha": "e13a5e105fb0c3b7558de3a0934ae3aea30be1c5",
+      "size": 2165
+    },
+    {
+      "path": "analysis_results/v8_comprehensive/summary.md",
+      "sha": "84db9bfd70003e8431df6ab0a29d854519f2649c",
+      "size": 5684
+    },
+    {
+      "path": "analysis_results/v9_flow_causality/summary.md",
+      "sha": "bbd88a221618258550f43fcca28405f4760cb699",
+      "size": 8635
+    },
+    {
+      "path": "analysis_results/v9_top_fixedflux/summary.md",
+      "sha": "e50529be40fb47d9e371fc0266ea307f58357c89",
+      "size": 6688
+    },
+    {
+      "path": "analysis_results/v9_velocity_profiles/summary.md",
+      "sha": "3450fe6266c0b7cec2051d933afca4558b9c2e16",
+      "size": 4995
+    },
+    {
+      "path": "analysis_results/v9_velocity_reversal_causality/summary.md",
+      "sha": "cba6f30caf62aa8d6de8f1147b467e77f9db0047",
+      "size": 6190
+    },
+    {
+      "path": "analysis_tools/TOP_SURFACE_FLOW_README_ES.md",
+      "sha": "636f41b471e29c5d10f2f77c5df3b71755e646ee",
+      "size": 1674
+    },
+    {
+      "path": "CASE_GUIDE_ES.md",
+      "sha": "337835ba87016fc48d8f2b27ed5999ec85d98927",
+      "size": 47033
+    },
+    {
+      "path": "CASE_GUIDE_INTERACTIVE_ES.html",
+      "sha": "cf8cbd59119a17f31e9fdcfc800b84772882c491",
+      "size": 66542
+    },
+    {
+      "path": "cases_3d/C3D_01_metal_mold/constant/geometry/README.md",
+      "sha": "9ee5c62c8e2fd571bea44e43ce3e360e2ce74f78",
+      "size": 1649
+    },
+    {
+      "path": "cases_3d/C3D_01_metal_mold/constant/triSurface/README.md",
+      "sha": "adf00c46d03de29c5f44bfcbdc5d5a6f9f92adee",
+      "size": 864
+    },
+    {
+      "path": "cases_3d/C3D_01_metal_mold/README.md",
+      "sha": "d965b5d7901595c0f8387285655f17a52b79a27c",
+      "size": 9469
+    },
+    {
+      "path": "cases_3d/C3D_02_metal_sand_clean/constant/geometry/README.md",
+      "sha": "2a425e6cc17c89c53b051fe0c5a339dfbf3eceeb",
+      "size": 1189
+    },
+    {
+      "path": "cases_3d/C3D_02_metal_sand_clean/constant/geometry/STL_V2_APPROVED_SOURCES.md",
+      "sha": "7ff0d9b0fee2952413cd9c414947cbfa11c38d23",
+      "size": 4262
+    },
+    {
+      "path": "cases_3d/C3D_02_metal_sand_clean/README.md",
+      "sha": "f2ff58cd045b1b7e49f68d54306ce3a5b1f7e999",
+      "size": 29456
+    },
+    {
+      "path": "cases_3d/C3D_03_doctor_multiblock_pilot/README.md",
+      "sha": "6bad3e124ec10159c656e4814d664e3e62e520cb",
+      "size": 7442
+    },
+    {
+      "path": "cases_3d/C3D_04_rounded_multiblock_pilot/AGENTS.md",
+      "sha": "b487b5b55790876b85540903456f607950079bc4",
+      "size": 22442
+    },
+    {
+      "path": "cases_3d/C3D_04_rounded_multiblock_pilot/C14_3D_A_faithful/analysis_results/GIT_PUBLICATION_MANIFEST.json",
+      "sha": "0bd877829b9c390abc390731e0827fb0d9967b94",
+      "size": 719366
+    },
+    {
+      "path": "cases_3d/C3D_04_rounded_multiblock_pilot/C14_3D_A_faithful/CASE_VARIANT.md",
+      "sha": "069694cba52755a65d2773be857756f50751e482",
+      "size": 335
+    },
+    {
+      "path": "cases_3d/C3D_04_rounded_multiblock_pilot/C14_3D_A_faithful/README.md",
+      "sha": "12922cc0379360fa6381330df3f85d08c6e5e1b2",
+      "size": 1523
+    },
+    {
+      "path": "cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/README.md",
+      "sha": "21866769f331499380a5d106a631b6adfab9bd6c",
+      "size": 19423
+    },
+    {
+      "path": "cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V2_BASAL_QUALITY/README.md",
+      "sha": "4fee896e294b60a52f1b10579f99ef2afb708137",
+      "size": 4582
+    },
+    {
+      "path": "cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V3_BASAL_SWEEP/README.md",
+      "sha": "27f7b95fd0d25540461835905b3190ff28cbd68f",
+      "size": 4374
+    },
+    {
+      "path": "cases_3d/C3D_04_rounded_multiblock_pilot/candidates/C3D04_V4_TRANSITION_REPAIR/README.md",
+      "sha": "da9620500b20ed88a8dfac7804db5c01c5436828",
+      "size": 5824
+    },
+    {
+      "path": "cases_3d/C3D_04_rounded_multiblock_pilot/README.md",
+      "sha": "e7affe70688e055a3c8ebb6914909a30ddb9791f",
+      "size": 27557
+    },
+    {
+      "path": "cases_3d/C3D_04_rounded_multiblock_pilot/t0_conduction/README.md",
+      "sha": "3af4f4a917cdafebd9384d7f3f681ec6591d69d7",
+      "size": 19632
+    },
+    {
+      "path": "cases_3d/C3D_05_step_gmsh_conformal/AGENTS.md",
+      "sha": "db734b34a7d8fda577056bddbd435d17b3dfad1e",
+      "size": 14238
+    },
+    {
+      "path": "cases_3d/C3D_05_step_gmsh_conformal/c14_physics/README.md",
+      "sha": "49e584a5e12043a4e1a2b6f3786df39bfd97e8e7",
+      "size": 17916
+    },
+    {
+      "path": "cases_3d/C3D_05_step_gmsh_conformal/README.md",
+      "sha": "6d65501c805f7dca81f7440315b73760bc42e477",
+      "size": 37824
+    },
+    {
+      "path": "cases_3d/C3D_05_step_gmsh_conformal/t0_conduction/README.md",
+      "sha": "1b8389846babb0c8960512e7040a54b2adf4d27e",
+      "size": 17877
+    },
+    {
+      "path": "cases_3d/case3d-01/README.md",
+      "sha": "fd2ed760c8f363c387079ac10a945a6d7edad811",
+      "size": 5499
+    },
+    {
+      "path": "cases_3d/README.md",
+      "sha": "945ab10a7bf376f66c8297ed9baaea8f759a02b7",
+      "size": 11046
+    },
+    {
+      "path": "cases_controlled_buoyancy/B10_airGapOF14/CASE_NOTES.md",
+      "sha": "90b70bde979e0417958ebdfe268fcd052bd3fd7d",
+      "size": 3143
+    },
+    {
+      "path": "cases_controlled_buoyancy/B10_airGapOF14/CASE_VARIANT.md",
+      "sha": "e4764a6baed321d4cc4bdc9ccd5b13415c225b1a",
+      "size": 768
+    },
+    {
+      "path": "cases_controlled_buoyancy/B11_energy2_test/CASE_NOTES.md",
+      "sha": "af80a4dfebdd08835b9244694ce125d37e0c803b",
+      "size": 972
+    },
+    {
+      "path": "cases_controlled_buoyancy/B11_energy2_test/CASE_VARIANT.md",
+      "sha": "3596ccdd293a956ce53c67c93e5317ce060ae129",
+      "size": 2955
+    },
+    {
+      "path": "cases_controlled_buoyancy/B11_topFixedFlux_airGapOF14/CASE_NOTES.md",
+      "sha": "f21fbaff49b0018bfebc79a65ac1b6f148ece52b",
+      "size": 4693
+    },
+    {
+      "path": "cases_controlled_buoyancy/B11_topFixedFlux_airGapOF14/CASE_VARIANT.md",
+      "sha": "a958aac0f61ab2a559413663c8b4a9e7859f7930",
+      "size": 1446
+    },
+    {
+      "path": "cases_controlled_buoyancy/B12_topFixedValue_airGapOF14/CASE_NOTES.md",
+      "sha": "591cb93abbf5ebec8067dbc3662a74fc93acd6df",
+      "size": 4401
+    },
+    {
+      "path": "cases_controlled_buoyancy/B12_topFixedValue_airGapOF14/CASE_VARIANT.md",
+      "sha": "7bd63581785490fa4b486b15366ffe30c38e4193",
+      "size": 1870
+    },
+    {
+      "path": "cases_controlled_buoyancy/B13_prghPressure_airGapOF14/CASE_NOTES.md",
+      "sha": "6f3fa00fe6337757638e0a0ecdfe11a3084d4d42",
+      "size": 4457
+    },
+    {
+      "path": "cases_controlled_buoyancy/B13_prghPressure_airGapOF14/CASE_VARIANT.md",
+      "sha": "fda187e8a346a8177935551ec702646497813b60",
+      "size": 1941
+    },
+    {
+      "path": "cases_controlled_buoyancy/B14_topFixedFlux_explicitRef/CASE_NOTES.md",
+      "sha": "83e5543899fe91d77d8f3efa9b5103a3f584c0f0",
+      "size": 5079
+    },
+    {
+      "path": "cases_controlled_buoyancy/B14_topFixedFlux_explicitRef/CASE_VARIANT.md",
+      "sha": "74e4ee1528ea75eaf548a2a7fb2e7c11dc4de31a",
+      "size": 945
+    },
+    {
+      "path": "cases_controlled_buoyancy/B15_adaptiveDt_fromB14/CASE_NOTES.md",
+      "sha": "4eee0e988e83c9faac6f71950c1d3ab6211aa30c",
+      "size": 2333
+    },
+    {
+      "path": "cases_controlled_buoyancy/B15_adaptiveDt_fromB14/CASE_VARIANT.md",
+      "sha": "2256ab30dd07eac56de6af41e55e4355f5de7a88",
+      "size": 605
+    },
+    {
+      "path": "cases_controlled_buoyancy/B16_phaseRelax025_fromB14/CASE_NOTES.md",
+      "sha": "4b0fafcff0a48640176f37127c1129a02c7e2f05",
+      "size": 1925
+    },
+    {
+      "path": "cases_controlled_buoyancy/B16_phaseRelax025_fromB14/CASE_VARIANT.md",
+      "sha": "3fcc878f174c2eca39dcb8296ef7d952cb3d924a",
+      "size": 478
+    },
+    {
+      "path": "cases_controlled_buoyancy/B3_reference/CASE_NOTES.md",
+      "sha": "e4a5ed30563ffe1662fe073026574e2bc694eccd",
+      "size": 3124
+    },
+    {
+      "path": "cases_controlled_buoyancy/B4_energy2/CASE_NOTES.md",
+      "sha": "fd7035475cf65b4c39e0af25dc2ddd899c2135d4",
+      "size": 2692
+    },
+    {
+      "path": "cases_controlled_buoyancy/B5_airGapOF14/CASE_NOTES.md",
+      "sha": "68f42b0d5e14bf497b6552438eb5c7be83b393c3",
+      "size": 3004
+    },
+    {
+      "path": "cases_controlled_buoyancy/B5_airGapOF14/CASE_VARIANT.md",
+      "sha": "e68f70815c3ea8b9dcdde9e61571044a68e8072f",
+      "size": 934
+    },
+    {
+      "path": "cases_controlled_buoyancy/B5_outer3/CASE_NOTES.md",
+      "sha": "f6261cced44b0f23610b1fad731fab7003c5babf",
+      "size": 2772
+    },
+    {
+      "path": "cases_controlled_buoyancy/B6_adaptiveDt/CASE_NOTES.md",
+      "sha": "76ec1dd8d831ad184003aea8f50691418e5b8a6b",
+      "size": 2830
+    },
+    {
+      "path": "cases_controlled_buoyancy/B7_outer4/CASE_NOTES.md",
+      "sha": "f3af5f0963c40da8b7545b38b0ced0bea014e578",
+      "size": 2670
+    },
+    {
+      "path": "cases_controlled_buoyancy/B8_adaptiveOuter4/CASE_NOTES.md",
+      "sha": "f1501be92edc7b7444def8bc3000ebf9c07d12d7",
+      "size": 2748
+    },
+    {
+      "path": "cases_controlled_buoyancy/B8_adaptiveOuter4/CASE_VARIANT.md",
+      "sha": "92f200c255e4ed9a4604aba2283ed9b496ddb035",
+      "size": 409
+    },
+    {
+      "path": "cases_controlled_buoyancy/B9_airGapOF14/CASE_NOTES.md",
+      "sha": "4ef7fe0bfb51cf10b0eb4fcfed85a520bf0b9c3d",
+      "size": 2845
+    },
+    {
+      "path": "cases_controlled_buoyancy/B9_airGapOF14/CASE_VARIANT.md",
+      "sha": "1909482943205212282b4f46a18802395d606032",
+      "size": 940
+    },
+    {
+      "path": "cases_controlled_buoyancy/B9_topFixedFlux/CASE_NOTES.md",
+      "sha": "8e853c1f284b0aa4997867a5778e3f80b9dc4b72",
+      "size": 3226
+    },
+    {
+      "path": "cases_controlled_buoyancy/B9_topFixedFlux/CASE_VARIANT.md",
+      "sha": "9870b7a1d70034d36705b649720b1ba7364e67ef",
+      "size": 1367
+    },
+    {
+      "path": "cases_controlled_buoyancy/C10_airGapOF14/CASE_NOTES.md",
+      "sha": "7e7693973ec5b7113e94646780fa0bd19e6f3058",
+      "size": 2741
+    },
+    {
+      "path": "cases_controlled_buoyancy/C10_airGapOF14/CASE_VARIANT.md",
+      "sha": "5b7b3689a345c0b541c8650be0f15b6d19b7739d",
+      "size": 688
+    },
+    {
+      "path": "cases_controlled_buoyancy/C11_energy2_test/CASE_NOTES.md",
+      "sha": "81d7f2fdba32f5b81ae3017976406c3a97e6f4ba",
+      "size": 1967
+    },
+    {
+      "path": "cases_controlled_buoyancy/C11_energy2_test/CASE_VARIANT.md",
+      "sha": "e4946ceafc99741c65bd3e1964ddd38f052286ae",
+      "size": 2809
+    },
+    {
+      "path": "cases_controlled_buoyancy/C11_topFixedFlux_airGapOF14/CASE_NOTES.md",
+      "sha": "4edab61d4efaab757e143cb5c111a39fa01d795c",
+      "size": 4061
+    },
+    {
+      "path": "cases_controlled_buoyancy/C11_topFixedFlux_airGapOF14/CASE_VARIANT.md",
+      "sha": "c27ba74aa9eeab20133bcf5efcbff95d181e8bc7",
+      "size": 1300
+    },
+    {
+      "path": "cases_controlled_buoyancy/C12_topFixedValue_airGapOF14/CASE_NOTES.md",
+      "sha": "d12228ef639de7a1fc1545c9de918a539d8323d2",
+      "size": 3974
+    },
+    {
+      "path": "cases_controlled_buoyancy/C12_topFixedValue_airGapOF14/CASE_VARIANT.md",
+      "sha": "749febb6ef7896539daf94ae44a708e2fceabe81",
+      "size": 1740
+    },
+    {
+      "path": "cases_controlled_buoyancy/C13_prghPressure_airGapOF14/CASE_NOTES.md",
+      "sha": "51a3db4ccef71d4ebc1bdd7386731b7abc18b25c",
+      "size": 3914
+    },
+    {
+      "path": "cases_controlled_buoyancy/C13_prghPressure_airGapOF14/CASE_VARIANT.md",
+      "sha": "b420304721d7529cc59fd895b65ca15b9aa27593",
+      "size": 1773
+    },
+    {
+      "path": "cases_controlled_buoyancy/C14_topFixedFlux_explicitRef/CASE_NOTES.md",
+      "sha": "feea5f4a3c5ad8ab4ae89ec73de4e7dce35318cf",
+      "size": 7213
+    },
+    {
+      "path": "cases_controlled_buoyancy/C14_topFixedFlux_explicitRef/CASE_VARIANT.md",
+      "sha": "1c083ffe8b1c1e35894ac21fe3e309fccf3b25c9",
+      "size": 945
+    },
+    {
+      "path": "cases_controlled_buoyancy/C15_adaptiveDt_fromC14/CASE_NOTES.md",
+      "sha": "afbbe9e1652b1971a2928f4a2ff1953e84bcc655",
+      "size": 1571
+    },
+    {
+      "path": "cases_controlled_buoyancy/C15_adaptiveDt_fromC14/CASE_VARIANT.md",
+      "sha": "4ebc96c0b52a5a9b6aa8063c21ae76fe4d1bde90",
+      "size": 483
+    },
+    {
+      "path": "cases_controlled_buoyancy/C16_phaseRelax025_fromC14/CASE_NOTES.md",
+      "sha": "9c48c13023003834329ca6def47da795c2eb2db4",
+      "size": 2029
+    },
+    {
+      "path": "cases_controlled_buoyancy/C16_phaseRelax025_fromC14/CASE_VARIANT.md",
+      "sha": "2f1a55ebb33f4a30766ae6cafeb93e254f892c34",
+      "size": 476
+    },
+    {
+      "path": "cases_controlled_buoyancy/C3_reference/CASE_NOTES.md",
+      "sha": "3262f7b834073ed767ef33af0b42e8373e24e72b",
+      "size": 2962
+    },
+    {
+      "path": "cases_controlled_buoyancy/C4_energy2/CASE_NOTES.md",
+      "sha": "e08287cf99d117d4f18333457aa2b46deaf55dab",
+      "size": 2576
+    },
+    {
+      "path": "cases_controlled_buoyancy/C5_airGapOF14/CASE_NOTES.md",
+      "sha": "25003ffa2797f99f410ee4b9d1bb0a45dd12a4d2",
+      "size": 2725
+    },
+    {
+      "path": "cases_controlled_buoyancy/C5_airGapOF14/CASE_VARIANT.md",
+      "sha": "0b88fb43965129db2d574e034c4968282f298e54",
+      "size": 650
+    },
+    {
+      "path": "cases_controlled_buoyancy/C5_outer3/CASE_NOTES.md",
+      "sha": "2cec3e5dfc50059e6fe6770a2e4ca77912e3afb5",
+      "size": 2607
+    },
+    {
+      "path": "cases_controlled_buoyancy/C6_adaptiveDt/CASE_NOTES.md",
+      "sha": "07c1afb9206d96cde71ab87227ce4aa6202f672f",
+      "size": 2714
+    },
+    {
+      "path": "cases_controlled_buoyancy/C7_outer4/CASE_NOTES.md",
+      "sha": "1206a0e2d697ccceeaaf2b22ac74214e5a7bdcbe",
+      "size": 2554
+    },
+    {
+      "path": "cases_controlled_buoyancy/C8_adaptiveOuter4/CASE_NOTES.md",
+      "sha": "0a73fe793bab49f1704ce0d341739fad09fc0d2b",
+      "size": 2571
+    },
+    {
+      "path": "cases_controlled_buoyancy/C8_adaptiveOuter4/CASE_VARIANT.md",
+      "sha": "6dfb151bf93231d85516e853f28635470727dba9",
+      "size": 409
+    },
+    {
+      "path": "cases_controlled_buoyancy/C9_airGapOF14/CASE_NOTES.md",
+      "sha": "79556e16fb848e49de666ffc55851947cdf0b3c3",
+      "size": 2646
+    },
+    {
+      "path": "cases_controlled_buoyancy/C9_airGapOF14/CASE_VARIANT.md",
+      "sha": "56590ffcb636be698716b809dafdece5deb415ac",
+      "size": 656
+    },
+    {
+      "path": "docs/audits/FILE_GOVERNANCE_LOG.md",
+      "sha": "a8ad6e4cfb41243699d0b4ede05629a31e16d746",
+      "size": 206471
+    },
+    {
+      "path": "docs/AUTOMATIC_MESH_ERROR_LOCALIZATION_POLICY_ES.md",
+      "sha": "b58282ae2a9927397bc36f0a60c205db2669a50a",
+      "size": 4975
+    },
+    {
+      "path": "docs/C3D_01_ESTADO_REAL_20261110_ES.md",
+      "sha": "5ca254720e88efc618a6d05b8f6a5dd6b13b1879",
+      "size": 20818
+    },
+    {
+      "path": "docs/C3D_02_ABLACION_STL_V2_20261118_ES.md",
+      "sha": "5c66a639f3dd308e211dea99fa191371d706d032",
+      "size": 6099
+    },
+    {
+      "path": "docs/C3D_02_DOS_MALLAS_20261112_ES.md",
+      "sha": "fc34bac483acbd79694460d8940e00451c53584a",
+      "size": 28787
+    },
+    {
+      "path": "docs/C3D_02_ESTRATEGIA_MALLADO_CONFORMANTE_20261118_ES.md",
+      "sha": "942d582f7f33d0e4a499f5eab2e9f742d08f6976",
+      "size": 10449
+    },
+    {
+      "path": "docs/C3D_02_MALLADO_INICIAL_20261112_ES.md",
+      "sha": "9df1d942b740b50c3ad53664df9a5121b0618f7c",
+      "size": 5697
+    },
+    {
+      "path": "docs/C3D_02_MESH_TRIAL_REGISTRY_20261118.csv",
+      "sha": "801dc961a1fd183b5237f450cd20fc5d048b588a",
+      "size": 694
+    },
+    {
+      "path": "docs/C3D_02_NATIVE_CHECKMESH_20261117_ES.md",
+      "sha": "1648c247819e317305b40eb88f53d82fb3206895",
+      "size": 23079
+    },
+    {
+      "path": "docs/C3D_02_REFERENCIA_DOCTOR_Y_OPCIONES_MALLADO_20261118_ES.md",
+      "sha": "73361e5867a641b2c505a5cb6bf16f04d54017e2",
+      "size": 5672
+    },
+    {
+      "path": "docs/C3D_03_RESULTADO_NATIVO_20261118_ES.md",
+      "sha": "a87b8a42698121ef73ad00bc46fa219abbeb8d66",
+      "size": 4578
+    },
+    {
+      "path": "docs/C3D_04_C14_3D_POSTPROCESS_PARITY_MATRIX_20261123_ES.md",
+      "sha": "67d4e4890e80816fb82e5a00367991a69ce34471",
+      "size": 12801
+    },
+    {
+      "path": "docs/C3D_04_C14_V4_T02_REAL_10S_20261123_ES.md",
+      "sha": "e389f8d8f4190e1c0f3ed31e9ca4bbbcd5c0bc8c",
+      "size": 4778
+    },
+    {
+      "path": "docs/C3D_04_C14_V4_T02_REAL_10S_PHASE_NUMERICAL_RESULTS_20261123_ES.md",
+      "sha": "d4c80208b18f5c43deb64761e79c285bdfc2a68b",
+      "size": 6617
+    },
+    {
+      "path": "docs/C3D_04_C3D_05_MALLADO_PARALELO_20261118_ES.md",
+      "sha": "a60f9485b3577ee6d93ffc4b6d32ed00219a86c9",
+      "size": 5544
+    },
+    {
+      "path": "docs/C3D_04_NO_ORTHO_T02_20261119_ES.md",
+      "sha": "ed246b6901f48e74bbe0316723e37a12cd72eac6",
+      "size": 16128
+    },
+    {
+      "path": "docs/C3D_04_RESULTADO_PRIMER_MALLADO_20261118_ES.md",
+      "sha": "645f18d6879bddfc6cbd309cd6a026277a4b26c2",
+      "size": 23643
+    },
+    {
+      "path": "docs/C3D_04_VALIDACION_SUPERFICIE_T02_20261119_ES.md",
+      "sha": "78dc6f09b98f508fbbdc368fac7213fa042a2ad3",
+      "size": 7372
+    },
+    {
+      "path": "docs/C3D_05_AREA_ARISTAS_Y_ENSAYO_FRONTAL_20261118_ES.md",
+      "sha": "f079a0feaff7dc1cba73872f0adcb6052b9b3cb7",
+      "size": 6388
+    },
+    {
+      "path": "docs/C3D_05_DIAGNOSTICO_DETERMINANTE_20261118_ES.md",
+      "sha": "0fb75711b15e72c073cc859d2dda429b303297c8",
+      "size": 7049
+    },
+    {
+      "path": "docs/C3D_05_FRONTAL_NETGEN_BLOQUEO_HXT_20261118_ES.md",
+      "sha": "2debf7a7453c1a294d0869876056503c0b1134d5",
+      "size": 5051
+    },
+    {
+      "path": "docs/C3D_05_HEX8_PRIMER_INTENTO_PYTHON_20261119_ES.md",
+      "sha": "200d1007e4bad4c2ed50f06ffeb2954f61db5df9",
+      "size": 4340
+    },
+    {
+      "path": "docs/C3D_05_HEX8_PROVENANCE_REVIEW_20261119_ES.md",
+      "sha": "af934702aab3859f6ff822d16077fe0d43a606cc",
+      "size": 6150
+    },
+    {
+      "path": "docs/C3D_05_HEX8_SEGUNDO_INTENTO_ACEPTADO_20261119_ES.md",
+      "sha": "afe23b1440480eafaa23bcf714a1521a1768dc05",
+      "size": 10418
+    },
+    {
+      "path": "docs/C3D_05_HEX8_VALIDACION_INDEPENDIENTE_FINAL_20261119_ES.md",
+      "sha": "f13dc6d2e48a75300416d2658354b28116412b65",
+      "size": 5087
+    },
+    {
+      "path": "docs/C3D_05_HXT_RESULTADO_Y_PILOTO_HEX_20261118_ES.md",
+      "sha": "1739783eb94c80cbf05662e0336e4e9acee56286",
+      "size": 7690
+    },
+    {
+      "path": "docs/C3D_05_NOORTH_CARAS_INTERNAS_20261119_ES.md",
+      "sha": "ab2aea0d25286a1ead34abd4c778b62de57864b8",
+      "size": 5294
+    },
+    {
+      "path": "docs/C3D_05_NOORTH_HOPS_REALES_Y_TRANSICION_FISICA_20261119_ES.md",
+      "sha": "baa96569ad1b030ccdb3585250532c6e9898cb3b",
+      "size": 9040
+    },
+    {
+      "path": "docs/C3D_05_RESULTADO_PRIMER_MALLADO_20261118_ES.md",
+      "sha": "fbe146c38bbe1b001dd830b02678c12639951dab",
+      "size": 4932
+    },
+    {
+      "path": "docs/C3D_05_STEP_SOURCE_AUDIT_20261118_ES.md",
+      "sha": "c51949934dd2fbf5555a461e442016f8075dd5b6",
+      "size": 6207
+    },
+    {
+      "path": "docs/C3D_05_T0_CONDUCCION_MULTIRREGION_F14_20261119_ES.md",
+      "sha": "3e623be804470514c8fd934bb33cb37c447f7d6d",
+      "size": 12643
+    },
+    {
+      "path": "docs/C3D_MESH_PROGRESS_20261118.csv",
+      "sha": "3aabb8e89f893ad6e19a90bc3d2abe27120b5795",
+      "size": 3201
+    },
+    {
+      "path": "docs/C3D_REINICIO_20261112_ES.md",
+      "sha": "87e3bd97d78c88853cddae11a87fb9476058dbfa",
+      "size": 6251
+    },
+    {
+      "path": "docs/C3D_STL_GEOMETRY_AUDIT_20261117_ES.md",
+      "sha": "af71465400e123fda7754fed9c561f4586bcfc19",
+      "size": 7700
+    },
+    {
+      "path": "docs/C3D04_A_C14_200S_PRIORITY_20261124_ES.md",
+      "sha": "39c01c6e371190d913dd06d9bd5ec4c38d53809b",
+      "size": 2398
+    },
+    {
+      "path": "docs/C3D04_A_C14_NATIVE_101_STATES_REAL_FORENSICS_20261123_ES.md",
+      "sha": "f5476dc1e47e3aa90fe60ae77eb920fe795f0c86",
+      "size": 6777
+    },
+    {
+      "path": "docs/C3D04_A_GIT_PUBLICATION_20261124_ES.md",
+      "sha": "80c068053c43b87c79b36492adbf9db26280dcb0",
+      "size": 2174
+    },
+    {
+      "path": "docs/C3D04_A_GRANADA_200S_ADAPTIVE_CAPPED_20261125_ES.md",
+      "sha": "63fb876529900be6fdcc1010413ae2347d157cd0",
+      "size": 2995
+    },
+    {
+      "path": "docs/C3D04_A_STAGE07_03_ACTIVE_MESH_FORENSICS_20261124_ES.md",
+      "sha": "f0f586adf4eb02ff92f8cf8b2cc4dcb7b1067dd7",
+      "size": 3546
+    },
+    {
+      "path": "docs/C3D04_A_STAGE07_BILATERAL_Q_COMPLETE_20261124_ES.md",
+      "sha": "161a7510ebc616338982c03fcfc56119856095a2",
+      "size": 2779
+    },
+    {
+      "path": "docs/C3D04_A_STAGE07_F14_SOLVER_BACKED_NATIVE_RECOVERY_20261123_ES.md",
+      "sha": "dcfd1968af3fc21bb15484d901a3a12ee8310bc4",
+      "size": 11892
+    },
+    {
+      "path": "docs/C3D04_A_STAGE07_FORENSIC_KINETICS_20261123_ES.md",
+      "sha": "64ff5838ff719e169b30ec55ed0d5e0259422810",
+      "size": 6431
+    },
+    {
+      "path": "docs/C3D04_A_STAGE07_FOUNDATION14_3TIME_LOOP_ISOLATION_20261124_ES.md",
+      "sha": "0da8956dc88b039c45e9b031620b23f466126f4a",
+      "size": 8769
+    },
+    {
+      "path": "docs/C3D04_A_STAGE07_NATIVE_METAL_CELLZONE_RECOVERY_20261123_ES.md",
+      "sha": "83e0bb2bf4c148339f537d9e8bf386ef3e9d366f",
+      "size": 6995
+    },
+    {
+      "path": "docs/C3D04_A_STAGE08_SOLIDIFICATION_REAL_20261124_ES.md",
+      "sha": "bb112b188465c38bbaef3fba174b309a0edaac28",
+      "size": 3262
+    },
+    {
+      "path": "docs/C3D04_A_STAGE09_ARCHIVED_C14_COMPARISON_20261124_ES.md",
+      "sha": "29d87c01d7fa4f2fbe6593355f9716ca6fd74e51",
+      "size": 6163
+    },
+    {
+      "path": "docs/C3D04_A_STAGE09_C14_2D_3D_COMPARISON_20261124_ES.md",
+      "sha": "521248efe120f465536e58f23b852462270e778c",
+      "size": 2539
+    },
+    {
+      "path": "docs/C3D04_A_STAGE09_FAITHFUL_C14_RUNTIME_20261124_ES.md",
+      "sha": "0c73ddd306791a4f6967bf99cf576e59fa9b4781",
+      "size": 5619
+    },
+    {
+      "path": "docs/C3D04_A_STAGE09_FAITHFUL_NATIVE_ANALYSIS_20261124_ES.md",
+      "sha": "0fd7ecdfc27d41bdafe8e55bddf0f3d47a20ceb5",
+      "size": 9919
+    },
+    {
+      "path": "docs/C3D04_A_STAGE09_MULTIDIRECTIONAL_20261124_ES.md",
+      "sha": "c0a68ae7c1bd5a345f9206c1d770a71ed9602cd2",
+      "size": 2596
+    },
+    {
+      "path": "docs/C3D04_A_STAGE09_TEMPORAL_SENSITIVITY_20261124_ES.md",
+      "sha": "ad0e1861c1014c910a6e7866337327eeb9fa2966",
+      "size": 3817
+    },
+    {
+      "path": "docs/C3D04_CASE_A_MILESTONE_TRACKER.csv",
+      "sha": "b2754c6df83c8bad9d78219995b5d8d883b1e9bc",
+      "size": 1689
+    },
+    {
+      "path": "docs/C3D04_CASE_A_STATUS.json",
+      "sha": "9613c821ae809bfc76f9a411d75aa6c4a36c4a7d",
+      "size": 78821
+    },
+    {
+      "path": "docs/DOCUMENT_SYNC_20261110_ES.md",
+      "sha": "2c3ea9fe0ab20b82d78da6ea9d7220c02f8c8582",
+      "size": 6006
+    },
+    {
+      "path": "docs/DOCUMENTATION_AUDIT_20261110_ES.md",
+      "sha": "7c6884319b050ac6964e0ff45f57fb4f7a866f08",
+      "size": 6098
+    },
+    {
+      "path": "docs/DOCUMENTATION_INDEX.md",
+      "sha": "42f82b669ba105167597e5bcac9a64414b4c73d9",
+      "size": 52062
+    },
+    {
+      "path": "docs/granada/B_FS_01_VOF_HYDRO_ANALOGUE_20261020.md",
+      "sha": "69519936e8da9551bb8b21a68c21352531ecb54c",
+      "size": 7578
+    },
+    {
+      "path": "docs/granada/B_FS_B_SH_OPENFOAM_FOUNDATION14_RESEARCH_20261020.md",
+      "sha": "393b029ea89239d24ed4c1e30e1fec596fedc22c",
+      "size": 10418
+    },
+    {
+      "path": "docs/granada/B11_C11_ENERGY2_DOCUMENTATION_AUDIT_20261021.md",
+      "sha": "96e79a9851ee29f7328ffbc4acefe0caae48415d",
+      "size": 3641
+    },
+    {
+      "path": "docs/granada/BILATERAL_INTERFACE_READINESS_20261020.md",
+      "sha": "3fa0b438bb6da1e9538cb5880840d05ac81b5fcd",
+      "size": 4817
+    },
+    {
+      "path": "docs/granada/C14_COMPARATIVO_2D_3DA_3DB_SONDAS_20261124_ES.md",
+      "sha": "62070912470bd0d05960158723d92e463088ec2b",
+      "size": 2809
+    },
+    {
+      "path": "docs/granada/C3D05_B_C14_101_ESTADOS_ALPHA1_OBSERVADO_Y_TIMELINE_20261123_ES.md",
+      "sha": "c1d7dc188eb4459d55bbf93fc4a28b692c4bbf18",
+      "size": 6528
+    },
+    {
+      "path": "docs/granada/C3D05_B_C14_10S_CFD_REAL_COMPLETADO_Y_ANALISIS_SOLO_LECTURA_20261123_ES.md",
+      "sha": "97d36aa22753a8918b47f26c8fa7bfb9382ea543",
+      "size": 4689
+    },
+    {
+      "path": "docs/granada/C3D05_B_C14_ALFA_V_PONDERADA_CONFIRMADA_Y_ENERGIA_INVENTARIO_20261124_ES.md",
+      "sha": "761d70176b0f3e8220d1dfaeb437b0d80c49c32d",
+      "size": 6181
+    },
+    {
+      "path": "docs/granada/C3D05_B_C14_COMPARATIVO_SONDAS_PERFILES_20261124_ES.md",
+      "sha": "84e8a5f2a457d4147422eaf3edd2dffb319cc1da",
+      "size": 4881
+    },
+    {
+      "path": "docs/granada/C3D05_B_C14_CORRECTED_SAMPLING_20261124_ES.md",
+      "sha": "98b44b2330173c557f6f0c27a8ca2f6f3fbe0ca6",
+      "size": 2454
+    },
+    {
+      "path": "docs/granada/C3D05_B_C14_CRUCE_101_ESTADOS_CONFIRMADO_Y_AUDITORIA_TERMINOS_20261124_ES.md",
+      "sha": "419981fb0d8e4ad364a752b2d0f203023b34509d",
+      "size": 7437
+    },
+    {
+      "path": "docs/granada/C3D05_B_C14_ENTREGA_PARA_REVISION_MANUAL_PARAVIEW_20261124_ES.md",
+      "sha": "9dd00bee87b5eaf867cd88acc87d2264f1f8913b",
+      "size": 4840
+    },
+    {
+      "path": "docs/granada/C3D05_B_C14_EVOLUCION_DIRECCIONAL_20261124_ES.md",
+      "sha": "d115e92cb172aeb4b16bbc5ffcd1935da91567dd",
+      "size": 3911
+    },
+    {
+      "path": "docs/granada/C3D05_B_C14_FLUJO_NATIVO_FLUIDO_SOLIDO_F14_20261124_ES.md",
+      "sha": "c36703161eab5d1cb08bc3fafae712d8a9b7f858",
+      "size": 12844
+    },
+    {
+      "path": "docs/granada/C3D05_B_C14_FLUJOS_NATIVOS_101_ESTADOS_Y_CRUCE_ENERGETICO_20261124_ES.md",
+      "sha": "aebaa355b3490f95c01f72830fac60aab15ad9df",
+      "size": 6796
+    },
+    {
+      "path": "docs/granada/C3D05_B_C14_INVENTARIO_CONJUNTO_101_ESTADOS_WSL_20261124_ES.md",
+      "sha": "57c78959adb262ba8c12ba9731947d3b0901696b",
+      "size": 5881
+    },
+    {
+      "path": "docs/granada/C3D05_B_C14_POSTPROCESAMIENTO_EXISTENTE_101TIEMPOS_ENTREGA_MANUAL_20261124_ES.md",
+      "sha": "39de96a48a3999e1059e8c919394b1088163aed5",
+      "size": 5711
+    },
+    {
+      "path": "docs/granada/C3D05_B_C14_SOLIDIFICACION_3D_FASE_FISICA_20261123_ES.md",
+      "sha": "fdb8d539440a3f7181ae12e4bf0660484acfa223",
+      "size": 8170
+    },
+    {
+      "path": "docs/granada/C3D05_B_C14_WSL_EJECUCION_REAL_EN_CURSO_20261123_ES.md",
+      "sha": "b8373ea7235fd028c9bd9d225b0510361cc9ccba",
+      "size": 3831
+    },
+    {
+      "path": "docs/granada/C3D05_B_C14_WSL_INVENTARIO_METAL_Y_ARENA_PREPARADO_20261124_ES.md",
+      "sha": "7f6bd24aa3544ea3758ea77b4f93f4a4055aa4a3",
+      "size": 6279
+    },
+    {
+      "path": "docs/granada/C3D05_B_C14_WSL_READINESS_CONFIRMADA_Y_MASA_RHO_PHI_20261124_ES.md",
+      "sha": "82aa42d55364df6ad10c510c5ae3b6f93b253ee8",
+      "size": 6539
+    },
+    {
+      "path": "docs/granada/C3D05_B_Q_ESPACIAL_REAL_6_TIEMPOS_Y_CONTRASTE_ENERGIA_20261123_ES.md",
+      "sha": "7afccc112c7b3658c80415c9a3fa70ba6240bbf7",
+      "size": 7650
+    },
+    {
+      "path": "docs/granada/C3D05_B_REEJECUCION_C14_FUNCTION_OBJECTS_001S_20261124_ES.md",
+      "sha": "2ef2bc12402697d0cbda728f958c0f2bac4543fc",
+      "size": 4638
+    },
+    {
+      "path": "docs/granada/C3D05_B_VOL_PONDERADO_ALPHA1_HEX8_Y_RESULTADOS_CRONOLOGIA_20261124_ES.md",
+      "sha": "cd550963c948a212a4b3d11f6edf059f64130dd5",
+      "size": 6379
+    },
+    {
+      "path": "docs/granada/C3D05_C14_NUMERICAL_ONE_SHOT_20261119_ES.md",
+      "sha": "c83a2b965a54c12647369179893ad118209e346d",
+      "size": 7168
+    },
+    {
+      "path": "docs/granada/C3D05_F14_CHT_DOS_SOLIDOS_SMOKE_20261120_ES.md",
+      "sha": "728af868f365e6148b00a0238a24ab23102738f1",
+      "size": 7426
+    },
+    {
+      "path": "docs/granada/C3D05_F14_POSTPROCESS_SMOKE_Y_EVIDENCIA_UNICA_20261120_ES.md",
+      "sha": "e5dfd7458b8cee904ffc60658c13fbeaa88aa974",
+      "size": 9151
+    },
+    {
+      "path": "docs/granada/C3D05_F14_WMAKE_REAL_20261120_ES.md",
+      "sha": "c721841a6346b419f7c29a971de7e8f2b9b50ba1",
+      "size": 4529
+    },
+    {
+      "path": "docs/granada/C3D05_FLUJO_ESPACIAL_Y_PUERTA_FISICA_20261123_ES.md",
+      "sha": "f2cdfc36c645ddd53f96bd970bdc50c4f86cfa53",
+      "size": 7337
+    },
+    {
+      "path": "docs/granada/C3D05_FVSOLUTION_C14_20261119_ES.md",
+      "sha": "9a0ba97e45896ea2be364838c2ae669c0d7b2390",
+      "size": 2952
+    },
+    {
+      "path": "docs/granada/C3D05_T0_BALANCE_ENERGETICO_NATIVO_20261120_ES.md",
+      "sha": "7410fc8d35f17f88e4b3bd450c5c819bf35d399d",
+      "size": 7772
+    },
+    {
+      "path": "docs/granada/C3D05_T0_FLUJO_INTERFAZ_12636_CARAS_20261120_ES.md",
+      "sha": "d00ac45a463959dae12023c62d26bec00245acb6",
+      "size": 8989
+    },
+    {
+      "path": "docs/granada/C3D05_T0_INTEGRATED_GRANADA_20261119_ES.md",
+      "sha": "d718f4e2abc0d6cb09c8d8214af5eca475f79fa1",
+      "size": 3035
+    },
+    {
+      "path": "docs/granada/C3D05_T0_README_HISTORICAL_BEFORE_SINGLE_FLOW_20261120.md",
+      "sha": "07fb631590e0d9b8828b5d67687309a5fb27dab0",
+      "size": 8397
+    },
+    {
+      "path": "docs/granada/C3D05_WSL_T0_270788_AUDITOR_RECOVERY_20261120_ES.md",
+      "sha": "efc44cdc8b5b2e53324fae870b6d1a3e2b7a10c2",
+      "size": 7312
+    },
+    {
+      "path": "docs/granada/C3D05_WSL_T0_ENERGIA_REAL_Y_TIEMPOS_Q_20261120_ES.md",
+      "sha": "84e7200ff368afebef1e409b325d3b64959740d0",
+      "size": 5906
+    },
+    {
+      "path": "docs/granada/C3D05_WSL_T0_NUMERICO_COMPLETO_270788_HEX8_20261120_ES.md",
+      "sha": "8845824bfa0fe570dfd4c9960c7cd1ccd59789f9",
+      "size": 6332
+    },
+    {
+      "path": "docs/granada/ENERGY_PHASE_V14_V16_20261020.md",
+      "sha": "6e0813361be2824d63162784b6632cc08dcb9494",
+      "size": 4104
+    },
+    {
+      "path": "docs/granada/GRANADA_GRANDE_GOVERNANCE_20261020.md",
+      "sha": "fc2bbf6229d596812387fa1b34f8a5b7bf646765",
+      "size": 1676
+    },
+    {
+      "path": "docs/granada/GRANADA_INTERFACE_SPATIAL_20261020.md",
+      "sha": "3436f43a8148e06fd4a2dbd9b40580f67efcf46c",
+      "size": 3827
+    },
+    {
+      "path": "docs/granada/MAESTRIA_CAMPANA_200S_ALMACENAMIENTO_COMPACTO_20261124_ES.md",
+      "sha": "e748b3aec8f189da7e77dd984b90d5f2cf4ea52b",
+      "size": 7782
+    },
+    {
+      "path": "docs/granada/MAESTRIA_CAMPANA_200S_TRANSFERENCIA_LAB_CASA_20261124_ES.md",
+      "sha": "cdabb5f1c9df1e5a01b87e33da7e6272d2a7df75",
+      "size": 5741
+    },
+    {
+      "path": "docs/granada/MAESTRIA_CAMPANA_ADAPTATIVA_200S_20261124_ES.md",
+      "sha": "c62ad8e6ef8893c736f4466144fa120897a1fb7d",
+      "size": 14380
+    },
+    {
+      "path": "docs/granada/MAESTRIA_CAMPANA_B14_C14_200S_PLAN_20261124_ES.md",
+      "sha": "45fea61a299292228d06b856f67885fb9eceacae",
+      "size": 8470
+    },
+    {
+      "path": "docs/granada/MAESTRIA_ESTADO_INTEGRADO_20261124_ES.md",
+      "sha": "67b978589ca80b6301fde497d79335216e37f282",
+      "size": 11191
+    },
+    {
+      "path": "docs/granada/MAESTRIA_ESTADO_INTEGRADO_20261125_ES.md",
+      "sha": "b1c080050dc92ffa76b54d2b18572fdda402bd10",
+      "size": 13553
+    },
+    {
+      "path": "docs/granada/MAESTRIA_ESTADO_INTEGRADO_20261127_ES.md",
+      "sha": "2f5a014db386f24d7a7bf3bab61daa02d092f115",
+      "size": 13899
+    },
+    {
+      "path": "docs/granada/OPENFOAM_HUB_READ_ACCESS_20261021.md",
+      "sha": "e70b35db431c81c3fd1ba64e487efea0bb5632dc",
+      "size": 1828
+    },
+    {
+      "path": "docs/granada/PLAN_D_CASE3D_01_MESH_GATE_20261021.md",
+      "sha": "ecf1543b6b52146db3698131e021e2440974f3e2",
+      "size": 7750
+    },
+    {
+      "path": "docs/MAESTRIA_STATUS.json",
+      "sha": "45fd2a1b32854d66409eaf63b97fae0bd3f12ade",
+      "size": 2775
+    },
+    {
+      "path": "docs/MASTERPROJECT_IDENTITY_ES.md",
+      "sha": "82319cd8ac29e8cefcdad2632144f6e12c67d261",
+      "size": 4246
+    },
+    {
+      "path": "docs/OPENFOAM_ECOSYSTEM.md",
+      "sha": "74b1300153ff8e98293a63c649bbf927ce84a385",
+      "size": 1784
+    },
+    {
+      "path": "docs/OPENFOAM14_LECCIONES_C3D_20261112_ES.md",
+      "sha": "df38dbe3b75b1e339730745b0bcbfd36844d3cfc",
+      "size": 6425
+    },
+    {
+      "path": "docs/POLITICA_ENTREGA_INTEGRAL_Y_ESTADO_ES.md",
+      "sha": "73b51dc3652530daf2adcb3ccd59dcf348f3835d",
+      "size": 10149
+    },
+    {
+      "path": "docs/PRIMER_AVANCE_REQUISITOS_DIRECTOR_20261118_ES.md",
+      "sha": "d7f95fb36054487fc670a5a36401c3921448e980",
+      "size": 15801
+    },
+    {
+      "path": "docs/PROJECT_STAGE_STATUS.json",
+      "sha": "1e317210715e2fefe56be31735fab0a2988ef322",
+      "size": 63114
+    },
+    {
+      "path": "docs/REGLA_INSTRUCCIONES_UNIFICADAS_ES.md",
+      "sha": "ec5ad9be404036193fcd2b7e217e66b644c54e6d",
+      "size": 4318
+    },
+    {
+      "path": "docs/WSL_CONCURRENT_CASE_WORKTREES_20261123_ES.md",
+      "sha": "feb1f3f65f295d51aa3b7f4c58a92e9ca7ac4c9b",
+      "size": 10220
+    },
+    {
+      "path": "freesurface/FS-C01/BFS01_MANIFEST.json",
+      "sha": "99156943218d7e2e57649caa3af9dec2f9d037e1",
+      "size": 3707
+    },
+    {
+      "path": "freesurface/FS-C01/CASE_NOTES.md",
+      "sha": "2780f3c6a72137b0c8b5eb06019d74847ef0ec54",
+      "size": 1700
+    },
+    {
+      "path": "freesurface/FS-C01/HOW_TO_RUN.md",
+      "sha": "ea5d94ff1ff6c2bd109a7d40d9845a5be9ab2bcf",
+      "size": 649
+    },
+    {
+      "path": "freesurface/README.md",
+      "sha": "47b87e87533911f12efcbe5dbec4a1f5f82c6387",
+      "size": 1141
+    },
+    {
+      "path": "GITHUB_EXECUTION_POLICY.md",
+      "sha": "d0b70d107a102e95d9ed85a8db91811601af6bed",
+      "size": 12673
+    },
+    {
+      "path": "JMATPRO_OPENFOAM_TRACEABILITY_ES.md",
+      "sha": "28f7bf73339143a63799b34e71565bf91eb844a5",
+      "size": 11958
+    },
+    {
+      "path": "NEXT_RESEARCH_ROADMAP_ES.md",
+      "sha": "7ed433a12ef8b9bdd9c4feb50885fe7d8368fb14",
+      "size": 31984
+    },
+    {
+      "path": "OPENFOAM_COMMAND_MANUAL_EN.md",
+      "sha": "80adeb8b211a38e6545c4109a46ea762580fee74",
+      "size": 49315
+    },
+    {
+      "path": "OPENFOAM_COMMAND_MANUAL_ES.md",
+      "sha": "2c6a4a3556fd794617bfb075476836b7006881e4",
+      "size": 63295
+    },
+    {
+      "path": "OPENFOAM_COMMAND_MANUAL.md",
+      "sha": "4f8dfc7d1513e7954b8b1cf18cb2626158b743d4",
+      "size": 2216
+    },
+    {
+      "path": "POSTPROCESSING_FIELD_GUIDE_ES.md",
+      "sha": "ca25ea3679a9d624f8d202d4b317c70d962f93d4",
+      "size": 17550
+    },
+    {
+      "path": "PROJECT_AUDIT_LOG_EN.md",
+      "sha": "b3234677d0850721e9c30f1a53cd7b0b5c726b64",
+      "size": 217233
+    },
+    {
+      "path": "PROJECT_AUDIT_LOG_ES.md",
+      "sha": "f3ae2531fc0c32ee41f014fe0ec5ddd235890491",
+      "size": 336046
+    },
+    {
+      "path": "PROJECT_AUDIT_LOG.md",
+      "sha": "9602c455db7bf3c6ebe458c937b6caa2c90b332b",
+      "size": 23647
+    },
+    {
+      "path": "README.md",
+      "sha": "64405ebd4165125cd9158d3b393943f8860cad26",
+      "size": 80190
+    },
+    {
+      "path": "reports/file-governance/FILE_GOVERNANCE.md",
+      "sha": "16bf9b557765e9df976900175f4a197a555c75dd",
+      "size": 3330
+    },
+    {
+      "path": "reports/file-governance/SUMMARY.json",
+      "sha": "e26239b7b1cc6d32fd28e286c08999bd31cd6292",
+      "size": 1106
+    },
+    {
+      "path": "RUN_CASE_REGISTRY.csv",
+      "sha": "5355456050f3ac1a681cf323a8a8963d3a47954b",
+      "size": 5090
+    },
+    {
+      "path": "RUN_MASTER_PROTOCOL.md",
+      "sha": "b1554e15c409a599d71fb53d65754392e980c029",
+      "size": 49555
+    },
+    {
+      "path": "thermodynamics/jmatpro/BRIDGE_USAGE_ES.md",
+      "sha": "cb1c914002f5813187087778cfc3cc074649d6f6",
+      "size": 871
+    },
+    {
+      "path": "thermodynamics/jmatpro/JMATPRO_EXPORT_TEMPLATE.csv",
+      "sha": "5a839abaeb941c2e1fc334b76589fdbe4cf87ddd",
+      "size": 173
+    },
+    {
+      "path": "thermodynamics/jmatpro/README_ES.md",
+      "sha": "f03da5aaa222c30b173349a589a6bca9c8c0c2db",
+      "size": 1297
+    },
+    {
+      "path": "VALIDATION_MATRIX_EN.md",
+      "sha": "42dee0095a61f59fe2b66f544d2402ed69fced22",
+      "size": 28711
+    },
+    {
+      "path": "VALIDATION_MATRIX_ES.md",
+      "sha": "5f7f17d45be9c33f421e5907483f34c117ba70f7",
+      "size": 46884
+    },
+    {
+      "path": "VALIDATION_MATRIX.md",
+      "sha": "9fe2b90113b1efe6af1397a5e87de9da5a6bcd1b",
+      "size": 17093
+    }
+  ]
+}
