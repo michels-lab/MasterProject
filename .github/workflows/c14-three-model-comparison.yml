@@ -1,0 +1,49 @@
+name: C14 three-model archived comparison
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  compare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: code
+          sparse-checkout: analysis_tools
+      - name: Software regression tests
+        run: python3 -B -m unittest discover -s code/analysis_tools -p test_compare_c14_three_models.py -v
+      - uses: actions/checkout@v4
+        with:
+          ref: 1ac7269161ce7f12c73d109571efbf35f572481a
+          path: source-a
+          sparse-checkout: |
+            cases_3d/C3D_04_rounded_multiblock_pilot/C14_3D_A_faithful/system
+            cases_3d/C3D_04_rounded_multiblock_pilot/C14_3D_A_faithful/postProcessing/metal/C14CanonicalProfiles
+      - uses: actions/checkout@v4
+        with:
+          ref: 8f8135876275434363f8cd37a32f73190417f578
+          path: source-b
+          sparse-checkout: |
+            analysis_results/C3D05_B_C14/corrected-20261124-162048
+      - uses: actions/checkout@v4
+        with:
+          ref: 03c543cad38bbc033a44d7d6c62b788f943116ed
+          path: source-2d
+          sparse-checkout: |
+            cases_controlled_buoyancy/C14_topFixedFlux_explicitRef/system
+            cases_controlled_buoyancy/C14_topFixedFlux_explicitRef/postProcessing/metal/horizontalProfiles
+            cases_controlled_buoyancy/C14_topFixedFlux_explicitRef/postProcessing/metal/verticalProfiles
+      - name: Analyze pinned original profiles without solver
+        run: |
+          python3 -B code/analysis_tools/compare_c14_three_models.py \
+            --a source-a/cases_3d/C3D_04_rounded_multiblock_pilot/C14_3D_A_faithful \
+            --b source-b/analysis_results/C3D05_B_C14/corrected-20261124-162048 \
+            --c source-2d/cases_controlled_buoyancy/C14_topFixedFlux_explicitRef \
+            --out output
+      - uses: actions/upload-artifact@v4
+        with:
+          name: C14-three-model-comparison
+          path: output/
+          if-no-files-found: error
