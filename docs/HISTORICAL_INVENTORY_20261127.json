@@ -2089,6 +2089,109 @@
       "entries": 1856,
       "documents": 2,
       "truncated": false
+    },
+    {
+      "dir": "cases_controlled_buoyancy/C10_airGapOF14",
+      "entries": 1856,
+      "documents": 2,
+      "truncated": false
+    },
+    {
+      "dir": "cases_controlled_buoyancy/C11_energy2_test",
+      "entries": 1874,
+      "documents": 2,
+      "truncated": false
+    },
+    {
+      "dir": "cases_controlled_buoyancy/C11_topFixedFlux_airGapOF14",
+      "entries": 1856,
+      "documents": 2,
+      "truncated": false
+    },
+    {
+      "dir": "cases_controlled_buoyancy/C12_topFixedValue_airGapOF14",
+      "entries": 1856,
+      "documents": 2,
+      "truncated": false
+    },
+    {
+      "dir": "cases_controlled_buoyancy/C13_prghPressure_airGapOF14",
+      "entries": 1856,
+      "documents": 2,
+      "truncated": false
+    },
+    {
+      "dir": "cases_controlled_buoyancy/C14_topFixedFlux_explicitRef",
+      "entries": 2059,
+      "documents": 2,
+      "truncated": false
+    },
+    {
+      "dir": "cases_controlled_buoyancy/C15_adaptiveDt_fromC14",
+      "entries": 2060,
+      "documents": 2,
+      "truncated": false
+    },
+    {
+      "dir": "cases_controlled_buoyancy/C16_phaseRelax025_fromC14",
+      "entries": 2059,
+      "documents": 2,
+      "truncated": false
+    },
+    {
+      "dir": "cases_controlled_buoyancy/C3_reference",
+      "entries": 1831,
+      "documents": 1,
+      "truncated": false
+    },
+    {
+      "dir": "cases_controlled_buoyancy/C4_energy2",
+      "entries": 1843,
+      "documents": 1,
+      "truncated": false
+    },
+    {
+      "dir": "cases_controlled_buoyancy/C5_airGapOF14",
+      "entries": 1852,
+      "documents": 2,
+      "truncated": false
+    },
+    {
+      "dir": "cases_controlled_buoyancy/C5_outer3",
+      "entries": 1855,
+      "documents": 1,
+      "truncated": false
+    },
+    {
+      "dir": "cases_controlled_buoyancy/C6_adaptiveDt",
+      "entries": 496,
+      "documents": 1,
+      "truncated": false
+    },
+    {
+      "dir": "cases_controlled_buoyancy/C7_outer4",
+      "entries": 1879,
+      "documents": 1,
+      "truncated": false
+    },
+    {
+      "dir": "cases_controlled_buoyancy/C8_adaptiveOuter4",
+      "entries": 521,
+      "documents": 2,
+      "truncated": false
+    },
+    {
+      "dir": "cases_controlled_buoyancy/C9_airGapOF14",
+      "entries": 1852,
+      "documents": 2,
+      "truncated": false
+    },
+    {
+      "dir": "cases_controlled_buoyancy/C9_topFixedFlux",
+      "entries": 1856,
+      "documents": 2,
+      "truncated": false
     }
-  ]
+  ],
+  "controlled_case_inventory_complete": true
 }
