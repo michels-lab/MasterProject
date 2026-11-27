@@ -1,3 +1,5 @@
+> **2026-11-27 — Uva + Granada C14:** pinned blob verification, saved-time coverage and output isolation for diagnostics; seven new synthetic regressions, CI pending; no CFD or milestone changes. [Report](docs/review/UVA_C14_DIAGNOSTIC_INTEGRITY_20261127_ES.md).
+
 > **2026-11-27 — Uva + Granada B historical 10 s:** path isolation, cooperative locks, resume provenance and partial exit status; ten synthetic regressions added, CI pending. No new CFD or milestone changes. [Report](docs/review/UVA_CASE_B_OFFLINE_INTEGRITY_20261127_ES.md).
 
 > **2026-11-27 — Incremental file review:** path/blob/scope ledger; seven initial inspections (two complete documentary scopes, five partial). Six adaptive publications cross-checked by step count against the manifest index; no physical change, new CFD or validation. [Protocol](docs/review/README.md).
