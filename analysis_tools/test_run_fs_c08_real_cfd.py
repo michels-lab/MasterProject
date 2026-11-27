@@ -8,7 +8,7 @@ from tempfile import TemporaryDirectory
 
 from run_fs_c08_real_cfd import (inspect_real_cfd_budgets, require_native_end_time,
                                  first_native_error, inspect_coupled_volume_closure)
-from stage_fs_c08_coupled import add_phase_mass_solvers
+from stage_fs_c08_coupled import add_phase_mass_solvers, isolated_new_directory
 
 
 def native_log(
@@ -155,6 +155,55 @@ class RealCFDBudgetEvidenceTests(unittest.TestCase):
             path.write_text("sigFpe : Enabling floating point exception trapping (FOAM_SIGFPE).\n"
                             "Floating point exception (core dumped)\n")
             self.assertEqual(first_native_error(path), "Floating point exception (core dumped)")
+
+
+class IsolatedDirectoryTests(unittest.TestCase):
+    def test_new_independent_destination(self):
+        with TemporaryDirectory() as temp:
+            root = Path(temp)
+            protected = root / "source"
+            protected.mkdir()
+            destination = root / "new" / "case"
+            self.assertEqual(isolated_new_directory(destination, protected), destination.resolve())
+            self.assertFalse(destination.exists())
+
+    def test_parent_symlink_cannot_bypass_source_guard(self):
+        with TemporaryDirectory() as temp:
+            root = Path(temp)
+            protected = root / "source"
+            protected.mkdir()
+            alias = root / "alias"
+            alias.symlink_to(protected, target_is_directory=True)
+            with self.assertRaises(ValueError):
+                isolated_new_directory(alias / "new_case", protected)
+            self.assertFalse((protected / "new_case").exists())
+
+    def test_diagnostics_cannot_overlap_new_case(self):
+        with TemporaryDirectory() as temp:
+            root = Path(temp)
+            case = root / "case"
+            for candidate in (case, case / "diagnostics", root):
+                with self.subTest(candidate=candidate), self.assertRaises(ValueError):
+                    isolated_new_directory(candidate, case)
+
+    def test_existing_or_dangling_symlink_rejected(self):
+        with TemporaryDirectory() as temp:
+            root = Path(temp)
+            alias = root / "alias"
+            alias.symlink_to(root / "missing", target_is_directory=True)
+            for candidate in (root, alias):
+                with self.subTest(candidate=candidate), self.assertRaises(ValueError):
+                    isolated_new_directory(candidate)
+
+    def test_dotdot_path_cannot_bypass_guard(self):
+        with TemporaryDirectory() as temp:
+            root = Path(temp)
+            protected = root / "source"
+            protected.mkdir()
+            other = root / "other"
+            other.mkdir()
+            with self.assertRaises(ValueError):
+                isolated_new_directory(other / ".." / "source" / "new", protected)
 
 
 if __name__ == "__main__":
