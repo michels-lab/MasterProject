@@ -63,6 +63,10 @@ class ComparisonTests(unittest.TestCase):
             self.assertEqual(comparison_ready_times(log, snapshots, 1e-6, True), [])
             self.assertEqual(comparison_ready_times(log+"\n"+energy, snapshots, 1e-6, True), [1e-6])
             self.assertEqual(comparison_ready_times(log+"\n"+mass, snapshots, 1e-6), [])
+            rejected=pressure.replace("Converged=1","Converged=0")
+            self.assertEqual(comparison_ready_times(log+"\n"+rejected, snapshots, 1e-6), [])
+            self.assertEqual(comparison_ready_times(log+"\n"+mass.replace("time_s=1e-6",""), snapshots, 1e-6), [])
+            self.assertEqual(comparison_ready_times(log, snapshots+snapshots, 1e-6), [])
             (fluid / REQUIRED_FINAL_FIELDS[0]).unlink()
             self.assertEqual(comparison_ready_times(log, snapshots, 1e-6), [])
 
