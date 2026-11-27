@@ -5,7 +5,7 @@ No file is auto-deleted or declared unused.
 
 ## Coverage
 
-Tracked: 42904; classified: 42899; readable documents: 237; above read cap: 1; findings: 9.
+Tracked: 42906; classified: 42901; readable documents: 237; above read cap: 1; findings: 9.
 
 ## File roles
 
@@ -14,7 +14,7 @@ Tracked: 42904; classified: 42899; readable documents: 237; above read cap: 1; f
 | agent | 9 |
 | analysis_tool | 1 |
 | bitacora | 5 |
-| config | 31 |
+| config | 33 |
 | data | 37 |
 | document | 198 |
 | index | 35 |
@@ -37,8 +37,8 @@ Tracked: 42904; classified: 42899; readable documents: 237; above read cap: 1; f
 - **CONFIRMED / BROKEN_RELATIVE_LINK** docs/granada/C3D05_T0_README_HISTORICAL_BEFORE_SINGLE_FLOW_20261120.md: Missing: outside-repo. Next: Fix link or restore target (ID 2fa56a22be90f045)
 - **CONFIRMED / BROKEN_RELATIVE_LINK** docs/granada/C3D05_T0_README_HISTORICAL_BEFORE_SINGLE_FLOW_20261120.md: Missing: outside-repo. Next: Fix link or restore target (ID 2fa56a22be90f045)
 - **CONFIRMED / BROKEN_RELATIVE_LINK** docs/granada/C3D05_T0_README_HISTORICAL_BEFORE_SINGLE_FLOW_20261120.md: Missing: outside-repo. Next: Fix link or restore target (ID 2fa56a22be90f045)
-- **REVIEW / POTENTIAL_UNLOGGED_CHANGES** PROJECT_AUDIT_LOG_EN.md: 7 implementation/config paths changed since this log's last commit; examples: docs/MAESTRIA_RESULT_MANIFEST_INDEX_20261127.json, docs/MAESTRIA_STATUS.json, docs/history/BRANCH_HISTORY_01_20261127.json, docs/history/BRANCH_HISTORY_02_20261127.json, docs/history/BRANCH_HISTORY_03_20261127.json, docs/history/BRANCH_HISTORY_04_20261127.json. Next: Inspect diffs and reconcile only meaningful decisions/results in the canonical log (ID 441497f8c33afbf3)
-- **REVIEW / POTENTIAL_UNLOGGED_CHANGES** PROJECT_AUDIT_LOG_ES.md: 7 implementation/config paths changed since this log's last commit; examples: docs/MAESTRIA_RESULT_MANIFEST_INDEX_20261127.json, docs/MAESTRIA_STATUS.json, docs/history/BRANCH_HISTORY_01_20261127.json, docs/history/BRANCH_HISTORY_02_20261127.json, docs/history/BRANCH_HISTORY_03_20261127.json, docs/history/BRANCH_HISTORY_04_20261127.json. Next: Inspect diffs and reconcile only meaningful decisions/results in the canonical log (ID bd95eee655930600)
+- **REVIEW / POTENTIAL_UNLOGGED_CHANGES** PROJECT_AUDIT_LOG_EN.md: 10 implementation/config paths changed since this log's last commit; examples: docs/HISTORICAL_INVENTORY_20261127.json, docs/MAESTRIA_RESULT_MANIFEST_INDEX_20261127.json, docs/MAESTRIA_STATUS.json, docs/history/BRANCH_HISTORY_01_20261127.json, docs/history/BRANCH_HISTORY_02_20261127.json, docs/history/BRANCH_HISTORY_03_20261127.json. Next: Inspect diffs and reconcile only meaningful decisions/results in the canonical log (ID a46e973008dc218c)
+- **REVIEW / POTENTIAL_UNLOGGED_CHANGES** PROJECT_AUDIT_LOG_ES.md: 10 implementation/config paths changed since this log's last commit; examples: docs/HISTORICAL_INVENTORY_20261127.json, docs/MAESTRIA_RESULT_MANIFEST_INDEX_20261127.json, docs/MAESTRIA_STATUS.json, docs/history/BRANCH_HISTORY_01_20261127.json, docs/history/BRANCH_HISTORY_02_20261127.json, docs/history/BRANCH_HISTORY_03_20261127.json. Next: Inspect diffs and reconcile only meaningful decisions/results in the canonical log (ID 2ecd864c23ad514c)
 
 Complete path → purpose/role/certainty list lives in FILE_GOVERNANCE.json. SUMMARY.json has counts only for master polling.
 A dated file, duplicate, or suspicious name is an **investigation candidate**, not unwanted material.

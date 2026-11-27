@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "audit_kind": "deterministic_full_tracked_tree",
-  "tracked_files_total": 42904,
-  "classified_files_total": 42899,
+  "tracked_files_total": 42906,
+  "classified_files_total": 42901,
   "docs_content_inspected": 237,
   "large_docs_skipped": 1,
   "excluded_reports": 5,
@@ -10,7 +10,7 @@
     "agent": 9,
     "analysis_tool": 1,
     "bitacora": 5,
-    "config": 31,
+    "config": 33,
     "data": 37,
     "document": 198,
     "index": 35,
@@ -29,8 +29,8 @@
     "POTENTIAL_UNLOGGED_CHANGES": 2
   },
   "finding_total": 9,
-  "inventory_fingerprint": "6268f0b4d35c075caec35081fcb440a5cce6a816878df01d94fb1592f0d891e1",
-  "evidence_fingerprint": "36ba67efb58f05d9837458b2c95ae56fa1ee9f85530783c22909e5e777814fd7",
+  "inventory_fingerprint": "c94ed6b21dbd6611e8487271f309a17fb0d506da122957655493c86a015eba69",
+  "evidence_fingerprint": "d60a3b777781140b7afce54a9039c29254d0feff0051532ce28a7daa7835104b",
   "files": [
     {
       "path": ".github/agents/openfoam-solidification.agent.md",
@@ -359,7 +359,7 @@
       "role": "agent",
       "purpose": "assistant role/instructions",
       "certainty": "rule",
-      "blob": "8989ddacc5aa0768e81e4025542a62926b0a19da"
+      "blob": "5ca42e16c1495b2e4a204447a0e7a245651879a9"
     },
     {
       "path": "CASE_GUIDE_ES.md",
@@ -450,14 +450,14 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "92ee06b8ccb1afba145bb9005ca67e0758a817cb"
+      "blob": "b52cd537989808cb23bfb1b413f5f24e5fab5f4a"
     },
     {
       "path": "RUN_CASE_REGISTRY.csv",
       "role": "data",
       "purpose": "structured/research data (semantics not validated)",
       "certainty": "rule",
-      "blob": "e8ea5cd324a4a47352195a3c24b12413daff4c1e"
+      "blob": "4c18b28d53b4805c24fd9aacf7410398fe6daae7"
     },
     {
       "path": "RUN_MASTER_PROTOCOL.md",
@@ -74286,7 +74286,7 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "5a4ec635f38e6dd76982b79ba6f98365bbb89554"
+      "blob": "a29cf80a939f50ba41f44dce4856c090b40e198f"
     },
     {
       "path": "cases_controlled_buoyancy/B14_topFixedFlux_explicitRef/CASE_VARIANT.md",
@@ -208287,7 +208287,7 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "2c6edc28cb884e264912b72ef927b023ec974240"
+      "blob": "09689149b59a629b15fcdb37440242d7d479778a"
     },
     {
       "path": "cases_controlled_buoyancy/C14_topFixedFlux_explicitRef/CASE_VARIANT.md",
@@ -299035,7 +299035,7 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "5743c2e1cc32351faa9dd97022ccfb7b8221339f"
+      "blob": "cad28c8d4927364c76b6a959b39188d657d33964"
     },
     {
       "path": "docs/DOCUMENT_SYNC_20261110_ES.md",
@@ -299049,7 +299049,7 @@
       "role": "config",
       "purpose": "machine-readable configuration",
       "certainty": "rule",
-      "blob": "f0eeec305539a771d25acd5a16754928684767e5"
+      "blob": "ff8be7a639ca69cc1face0e63ec66c3c8ab357eb"
     },
     {
       "path": "docs/MAESTRIA_COMMIT_HISTORY_20261127.json",
@@ -299070,21 +299070,21 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "b0728965eef0b8a736ca6aae5214a8f1956603be"
+      "blob": "106a24c6c1ce2c1861e3abcd411afa80c9adda44"
     },
     {
       "path": "docs/MAESTRIA_RESULT_MANIFEST_INDEX_20261127.json",
       "role": "config",
       "purpose": "machine-readable configuration",
       "certainty": "rule",
-      "blob": "47cd753808dc1c26590e39ae805c6a94c83d2c11"
+      "blob": "94622ae978420d985b94eda3069d805d1209098e"
     },
     {
       "path": "docs/MAESTRIA_STATUS.json",
       "role": "config",
       "purpose": "machine-readable configuration",
       "certainty": "rule",
-      "blob": "db6610284559a0edabc435773e8e57c1bb778eb6"
+      "blob": "f4002475e83d7c82e7dcd04b8ecf31afcc96d573"
     },
     {
       "path": "docs/MASTERPROJECT_IDENTITY_ES.md",
@@ -299434,14 +299434,14 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "c53221231d2cf24b6de89cce2929feff1ba9ed5f"
+      "blob": "a9630207e0a346a4bcf552ca6c23e69753ef5b2c"
     },
     {
       "path": "docs/granada/MAESTRIA_CAMPANA_ADAPTATIVA_200S_20261124_ES.md",
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "eeee138ed68a56cbd3debb3339729f5c0b853117"
+      "blob": "addef5d2fd074db877d7b99ffe5708fd8e06b2aa"
     },
     {
       "path": "docs/granada/MAESTRIA_CAMPANA_B14_C14_200S_PLAN_20261124_ES.md",
@@ -299455,21 +299455,21 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "a000fc8ea2d084c521ab3819ab7e7fcfd302ddea"
+      "blob": "1be01ac9f00a68cdab8ece488f19b07ae0cd42bf"
     },
     {
       "path": "docs/granada/MAESTRIA_ESTADO_INTEGRADO_20261125_ES.md",
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "1624efe3f7109ba70b83431e28d992eb27b4d65e"
+      "blob": "c7b05843e6e580ef4fc3308b10e96353f145d5d9"
     },
     {
       "path": "docs/granada/MAESTRIA_ESTADO_INTEGRADO_20261127_ES.md",
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "145c4bb50a4ec7bd5e9ed98629cb5a2341ad6245"
+      "blob": "559e7595250c01f7533fa01caa4604fc5823e968"
     },
     {
       "path": "docs/granada/OPENFOAM_HUB_READ_ACCESS_20261021.md",
@@ -299511,14 +299511,28 @@
       "role": "config",
       "purpose": "machine-readable configuration",
       "certainty": "rule",
-      "blob": "6d9d9b35b3bc35e8cedc4bb56efd360549b71d51"
+      "blob": "3bb0ecbc4369708ce11656816bc8e0a0d7d412f2"
     },
     {
       "path": "docs/history/BRANCH_HISTORY_05_20261127.json",
       "role": "config",
       "purpose": "machine-readable configuration",
       "certainty": "rule",
-      "blob": "333cac7d797453d09e02a2fcff195542d8390344"
+      "blob": "9daa26c7b9c190e4726715bcb45b6717de724d74"
+    },
+    {
+      "path": "docs/history/BRANCH_HISTORY_06_20261127.json",
+      "role": "config",
+      "purpose": "machine-readable configuration",
+      "certainty": "rule",
+      "blob": "cce3ef1cc84e852e3d0b335a838c7e509f4ed42a"
+    },
+    {
+      "path": "docs/history/BRANCH_HISTORY_DELTA_20261127.json",
+      "role": "config",
+      "purpose": "machine-readable configuration",
+      "certainty": "rule",
+      "blob": "da9b009e8933f96aac2e04e907cde2f85c2e7859"
     },
     {
       "path": "doctor_original/bcFourier/0/T",
@@ -300391,20 +300405,20 @@
       "state": "REVIEW_REQUIRED"
     },
     {
-      "id": "441497f8c33afbf3",
+      "id": "a46e973008dc218c",
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_EN.md",
-      "observation": "7 implementation/config paths changed since this log's last commit; examples: docs/MAESTRIA_RESULT_MANIFEST_INDEX_20261127.json, docs/MAESTRIA_STATUS.json, docs/history/BRANCH_HISTORY_01_20261127.json, docs/history/BRANCH_HISTORY_02_20261127.json, docs/history/BRANCH_HISTORY_03_20261127.json, docs/history/BRANCH_HISTORY_04_20261127.json",
+      "observation": "10 implementation/config paths changed since this log's last commit; examples: docs/HISTORICAL_INVENTORY_20261127.json, docs/MAESTRIA_RESULT_MANIFEST_INDEX_20261127.json, docs/MAESTRIA_STATUS.json, docs/history/BRANCH_HISTORY_01_20261127.json, docs/history/BRANCH_HISTORY_02_20261127.json, docs/history/BRANCH_HISTORY_03_20261127.json",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     },
     {
-      "id": "bd95eee655930600",
+      "id": "2ecd864c23ad514c",
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_ES.md",
-      "observation": "7 implementation/config paths changed since this log's last commit; examples: docs/MAESTRIA_RESULT_MANIFEST_INDEX_20261127.json, docs/MAESTRIA_STATUS.json, docs/history/BRANCH_HISTORY_01_20261127.json, docs/history/BRANCH_HISTORY_02_20261127.json, docs/history/BRANCH_HISTORY_03_20261127.json, docs/history/BRANCH_HISTORY_04_20261127.json",
+      "observation": "10 implementation/config paths changed since this log's last commit; examples: docs/HISTORICAL_INVENTORY_20261127.json, docs/MAESTRIA_RESULT_MANIFEST_INDEX_20261127.json, docs/MAESTRIA_STATUS.json, docs/history/BRANCH_HISTORY_01_20261127.json, docs/history/BRANCH_HISTORY_02_20261127.json, docs/history/BRANCH_HISTORY_03_20261127.json",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     }
