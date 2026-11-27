@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Lab fixed-step eight-rank queue. Preserve serial evidence; no rerun of completed CFD."""
+import argparse
 import fcntl
 import json
 import os
@@ -32,9 +33,7 @@ def need(ok,msg):
     if not ok: raise RuntimeError(msg)
 def read(p): return json.loads(p.read_text())
 def save(p,v):
-    tmp=p.with_name("."+p.name+".tmp")
-    tmp.write_text(json.dumps(v,indent=2)+"\n")
-    tmp.replace(p)
+    compact.json_out(p,v)
 def procs():
     for p in Path("/proc").iterdir():
         if p.name.isdigit():
@@ -71,9 +70,11 @@ def checkpoint(src):
         if all((p/r/f).is_file() and (p/r/f).stat().st_size>0 for r,fs in fields.items() for f in fs):
             good.append(t)
     return max(good,default=0)
-def terminate_old():
+def terminate_old(allow_takeover=False):
     # Parent first: prevents old serial manager launching a subsequent case.
     parents,workers,solvers=old_processes()
+    need(allow_takeover or not (parents or workers or solvers),
+         "active serial campaign; explicit --allow-takeover required")
     for pid in parents:
         try: os.kill(pid,signal.SIGTERM); os.kill(pid,signal.SIGCONT)
         except ProcessLookupError: pass
@@ -92,7 +93,7 @@ def native(case,name,args,progress=False,start=0):
     last=start; count=0; ranks=None; end=fatal=False
     start_wall=time.monotonic()
     print("START",case.name,name,flush=True)
-    with (case/name).open("x",buffering=1) as log:
+    with transfer.checked_relative(case,name).open("x",buffering=1) as log:
         p=subprocess.Popen(args,cwd=case,stdout=subprocess.PIPE,stderr=subprocess.STDOUT,text=True,errors="replace",start_new_session=True)
         try:
             for line in p.stdout:
@@ -130,8 +131,9 @@ def native(case,name,args,progress=False,start=0):
         need(ranks==8 and count==(200-start)*1000 and abs(last-200)<1e-7,"MPI completion not proven")
     return time.monotonic()-start_wall
 def prepare(name):
-    src=SRC/name;case=DST/name
-    r=read(src/REPORT)
+    need(name in NAMES,"case not authorized for MPI queue")
+    src=transfer.checked_relative(SRC,name);case=transfer.checked_relative(DST,name)
+    r=read(transfer.checked_relative(src,REPORT))
     if r.get("solver_completed") and r.get("final_time_s")==200:
         return None
     need(not case.exists(),"existing MPI attempt preserved: "+str(case))
@@ -232,25 +234,31 @@ def archive_failed_starts():
     print("FAILED_STARTS_ARCHIVED",backup,flush=True)
 
 def main():
+    ap=argparse.ArgumentParser(description=__doc__)
+    ap.add_argument("--allow-takeover",action="store_true",help="explicitly authorize stopping the old serial campaign")
+    a=ap.parse_args()
     need(os.environ.get("WM_PROJECT_VERSION")=="14","load Foundation14")
     need(len(os.sched_getaffinity(0))>=8,"eight CPUs unavailable")
     for cmd in ("foamMultiRun","mpirun","decomposePar","reconstructPar","foamLog"):
         need(shutil.which(cmd),"missing "+cmd)
     need((HOME/"finalize_lab_fixed_mpi8.py").is_file(),"finalizer missing")
     mpi_preflight()
+    need(not DST.is_symlink(),"unsafe MPI root")
     DST.mkdir(exist_ok=True)
     audit=HOME/"CAMPAIGN_200S_FIXED_MPI_08_AUDIT"
+    need(not audit.is_symlink(),"unsafe audit root")
     audit.mkdir(exist_ok=True)
     print("WAITING_FOR_PREVIOUS_FINALIZER_IF_ANY",flush=True)
-    with (audit/".finalize.lock").open("a") as finalizer_lock, (DST/".queue.lock").open("a") as lock:
+    with transfer.checked_relative(audit,".finalize.lock").open("a") as finalizer_lock, transfer.checked_relative(DST,".queue.lock").open("a") as lock:
         fcntl.flock(finalizer_lock,fcntl.LOCK_EX)
         fcntl.flock(lock,fcntl.LOCK_EX|fcntl.LOCK_NB)
+        need(a.allow_takeover or not any(old_processes()),"active serial campaign; no takeover authorized")
         archive_failed_starts()
         r=read(SRC/"C14-3DA-200s"/REPORT)
         need(r["status"]=="SOLVER_COMPLETE_COMPACT_AUDITED" and r["final_time_s"]==200 and r["solver_completed"],"C14-3DA audit not confirmed")
         # Verify MPI decomposition on a stable checkpoint before stopping serial.
         first=prepare(NAMES[0])
-        terminate_old()
+        terminate_old(a.allow_takeover)
         summary={"C14-3DA-200s":{"status":"SERIAL_COMPLETE_PRESERVED"}}
         for name in NAMES:
             try:
