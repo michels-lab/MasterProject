@@ -27,6 +27,7 @@ import sys
 
 from stage_fs_c08_coupled import BASE_MODULE, ROOT, isolated_new_directory, stage
 from fs_c08_transient_ledger import write_transient_ledger
+from fs_c08_momentum_diagnostics import write_momentum_diagnostics
 
 REQUIRED_FINAL_FIELDS = (
     "rhoAlpha.liquid", "rhoAlpha.solid", "alpha.metal",
@@ -510,6 +511,7 @@ def execute(source: Path, material: Path, output: Path,
         # Always include actionable evidence for a failed native attempt.
         log = native_log.read_text(encoding="utf-8", errors="replace")
         report["transient_ledger"] = write_transient_ledger(log, diagnostics)
+        report["momentum_diagnostics"] = write_momentum_diagnostics(log, diagnostics)
         markers = ("FS_C08_INITIAL_GAS_INVENTORY", "FS_C08_PRE_ENERGY_VOLUME",
                    "FS_C08_ACCEPTED_STATE_LEDGER", "FS_C08_LOCAL_ENERGY_LEDGER",
                    "FS_C08_THERMAL_TRANSPORT_SPLIT", "FS_C08_THREE_PHASE_TRIAL_VOLUME",
