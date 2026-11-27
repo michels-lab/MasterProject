@@ -102,7 +102,7 @@
       "B14-2D",
       "C14-3DB"
     ],
-    "confirmed_manifest_count": 0,
+    "confirmed_manifest_count": 3,
     "reported_complete": [
       "C14-3DA",
       "C14-3DB",
@@ -141,9 +141,18 @@
       "original_modified": false,
       "view_uses_symlinks": true
     },
-    "publication": "pending; prior A branch incomplete at previous inspection",
+    "publication": "3/4 complete manifests independently read from GitHub; C14-3DA branch exists without MANIFEST.json; push error detail not provided",
     "evidence": "Investigator WSL console 2026-11-27; original report and recovery summary, not direct access to WSL",
-    "physical_validation": false
+    "physical_validation": false,
+    "published_cases": [
+      "C14-3DB",
+      "B14-2D",
+      "C14-2D"
+    ],
+    "publication_prefix": "results/campaign-200s-fixed-lab-v2/",
+    "pending_publication": [
+      "C14-3DA"
+    ]
   },
   "FS_C08": {
     "branch": "research/fs-c08-conservative-phase-mass-20261123",
