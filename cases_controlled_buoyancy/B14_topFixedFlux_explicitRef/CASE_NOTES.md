@@ -1,3 +1,5 @@
+> **27-11-2026 — actualización:** B14 2D adaptativo MPI con y sin tope completó 200 s (14276 y 14275 pasos), pendiente auditoría/publicación por duplicado de perfil vertical. B14 3D excluido; FS-C08 separado. [Historia](https://github.com/michels-lab/MasterProject/blob/main/docs/granada/MAESTRIA_ESTADO_INTEGRADO_20261127_ES.md). Entradas anteriores históricas.
+
 > **25-11-2026 | ESTADO VIGENTE:** B14 2D original de 10 s intacto y referencia de rho(T) para contracción. B14-2D-200s fijo compacto preparado, sin 200 s confirmados; intento adaptativo PC bloqueado/fallido preservado. B14 3D fuera de campaña autorizada. FS-C08 utiliza tablas de ingeniería derivadas de B14, no es el B14 original ni modelo calibrado de contracción. Solver FS-C08 ya compilado y probado en WSL; lotes de arranque 79/80 pasos aceptados, energía global y contracción física pendientes. [Registro integrado](https://github.com/michels-lab/MasterProject/blob/main/docs/granada/MAESTRIA_ESTADO_INTEGRADO_20261125_ES.md).
 
 # CASE_NOTES — B14_topFixedFlux_explicitRef
