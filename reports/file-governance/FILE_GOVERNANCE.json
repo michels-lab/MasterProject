@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
   "audit_kind": "deterministic_full_tracked_tree",
-  "tracked_files_total": 42950,
-  "classified_files_total": 42945,
-  "docs_content_inspected": 256,
+  "tracked_files_total": 42951,
+  "classified_files_total": 42946,
+  "docs_content_inspected": 257,
   "large_docs_skipped": 1,
   "excluded_reports": 5,
   "roles": {
@@ -12,7 +12,7 @@
     "bitacora": 5,
     "config": 33,
     "data": 43,
-    "document": 215,
+    "document": 216,
     "index": 37,
     "license": 1,
     "simulation_case_file": 141,
@@ -30,7 +30,7 @@
     "UNKNOWN_PURPOSE": 1
   },
   "finding_total": 8,
-  "inventory_fingerprint": "95dee79d40ba7b809147efdd58336750d8e33a1241dc5b3ec7fef50f033324d5",
+  "inventory_fingerprint": "b48ac8f17e795e25f955a956e9636864b2869b683ba6b97ad5e8f3465344d591",
   "evidence_fingerprint": "e7b9f0156261d19bdf73668ed1141a71accec906e79e9524ca8939ff09069206",
   "files": [
     {
@@ -299240,6 +299240,13 @@
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
       "blob": "653a6d5fc3721f919a45800c15fd47da94166c0b"
+    },
+    {
+      "path": "docs/PRIMER_AVANCE_TESIS_PLAN_PRESENTACION_20261127_ES.md",
+      "role": "document",
+      "purpose": "manual/decision/report/historical note",
+      "certainty": "inferred",
+      "blob": "39f1d12f830986ac4adcab0bfb59249d1c72bda4"
     },
     {
       "path": "docs/PROJECT_STAGE_STATUS.json",
