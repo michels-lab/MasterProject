@@ -107,6 +107,20 @@
   "response_rule": "Every update about this case must explicitly display: Etapa N/10; avance general completed/total (%) using this manifest, physical/CFD status, what changed, what remains; never imply false precision. Recompute on changes.",
   "execution_rule": "Integrate validations into one cohesive milestone; no one-script-per-subproblem loops, no rerun already closed V4/T02 audits; one user command only at a meaningful end-to-end delivery; preserve case and audit evidence.",
   "last_integrated_delivery": {
+    "date": "2026-11-27",
+    "stage_completed": "08_SOLIDIFICATION_T1",
+    "current_stage": "09_VERIFICATION_AND_GRID",
+    "operational_completion": "8/10=80%",
+    "status": "NATIVE_ADAPTIVE_THERMAL_FAILURE_REPRODUCED__MESH_OK__STAGE09_OPEN",
+    "evidence_report": "docs/granada/C3D04_A_NATIVE_THERMAL_OBSERVED_20261127_ES.md",
+    "scientific_limits": [
+      "Capped MPI8 failed at 0.68 s; uncapped failed at 0.70 s. No adaptive A completion.",
+      "Native checkMesh Mesh OK in both regions; no local defect or root cause established.",
+      "No discrete conservation, grid/time independence or QuickCup validation."
+    ],
+    "next": "Inspect critical cells in the existing fixed 10 s reference if fields are available; preserve original comparative settings and do not rerun identical CFD."
+  },
+  "historical_last_integrated_delivery_20261124": {
     "date": "2026-11-24",
     "stage_completed": "08_SOLIDIFICATION_T1",
     "current_stage": "09_VERIFICATION_AND_GRID",
