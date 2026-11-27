@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "audit_kind": "deterministic_full_tracked_tree",
-  "tracked_files_total": 42910,
-  "classified_files_total": 42905,
+  "tracked_files_total": 42911,
+  "classified_files_total": 42906,
   "docs_content_inspected": 239,
   "large_docs_skipped": 1,
   "excluded_reports": 5,
@@ -20,18 +20,19 @@
     "simulation_log": 3264,
     "simulation_output": 36203,
     "source": 176,
-    "test": 78,
+    "test": 79,
     "unknown": 1,
     "web_ui": 1,
     "workflow": 37
   },
   "finding_counts": {
     "BROKEN_RELATIVE_LINK": 7,
+    "POTENTIAL_UNLOGGED_CHANGES": 2,
     "UNKNOWN_PURPOSE": 1
   },
-  "finding_total": 8,
-  "inventory_fingerprint": "491520487e2565f302d83b4ae3264354eb0808e95132c94a96d2af505c23dee3",
-  "evidence_fingerprint": "e7b9f0156261d19bdf73668ed1141a71accec906e79e9524ca8939ff09069206",
+  "finding_total": 10,
+  "inventory_fingerprint": "84e8c50c2156245991764f20c565dbaac73e85e4a90970f5d99f8153889c81e6",
+  "evidence_fingerprint": "adbf0821018bd737520d471946990344e4b06f0e8b985cbd1a23d6021d22e1ae",
   "files": [
     {
       "path": ".github/agents/openfoam-solidification.agent.md",
@@ -451,7 +452,7 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "6c6c015b91b5c3af199bb7b310874c6fa3cc96a0"
+      "blob": "e6ffdfe716afaa20f386bf9d9c20a516c39ceb5a"
     },
     {
       "path": "RUN_CASE_REGISTRY.csv",
@@ -298798,7 +298799,7 @@
       "role": "config",
       "purpose": "machine-readable configuration",
       "certainty": "rule",
-      "blob": "f721d20ea8bc986a0e9cbd40e0e031fbc57074fa"
+      "blob": "3ec6766071bf77a5f5771a869f0c37d5133d0c67"
     },
     {
       "path": "docs/C3D_01_ESTADO_REAL_20261110_ES.md",
@@ -299085,7 +299086,7 @@
       "role": "config",
       "purpose": "machine-readable configuration",
       "certainty": "rule",
-      "blob": "34519fd1b8034d9eba4c3d48b267d5a96f858495"
+      "blob": "14d012f9c450eeed3e9d829128db1eafc9d80315"
     },
     {
       "path": "docs/MASTERPROJECT_IDENTITY_ES.md",
@@ -299183,7 +299184,7 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "d72bc02cae6e80ed89b700c8e66c350494ae9aba"
+      "blob": "0f830300831c7f324415da3723b6e044f4c67d41"
     },
     {
       "path": "docs/granada/C3D05_B_C14_101_ESTADOS_ALPHA1_OBSERVADO_Y_TIMELINE_20261123_ES.md",
@@ -299449,7 +299450,7 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "95b81a81a2cb46f67661a1ac9e04d3f6a19b5cb7"
+      "blob": "3eb3eeb3bb317c3bef3f13bd37dd1f386c0367f3"
     },
     {
       "path": "docs/granada/MAESTRIA_CAMPANA_B14_C14_200S_PLAN_20261124_ES.md",
@@ -299477,7 +299478,7 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "3241819176f838d9fd82fb723c9c3436cc73b89e"
+      "blob": "b85ecf9a1cd8d4c90cdb6ce9368bc4252514219b"
     },
     {
       "path": "docs/granada/OPENFOAM_HUB_READ_ACCESS_20261021.md",
@@ -299547,14 +299548,14 @@
       "role": "unknown",
       "purpose": "function unknown: owner classification required",
       "certainty": "unknown",
-      "blob": "dece5d42bbdeae994541701ed34efa157cdccd6e"
+      "blob": "aece76124cafffc51996576fc80bab6ff41034f8"
     },
     {
       "path": "docs/review/README.md",
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "34673ecd49b7b901914cc9e3ea8d269d8595f536"
+      "blob": "df01d0ac677148c8cc10d17405da54ae4cf64266"
     },
     {
       "path": "doctor_original/bcFourier/0/T",
@@ -300219,7 +300220,7 @@
       "role": "source",
       "purpose": "code/test implementation",
       "certainty": "rule",
-      "blob": "6341ad3ff9ba2c1810bfedf0ed4d1aeeb2ebe326"
+      "blob": "ba07d965830e1d486fadca40efc9982ffa48d2ef"
     },
     {
       "path": "tools/finalize_lab_fixed_mpi8.py",
@@ -300355,6 +300356,13 @@
       "blob": "7a3d2359bb9100ea0779c7b7118a42dcc314dafd"
     },
     {
+      "path": "tools/tests/test_file_review_queue.py",
+      "role": "test",
+      "purpose": "code/test implementation",
+      "certainty": "rule",
+      "blob": "bc87f0d6d90cde0fa52ef605b82156b5da9aeb22"
+    },
+    {
       "path": "tools/tests/test_isolate_active_openfoam_cases.py",
       "role": "test",
       "purpose": "code/test implementation",
@@ -300431,6 +300439,24 @@
       "path": "docs/granada/C3D05_T0_README_HISTORICAL_BEFORE_SINGLE_FLOW_20261120.md",
       "observation": "Missing: outside-repo",
       "recommendation": "Fix link or restore target",
+      "state": "REVIEW_REQUIRED"
+    },
+    {
+      "id": "90747b4a56bd76e3",
+      "code": "POTENTIAL_UNLOGGED_CHANGES",
+      "severity": "review",
+      "path": "PROJECT_AUDIT_LOG_EN.md",
+      "observation": "4 implementation/config paths changed since this log's last commit; examples: docs/C3D04_CASE_A_STATUS.json, docs/MAESTRIA_STATUS.json, tools/file_review_queue.py, tools/tests/test_file_review_queue.py",
+      "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
+      "state": "REVIEW_REQUIRED"
+    },
+    {
+      "id": "e60d729accbd0c70",
+      "code": "POTENTIAL_UNLOGGED_CHANGES",
+      "severity": "review",
+      "path": "PROJECT_AUDIT_LOG_ES.md",
+      "observation": "4 implementation/config paths changed since this log's last commit; examples: docs/C3D04_CASE_A_STATUS.json, docs/MAESTRIA_STATUS.json, tools/file_review_queue.py, tools/tests/test_file_review_queue.py",
+      "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     },
     {

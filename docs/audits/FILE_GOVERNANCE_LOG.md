@@ -2905,3 +2905,10 @@ Automatic evidence deltas, pending human triage. No deletion authority.
 - NEW — UNKNOWN_PURPOSE at `docs/review/FILE_REVIEW_LEDGER.jsonl` (ID 70bd3363abfdf819).
 - NO_LONGER_DETECTED — POTENTIAL_UNLOGGED_CHANGES at `PROJECT_AUDIT_LOG_ES.md` (ID 1f881b99823edc2e).
 - NO_LONGER_DETECTED — POTENTIAL_UNLOGGED_CHANGES at `PROJECT_AUDIT_LOG_EN.md` (ID b7aa086f9ac5bf2c).
+
+## 2026-11-27 09:58 UTC
+
+- All tracked 42911; findings 10; inventory 84e8c50c2156; evidence adbf0821018b. Full local report in reports/file-governance/. Status REVIEW_REQUIRED.
+- Finding changes: 2 NEW; 0 NO_LONGER_DETECTED (not necessarily resolved). Inventory: 1 new paths, 0 removed paths, 0 reclassified paths.
+- NEW — POTENTIAL_UNLOGGED_CHANGES at `PROJECT_AUDIT_LOG_EN.md` (ID 90747b4a56bd76e3).
+- NEW — POTENTIAL_UNLOGGED_CHANGES at `PROJECT_AUDIT_LOG_ES.md` (ID e60d729accbd0c70).
