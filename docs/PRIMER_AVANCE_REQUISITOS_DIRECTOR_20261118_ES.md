@@ -74,11 +74,11 @@ Las expresiones siguientes son un **esquema físico de las ecuaciones gobernante
 - `phaseChangeSource`: `solidificationMeltingSource`, `Tsol=1423 K`, `Tliq=1473 K`, `L=2.286e5 J/kg`, `alpha1e=0.8`, `beta=1.13e-4 K⁻¹`, `rhoRef=6820 kg/m³`, `Cu=1e5`, `q=1e-3`, **`relax=0.1`**.
 - Estos son datos efectivos de **C14**, no una afirmación de que `rho(T)`, `Cp(T)` o `k(T)` ya se hayan incorporado; la mejora con datos dependientes de temperatura/JMatPro debe diferenciarse como **trabajo futuro**.
 
-## 4. Courant, tolerancias y estabilidad — cifra pendiente de medir
+## 4. Courant, tolerancias y estabilidad — máximo observado extraído
 
 **Error que no debe aparecer en el primer avance:** poner `Co_max=0.25` como máximo alcanzado. El diccionario fija `maxCo 0.25`, pero con `adjustTimeStep no` la simulación usa `deltaT=0.001 s` y ese 0.25 **no certifica** el número de Courant observado.
 
-**Evidencia a extraer de los registros REALES** de cada caso CFD verificado: mensajes `Courant Number mean: ... max: ...` (o formato real), máximo global de todos los pasos con tiempo de aparición, promedio relevante, evolución en el tiempo; número de correctores, residuos iniciales/finales `p_rgh`, `U`, `h/e`, continuidad, costo CPU/clock y `deltaT` real. Evitar inventar números: sin salida de log auditada, valor actual **PENDIENTE**.
+**Evidencia a extraer de los registros REALES** de cada caso CFD verificado: mensajes `Courant Number mean: ... max: ...` (o formato real), máximo global de todos los pasos con tiempo de aparición, promedio relevante, evolución en el tiempo; número de correctores, residuos iniciales/finales `p_rgh`, `U`, `h/e`, continuidad, costo CPU/clock y `deltaT` real. **Uva 27-11:** la serie completa `logs/CourantMax_0` de C14 en `25e7cf8cb4a30fb0fe5ece5bd9a2e451815ab232` contiene 10,000 registros, máximo **0.0650864**, etiqueta temporal **2.963 s**, último registro 9.999 s. Es el máximo de la serie publicada, no una comprobación del log nativo íntegro; promedio, evolución gráfica y otras métricas pendientes. [Recálculo](../analysis_results/v15_v16_postpush_20261015/README.md).
 
 En C14: tolerancias configuradas `p_rgh 1e-7`, `U 1e-8`, `h 1e-9` y `e` en molde `1e-6`, con `relTol` regionales variables (metal presión 0.01, velocidad/energía 0.05; arena energía 0.05). No presentar estas tolerancias como residuos efectivamente alcanzados.
 
@@ -123,7 +123,8 @@ En C14: tolerancias configuradas `p_rgh 1e-7`, `U 1e-8`, `h 1e-9` y `e` en molde
 - [x] Separación documentada entre `maxCo=0.25` nominal, `Co_max` realmente observado y `relax=0.1/0.25`.
 - [x] BC/IC reales y unidades de C14 documentadas.
 - [ ] Verificación término por término de las ecuaciones discretizadas del solver Foundation 14 y su cita académica.
-- [ ] Extracción verificable del máximo Courant observado del log C14 (con fecha/tiempo simulado y evolución).
+- [x] Extracción del máximo Courant publicado de C14 y su etiqueta temporal.
+- [ ] Evolución gráfica, Courant medio y contraste con log nativo íntegro C14.
 - [x] Evidencia publicada C16 hasta 10 s y comparación térmica central preliminar.
 - [ ] Auditoría integral de C16 con `relax=0.25`; log final, procedencia, campos, curvas y conclusiones físicas.
 - [ ] Tabla de indicadores de residuos, continuidad, costo, energía y convergencia con fuentes de datos explícitas.
