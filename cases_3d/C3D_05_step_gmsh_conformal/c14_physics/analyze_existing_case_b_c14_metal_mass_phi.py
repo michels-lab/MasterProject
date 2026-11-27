@@ -135,7 +135,8 @@ def rho_mass_snapshot(rho:list[float],alpha:list[float],
         ri*vi*(1-ai) for ri,vi,ai in zip(rho,volumes,alpha))
     liquid=mass-modeled_solid
     mean=mass/math.fsum(volumes)
-    require(0<=modeled_solid<=mass and liquid>=0,
+    require(all(math.isfinite(x) for x in (mass,modeled_solid,liquid,mean,modeled_solid*latent)) and
+            mass>0 and 0<=modeled_solid<=mass and liquid>=0,
             "modeled density-weighted phase bound invalid")
     return {
         "rho_mass_kg":mass,
@@ -220,6 +221,16 @@ def temporal_mass_screening(records:list[dict])->dict:
     Breaks in rho/phi and serialization errors result in NOT ASSESSABLE,
     NEVER fill a missing time or infer phi=0. t0 is not invented.
     """
+    times=[r["time_s"] for r in records]
+    require(all(math.isfinite(t) for t in times) and
+            all(b>a for a,b in zip(times,times[1:])),
+            "nonfinite, duplicate or unordered saved time axis")
+    for r in records:
+        for key in ("rho_mass_kg","phi_metalTop_kg_s_if_readable",
+                    "phi_metal_to_mold_kg_s_if_readable"):
+            value=r[key]
+            require(value is None or (math.isfinite(value) and
+                    (key!="rho_mass_kg" or value>0)), "invalid saved mass/flux "+key)
     withrho=[r for r in records if r["rho_mass_kg"] is not None]
     require(len(withrho)>=2,"insufficient archived actual rho to screen mass")
     base=withrho[0]
@@ -292,7 +303,13 @@ def temporal_mass_screening(records:list[dict])->dict:
             last["mass_delta_plus_sampled_exterior_phi_kg_NOT_CONTINUITY_RESIDUAL"]
             if last else None,
         "complete_uninterrupted_joint_coverage_to_10s":
-            integrated_intervals > 0 and last is not None and last["time_s"]==10.0,
+            integrated_intervals > 0 and last is not None and
+            math.isclose(last["time_s"],10,rel_tol=0,abs_tol=1e-8) and
+            math.isclose(first["time_s"],.1,rel_tol=0,abs_tol=1e-8) and
+            integrated_intervals==99,
+        "contiguous_suffix_reaches_10s_NOT_FULL_COVERAGE":
+            integrated_intervals > 0 and last is not None and
+            math.isclose(last["time_s"],10,rel_tol=0,abs_tol=1e-8),
     })
     return screened
 
@@ -302,12 +319,7 @@ def run(case:Path,join:Path,q:Path,storage:Path,out:Path)->dict:
     join=join.expanduser().absolute()
     q=q.expanduser().absolute()
     storage=storage.expanduser().absolute()
-    out=out.expanduser().absolute()
-    require(not out.exists() and not out.is_symlink(),
-            "immutable output already exists, no overwrite")
-    require(all(out!=p and out not in p.parents and p not in out.parents
-                for p in (case,join,q,storage)),
-            "output overlaps real source CFD or prior data archives")
+    out=readiness.independent_output(out,(case,join,q,storage))
     _,provenance=readiness.verify_archives(join,q,storage,case)
     source,checks=native.validated_mesh_and_stage(case)
     saved=native.saved_times(case)
