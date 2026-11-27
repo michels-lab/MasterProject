@@ -1,6 +1,6 @@
 {
   "schema": "masterproject-fs-c08-conservative-phase-mass-status-v1",
-  "date": "2026-11-24",
+  "date": "2026-11-27",
   "repo": "michels-lab/MasterProject",
   "branch": "research/fs-c08-conservative-phase-mass-20261123",
   "parent_branch": "research/fs-c02-metal-air-vof-20261117",
@@ -2033,7 +2033,7 @@
     }
   },
   "synchronized_geometry_energy_candidate": {
-    "status": "CODE_PUBLISHED_NATIVE_BUILD_PENDING",
+    "status": "NATIVE_BUILD_AND_STARTUP_CLOSURE_GATES_PASS__NOT_FULL_TRANSIENT",
     "commits": [
       "c5986120fd10c087b9f7dd3728a94cc62626af8b",
       "f8f78550cc3c327a9e5d796827f2aa8934945091"
@@ -2041,7 +2041,75 @@
     "scope": "Strict path synchronizes VOF and phase fractions only after volume-admissible projection, before thermal assembly; same reconstruction at candidate gate with final phi/rhoPhi/U/K/vDot/Uf/p_rgh/continuity, re-solves energy and continues outer iteration if final-state audit fails. No repeated reconstruction after strict convergence; retains final energy audit and adds final volume gate. Frozen momentum approximation unchanged, legacy branch retained. Trial fractions are internal iterates, not independently accepted timesteps. No changes to B14 or tolerances.",
     "suite": "thermal_closure",
     "command": "--suite thermal_closure --dt 5e-7 --steps 10 --jobs 2 --compact-output",
-    "native_build_verified": false,
-    "CFD_verified": false
+    "native_build_verified": true,
+    "CFD_verified": true,
+    "verified_attempt": {
+      "tested_commit_prefix": "7b3ed1ff4",
+      "diagnostics": "FS_C08_BATCH_20261126T032157Z_1a7731a8",
+      "replicate": "FS_C08_BATCH_20261126T042933Z_0c0d778e",
+      "replicate_counted_again": false,
+      "native_library_sha256": "2b47f54fec6e429b6e7484c4440de718eca8d7611c2b90d1f938838faab82887",
+      "exit_code": 0,
+      "completed_variants": 4,
+      "accepted_steps": 75,
+      "scheduled_steps": 75,
+      "common_times_count": 5,
+      "common_time_s": 0.000005,
+      "K_Pa": 83760854742.49072,
+      "linear_tolerance": 1e-12,
+      "all_final_coupled_energy_audits_pass": true,
+      "variants": [
+        {
+          "dt_s": 0.000001,
+          "steps": 5,
+          "maxU_m_s": 75.278332094,
+          "pMax_Pa": 207815.914113,
+          "energyL1": 5.704597694292544e-9,
+          "maxVolumeResidual": 6.66133814775e-16,
+          "solidMass_kg": 9.4394228841e-7
+        },
+        {
+          "dt_s": 5e-7,
+          "steps": 10,
+          "maxU_m_s": 65.6088209391,
+          "pMax_Pa": 176681.718795,
+          "energyL1": 2.3341858448012348e-8,
+          "maxVolumeResidual": 7.77156117238e-16,
+          "solidMass_kg": 6.04641518285e-7
+        },
+        {
+          "dt_s": 2.5e-7,
+          "steps": 20,
+          "maxU_m_s": 36.6428508158,
+          "pMax_Pa": 141862.471303,
+          "energyL1": 2.634973079215067e-8,
+          "maxVolumeResidual": 5.10702591328e-15,
+          "solidMass_kg": 2.86442519681e-7
+        },
+        {
+          "dt_s": 1.25e-7,
+          "steps": 40,
+          "maxU_m_s": 12.8225022307,
+          "pMax_Pa": 115526.939864,
+          "energyL1": 1.0925352219147236e-7,
+          "maxVolumeResidual": 7.1054273576e-15,
+          "solidMass_kg": 9.63237795601e-8
+        }
+      ],
+      "temporal_independence": false,
+      "global_energy_verified": false,
+      "physical_shrinkage_validated": false,
+      "evidence": "investigator-supplied terminal summaries; raw WSL files not mounted"
+    }
+  },
+  "integrated_history": "https://github.com/michels-lab/MasterProject/blob/main/docs/granada/MAESTRIA_ESTADO_INTEGRADO_20261127_ES.md",
+  "latest_batch_20261127": {
+    "unique_batch": 12,
+    "complete_variants": 36,
+    "scheduled_variants": 48,
+    "accepted_steps": 501,
+    "scheduled_steps": 757,
+    "scope": "historical unique batches, not thesis progress",
+    "next": "identify acceleration/time-step dependence, preserve strict coupled gates, calibrated alloy and global CHT closure pending"
   }
 }
