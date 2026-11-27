@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
   "audit_kind": "deterministic_full_tracked_tree",
-  "tracked_files_total": 42911,
-  "classified_files_total": 42906,
-  "docs_content_inspected": 239,
+  "tracked_files_total": 42912,
+  "classified_files_total": 42907,
+  "docs_content_inspected": 240,
   "large_docs_skipped": 1,
   "excluded_reports": 5,
   "roles": {
@@ -12,7 +12,7 @@
     "bitacora": 5,
     "config": 33,
     "data": 37,
-    "document": 199,
+    "document": 200,
     "index": 36,
     "license": 1,
     "simulation_case_file": 141,
@@ -31,8 +31,8 @@
     "UNKNOWN_PURPOSE": 1
   },
   "finding_total": 10,
-  "inventory_fingerprint": "e544a638cee32bc845970fa452bb6089b6d95e8a103c53b689344c64d5b9dd95",
-  "evidence_fingerprint": "a624aadd6b26e828ad8117afd31d624258d56a67d70878142a22d45db5d0f6f0",
+  "inventory_fingerprint": "219409206e5b6699cf68d807352a99b7b4ba8362996d1068582b582689e0106b",
+  "evidence_fingerprint": "dfeb1efcbe498fdb7979244f57adbd77dd684021f3ce6d8221f316f2d7fe2409",
   "files": [
     {
       "path": ".github/agents/openfoam-solidification.agent.md",
@@ -466,7 +466,7 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "a77c523a295f74fe5d9bbf9d6b24b81b9244e985"
+      "blob": "75f78415cb07ccd6a94b93d19ee6062d2043b3ee"
     },
     {
       "path": "VALIDATION_MATRIX.md",
@@ -809,7 +809,7 @@
       "role": "source",
       "purpose": "code/test implementation",
       "certainty": "rule",
-      "blob": "a27d5db477f2809c4f0994d1afb5e44cb7602cf8"
+      "blob": "47cc7fadf37131b73ac4c99f73414e655ff4e38e"
     },
     {
       "path": "analysis_tools/coupling_analysis.py",
@@ -299086,7 +299086,7 @@
       "role": "config",
       "purpose": "machine-readable configuration",
       "certainty": "rule",
-      "blob": "c2c386a402b466b20971fa21001d90ddfcb68814"
+      "blob": "a5294eba7be5304acf921d74001c052f9026ee66"
     },
     {
       "path": "docs/MASTERPROJECT_IDENTITY_ES.md",
@@ -299548,14 +299548,21 @@
       "role": "unknown",
       "purpose": "function unknown: owner classification required",
       "certainty": "unknown",
-      "blob": "f2e619fb7b9ac9901d0b4253f34a0976c569c3fc"
+      "blob": "29bc63cd75a1f14c97a5e8155b4cecc2b05757e4"
+    },
+    {
+      "path": "docs/review/GENERAL_REGISTRY_AUDIT_20261127_ES.md",
+      "role": "document",
+      "purpose": "manual/decision/report/historical note",
+      "certainty": "inferred",
+      "blob": "4cca032a774fa679f64f7b4959e2566d814f654c"
     },
     {
       "path": "docs/review/README.md",
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "e1afcce12dd89e066de0b63a1445cdf2ef4fef9a"
+      "blob": "77fc1a9916c54f4f7a08dfda7f26c9f202c364f5"
     },
     {
       "path": "doctor_original/bcFourier/0/T",
@@ -300442,20 +300449,20 @@
       "state": "REVIEW_REQUIRED"
     },
     {
-      "id": "147a5b759f4e3687",
+      "id": "9a86528d24c825e3",
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_EN.md",
-      "observation": "5 implementation/config paths changed since this log's last commit; examples: docs/C3D04_CASE_A_STATUS.json, docs/MAESTRIA_STATUS.json, docs/PROJECT_STAGE_STATUS.json, tools/file_review_queue.py, tools/tests/test_file_review_queue.py",
+      "observation": "6 implementation/config paths changed since this log's last commit; examples: analysis_tools/check_run_registry.py, docs/C3D04_CASE_A_STATUS.json, docs/MAESTRIA_STATUS.json, docs/PROJECT_STAGE_STATUS.json, tools/file_review_queue.py, tools/tests/test_file_review_queue.py",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     },
     {
-      "id": "19eff206435d3e71",
+      "id": "1142809ac417d6b9",
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_ES.md",
-      "observation": "5 implementation/config paths changed since this log's last commit; examples: docs/C3D04_CASE_A_STATUS.json, docs/MAESTRIA_STATUS.json, docs/PROJECT_STAGE_STATUS.json, tools/file_review_queue.py, tools/tests/test_file_review_queue.py",
+      "observation": "6 implementation/config paths changed since this log's last commit; examples: analysis_tools/check_run_registry.py, docs/C3D04_CASE_A_STATUS.json, docs/MAESTRIA_STATUS.json, docs/PROJECT_STAGE_STATUS.json, tools/file_review_queue.py, tools/tests/test_file_review_queue.py",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     },
