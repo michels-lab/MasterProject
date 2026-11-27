@@ -31,8 +31,8 @@
     "UNKNOWN_PURPOSE": 1
   },
   "finding_total": 10,
-  "inventory_fingerprint": "261751d1b1356769017f602e3caf1f7cb97dce7c864a390b8e7508c8c12e6400",
-  "evidence_fingerprint": "824c93e85cb9c22cea77c17bea65a7a89c9cf8d79f01460dbdbfe3b7baf77a25",
+  "inventory_fingerprint": "b20a9330a1737867b7d3552a6fd93b6b6f8e76cde8d8159d3e1bc0dd5c768d3d",
+  "evidence_fingerprint": "91f15eb657caa4539a1ec545c53b68cbff0749f8c0e057099c52f8952d8ae7ab",
   "files": [
     {
       "path": ".github/agents/openfoam-solidification.agent.md",
@@ -299674,7 +299674,7 @@
       "role": "unknown",
       "purpose": "function unknown: owner classification required",
       "certainty": "unknown",
-      "blob": "bcca0576f78d996ff90c955648ed830c8341d3e7"
+      "blob": "45e12eec2b008e3c67ad7b70e7d5b7772b35f557"
     },
     {
       "path": "docs/review/GENERAL_REGISTRY_AUDIT_20261127_ES.md",
@@ -300395,7 +300395,7 @@
       "role": "source",
       "purpose": "code/test implementation",
       "certainty": "rule",
-      "blob": "9a7248a8d0d33b9dce87da81204c092e22010ed4"
+      "blob": "af6ef792418cc34e77c69d59c4de7c6eb4532da8"
     },
     {
       "path": "tools/isolate_active_openfoam_cases.py",
@@ -300507,7 +300507,7 @@
       "role": "test",
       "purpose": "code/test implementation",
       "certainty": "rule",
-      "blob": "8e6197ce964550981206fa605852685c2b6a148c"
+      "blob": "2c00064b815cadb0407665dc986bbb828ee5c70a"
     },
     {
       "path": "tools/test_compact_campaign_200s.py",
@@ -300638,20 +300638,20 @@
       "state": "REVIEW_REQUIRED"
     },
     {
-      "id": "9757bc34a4d1b609",
+      "id": "e70fa21f46620487",
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_EN.md",
-      "observation": "31 implementation/config paths changed since this log's last commit; examples: .github/workflows/adaptive-campaign-static.yml, .github/workflows/c14-three-model-comparison.yml, .github/workflows/compact-campaign-200s-static.yml, .github/workflows/transfer-campaign-200s-static.yml, analysis_tools/audit_recovered_200s_log.py, analysis_tools/check_run_registry.py",
+      "observation": "33 implementation/config paths changed since this log's last commit; examples: .github/workflows/adaptive-campaign-static.yml, .github/workflows/c14-three-model-comparison.yml, .github/workflows/compact-campaign-200s-static.yml, .github/workflows/transfer-campaign-200s-static.yml, analysis_tools/audit_recovered_200s_log.py, analysis_tools/check_run_registry.py",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     },
     {
-      "id": "2832e6ce88a4a8ba",
+      "id": "4b01e9bccf7c298a",
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_ES.md",
-      "observation": "31 implementation/config paths changed since this log's last commit; examples: .github/workflows/adaptive-campaign-static.yml, .github/workflows/c14-three-model-comparison.yml, .github/workflows/compact-campaign-200s-static.yml, .github/workflows/transfer-campaign-200s-static.yml, analysis_tools/audit_recovered_200s_log.py, analysis_tools/check_run_registry.py",
+      "observation": "33 implementation/config paths changed since this log's last commit; examples: .github/workflows/adaptive-campaign-static.yml, .github/workflows/c14-three-model-comparison.yml, .github/workflows/compact-campaign-200s-static.yml, .github/workflows/transfer-campaign-200s-static.yml, analysis_tools/audit_recovered_200s_log.py, analysis_tools/check_run_registry.py",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     },

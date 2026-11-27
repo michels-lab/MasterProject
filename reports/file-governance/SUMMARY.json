@@ -31,8 +31,8 @@
     "UNKNOWN_PURPOSE": 1
   },
   "finding_total": 10,
-  "inventory_fingerprint": "261751d1b1356769017f602e3caf1f7cb97dce7c864a390b8e7508c8c12e6400",
-  "evidence_fingerprint": "824c93e85cb9c22cea77c17bea65a7a89c9cf8d79f01460dbdbfe3b7baf77a25",
+  "inventory_fingerprint": "b20a9330a1737867b7d3552a6fd93b6b6f8e76cde8d8159d3e1bc0dd5c768d3d",
+  "evidence_fingerprint": "91f15eb657caa4539a1ec545c53b68cbff0749f8c0e057099c52f8952d8ae7ab",
   "untracked_audited": false,
   "ignored_audited": false,
   "binary_contents_audited": false,
