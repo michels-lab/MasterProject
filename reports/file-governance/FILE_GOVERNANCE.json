@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
   "audit_kind": "deterministic_full_tracked_tree",
-  "tracked_files_total": 42935,
-  "classified_files_total": 42930,
-  "docs_content_inspected": 247,
+  "tracked_files_total": 42937,
+  "classified_files_total": 42932,
+  "docs_content_inspected": 249,
   "large_docs_skipped": 1,
   "excluded_reports": 5,
   "roles": {
@@ -12,7 +12,7 @@
     "bitacora": 5,
     "config": 33,
     "data": 43,
-    "document": 206,
+    "document": 208,
     "index": 37,
     "license": 1,
     "simulation_case_file": 141,
@@ -31,8 +31,8 @@
     "UNKNOWN_PURPOSE": 1
   },
   "finding_total": 10,
-  "inventory_fingerprint": "8fd63cf4437a9ccd69b2a837ae0c787ad3b201cedc37cba91111ec42c2a2e8db",
-  "evidence_fingerprint": "f4810d239e90c3a3df795501d5cc5df0b7a82caee669d1c90ac169f30374b660",
+  "inventory_fingerprint": "5e8bb1eb5fb696dce5b510413650178f65acdc65dbc584b80adfb05b533bf4e4",
+  "evidence_fingerprint": "815beedffe5bf08d5a6e808c39f0fef2b0329ef0d89729fccd0304394f69e7b3",
   "files": [
     {
       "path": ".github/agents/openfoam-solidification.agent.md",
@@ -299674,7 +299674,7 @@
       "role": "unknown",
       "purpose": "function unknown: owner classification required",
       "certainty": "unknown",
-      "blob": "59b3692c074937708ccda135f955b53da69dfacc"
+      "blob": "647ea989970e191020c775158024e2d1cc0f1c0d"
     },
     {
       "path": "docs/review/GENERAL_REGISTRY_AUDIT_20261127_ES.md",
@@ -299691,11 +299691,25 @@
       "blob": "77fc1a9916c54f4f7a08dfda7f26c9f202c364f5"
     },
     {
+      "path": "docs/review/UVA_ADAPTIVE_INTEGRITY_20261127_ES.md",
+      "role": "document",
+      "purpose": "manual/decision/report/historical note",
+      "certainty": "inferred",
+      "blob": "c42975bd4a2f5d53dc72963287394b19b4c89abc"
+    },
+    {
       "path": "docs/review/UVA_CAMPAIGN_CI_TRIGGERS_20261127_ES.md",
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
       "blob": "3d790b4168c698a72fe2c2f41d9638080180c94c"
+    },
+    {
+      "path": "docs/review/UVA_TRANSFER_INTEGRITY_20261127_ES.md",
+      "role": "document",
+      "purpose": "manual/decision/report/historical note",
+      "certainty": "inferred",
+      "blob": "a45a962c9621a5bffd468497b4796b39a21d6f0d"
     },
     {
       "path": "doctor_original/bcFourier/0/T",
@@ -300430,7 +300444,7 @@
       "role": "source",
       "purpose": "code/test implementation",
       "certainty": "rule",
-      "blob": "4b9737459f5373f7ac0aa231e5c01cd4f0d64248"
+      "blob": "d2ea4f4e71d58cf8d2e58542acd1f85ef6137526"
     },
     {
       "path": "tools/run_adaptive_mpi_campaign.py",
@@ -300472,7 +300486,7 @@
       "role": "test",
       "purpose": "code/test implementation",
       "certainty": "rule",
-      "blob": "c783df91ac4b6d57b5ea49ad73c5d82fc58f1ece"
+      "blob": "005b1cabbfeae7a3333d1a1c20cfa00469fb6add"
     },
     {
       "path": "tools/test_adaptive_mpi_sequence.py",
@@ -300521,7 +300535,7 @@
       "role": "test",
       "purpose": "code/test implementation",
       "certainty": "rule",
-      "blob": "7a3d2359bb9100ea0779c7b7118a42dcc314dafd"
+      "blob": "8c5d85c2db7f6e3994c89bb87824913961407a10"
     },
     {
       "path": "tools/tests/test_file_review_queue.py",
@@ -300542,7 +300556,7 @@
       "role": "source",
       "purpose": "code/test implementation",
       "certainty": "rule",
-      "blob": "ed6a4077134c59788ffdde9bad3fb77ab892a45d"
+      "blob": "37c84deca0f8507666f5144fb7b31a9567ba7ed3"
     }
   ],
   "findings": [
@@ -300610,20 +300624,20 @@
       "state": "REVIEW_REQUIRED"
     },
     {
-      "id": "dc7acb7f6a2e4194",
+      "id": "b4b63cab2aa587f6",
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_EN.md",
-      "observation": "24 implementation/config paths changed since this log's last commit; examples: .github/workflows/adaptive-campaign-static.yml, .github/workflows/c14-three-model-comparison.yml, .github/workflows/compact-campaign-200s-static.yml, .github/workflows/transfer-campaign-200s-static.yml, analysis_tools/audit_recovered_200s_log.py, analysis_tools/check_run_registry.py",
+      "observation": "28 implementation/config paths changed since this log's last commit; examples: .github/workflows/adaptive-campaign-static.yml, .github/workflows/c14-three-model-comparison.yml, .github/workflows/compact-campaign-200s-static.yml, .github/workflows/transfer-campaign-200s-static.yml, analysis_tools/audit_recovered_200s_log.py, analysis_tools/check_run_registry.py",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     },
     {
-      "id": "0c2e6e7e768e4610",
+      "id": "02e2fcc8b4bfb2cf",
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_ES.md",
-      "observation": "24 implementation/config paths changed since this log's last commit; examples: .github/workflows/adaptive-campaign-static.yml, .github/workflows/c14-three-model-comparison.yml, .github/workflows/compact-campaign-200s-static.yml, .github/workflows/transfer-campaign-200s-static.yml, analysis_tools/audit_recovered_200s_log.py, analysis_tools/check_run_registry.py",
+      "observation": "28 implementation/config paths changed since this log's last commit; examples: .github/workflows/adaptive-campaign-static.yml, .github/workflows/c14-three-model-comparison.yml, .github/workflows/compact-campaign-200s-static.yml, .github/workflows/transfer-campaign-200s-static.yml, analysis_tools/audit_recovered_200s_log.py, analysis_tools/check_run_registry.py",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     },
