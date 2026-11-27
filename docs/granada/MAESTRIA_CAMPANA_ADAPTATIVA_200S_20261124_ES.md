@@ -1,3 +1,5 @@
+> **27-11-2026 | Estado vigente integrado:** campaña adaptativa laptop 6/8 combinaciones calculadas, 3/8 publicadas con manifiesto completo, 3/8 pendientes de auditoría de perfiles duplicados, 2/8 A fallidas. C14-2D sin tope es serial, no MPI. A fijo laptop llegó a 200 s; publicación laboratorio no confirmada. FS-C08 lote 12: 4/4 variantes, 75/75 pasos a 5 μs, sin independencia temporal ni validación física. A etapa 9/10, 8/10=80%; B etapa 3/7, 2/7=29%; 2D histórica 26/26. No porcentaje global de tesis. [Historia y evidencia](https://github.com/michels-lab/MasterProject/blob/main/docs/granada/MAESTRIA_ESTADO_INTEGRADO_20261127_ES.md) · [Estado JSON](https://github.com/michels-lab/MasterProject/blob/main/docs/MAESTRIA_STATUS.json). Las entradas previas conservan su valor histórico.
+
 # Campaña adaptativa 200 s
 
 ## Campaña adaptativa independiente autorizada — 24-11-2026
