@@ -27,11 +27,12 @@
   },
   "finding_counts": {
     "BROKEN_RELATIVE_LINK": 7,
+    "POTENTIAL_UNLOGGED_CHANGES": 2,
     "UNKNOWN_PURPOSE": 1
   },
-  "finding_total": 8,
-  "inventory_fingerprint": "b48ac8f17e795e25f955a956e9636864b2869b683ba6b97ad5e8f3465344d591",
-  "evidence_fingerprint": "e7b9f0156261d19bdf73668ed1141a71accec906e79e9524ca8939ff09069206",
+  "finding_total": 10,
+  "inventory_fingerprint": "950ec110cc6c80e302a698eceacc0ab4e7f1fcb9ff37ab5066867552f664b09c",
+  "evidence_fingerprint": "207a1bb14955f550e6837a6de79181bd0472af45dd45b3f6ed01de4fc0e09f44",
   "files": [
     {
       "path": ".github/agents/openfoam-solidification.agent.md",
@@ -300506,7 +300507,7 @@
       "role": "source",
       "purpose": "code/test implementation",
       "certainty": "rule",
-      "blob": "57138d53a126da3ab6ff27f2613cc81812beb58b"
+      "blob": "a3d013a71fbddd2ef05ceed0f4cfe97f0501fca8"
     },
     {
       "path": "tools/repository_file_auditor.py",
@@ -300718,6 +300719,24 @@
       "path": "docs/granada/C3D05_T0_README_HISTORICAL_BEFORE_SINGLE_FLOW_20261120.md",
       "observation": "Missing: outside-repo",
       "recommendation": "Fix link or restore target",
+      "state": "REVIEW_REQUIRED"
+    },
+    {
+      "id": "ab345dcd04cc872f",
+      "code": "POTENTIAL_UNLOGGED_CHANGES",
+      "severity": "review",
+      "path": "PROJECT_AUDIT_LOG_EN.md",
+      "observation": "1 implementation/config paths changed since this log's last commit; examples: tools/recover_published_200s.py",
+      "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
+      "state": "REVIEW_REQUIRED"
+    },
+    {
+      "id": "8c7e00b52bd63f3f",
+      "code": "POTENTIAL_UNLOGGED_CHANGES",
+      "severity": "review",
+      "path": "PROJECT_AUDIT_LOG_ES.md",
+      "observation": "1 implementation/config paths changed since this log's last commit; examples: tools/recover_published_200s.py",
+      "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     },
     {
