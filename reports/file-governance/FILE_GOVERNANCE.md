@@ -5,7 +5,7 @@ No file is auto-deleted or declared unused.
 
 ## Coverage
 
-Tracked: 42934; classified: 42929; readable documents: 246; above read cap: 1; findings: 10.
+Tracked: 42935; classified: 42930; readable documents: 247; above read cap: 1; findings: 10.
 
 ## File roles
 
@@ -16,7 +16,7 @@ Tracked: 42934; classified: 42929; readable documents: 246; above read cap: 1; f
 | bitacora | 5 |
 | config | 33 |
 | data | 43 |
-| document | 205 |
+| document | 206 |
 | index | 37 |
 | license | 1 |
 | simulation_case_file | 141 |
@@ -38,8 +38,8 @@ Tracked: 42934; classified: 42929; readable documents: 246; above read cap: 1; f
 - **CONFIRMED / BROKEN_RELATIVE_LINK** docs/granada/C3D05_T0_README_HISTORICAL_BEFORE_SINGLE_FLOW_20261120.md: Missing: outside-repo. Next: Fix link or restore target (ID 2fa56a22be90f045)
 - **CONFIRMED / BROKEN_RELATIVE_LINK** docs/granada/C3D05_T0_README_HISTORICAL_BEFORE_SINGLE_FLOW_20261120.md: Missing: outside-repo. Next: Fix link or restore target (ID 2fa56a22be90f045)
 - **CONFIRMED / BROKEN_RELATIVE_LINK** docs/granada/C3D05_T0_README_HISTORICAL_BEFORE_SINGLE_FLOW_20261120.md: Missing: outside-repo. Next: Fix link or restore target (ID 2fa56a22be90f045)
-- **REVIEW / POTENTIAL_UNLOGGED_CHANGES** PROJECT_AUDIT_LOG_EN.md: 21 implementation/config paths changed since this log's last commit; examples: .github/workflows/c14-three-model-comparison.yml, analysis_tools/audit_recovered_200s_log.py, analysis_tools/check_run_registry.py, analysis_tools/compare_c14_three_models.py, analysis_tools/full_campaign_audit.py, analysis_tools/test_audit_recovered_200s_log.py. Next: Inspect diffs and reconcile only meaningful decisions/results in the canonical log (ID 866061ef982782bb)
-- **REVIEW / POTENTIAL_UNLOGGED_CHANGES** PROJECT_AUDIT_LOG_ES.md: 21 implementation/config paths changed since this log's last commit; examples: .github/workflows/c14-three-model-comparison.yml, analysis_tools/audit_recovered_200s_log.py, analysis_tools/check_run_registry.py, analysis_tools/compare_c14_three_models.py, analysis_tools/full_campaign_audit.py, analysis_tools/test_audit_recovered_200s_log.py. Next: Inspect diffs and reconcile only meaningful decisions/results in the canonical log (ID 97360a0886656102)
+- **REVIEW / POTENTIAL_UNLOGGED_CHANGES** PROJECT_AUDIT_LOG_EN.md: 24 implementation/config paths changed since this log's last commit; examples: .github/workflows/adaptive-campaign-static.yml, .github/workflows/c14-three-model-comparison.yml, .github/workflows/compact-campaign-200s-static.yml, .github/workflows/transfer-campaign-200s-static.yml, analysis_tools/audit_recovered_200s_log.py, analysis_tools/check_run_registry.py. Next: Inspect diffs and reconcile only meaningful decisions/results in the canonical log (ID dc7acb7f6a2e4194)
+- **REVIEW / POTENTIAL_UNLOGGED_CHANGES** PROJECT_AUDIT_LOG_ES.md: 24 implementation/config paths changed since this log's last commit; examples: .github/workflows/adaptive-campaign-static.yml, .github/workflows/c14-three-model-comparison.yml, .github/workflows/compact-campaign-200s-static.yml, .github/workflows/transfer-campaign-200s-static.yml, analysis_tools/audit_recovered_200s_log.py, analysis_tools/check_run_registry.py. Next: Inspect diffs and reconcile only meaningful decisions/results in the canonical log (ID 0c2e6e7e768e4610)
 - **REVIEW / UNKNOWN_PURPOSE** docs/review/FILE_REVIEW_LEDGER.jsonl: No reliable purpose category from path. Next: Declare role after reviewing usage (ID 70bd3363abfdf819)
 
 Complete path → purpose/role/certainty list lives in FILE_GOVERNANCE.json. SUMMARY.json has counts only for master polling.

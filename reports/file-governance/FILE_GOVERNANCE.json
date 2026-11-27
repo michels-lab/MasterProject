@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
   "audit_kind": "deterministic_full_tracked_tree",
-  "tracked_files_total": 42934,
-  "classified_files_total": 42929,
-  "docs_content_inspected": 246,
+  "tracked_files_total": 42935,
+  "classified_files_total": 42930,
+  "docs_content_inspected": 247,
   "large_docs_skipped": 1,
   "excluded_reports": 5,
   "roles": {
@@ -12,7 +12,7 @@
     "bitacora": 5,
     "config": 33,
     "data": 43,
-    "document": 205,
+    "document": 206,
     "index": 37,
     "license": 1,
     "simulation_case_file": 141,
@@ -31,8 +31,8 @@
     "UNKNOWN_PURPOSE": 1
   },
   "finding_total": 10,
-  "inventory_fingerprint": "eba8039d61daff603788441a7b29d6fb45c828eadd433566b9a3b64233ab4c88",
-  "evidence_fingerprint": "cf84e64558f6a9572a341a7dbcde46b1809d80c6e10f5fda02461fde781f9c10",
+  "inventory_fingerprint": "8fd63cf4437a9ccd69b2a837ae0c787ad3b201cedc37cba91111ec42c2a2e8db",
+  "evidence_fingerprint": "f4810d239e90c3a3df795501d5cc5df0b7a82caee669d1c90ac169f30374b660",
   "files": [
     {
       "path": ".github/agents/openfoam-solidification.agent.md",
@@ -74,7 +74,7 @@
       "role": "workflow",
       "purpose": "GitHub Actions automation",
       "certainty": "rule",
-      "blob": "5c4749d32faad72811b34473f6cfde535d16829f"
+      "blob": "3b089b07b79e6f72db3a4f8969e1680c61c142af"
     },
     {
       "path": ".github/workflows/c14-three-model-comparison.yml",
@@ -186,7 +186,7 @@
       "role": "workflow",
       "purpose": "GitHub Actions automation",
       "certainty": "rule",
-      "blob": "5768bfbea2480f6401954dc7022c593c476d6f07"
+      "blob": "05420ebf005ca7d6b75a2dbbb42486238617d68e"
     },
     {
       "path": ".github/workflows/file-governance-audit.yml",
@@ -284,7 +284,7 @@
       "role": "workflow",
       "purpose": "GitHub Actions automation",
       "certainty": "rule",
-      "blob": "30267fa14db16941cb3eb1a62e2e8dab58d4c424"
+      "blob": "577a096e1bab3a12c637e35c4b4aac22653bf240"
     },
     {
       "path": ".github/workflows/uy-temporal-analysis.yml",
@@ -299674,7 +299674,7 @@
       "role": "unknown",
       "purpose": "function unknown: owner classification required",
       "certainty": "unknown",
-      "blob": "cf542fec1fec9bac541d942ec380d9c5d820f93b"
+      "blob": "59b3692c074937708ccda135f955b53da69dfacc"
     },
     {
       "path": "docs/review/GENERAL_REGISTRY_AUDIT_20261127_ES.md",
@@ -299689,6 +299689,13 @@
       "purpose": "navigation/onboarding",
       "certainty": "rule",
       "blob": "77fc1a9916c54f4f7a08dfda7f26c9f202c364f5"
+    },
+    {
+      "path": "docs/review/UVA_CAMPAIGN_CI_TRIGGERS_20261127_ES.md",
+      "role": "document",
+      "purpose": "manual/decision/report/historical note",
+      "certainty": "inferred",
+      "blob": "3d790b4168c698a72fe2c2f41d9638080180c94c"
     },
     {
       "path": "doctor_original/bcFourier/0/T",
@@ -300603,20 +300610,20 @@
       "state": "REVIEW_REQUIRED"
     },
     {
-      "id": "866061ef982782bb",
+      "id": "dc7acb7f6a2e4194",
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_EN.md",
-      "observation": "21 implementation/config paths changed since this log's last commit; examples: .github/workflows/c14-three-model-comparison.yml, analysis_tools/audit_recovered_200s_log.py, analysis_tools/check_run_registry.py, analysis_tools/compare_c14_three_models.py, analysis_tools/full_campaign_audit.py, analysis_tools/test_audit_recovered_200s_log.py",
+      "observation": "24 implementation/config paths changed since this log's last commit; examples: .github/workflows/adaptive-campaign-static.yml, .github/workflows/c14-three-model-comparison.yml, .github/workflows/compact-campaign-200s-static.yml, .github/workflows/transfer-campaign-200s-static.yml, analysis_tools/audit_recovered_200s_log.py, analysis_tools/check_run_registry.py",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     },
     {
-      "id": "97360a0886656102",
+      "id": "0c2e6e7e768e4610",
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_ES.md",
-      "observation": "21 implementation/config paths changed since this log's last commit; examples: .github/workflows/c14-three-model-comparison.yml, analysis_tools/audit_recovered_200s_log.py, analysis_tools/check_run_registry.py, analysis_tools/compare_c14_three_models.py, analysis_tools/full_campaign_audit.py, analysis_tools/test_audit_recovered_200s_log.py",
+      "observation": "24 implementation/config paths changed since this log's last commit; examples: .github/workflows/adaptive-campaign-static.yml, .github/workflows/c14-three-model-comparison.yml, .github/workflows/compact-campaign-200s-static.yml, .github/workflows/transfer-campaign-200s-static.yml, analysis_tools/audit_recovered_200s_log.py, analysis_tools/check_run_registry.py",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     },
