@@ -18,8 +18,21 @@ REGISTRY = ROOT / "RUN_CASE_REGISTRY.csv"
 CASES_DIR = ROOT / "cases_controlled_buoyancy"
 CAMPAIGN = ROOT / "analysis_results" / "full_campaign_audit" / "case_metrics.csv"
 
-VALID_STATES = {"PREPARED_NOT_RUN", "RUNNING", "FAILED", "RUN_VERIFIED"}
-VALID_ANALYSIS = {"NOT_ANALYZED", "ANALYSIS_VERIFIED"}
+VALID_STATES = {"PREPARED_NOT_RUN", "RUNNING", "FAILED", "RUN_VERIFIED",
+                "EVIDENCE_PUSHED", "RUN_FAILED_PRESERVED",
+                "RUN_COMPLETE_REPORTED", "FINAL_STATUS_UNVERIFIED"}
+VALID_ANALYSIS = {"NOT_ANALYZED", "ANALYSIS_VERIFIED",
+                  "PRELIMINARY_COMPARISON", "AUDIT_MANIFEST_VERIFIED",
+                  "AUDIT_PENDING", "AUDIT_REPORTED_MANIFEST_PENDING"}
+EXTERNAL_RUN_GROUPS = {"ADAPTIVE_200S_LAPTOP", "FIXED_200S_LAPTOP", "FIXED_200S_LAB"}
+
+
+def external_run_names(registry: list[dict[str, str]]) -> set[str]:
+    """Campaign rows identify external executions, not local case directories."""
+    return {row["case"].strip() for row in registry
+            if row.get("group", "").strip() in EXTERNAL_RUN_GROUPS
+            and row.get("case", "").strip()}
+
 VALID_COVERAGE = {"YES", "NO"}
 
 
@@ -77,7 +90,8 @@ def main() -> int:
     # or upgrade a registered 3D mesh to a RUN_VERIFIED CFD result.
     disk_set = existing_registry_case_dirs(registry, CASES_DIR, ROOT / "cases_3d")
     unregistered = sorted(disk_set - case_set)
-    absent_dirs = sorted(case_set - disk_set)
+    external = external_run_names(registry)
+    absent_dirs = sorted(case_set - disk_set - external)
     unregistered_csv = sorted(audit_set - case_set)
     if unregistered:
         errors.append("Case directories not in registry: " + ", ".join(unregistered))
@@ -87,7 +101,7 @@ def main() -> int:
         errors.append("Audited cases missing from registry: " + ", ".join(unregistered_csv))
 
     verified: list[str] = []
-    not_run: list[str] = []
+    not_fully_verified: list[str] = []
     for row in registry:
         name = row.get("case", "").strip()
         state = row.get("run_status", "").strip()
@@ -101,7 +115,7 @@ def main() -> int:
         if state == "RUN_VERIFIED" and analysis == "ANALYSIS_VERIFIED":
             verified.append(name)
         else:
-            not_run.append(name)
+            not_fully_verified.append(name)
             if present:
                 errors.append(f"{name}: not fully verified but included in campaign CSV.")
         evidence = row.get("evidence_file", "").strip()
@@ -109,12 +123,13 @@ def main() -> int:
             errors.append(f"{name}: evidence file not found: {evidence}")
 
     outside = sorted(set(verified) - audit_set)
-    info.append(f"Case directories: {len(disk_set)}; registered: {len(names)}; fully verified: {len(verified)}.")
+    info.append(f"Case directories: {len(disk_set)}; registered: {len(names)}; fully verified for historical analysis: {len(verified)}.")
+    info.append(f"External execution rows (no local directory required): {len(external)}. Manifest evidence is not physical validation.")
     info.append(f"Campaign CSV rows: {len(audited)}; verified cases absent from CSV: {len(outside)}.")
     if outside:
         info.append("Verified but outside historical campaign: " + ", ".join(outside))
-    if not_run:
-        info.append("Not fully verified: " + ", ".join(sorted(not_run)))
+    if not_fully_verified:
+        info.append("Not fully verified for historical analysis: " + ", ".join(sorted(not_fully_verified)))
     for line in info:
         print(line)
     for line in errors:
