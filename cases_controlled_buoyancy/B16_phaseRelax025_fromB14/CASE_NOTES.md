@@ -1,6 +1,8 @@
+> **27-11-2026 — Operación Uva, estado vigente:** EVIDENCE_PUSHED / PRELIMINARY_COMPARISON. Series publicadas en el commit `25e7cf8cb4a30fb0fe5ece5bd9a2e451815ab232` leídas completas: 10000 pasos, sonda hasta 10 s (T=1470.08 K), Co máximo reportado 0.0674108. [Recálculo y límites](../../analysis_results/v15_v16_postpush_20261015/README.md). No se confirmó End/retorno del runner ni cierre físico; no RUN_VERIFIED/ANALYSIS_VERIFIED. No repetir CFD automáticamente. Las notas de preparación siguientes son históricas.
+
 # CASE_NOTES — B16_phaseRelax025_fromB14
 
-**Estado:** PREPARED_NOT_RUN · **Fecha:** 2026-10-08
+**Estado histórico de preparación:** PREPARED_NOT_RUN · **Fecha:** 2026-10-08
 **Padre controlado:** `B14_topFixedFlux_explicitRef`.
 **Ejecución:** exclusivamente en laptop, después GitHub recibe los resultados por push.
 
