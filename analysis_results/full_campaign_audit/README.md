@@ -1,3 +1,5 @@
+> **27-11-2026 — Uva + Granada:** este archivo y sus CSV son un corte histórico, no el catálogo vigente. El [catálogo independiente de 51 casos](../evidence_catalog_20261127/README.md) registra 31 con métricas importadas y documenta 40 métricas espaciales con tiempos distintos y la insuficiencia de muestras comunes V6/V8. No usar sus RMSE de alpha media cero como concordancia temporal. El generador legacy exige ahora `--out` nuevo, por ejemplo `python3 analysis_tools/full_campaign_audit.py --out /tmp/c14_legacy_reproduction_01`; no sobrescribe este archivo. Su algoritmo no constituye el comparador corregido. Los estados antiguos de B11-energy2 y 30 casos que figuran abajo pertenecen al corte histórico.
+
 # Alcance del consolidado histórico (2026-10-08)
 
 Los cinco archivos de esta carpeta reflejan **solo la campaña V3–V13 de 26 casos**, no todas las carpetas `cases_controlled_buoyancy/`.
