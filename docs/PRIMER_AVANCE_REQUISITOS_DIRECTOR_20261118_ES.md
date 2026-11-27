@@ -2,7 +2,7 @@
 
 # Primer avance de maestría — requisitos expresos del director y trazabilidad OpenFOAM
 
-**Registro:** 18-11-2026. **Proyecto:** MasterProject / QuickCup, solidificación de hierro hipoeutéctico en arena. **Carácter:** lista obligatoria para la primera presentación; no indica que todas las pruebas estén concluidas. **Prioridad científica:** distinguir resultados CFD verificados del **caso 2D de referencia C14** de experimentos de **malla 3D C3D-02, todavía rechazados**. Los criterios anteriores de los proyectos B/C y C14 no se reemplazan.
+**Registro:** 18-11-2026. **Proyecto:** MasterProject / QuickCup, solidificación de hierro hipoeutéctico en arena. **Carácter:** lista obligatoria para la primera presentación; no indica que todas las pruebas estén concluidas. **Prioridad científica (actualizada por Uva):** distinguir resultados CFD verificados de C14 2D, experimentos históricos de malla C3D-02 rechazados y resultados posteriores C14 3D-A/B. No equiparar ejecución a validación física. Los criterios anteriores de los proyectos B/C y C14 no se reemplazan.
 
 ## 1. Solicitud del director — compromiso de presentación
 
@@ -89,9 +89,9 @@ En C14: tolerancias configuradas `p_rgh 1e-7`, `U 1e-8`, `h 1e-9` y `e` en molde
 | Caso | `relax` | Estado comprobado | Otros parámetros |
 |---|---:|---|---|
 | `C14_topFixedFlux_explicitRef` | **0.10** | `RUN_VERIFIED` y `ANALYSIS_VERIFIED` históricos | Referencia |
-| `C16_phaseRelax025_fromC14` | **0.25** | **`PREPARED_NOT_RUN`**; no se ha verificado ejecución CFD | Diseñado para cambiar **únicamente** `constant/metal/fvModels`, conservando Δt fijo y BC de C14 |
+| `C16_phaseRelax025_fromC14` | **0.25** | `EVIDENCE_PUSHED_PRELIMINARY_COMPARISON`; evidencia a 10 s, auditoría completa pendiente | Diseñado para cambiar **únicamente** `constant/metal/fvModels`, conservando Δt fijo y BC de C14 |
 
-**Experimento mínimo ya planificado:** ejecutar C16 en la laptop y comparar C14 vs C16 al mismo tiempo físico (hasta 10 s), sin modificar las fuentes originales, solamente después de la verificación preflight habitual. Documentar versiones de OpenFOAM y checksums/diffs de todas las entradas para asegurar cambio de una sola variable. **No afirmar resultados de sensibilidad antes de ejecutar y auditar C16**.
+**Experimento mínimo — recuperar y auditar primero:** C16 tiene evidencia publicada el 15-10-2026 hasta 10 s; se comprobaron directamente el último registro `logs/Time_0` y la sonda T=1464.22 K en el commit `25e7cf8cb4a30fb0fe5ece5bd9a2e451815ab232`. El [cribado preliminar](../analysis_results/v15_v16_postpush_20261015/README.md) reporta 10,000 pasos, Co máximo 0.0651054, ΔT final +0.03 K, RMSE 0.0201 K y máximo |ΔT| 0.050 K frente a C14. Auditar log final, entradas y campos existentes antes de considerar otra corrida; no repetir CFD automáticamente. Documentar versiones de OpenFOAM y checksums/diffs de todas las entradas para asegurar cambio de una sola variable. **No presentar el cribado preliminar como sensibilidad integral validada.**
 
 **Mayor solidez experimental (opcional, aún sin casos fuente creados):** evaluar al menos un valor menor, por ejemplo 0.05, y uno mayor, por ejemplo 0.50, si el objetivo es mostrar tendencia y no solo una diferencia entre dos casos. Estos **son valores propuestos, no experimentos realizados ni instrucciones de alterar C14/C16 sin control**.
 
@@ -107,14 +107,14 @@ En C14: tolerancias configuradas `p_rgh 1e-7`, `U 1e-8`, `h 1e-9` y `e` en molde
 ## 6. Estructura sugerida para el primer avance
 
 1. Pregunta de investigación, QuickCup, hipótesis y ámbito 2D→3D.
-2. Geometría y condiciones físicas; distinguir ejemplo cuasi-2D del doctor, C14 2D verificado y QuickCup 3D todavía sin malla aprobada.
+2. Geometría y condiciones físicas; distinguir ejemplo cuasi-2D del doctor, C14 2D verificado y QuickCup 3D: C3D-02 rechazado como antecedente y mallas A/B aceptadas con sus limitaciones.
 3. Ecuaciones gobernantes (masa, momento, energía metal/arena, fuente de fase y acoplamiento térmico) con hipótesis/limitaciones.
 4. Condiciones iniciales y de frontera con tabla, esquema y referencias a archivos reales C14.
 5. Propiedades y constantes del modelo, especialmente `Tsol`, `Tliq`, `L`, `Cu`, `q` y `relax`.
 6. Solución numérica: malla, `deltaT`, PIMPLE, tolerancias; **Courant medido** y residuos/continuidad.
-7. Comparación cuantitativa de sensibilidad `C14(relax=0.10)` vs `C16(relax=0.25)` **solo cuando C16 haya corrido y se analicen resultados reales**.
-8. Avance 3D: STL original y v2, ablación fallida, estudio de `blockMesh` conformante del doctor como referencia de construcción, limitaciones y próximos experimentos.
-9. Conclusiones, límites físicos y próximos pasos; no afirmar CFD 3D.
+7. Comparación cuantitativa de sensibilidad `C14(relax=0.10)` vs `C16(relax=0.25)` distinguiendo el cribado publicado y el análisis integral aún pendiente.
+8. Avance 3D: STL original y v2, ablación fallida, estudio de `blockMesh` conformante del doctor como referencia de construcción, limitaciones, avances posteriores C14 3D-A/B y resultados a sus tiempos reales.
+9. Conclusiones, límites físicos y próximos pasos; no afirmar validación física 3D.
 
 ## 7. Checklist de aceptación documental
 
@@ -124,10 +124,11 @@ En C14: tolerancias configuradas `p_rgh 1e-7`, `U 1e-8`, `h 1e-9` y `e` en molde
 - [x] BC/IC reales y unidades de C14 documentadas.
 - [ ] Verificación término por término de las ecuaciones discretizadas del solver Foundation 14 y su cita académica.
 - [ ] Extracción verificable del máximo Courant observado del log C14 (con fecha/tiempo simulado y evolución).
-- [ ] Ejecución y auditoría de C16 con `relax=0.25`; curvas comparativas y conclusiones estadísticas/físicas.
+- [x] Evidencia publicada C16 hasta 10 s y comparación térmica central preliminar.
+- [ ] Auditoría integral de C16 con `relax=0.25`; log final, procedencia, campos, curvas y conclusiones físicas.
 - [ ] Tabla de indicadores de residuos, continuidad, costo, energía y convergencia con fuentes de datos explícitas.
 - [ ] Preparación del primer avance con gráfica, referencias bibliográficas y notas de alcance; fecha de presentación aún no especificada.
-- [ ] Mallado C3D-02 aceptado — **no es prerrequisito para exponer los resultados C14 verificados**, pero no presentarlo como logrado.
+- [ ] C3D-02: mallado histórico rechazado; no es prerrequisito para exponer C14 ni se debe confundir con los posteriores casos A/B aceptados. No reabrir esa ruta sin justificación.
 
 ## Fuentes primarias del repositorio
 
