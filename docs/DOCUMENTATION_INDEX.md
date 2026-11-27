@@ -1,3 +1,12 @@
+## Auditoría histórica exhaustiva de procedencia (27-11)
+- [Historia científica](MAESTRIA_HISTORIA_CIENTIFICA_ES.md)
+- [Inventario](HISTORICAL_INVENTORY_20261127.json)
+- [Commits main parte 1](MAESTRIA_COMMIT_HISTORY_20261127.json), [parte 2](MAESTRIA_COMMIT_HISTORY_20261127_PART2.json)
+- [Ramas exclusivas y delta](history/)
+- [Manifiestos](MAESTRIA_RESULT_MANIFEST_INDEX_20261127.json)
+
+> **27-11-2026 — cierre de esta revisión documental:** 6/8 combinaciones adaptativas laptop calculadas y publicadas con manifiesto completo; B14-2D sin tope 14275 pasos/200 s, commit e066adf9. Las dos A fallaron (.68/.70 s); no hay caso 2D pendiente de recuperación. 97 ramas indexadas (95 del corte inicial + 2 altas), 3815 commits únicos con cadena de padres completa, 273 archivos documentales inventariados en el corte inicial. No validación física nueva. [Manifiestos](https://github.com/michels-lab/MasterProject/blob/main/docs/MAESTRIA_RESULT_MANIFEST_INDEX_20261127.json) · [Historia e índices](https://github.com/michels-lab/MasterProject/blob/main/docs/MAESTRIA_HISTORIA_CIENTIFICA_ES.md). Entradas anteriores históricas.
+
 > **27-11-2026 — ESTADO VIGENTE (sustituye estados temporales antiguos, no los hechos históricos):** 2D histórica 26/26, V14 separado. A 9/10, 8/10=80% de hitos; B 3/7, 2/7=29%. Adaptativa laptop: 6/8 calculadas, 5/8 publicadas con manifiesto completo (C14-2D serial sin tope, C14-2D MPI limitado, B14-2D MPI limitado y C14-3DB MPI ambas políticas), B14-2D sin tope pendiente de publicación, A ambas políticas fallidas a .68/.70 s. Fija laboratorio: A reportado auditado, manifiesto pendiente; A fijo laptop 200 s observado, no confundir. FS-C08 lote 12: 75/75 pasos, 4/4 variantes a 5 μs, sin independencia temporal, energía global ni contracción validada. No porcentaje global de tesis. [Historia científica](https://github.com/michels-lab/MasterProject/blob/main/docs/MAESTRIA_HISTORIA_CIENTIFICA_ES.md) · [Estado integrado](https://github.com/michels-lab/MasterProject/blob/main/docs/granada/MAESTRIA_ESTADO_INTEGRADO_20261127_ES.md) · [Estado JSON](https://github.com/michels-lab/MasterProject/blob/main/docs/MAESTRIA_STATUS.json).
 
 ## Índices históricos nuevos

@@ -2193,5 +2193,30 @@
       "truncated": false
     }
   ],
-  "controlled_case_inventory_complete": true
+  "controlled_case_inventory_complete": true,
+  "delta_branches": [
+    {
+      "name": "results/campaign-200s-adaptive-mpi-r8-Co025-dt0p025-v1/B14-2D-200s",
+      "sha": "b02ef4a97670ba8b43e05447dcc55b7342edd767"
+    },
+    {
+      "name": "results/campaign-200s-adaptive-mpi-r8-Co025-dtuncapped-v1/B14-2D-200s",
+      "sha": "e066adf90a62988f7b8bd416115055af8d586811"
+    }
+  ],
+  "branch_history_parts": [
+    "docs/history/BRANCH_HISTORY_01_20261127.json",
+    "docs/history/BRANCH_HISTORY_02_20261127.json",
+    "docs/history/BRANCH_HISTORY_03_20261127.json",
+    "docs/history/BRANCH_HISTORY_04_20261127.json",
+    "docs/history/BRANCH_HISTORY_05_20261127.json",
+    "docs/history/BRANCH_HISTORY_06_20261127.json",
+    "docs/history/BRANCH_HISTORY_DELTA_20261127.json"
+  ],
+  "branch_history_verified": {
+    "initial": 95,
+    "delta": 2,
+    "complete": 97,
+    "unique_commits": 3815
+  }
 }

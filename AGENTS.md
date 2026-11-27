@@ -1,3 +1,7 @@
+## Historical provenance maintenance — 2026-11-27
+
+Use docs/MAESTRIA_HISTORIA_CIENTIFICA_ES.md and docs/DOCUMENTATION_INDEX.md as historical entrypoints, docs/MAESTRIA_STATUS.json as current state, and the frozen history indices under docs/history/ and docs/HISTORICAL_INVENTORY_20261127.json for provenance. Preserve historical source files and branch tips; update current state and run registry with verified manifests in every delivery. Historical index is a dated snapshot, not a reason to rewrite immutable branch history. Never infer experimental validation from manifest or commit count.
+
 ## Mandatory history synchronization — 2026-11-27
 
 For every research delivery, update the owning dated log (preserve previous history), owning JSON status, [integrated history](https://github.com/michels-lab/MasterProject/blob/main/docs/granada/MAESTRIA_ESTADO_INTEGRADO_20261127_ES.md), docs/MAESTRIA_STATUS.json and README in the same documentation operation. Include date, actual evidence, configuration, failures/recovery, provenance, scope and next milestone. Distinguish lab fixed, laptop serial/MPI, pilot/full, solver completion, audit, publication and physical validation. Require a complete manifest before claiming publication. No global thesis percentage. Preserve native results, do not publish personal transcripts or credentials. Mark unobserved runs pending. Maintain Spanish/English owning records where present. Verify links and JSON after changes.

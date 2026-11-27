@@ -30,8 +30,8 @@
   "adaptive_laptop": {
     "planned_combinations": 8,
     "solver_complete": 6,
-    "published": 5,
-    "audit_pending": 1,
+    "published": 6,
+    "audit_pending": 0,
     "failed": 2,
     "mpi_homogeneous": false,
     "rows": [
@@ -75,7 +75,7 @@
         "mpi8_uncapped",
         14275,
         200,
-        "audit_pending"
+        "published"
       ],
       [
         "C14-3DA",
@@ -92,7 +92,7 @@
         "failed"
       ]
     ],
-    "last_recovery_attempt": "Two capped 2D results now have verified complete remote manifests; uncapped B14-2D pending at manifest snapshot",
+    "last_recovery_attempt": "All three formerly blocked 2D MPI publications now have complete remote manifests; 6/8 computed and published; two A failures preserved.",
     "native_files_modified": false
   },
   "fixed_lab": {
@@ -131,5 +131,20 @@
   "commit_history": [
     "docs/MAESTRIA_COMMIT_HISTORY_20261127.json",
     "docs/MAESTRIA_COMMIT_HISTORY_20261127_PART2.json"
-  ]
+  ],
+  "history_audit": {
+    "initial_snapshot": "134ac9bf6f631320630212274fd26cb8c31b5c31",
+    "branches_initial": 95,
+    "branches_delta": 2,
+    "branches_total": 97,
+    "main_commits": 2311,
+    "exclusive_commits_initial": 1500,
+    "delta_commits": 4,
+    "unique_commits": 3815,
+    "all_indexed_branch_parent_chains_complete": true,
+    "document_metadata_count": 273,
+    "all_34_controlled_case_tree_scans_complete": true,
+    "scope": "metadata and provenance index; not line-by-line review or raw CFD binary validation",
+    "branch_history_dir": "docs/history"
+  }
 }
