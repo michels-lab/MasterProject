@@ -5,6 +5,12 @@ on:
     paths:
       - 'tools/run_adaptive_campaign_200s.py'
       - 'tools/run_adaptive_mpi_campaign.py'
+      - 'tools/finalize_lab_fixed_mpi8.py'
+      - 'tools/recover_lab_mpi_reference.py'
+      - 'tools/resume_lab_mpi8_deadline.py'
+      - 'tools/run_lab_fixed_mpi8.py'
+      - 'tools/run_lab_mpi8_fresh_timing.py'
+      - 'tools/test_lab_fixed_integrity.py'
       - 'tools/test_adaptive_mpi_sequence.py'
       - 'tools/test_adaptive_campaign_200s.py'
       - 'tools/compact_campaign_200s.py'
@@ -20,6 +26,12 @@ on:
     paths:
       - 'tools/run_adaptive_campaign_200s.py'
       - 'tools/run_adaptive_mpi_campaign.py'
+      - 'tools/finalize_lab_fixed_mpi8.py'
+      - 'tools/recover_lab_mpi_reference.py'
+      - 'tools/resume_lab_mpi8_deadline.py'
+      - 'tools/run_lab_fixed_mpi8.py'
+      - 'tools/run_lab_mpi8_fresh_timing.py'
+      - 'tools/test_lab_fixed_integrity.py'
       - 'tools/test_adaptive_mpi_sequence.py'
       - 'tools/test_adaptive_campaign_200s.py'
       - 'tools/compact_campaign_200s.py'
@@ -47,3 +59,4 @@ jobs:
             cases_3d/C3D_04_rounded_multiblock_pilot/C14_3D_A_faithful/system
       - run: python3 -B tools/test_adaptive_campaign_200s.py -v
       - run: python3 -B tools/test_adaptive_mpi_sequence.py -v
+      - run: python3 -B tools/test_lab_fixed_integrity.py -v
