@@ -1,6 +1,6 @@
 {
   "schema": "MASTERPROJECT_STAGE_PROGRESS_V1",
-  "date": "2026-11-24",
+  "date": "2026-11-27",
   "case": "C3D_05_step_gmsh_conformal",
   "stage": "3/7 — T0 acoplamiento térmico: preparación de parámetros",
   "completed": 2,
@@ -897,5 +897,24 @@
       "error": "RuntimeError: load Foundation14"
     },
     "fs_c08_separate": true
+  },
+  "integrated_history": "docs/granada/MAESTRIA_ESTADO_INTEGRADO_20261127_ES.md",
+  "campaign_200s_update_20261127": {
+    "adaptive_mpi_capped": {
+      "solver_completed": true,
+      "final_time_s": 200,
+      "solver_steps": 15013,
+      "manifest_verified": true,
+      "branch": "results/campaign-200s-adaptive-mpi-r8-Co025-dt0p025-v1/C14-3DB-200s"
+    },
+    "adaptive_mpi_uncapped": {
+      "solver_completed": true,
+      "final_time_s": 200,
+      "solver_steps": 15012,
+      "manifest_verified": true,
+      "branch": "results/campaign-200s-adaptive-mpi-r8-Co025-dtuncapped-v1/C14-3DB-200s"
+    },
+    "fixed_lab_200s_completion_verified": false,
+    "scientific_gates_changed": false
   }
 }
