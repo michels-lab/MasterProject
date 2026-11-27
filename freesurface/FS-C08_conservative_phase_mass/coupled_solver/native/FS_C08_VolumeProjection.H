@@ -1,5 +1,6 @@
 /* FS-C08 pressure-volume closure building block, Foundation14.
- * Experimental implementation. Not yet connected to time integration.
+ * Experimental implementation coupled to native time integration;
+ * local closure is not full-transient or physical validation.
  * GPL-3.0-or-later, Michel's Lab 2026.
  */
 #ifndef FS_C08_VolumeProjection_H
@@ -72,7 +73,7 @@ tmp<volScalarField> trialMassFromOldTime
 );
 
 // A nonlinear pressure/volume transaction for the fixed-temperature,
-// pressure-incompressible metal / linear-in-pressure gas EOS subproblem.
+// metal (incompressible or experimental finite K) / linear-in-pressure gas EOS subproblem.
 // Inputs mL/mG/pressure/rhoG and fluxes are updated only on success.
 // dp must have homogeneous increment BCs consistent with pressure.
 // Caller supplies frozen momentum-derived mobilities (NOT arbitrary
