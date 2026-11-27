@@ -1,0 +1,2470 @@
+{
+  "snapshot": "134ac9bf6f631320630212274fd26cb8c31b5c31",
+  "scope": "exclusive commits relative to main at snapshot; parent closure explicitly checked",
+  "branches": [
+    {
+      "name": "granada/c3d02-measure-zoned-mold-volume-20261113",
+      "sha": "741f04cb43afae27cd23b2a273786209c20da13d",
+      "main_reachable": false,
+      "commits": [
+        {
+          "sha": "741f04cb43afae27cd23b2a273786209c20da13d",
+          "date": "2026-11-13T23:42:35Z",
+          "subject": "fix(c3d02): initialize Foundation 14 before strict shell mode",
+          "parents": [
+            "4ab867ca94df454abed5d439853f83c5a59ba2f5"
+          ]
+        },
+        {
+          "sha": "4ab867ca94df454abed5d439853f83c5a59ba2f5",
+          "date": "2026-11-13T23:41:53Z",
+          "subject": "test(c3d02): guard read-only zone-volume measurement in isolated shadow case",
+          "parents": [
+            "157266521aa6202603c1b1b9f21232606ad853ed"
+          ]
+        },
+        {
+          "sha": "157266521aa6202603c1b1b9f21232606ad853ed",
+          "date": "2026-11-13T23:41:40Z",
+          "subject": "docs(c3d02): record real geometric mold zone labels and plan zone-only volume measurement",
+          "parents": [
+            "eb813a3bb6e8a16d7a592ecd28637c2795f371bd"
+          ]
+        },
+        {
+          "sha": "eb813a3bb6e8a16d7a592ecd28637c2795f371bd",
+          "date": "2026-11-13T23:41:38Z",
+          "subject": "docs(c3d02): record real geometric mold zone labels and plan zone-only volume measurement",
+          "parents": [
+            "9b19ef9b292d686d1254b0389ff58e53e9e58d50"
+          ]
+        },
+        {
+          "sha": "9b19ef9b292d686d1254b0389ff58e53e9e58d50",
+          "date": "2026-11-13T23:41:34Z",
+          "subject": "docs(c3d02): record real geometric mold zone labels and plan zone-only volume measurement",
+          "parents": [
+            "0da0d88196857cde23833ba6d64f8023385f86c4"
+          ]
+        },
+        {
+          "sha": "0da0d88196857cde23833ba6d64f8023385f86c4",
+          "date": "2026-11-13T23:41:32Z",
+          "subject": "docs(c3d02): record real geometric mold zone labels and plan zone-only volume measurement",
+          "parents": [
+            "62d8501e7c9480dd78f5c33d7df5bb1dbc0941a2"
+          ]
+        },
+        {
+          "sha": "62d8501e7c9480dd78f5c33d7df5bb1dbc0941a2",
+          "date": "2026-11-13T23:41:28Z",
+          "subject": "docs(c3d02): record real geometric mold zone labels and plan zone-only volume measurement",
+          "parents": [
+            "98da56b441e17eac385da346ff33b158fa988b03"
+          ]
+        },
+        {
+          "sha": "98da56b441e17eac385da346ff33b158fa988b03",
+          "date": "2026-11-13T23:41:26Z",
+          "subject": "docs(c3d02): record real geometric mold zone labels and plan zone-only volume measurement",
+          "parents": [
+            "ec8d3cba11e08ccff85ae60e458765c89b5832e7"
+          ]
+        },
+        {
+          "sha": "ec8d3cba11e08ccff85ae60e458765c89b5832e7",
+          "date": "2026-11-13T23:41:23Z",
+          "subject": "docs(c3d02): record real geometric mold zone labels and plan zone-only volume measurement",
+          "parents": [
+            "50b8a4a1cb3ed69d61a4fcdff98dfc1e5ea39177"
+          ]
+        },
+        {
+          "sha": "50b8a4a1cb3ed69d61a4fcdff98dfc1e5ea39177",
+          "date": "2026-11-13T23:41:19Z",
+          "subject": "docs(c3d02): record real geometric mold zone labels and plan zone-only volume measurement",
+          "parents": [
+            "7c1f87a0724070fdd2b4a0dfa8204675d904a8f4"
+          ]
+        },
+        {
+          "sha": "7c1f87a0724070fdd2b4a0dfa8204675d904a8f4",
+          "date": "2026-11-13T23:41:16Z",
+          "subject": "docs(c3d02): record real geometric mold zone labels and plan zone-only volume measurement",
+          "parents": [
+            "fef17adb8bd4a2ca090140dd21ef44b7b92775b4"
+          ]
+        },
+        {
+          "sha": "fef17adb8bd4a2ca090140dd21ef44b7b92775b4",
+          "date": "2026-11-13T23:40:23Z",
+          "subject": "fix(c3d02): canonicalize read-only source and reject zonal volume mismatch",
+          "parents": [
+            "622391a6ed22a18409d1bb50fadc74e77e2d3abc"
+          ]
+        },
+        {
+          "sha": "622391a6ed22a18409d1bb50fadc74e77e2d3abc",
+          "date": "2026-11-13T23:39:50Z",
+          "subject": "feat(c3d02): measure existing moldVolume zone through Foundation 14 volFieldValue in isolated shadow case",
+          "parents": [
+            "d960358b5c005f06b577f7becca9f01d35398843"
+          ]
+        }
+      ],
+      "unresolved_parents": [],
+      "coverage_complete": true
+    },
+    {
+      "name": "granada/c3d02-meshing-source-v1-20261112",
+      "sha": "320265090f9d0dfac542760e91b8973b4426355c",
+      "main_reachable": false,
+      "commits": [
+        {
+          "sha": "320265090f9d0dfac542760e91b8973b4426355c",
+          "date": "2026-11-12T23:28:01Z",
+          "subject": "docs(c3d02): synchronize first native 3D mesh-stage protocol",
+          "parents": [
+            "c6c9ce10087fe9b0e4cc4093054a33a0bd34199e"
+          ]
+        },
+        {
+          "sha": "c6c9ce10087fe9b0e4cc4093054a33a0bd34199e",
+          "date": "2026-11-12T23:27:58Z",
+          "subject": "docs(c3d02): synchronize first native 3D mesh-stage protocol",
+          "parents": [
+            "61310be2cc79e62115119dff9ee2485094a179f1"
+          ]
+        },
+        {
+          "sha": "61310be2cc79e62115119dff9ee2485094a179f1",
+          "date": "2026-11-12T23:27:55Z",
+          "subject": "docs(c3d02): synchronize first native 3D mesh-stage protocol",
+          "parents": [
+            "7fa5ab11db587514dc6619ef4185181e129da2fb"
+          ]
+        },
+        {
+          "sha": "7fa5ab11db587514dc6619ef4185181e129da2fb",
+          "date": "2026-11-12T23:27:52Z",
+          "subject": "docs(c3d02): synchronize first native 3D mesh-stage protocol",
+          "parents": [
+            "e2e6cd2bb60af24ff5b339dcda5580284fcbd98c"
+          ]
+        },
+        {
+          "sha": "e2e6cd2bb60af24ff5b339dcda5580284fcbd98c",
+          "date": "2026-11-12T23:27:49Z",
+          "subject": "docs(c3d02): synchronize first native 3D mesh-stage protocol",
+          "parents": [
+            "553403c724497cd3a4c4adc8e31af6d157f18475"
+          ]
+        },
+        {
+          "sha": "553403c724497cd3a4c4adc8e31af6d157f18475",
+          "date": "2026-11-12T23:27:47Z",
+          "subject": "docs(c3d02): synchronize first native 3D mesh-stage protocol",
+          "parents": [
+            "343d7342855280b7d3567c0b6c5008e2c2713432"
+          ]
+        },
+        {
+          "sha": "343d7342855280b7d3567c0b6c5008e2c2713432",
+          "date": "2026-11-12T23:27:44Z",
+          "subject": "docs(c3d02): synchronize first native 3D mesh-stage protocol",
+          "parents": [
+            "ffea52d9b810b16781aeebfca2333630d2fbba7a"
+          ]
+        },
+        {
+          "sha": "ffea52d9b810b16781aeebfca2333630d2fbba7a",
+          "date": "2026-11-12T23:27:13Z",
+          "subject": "test(c3d02): validate two-material native mesh inputs statically",
+          "parents": [
+            "24f436d4aa2b3c4fc74c0f85dbf3d0b8aa30a3aa"
+          ]
+        },
+        {
+          "sha": "24f436d4aa2b3c4fc74c0f85dbf3d0b8aa30a3aa",
+          "date": "2026-11-12T23:27:00Z",
+          "subject": "feat(c3d02): reject gross exterior retention by preliminary STL volume band",
+          "parents": [
+            "e487101d14f0bdda249179ff80179f871b9e9a9c"
+          ]
+        },
+        {
+          "sha": "e487101d14f0bdda249179ff80179f871b9e9a9c",
+          "date": "2026-11-12T23:26:33Z",
+          "subject": "docs(c3d02): exact one-run mesh protocol and scientific acceptance gates",
+          "parents": [
+            "9754481e11d358a52bf75b2e8b0a0a3f61617795"
+          ]
+        },
+        {
+          "sha": "9754481e11d358a52bf75b2e8b0a0a3f61617795",
+          "date": "2026-11-12T23:26:01Z",
+          "subject": "docs(c3d02): document first Foundation 14 native two-seed meshing stage",
+          "parents": [
+            "4ca7737b7e63849c7bea884aecf952df8139b13e"
+          ]
+        },
+        {
+          "sha": "4ca7737b7e63849c7bea884aecf952df8139b13e",
+          "date": "2026-11-12T23:25:33Z",
+          "subject": "fix(c3d02): report failed checkMesh rather than exiting before summary",
+          "parents": [
+            "c4ed4d70c8b7b4ee8b41244b637d6f9a5d23c633"
+          ]
+        },
+        {
+          "sha": "c4ed4d70c8b7b4ee8b41244b637d6f9a5d23c633",
+          "date": "2026-11-12T23:25:20Z",
+          "subject": "feat(c3d02): guarded, single-workdir two-material meshing run",
+          "parents": [
+            "725ecc120e541fc8857b0bb8e7f3de10f3974246"
+          ]
+        },
+        {
+          "sha": "725ecc120e541fc8857b0bb8e7f3de10f3974246",
+          "date": "2026-11-12T23:24:41Z",
+          "subject": "feat(c3d02): candidate Foundation 14 two-seed meshing dictionary",
+          "parents": [
+            "c2ca71492e3a255344eea4f393ca4c7c519967c3"
+          ]
+        }
+      ],
+      "unresolved_parents": [],
+      "coverage_complete": true
+    },
+    {
+      "name": "granada/c3d02-mold-castellation-l3-20261113",
+      "sha": "5d9d6b1c248e932b64d482aae44215c4f5d5ab29",
+      "main_reachable": false,
+      "commits": [
+        {
+          "sha": "5d9d6b1c248e932b64d482aae44215c4f5d5ab29",
+          "date": "2026-11-13T22:29:05Z",
+          "subject": "docs(c3d02): native surfaceCheck passed; record bounded L3 pre-snap isolation experiment",
+          "parents": [
+            "86b449f0a3a2908d736cf1a6f452d65857ecaed2"
+          ]
+        },
+        {
+          "sha": "86b449f0a3a2908d736cf1a6f452d65857ecaed2",
+          "date": "2026-11-13T22:29:02Z",
+          "subject": "docs(c3d02): native surfaceCheck passed; record bounded L3 pre-snap isolation experiment",
+          "parents": [
+            "a5c78a26562ef354ddf8348808bb075e99a2e169"
+          ]
+        },
+        {
+          "sha": "a5c78a26562ef354ddf8348808bb075e99a2e169",
+          "date": "2026-11-13T22:28:59Z",
+          "subject": "docs(c3d02): native surfaceCheck passed; record bounded L3 pre-snap isolation experiment",
+          "parents": [
+            "ab6539b6f5e53cbc5e0579250c68faf11e92f326"
+          ]
+        },
+        {
+          "sha": "ab6539b6f5e53cbc5e0579250c68faf11e92f326",
+          "date": "2026-11-13T22:28:56Z",
+          "subject": "docs(c3d02): native surfaceCheck passed; record bounded L3 pre-snap isolation experiment",
+          "parents": [
+            "71ecf65031581666cc6770468922d427a54d3e2f"
+          ]
+        },
+        {
+          "sha": "71ecf65031581666cc6770468922d427a54d3e2f",
+          "date": "2026-11-13T22:28:53Z",
+          "subject": "docs(c3d02): native surfaceCheck passed; record bounded L3 pre-snap isolation experiment",
+          "parents": [
+            "6cfd9a9abb12454a2379ca4b715091b94f2fbba4"
+          ]
+        },
+        {
+          "sha": "6cfd9a9abb12454a2379ca4b715091b94f2fbba4",
+          "date": "2026-11-13T22:28:50Z",
+          "subject": "docs(c3d02): native surfaceCheck passed; record bounded L3 pre-snap isolation experiment",
+          "parents": [
+            "857b5e750ca0fa3d4adb5260b165ddfb394b256d"
+          ]
+        },
+        {
+          "sha": "857b5e750ca0fa3d4adb5260b165ddfb394b256d",
+          "date": "2026-11-13T22:28:46Z",
+          "subject": "docs(c3d02): native surfaceCheck passed; record bounded L3 pre-snap isolation experiment",
+          "parents": [
+            "7e8820a7a62df20cc3da2d2103dfe7e4c5f7e834"
+          ]
+        },
+        {
+          "sha": "7e8820a7a62df20cc3da2d2103dfe7e4c5f7e834",
+          "date": "2026-11-13T22:28:04Z",
+          "subject": "test(c3d02): assert isolated level-3 mold-only castellation test is bounded",
+          "parents": [
+            "e35200436df8dfe84adc3216a7dc276919580d00"
+          ]
+        },
+        {
+          "sha": "e35200436df8dfe84adc3216a7dc276919580d00",
+          "date": "2026-11-13T22:27:45Z",
+          "subject": "feat(c3d02): one bounded mold-only level-3 castellation test without snapping",
+          "parents": [
+            "08e32a4aa455f2b4c20d95c42fb235b06cb3e4f0"
+          ]
+        }
+      ],
+      "unresolved_parents": [],
+      "coverage_complete": true
+    },
+    {
+      "name": "granada/c3d02-mold-zone-classification-20261113",
+      "sha": "9bb42d839b4cc62ada16e102ff9e98a207c909cb",
+      "main_reachable": false,
+      "commits": [
+        {
+          "sha": "9bb42d839b4cc62ada16e102ff9e98a207c909cb",
+          "date": "2026-11-13T23:21:27Z",
+          "subject": "docs(c3d02): record L3 full-box retention and explicit mold zone diagnostic",
+          "parents": [
+            "c8de9a916e6499d0c188de19549fc4ae1b2bfe0a"
+          ]
+        },
+        {
+          "sha": "c8de9a916e6499d0c188de19549fc4ae1b2bfe0a",
+          "date": "2026-11-13T23:21:24Z",
+          "subject": "docs(c3d02): record L3 full-box retention and explicit mold zone diagnostic",
+          "parents": [
+            "7dcb3283fec6f2468afee08eddf5314442e808e4"
+          ]
+        },
+        {
+          "sha": "7dcb3283fec6f2468afee08eddf5314442e808e4",
+          "date": "2026-11-13T23:21:21Z",
+          "subject": "docs(c3d02): record L3 full-box retention and explicit mold zone diagnostic",
+          "parents": [
+            "aa0df6141ed5fdda565781a10554f514abc63534"
+          ]
+        },
+        {
+          "sha": "aa0df6141ed5fdda565781a10554f514abc63534",
+          "date": "2026-11-13T23:21:17Z",
+          "subject": "docs(c3d02): record L3 full-box retention and explicit mold zone diagnostic",
+          "parents": [
+            "73c5b866ae8f205a0390ab4cf0380f721caa6448"
+          ]
+        },
+        {
+          "sha": "73c5b866ae8f205a0390ab4cf0380f721caa6448",
+          "date": "2026-11-13T23:21:13Z",
+          "subject": "docs(c3d02): record L3 full-box retention and explicit mold zone diagnostic",
+          "parents": [
+            "d2a2ddaea465fa82a1f015109e012b3c5e53c436"
+          ]
+        },
+        {
+          "sha": "d2a2ddaea465fa82a1f015109e012b3c5e53c436",
+          "date": "2026-11-13T23:21:10Z",
+          "subject": "docs(c3d02): record L3 full-box retention and explicit mold zone diagnostic",
+          "parents": [
+            "a60bc77a5b4e5687c285a75a21861eb1fc65b6ef"
+          ]
+        },
+        {
+          "sha": "a60bc77a5b4e5687c285a75a21861eb1fc65b6ef",
+          "date": "2026-11-13T23:21:07Z",
+          "subject": "docs(c3d02): record L3 full-box retention and explicit mold zone diagnostic",
+          "parents": [
+            "7d8d74adba27ae7a20e6187fe693015daa5e7f1e"
+          ]
+        },
+        {
+          "sha": "7d8d74adba27ae7a20e6187fe693015daa5e7f1e",
+          "date": "2026-11-13T23:21:03Z",
+          "subject": "docs(c3d02): record L3 full-box retention and explicit mold zone diagnostic",
+          "parents": [
+            "0e10ac23148fc644a7d4d3f22ea6dc007511194f"
+          ]
+        },
+        {
+          "sha": "0e10ac23148fc644a7d4d3f22ea6dc007511194f",
+          "date": "2026-11-13T23:20:05Z",
+          "subject": "test(c3d02): assert bounded geometric mold zone classification and no CFD actions",
+          "parents": [
+            "eb1d14264e25992abf3f41e66b3a77ead553dc0a"
+          ]
+        },
+        {
+          "sha": "eb1d14264e25992abf3f41e66b3a77ead553dc0a",
+          "date": "2026-11-13T23:19:43Z",
+          "subject": "feat(c3d02): test Foundation 14 mold cellZone inside classification independent of connectivity",
+          "parents": [
+            "8ac3e1ce4b220c21ff42ebffdecde54cb27aa1c7"
+          ]
+        }
+      ],
+      "unresolved_parents": [],
+      "coverage_complete": true
+    },
+    {
+      "name": "granada/c3d02-one-command-conformal-regions-20261117",
+      "sha": "29ef14492dc72b7c6f44e7531128c752c07f2283",
+      "main_reachable": false,
+      "commits": [
+        {
+          "sha": "29ef14492dc72b7c6f44e7531128c752c07f2283",
+          "date": "2026-11-17T20:48:51Z",
+          "subject": "fix(c3d02): generate C14 boundaryField for all patches including empty-size patch entries",
+          "parents": [
+            "1b3ed0c7c7eed96d309fb5b1ccae225f520f0d30"
+          ]
+        },
+        {
+          "sha": "1b3ed0c7c7eed96d309fb5b1ccae225f520f0d30",
+          "date": "2026-11-17T20:48:35Z",
+          "subject": "docs(c3d02): replace incremental tests with one-command conformal CHT production gate",
+          "parents": [
+            "ea83e4b5deedb66dddcb13201232500450c15a24"
+          ]
+        },
+        {
+          "sha": "ea83e4b5deedb66dddcb13201232500450c15a24",
+          "date": "2026-11-17T20:48:32Z",
+          "subject": "docs(c3d02): replace incremental tests with one-command conformal CHT production gate",
+          "parents": [
+            "304b4295821cb07afd764a3595eebcb0cb2f5303"
+          ]
+        },
+        {
+          "sha": "304b4295821cb07afd764a3595eebcb0cb2f5303",
+          "date": "2026-11-17T20:48:27Z",
+          "subject": "docs(c3d02): replace incremental tests with one-command conformal CHT production gate",
+          "parents": [
+            "224509f8b109b37c0567df4a1dc074b6e04ca361"
+          ]
+        },
+        {
+          "sha": "224509f8b109b37c0567df4a1dc074b6e04ca361",
+          "date": "2026-11-17T20:48:23Z",
+          "subject": "docs(c3d02): replace incremental tests with one-command conformal CHT production gate",
+          "parents": [
+            "2312a1585bd345202ba757e251f22db5c5b48738"
+          ]
+        },
+        {
+          "sha": "2312a1585bd345202ba757e251f22db5c5b48738",
+          "date": "2026-11-17T20:48:20Z",
+          "subject": "docs(c3d02): replace incremental tests with one-command conformal CHT production gate",
+          "parents": [
+            "01560bec91a5e0223049c3891f4afe032c385dcc"
+          ]
+        },
+        {
+          "sha": "01560bec91a5e0223049c3891f4afe032c385dcc",
+          "date": "2026-11-17T20:47:07Z",
+          "subject": "fix(c3d02): correct regex escapes in phase-change C14 zone adaptation",
+          "parents": [
+            "19e97d7dfb31bb8655b1a772eca548063f5a0a92"
+          ]
+        },
+        {
+          "sha": "19e97d7dfb31bb8655b1a772eca548063f5a0a92",
+          "date": "2026-11-17T20:46:35Z",
+          "subject": "feat(c3d02): preserve C14 phase-change model across split region zone addressing",
+          "parents": [
+            "fb3e1301d2f0fc76511eb924e89994cb250a6fad"
+          ]
+        },
+        {
+          "sha": "fb3e1301d2f0fc76511eb924e89994cb250a6fad",
+          "date": "2026-11-17T20:46:08Z",
+          "subject": "test(c3d02): exercise single-command production builder and nested C14 boundary-field parser",
+          "parents": [
+            "6ea3c716f8acf4c2168d05f4a6c97b9c2b8352d4"
+          ]
+        },
+        {
+          "sha": "6ea3c716f8acf4c2168d05f4a6c97b9c2b8352d4",
+          "date": "2026-11-17T20:45:30Z",
+          "subject": "feat(c3d02): one-command common metal/mold mesh, reciprocal mappedWall, strict G1 and conditional C14 solver",
+          "parents": [
+            "74826321c6a50c0dcf986fa81c1b465054f33088"
+          ]
+        }
+      ],
+      "unresolved_parents": [],
+      "coverage_complete": true
+    },
+    {
+      "name": "granada/c3d02-readonly-diagnostic-20261112",
+      "sha": "fe108d9f83fa6ce5b1ddb888102855327c225e8c",
+      "main_reachable": false,
+      "commits": [
+        {
+          "sha": "fe108d9f83fa6ce5b1ddb888102855327c225e8c",
+          "date": "2026-11-12T23:37:37Z",
+          "subject": "docs(c3d02): front-page failed mesh status and read-only next action",
+          "parents": [
+            "5787e9b6eaca60375760b8e82ab011b6bc1f900b"
+          ]
+        },
+        {
+          "sha": "5787e9b6eaca60375760b8e82ab011b6bc1f900b",
+          "date": "2026-11-12T23:37:34Z",
+          "subject": "docs(c3d02): front-page failed mesh status and read-only next action",
+          "parents": [
+            "fd11ef1b4c57d3527a721927d48ab4740b13df3d"
+          ]
+        },
+        {
+          "sha": "fd11ef1b4c57d3527a721927d48ab4740b13df3d",
+          "date": "2026-11-12T23:37:31Z",
+          "subject": "docs(c3d02): front-page failed mesh status and read-only next action",
+          "parents": [
+            "ec7a28391c9d6eb0805774eb293922eaeb7fcb24"
+          ]
+        },
+        {
+          "sha": "ec7a28391c9d6eb0805774eb293922eaeb7fcb24",
+          "date": "2026-11-12T23:37:02Z",
+          "subject": "docs(c3d02): record failed 589701-cell mesh and prohibit blind reruns",
+          "parents": [
+            "f5dc6f3cc47babea1c5346b0bf07e8f50652c91f"
+          ]
+        },
+        {
+          "sha": "f5dc6f3cc47babea1c5346b0bf07e8f50652c91f",
+          "date": "2026-11-12T23:36:59Z",
+          "subject": "docs(c3d02): record failed 589701-cell mesh and prohibit blind reruns",
+          "parents": [
+            "b59116b4c0cb4dd4eaf676596ad865d1afd763dc"
+          ]
+        },
+        {
+          "sha": "b59116b4c0cb4dd4eaf676596ad865d1afd763dc",
+          "date": "2026-11-12T23:36:56Z",
+          "subject": "docs(c3d02): record failed 589701-cell mesh and prohibit blind reruns",
+          "parents": [
+            "5d96504a5b5c0db69cd0b8e97a5a04b9d646699b"
+          ]
+        },
+        {
+          "sha": "5d96504a5b5c0db69cd0b8e97a5a04b9d646699b",
+          "date": "2026-11-12T23:36:53Z",
+          "subject": "docs(c3d02): record failed 589701-cell mesh and prohibit blind reruns",
+          "parents": [
+            "7dd8e1bcf701d270bebd24db372cdefecaa8d30e"
+          ]
+        },
+        {
+          "sha": "7dd8e1bcf701d270bebd24db372cdefecaa8d30e",
+          "date": "2026-11-12T23:36:50Z",
+          "subject": "docs(c3d02): record failed 589701-cell mesh and prohibit blind reruns",
+          "parents": [
+            "0a9bfa4030f4e10c3c899d6cc526f356ec5872f7"
+          ]
+        },
+        {
+          "sha": "0a9bfa4030f4e10c3c899d6cc526f356ec5872f7",
+          "date": "2026-11-12T23:36:47Z",
+          "subject": "docs(c3d02): record failed 589701-cell mesh and prohibit blind reruns",
+          "parents": [
+            "5eec9fc338afad42fe6579a6a721ce542faac282"
+          ]
+        },
+        {
+          "sha": "5eec9fc338afad42fe6579a6a721ce542faac282",
+          "date": "2026-11-12T23:36:43Z",
+          "subject": "docs(c3d02): record failed 589701-cell mesh and prohibit blind reruns",
+          "parents": [
+            "799581f8ca7053d3bf30d15cae5a8ed50c8a5d7f"
+          ]
+        },
+        {
+          "sha": "799581f8ca7053d3bf30d15cae5a8ed50c8a5d7f",
+          "date": "2026-11-12T23:35:55Z",
+          "subject": "feat(c3d02): read-only diagnosis of retained exterior and interface selection",
+          "parents": [
+            "260ad095a2732b6d978d058c99f51efdd3a80629"
+          ]
+        }
+      ],
+      "unresolved_parents": [],
+      "coverage_complete": true
+    },
+    {
+      "name": "granada/c3d02-spatial-vtk-audit-20261115",
+      "sha": "6f1f3dc901b7b610199783ff1c33c9ae892e2e44",
+      "main_reachable": false,
+      "commits": [
+        {
+          "sha": "6f1f3dc901b7b610199783ff1c33c9ae892e2e44",
+          "date": "2026-11-16T05:35:49Z",
+          "subject": "fix(c3d02): use deque.popleft for all VTK coordinate tokens",
+          "parents": [
+            "d33a8399f37681015a4c3c3bc26a529386f20452"
+          ]
+        },
+        {
+          "sha": "d33a8399f37681015a4c3c3bc26a529386f20452",
+          "date": "2026-11-16T05:34:02Z",
+          "subject": "docs(c3d02): record native defect VTK output and read-only spatial evidence",
+          "parents": [
+            "58f2e1b555591833728db29bee697abc5b162cdf"
+          ]
+        },
+        {
+          "sha": "58f2e1b555591833728db29bee697abc5b162cdf",
+          "date": "2026-11-16T05:33:59Z",
+          "subject": "docs(c3d02): record native defect VTK output and read-only spatial evidence",
+          "parents": [
+            "390f0511e5daa1f8da0ee03db1e508e31000a578"
+          ]
+        },
+        {
+          "sha": "390f0511e5daa1f8da0ee03db1e508e31000a578",
+          "date": "2026-11-16T05:33:55Z",
+          "subject": "docs(c3d02): record native defect VTK output and read-only spatial evidence",
+          "parents": [
+            "dd8f014aa424ed65549386c741e79a5220818815"
+          ]
+        },
+        {
+          "sha": "dd8f014aa424ed65549386c741e79a5220818815",
+          "date": "2026-11-16T05:33:52Z",
+          "subject": "docs(c3d02): record native defect VTK output and read-only spatial evidence",
+          "parents": [
+            "8edee93dfa960e5128e1654af8505af14cc78ae2"
+          ]
+        },
+        {
+          "sha": "8edee93dfa960e5128e1654af8505af14cc78ae2",
+          "date": "2026-11-16T05:33:49Z",
+          "subject": "docs(c3d02): record native defect VTK output and read-only spatial evidence",
+          "parents": [
+            "cc11bbcbfdb59126b84810e76216e5014cb9b655"
+          ]
+        },
+        {
+          "sha": "cc11bbcbfdb59126b84810e76216e5014cb9b655",
+          "date": "2026-11-16T05:33:44Z",
+          "subject": "docs(c3d02): record native defect VTK output and read-only spatial evidence",
+          "parents": [
+            "c5a43af115c9099a24d36d87e140cd6dc7fd9af6"
+          ]
+        },
+        {
+          "sha": "c5a43af115c9099a24d36d87e140cd6dc7fd9af6",
+          "date": "2026-11-16T05:33:41Z",
+          "subject": "docs(c3d02): record native defect VTK output and read-only spatial evidence",
+          "parents": [
+            "9b5af457e12031d73d146c514493513df7081e1f"
+          ]
+        },
+        {
+          "sha": "9b5af457e12031d73d146c514493513df7081e1f",
+          "date": "2026-11-16T05:32:31Z",
+          "subject": "test(c3d02): synthetic ASCII and binary VTK spatial-parser self-tests",
+          "parents": [
+            "6d971ce8b891e3f8cb822f2b1531ab16fe1b83a3"
+          ]
+        },
+        {
+          "sha": "6d971ce8b891e3f8cb822f2b1531ab16fe1b83a3",
+          "date": "2026-11-16T05:32:20Z",
+          "subject": "fix(c3d02): robust VTK parser deque and float32 tolerance for axial limits",
+          "parents": [
+            "526ee96a23e3cc515c13354c07bc12c82381f214"
+          ]
+        },
+        {
+          "sha": "526ee96a23e3cc515c13354c07bc12c82381f214",
+          "date": "2026-11-16T05:31:58Z",
+          "subject": "feat(c3d02): analyze four exported defect VTK spatial extents with standalone Python",
+          "parents": [
+            "98c22dfa7e17d6dae525ddad8ee321efb165121d"
+          ]
+        }
+      ],
+      "unresolved_parents": [],
+      "coverage_complete": true
+    },
+    {
+      "name": "granada/c3d-clean-restart-20261112",
+      "sha": "d74ef13767468de1e3087da21db2206f9d57b86a",
+      "main_reachable": false,
+      "commits": [
+        {
+          "sha": "d74ef13767468de1e3087da21db2206f9d57b86a",
+          "date": "2026-11-12T22:13:07Z",
+          "subject": "fix(c3d02): count coordinate lines, not vertices opening parenthesis",
+          "parents": [
+            "91e52688585b092ca412b78a2ef465d37f42660f"
+          ]
+        },
+        {
+          "sha": "91e52688585b092ca412b78a2ef465d37f42660f",
+          "date": "2026-11-12T22:12:43Z",
+          "subject": "fix(registry): recognize explicitly registered clean 3D case directory",
+          "parents": [
+            "b7228d9bb1bca400a705e2ea5117671d19a2ba35"
+          ]
+        },
+        {
+          "sha": "b7228d9bb1bca400a705e2ea5117671d19a2ba35",
+          "date": "2026-11-12T22:10:23Z",
+          "subject": "ci(c3d02): static source regression check without installing OpenFOAM",
+          "parents": [
+            "3d441f5319647ec46aa96e2e1695ce893f4d862e"
+          ]
+        },
+        {
+          "sha": "3d441f5319647ec46aa96e2e1695ce893f4d862e",
+          "date": "2026-11-12T22:10:09Z",
+          "subject": "test(c3d02): separate CI-safe static test from CAD dependent check",
+          "parents": [
+            "fb779ac0bb5ebbf846d480801ef898e2713455c2"
+          ]
+        },
+        {
+          "sha": "fb779ac0bb5ebbf846d480801ef898e2713455c2",
+          "date": "2026-11-12T22:10:06Z",
+          "subject": "test(c3d02): check C14 files and preflight source without OpenFOAM",
+          "parents": [
+            "cd82202681c2bd1497e7a201ab0e7b68f16f5e4c"
+          ]
+        },
+        {
+          "sha": "cd82202681c2bd1497e7a201ab0e7b68f16f5e4c",
+          "date": "2026-11-12T22:08:54Z",
+          "subject": "docs: align historical plan, material provenance and identity with clean 3D restart",
+          "parents": [
+            "36a68313e494f653c47085133e2576f8fbaac858"
+          ]
+        },
+        {
+          "sha": "36a68313e494f653c47085133e2576f8fbaac858",
+          "date": "2026-11-12T22:08:51Z",
+          "subject": "docs: align historical plan, material provenance and identity with clean 3D restart",
+          "parents": [
+            "7a65fb5524b2a2dba46f1dd6015c5cae3a3bb2f0"
+          ]
+        },
+        {
+          "sha": "7a65fb5524b2a2dba46f1dd6015c5cae3a3bb2f0",
+          "date": "2026-11-12T22:08:48Z",
+          "subject": "docs: align historical plan, material provenance and identity with clean 3D restart",
+          "parents": [
+            "2db3a7a2081d3a44f2836fc763b66685b4d74b28"
+          ]
+        },
+        {
+          "sha": "2db3a7a2081d3a44f2836fc763b66685b4d74b28",
+          "date": "2026-11-12T22:08:46Z",
+          "subject": "docs: align historical plan, material provenance and identity with clean 3D restart",
+          "parents": [
+            "7f7a5208c9a516a08b389a8b760db43b8ab35283"
+          ]
+        },
+        {
+          "sha": "7f7a5208c9a516a08b389a8b760db43b8ab35283",
+          "date": "2026-11-12T22:08:43Z",
+          "subject": "docs: align historical plan, material provenance and identity with clean 3D restart",
+          "parents": [
+            "278caf5209260fe047662b4ecfa944ad731a8da4"
+          ]
+        },
+        {
+          "sha": "278caf5209260fe047662b4ecfa944ad731a8da4",
+          "date": "2026-11-12T22:08:39Z",
+          "subject": "docs: align historical plan, material provenance and identity with clean 3D restart",
+          "parents": [
+            "8a99399b077db3b5db5536850b64be1e5d001189"
+          ]
+        },
+        {
+          "sha": "8a99399b077db3b5db5536850b64be1e5d001189",
+          "date": "2026-11-12T22:07:59Z",
+          "subject": "docs(registry): register clean C3D-02 as prepared, never run",
+          "parents": [
+            "629597df3bbbce01c89fc8389d67bb244dc71eaa"
+          ]
+        },
+        {
+          "sha": "629597df3bbbce01c89fc8389d67bb244dc71eaa",
+          "date": "2026-11-12T22:07:38Z",
+          "subject": "feat(c3d02): add guarded CAD migration and mesh-only preflight scripts",
+          "parents": [
+            "ea2061d54ae937e9f9d7a0f34f97cc273f417f64"
+          ]
+        },
+        {
+          "sha": "ea2061d54ae937e9f9d7a0f34f97cc273f417f64",
+          "date": "2026-11-12T22:07:35Z",
+          "subject": "feat(c3d02): add guarded CAD migration and mesh-only preflight scripts",
+          "parents": [
+            "238b0fa04af88e183b1542943a1493f1e5dbfd1b"
+          ]
+        },
+        {
+          "sha": "238b0fa04af88e183b1542943a1493f1e5dbfd1b",
+          "date": "2026-11-12T22:07:33Z",
+          "subject": "feat(c3d02): add guarded CAD migration and mesh-only preflight scripts",
+          "parents": [
+            "2288bd1b0cfe5517f7fc545f632140cc077f3275"
+          ]
+        },
+        {
+          "sha": "2288bd1b0cfe5517f7fc545f632140cc077f3275",
+          "date": "2026-11-12T22:07:31Z",
+          "subject": "feat(c3d02): add guarded CAD migration and mesh-only preflight scripts",
+          "parents": [
+            "7e2a37f879363e8aa2ea7c15643523fc1c7c1055"
+          ]
+        },
+        {
+          "sha": "7e2a37f879363e8aa2ea7c15643523fc1c7c1055",
+          "date": "2026-11-12T22:06:49Z",
+          "subject": "fix(c3d02): correct eight unique background block vertices",
+          "parents": [
+            "386d08f12f595cb1702e6d81016393335ceabc12"
+          ]
+        },
+        {
+          "sha": "386d08f12f595cb1702e6d81016393335ceabc12",
+          "date": "2026-11-12T22:06:32Z",
+          "subject": "feat(c3d02): create independent mesh-preflight source case",
+          "parents": [
+            "cd56dda5cc637acb20f8e720497a93af4b1d8237"
+          ]
+        },
+        {
+          "sha": "cd56dda5cc637acb20f8e720497a93af4b1d8237",
+          "date": "2026-11-12T22:06:29Z",
+          "subject": "feat(c3d02): create independent mesh-preflight source case",
+          "parents": [
+            "d9ffb3a0682d6889011a47d1297121f66ed76f5c"
+          ]
+        },
+        {
+          "sha": "d9ffb3a0682d6889011a47d1297121f66ed76f5c",
+          "date": "2026-11-12T22:06:27Z",
+          "subject": "feat(c3d02): create independent mesh-preflight source case",
+          "parents": [
+            "54051df96cc2bc08f8aef9184504b02baa5e0a41"
+          ]
+        },
+        {
+          "sha": "54051df96cc2bc08f8aef9184504b02baa5e0a41",
+          "date": "2026-11-12T22:06:25Z",
+          "subject": "feat(c3d02): create independent mesh-preflight source case",
+          "parents": [
+            "83d26b2aa4a30686546ecef5c8e608a23028a6b5"
+          ]
+        },
+        {
+          "sha": "83d26b2aa4a30686546ecef5c8e608a23028a6b5",
+          "date": "2026-11-12T22:05:20Z",
+          "subject": "feat(c3d02): inherit unchanged C14 material and phase-change physics",
+          "parents": [
+            "5b2b8159ead4affd2f091890c01897951d4757ba"
+          ]
+        },
+        {
+          "sha": "5b2b8159ead4affd2f091890c01897951d4757ba",
+          "date": "2026-11-12T22:05:18Z",
+          "subject": "feat(c3d02): inherit unchanged C14 material and phase-change physics",
+          "parents": [
+            "9176eff32a340fc7aa60e4334d6b30a228b5c20f"
+          ]
+        },
+        {
+          "sha": "9176eff32a340fc7aa60e4334d6b30a228b5c20f",
+          "date": "2026-11-12T22:05:15Z",
+          "subject": "feat(c3d02): inherit unchanged C14 material and phase-change physics",
+          "parents": [
+            "740fef8016c9fedeba877c6eb8d3306cd52011c1"
+          ]
+        },
+        {
+          "sha": "740fef8016c9fedeba877c6eb8d3306cd52011c1",
+          "date": "2026-11-12T22:05:12Z",
+          "subject": "feat(c3d02): inherit unchanged C14 material and phase-change physics",
+          "parents": [
+            "4e813a8c4ab1897d6148586282476cb9b2635ad0"
+          ]
+        },
+        {
+          "sha": "4e813a8c4ab1897d6148586282476cb9b2635ad0",
+          "date": "2026-11-12T22:05:10Z",
+          "subject": "feat(c3d02): inherit unchanged C14 material and phase-change physics",
+          "parents": [
+            "370a69153e9a482ce717fc462c40950507c93387"
+          ]
+        },
+        {
+          "sha": "370a69153e9a482ce717fc462c40950507c93387",
+          "date": "2026-11-12T22:05:07Z",
+          "subject": "feat(c3d02): inherit unchanged C14 material and phase-change physics",
+          "parents": [
+            "d5db5ef594129435b6495edddcff7749ab32b535"
+          ]
+        },
+        {
+          "sha": "d5db5ef594129435b6495edddcff7749ab32b535",
+          "date": "2026-11-12T22:05:04Z",
+          "subject": "feat(c3d02): inherit unchanged C14 material and phase-change physics",
+          "parents": [
+            "0ea3c3fb8df1e2e31e1f19bd13f42ec0aec92d95"
+          ]
+        },
+        {
+          "sha": "0ea3c3fb8df1e2e31e1f19bd13f42ec0aec92d95",
+          "date": "2026-11-12T22:03:31Z",
+          "subject": "docs(openfoam14): record executed syntax and preserve real incident chronology",
+          "parents": [
+            "9f95564a3bdeffee4e486ee80e55dff60a4965ee"
+          ]
+        },
+        {
+          "sha": "9f95564a3bdeffee4e486ee80e55dff60a4965ee",
+          "date": "2026-11-12T22:03:28Z",
+          "subject": "docs(openfoam14): record executed syntax and preserve real incident chronology",
+          "parents": [
+            "a9087deb27741ebde02208c969f0ad4f11ce365d"
+          ]
+        },
+        {
+          "sha": "a9087deb27741ebde02208c969f0ad4f11ce365d",
+          "date": "2026-11-12T22:03:25Z",
+          "subject": "docs(openfoam14): record executed syntax and preserve real incident chronology",
+          "parents": [
+            "ced96384df5b386aef900bbc15ab1eec21af043b"
+          ]
+        },
+        {
+          "sha": "ced96384df5b386aef900bbc15ab1eec21af043b",
+          "date": "2026-11-12T22:03:23Z",
+          "subject": "docs(openfoam14): record executed syntax and preserve real incident chronology",
+          "parents": [
+            "ce4806056d7054b255d74383a1afc89f21744101"
+          ]
+        },
+        {
+          "sha": "ce4806056d7054b255d74383a1afc89f21744101",
+          "date": "2026-11-12T22:03:20Z",
+          "subject": "docs(openfoam14): record executed syntax and preserve real incident chronology",
+          "parents": [
+            "c3feb6b7f78f6d32f07bfcde22a5443004b85d41"
+          ]
+        },
+        {
+          "sha": "c3feb6b7f78f6d32f07bfcde22a5443004b85d41",
+          "date": "2026-11-12T22:02:23Z",
+          "subject": "docs(c3d): synchronize active clean restart and preserve historical evidence",
+          "parents": [
+            "961519c267fdf1c659e4d5ea1af3f22c30813433"
+          ]
+        },
+        {
+          "sha": "961519c267fdf1c659e4d5ea1af3f22c30813433",
+          "date": "2026-11-12T22:02:20Z",
+          "subject": "docs(c3d): synchronize active clean restart and preserve historical evidence",
+          "parents": [
+            "a0defe4a1b50f160347d217c78ea2fb78eb9b1c6"
+          ]
+        },
+        {
+          "sha": "a0defe4a1b50f160347d217c78ea2fb78eb9b1c6",
+          "date": "2026-11-12T22:02:16Z",
+          "subject": "docs(c3d): synchronize active clean restart and preserve historical evidence",
+          "parents": [
+            "d027036cbe9bf150933ca3e1d237a2f82da2b5e5"
+          ]
+        },
+        {
+          "sha": "d027036cbe9bf150933ca3e1d237a2f82da2b5e5",
+          "date": "2026-11-12T22:02:14Z",
+          "subject": "docs(c3d): synchronize active clean restart and preserve historical evidence",
+          "parents": [
+            "139b0d4865882733b62f3c0014b7cdeffa1d20df"
+          ]
+        },
+        {
+          "sha": "139b0d4865882733b62f3c0014b7cdeffa1d20df",
+          "date": "2026-11-12T22:02:11Z",
+          "subject": "docs(c3d): synchronize active clean restart and preserve historical evidence",
+          "parents": [
+            "24e8b3741f525b3ebaa2977e125840af40c76c67"
+          ]
+        },
+        {
+          "sha": "24e8b3741f525b3ebaa2977e125840af40c76c67",
+          "date": "2026-11-12T22:02:08Z",
+          "subject": "docs(c3d): synchronize active clean restart and preserve historical evidence",
+          "parents": [
+            "a3ee119682f47d93c6e67a68d3ac44240d112d46"
+          ]
+        },
+        {
+          "sha": "a3ee119682f47d93c6e67a68d3ac44240d112d46",
+          "date": "2026-11-12T22:02:04Z",
+          "subject": "docs(c3d): synchronize active clean restart and preserve historical evidence",
+          "parents": [
+            "d1be26b34c424e5b274d4baca08e672dd597a17d"
+          ]
+        },
+        {
+          "sha": "d1be26b34c424e5b274d4baca08e672dd597a17d",
+          "date": "2026-11-12T22:02:02Z",
+          "subject": "docs(c3d): synchronize active clean restart and preserve historical evidence",
+          "parents": [
+            "91c3945a2920c46e44c307fbcb4b82b6b68b36dd"
+          ]
+        },
+        {
+          "sha": "91c3945a2920c46e44c307fbcb4b82b6b68b36dd",
+          "date": "2026-11-12T22:01:18Z",
+          "subject": "docs(c3d): preserve November 12 failure analysis and OpenFOAM 14 lessons",
+          "parents": [
+            "367d94f57f39b0865acefb22ea51bde3983dd8ee"
+          ]
+        },
+        {
+          "sha": "367d94f57f39b0865acefb22ea51bde3983dd8ee",
+          "date": "2026-11-12T22:01:13Z",
+          "subject": "docs(c3d): preserve November 12 failure analysis and OpenFOAM 14 lessons",
+          "parents": [
+            "38c22357e4b3d4ab7b7ecf5c0986a39d7e5c1f61"
+          ]
+        }
+      ],
+      "unresolved_parents": [],
+      "coverage_complete": true
+    },
+    {
+      "name": "granada/fix-foreign-life-file-steward-fixtures-20261021",
+      "sha": "378955064bc6143a1951d3fd2d2a4755581454dd",
+      "main_reachable": true,
+      "commits": [],
+      "unresolved_parents": [],
+      "coverage_complete": true
+    },
+    {
+      "name": "granada/fs-c06-native-gate-20261120",
+      "sha": "4d2323ee93cee2d6122c332d4ead5d4f4fdcbba8",
+      "main_reachable": false,
+      "commits": [
+        {
+          "sha": "4d2323ee93cee2d6122c332d4ead5d4f4fdcbba8",
+          "date": "2026-11-21T00:27:46Z",
+          "subject": "feat(fs-c06): add isolated Foundation14 native solver and two-region mesh gate",
+          "parents": [
+            "c47f5aac3585696083ecdde1b412ed597de287f7"
+          ]
+        },
+        {
+          "sha": "c47f5aac3585696083ecdde1b412ed597de287f7",
+          "date": "2026-11-21T00:27:28Z",
+          "subject": "status(fs-c06): link green native-dictionary composition regressions, no CFD claims",
+          "parents": [
+            "1fb50b8b3702fc9f2ea1a45322a7c939c783290e"
+          ]
+        },
+        {
+          "sha": "1fb50b8b3702fc9f2ea1a45322a7c939c783290e",
+          "date": "2026-11-21T00:26:23Z",
+          "subject": "status(fs-c06): track two native models separately from physical execution",
+          "parents": [
+            "50e7d864d8b80bc2f7622ec32531fac0975abc38"
+          ]
+        },
+        {
+          "sha": "50e7d864d8b80bc2f7622ec32531fac0975abc38",
+          "date": "2026-11-21T00:26:16Z",
+          "subject": "docs(fs-c06): log native dual-fvModels retention and evidence boundary",
+          "parents": [
+            "b096abe043475e3036db8eb7f9fea9bda828dad5"
+          ]
+        },
+        {
+          "sha": "b096abe043475e3036db8eb7f9fea9bda828dad5",
+          "date": "2026-11-21T00:25:41Z",
+          "subject": "test(fs-c06): prevent native fvModels replacement and duplicate phase sources",
+          "parents": [
+            "48297114caa5f7401ce0da3f4203eb44247a21bf"
+          ]
+        },
+        {
+          "sha": "48297114caa5f7401ce0da3f4203eb44247a21bf",
+          "date": "2026-11-21T00:25:29Z",
+          "subject": "fix(fs-c06): correct escaped native dictionary composition source",
+          "parents": [
+            "5110095eb7869b70b7f196c03ec7f4b297be8050"
+          ]
+        },
+        {
+          "sha": "5110095eb7869b70b7f196c03ec7f4b297be8050",
+          "date": "2026-11-21T00:25:17Z",
+          "subject": "fix(fs-c06): retain native VoF turbulence damping beside phase-change fvModel",
+          "parents": [
+            "38484313e86a3710b9fc1196281342ec20c2eac3"
+          ]
+        },
+        {
+          "sha": "38484313e86a3710b9fc1196281342ec20c2eac3",
+          "date": "2026-11-21T00:24:01Z",
+          "subject": "docs(fs-c06): prioritize native OpenFOAM physics and demote Python to auxiliary tooling",
+          "parents": [
+            "83079c3d42be82f031e367e85997bf9a7a8f4115"
+          ]
+        },
+        {
+          "sha": "83079c3d42be82f031e367e85997bf9a7a8f4115",
+          "date": "2026-11-21T00:14:38Z",
+          "subject": "fix(fs-c06/granada): reverify saved native field SHA, forbid in-place outputs, test stale JSON claims",
+          "parents": [
+            "eefda07040fe9660abd88b1d47ba4cf04e0668de"
+          ]
+        },
+        {
+          "sha": "eefda07040fe9660abd88b1d47ba4cf04e0668de",
+          "date": "2026-11-21T00:12:45Z",
+          "subject": "feat(fs-c06/granada): add provenance-gated, read-only density contraction screening and negative physics regressions",
+          "parents": [
+            "e254f62369f7467c6aa086bc6ec5e3f591d202cb"
+          ]
+        },
+        {
+          "sha": "e254f62369f7467c6aa086bc6ec5e3f591d202cb",
+          "date": "2026-11-21T00:09:24Z",
+          "subject": "chore(fs-c06): record corrected native phase field provenance without claiming CFD",
+          "parents": [
+            "166664fd41bdaeb019ee36396a02ed48ffe44ef8"
+          ]
+        },
+        {
+          "sha": "166664fd41bdaeb019ee36396a02ed48ffe44ef8",
+          "date": "2026-11-21T00:09:07Z",
+          "subject": "docs(fs-c06): trace native phase-change temperature to metal thermo T.metal",
+          "parents": [
+            "2f823eb960a401ef35223b2a4a22f054b3250f1c"
+          ]
+        },
+        {
+          "sha": "2f823eb960a401ef35223b2a4a22f054b3250f1c",
+          "date": "2026-11-21T00:09:00Z",
+          "subject": "test(fs-c06): assert native T.metal phase-temperature validation distinct from mixture T",
+          "parents": [
+            "3b2c7fa064c909d3e400ab3f79f90fbd70e59f6a"
+          ]
+        },
+        {
+          "sha": "3b2c7fa064c909d3e400ab3f79f90fbd70e59f6a",
+          "date": "2026-11-21T00:08:51Z",
+          "subject": "fix(fs-c06): audit metal-phase T.metal used by native phase-change model, not mixture T",
+          "parents": [
+            "b25ff2c44ec03b27262b414450ef16409cd47d59"
+          ]
+        },
+        {
+          "sha": "b25ff2c44ec03b27262b414450ef16409cd47d59",
+          "date": "2026-11-21T00:08:17Z",
+          "subject": "docs(fs-c06): document corrected native solid reader and validation limits",
+          "parents": [
+            "e0c4ea980320bc58e28efd664e9e106372419b4b"
+          ]
+        },
+        {
+          "sha": "e0c4ea980320bc58e28efd664e9e106372419b4b",
+          "date": "2026-11-21T00:07:44Z",
+          "subject": "test(fs-c06): cover native solid AUTO_WRITE ASCII fields and reject wrong object or malformed data",
+          "parents": [
+            "e16a8af9ed4449c4ec97319b76b66d49fa850da4"
+          ]
+        },
+        {
+          "sha": "e16a8af9ed4449c4ec97319b76b66d49fa850da4",
+          "date": "2026-11-21T00:07:33Z",
+          "subject": "fix(fs-c06): correct literal regex escapes in native solid field parser",
+          "parents": [
+            "0359f6a06bed9af5dfee9714e46b0b8db38e4a63"
+          ]
+        },
+        {
+          "sha": "0359f6a06bed9af5dfee9714e46b0b8db38e4a63",
+          "date": "2026-11-21T00:07:25Z",
+          "subject": "fix(fs-c06): read Foundation14 alpha.metal.solid with strict field-specific parser",
+          "parents": [
+            "bcbef3acbff5a7a403bdc090d3616fc3c47dc068"
+          ]
+        },
+        {
+          "sha": "bcbef3acbff5a7a403bdc090d3616fc3c47dc068",
+          "date": "2026-11-20T23:59:30Z",
+          "subject": "docs(fs-c06): render native geometry audit formulas as inline Markdown code",
+          "parents": [
+            "6413a5af19850e27bb58a5bea842f0c8fe129c94"
+          ]
+        },
+        {
+          "sha": "6413a5af19850e27bb58a5bea842f0c8fe129c94",
+          "date": "2026-11-20T23:59:15Z",
+          "subject": "feat(fs-c06): audit native VOF solid/liquid volumes by mesh geometry, not inferred shrinkage",
+          "parents": [
+            "69a4840884e6eacf8bec79bf63ab706463d80235"
+          ]
+        },
+        {
+          "sha": "69a4840884e6eacf8bec79bf63ab706463d80235",
+          "date": "2026-11-20T22:35:37Z",
+          "subject": "fix(fs-c06): preserve truthful native-run attempt state and report timeout without stack trace",
+          "parents": [
+            "7b8b8a21779331dfd6d084f79bbad6aaa0280ffc"
+          ]
+        },
+        {
+          "sha": "7b8b8a21779331dfd6d084f79bbad6aaa0280ffc",
+          "date": "2026-11-20T22:35:06Z",
+          "subject": "docs(fs-c06): index isolated VOF model compatibility candidate and honest progress state",
+          "parents": [
+            "9a74043870a0bb3ea2d32b57407153e1802e1e41"
+          ]
+        },
+        {
+          "sha": "9a74043870a0bb3ea2d32b57407153e1802e1e41",
+          "date": "2026-11-20T22:34:06Z",
+          "subject": "feat(fs-c06): stage isolated Foundation14 VOF-native solidification smoke with C14 provenance and fail-closed phase guards",
+          "parents": [
+            "b900181aca46e3003efc78c0fba65c978284023b"
+          ]
+        },
+        {
+          "sha": "b900181aca46e3003efc78c0fba65c978284023b",
+          "date": "2026-11-20T22:14:07Z",
+          "subject": "docs(fs-c05): record real Granada heat reciprocity, read-only Euler review and FS-C06 physical gates",
+          "parents": [
+            "68793ed472ded067254ca36523c7625eda47b9b4"
+          ]
+        },
+        {
+          "sha": "68793ed472ded067254ca36523c7625eda47b9b4",
+          "date": "2026-11-20T22:13:22Z",
+          "subject": "fix(fs-c05): label saved sand Euler energy report explicitly and satisfy CI",
+          "parents": [
+            "c3294456a00388e4b7a9a28238cf54a70cd61def"
+          ]
+        },
+        {
+          "sha": "c3294456a00388e4b7a9a28238cf54a70cd61def",
+          "date": "2026-11-20T22:01:59Z",
+          "subject": "fix(fs-c05): unify retrospective sand energy function name with 8 independent physical regression cases",
+          "parents": [
+            "afcde04797495d45094a6324d6a6f0f132d8486b"
+          ]
+        },
+        {
+          "sha": "afcde04797495d45094a6324d6a6f0f132d8486b",
+          "date": "2026-11-20T21:59:33Z",
+          "subject": "test(fs-c05): monitor actual subprocess.run directly for no-CFD retrospective audit, avoid fake module attribute",
+          "parents": [
+            "0844773f3132c3f8dab9e17b366cdcce14f6abe8"
+          ]
+        },
+        {
+          "sha": "0844773f3132c3f8dab9e17b366cdcce14f6abe8",
+          "date": "2026-11-20T21:59:05Z",
+          "subject": "ci(fs-c05): automate saved native Granada sand Euler energy closure and one-shot retrospective result tests",
+          "parents": [
+            "8f6c34b6f5f3449ba74bca33dbb7459054da9da1"
+          ]
+        },
+        {
+          "sha": "8f6c34b6f5f3449ba74bca33dbb7459054da9da1",
+          "date": "2026-11-20T21:58:54Z",
+          "subject": "test(fs-c05): real reported sand Euler energy closure, 8 negative/integration cases without user rerun",
+          "parents": [
+            "5253a80be72697d8b6f84c928892281269d59609"
+          ]
+        },
+        {
+          "sha": "5253a80be72697d8b6f84c928892281269d59609",
+          "date": "2026-11-20T21:58:22Z",
+          "subject": "feat(fs-c05): read only past native Granada Q, alpha/T/rho with SHA, check sand per-Euler-step internal energy closure and export separate report",
+          "parents": [
+            "7fb14e6d80ef6b94eb7d1dd24b88e40cfc923c67"
+          ]
+        },
+        {
+          "sha": "7fb14e6d80ef6b94eb7d1dd24b88e40cfc923c67",
+          "date": "2026-11-20T21:56:03Z",
+          "subject": "docs(fs-c05): register real November 20 Granada 2-region wall Q and rho inventory, 0.00027% reciprocity and sand discrete energy closure without new CFD",
+          "parents": [
+            "a32a9d2812fc3a1efdcd618607c4a8bd096d3bc6"
+          ]
+        },
+        {
+          "sha": "a32a9d2812fc3a1efdcd618607c4a8bd096d3bc6",
+          "date": "2026-11-19T21:47:09Z",
+          "subject": "docs(granada): enforce one native acceptance per integrated FS-C05 physics batch, CI/regression first and truthful provenance",
+          "parents": [
+            "7dfcee2c4cf54738cfaed40540eb8c7fcb8e6214"
+          ]
+        },
+        {
+          "sha": "7dfcee2c4cf54738cfaed40540eb8c7fcb8e6214",
+          "date": "2026-11-19T21:44:22Z",
+          "subject": "test(fs-c05): add full one-shot synthetic CFD file integration covering actual alpha/T/rho and two wall-Q parsers before asking for Ubuntu run",
+          "parents": [
+            "56df507a855195e72e84f34f85bebb149d97e967"
+          ]
+        },
+        {
+          "sha": "56df507a855195e72e84f34f85bebb149d97e967",
+          "date": "2026-11-19T21:43:15Z",
+          "subject": "docs(fs-c05): consolidate Granada all-in-one density mass inventory, Qdt, alpha/T, wall flux, one native command and remaining physical validation gaps",
+          "parents": [
+            "cd3c8660276eb237e667119063a3d2ef7ce44ce6"
+          ]
+        },
+        {
+          "sha": "cd3c8660276eb237e667119063a3d2ef7ce44ce6",
+          "date": "2026-11-19T21:40:14Z",
+          "subject": "ci(fs-c05): enforce native rho inventory schema/unit tests, integrate mass inventory into Granada one-shot native analysis",
+          "parents": [
+            "1446e3e90d712e31e9666700d9aed80dd8acebef"
+          ]
+        },
+        {
+          "sha": "1446e3e90d712e31e9666700d9aed80dd8acebef",
+          "date": "2026-11-19T21:39:53Z",
+          "subject": "test(fs-c05): include optional real rho inventory and measured Qdt in one-shot diagnostic, no extra user experiment",
+          "parents": [
+            "458ae70254d89cdbd1eb5d992dd10ec85689adcd"
+          ]
+        },
+        {
+          "sha": "458ae70254d89cdbd1eb5d992dd10ec85689adcd",
+          "date": "2026-11-19T21:39:30Z",
+          "subject": "feat(fs-c05): include saved native rho mass inventory and Q*dt interfacial heat diagnostic in single Granada report, no fake conservation closure",
+          "parents": [
+            "86132d2eba4d91accd37886a23b2b7faad03e8f5"
+          ]
+        },
+        {
+          "sha": "86132d2eba4d91accd37886a23b2b7faad03e8f5",
+          "date": "2026-11-19T21:38:52Z",
+          "subject": "test(fs-c05): real rho-field dimensions and cell parsing, mixture mass inventory and missing snapshot fail-closed",
+          "parents": [
+            "07fdbaff3055405adf8079c761bff5da65df0f8e"
+          ]
+        },
+        {
+          "sha": "07fdbaff3055405adf8079c761bff5da65df0f8e",
+          "date": "2026-11-19T21:38:25Z",
+          "subject": "feat(fs-c05): audit actual Foundation14 written mixture rho inventories and provisional gas/iron masses at both steps, no mass-closure fiction",
+          "parents": [
+            "001092449afc2cdf79c29fd0273ad44a11308ae8"
+          ]
+        },
+        {
+          "sha": "001092449afc2cdf79c29fd0273ad44a11308ae8",
+          "date": "2026-11-19T20:28:33Z",
+          "subject": "docs(fs-c05): consolidate full next diagnostics into one Granada native invocation, one JSON/Markdown report; no repetitive user unit testing",
+          "parents": [
+            "8de67ab36835a35a60f1187da21fd75b7e885bcf"
+          ]
+        },
+        {
+          "sha": "8de67ab36835a35a60f1187da21fd75b7e885bcf",
+          "date": "2026-11-19T20:27:40Z",
+          "subject": "ci(fs-c05): run integrated one-shot Granada CFD field+wall-Q diagnostics synthetic tests before a single native user command",
+          "parents": [
+            "b276012baa95c32a9cb39ff78113920484edb177"
+          ]
+        },
+        {
+          "sha": "b276012baa95c32a9cb39ff78113920484edb177",
+          "date": "2026-11-19T20:27:25Z",
+          "subject": "test(fs-c05): one-shot Granite CFD diagnostics 9 synthetic regressions, no user unit-test ritual",
+          "parents": [
+            "4108546019b3d91cad7e91717ed4839ee11430a9"
+          ]
+        },
+        {
+          "sha": "4108546019b3d91cad7e91717ed4839ee11430a9",
+          "date": "2026-11-19T20:26:30Z",
+          "subject": "feat(fs-c05): one-shot isolated Foundation14 VOF+CHT wall-Q, alpha/T snapshots, storage proxies, JSON and Markdown full diagnostic",
+          "parents": [
+            "85ae006d3e473939b9d376949e1933f65c1bc489"
+          ]
+        },
+        {
+          "sha": "85ae006d3e473939b9d376949e1933f65c1bc489",
+          "date": "2026-11-19T20:24:10Z",
+          "subject": "refactor(fs-c05): reuse provenance-independent native alpha/T snapshot measurements in one-shot instrumented thermal diagnostics",
+          "parents": [
+            "208852e3f9928e77b188a0bd3b675a06b6aeb31f"
+          ]
+        },
+        {
+          "sha": "208852e3f9928e77b188a0bd3b675a06b6aeb31f",
+          "date": "2026-11-19T19:29:01Z",
+          "subject": "docs(fs-c05): instrument real Foundation14 wallHeatFlux Q in fluid/mold with isolated two-step probe and fail-closed 5% diagnostic",
+          "parents": [
+            "adfb788911fae25be172078e42120ef32c566922"
+          ]
+        },
+        {
+          "sha": "adfb788911fae25be172078e42120ef32c566922",
+          "date": "2026-11-19T19:28:30Z",
+          "subject": "ci(fs-c05): gate Foundation14 two-region wallHeatFlux postrun instrumentation and Q reciprocity parser with 14 synthetic regressions",
+          "parents": [
+            "647ea36141b5928ba8ba3a3c2ce17077cb7df12b"
+          ]
+        },
+        {
+          "sha": "647ea36141b5928ba8ba3a3c2ce17077cb7df12b",
+          "date": "2026-11-19T19:28:07Z",
+          "subject": "test(fs-c05): 14 synthetic wall heat-flux parsing, Q reciprocity, isolated copy and native failure gates, no CFD in CI",
+          "parents": [
+            "b26c458587c3914bb59a368f0eb1f0db26a74605"
+          ]
+        },
+        {
+          "sha": "b26c458587c3914bb59a368f0eb1f0db26a74605",
+          "date": "2026-11-19T19:27:09Z",
+          "subject": "feat(fs-c05): instrument Foundation14 wallHeatFlux in fluid and mold via new isolated two-step foamMultiRun, quantify Q reciprocity, never claim energy balance",
+          "parents": [
+            "bcd3c8643b91e02ffb3bf9eb4bd0b69608e0471c"
+          ]
+        },
+        {
+          "sha": "bcd3c8643b91e02ffb3bf9eb4bd0b69608e0471c",
+          "date": "2026-11-19T19:25:31Z",
+          "subject": "docs(fs-c05): record real three-time alpha/T evolution and zero VOF volume drift, flag 1.683K gas rise for thermal energy audit",
+          "parents": [
+            "1aadf246c4877d88c265525131b072120e1e93d2"
+          ]
+        },
+        {
+          "sha": "1aadf246c4877d88c265525131b072120e1e93d2",
+          "date": "2026-11-19T19:13:09Z",
+          "subject": "docs(fs-c05): register real two-step OpenFOAM VOF+CHT completion and add read-only native alpha-volume/T observable analysis",
+          "parents": [
+            "1005565a7becc66e24e01777e7fb48fff286b3a4"
+          ]
+        },
+        {
+          "sha": "1005565a7becc66e24e01777e7fb48fff286b3a4",
+          "date": "2026-11-19T19:12:29Z",
+          "subject": "ci(fs-c05): require saved 0/1e-7/2e-7 real alpha/T read-only regression gates after native CHT startup",
+          "parents": [
+            "7f4c52046ef10270eb718384165a0bf68bf3fb74"
+          ]
+        },
+        {
+          "sha": "7f4c52046ef10270eb718384165a0bf68bf3fb74",
+          "date": "2026-11-19T19:11:59Z",
+          "subject": "test(fs-c05): 14 synthetic alpha/T saved-step provenance and phase-volume diagnostics, no fake thermal conservation",
+          "parents": [
+            "309e704baaaf7b50043e8a0342898e861bdad3cb"
+          ]
+        },
+        {
+          "sha": "309e704baaaf7b50043e8a0342898e861bdad3cb",
+          "date": "2026-11-19T19:10:40Z",
+          "subject": "feat(fs-c05): inspect actual 0,1e-7,2e-7 native CFD alpha/T fields, hexa phase volumes and temperature changes without altering successful smoke",
+          "parents": [
+            "b3b29942ba0a20e72e194ee8c0e314894d02455b"
+          ]
+        },
+        {
+          "sha": "b3b29942ba0a20e72e194ee8c0e314894d02455b",
+          "date": "2026-11-19T07:01:50Z",
+          "subject": "test(fs-c05): inject actual newline in invalid-rhoPhi scheme regression so conflicting epsilon scheme is detected",
+          "parents": [
+            "cdd6b0b1ceb7ef9b901bac66e5abc7ccc920f44b"
+          ]
+        },
+        {
+          "sha": "cdd6b0b1ceb7ef9b901bac66e5abc7ccc920f44b",
+          "date": "2026-11-19T06:57:51Z",
+          "subject": "test(fs-c05): synthesize official multiline divSchemes layout for rhoPhi RAS transport matching and realistic native failure regression",
+          "parents": [
+            "068110dee33638aeb22ff9e1fa34ccf75c47e7d9"
+          ]
+        },
+        {
+          "sha": "068110dee33638aeb22ff9e1fa34ccf75c47e7d9",
+          "date": "2026-11-19T06:55:47Z",
+          "subject": "docs(fs-c05): record real native 1e-7s startup failure div(rhoPhi,epsilon) and copy-only RAS repair/retry procedure",
+          "parents": [
+            "bb8ee7d79185637ffe5379a2368a93a83bf91e59"
+          ]
+        },
+        {
+          "sha": "bb8ee7d79185637ffe5379a2368a93a83bf91e59",
+          "date": "2026-11-19T06:54:35Z",
+          "subject": "test(fs-c05): reproduce real legacy rhoPhi epsilon missing failure, assert copy-only repair and Foundation14 seconds-suffixed time log",
+          "parents": [
+            "486ce96e18211c2d4ae1b54d57d38b91f7cc6bd4"
+          ]
+        },
+        {
+          "sha": "486ce96e18211c2d4ae1b54d57d38b91f7cc6bd4",
+          "date": "2026-11-19T06:53:48Z",
+          "subject": "test(fs-c05): demand rhoPhi k and epsilon schemes in all CHT candidates, guard idempotence and incompatible entries",
+          "parents": [
+            "13b2c7516b0a2b0d1df463bebafa214d86948eee"
+          ]
+        },
+        {
+          "sha": "13b2c7516b0a2b0d1df463bebafa214d86948eee",
+          "date": "2026-11-19T06:53:20Z",
+          "subject": "fix(fs-c05): repair missing rhoPhi RAS k/epsilon schemes only on fresh smoke copy; accept Foundation14 Time = 1e-07s log format",
+          "parents": [
+            "f68623a708e3ae4ad4fb3dbefe408169766ffdb9"
+          ]
+        },
+        {
+          "sha": "f68623a708e3ae4ad4fb3dbefe408169766ffdb9",
+          "date": "2026-11-19T06:52:40Z",
+          "subject": "fix(fs-c05): define compressible kEpsilon div(rhoPhi,k) and div(rhoPhi,epsilon) in newly generated Foundation14 VOF CHT cases",
+          "parents": [
+            "5de56d46b827f265e8c6a75b32ab72ca95a7a946"
+          ]
+        },
+        {
+          "sha": "5de56d46b827f265e8c6a75b32ab72ca95a7a946",
+          "date": "2026-11-19T06:44:34Z",
+          "subject": "test(fs-c05): synthetic Foundation14 controlDict includes official writeControl and runTimeModifiable for two-step startup tests",
+          "parents": [
+            "41a2194af44fea2e9c66688cdac0f674f9054cc9"
+          ]
+        },
+        {
+          "sha": "41a2194af44fea2e9c66688cdac0f674f9054cc9",
+          "date": "2026-11-19T06:41:32Z",
+          "subject": "fix(fs-c05): surface exact isolated failing case path and last 45 real solver log lines on native startup rejection",
+          "parents": [
+            "bbc28fb045ed2c62b2997246511498e4750740c6"
+          ]
+        },
+        {
+          "sha": "bbc28fb045ed2c62b2997246511498e4750740c6",
+          "date": "2026-11-19T06:40:20Z",
+          "subject": "docs(fs-c05): add first isolated two-step Foundation14 foamMultiRun smoke, strict source hashes and failure logs",
+          "parents": [
+            "e16ea2fc3377339be265cfc3ba638406adf2bf97"
+          ]
+        },
+        {
+          "sha": "e16ea2fc3377339be265cfc3ba638406adf2bf97",
+          "date": "2026-11-19T06:39:35Z",
+          "subject": "ci(fs-c05): enforce 11 native two-step startup tests with fresh-copy-only CFD gate and failure logs",
+          "parents": [
+            "f1cf6de82bf649e275186d39f190800fcb79a8df"
+          ]
+        },
+        {
+          "sha": "f1cf6de82bf649e275186d39f190800fcb79a8df",
+          "date": "2026-11-19T06:39:16Z",
+          "subject": "test(fs-c05): 11 synthetic isolation, two-step CFD startup, timeout/fatal/error rejection and no false heat balance success",
+          "parents": [
+            "ad0b77cf7a9406d8f4c56363a5d8bb67a43b8b2f"
+          ]
+        },
+        {
+          "sha": "ad0b77cf7a9406d8f4c56363a5d8bb67a43b8b2f",
+          "date": "2026-11-19T06:38:16Z",
+          "subject": "feat(fs-c05): run 2-step Foundation14 compressibleVoF+solid foamMultiRun ONLY on immutable-source fresh copy, preserve failure logs",
+          "parents": [
+            "56515f8c207cc38050f16f58974eef39cf4aae22"
+          ]
+        },
+        {
+          "sha": "56515f8c207cc38050f16f58974eef39cf4aae22",
+          "date": "2026-11-19T06:36:45Z",
+          "subject": "docs(fs-c05): record real Ubuntu 8/8 initial compressibleVoF+solid staging success and case provenance",
+          "parents": [
+            "01a417ce7400a7ea3e605dab2af6b63f3f4bf92b"
+          ]
+        },
+        {
+          "sha": "01a417ce7400a7ea3e605dab2af6b63f3f4bf92b",
+          "date": "2026-11-19T06:20:47Z",
+          "subject": "fix(fs-c05): correct Python raw regex escapes and real newline for epsilon scheme insertion",
+          "parents": [
+            "94d2be8827fc71afd8d4fc186e5fcac11023895c"
+          ]
+        },
+        {
+          "sha": "94d2be8827fc71afd8d4fc186e5fcac11023895c",
+          "date": "2026-11-19T06:20:12Z",
+          "subject": "fix(fs-c05): preflight official solver model before copying and require exactly one epsilon transport scheme",
+          "parents": [
+            "bd5b23f9fe6c30f09e0c2f145531cf2a634dcd6c"
+          ]
+        },
+        {
+          "sha": "bd5b23f9fe6c30f09e0c2f145531cf2a634dcd6c",
+          "date": "2026-11-19T06:19:01Z",
+          "subject": "docs(fs-c05): first official Foundation14 compressibleVoF+solid QuickCup 3D thermal screening solver candidate, provisional physics and exact local staging command",
+          "parents": [
+            "4e821b3557ae5b5e6fb3165ad40661e61ae851f4"
+          ]
+        },
+        {
+          "sha": "4e821b3557ae5b5e6fb3165ad40661e61ae851f4",
+          "date": "2026-11-19T06:17:05Z",
+          "subject": "ci(fs-c05): stage official v14 compressibleVoF+solid 3D CHT prototype safely with 8 provenance tests and syntax checks",
+          "parents": [
+            "c9d6398d9ad551ddc282bf268cac4564de3b131c"
+          ]
+        },
+        {
+          "sha": "c9d6398d9ad551ddc282bf268cac4564de3b131c",
+          "date": "2026-11-19T06:16:51Z",
+          "subject": "test(fs-c05): eight synthetic official v14 compressibleVoF+solid CHT staging, RAS and isolated source integrity gates",
+          "parents": [
+            "e3bf0b9c3304ee9c733925b642ab544b518af932"
+          ]
+        },
+        {
+          "sha": "e3bf0b9c3304ee9c733925b642ab544b518af932",
+          "date": "2026-11-19T06:15:32Z",
+          "subject": "fix(fs-c05): remove stray parenthesis in thermal VOF/CHT solver candidate generator",
+          "parents": [
+            "965dbfc9350b93fd993154401899c499f2262052"
+          ]
+        },
+        {
+          "sha": "965dbfc9350b93fd993154401899c499f2262052",
+          "date": "2026-11-19T06:14:53Z",
+          "subject": "feat(fs-c05): stage provisional compressibleVoF + solid foamMultiRun CHT input on isolated validated FS-C04 3D mesh from official v14 tutorial",
+          "parents": [
+            "b0b6ebca46bbc0fa6f9774592d2773fe4568b7d5"
+          ]
+        },
+        {
+          "sha": "b0b6ebca46bbc0fa6f9774592d2773fe4568b7d5",
+          "date": "2026-11-19T06:10:00Z",
+          "subject": "docs(fs-c04): register real native T 4/4 integrals and finalize initial-condition verification gate, advance to VOF+CHT physics",
+          "parents": [
+            "3136f982adcb109a506eb0f34c4bb517cd2b2151"
+          ]
+        },
+        {
+          "sha": "3136f982adcb109a506eb0f34c4bb517cd2b2151",
+          "date": "2026-11-19T05:52:50Z",
+          "subject": "docs(fs-c04): native t=0 two-region T average/integral acceptance protocol and independent run command, no CFD",
+          "parents": [
+            "550391b47783259d4488e4467db1e6d46d2dcaf9"
+          ]
+        },
+        {
+          "sha": "550391b47783259d4488e4467db1e6d46d2dcaf9",
+          "date": "2026-11-19T05:52:27Z",
+          "subject": "fix(fs-c04): account for Foundation14 ASCII volFieldValue write precision while keeping 5ppm native T gate",
+          "parents": [
+            "9198dc8c1794f9517c43cc487a5e37f69f71b073"
+          ]
+        },
+        {
+          "sha": "9198dc8c1794f9517c43cc487a5e37f69f71b073",
+          "date": "2026-11-19T05:51:51Z",
+          "subject": "ci(fs-c04): require 14 native initial T regional volume-average and integral regression gates",
+          "parents": [
+            "64ac10a0f0f0df3259ab39089dd00ef6bc6fbd3b"
+          ]
+        },
+        {
+          "sha": "64ac10a0f0f0df3259ab39089dd00ef6bc6fbd3b",
+          "date": "2026-11-19T05:51:36Z",
+          "subject": "test(fs-c04): 14 no-CFD native T two-region average/integral parser, isolated copy and failure-gates",
+          "parents": [
+            "a08c266ec2883f04b536b314b4b035801b663cf2"
+          ]
+        },
+        {
+          "sha": "a08c266ec2883f04b536b314b4b035801b663cf2",
+          "date": "2026-11-19T05:50:41Z",
+          "subject": "feat(fs-c04): clone stage and verify Foundation14 native 0s fluid/mold volAverage(T) and volIntegrate(T) without CFD",
+          "parents": [
+            "83dd27cce90ab5e654c7d6b4dfd98a17186bbdf0"
+          ]
+        },
+        {
+          "sha": "83dd27cce90ab5e654c7d6b4dfd98a17186bbdf0",
+          "date": "2026-11-19T05:49:42Z",
+          "subject": "docs(fs-c04): record real 12/12 initial-T staging success and isolated thermal-screen path, no CHT",
+          "parents": [
+            "32b049eaa4ec6e5ba40c3b44769a8e1df6020c81"
+          ]
+        },
+        {
+          "sha": "32b049eaa4ec6e5ba40c3b44769a8e1df6020c81",
+          "date": "2026-11-19T05:40:05Z",
+          "subject": "docs(fs-c04): record 3136/3136 real reciprocal contact areas and introduce isolated 1500K metal/300K air+sand initial T screening",
+          "parents": [
+            "5c3a55a65262bb5ea46bbe7aa94c68c1730fcefc"
+          ]
+        },
+        {
+          "sha": "5c3a55a65262bb5ea46bbe7aa94c68c1730fcefc",
+          "date": "2026-11-19T05:39:32Z",
+          "subject": "ci(fs-c04): screen exact initial temperature by verified alpha and sand regions without CHT solver",
+          "parents": [
+            "b1519cac1f2714c02a017d9c20281d8d9445e872"
+          ]
+        },
+        {
+          "sha": "b1519cac1f2714c02a017d9c20281d8d9445e872",
+          "date": "2026-11-19T05:39:15Z",
+          "subject": "fix(fs-c04): make temperature-stage synthetic fluid boundary counts conform to native 3136 contact and atmospheric faces",
+          "parents": [
+            "f18c048152676508eedfecc471c386dbdf6aa2e5"
+          ]
+        },
+        {
+          "sha": "f18c048152676508eedfecc471c386dbdf6aa2e5",
+          "date": "2026-11-19T05:38:51Z",
+          "subject": "test(fs-c04): 12 no-CFD initial thermal screening cases, exact alpha-aligned 1500K/300K fields and no fake CHT boundaries",
+          "parents": [
+            "cce6d38b665d816cadc267a6811fef763cb179d9"
+          ]
+        },
+        {
+          "sha": "cce6d38b665d816cadc267a6811fef763cb179d9",
+          "date": "2026-11-19T05:37:58Z",
+          "subject": "fix(fs-c04): create missing 0/mold in new thermal-only copy without modifying approved alpha case",
+          "parents": [
+            "218a8f5737ea7e8972a8e4b965fb19d12c2b48ab"
+          ]
+        },
+        {
+          "sha": "218a8f5737ea7e8972a8e4b965fb19d12c2b48ab",
+          "date": "2026-11-19T05:37:43Z",
+          "subject": "feat(fs-c04): isolated temperature-only initial fields 1500K metal, 300K gas/sand with non-solving thermal BC placeholders",
+          "parents": [
+            "daf0b8eaad1cdca31f4904ea95857c96fbc719f7"
+          ]
+        },
+        {
+          "sha": "daf0b8eaad1cdca31f4904ea95857c96fbc719f7",
+          "date": "2026-11-19T04:58:23Z",
+          "subject": "docs(fs-c04): add native alpha-confirmed 3136-face thermal contact area and reciprocal normal audit, no CFD",
+          "parents": [
+            "6ef9a8b06659a88b88a8a626b716ffd46dd5c21c"
+          ]
+        },
+        {
+          "sha": "6ef9a8b06659a88b88a8a626b716ffd46dd5c21c",
+          "date": "2026-11-19T04:57:51Z",
+          "subject": "ci(fs-c04): verify reciprocal heat-contact faces and initial metal/air-to-sand geometry before CHT",
+          "parents": [
+            "786810edda5ea824e27648e8cd74f7e846580165"
+          ]
+        },
+        {
+          "sha": "786810edda5ea824e27648e8cd74f7e846580165",
+          "date": "2026-11-19T04:57:36Z",
+          "subject": "test(fs-c04): 11 no-CFD reciprocal contact face area/normals, initial metal-vs-gas classification and fake-roof rejection",
+          "parents": [
+            "59598d03f02c72f928cf0f886c5cd610bd7c86ff"
+          ]
+        },
+        {
+          "sha": "59598d03f02c72f928cf0f886c5cd610bd7c86ff",
+          "date": "2026-11-19T04:56:57Z",
+          "subject": "feat(fs-c04): read-only reciprocal 3136-face fluid/sand CHT geometry audit, split metal vs air contact areas",
+          "parents": [
+            "8cede0200779ee76af56bfffaaf09b41c07624c5"
+          ]
+        },
+        {
+          "sha": "8cede0200779ee76af56bfffaaf09b41c07624c5",
+          "date": "2026-11-19T04:55:20Z",
+          "subject": "docs(fs-c04): confirm native Foundation14 0s alpha integral exact, 14 tests and archive postProcess path",
+          "parents": [
+            "7ce79841daf13a4afe7ff2c3baa3da893623d309"
+          ]
+        },
+        {
+          "sha": "7ce79841daf13a4afe7ff2c3baa3da893623d309",
+          "date": "2026-11-18T21:54:04Z",
+          "subject": "docs(fs-c04): record local 10/10 staged alpha proof and prepare independent Foundation14 native volIntegrate gate with no CFD",
+          "parents": [
+            "18c68bfa6918ceb2c08051f40b1d60003ed0aca0"
+          ]
+        },
+        {
+          "sha": "18c68bfa6918ceb2c08051f40b1d60003ed0aca0",
+          "date": "2026-11-18T21:53:25Z",
+          "subject": "ci(fs-c04): enforce 14 synthetic tests before Foundation14 native alpha volume acceptance",
+          "parents": [
+            "46784cd5248c29e9692d6b2ef4f553c411b3d919"
+          ]
+        },
+        {
+          "sha": "46784cd5248c29e9692d6b2ef4f553c411b3d919",
+          "date": "2026-11-18T21:53:06Z",
+          "subject": "test(fs-c04): 14 synthetic native postProcess alpha-volume gates, immutable copy and fail-closed result parsing",
+          "parents": [
+            "0a14b84d15799347058357aa3962e34f7da493a3"
+          ]
+        },
+        {
+          "sha": "0a14b84d15799347058357aa3962e34f7da493a3",
+          "date": "2026-11-18T21:52:25Z",
+          "subject": "feat(fs-c04): verify Foundation14 native alpha.metal volume integral via foamPostProcess on an immutable-source isolated copy",
+          "parents": [
+            "4e0696e5c31799cc4be55919911aa78b602d7519"
+          ]
+        },
+        {
+          "sha": "4e0696e5c31799cc4be55919911aa78b602d7519",
+          "date": "2026-11-18T21:31:55Z",
+          "subject": "docs(fs-c04): record real verified 2368 split-fluid metal cells and describe isolated alpha.metal initial field staging gates",
+          "parents": [
+            "2a29932a1d71d937aef8c63b1e612ed268ce651d"
+          ]
+        },
+        {
+          "sha": "2a29932a1d71d937aef8c63b1e612ed268ce651d",
+          "date": "2026-11-18T21:31:13Z",
+          "subject": "fix(fs-c04): tolerate preexisting empty 0/fluid dir in copied mesh without overwriting alpha field",
+          "parents": [
+            "9832f6799efb9d4f12451cff0ec284d7789a2403"
+          ]
+        },
+        {
+          "sha": "9832f6799efb9d4f12451cff0ec284d7789a2403",
+          "date": "2026-11-18T21:30:47Z",
+          "subject": "ci(fs-c04): enforce 10 isolated alpha.metal staging and exact 2368-cell gas/metal boundary regressions",
+          "parents": [
+            "eb21303285176c89cf5bd1e9f08eef282f95817c"
+          ]
+        },
+        {
+          "sha": "eb21303285176c89cf5bd1e9f08eef282f95817c",
+          "date": "2026-11-18T21:30:36Z",
+          "subject": "test(fs-c04): 10 no-CFD isolated alpha initializer gates for phase cell masks, thermal wall BCs, volume, copy integrity and refusal to overwrite",
+          "parents": [
+            "409ffec19fb82e01d4ff5bc6b68e53fc1c6205d5"
+          ]
+        }
+      ],
+      "unresolved_parents": [
+        "409ffec19fb82e01d4ff5bc6b68e53fc1c6205d5"
+      ],
+      "coverage_complete": false
+    },
+    {
+      "name": "main",
+      "sha": "134ac9bf6f631320630212274fd26cb8c31b5c31",
+      "main_reachable": true,
+      "commits": [],
+      "unresolved_parents": [],
+      "coverage_complete": true
+    },
+    {
+      "name": "research/c3d01-metal-mold-background-20261019",
+      "sha": "2d28f59da3bab93049fcefda106bc0bcc60927f8",
+      "main_reachable": false,
+      "commits": [
+        {
+          "sha": "2d28f59da3bab93049fcefda106bc0bcc60927f8",
+          "date": "2026-10-19T21:01:08Z",
+          "subject": "docs(c3d): record independent 3D experimental case and mesh-only status",
+          "parents": [
+            "95c0b85cf763733a97848fd109d6e7ee98d0b324"
+          ]
+        },
+        {
+          "sha": "95c0b85cf763733a97848fd109d6e7ee98d0b324",
+          "date": "2026-10-19T21:01:05Z",
+          "subject": "docs(c3d): record independent 3D experimental case and mesh-only status",
+          "parents": [
+            "a02accc95d72cd18e1d4d3ddbaba70f91a47af92"
+          ]
+        },
+        {
+          "sha": "a02accc95d72cd18e1d4d3ddbaba70f91a47af92",
+          "date": "2026-10-19T21:01:01Z",
+          "subject": "docs(c3d): record independent 3D experimental case and mesh-only status",
+          "parents": [
+            "01e705e1297bf8c2450da291c1442a6e53219808"
+          ]
+        },
+        {
+          "sha": "01e705e1297bf8c2450da291c1442a6e53219808",
+          "date": "2026-10-19T21:00:21Z",
+          "subject": "docs(c3d): link new 3D experimental case from project home",
+          "parents": [
+            "dab3e68dd4af5711ab742ac80bdaaaeea08a7bb7"
+          ]
+        },
+        {
+          "sha": "dab3e68dd4af5711ab742ac80bdaaaeea08a7bb7",
+          "date": "2026-10-19T21:00:00Z",
+          "subject": "ci(c3d): test independent 3D mesh configuration without installing or executing OpenFOAM",
+          "parents": [
+            "0965375964268592d62afdb7cc930a24986ea436"
+          ]
+        },
+        {
+          "sha": "0965375964268592d62afdb7cc930a24986ea436",
+          "date": "2026-10-19T20:59:42Z",
+          "subject": "docs(c3d): index independent 3D research cases",
+          "parents": [
+            "e75c7d961bb8f8859b7d0272f9426f9b955e0948"
+          ]
+        },
+        {
+          "sha": "e75c7d961bb8f8859b7d0272f9426f9b955e0948",
+          "date": "2026-10-19T20:59:04Z",
+          "subject": "docs(c3d): explain standalone 3D experiment, SolidWorks STL loading and mesh validation gates",
+          "parents": [
+            "cc3a547eefe6346a9bc25c9cd7854e2f573b0d9a"
+          ]
+        },
+        {
+          "sha": "cc3a547eefe6346a9bc25c9cd7854e2f573b0d9a",
+          "date": "2026-10-19T20:58:17Z",
+          "subject": "fix(c3d): resolve preflight path from nested 3D case directory",
+          "parents": [
+            "e7c605986ca14c03c3ab519310a564902f51dc9a"
+          ]
+        },
+        {
+          "sha": "e7c605986ca14c03c3ab519310a564902f51dc9a",
+          "date": "2026-10-19T20:57:56Z",
+          "subject": "test(c3d): verify background cell count, outward face normals and safe STL conversion without CFD",
+          "parents": [
+            "36876c11abce98785ea2f353bd5a2970d404833a"
+          ]
+        },
+        {
+          "sha": "36876c11abce98785ea2f353bd5a2970d404833a",
+          "date": "2026-10-19T20:57:14Z",
+          "subject": "research(c3d): add safe laptop-only blockMesh and checkMesh run script",
+          "parents": [
+            "157dec0e1add8d1aa59dc746dfa8f7b190d36408"
+          ]
+        },
+        {
+          "sha": "157dec0e1add8d1aa59dc746dfa8f7b190d36408",
+          "date": "2026-10-19T20:56:32Z",
+          "subject": "research(c3d): store reproducible corrected STL fingerprints, dimensions and 3D region seeds",
+          "parents": [
+            "c54da831be08644c0effe8066c338747c2ec8cad"
+          ]
+        },
+        {
+          "sha": "c54da831be08644c0effe8066c338747c2ec8cad",
+          "date": "2026-10-19T20:56:08Z",
+          "subject": "research(c3d): add checked mm-to-m STL preparation from original aligned SolidWorks files",
+          "parents": [
+            "a421b7c42cb17bbbfbe328d4d2b82fa4dc1f4f73"
+          ]
+        },
+        {
+          "sha": "a421b7c42cb17bbbfbe328d4d2b82fa4dc1f4f73",
+          "date": "2026-10-19T20:55:22Z",
+          "subject": "research(c3d): stage constant/triSurface/README.md for independent 3D test",
+          "parents": [
+            "6577cab0e2c2434eeb9c47c3d5032d6565dd740f"
+          ]
+        },
+        {
+          "sha": "6577cab0e2c2434eeb9c47c3d5032d6565dd740f",
+          "date": "2026-10-19T20:55:19Z",
+          "subject": "research(c3d): stage constant/triSurface/.gitignore for independent 3D test",
+          "parents": [
+            "c24810223705995bf69f5fc17dd385bc9a6ae288"
+          ]
+        },
+        {
+          "sha": "c24810223705995bf69f5fc17dd385bc9a6ae288",
+          "date": "2026-10-19T20:55:16Z",
+          "subject": "research(c3d): stage system/controlDict for independent 3D test",
+          "parents": [
+            "838b198501d93c0e2a99da28279a972a387c4605"
+          ]
+        },
+        {
+          "sha": "838b198501d93c0e2a99da28279a972a387c4605",
+          "date": "2026-10-19T20:54:55Z",
+          "subject": "research(c3d): create standalone 3D background mesh dictionary with outward patches",
+          "parents": [
+            "28878520e449c84b9727d48eb63128e686b3b595"
+          ]
+        }
+      ],
+      "unresolved_parents": [],
+      "coverage_complete": true
+    },
+    {
+      "name": "research/c3d01-native-mm-units-openfoam14-20261019",
+      "sha": "a41d1e161e5866131cf39d3d5f77dc3d2722f87b",
+      "main_reachable": false,
+      "commits": [
+        {
+          "sha": "a41d1e161e5866131cf39d3d5f77dc3d2722f87b",
+          "date": "2026-10-19T21:23:35Z",
+          "subject": "docs(c3d): record native mm geometry in 3D roadmap and research logs",
+          "parents": [
+            "e4b57da4edf9696fd7d2b5a55a66fa8590bb67ef"
+          ]
+        },
+        {
+          "sha": "e4b57da4edf9696fd7d2b5a55a66fa8590bb67ef",
+          "date": "2026-10-19T21:23:31Z",
+          "subject": "docs(c3d): record native mm geometry in 3D roadmap and research logs",
+          "parents": [
+            "396a32a86008471e680e9dda71d0285ae2ac00ea"
+          ]
+        },
+        {
+          "sha": "396a32a86008471e680e9dda71d0285ae2ac00ea",
+          "date": "2026-10-19T21:23:27Z",
+          "subject": "docs(c3d): record native mm geometry in 3D roadmap and research logs",
+          "parents": [
+            "bae47701b6f09e888057107eb309b6b45c138889"
+          ]
+        },
+        {
+          "sha": "bae47701b6f09e888057107eb309b6b45c138889",
+          "date": "2026-10-19T21:23:23Z",
+          "subject": "docs(c3d): record native mm geometry in 3D roadmap and research logs",
+          "parents": [
+            "d74d1feac93e5168de172b01ad3fe357d66183df"
+          ]
+        },
+        {
+          "sha": "d74d1feac93e5168de172b01ad3fe357d66183df",
+          "date": "2026-10-19T21:23:20Z",
+          "subject": "docs(c3d): record native mm geometry in 3D roadmap and research logs",
+          "parents": [
+            "a168cd478c33c080f93e2be06f38b189284afc37"
+          ]
+        },
+        {
+          "sha": "a168cd478c33c080f93e2be06f38b189284afc37",
+          "date": "2026-10-19T21:22:38Z",
+          "subject": "docs(c3d): mark old triSurface geometry route deprecated for Foundation v14",
+          "parents": [
+            "92f0b10ee88b60356e13368fee9ae01ec5ac0bce"
+          ]
+        },
+        {
+          "sha": "92f0b10ee88b60356e13368fee9ae01ec5ac0bce",
+          "date": "2026-10-19T21:22:25Z",
+          "subject": "docs(c3d): adopt native Foundation14 [mm] units for blockMesh and STL while preserving source CAD",
+          "parents": [
+            "9dc059f7ae42aed56ead284066d3d5a473598379"
+          ]
+        },
+        {
+          "sha": "9dc059f7ae42aed56ead284066d3d5a473598379",
+          "date": "2026-10-19T21:21:14Z",
+          "subject": "research(c3d): document native-mm STL byte preservation and v14 SI conversion authority",
+          "parents": [
+            "591ec15ced78ae7325aa27a1788be142a2800de6"
+          ]
+        },
+        {
+          "sha": "591ec15ced78ae7325aa27a1788be142a2800de6",
+          "date": "2026-10-19T21:20:57Z",
+          "subject": "test(c3d): prove in-memory conversion of mm STL is read-only and volume-correct",
+          "parents": [
+            "09aefab96ded6e2f105b30b37e848493358e1bf8"
+          ]
+        },
+        {
+          "sha": "09aefab96ded6e2f105b30b37e848493358e1bf8",
+          "date": "2026-10-19T21:20:43Z",
+          "subject": "test(c3d): enforce native mm in blockMesh and byte-identical STL staging",
+          "parents": [
+            "519e96fe4a7f80a54cd3c6abaf14bfeb70858263"
+          ]
+        },
+        {
+          "sha": "519e96fe4a7f80a54cd3c6abaf14bfeb70858263",
+          "date": "2026-10-19T21:20:18Z",
+          "subject": "research(c3d): validate unchanged mm STL using SI-only in-memory preflight before blockMesh",
+          "parents": [
+            "d06af762d84856a6b85a4832599851416d05ad5c"
+          ]
+        },
+        {
+          "sha": "d06af762d84856a6b85a4832599851416d05ad5c",
+          "date": "2026-10-19T21:20:04Z",
+          "subject": "research(c3d): establish OpenFOAM14 constant/geometry directory for native-mm STL",
+          "parents": [
+            "b867b38c0e62d731582c0f14978b6a640be72d72"
+          ]
+        },
+        {
+          "sha": "b867b38c0e62d731582c0f14978b6a640be72d72",
+          "date": "2026-10-19T21:20:02Z",
+          "subject": "research(c3d): establish OpenFOAM14 constant/geometry directory for native-mm STL",
+          "parents": [
+            "5bf044ef92941cf94db78fac6d727065378ab91e"
+          ]
+        },
+        {
+          "sha": "5bf044ef92941cf94db78fac6d727065378ab91e",
+          "date": "2026-10-19T21:19:47Z",
+          "subject": "research(c3d): stage byte-identical STL in mm for native OpenFOAM14 geometry units",
+          "parents": [
+            "34de4ef58211125768098836a076177ff72d325b"
+          ]
+        },
+        {
+          "sha": "34de4ef58211125768098836a076177ff72d325b",
+          "date": "2026-10-19T21:19:26Z",
+          "subject": "test(c3d): audit original mm STL in memory without changing SolidWorks exports",
+          "parents": [
+            "1e80ab91bce992e783fe56570a4e626555909cbc"
+          ]
+        },
+        {
+          "sha": "1e80ab91bce992e783fe56570a4e626555909cbc",
+          "date": "2026-10-19T21:19:08Z",
+          "subject": "research(c3d): express background vertices directly in OpenFOAM14 millimetres",
+          "parents": [
+            "08fa1eb25aacf39e8d6d88ba2b4e27dac6e1a994"
+          ]
+        }
+      ],
+      "unresolved_parents": [],
+      "coverage_complete": true
+    },
+    {
+      "name": "research/c3d01-refinement-max05mm-20261019",
+      "sha": "146687a17b435e9ec5be241b4d2147eefd4e9a9f",
+      "main_reachable": false,
+      "commits": [
+        {
+          "sha": "146687a17b435e9ec5be241b4d2147eefd4e9a9f",
+          "date": "2026-10-20T00:14:07Z",
+          "subject": "docs(roadmap): preserve agreed C3D 0.5mm volume refinement target",
+          "parents": [
+            "1503af460ff49a31baad6fb1332cdddcf0edf7d0"
+          ]
+        },
+        {
+          "sha": "1503af460ff49a31baad6fb1332cdddcf0edf7d0",
+          "date": "2026-10-20T00:13:35Z",
+          "subject": "docs(audit): mirror C3D 0.5mm research decision in English",
+          "parents": [
+            "dffc151c326727c40b814359d8173e7ee438c625"
+          ]
+        },
+        {
+          "sha": "dffc151c326727c40b814359d8173e7ee438c625",
+          "date": "2026-10-20T00:13:31Z",
+          "subject": "docs(audit): log 0.5mm C3D volumetric target in Spanish",
+          "parents": [
+            "aa51815646a86c90a92624165e65a3ced2d8a7e1"
+          ]
+        },
+        {
+          "sha": "aa51815646a86c90a92624165e65a3ced2d8a7e1",
+          "date": "2026-10-20T00:12:50Z",
+          "subject": "test(c3d): assert refinement note without no-op expression",
+          "parents": [
+            "dd5d9d395ee98d0a5afef513ba91f334e668bf2f"
+          ]
+        },
+        {
+          "sha": "dd5d9d395ee98d0a5afef513ba91f334e668bf2f",
+          "date": "2026-10-20T00:12:29Z",
+          "subject": "docs(c3d): link agreed volume refinement and pending meshing gate",
+          "parents": [
+            "b5e6802149f895b367bc7b8a82d6bf15bab7ba65"
+          ]
+        },
+        {
+          "sha": "b5e6802149f895b367bc7b8a82d6bf15bab7ba65",
+          "date": "2026-10-20T00:12:26Z",
+          "subject": "test(c3d): guard agreed 0.5mm refinement policy without CFD",
+          "parents": [
+            "0008bb8ffe585e307129dc1f466e7637276a952f"
+          ]
+        },
+        {
+          "sha": "0008bb8ffe585e307129dc1f466e7637276a952f",
+          "date": "2026-10-20T00:12:23Z",
+          "subject": "science(c3d): record 0.5mm planned metal/mold refinement invariant",
+          "parents": [
+            "c12e5b04b92a96a2db38d56e08996897d961bc81"
+          ]
+        },
+        {
+          "sha": "c12e5b04b92a96a2db38d56e08996897d961bc81",
+          "date": "2026-10-20T00:11:53Z",
+          "subject": "docs(c3d): lock 0.5mm nominal volumetric target for metal and sand",
+          "parents": [
+            "1f684ba01fa7e02aaeda9c27b4b9e0e8138dbc22"
+          ]
+        }
+      ],
+      "unresolved_parents": [],
+      "coverage_complete": true
+    },
+    {
+      "name": "research/c3d01-stl-meshing-gate-20261019",
+      "sha": "4674892507675908c720facf1bb0b2dbbf7cbf26",
+      "main_reachable": false,
+      "commits": [
+        {
+          "sha": "4674892507675908c720facf1bb0b2dbbf7cbf26",
+          "date": "2026-10-19T18:50:18Z",
+          "subject": "test(c3d): document isolation of synthetic geometry regression fixtures",
+          "parents": [
+            "18736d6f02c11c0ea0fd9ee51c98fd92f886527b"
+          ]
+        },
+        {
+          "sha": "18736d6f02c11c0ea0fd9ee51c98fd92f886527b",
+          "date": "2026-10-19T18:49:44Z",
+          "subject": "docs(c3d): enforce fresh sandbox extraction for each mesh attempt",
+          "parents": [
+            "76aa65d3383026891b7d59db415f03348ad6ed7c"
+          ]
+        },
+        {
+          "sha": "76aa65d3383026891b7d59db415f03348ad6ed7c",
+          "date": "2026-10-19T18:49:06Z",
+          "subject": "docs(c3d): log preliminary metal-mold geometry and outstanding mesh gates",
+          "parents": [
+            "ba18558af89a37eb6865a55dc236dd6ce29c881a"
+          ]
+        },
+        {
+          "sha": "ba18558af89a37eb6865a55dc236dd6ce29c881a",
+          "date": "2026-10-19T18:49:02Z",
+          "subject": "docs(c3d): log preliminary metal-mold geometry and outstanding mesh gates",
+          "parents": [
+            "22db99bbc005829b3ccd293313e7b18eb8e11f86"
+          ]
+        },
+        {
+          "sha": "22db99bbc005829b3ccd293313e7b18eb8e11f86",
+          "date": "2026-10-19T18:48:58Z",
+          "subject": "docs(c3d): log preliminary metal-mold geometry and outstanding mesh gates",
+          "parents": [
+            "ef7062f91764e818e1a0cf9f5e7199c73eef23c5"
+          ]
+        },
+        {
+          "sha": "ef7062f91764e818e1a0cf9f5e7199c73eef23c5",
+          "date": "2026-10-19T18:48:19Z",
+          "subject": "ci(c3d): run stdlib-only synthetic STL tests, no meshing or CFD",
+          "parents": [
+            "1e8254ae3e05d71a938c9473eda53d3a212fff9b"
+          ]
+        },
+        {
+          "sha": "1e8254ae3e05d71a938c9473eda53d3a212fff9b",
+          "date": "2026-10-19T18:48:07Z",
+          "subject": "docs(c3d): document independent CAD-STL provenance and laptop-only mesh acceptance gates",
+          "parents": [
+            "bee48e8b9b001ca744dc114a52f87d13e0e63431"
+          ]
+        },
+        {
+          "sha": "bee48e8b9b001ca744dc114a52f87d13e0e63431",
+          "date": "2026-10-19T18:47:25Z",
+          "subject": "research(c3d): record conditional STL dimensions, volumes, provenance and region seeds",
+          "parents": [
+            "d61fc6058e217838917385d2c78f9f3e48aebfd5"
+          ]
+        },
+        {
+          "sha": "d61fc6058e217838917385d2c78f9f3e48aebfd5",
+          "date": "2026-10-19T18:47:03Z",
+          "subject": "test(c3d): regression coverage for STL manifold volume seeds and scale",
+          "parents": [
+            "80eb39894d9bb1854c913cb62005a5cb222b453e"
+          ]
+        },
+        {
+          "sha": "80eb39894d9bb1854c913cb62005a5cb222b453e",
+          "date": "2026-10-19T18:46:40Z",
+          "subject": "research(c3d): add read-only binary STL geometry and region-seed preflight",
+          "parents": [
+            "44cef514f7562527f69b359ff98e11b381e1e11b"
+          ]
+        }
+      ],
+      "unresolved_parents": [],
+      "coverage_complete": true
+    },
+    {
+      "name": "research/fs-c01-isolated-execution-20261117",
+      "sha": "57c747a9cbf8115deb5ca62612c6ea7bac2c706c",
+      "main_reachable": false,
+      "commits": [
+        {
+          "sha": "57c747a9cbf8115deb5ca62612c6ea7bac2c706c",
+          "date": "2026-11-18T00:43:29Z",
+          "subject": "docs(fs-c01): record observed 11-point 0.0 volume drift and final Co evidence with explicit limits",
+          "parents": [
+            "12e67296fcebe8748d7b6efd391e722dd584152b"
+          ]
+        },
+        {
+          "sha": "12e67296fcebe8748d7b6efd391e722dd584152b",
+          "date": "2026-11-18T00:35:35Z",
+          "subject": "docs(fs-c01): register researcher-reported successful water-air local run and volume screen; keep mass and shrinkage gates open",
+          "parents": [
+            "e72b9b518dfae6eb3654a7061c5b1805e33a136d"
+          ]
+        },
+        {
+          "sha": "e72b9b518dfae6eb3654a7061c5b1805e33a136d",
+          "date": "2026-11-18T00:35:32Z",
+          "subject": "docs(fs-c01): register researcher-reported successful water-air local run and volume screen; keep mass and shrinkage gates open",
+          "parents": [
+            "16fa1498f0b638d615922c4d69807c6eae129e62"
+          ]
+        },
+        {
+          "sha": "16fa1498f0b638d615922c4d69807c6eae129e62",
+          "date": "2026-11-18T00:31:44Z",
+          "subject": "docs(freesurface): distinguish local meshing evidence from failed FS-C01 solver initialization",
+          "parents": [
+            "601a135f30bd38f2060052bbd569a540633d806d"
+          ]
+        },
+        {
+          "sha": "601a135f30bd38f2060052bbd569a540633d806d",
+          "date": "2026-11-18T00:30:21Z",
+          "subject": "docs(fs-c01): preserve real failed run evidence and safe dedicated worktree retry instructions",
+          "parents": [
+            "cb3820819ee785124c2334cb9bfa4aedec91c81d"
+          ]
+        },
+        {
+          "sha": "cb3820819ee785124c2334cb9bfa4aedec91c81d",
+          "date": "2026-11-18T00:30:18Z",
+          "subject": "docs(fs-c01): preserve real failed run evidence and safe dedicated worktree retry instructions",
+          "parents": [
+            "7e8ee62e62aae6dd8418e9b7ba42020cd7dfd99a"
+          ]
+        },
+        {
+          "sha": "7e8ee62e62aae6dd8418e9b7ba42020cd7dfd99a",
+          "date": "2026-11-18T00:29:46Z",
+          "subject": "test(fs-c01): permanently catch missing writeFields in generated and frozen OpenFOAM14 cases",
+          "parents": [
+            "9fe41c0470667c5c6b4cb90e7bb18b25ab5c5605"
+          ]
+        },
+        {
+          "sha": "9fe41c0470667c5c6b4cb90e7bb18b25ab5c5605",
+          "date": "2026-11-18T00:29:44Z",
+          "subject": "test(fs-c01): permanently catch missing writeFields in generated and frozen OpenFOAM14 cases",
+          "parents": [
+            "ef2e9d2ca9d180c7cc7cae61a5e409f96a26efb8"
+          ]
+        },
+        {
+          "sha": "ef2e9d2ca9d180c7cc7cae61a5e409f96a26efb8",
+          "date": "2026-11-18T00:29:42Z",
+          "subject": "test(fs-c01): permanently catch missing writeFields in generated and frozen OpenFOAM14 cases",
+          "parents": [
+            "e64a3b71631f1c4c15f2d1e749e3efaa547cac8f"
+          ]
+        },
+        {
+          "sha": "e64a3b71631f1c4c15f2d1e749e3efaa547cac8f",
+          "date": "2026-11-18T00:29:27Z",
+          "subject": "fix(fs-c01): fail preflight for missing Foundation14 writeFields keyword even with matching hashes",
+          "parents": [
+            "1c6d9dde457bc802281aa77e926e3fc658559075"
+          ]
+        },
+        {
+          "sha": "1c6d9dde457bc802281aa77e926e3fc658559075",
+          "date": "2026-11-18T00:29:05Z",
+          "subject": "fix(bfs01): generated Foundation14 volFieldValue always includes required writeFields false",
+          "parents": [
+            "027ce7745590d5d6df4ed83ee580136f5082b924"
+          ]
+        },
+        {
+          "sha": "027ce7745590d5d6df4ed83ee580136f5082b924",
+          "date": "2026-11-18T00:28:50Z",
+          "subject": "chore(fs-c01): rebaseline only waterVolume controlDict SHA256 in 20-input manifest",
+          "parents": [
+            "fa70c2c27827b463bdb2157900fe05071bc7ecbf"
+          ]
+        },
+        {
+          "sha": "fa70c2c27827b463bdb2157900fe05071bc7ecbf",
+          "date": "2026-11-18T00:28:48Z",
+          "subject": "fix(fs-c01): specify required OpenFOAM14 waterVolume writeFields flag",
+          "parents": [
+            "f5be57ec20522593fa7fdda18d4a81ab6611c555"
+          ]
+        },
+        {
+          "sha": "f5be57ec20522593fa7fdda18d4a81ab6611c555",
+          "date": "2026-11-18T00:06:19Z",
+          "subject": "docs(fs-c01): separate runnable FS-C01 from active C3D-02 work",
+          "parents": [
+            "d47323ece352327f39f5429fd21f73ba8ddedea4"
+          ]
+        },
+        {
+          "sha": "d47323ece352327f39f5429fd21f73ba8ddedea4",
+          "date": "2026-11-18T00:06:17Z",
+          "subject": "docs(fs-c01): separate runnable FS-C01 from active C3D-02 work",
+          "parents": [
+            "484ecb60a9bfca42bfc7008a6891f37934872132"
+          ]
+        },
+        {
+          "sha": "484ecb60a9bfca42bfc7008a6891f37934872132",
+          "date": "2026-11-18T00:06:02Z",
+          "subject": "docs(fs-c01): exact-case WSL worktree procedure separated from C3D-02",
+          "parents": [
+            "de7bf5cf7cfc1ccfe91688e1e9559eb39e4dc17c"
+          ]
+        },
+        {
+          "sha": "de7bf5cf7cfc1ccfe91688e1e9559eb39e4dc17c",
+          "date": "2026-11-18T00:04:56Z",
+          "subject": "ci(fs-c01): verify isolated runner without CFD execution",
+          "parents": [
+            "c80d2015cb8984301dbb7729416310e4f253a444"
+          ]
+        },
+        {
+          "sha": "c80d2015cb8984301dbb7729416310e4f253a444",
+          "date": "2026-11-18T00:04:42Z",
+          "subject": "test(fs-c01): synthetic isolation provenance and mesh gate regressions",
+          "parents": [
+            "ef4af809382e91ba7e10dd3d36f717eb9c1129f2"
+          ]
+        },
+        {
+          "sha": "ef4af809382e91ba7e10dd3d36f717eb9c1129f2",
+          "date": "2026-11-18T00:04:06Z",
+          "subject": "feat(fs-c01): isolated Foundation 14 runner with case-specific logs and fail-closed quality gates",
+          "parents": [
+            "3f6a26dc9490f1387652ffb23c6202a1da033d55"
+          ]
+        }
+      ],
+      "unresolved_parents": [],
+      "coverage_complete": true
+    }
+  ]
+}
