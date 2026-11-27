@@ -33,3 +33,9 @@ Las versiones actualizadas de AGENTS.md y MAESTRIA_STATUS.json se verificaron co
 ## Nombre operativo: Uva
 
 Cuando el investigador diga «Operación Uva» o «Uva», continuar la cola incremental en bloques independientes, consultar primero el ledger y registrar cada revisión por ruta/blob. Priorizar archivos vigentes cambiados, corregir incoherencias demostrables y conservar evidencia histórica. No reiniciar la auditoría ni repetir archivos cerrados sin reapertura justificada. Publicar el balance real de cada bloque y sus bloqueos; Uva no ejecuta CFD ni sustituye Granada.
+
+## Modalidad combinada Uva + Granada
+
+En el contexto de MasterProject, «Op Granada» durante Uva significa ampliar cada bloque de auditoría y corregir incoherencias demostrables, sin ejecutar CFD por defecto. Consultar primero los recibos vigentes; conservar datos y ramas históricas; usar refs inmutables en los nuevos recibos. Los recibos históricos con refs simbólicos se conservan, se identifican como no fijados y no se inventa un commit retrospectivo. Los cambios en una rama de investigación se registran en el ledger central con su rama y commit.
+
+El resumen de `tools/file_review_queue.py` incluye `ledger_summary`: eventos, rutas únicas registradas, pares ruta/blob de contenido, estados más recientes y número de eventos sin ref fijado. No confundir estos valores con cobertura del árbol de un commit ni porcentaje de tesis. El total de árboles inspeccionados sigue dependiendo del ref elegido; el mínimo inicial de 30,416 blobs no es un denominador de cobertura global. Los contadores de MAESTRIA_STATUS.json pertenecen al corte inicial salvo indicación explícita; para cifras vigentes consultar el ledger.
