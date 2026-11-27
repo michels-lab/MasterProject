@@ -31,7 +31,7 @@
     "UNKNOWN_PURPOSE": 1
   },
   "finding_total": 10,
-  "inventory_fingerprint": "995e68f55c01f41a21c9a12082345b7ac9e9a75c2abf0c8b36d65c42c85a4631",
+  "inventory_fingerprint": "f082321a54e0bef040504f935ae714a324e11ab111e9335a6c5e990d48dd159e",
   "evidence_fingerprint": "a624aadd6b26e828ad8117afd31d624258d56a67d70878142a22d45db5d0f6f0",
   "files": [
     {
@@ -452,7 +452,7 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "a39641ec1d9e7f8074e8c2b98df75d1d0f381fb7"
+      "blob": "a9a7eedca1f67e203c93c144a7718c50aee0092a"
     },
     {
       "path": "RUN_CASE_REGISTRY.csv",
@@ -298799,7 +298799,7 @@
       "role": "config",
       "purpose": "machine-readable configuration",
       "certainty": "rule",
-      "blob": "8a99833d6a09e0c2bf68850c3e1651461c53f0a9"
+      "blob": "4fa01e88abd426522f89095147ae09725969a747"
     },
     {
       "path": "docs/C3D_01_ESTADO_REAL_20261110_ES.md",
@@ -299086,7 +299086,7 @@
       "role": "config",
       "purpose": "machine-readable configuration",
       "certainty": "rule",
-      "blob": "20fc32e9533dd247b1a06dc85d4daf4eae93a333"
+      "blob": "c2c386a402b466b20971fa21001d90ddfcb68814"
     },
     {
       "path": "docs/MASTERPROJECT_IDENTITY_ES.md",
@@ -299184,7 +299184,7 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "638b1f93606936cecff9464c83022058aee98c8f"
+      "blob": "788aef70e32e33f87c8f8ebe2f28edc1399c9d6a"
     },
     {
       "path": "docs/granada/C3D05_B_C14_101_ESTADOS_ALPHA1_OBSERVADO_Y_TIMELINE_20261123_ES.md",
@@ -299450,7 +299450,7 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "51dd5fc13fbfe0d08fe454e50e5ca833874d9f9c"
+      "blob": "86d4ecf761b99f098ef8f09b1165d1444526f390"
     },
     {
       "path": "docs/granada/MAESTRIA_CAMPANA_B14_C14_200S_PLAN_20261124_ES.md",
@@ -299478,7 +299478,7 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "a88fc0bfda799d53ea1a580baccda67b3fc4d002"
+      "blob": "29c4519715b1cafbd4e3d98b111d399bd2fb5f63"
     },
     {
       "path": "docs/granada/OPENFOAM_HUB_READ_ACCESS_20261021.md",
