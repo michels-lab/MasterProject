@@ -18,6 +18,7 @@ from __future__ import annotations
 import argparse
 from datetime import datetime, timezone
 import hashlib
+import fcntl
 import json
 import os
 from pathlib import Path
@@ -378,6 +379,19 @@ def finish(work,doc,steps):
     return doc
 
 
+def acquire_output_lock(work):
+    """Cooperating process lock outside output, held until native work ends."""
+    work.parent.mkdir(parents=True,exist_ok=True)
+    lock=work.with_name(work.name+".UVA.lock")
+    fd=os.open(lock,os.O_CREAT|os.O_RDWR|os.O_NOFOLLOW,0o600)
+    try:
+        fcntl.flock(fd,fcntl.LOCK_EX|fcntl.LOCK_NB)
+    except BaseException:
+        os.close(fd)
+        raise
+    return fd
+
+
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--case",type=Path,default=ORIGINAL)
@@ -387,6 +401,7 @@ def main():
     parser.add_argument("--resume",action="store_true",
                         help="continuar etapas no ejecutadas en copia existente")
     args=parser.parse_args()
+    lock_fd=None
     try:
         source,work=checked_paths(args.case,args.out)
         saved,_=existing_states(source)
@@ -405,6 +420,7 @@ def main():
             all(abs(t-i*.1)<1e-8 for i,(t,n)
                 in enumerate(rho_phi_times,1))
         )
+        lock_fd=acquire_output_lock(work)
         if args.resume:
             need(work.is_dir() and (work/REPORT).is_file(),
                  "no existe copia previa para reanudar")
@@ -471,6 +487,9 @@ def main():
     except (OSError,ValueError,KeyError,TypeError,UnicodeError) as e:
         print("CASO_B_C14_POSTPROCESS_ERROR: "+str(e),file=sys.stderr)
         return 2
+    finally:
+        if lock_fd is not None:
+            os.close(lock_fd)
 
 
 if __name__=="__main__":
