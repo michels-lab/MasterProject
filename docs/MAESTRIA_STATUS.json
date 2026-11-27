@@ -153,7 +153,35 @@
     "publication_prefix": "results/campaign-200s-fixed-lab-v2/",
     "pending_publication": [],
     "archive_bytes_total": 2159821556,
-    "archive_part_count": 66
+    "archive_part_count": 66,
+    "native_solver_timing_20261127": {
+      "source": "Investigator laboratory WSL console: last ExecutionTime and ClockTime line from each native log.foamMultiRun",
+      "units": "s",
+      "cases": {
+        "C14-3DA": {
+          "execution_time": 7453.94,
+          "clock_time": 7464
+        },
+        "C14-3DB": {
+          "execution_time": 58371.9,
+          "clock_time": 58390
+        },
+        "B14-2D": {
+          "execution_time": 2918.26,
+          "clock_time": 2936
+        },
+        "C14-2D": {
+          "execution_time": 35466.2,
+          "clock_time": 35482
+        }
+      },
+      "sum_clock_time": 104272,
+      "notes": [
+        "Do not substitute native integer ClockTime for external runner elapsed time; A external runner wall time remains unrecorded.",
+        "A serial vs B MPI8, different geometries; no controlled scaling inference.",
+        "C14-2D anomaly remains unresolved; near equality of ExecutionTime and ClockTime is not evidence of aggregate MPI CPU utilization or absence of contention. Inspect TIMING_STEPS.csv, TIMING_MPI_RANKS.csv and logs."
+      ]
+    }
   },
   "FS_C08": {
     "branch": "research/fs-c08-conservative-phase-mass-20261123",
