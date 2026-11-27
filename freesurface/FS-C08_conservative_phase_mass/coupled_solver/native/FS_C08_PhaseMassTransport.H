@@ -49,7 +49,7 @@ class PhaseMassTransport
     autoPtr<Function1<scalar>> solidMassFractionT_;
     autoPtr<Function1<scalar>> tauPhaseChangeT_;
 
-    // Composition-specific enthalpy closure; no legacy fvModel latent source.
+    // Composition-specific internal-energy closure; no legacy fvModel latent source.
     // u_s(Tref)=0; u_l(Tref)=latentHeat; both u(T) use exact
     // Function1 Cv(T) integral, never Cv*T with mismatched references.
     dimensionedScalar latentHeat_;
@@ -196,9 +196,8 @@ public:
     const word& materialId() const { return materialId_; }
     const word& propertySource() const { return propertySource_; }
 
-    // The following are NOT present until the derived solver integrates
-    // pressure, mixture EOS, gas continuity and sensible/latent energy.
-    // Do not use this component standalone as a "shrinkage result".
+    // The derived solver supplies pressure, gas continuity and energy coupling.
+    // This component alone does not certify a physical shrinkage result.
 };
 
 } // namespace fsC08
