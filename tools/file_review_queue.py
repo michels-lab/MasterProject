@@ -28,6 +28,23 @@ def receipts(raw):
             latest[(r["path"], r["blob"])] = r
     return latest
 
+def receipt_summary(raw):
+    """Summarize recorded events and versions, not coverage of the repository."""
+    events = [json.loads(line) for line in raw.splitlines() if line.strip()]
+    latest = receipts(raw)
+    states = collections.Counter(r["state"] for r in latest.values())
+    return {
+        "events": len(events),
+        "unique_recorded_paths": len({r["path"] for r in events}),
+        "unique_content_path_blob_pairs": len(latest),
+        "latest_content_states": dict(states),
+        "non_pinned_ref_events": sum(
+            len(r["ref"]) != 40 or any(c not in "0123456789abcdefABCDEF" for c in r["ref"])
+            for r in events
+        ),
+        "repository_coverage_percent": None,
+    }
+
 def queue(raw, latest, prefix):
     any_path = {path for path, _ in latest}
     for entry in raw.split(b"\0"):
@@ -62,7 +79,8 @@ def main():
     # Separate explicit ledger ref allows historical branches to reuse current receipts.
     ledger_commit = git("rev-parse", "--verify", "--end-of-options",
                         (args.ledger_ref or args.ref) + "^{commit}").decode().strip()
-    latest = receipts(git("show", ledger_commit + ":" + LEDGER).decode("utf-8"))
+    raw_ledger = git("show", ledger_commit + ":" + LEDGER).decode("utf-8")
+    latest = receipts(raw_ledger)
     counts = collections.Counter()
     emitted = 0
     for row in queue(git("ls-tree", "-r", "-z", "--full-tree", commit), latest, args.prefix):
@@ -73,7 +91,8 @@ def main():
             print(json.dumps(row, ensure_ascii=True))
             emitted += 1
     print(json.dumps({"commit": commit, "ledger_commit": ledger_commit, "prefix": args.prefix, "counts": dict(counts),
-                      "total": sum(counts.values()), "emitted": emitted}), file=sys.stderr)
+                      "total": sum(counts.values()), "emitted": emitted,
+                      "ledger_summary": receipt_summary(raw_ledger)}), file=sys.stderr)
 
 if __name__ == "__main__":
     main()
