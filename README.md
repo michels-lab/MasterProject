@@ -1,3 +1,5 @@
+> **27-11-2026 — Uva + Granada:** protección de diagnósticos archivados C14 de masa, energía y perfiles 2D/A/B; siete regresiones nuevas, sin cierre físico. [Informe](docs/review/UVA_C14_DIAGNOSTIC_INTEGRITY_20261127_ES.md).
+
 > **27-11-2026 — Uva, conciliación de publicación V2:** los cuatro manifiestos fijos y los cuatro informes de `analysis_preview` se leyeron en commits inmutables: 800000 pasos, 200 s por caso, 66 fragmentos declarados, 2159821556 bytes; A serial y restantes MPI8. Se recuperó el SHA de commit faltante de A en el índice (ba0d4d29), que impedía seleccionarlo en el recuperador, y se sincronizaron los indicadores de manifiesto A/B. No se descargaron binarios, no se ejecutó CFD y no se cerraron hitos físicos. [Auditoría](https://github.com/michels-lab/MasterProject/blob/main/docs/review/UVA_LAB_MANIFEST_RECONCILIATION_20261127_ES.md).
 
 > **27-11-2026 — Uva + Granada:** integridad de ejecución/postproceso histórico B 10 s; diez regresiones sintéticas incorporadas, CI pendiente; resultados y puertas científicas intactos. [Informe](docs/review/UVA_CASE_B_OFFLINE_INTEGRITY_20261127_ES.md).
