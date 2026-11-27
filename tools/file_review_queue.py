@@ -51,6 +51,7 @@ def queue(raw, latest, prefix):
 def main():
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument("--ref", required=True)
+    p.add_argument("--ledger-ref", help="Explicit ledger ref; defaults to --ref")
     p.add_argument("--prefix", default="")
     p.add_argument("--limit", type=int, default=100)
     p.add_argument("--include-closed", action="store_true")
@@ -58,8 +59,10 @@ def main():
     if args.limit < 0:
         p.error("--limit must be >= 0")
     commit = git("rev-parse", "--verify", "--end-of-options", args.ref + "^{commit}").decode().strip()
-    # Ledger is read from the same immutable ref; missing ledger is an error, not empty success.
-    latest = receipts(git("show", commit + ":" + LEDGER).decode("utf-8"))
+    # Separate explicit ledger ref allows historical branches to reuse current receipts.
+    ledger_commit = git("rev-parse", "--verify", "--end-of-options",
+                        (args.ledger_ref or args.ref) + "^{commit}").decode().strip()
+    latest = receipts(git("show", ledger_commit + ":" + LEDGER).decode("utf-8"))
     counts = collections.Counter()
     emitted = 0
     for row in queue(git("ls-tree", "-r", "-z", "--full-tree", commit), latest, args.prefix):
@@ -69,7 +72,7 @@ def main():
         if not args.limit or emitted < args.limit:
             print(json.dumps(row, ensure_ascii=True))
             emitted += 1
-    print(json.dumps({"commit": commit, "prefix": args.prefix, "counts": dict(counts),
+    print(json.dumps({"commit": commit, "ledger_commit": ledger_commit, "prefix": args.prefix, "counts": dict(counts),
                       "total": sum(counts.values()), "emitted": emitted}), file=sys.stderr)
 
 if __name__ == "__main__":

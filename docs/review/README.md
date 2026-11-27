@@ -25,3 +25,7 @@ Prioridad: (1) estados y documentación vigente; (2) scripts, diccionarios, conf
 ## Corte inicial
 
 Se registran siete inspecciones reales, dos de alcance completo documental y cinco parciales. Se cruzaron seis manifiestos adaptativos con el estado (pasos 11028, 11029, 14275, 14276, 15012, 15013). Se corrigió la rotulación de encabezados antiguos, no las cifras históricas. No se ejecutó OpenFOAM, no se descargaron binarios ni se validó experimentalmente. El total de archivos aún no está determinado por el conector. El siguiente bloque prioriza las versiones nuevas de documentación y los estados propietarios, luego manuales y herramientas. No hay porcentaje global de tesis ni de revisión exhaustiva en este corte.
+
+## Verificación poscommit y ramas históricas
+
+Las versiones actualizadas de AGENTS.md y MAESTRIA_STATUS.json se verificaron contra el padre y tienen recibos nuevos. Para una rama histórica que no contiene el ledger, usar `--ref <rama-o-commit> --ledger-ref origin/main`; no hace checkout. Para otro alcance usar `--include-closed` y registrar reapertura justificada si corresponde. La prueba de regresión de la cola es sintética, no CFD; su ejecución queda pendiente de verificación.
