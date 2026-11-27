@@ -1,0 +1,2397 @@
+{
+  "snapshot": "134ac9bf6f631320630212274fd26cb8c31b5c31",
+  "scope": "exclusive commits relative to main at snapshot; parent closure explicitly checked",
+  "branches": [
+    {
+      "name": "research/fs-c02-metal-air-vof-20261117",
+      "sha": "99c79b7f6f4f0b5e3ace07c8b16edf452f6356ae",
+      "main_reachable": false,
+      "commits": [
+        {
+          "sha": "99c79b7f6f4f0b5e3ace07c8b16edf452f6356ae",
+          "date": "2026-11-24T03:12:14Z",
+          "subject": "docs(fs-c07): index completed 20-state native core audit and conservative-model next stage",
+          "parents": [
+            "b88a1679d74257ab89219a874c8e243d40ac88fb"
+          ]
+        },
+        {
+          "sha": "b88a1679d74257ab89219a874c8e243d40ac88fb",
+          "date": "2026-11-24T03:12:04Z",
+          "subject": "docs(fs-c07): publish full 20/20 core-phase evidence and state conservative next physics without false acceptance",
+          "parents": [
+            "61278e193e3679417b5cd25d387c478f2cd89489"
+          ]
+        },
+        {
+          "sha": "61278e193e3679417b5cd25d387c478f2cd89489",
+          "date": "2026-11-24T03:11:50Z",
+          "subject": "chore(fs-c07): confirm 20/20 real native core safety at 1e-8 while preserving global allocation FAIL and no shrinkage",
+          "parents": [
+            "8d1b3e006c746d25a6f30c76b45ed45c2704ab99"
+          ]
+        },
+        {
+          "sha": "8d1b3e006c746d25a6f30c76b45ed45c2704ab99",
+          "date": "2026-11-24T03:11:32Z",
+          "subject": "docs(fs-c07): close 20/20 low-VOF spatial gate, preserve local physical FAIL, define conservative FS-C08 mass-energy acceptance contract",
+          "parents": [
+            "486801def1fe67225b973120eb441abc10b1a153"
+          ]
+        },
+        {
+          "sha": "486801def1fe67225b973120eb441abc10b1a153",
+          "date": "2026-11-24T03:10:54Z",
+          "subject": "ci(fs-c07): enforce documented all-20 native phase-location evidence and no-false-core-acceptance checks",
+          "parents": [
+            "1707f57e5f08615c208bd6039da9fc57936c6307"
+          ]
+        },
+        {
+          "sha": "1707f57e5f08615c208bd6039da9fc57936c6307",
+          "date": "2026-11-24T03:10:40Z",
+          "subject": "test(fs-c07): ensure all twenty genuine WSL phase bins and maxima remain internally consistent",
+          "parents": [
+            "0fe427f2d797f43b0eb8e403fd53876fe7ac10fe"
+          ]
+        },
+        {
+          "sha": "0fe427f2d797f43b0eb8e403fd53876fe7ac10fe",
+          "date": "2026-11-24T03:10:20Z",
+          "subject": "data(fs-c07): preserve all 20 authentic saved-state low-VOF phase allocation counts and core zero-excess result",
+          "parents": [
+            "e960fb6c0227437a55c9c6f41958cc0df30790ce"
+          ]
+        },
+        {
+          "sha": "e960fb6c0227437a55c9c6f41958cc0df30790ce",
+          "date": "2026-11-23T21:33:59Z",
+          "subject": "docs(fs-c07): index native low-VOF over-allocation and source-verified update ordering",
+          "parents": [
+            "424798e34b30fb72e6fed215c423741eb1a8af5f"
+          ]
+        },
+        {
+          "sha": "424798e34b30fb72e6fed215c423741eb1a8af5f",
+          "date": "2026-11-23T21:33:49Z",
+          "subject": "docs(fs-c07): attach native three-time low-VOF excess, Foundation14 solver ordering and 20-time verification command",
+          "parents": [
+            "adff55447beb141316b69bc3be4aaa922400f19f"
+          ]
+        },
+        {
+          "sha": "adff55447beb141316b69bc3be4aaa922400f19f",
+          "date": "2026-11-23T21:33:33Z",
+          "subject": "chore(fs-c07): capture 3-time real low-VOF spatial solid excess and Foundation14 model-before-VOF-order cause hypothesis",
+          "parents": [
+            "a85d5f3f98924b51bd68107dc97c87585248bebb"
+          ]
+        },
+        {
+          "sha": "a85d5f3f98924b51bd68107dc97c87585248bebb",
+          "date": "2026-11-23T21:33:12Z",
+          "subject": "test(fs-c07): forbid missing/extra VOF-bin counts in full 20-time location audit",
+          "parents": [
+            "d177fae05d0c3755bf21434cf61806b14e74b76d"
+          ]
+        },
+        {
+          "sha": "d177fae05d0c3755bf21434cf61806b14e74b76d",
+          "date": "2026-11-23T21:33:03Z",
+          "subject": "fix(fs-c07): enforce all alpha-bin counts exactly reproduce native significant allocation defects",
+          "parents": [
+            "358bdd4a8db4180bb7fe4e16da89f58cbb54f8a8"
+          ]
+        },
+        {
+          "sha": "358bdd4a8db4180bb7fe4e16da89f58cbb54f8a8",
+          "date": "2026-11-23T21:32:41Z",
+          "subject": "docs(fs-c07): ground low-VOF solid overallocation in genuine 3-time spatial evidence and Foundation14 fvModels-before-alphaPredictor source",
+          "parents": [
+            "c08fe769e13e8648d9889b7c277fde50929e5df4"
+          ]
+        },
+        {
+          "sha": "c08fe769e13e8648d9889b7c277fde50929e5df4",
+          "date": "2026-11-23T21:31:47Z",
+          "subject": "test(fs-c07): require all 20 native saved times for core-phase location conclusion and refuse missing fields",
+          "parents": [
+            "1ca8b6c8d85e50ec7d1063842da64dae180300ee"
+          ]
+        },
+        {
+          "sha": "1ca8b6c8d85e50ec7d1063842da64dae180300ee",
+          "date": "2026-11-23T21:31:28Z",
+          "subject": "feat(fs-c07): audit location of every one of 20 saved native phase states with compact low-VOF/core evidence",
+          "parents": [
+            "9270a1ab8747a3e8b805a43a886432896dddddc1"
+          ]
+        },
+        {
+          "sha": "9270a1ab8747a3e8b805a43a886432896dddddc1",
+          "date": "2026-11-23T20:44:27Z",
+          "subject": "chore(fs-c07): track real volume recovery as complete, spatial bound/VOF diagnostic staged with explicit unverified CI",
+          "parents": [
+            "8047a1e1d1019527fd9d3b23440e2850e9087c70"
+          ]
+        },
+        {
+          "sha": "8047a1e1d1019527fd9d3b23440e2850e9087c70",
+          "date": "2026-11-23T20:44:15Z",
+          "subject": "docs(fs-c07): index verified 20-state solid-metal volume recovery and pending non-destructive spatial diagnosis",
+          "parents": [
+            "38bf2061869a8e2bb4a225760573455cec795aad"
+          ]
+        },
+        {
+          "sha": "38bf2061869a8e2bb4a225760573455cec795aad",
+          "date": "2026-11-23T20:43:59Z",
+          "subject": "docs(fs-c07): record actual 5.0063% raw solid inventory, native monitor parity and spatial violation diagnostic",
+          "parents": [
+            "a38429b84c8f438fba7b94c2fc8ea7d9363a671b"
+          ]
+        },
+        {
+          "sha": "a38429b84c8f438fba7b94c2fc8ea7d9363a671b",
+          "date": "2026-11-23T20:43:40Z",
+          "subject": "ci(fs-c07): add native fluid mesh-indexed phase allocation mapping synthetic regression",
+          "parents": [
+            "89b6e4c8570c11ee0eea99008ec04d1a9688329f"
+          ]
+        },
+        {
+          "sha": "89b6e4c8570c11ee0eea99008ec04d1a9688329f",
+          "date": "2026-11-23T20:43:27Z",
+          "subject": "fix(fs-c07): avoid claiming geometric interface location merely from alpha.metal threshold",
+          "parents": [
+            "1504d7bc7cf2c5acccabc48abdce93d1c5e70573"
+          ]
+        },
+        {
+          "sha": "1504d7bc7cf2c5acccabc48abdce93d1c5e70573",
+          "date": "2026-11-23T20:43:25Z",
+          "subject": "fix(fs-c07): avoid claiming geometric interface location merely from alpha.metal threshold",
+          "parents": [
+            "b0c24f67ab72b3cd5ef0953d3ebbbda35afff13f"
+          ]
+        },
+        {
+          "sha": "b0c24f67ab72b3cd5ef0953d3ebbbda35afff13f",
+          "date": "2026-11-23T20:43:17Z",
+          "subject": "test(fs-c07): verify no-clipping cell-geometry and core/interfacial violation classification",
+          "parents": [
+            "a3b3fd947f8632386f2457e5c37ca2de16191287"
+          ]
+        },
+        {
+          "sha": "a3b3fd947f8632386f2457e5c37ca2de16191287",
+          "date": "2026-11-23T20:42:49Z",
+          "subject": "feat(fs-c07): map native phase-overallocation to actual fluid mesh coordinates and VOF magnitude bins, no CFD rerun",
+          "parents": [
+            "7bd6d3954861b4b4a632e99e3ec39b67076fbf38"
+          ]
+        },
+        {
+          "sha": "7bd6d3954861b4b4a632e99e3ec39b67076fbf38",
+          "date": "2026-11-23T20:41:39Z",
+          "subject": "chore(fs-c07): register genuine 20-state Vmetal 48.011 cm3 and raw Vsolid 2.404 cm3, microscopic overlap and physical gate FAIL",
+          "parents": [
+            "0f744740b2b0dc9c018f7d094d64ac0dcf3e7616"
+          ]
+        },
+        {
+          "sha": "0f744740b2b0dc9c018f7d094d64ac0dcf3e7616",
+          "date": "2026-11-23T20:41:02Z",
+          "subject": "docs(fs-c07): record 20-state real raw volumes, tiny integrated phase overlap and independent native monitor agreement",
+          "parents": [
+            "d404a5e00a4ea869db9b5770151a64d975297318"
+          ]
+        },
+        {
+          "sha": "d404a5e00a4ea869db9b5770151a64d975297318",
+          "date": "2026-11-23T20:14:24Z",
+          "subject": "docs(fs-c07): index real 20-frame native phase-change evidence and non-clipping error-volume recovery",
+          "parents": [
+            "146f612ed0b0b42f7e96481d73b0505a82beb80c"
+          ]
+        },
+        {
+          "sha": "146f612ed0b0b42f7e96481d73b0505a82beb80c",
+          "date": "2026-11-23T20:14:08Z",
+          "subject": "docs(fs-c07): link actual native solidification, phase allocation defect magnitude and no-CFD raw volume recovery",
+          "parents": [
+            "c0ac907dcb987fca9da3154d56a72bdbe37021db"
+          ]
+        },
+        {
+          "sha": "c0ac907dcb987fca9da3154d56a72bdbe37021db",
+          "date": "2026-11-23T20:13:51Z",
+          "subject": "chore(fs-c07): register 20 genuine native solidification snapshots and measured solid-over-metal violations without accepting shrinkage",
+          "parents": [
+            "05edba54b2f0af85bae12d840b4e4dad6ed273b1"
+          ]
+        },
+        {
+          "sha": "05edba54b2f0af85bae12d840b4e4dad6ed273b1",
+          "date": "2026-11-23T20:13:19Z",
+          "subject": "docs(fs-c07): record real 20-step liquidus crossing, solid growth and exact local over-allocation while preserving raw evidence",
+          "parents": [
+            "3cb958daea93fa51bd05dc61954766acade4c43f"
+          ]
+        },
+        {
+          "sha": "3cb958daea93fa51bd05dc61954766acade4c43f",
+          "date": "2026-11-23T20:12:10Z",
+          "subject": "ci(fs-c07): test no-clipping 20-state native phase-volume recovery and monitor comparisons",
+          "parents": [
+            "bb4e471c07eab2cb6d78844bab8bca7ca9e8e912"
+          ]
+        },
+        {
+          "sha": "bb4e471c07eab2cb6d78844bab8bca7ca9e8e912",
+          "date": "2026-11-23T20:11:48Z",
+          "subject": "test(fs-c07): verify raw native volume recovery, non-clipped defect integral, liquidus core and no data modifications",
+          "parents": [
+            "c4013afdc8bb147798934f8788e2b5510b2dcdde"
+          ]
+        },
+        {
+          "sha": "c4013afdc8bb147798934f8788e2b5510b2dcdde",
+          "date": "2026-11-23T20:11:16Z",
+          "subject": "feat(fs-c07): recover native 20-state raw solid and VOF volumes with unphysical-overlap integrals and independent monitor comparisons",
+          "parents": [
+            "4116c460ea341be7e99a64cf9ea839fdaae09c7b"
+          ]
+        },
+        {
+          "sha": "4116c460ea341be7e99a64cf9ea839fdaae09c7b",
+          "date": "2026-11-23T19:53:43Z",
+          "subject": "docs(fs-c07): update index from 'not run' to real 1-second CFD complete with failed physical audit",
+          "parents": [
+            "9a961cfc925e62f1003e05fa7e03766036011f80"
+          ]
+        },
+        {
+          "sha": "9a961cfc925e62f1003e05fa7e03766036011f80",
+          "date": "2026-11-23T19:53:26Z",
+          "subject": "chore(fs-c07): status 1s native complete with failed postprocess, future provenance fix unverified",
+          "parents": [
+            "116cc8d52495c88d78c4159d86803ef60dfbeced"
+          ]
+        },
+        {
+          "sha": "116cc8d52495c88d78c4159d86803ef60dfbeced",
+          "date": "2026-11-23T19:53:13Z",
+          "subject": "test(fs-c07): preserve true native solver completed status when scientific field audit fails",
+          "parents": [
+            "24145fc3e23a2253a8f0e95541f2590cadb67a39"
+          ]
+        },
+        {
+          "sha": "24145fc3e23a2253a8f0e95541f2590cadb67a39",
+          "date": "2026-11-23T19:52:48Z",
+          "subject": "fix(fs-c07): persist solver completion before separate physical-field gate to avoid false native_cfd_executed=false",
+          "parents": [
+            "11f7f71216a764bba420dbc12099bc05ff8ab701"
+          ]
+        },
+        {
+          "sha": "11f7f71216a764bba420dbc12099bc05ff8ab701",
+          "date": "2026-11-23T19:52:23Z",
+          "subject": "docs(fs-c07): distinguish completed real solver from failed allocation postprocess and link raw field forensic",
+          "parents": [
+            "40ad7c0da5de1adfe013bb8feeee5f3deaad1cf1"
+          ]
+        },
+        {
+          "sha": "40ad7c0da5de1adfe013bb8feeee5f3deaad1cf1",
+          "date": "2026-11-23T19:52:03Z",
+          "subject": "docs(fs-c07): preserve genuine 1s native solver completion, mass flux and phase allocation failure forensic",
+          "parents": [
+            "e936bfba52eb4328fa7c6eb2f2ee2f5a341818b4"
+          ]
+        },
+        {
+          "sha": "e936bfba52eb4328fa7c6eb2f2ee2f5a341818b4",
+          "date": "2026-11-23T19:51:26Z",
+          "subject": "chore(fs-c07): record native 1s solver completion and exact nontrivial phase allocation audit failure",
+          "parents": [
+            "cf64e2292c1c0dd67327f0e5bc3ffb95df83581a"
+          ]
+        },
+        {
+          "sha": "cf64e2292c1c0dd67327f0e5bc3ffb95df83581a",
+          "date": "2026-11-23T19:50:45Z",
+          "subject": "feat(fs-c07): compact diagnostic across 20 snapshots showing first and worst allocation defects",
+          "parents": [
+            "d0a142d0a5688eb7b4de64b96e643413cfe7f8be"
+          ]
+        },
+        {
+          "sha": "d0a142d0a5688eb7b4de64b96e643413cfe7f8be",
+          "date": "2026-11-23T19:50:20Z",
+          "subject": "ci(fs-c07): require forensic allocation tests without re-running OpenFOAM",
+          "parents": [
+            "28c1b831bab34cc628aff944cf5d0fd7222c6de9"
+          ]
+        },
+        {
+          "sha": "28c1b831bab34cc628aff944cf5d0fd7222c6de9",
+          "date": "2026-11-23T19:50:10Z",
+          "subject": "test(fs-c07): distinguish tiny numerical alpha overshoot from significant invalid solid-metal allocation",
+          "parents": [
+            "590cd0da8b4115feab0713282a9e94a44c86c037"
+          ]
+        },
+        {
+          "sha": "590cd0da8b4115feab0713282a9e94a44c86c037",
+          "date": "2026-11-23T19:49:36Z",
+          "subject": "feat(fs-c07): inspect 20 native phase snapshots, quantify exact VOF/solid violations without clipping or CFD rerun",
+          "parents": [
+            "437bf13c3265d6ac1507cee20436b32669ed740d"
+          ]
+        },
+        {
+          "sha": "437bf13c3265d6ac1507cee20436b32669ed740d",
+          "date": "2026-11-23T19:44:46Z",
+          "subject": "docs(fs-c07): document incomplete preserved run, 895 GB free, and read-only root-cause recovery",
+          "parents": [
+            "97630f0ce498a24a99a5963d5daa31a1dcaeabe1"
+          ]
+        },
+        {
+          "sha": "97630f0ce498a24a99a5963d5daa31a1dcaeabe1",
+          "date": "2026-11-23T19:44:12Z",
+          "subject": "fix(fs-c07): surface true native failure reason and last CFD time instead of evidence-only footer",
+          "parents": [
+            "0d93e5f34a2c735769c8392d4e5c3138ea958b21"
+          ]
+        },
+        {
+          "sha": "0d93e5f34a2c735769c8392d4e5c3138ea958b21",
+          "date": "2026-11-23T19:43:45Z",
+          "subject": "chore(fs-c07): register saved incomplete run and 895GB free, require true last_error before diagnosis",
+          "parents": [
+            "1d6bee73a1a993ca55945d57222f653f0dbf3bb9"
+          ]
+        },
+        {
+          "sha": "1d6bee73a1a993ca55945d57222f653f0dbf3bb9",
+          "date": "2026-11-23T19:43:25Z",
+          "subject": "ci(fs-c07): compile and test read-only saved-run forensic inspection",
+          "parents": [
+            "13a0af7da85f8a59cea2faa5d005c36319ddb021"
+          ]
+        },
+        {
+          "sha": "13a0af7da85f8a59cea2faa5d005c36319ddb021",
+          "date": "2026-11-23T19:43:10Z",
+          "subject": "test(fs-c07): validate read-only incomplete-run diagnosis and preserve case bytes",
+          "parents": [
+            "f203d39e677d70ff00d44dc70ed93ad205939fc2"
+          ]
+        },
+        {
+          "sha": "f203d39e677d70ff00d44dc70ed93ad205939fc2",
+          "date": "2026-11-23T19:42:51Z",
+          "subject": "feat(fs-c07): diagnose saved native termination from report, log and last physical fields without rerun",
+          "parents": [
+            "3c5ee87c41203afd5258ac8ba49f0107e04f37c5"
+          ]
+        },
+        {
+          "sha": "3c5ee87c41203afd5258ac8ba49f0107e04f37c5",
+          "date": "2026-11-23T18:40:52Z",
+          "subject": "docs(fs-c07): record actual running CFD, heat-flux reciprocity and future-only write frequency repair",
+          "parents": [
+            "1fa73ab1f2db51e26b54ac746c4fd55eb8c79941"
+          ]
+        },
+        {
+          "sha": "1fa73ab1f2db51e26b54ac746c4fd55eb8c79941",
+          "date": "2026-11-23T18:40:32Z",
+          "subject": "chore(fs-c07): record real live CFD t=0.114s, Courant and native thermal flux without completion claim",
+          "parents": [
+            "720ae45bc3cf7299bdb646b4c3590dfd85fcf062"
+          ]
+        },
+        {
+          "sha": "720ae45bc3cf7299bdb646b4c3590dfd85fcf062",
+          "date": "2026-11-23T18:39:48Z",
+          "subject": "test(fs-c07): enforce decoupled monitor frequency and preserve accepted FS-C06 sources",
+          "parents": [
+            "ab95c31f1c04037e61f34964ed22414536a59c31"
+          ]
+        },
+        {
+          "sha": "ab95c31f1c04037e61f34964ed22414536a59c31",
+          "date": "2026-11-23T18:39:39Z",
+          "subject": "fix(fs-c07): retain accepted FS-C06 monitor provenance, stage time-synchronized FS-C07 monitors",
+          "parents": [
+            "5576e2607a93fd67e5f6fa269c63b4045964e176"
+          ]
+        },
+        {
+          "sha": "5576e2607a93fd67e5f6fa269c63b4045964e176",
+          "date": "2026-11-23T18:39:23Z",
+          "subject": "fix(fs-c07): decouple function-object writes from every timestep; align 10 monitors to 0.05s output",
+          "parents": [
+            "8e4ecfd9ab87b5b47519ebc1d3dfdbf84c8b00a1"
+          ]
+        },
+        {
+          "sha": "8e4ecfd9ab87b5b47519ebc1d3dfdbf84c8b00a1",
+          "date": "2026-11-23T18:35:45Z",
+          "subject": "docs(fs-c07): explain silent native 1s execution and safe WSL log/CPU monitoring",
+          "parents": [
+            "df787ef1be702e3487e336eafd4be4f8f5d362c2"
+          ]
+        },
+        {
+          "sha": "df787ef1be702e3487e336eafd4be4f8f5d362c2",
+          "date": "2026-11-23T18:35:28Z",
+          "subject": "chore(fs-c07): record user's first native launch and silent logging diagnosis without claiming completion",
+          "parents": [
+            "f35ee3d3fda15095ab31752a26e9fb8dfaec207a"
+          ]
+        },
+        {
+          "sha": "f35ee3d3fda15095ab31752a26e9fb8dfaec207a",
+          "date": "2026-11-23T18:34:44Z",
+          "subject": "test(fs-c07): verify live native Time extraction and avoid fictitious progress",
+          "parents": [
+            "dff9c52df42ff24146cd5797b5e284071cac88ed"
+          ]
+        },
+        {
+          "sha": "dff9c52df42ff24146cd5797b5e284071cac88ed",
+          "date": "2026-11-23T18:34:13Z",
+          "subject": "fix(fs-c07): correct raw-regex Time parser for live Foundation14 progress",
+          "parents": [
+            "b433a6f211c3deeaac4e20e34688be29a7625c31"
+          ]
+        },
+        {
+          "sha": "b433a6f211c3deeaac4e20e34688be29a7625c31",
+          "date": "2026-11-23T18:33:57Z",
+          "subject": "fix(fs-c07): stream native progress every 15s, preserve logs and terminate on interruption/timeout",
+          "parents": [
+            "7b0626e41bdcb6b878dfa85a2268f0320b58b75c"
+          ]
+        },
+        {
+          "sha": "7b0626e41bdcb6b878dfa85a2268f0320b58b75c",
+          "date": "2026-11-23T17:47:14Z",
+          "subject": "docs(fs-c07): correct WSL provenance status label",
+          "parents": [
+            "0283dfbf0cf933cc9cbc1617c94d13b4c8340cd7"
+          ]
+        },
+        {
+          "sha": "0283dfbf0cf933cc9cbc1617c94d13b4c8340cd7",
+          "date": "2026-11-23T17:47:05Z",
+          "subject": "chore(fs-c07): require native full time horizon and 10 numeric records before thermal PASS",
+          "parents": [
+            "3a2cf523c3958718e3d0eb9da18dd87869fbdd76"
+          ]
+        },
+        {
+          "sha": "3a2cf523c3958718e3d0eb9da18dd87869fbdd76",
+          "date": "2026-11-23T17:46:18Z",
+          "subject": "test(fs-c07): reject incomplete native monitors and support initial OpenFOAM T-field variation",
+          "parents": [
+            "ba169330cbc808ac068f978e3a3258f67a876af8"
+          ]
+        },
+        {
+          "sha": "ba169330cbc808ac068f978e3a3258f67a876af8",
+          "date": "2026-11-23T17:45:58Z",
+          "subject": "feat(fs-c07): require genuine ten native monitor time series at final thermal horizon",
+          "parents": [
+            "a8fa322621aad8a0be55b2b044390a5aa148a81a"
+          ]
+        },
+        {
+          "sha": "a8fa322621aad8a0be55b2b044390a5aa148a81a",
+          "date": "2026-11-23T17:44:30Z",
+          "subject": "docs(fs-c07): connect native thermal transition research stage without shrinkage claims",
+          "parents": [
+            "0d0fe6c3695d878720d7f85216bc0985cc200289"
+          ]
+        },
+        {
+          "sha": "0d0fe6c3695d878720d7f85216bc0985cc200289",
+          "date": "2026-11-23T17:44:27Z",
+          "subject": "docs(fs-c07): connect native thermal transition research stage without shrinkage claims",
+          "parents": [
+            "d1c922784547be49e263d61e9718c14a4d969dc1"
+          ]
+        },
+        {
+          "sha": "d1c922784547be49e263d61e9718c14a4d969dc1",
+          "date": "2026-11-23T17:43:53Z",
+          "subject": "fix(fs-c07): import real native alpha and mesh readers from canonical FS-C02/C04 modules",
+          "parents": [
+            "de2ba2da4ec0277ca519bb52131191702c2d74ac"
+          ]
+        },
+        {
+          "sha": "de2ba2da4ec0277ca519bb52131191702c2d74ac",
+          "date": "2026-11-23T17:43:38Z",
+          "subject": "fix(fs-c07): reject in-repo output and prevent false completed thermal screen before t=1s",
+          "parents": [
+            "de0ea4e1cac9336a88e4943b84076bee98f48dc8"
+          ]
+        },
+        {
+          "sha": "de0ea4e1cac9336a88e4943b84076bee98f48dc8",
+          "date": "2026-11-23T17:43:03Z",
+          "subject": "chore(fs-c07): make honest native thermal screen status distinct from unimplemented shrinkage",
+          "parents": [
+            "d6dcc877bcb10716550ea1a7ef26e0273ec7c83b"
+          ]
+        },
+        {
+          "sha": "d6dcc877bcb10716550ea1a7ef26e0273ec7c83b",
+          "date": "2026-11-23T17:42:43Z",
+          "subject": "docs(fs-c07): specify native thermal-to-solid screen and mass-conservative shrinkage equations/source hooks",
+          "parents": [
+            "83bf11d63a06d0c5f213e7e7375c94a6323f1e40"
+          ]
+        },
+        {
+          "sha": "83bf11d63a06d0c5f213e7e7375c94a6323f1e40",
+          "date": "2026-11-23T17:41:34Z",
+          "subject": "fix(fs-c07): accept actual FS-C06 initial mixture T when T.metal is generated during solver",
+          "parents": [
+            "8699e88a9afb58e649eb93e0431f187743652c70"
+          ]
+        },
+        {
+          "sha": "8699e88a9afb58e649eb93e0431f187743652c70",
+          "date": "2026-11-23T17:40:08Z",
+          "subject": "ci(fs-c07): add explicit synthetic source/isolation CI distinct from native OpenFOAM run",
+          "parents": [
+            "a325428fde61eb8a7955f78da6079e2cdf81602f"
+          ]
+        },
+        {
+          "sha": "a325428fde61eb8a7955f78da6079e2cdf81602f",
+          "date": "2026-11-23T17:39:56Z",
+          "subject": "test(fs-c07): provenance-safe native thermal staging and no false shrinkage assertions",
+          "parents": [
+            "11571c34a2a6cae8ef6b17259884de85e6d2305e"
+          ]
+        },
+        {
+          "sha": "11571c34a2a6cae8ef6b17259884de85e6d2305e",
+          "date": "2026-11-23T17:38:58Z",
+          "subject": "feat(fs-c07): isolated real Foundation14 liquidus-crossing transient and native saved-field diagnostics",
+          "parents": [
+            "e3479e90a9ffb226e144944dfce549cece1612fc"
+          ]
+        },
+        {
+          "sha": "e3479e90a9ffb226e144944dfce549cece1612fc",
+          "date": "2026-11-23T17:36:27Z",
+          "subject": "feat(fs-c07): add native Foundation14 long-horizon VOF+CHT thermal transition controlDict",
+          "parents": [
+            "5ebf74b301695a41a5159813bfe2f9298bd2856b"
+          ]
+        },
+        {
+          "sha": "5ebf74b301695a41a5159813bfe2f9298bd2856b",
+          "date": "2026-11-21T03:39:08Z",
+          "subject": "docs(fs-c06): link quantified native monitor results and preserve remaining physics gates",
+          "parents": [
+            "128f2723b786c45cb65fb1127e5273a66f2dc1d4"
+          ]
+        },
+        {
+          "sha": "128f2723b786c45cb65fb1127e5273a66f2dc1d4",
+          "date": "2026-11-21T03:39:06Z",
+          "subject": "docs(fs-c06): link quantified native monitor results and preserve remaining physics gates",
+          "parents": [
+            "ca8cd115a70b002d6afdbd7f23fc26ffb86a50ff"
+          ]
+        },
+        {
+          "sha": "ca8cd115a70b002d6afdbd7f23fc26ffb86a50ff",
+          "date": "2026-11-21T03:39:04Z",
+          "subject": "docs(fs-c06): link quantified native monitor results and preserve remaining physics gates",
+          "parents": [
+            "a16c70d2453ca141297c1081deb7e261423441f0"
+          ]
+        },
+        {
+          "sha": "a16c70d2453ca141297c1081deb7e261423441f0",
+          "date": "2026-11-21T03:38:54Z",
+          "subject": "chore(fs-c06): accept 10 native monitor values; thermal reciprocity measured, mass closure remains open",
+          "parents": [
+            "52c407aa66e75516295bf113ea6e1c22488d6b1f"
+          ]
+        },
+        {
+          "sha": "52c407aa66e75516295bf113ea6e1c22488d6b1f",
+          "date": "2026-11-21T03:38:40Z",
+          "subject": "docs(fs-c06): quantify 10 native monitor outputs, CHT reciprocity and unresolved mass closure without shrinkage claims",
+          "parents": [
+            "2479bf6e44ca8314a2a24e3a3329231f5852e585"
+          ]
+        },
+        {
+          "sha": "2479bf6e44ca8314a2a24e3a3329231f5852e585",
+          "date": "2026-11-21T03:35:48Z",
+          "subject": "docs(fs-c06): link exact recursive reader for already-saved 10-monitor native run",
+          "parents": [
+            "4e82c6e073d503d8fdd6e31ff6a7efe9e938b835"
+          ]
+        },
+        {
+          "sha": "4e82c6e073d503d8fdd6e31ff6a7efe9e938b835",
+          "date": "2026-11-21T03:35:41Z",
+          "subject": "docs(fs-c06): correct shell lookup mistake and preserve native 10-of-10 evidence",
+          "parents": [
+            "2d65bf7e84de05f76807d208e6cc674a77bc7468"
+          ]
+        },
+        {
+          "sha": "2d65bf7e84de05f76807d208e6cc674a77bc7468",
+          "date": "2026-11-21T03:35:32Z",
+          "subject": "chore(fs-c06): distinguish wrong postProcessing paths from proven 10-of-10 monitor files",
+          "parents": [
+            "ef7b684f8de07e4710de575a95ba8149ff600b46"
+          ]
+        },
+        {
+          "sha": "ef7b684f8de07e4710de575a95ba8149ff600b46",
+          "date": "2026-11-21T03:35:21Z",
+          "subject": "fix(fs-c06): provide read-only region-agnostic native monitor reader for saved WSL run",
+          "parents": [
+            "963121351f7c2d640607d847c9cf1a4bb0dc7ea9"
+          ]
+        },
+        {
+          "sha": "963121351f7c2d640607d847c9cf1a4bb0dc7ea9",
+          "date": "2026-11-21T03:29:01Z",
+          "subject": "docs(fs-c06): show second native 10/10 monitor PASS at top of case index",
+          "parents": [
+            "445f0671da2fe093c44045ee5402773be4b2c8e4"
+          ]
+        },
+        {
+          "sha": "445f0671da2fe093c44045ee5402773be4b2c8e4",
+          "date": "2026-11-21T03:28:58Z",
+          "subject": "docs(fs-c06): show second native 10/10 monitor PASS at top of case index",
+          "parents": [
+            "6cbf1dac84394cfbc4330fd96eca73f3cf88aa77"
+          ]
+        },
+        {
+          "sha": "6cbf1dac84394cfbc4330fd96eca73f3cf88aa77",
+          "date": "2026-11-21T03:28:44Z",
+          "subject": "docs(fs-c06): preserve second real WSL 10-of-10 monitor PASS and outstanding numerical audits",
+          "parents": [
+            "e1e97f87f32fd90da4f0dbc22e32df0ba55bdd29"
+          ]
+        },
+        {
+          "sha": "e1e97f87f32fd90da4f0dbc22e32df0ba55bdd29",
+          "date": "2026-11-21T03:28:35Z",
+          "subject": "chore(fs-c06): register second WSL native PASS with 10/10 monitor files, not numeric validation",
+          "parents": [
+            "608332778cc2eee92307524f72c55b2b88dde6f8"
+          ]
+        },
+        {
+          "sha": "608332778cc2eee92307524f72c55b2b88dde6f8",
+          "date": "2026-11-21T03:26:03Z",
+          "subject": "docs(fs-c06): update project navigation with native zero-solid measurements and function-object fix",
+          "parents": [
+            "d08b25fd0c0275c233c299611b6e608b3c19d997"
+          ]
+        },
+        {
+          "sha": "d08b25fd0c0275c233c299611b6e608b3c19d997",
+          "date": "2026-11-21T03:26:01Z",
+          "subject": "docs(fs-c06): update project navigation with native zero-solid measurements and function-object fix",
+          "parents": [
+            "d618d35d498005aec6dd4d0b43c824c339e07ced"
+          ]
+        },
+        {
+          "sha": "d618d35d498005aec6dd4d0b43c824c339e07ced",
+          "date": "2026-11-21T03:25:37Z",
+          "subject": "docs(fs-c06): explain observed zero phase, missing monitor outputs, and native functions correction",
+          "parents": [
+            "449b10ff6d8e145fe7aec5a0291c5ce4c23d28d3"
+          ]
+        },
+        {
+          "sha": "449b10ff6d8e145fe7aec5a0291c5ce4c23d28d3",
+          "date": "2026-11-21T03:25:27Z",
+          "subject": "chore(fs-c06): record 0 solid native measurements and pending system/functions WSL acceptance",
+          "parents": [
+            "d59dfa89e70037905a0282e337089333558baf79"
+          ]
+        },
+        {
+          "sha": "d59dfa89e70037905a0282e337089333558baf79",
+          "date": "2026-11-21T03:25:13Z",
+          "subject": "docs(fs-c06): record measured zero-solid run and Foundation14 function objects root cause",
+          "parents": [
+            "faf5147a7dbfd878ae4e2bad1d18a4673fa6e4ef"
+          ]
+        },
+        {
+          "sha": "faf5147a7dbfd878ae4e2bad1d18a4673fa6e4ef",
+          "date": "2026-11-21T03:24:47Z",
+          "subject": "fix(fs-c06): reject native gate unless all 10 Foundation14 monitor outputs exist",
+          "parents": [
+            "e23c6e9a844701d5e5427345898f3f6303eecdb7"
+          ]
+        },
+        {
+          "sha": "e23c6e9a844701d5e5427345898f3f6303eecdb7",
+          "date": "2026-11-21T03:24:31Z",
+          "subject": "test(fs-c06): require Foundation14 system/functions, prohibit legacy controlDict block",
+          "parents": [
+            "c4b76154fd2f5de7d5c167a2785046aadf9df8c1"
+          ]
+        },
+        {
+          "sha": "c4b76154fd2f5de7d5c167a2785046aadf9df8c1",
+          "date": "2026-11-21T03:24:21Z",
+          "subject": "fix(fs-c06): use correct Python raw-regex escapes in native functions validation",
+          "parents": [
+            "4089442b4d574e3ab431fc50c05a77f60b9be7c8"
+          ]
+        },
+        {
+          "sha": "4089442b4d574e3ab431fc50c05a77f60b9be7c8",
+          "date": "2026-11-21T03:24:13Z",
+          "subject": "fix(fs-c06): stage and validate native Foundation14 system/functions separately from controlDict",
+          "parents": [
+            "51afaa26885f1cc235819d2971c70d94e500bb21"
+          ]
+        },
+        {
+          "sha": "51afaa26885f1cc235819d2971c70d94e500bb21",
+          "date": "2026-11-21T03:23:58Z",
+          "subject": "fix(fs-c06): stop declaring ignored function objects inside controlDict",
+          "parents": [
+            "8260521fdb723fd5558659fd92d61a5a68b34d28"
+          ]
+        },
+        {
+          "sha": "8260521fdb723fd5558659fd92d61a5a68b34d28",
+          "date": "2026-11-21T03:23:56Z",
+          "subject": "fix(fs-c06): move native phase/mass/heat monitors to Foundation14 system/functions",
+          "parents": [
+            "4b769893e7948cdf7f7a5606ecfc6ae4123384ea"
+          ]
+        },
+        {
+          "sha": "4b769893e7948cdf7f7a5606ecfc6ae4123384ea",
+          "date": "2026-11-21T03:19:24Z",
+          "subject": "docs(fs-c06): surface first native WSL PASS without claiming shrinkage",
+          "parents": [
+            "cb71aa57db76c24aa10fb2faf6ae419f3f2c05a9"
+          ]
+        },
+        {
+          "sha": "cb71aa57db76c24aa10fb2faf6ae419f3f2c05a9",
+          "date": "2026-11-21T03:19:22Z",
+          "subject": "docs(fs-c06): surface first native WSL PASS without claiming shrinkage",
+          "parents": [
+            "c53b427485f1db3a9bf9af26860826c7202bf6d3"
+          ]
+        }
+      ],
+      "unresolved_parents": [
+        "c53b427485f1db3a9bf9af26860826c7202bf6d3"
+      ],
+      "coverage_complete": false
+    },
+    {
+      "name": "research/fs-c08-conservative-phase-mass-20261123",
+      "sha": "4cb2601f888e9a6dd7aab5ebeeaa4a1c15d269f6",
+      "main_reachable": false,
+      "commits": [
+        {
+          "sha": "4cb2601f888e9a6dd7aab5ebeeaa4a1c15d269f6",
+          "date": "2026-11-27T08:30:43Z",
+          "subject": "docs(fs-c08): preserve twelfth batch chronology and replicate",
+          "parents": [
+            "baeb2b3df9d0c6c5f9ae4959367e91765fb33e35"
+          ]
+        },
+        {
+          "sha": "baeb2b3df9d0c6c5f9ae4959367e91765fb33e35",
+          "date": "2026-11-27T08:30:41Z",
+          "subject": "docs(fs-c08): preserve twelfth batch chronology and replicate",
+          "parents": [
+            "98710869dce819079bda5049308aac627150b271"
+          ]
+        },
+        {
+          "sha": "98710869dce819079bda5049308aac627150b271",
+          "date": "2026-11-27T08:30:38Z",
+          "subject": "docs(fs-c08): record successful synchronized geometry startup batch and preserved temporal limits",
+          "parents": [
+            "7b3ed1ff46e8cb509fbbb416235dde61bc3d5506"
+          ]
+        },
+        {
+          "sha": "7b3ed1ff46e8cb509fbbb416235dde61bc3d5506",
+          "date": "2026-11-26T03:09:35Z",
+          "subject": "docs(fs-c08): append eleventh batch and geometry synchronization correction",
+          "parents": [
+            "c31e7acc0ca55d7db802e94843eb19d980dc6986"
+          ]
+        },
+        {
+          "sha": "c31e7acc0ca55d7db802e94843eb19d980dc6986",
+          "date": "2026-11-26T03:09:32Z",
+          "subject": "docs(fs-c08): record final-state audit failure and synchronized geometry candidate",
+          "parents": [
+            "f8f78550cc3c327a9e5d796827f2aa8934945091"
+          ]
+        },
+        {
+          "sha": "f8f78550cc3c327a9e5d796827f2aa8934945091",
+          "date": "2026-11-26T03:09:14Z",
+          "subject": "fix(fs-c08): preserve audited strict final fields and verify post-audit volume closure",
+          "parents": [
+            "c5986120fd10c087b9f7dd3728a94cc62626af8b"
+          ]
+        },
+        {
+          "sha": "c5986120fd10c087b9f7dd3728a94cc62626af8b",
+          "date": "2026-11-26T03:09:00Z",
+          "subject": "fix(fs-c08): synchronize volume-admissible phase geometry before strict energy assembly and iterate on final-state mismatch",
+          "parents": [
+            "800e93762d06f859a036ebe5749722061991508b"
+          ]
+        },
+        {
+          "sha": "800e93762d06f859a036ebe5749722061991508b",
+          "date": "2026-11-26T03:05:04Z",
+          "subject": "docs(fs-c08): log coupled residual failure and common-state energy closure experiment",
+          "parents": [
+            "056af991d1991127b6ce694a46edd3d254ff4b4d"
+          ]
+        },
+        {
+          "sha": "056af991d1991127b6ce694a46edd3d254ff4b4d",
+          "date": "2026-11-26T03:05:00Z",
+          "subject": "docs(fs-c08): record tenth batch outer rejection and fixed-state closure candidate",
+          "parents": [
+            "a163cbeaa69e31f2cdc4d6517f246d8ab12e0f25"
+          ]
+        },
+        {
+          "sha": "a163cbeaa69e31f2cdc4d6517f246d8ab12e0f25",
+          "date": "2026-11-26T03:04:42Z",
+          "subject": "feat(fs-c08): compare strict coupled energy closure across fixed timesteps and require final audit records",
+          "parents": [
+            "eec47dadac1798475689ac583d7f9bc9d8148e39"
+          ]
+        },
+        {
+          "sha": "eec47dadac1798475689ac583d7f9bc9d8148e39",
+          "date": "2026-11-26T03:04:39Z",
+          "subject": "feat(fs-c08): compare strict coupled energy closure across fixed timesteps and require final audit records",
+          "parents": [
+            "84bec801cd32d471db2f9fa282b5898c38d690c2"
+          ]
+        },
+        {
+          "sha": "84bec801cd32d471db2f9fa282b5898c38d690c2",
+          "date": "2026-11-26T03:04:19Z",
+          "subject": "audit(fs-c08): require fixed-state acceptance and recheck actual final geometry and velocity before publishing strict step",
+          "parents": [
+            "3e6233e4856a217b774cc1ca0fae807d96fb6fb5"
+          ]
+        },
+        {
+          "sha": "3e6233e4856a217b774cc1ca0fae807d96fb6fb5",
+          "date": "2026-11-26T03:04:05Z",
+          "subject": "feat(fs-c08): accept coupled pressure candidate only if frozen-state energy audit and existing conservation gates pass",
+          "parents": [
+            "4c4d859013dc74d970e7babdea0d3121f4a8f76e"
+          ]
+        },
+        {
+          "sha": "4c4d859013dc74d970e7babdea0d3121f4a8f76e",
+          "date": "2026-11-26T03:04:02Z",
+          "subject": "feat(fs-c08): accept coupled pressure candidate only if frozen-state energy audit and existing conservation gates pass",
+          "parents": [
+            "e84bdb3ab9804993faa5c7b7d779aa15d1d1c726"
+          ]
+        },
+        {
+          "sha": "e84bdb3ab9804993faa5c7b7d779aa15d1d1c726",
+          "date": "2026-11-26T03:03:58Z",
+          "subject": "feat(fs-c08): accept coupled pressure candidate only if frozen-state energy audit and existing conservation gates pass",
+          "parents": [
+            "2b06f17d1ec307bcb210ecdc49ee778672b91e93"
+          ]
+        },
+        {
+          "sha": "2b06f17d1ec307bcb210ecdc49ee778672b91e93",
+          "date": "2026-11-26T02:13:27Z",
+          "subject": "docs(fs-c08): log ninth batch and thermal convergence experiment",
+          "parents": [
+            "2e59696220aeaf1fb021d8b61d25b2ef6835c171"
+          ]
+        },
+        {
+          "sha": "2e59696220aeaf1fb021d8b61d25b2ef6835c171",
+          "date": "2026-11-26T02:13:24Z",
+          "subject": "docs(fs-c08): record 150-step finite-K refinement and energy residual control candidate",
+          "parents": [
+            "6c1173568ccb936694b3ec010cfae252c2c4e660"
+          ]
+        },
+        {
+          "sha": "6c1173568ccb936694b3ec010cfae252c2c4e660",
+          "date": "2026-11-26T02:13:03Z",
+          "subject": "feat(fs-c08): four-case thermal residual-control batch with fixed finite-K EOS",
+          "parents": [
+            "d5c522a211fd95971129f39b4b00a4af7e9cd36b"
+          ]
+        },
+        {
+          "sha": "d5c522a211fd95971129f39b4b00a4af7e9cd36b",
+          "date": "2026-11-26T02:13:01Z",
+          "subject": "feat(fs-c08): four-case thermal residual-control batch with fixed finite-K EOS",
+          "parents": [
+            "de3b9a562840ee1a4e0fb9e7ccb0730ed1c6f6ba"
+          ]
+        },
+        {
+          "sha": "de3b9a562840ee1a4e0fb9e7ccb0730ed1c6f6ba",
+          "date": "2026-11-26T02:12:58Z",
+          "subject": "feat(fs-c08): four-case thermal residual-control batch with fixed finite-K EOS",
+          "parents": [
+            "d912ad25c531dd1e62927bef8bc345b2a6fd773b"
+          ]
+        },
+        {
+          "sha": "d912ad25c531dd1e62927bef8bc345b2a6fd773b",
+          "date": "2026-11-26T02:12:45Z",
+          "subject": "feat(fs-c08): audit nonlinear thermal inventory residual and optional residual-controlled temperature solve",
+          "parents": [
+            "ba6caba8678d15a49ea4d77a9a2075dac4c9cdc9"
+          ]
+        },
+        {
+          "sha": "ba6caba8678d15a49ea4d77a9a2075dac4c9cdc9",
+          "date": "2026-11-26T01:43:38Z",
+          "subject": "docs(fs-c08): preserve active EOS evidence and fixed-time refinement plan",
+          "parents": [
+            "287ec08088621d249afc0019d19e6c54ade38591"
+          ]
+        },
+        {
+          "sha": "287ec08088621d249afc0019d19e6c54ade38591",
+          "date": "2026-11-26T01:43:36Z",
+          "subject": "docs(fs-c08): record active finite-K startup verification and longer fixed-time refinement",
+          "parents": [
+            "05a9d8abb100f091c4c2f61a8f19b6cac14982e9"
+          ]
+        },
+        {
+          "sha": "05a9d8abb100f091c4c2f61a8f19b6cac14982e9",
+          "date": "2026-11-26T01:43:15Z",
+          "subject": "audit(fs-c08): compare saved milestone states and accepted history extrema across finite-K time refinement",
+          "parents": [
+            "c1a178c62466fcec390ad2988e9046f738138fae"
+          ]
+        },
+        {
+          "sha": "c1a178c62466fcec390ad2988e9046f738138fae",
+          "date": "2026-11-26T01:43:01Z",
+          "subject": "feat(fs-c08): finite-K fixed-time refinement to common horizon with compact clipboard output and completed-only comparison",
+          "parents": [
+            "480cac20830606551ecc40d78ce31ae05db9f17c"
+          ]
+        },
+        {
+          "sha": "480cac20830606551ecc40d78ce31ae05db9f17c",
+          "date": "2026-11-26T01:35:14Z",
+          "subject": "docs(fs-c08): log auxiliary compliance results and active EOS experiment",
+          "parents": [
+            "9f4857dd96c17214a7e666b9f7936ce48760ab01"
+          ]
+        },
+        {
+          "sha": "9f4857dd96c17214a7e666b9f7936ce48760ab01",
+          "date": "2026-11-26T01:35:11Z",
+          "subject": "docs(fs-c08): record compliance evidence and active weakly compressible candidate",
+          "parents": [
+            "00dbb8c2657280f4fb0eb335ed1fad5530efd229"
+          ]
+        },
+        {
+          "sha": "00dbb8c2657280f4fb0eb335ed1fad5530efd229",
+          "date": "2026-11-26T01:34:53Z",
+          "subject": "audit(fs-c08): retain elastic volume contribution separately in accepted-state ledger",
+          "parents": [
+            "4bb0641529bf8a7034ed6ec7b230341a68976acd"
+          ]
+        },
+        {
+          "sha": "4bb0641529bf8a7034ed6ec7b230341a68976acd",
+          "date": "2026-11-26T01:34:51Z",
+          "subject": "audit(fs-c08): retain elastic volume contribution separately in accepted-state ledger",
+          "parents": [
+            "db8fc61aae86ffcbce52df250918e1aa2498f8ac"
+          ]
+        },
+        {
+          "sha": "db8fc61aae86ffcbce52df250918e1aa2498f8ac",
+          "date": "2026-11-26T01:34:48Z",
+          "subject": "audit(fs-c08): retain elastic volume contribution separately in accepted-state ledger",
+          "parents": [
+            "40ad0098e00af23a9404dbb1a84e2770a53d7cd7"
+          ]
+        },
+        {
+          "sha": "40ad0098e00af23a9404dbb1a84e2770a53d7cd7",
+          "date": "2026-11-26T01:34:46Z",
+          "subject": "audit(fs-c08): retain elastic volume contribution separately in accepted-state ledger",
+          "parents": [
+            "ec62a40631eea835cf1e004bd3ce7ef3f37f3b65"
+          ]
+        },
+        {
+          "sha": "ec62a40631eea835cf1e004bd3ce7ef3f37f3b65",
+          "date": "2026-11-26T01:34:18Z",
+          "subject": "feat(fs-c08): stage explicit finite-K candidate and batch four EOS variants without modifying B14 reference",
+          "parents": [
+            "0d389ce0bcba335a46ebfdecf9093b8bc20af2ad"
+          ]
+        },
+        {
+          "sha": "0d389ce0bcba335a46ebfdecf9093b8bc20af2ad",
+          "date": "2026-11-26T01:34:15Z",
+          "subject": "feat(fs-c08): stage explicit finite-K candidate and batch four EOS variants without modifying B14 reference",
+          "parents": [
+            "55424dcc46b4dfc5738a1f1164902161bb3bf0ed"
+          ]
+        },
+        {
+          "sha": "55424dcc46b4dfc5738a1f1164902161bb3bf0ed",
+          "date": "2026-11-26T01:34:13Z",
+          "subject": "feat(fs-c08): stage explicit finite-K candidate and batch four EOS variants without modifying B14 reference",
+          "parents": [
+            "b8aa19ae34ce7120dff6615d7c37c593e9323efc"
+          ]
+        },
+        {
+          "sha": "b8aa19ae34ce7120dff6615d7c37c593e9323efc",
+          "date": "2026-11-26T01:33:58Z",
+          "subject": "feat(fs-c08): nonlinear finite-K pressure projection with exact density replay and unchanged mass flux conservation",
+          "parents": [
+            "c95588cd975875dafcd360b60e877ea434f1baea"
+          ]
+        },
+        {
+          "sha": "c95588cd975875dafcd360b60e877ea434f1baea",
+          "date": "2026-11-26T01:33:55Z",
+          "subject": "feat(fs-c08): nonlinear finite-K pressure projection with exact density replay and unchanged mass flux conservation",
+          "parents": [
+            "79a9d0127fce535e40a6f67408dd1ff50e3ae73f"
+          ]
+        },
+        {
+          "sha": "79a9d0127fce535e40a6f67408dd1ff50e3ae73f",
+          "date": "2026-11-26T01:33:52Z",
+          "subject": "feat(fs-c08): nonlinear finite-K pressure projection with exact density replay and unchanged mass flux conservation",
+          "parents": [
+            "0c2dbc70f6a7e7b12f41d4dce9b2d642240f8c02"
+          ]
+        },
+        {
+          "sha": "0c2dbc70f6a7e7b12f41d4dce9b2d642240f8c02",
+          "date": "2026-11-26T01:33:39Z",
+          "subject": "feat(fs-c08): optional common finite bulk modulus for phase density and pressure-volume bookkeeping",
+          "parents": [
+            "b5e200de932a1a766d48a20a5f866e46cb128614"
+          ]
+        },
+        {
+          "sha": "b5e200de932a1a766d48a20a5f866e46cb128614",
+          "date": "2026-11-26T01:33:36Z",
+          "subject": "feat(fs-c08): optional common finite bulk modulus for phase density and pressure-volume bookkeeping",
+          "parents": [
+            "e41892275cb9edb1880298112a904281e1097455"
+          ]
+        },
+        {
+          "sha": "e41892275cb9edb1880298112a904281e1097455",
+          "date": "2026-11-26T01:33:33Z",
+          "subject": "feat(fs-c08): optional common finite bulk modulus for phase density and pressure-volume bookkeeping",
+          "parents": [
+            "271795fc27784888d0fce8596232689c93839968"
+          ]
+        },
+        {
+          "sha": "271795fc27784888d0fce8596232689c93839968",
+          "date": "2026-11-26T00:53:59Z",
+          "subject": "docs(fs-c08): preserve source attribution results and compliance sensitivity scope",
+          "parents": [
+            "82f2114a6ab244c36ee5f67b34921fd3577d244b"
+          ]
+        },
+        {
+          "sha": "82f2114a6ab244c36ee5f67b34921fd3577d244b",
+          "date": "2026-11-26T00:53:56Z",
+          "subject": "docs(fs-c08): record verified source attribution and literature-based compliance experiment",
+          "parents": [
+            "3bfa0783497c56eccebd5b2def5ac7df9d0375f1"
+          ]
+        },
+        {
+          "sha": "3bfa0783497c56eccebd5b2def5ac7df9d0375f1",
+          "date": "2026-11-26T00:53:39Z",
+          "subject": "audit(fs-c08): include elastic compliance comparison in short batch reports",
+          "parents": [
+            "6bd2e3b2d7f6e89a0ff92a2ae0fac070ae1a8d17"
+          ]
+        },
+        {
+          "sha": "6bd2e3b2d7f6e89a0ff92a2ae0fac070ae1a8d17",
+          "date": "2026-11-26T00:53:33Z",
+          "subject": "audit(fs-c08): evaluate sourced pure-Fe elastic compliance on frozen startup pressure operator only",
+          "parents": [
+            "65fa69dc31f1cd3a73885e1be88e162dba05ec9e"
+          ]
+        },
+        {
+          "sha": "65fa69dc31f1cd3a73885e1be88e162dba05ec9e",
+          "date": "2026-11-26T00:53:30Z",
+          "subject": "audit(fs-c08): evaluate sourced pure-Fe elastic compliance on frozen startup pressure operator only",
+          "parents": [
+            "ad36f351a4ab7ca850e2667b1dd9fbf0db569fd6"
+          ]
+        },
+        {
+          "sha": "ad36f351a4ab7ca850e2667b1dd9fbf0db569fd6",
+          "date": "2026-11-26T00:34:48Z",
+          "subject": "docs(fs-c08): preserve failed build evidence and exact retry scope",
+          "parents": [
+            "c235c08d1ee932e33c1a32edf6e8a5a3a713843a"
+          ]
+        },
+        {
+          "sha": "c235c08d1ee932e33c1a32edf6e8a5a3a713843a",
+          "date": "2026-11-26T00:34:45Z",
+          "subject": "docs(fs-c08): record attribution build failure and typed scalar constructor fix",
+          "parents": [
+            "96c71552949d45de95579a99ef22275d406bdeaf"
+          ]
+        },
+        {
+          "sha": "96c71552949d45de95579a99ef22275d406bdeaf",
+          "date": "2026-11-26T00:34:35Z",
+          "subject": "fix(fs-c08): include compiler instantiation context in shared build failure report",
+          "parents": [
+            "dac7a4564e836db476154042060ddfe47132e5dd"
+          ]
+        },
+        {
+          "sha": "dac7a4564e836db476154042060ddfe47132e5dd",
+          "date": "2026-11-26T00:34:23Z",
+          "subject": "fix(fs-c08): disambiguate Foundation14 scalar list construction and remove unused diagnostic list",
+          "parents": [
+            "f74f87eb426a5c27cbccca5d7feef6d9e3f58c3e"
+          ]
+        },
+        {
+          "sha": "f74f87eb426a5c27cbccca5d7feef6d9e3f58c3e",
+          "date": "2026-11-26T00:23:47Z",
+          "subject": "docs(fs-c08): append temporal refinement results and short pressure attribution plan",
+          "parents": [
+            "54218878b14be67063a26ef10de62f7bff07fdfe"
+          ]
+        },
+        {
+          "sha": "54218878b14be67063a26ef10de62f7bff07fdfe",
+          "date": "2026-11-26T00:23:44Z",
+          "subject": "docs(fs-c08): record temporal refinement rejection and initial pressure source attribution",
+          "parents": [
+            "a8a67f72ba3f37ce805fe15aa79deecf4ed19fca"
+          ]
+        },
+        {
+          "sha": "a8a67f72ba3f37ce805fe15aa79deecf4ed19fca",
+          "date": "2026-11-26T00:23:28Z",
+          "subject": "audit(fs-c08): surface initial pressure attribution in batch results including rejected steps",
+          "parents": [
+            "31c815e74cfb5b159ac3c1a92f5fd3f826ceb872"
+          ]
+        },
+        {
+          "sha": "31c815e74cfb5b159ac3c1a92f5fd3f826ceb872",
+          "date": "2026-11-26T00:23:26Z",
+          "subject": "audit(fs-c08): surface initial pressure attribution in batch results including rejected steps",
+          "parents": [
+            "6082e799329c9a3cb04eb28044263ab2950af425"
+          ]
+        },
+        {
+          "sha": "6082e799329c9a3cb04eb28044263ab2950af425",
+          "date": "2026-11-26T00:23:21Z",
+          "subject": "audit(fs-c08): split initial residual into metal material, metal transport, gas EOS and gas transport/source",
+          "parents": [
+            "f56a3aa87cb69a2249a9f3d2f229cf6ad270368b"
+          ]
+        },
+        {
+          "sha": "f56a3aa87cb69a2249a9f3d2f229cf6ad270368b",
+          "date": "2026-11-26T00:23:08Z",
+          "subject": "audit(fs-c08): attribute first pressure correction to four forcing components on same frozen active-set operator",
+          "parents": [
+            "c5b845c985e203294491167eef2f37415898fe34"
+          ]
+        },
+        {
+          "sha": "c5b845c985e203294491167eef2f37415898fe34",
+          "date": "2026-11-26T00:22:57Z",
+          "subject": "audit(fs-c08): expose optional first-projection residual components for source attribution",
+          "parents": [
+            "b2c5cc1f176ef86d7ed0ef43053e25a0989e74a4"
+          ]
+        },
+        {
+          "sha": "b2c5cc1f176ef86d7ed0ef43053e25a0989e74a4",
+          "date": "2026-11-25T23:50:30Z",
+          "subject": "docs(fs-c08): append support results and temporal refinement batch",
+          "parents": [
+            "9daf187a0edf94e2ca403ee83ebd651c37a4c87d"
+          ]
+        },
+        {
+          "sha": "9daf187a0edf94e2ca403ee83ebd651c37a4c87d",
+          "date": "2026-11-25T23:50:27Z",
+          "subject": "docs(fs-c08): close transport support hypothesis and record fixed-time refinement plan",
+          "parents": [
+            "9dc3a3990068cb921d4769c3c81bf437b9edcb74"
+          ]
+        },
+        {
+          "sha": "9dc3a3990068cb921d4769c3c81bf437b9edcb74",
+          "date": "2026-11-25T23:50:14Z",
+          "subject": "audit(fs-c08): retain initial pressure Jacobian records for fixed-step refinement",
+          "parents": [
+            "7e7e6e6a4cee998e5bbb93454d0a0771777140d0"
+          ]
+        },
+        {
+          "sha": "7e7e6e6a4cee998e5bbb93454d0a0771777140d0",
+          "date": "2026-11-25T23:50:08Z",
+          "subject": "feat(fs-c08): fixed-timestep refinement suite at equal physical horizon with momentum evidence",
+          "parents": [
+            "78856d6ab18f21f74b93b4c08d1a2fc814d3a70e"
+          ]
+        },
+        {
+          "sha": "78856d6ab18f21f74b93b4c08d1a2fc814d3a70e",
+          "date": "2026-11-25T23:44:51Z",
+          "subject": "docs(fs-c08): append verified energy results and next pressure stencil suite",
+          "parents": [
+            "6ddf99f96da7f4cf0f7123480439b36343aabef2"
+          ]
+        },
+        {
+          "sha": "6ddf99f96da7f4cf0f7123480439b36343aabef2",
+          "date": "2026-11-25T23:44:48Z",
+          "subject": "docs(fs-c08): register old-time phase support experiment and preserve energy reference",
+          "parents": [
+            "3533023afed4f94ce3d353f20a2eff762eb42b1f"
+          ]
+        },
+        {
+          "sha": "3533023afed4f94ce3d353f20a2eff762eb42b1f",
+          "date": "2026-11-25T23:44:34Z",
+          "subject": "feat(fs-c08): expose fixed-step old-time phase support experiment suite",
+          "parents": [
+            "e71c28fdcc217dc3da79c935c92e641bdbc0031f"
+          ]
+        },
+        {
+          "sha": "e71c28fdcc217dc3da79c935c92e641bdbc0031f",
+          "date": "2026-11-25T23:44:31Z",
+          "subject": "feat(fs-c08): expose fixed-step old-time phase support experiment suite",
+          "parents": [
+            "00d1bf80f443b4d5dfe2497cee59ff5074129ed1"
+          ]
+        },
+        {
+          "sha": "00d1bf80f443b4d5dfe2497cee59ff5074129ed1",
+          "date": "2026-11-25T23:44:29Z",
+          "subject": "feat(fs-c08): expose fixed-step old-time phase support experiment suite",
+          "parents": [
+            "8ca7876450c973f8406dbced5d4e1524a01642b4"
+          ]
+        },
+        {
+          "sha": "8ca7876450c973f8406dbced5d4e1524a01642b4",
+          "date": "2026-11-25T23:44:19Z",
+          "subject": "feat(fs-c08): constrain experimental pressure flux stencil to old-time phase support and audit through-flow",
+          "parents": [
+            "9948b25ca092d0621db58a029a27f3d0863cc574"
+          ]
+        },
+        {
+          "sha": "9948b25ca092d0621db58a029a27f3d0863cc574",
+          "date": "2026-11-25T23:43:59Z",
+          "subject": "docs(fs-c08): record verified energy factorial and first-step phase advection evidence",
+          "parents": [
+            "41a862ac164c181ca87116b8a79b1bc84c1c7ba3"
+          ]
+        },
+        {
+          "sha": "41a862ac164c181ca87116b8a79b1bc84c1c7ba3",
+          "date": "2026-11-25T23:07:03Z",
+          "subject": "docs(fs-c08): reconcile legacy real-CFD and mass-gate flags with verified startup scope",
+          "parents": [
+            "06b4349f40bb4da622f6fb66c76fd0dacc04d2de"
+          ]
+        },
+        {
+          "sha": "06b4349f40bb4da622f6fb66c76fd0dacc04d2de",
+          "date": "2026-11-25T23:06:57Z",
+          "subject": "docs(fs-c08): link consolidated experiment log and main project synchronization",
+          "parents": [
+            "969eed12b4798c51dc92af1d8a4c0d25a958051a"
+          ]
+        },
+        {
+          "sha": "969eed12b4798c51dc92af1d8a4c0d25a958051a",
+          "date": "2026-11-25T23:05:57Z",
+          "subject": "docs(fs-c08): consolidate case-by-case native WSL experiment log and pending energy suite",
+          "parents": [
+            "f8e356f490a46a0461f20d36db704b56b11d2884"
+          ]
+        },
+        {
+          "sha": "f8e356f490a46a0461f20d36db704b56b11d2884",
+          "date": "2026-11-25T23:03:01Z",
+          "subject": "docs(fs-c08): record flux batch results and energy donor time-level experiment",
+          "parents": [
+            "a8679b3e1e07a509945e53f923b07f97f43bd321"
+          ]
+        },
+        {
+          "sha": "a8679b3e1e07a509945e53f923b07f97f43bd321",
+          "date": "2026-11-25T23:02:49Z",
+          "subject": "feat(fs-c08): configure four-case energy donor sensitivity suite at fixed dt",
+          "parents": [
+            "1f952c234bfe8801d25142983c37ba2004697461"
+          ]
+        },
+        {
+          "sha": "1f952c234bfe8801d25142983c37ba2004697461",
+          "date": "2026-11-25T23:02:47Z",
+          "subject": "feat(fs-c08): configure four-case energy donor sensitivity suite at fixed dt",
+          "parents": [
+            "990cf0139dd6bcb88d92c4c1bad85a9345b578ac"
+          ]
+        },
+        {
+          "sha": "990cf0139dd6bcb88d92c4c1bad85a9345b578ac",
+          "date": "2026-11-25T23:02:44Z",
+          "subject": "feat(fs-c08): configure four-case energy donor sensitivity suite at fixed dt",
+          "parents": [
+            "c96658b3f6af66ae52802957666c04dbbc801503"
+          ]
+        },
+        {
+          "sha": "c96658b3f6af66ae52802957666c04dbbc801503",
+          "date": "2026-11-25T23:02:34Z",
+          "subject": "fix(fs-c08): avoid duplicate numerics dictionary registration inside nested thermal solve",
+          "parents": [
+            "d01e3f61049b9c6525bc345fdb1a510a58124a9c"
+          ]
+        },
+        {
+          "sha": "d01e3f61049b9c6525bc345fdb1a510a58124a9c",
+          "date": "2026-11-25T23:02:27Z",
+          "subject": "fix(fs-c08): initialize gas energy history and expose inadmissible gas predictor inventory",
+          "parents": [
+            "46acb3d59848c8bdef07cd597b1ee5a8ab599336"
+          ]
+        },
+        {
+          "sha": "46acb3d59848c8bdef07cd597b1ee5a8ab599336",
+          "date": "2026-11-25T23:02:24Z",
+          "subject": "feat(fs-c08): isolate gas and liquid donor energy time levels and phase-resolved advection diagnostics",
+          "parents": [
+            "8fa88ae32bef50053f3bb21996df1f1abc1e7db8"
+          ]
+        },
+        {
+          "sha": "8fa88ae32bef50053f3bb21996df1f1abc1e7db8",
+          "date": "2026-11-25T10:17:13Z",
+          "subject": "docs(fs-c08): record verified mobility batch and prepare fixed-step flux sensitivity suite",
+          "parents": [
+            "c6fac57edc5ff247bb9813d6a25380702a6c2ae3"
+          ]
+        },
+        {
+          "sha": "c6fac57edc5ff247bb9813d6a25380702a6c2ae3",
+          "date": "2026-11-25T10:16:58Z",
+          "subject": "feat(fs-c08): expose four-variant fixed-step interface flux batch",
+          "parents": [
+            "f638025b01192940c9194e001235058dab1b8815"
+          ]
+        },
+        {
+          "sha": "f638025b01192940c9194e001235058dab1b8815",
+          "date": "2026-11-25T10:16:55Z",
+          "subject": "feat(fs-c08): expose four-variant fixed-step interface flux batch",
+          "parents": [
+            "2c04a299a3597c004037df00f7e2c1282dbc22a1"
+          ]
+        },
+        {
+          "sha": "2c04a299a3597c004037df00f7e2c1282dbc22a1",
+          "date": "2026-11-25T10:16:52Z",
+          "subject": "feat(fs-c08): expose four-variant fixed-step interface flux batch",
+          "parents": [
+            "3ba1bb87f05a34be9267f2f3b2af5d5c9d9cc20e"
+          ]
+        },
+        {
+          "sha": "3ba1bb87f05a34be9267f2f3b2af5d5c9d9cc20e",
+          "date": "2026-11-25T10:16:38Z",
+          "subject": "feat(fs-c08): isolate total-upwind predictor and temporal flux correction in fixed-step interface experiments",
+          "parents": [
+            "3ab54d2285d6a432781f572e26bd6558d6526241"
+          ]
+        },
+        {
+          "sha": "3ab54d2285d6a432781f572e26bd6558d6526241",
+          "date": "2026-11-25T09:48:12Z",
+          "subject": "docs(fs-c08): record one-command parallel fixed-step experiment batch",
+          "parents": [
+            "fccf7662d03834eb71d518e27505f04e3836d131"
+          ]
+        },
+        {
+          "sha": "fccf7662d03834eb71d518e27505f04e3836d131",
+          "date": "2026-11-25T09:48:02Z",
+          "subject": "docs(fs-c08): document fixed-step concurrent experiments and shared-build constraints",
+          "parents": [
+            "9fef3ea09289e6d499c13861a1559b73c7fbc447"
+          ]
+        },
+        {
+          "sha": "9fef3ea09289e6d499c13861a1559b73c7fbc447",
+          "date": "2026-11-25T09:48:00Z",
+          "subject": "fix(fs-c08): compare batch ledgers only at explicitly saved timestamps",
+          "parents": [
+            "ac8d85259f813c567a320df7a098410441599d39"
+          ]
+        },
+        {
+          "sha": "ac8d85259f813c567a320df7a098410441599d39",
+          "date": "2026-11-25T09:47:42Z",
+          "subject": "feat(fs-c08): run four fixed-step momentum variants in parallel with one build and common-time comparison",
+          "parents": [
+            "9dc26135ce5d96cd00d9c480d9fdf38cb233a52b"
+          ]
+        },
+        {
+          "sha": "9dc26135ce5d96cd00d9c480d9fdf38cb233a52b",
+          "date": "2026-11-25T09:47:21Z",
+          "subject": "feat(fs-c08): share one verified native build across isolated runs with library lock and hash audit",
+          "parents": [
+            "c9952b8ca72dc9af1a9452d01c9c4ee47c24506a"
+          ]
+        },
+        {
+          "sha": "c9952b8ca72dc9af1a9452d01c9c4ee47c24506a",
+          "date": "2026-11-25T09:44:59Z",
+          "subject": "docs(fs-c08): record successful refresh run and phase-weighted mobility candidate",
+          "parents": [
+            "dba2386312af7b96840177172c6eac574d1dd0be"
+          ]
+        },
+        {
+          "sha": "dba2386312af7b96840177172c6eac574d1dd0be",
+          "date": "2026-11-25T09:44:48Z",
+          "subject": "feat(fs-c08): configure isolated phase pressure mobility comparison",
+          "parents": [
+            "db88ad4ed30515234ba5e75afb5b591c104325ca"
+          ]
+        },
+        {
+          "sha": "db88ad4ed30515234ba5e75afb5b591c104325ca",
+          "date": "2026-11-25T09:44:46Z",
+          "subject": "feat(fs-c08): configure isolated phase pressure mobility comparison",
+          "parents": [
+            "b60e89a71443f0f698fcecf298b99ad1c90dcb5a"
+          ]
+        },
+        {
+          "sha": "b60e89a71443f0f698fcecf298b99ad1c90dcb5a",
+          "date": "2026-11-25T09:44:36Z",
+          "subject": "feat(fs-c08): compare phase-weighted inverse momentum mobility against cross-phase interpolation",
+          "parents": [
+            "6bb416084626cb58cec49670fe3b4b4027a2d34a"
+          ]
+        },
+        {
+          "sha": "6bb416084626cb58cec49670fe3b4b4027a2d34a",
+          "date": "2026-11-25T09:39:50Z",
+          "subject": "docs(fs-c08): record native refresh build pass and boundary evaluation ordering correction",
+          "parents": [
+            "ea241e285dda61be121d6012b95cdf2299c9b1ec"
+          ]
+        },
+        {
+          "sha": "ea241e285dda61be121d6012b95cdf2299c9b1ec",
+          "date": "2026-11-25T09:39:47Z",
+          "subject": "audit(fs-c08): expose ordered momentum refresh boundary stages in failure tail",
+          "parents": [
+            "c8636c92f45b8d98f19497fe69680c4c8a9cf999"
+          ]
+        },
+        {
+          "sha": "c8636c92f45b8d98f19497fe69680c4c8a9cf999",
+          "date": "2026-11-25T09:39:36Z",
+          "subject": "fix(fs-c08): defer fixedFluxPressure evaluation until current gradient is constrained",
+          "parents": [
+            "b3291bebfe4fa7c38151243adc5b5fb7693e9504"
+          ]
+        },
+        {
+          "sha": "b3291bebfe4fa7c38151243adc5b5fb7693e9504",
+          "date": "2026-11-25T09:35:18Z",
+          "subject": "docs(fs-c08): record mobility comparison and fixed-step momentum refresh experiment",
+          "parents": [
+            "63889b73414fd4cfd01a076e21e1951b0fee4f19"
+          ]
+        },
+        {
+          "sha": "63889b73414fd4cfd01a076e21e1951b0fee4f19",
+          "date": "2026-11-25T09:35:04Z",
+          "subject": "feat(fs-c08): expose controlled momentum matrix refresh at fixed timestep",
+          "parents": [
+            "1a566a7f9db4c81f5c23e44883a0d27afb29090c"
+          ]
+        },
+        {
+          "sha": "1a566a7f9db4c81f5c23e44883a0d27afb29090c",
+          "date": "2026-11-25T09:35:01Z",
+          "subject": "feat(fs-c08): expose controlled momentum matrix refresh at fixed timestep",
+          "parents": [
+            "8bfbe8d55ab173f6270c7adf73a507fc21f02556"
+          ]
+        },
+        {
+          "sha": "8bfbe8d55ab173f6270c7adf73a507fc21f02556",
+          "date": "2026-11-25T09:34:51Z",
+          "subject": "feat(fs-c08): refresh native momentum matrix after thermal predictor and audit accepted-state force balance",
+          "parents": [
+            "ade60ddcedb520c824f264611ee619cf913b468a"
+          ]
+        },
+        {
+          "sha": "ade60ddcedb520c824f264611ee619cf913b468a",
+          "date": "2026-11-25T09:19:30Z",
+          "subject": "docs(fs-c08): record ten-step native conservation pass and controlled momentum experiment",
+          "parents": [
+            "204a14094ced3d2a3af53d4f05a234cd6b181d0c"
+          ]
+        },
+        {
+          "sha": "204a14094ced3d2a3af53d4f05a234cd6b181d0c",
+          "date": "2026-11-25T09:19:10Z",
+          "subject": "feat(fs-c08): expose isolated momentum mobility comparison in native probe runner",
+          "parents": [
+            "e14d187caac4358730f6a7fe37f97ab1b6205da5"
+          ]
+        }
+      ],
+      "unresolved_parents": [
+        "e14d187caac4358730f6a7fe37f97ab1b6205da5"
+      ],
+      "coverage_complete": false
+    },
+    {
+      "name": "research/granada-add-freesurface-testcase-20261020",
+      "sha": "8913b1b87ee9a46314f3cbf8fb7abc738ffe8791",
+      "main_reachable": false,
+      "commits": [
+        {
+          "sha": "8913b1b87ee9a46314f3cbf8fb7abc738ffe8791",
+          "date": "2026-10-21T01:37:14Z",
+          "subject": "legal(freesurface): include upstream OpenFOAM Foundation GPLv3 license with copied tutorial",
+          "parents": [
+            "816cea16213c0b276b8bea6b8359bfbb56fd2c24"
+          ]
+        },
+        {
+          "sha": "816cea16213c0b276b8bea6b8359bfbb56fd2c24",
+          "date": "2026-10-21T01:34:51Z",
+          "subject": "ci(freesurface): verify FS-C01 20 staged file hashes, no CFD results and case naming",
+          "parents": [
+            "bfab916d3e1e3ed807028dd3999456ae5306a5ff"
+          ]
+        },
+        {
+          "sha": "bfab916d3e1e3ed807028dd3999456ae5306a5ff",
+          "date": "2026-10-21T01:34:38Z",
+          "subject": "fix(test): use whitespace and phase-group regex semantics correctly",
+          "parents": [
+            "ddeff7eb633da5b99337ea83f70a877db794f282"
+          ]
+        },
+        {
+          "sha": "ddeff7eb633da5b99337ea83f70a877db794f282",
+          "date": "2026-10-21T01:34:02Z",
+          "subject": "test(freesurface): protect FS-C01 original input SHA256, case identity, and not-run status",
+          "parents": [
+            "90fb57c82b6d8fbf424b298a4f15d2280db82865"
+          ]
+        },
+        {
+          "sha": "90fb57c82b6d8fbf424b298a4f15d2280db82865",
+          "date": "2026-10-21T01:33:03Z",
+          "subject": "test(freesurface): add FS-C01 complete Foundation14 water-air VOF case inputs",
+          "parents": [
+            "12eef5960de3567163e1a70315e502c3bde2f085"
+          ]
+        }
+      ],
+      "unresolved_parents": [],
+      "coverage_complete": true
+    },
+    {
+      "name": "research/granada-bfs01-vof-benchmark-20261020",
+      "sha": "099f2f377c44bb70932d76de9c25221157ed666c",
+      "main_reachable": false,
+      "commits": [
+        {
+          "sha": "099f2f377c44bb70932d76de9c25221157ed666c",
+          "date": "2026-10-20T10:38:17Z",
+          "subject": "docs(ci): align 15 regressions and input-hash preflight with B-FS01 staged-case contract",
+          "parents": [
+            "17bd2e68c275ef90d58b35487d5b0e65bb6a94bb"
+          ]
+        },
+        {
+          "sha": "17bd2e68c275ef90d58b35487d5b0e65bb6a94bb",
+          "date": "2026-10-20T10:38:14Z",
+          "subject": "docs(ci): align 15 regressions and input-hash preflight with B-FS01 staged-case contract",
+          "parents": [
+            "b7fe7efcd02754aad4898c1be896e50487aff52a"
+          ]
+        },
+        {
+          "sha": "b7fe7efcd02754aad4898c1be896e50487aff52a",
+          "date": "2026-10-20T10:37:59Z",
+          "subject": "test(granada): add two regressions for tampered benchmark CFD inputs and unsafe paths",
+          "parents": [
+            "b904034b7722c893946bf811e71ba49ea498c634"
+          ]
+        },
+        {
+          "sha": "b904034b7722c893946bf811e71ba49ea498c634",
+          "date": "2026-10-20T10:37:40Z",
+          "subject": "fix(granada): audit exact staged input SHA256, reject untracked CFD input drift",
+          "parents": [
+            "dcf98e144636977ed25f925a4410bf67cdf23ad0"
+          ]
+        },
+        {
+          "sha": "dcf98e144636977ed25f925a4410bf67cdf23ad0",
+          "date": "2026-10-20T10:34:41Z",
+          "subject": "docs(granada): B-FS-01 water-air staged benchmark, OpenFOAM runtime gates and scientific limits",
+          "parents": [
+            "0d313d4940fb2e4cd850bad14b84b88df4640ef4"
+          ]
+        },
+        {
+          "sha": "0d313d4940fb2e4cd850bad14b84b88df4640ef4",
+          "date": "2026-10-20T10:33:33Z",
+          "subject": "ci(granada): verify 13 VOF benchmark regressions and stage official Foundation14 tutorial without CFD",
+          "parents": [
+            "6a217c260b411dc8346a10534a02e30f0197b31e"
+          ]
+        },
+        {
+          "sha": "6a217c260b411dc8346a10534a02e30f0197b31e",
+          "date": "2026-10-20T10:32:31Z",
+          "subject": "test(granada): thirteen synthetic VOF staging and source-backed volume integrity gates",
+          "parents": [
+            "30312aae0f9b077ac58ff47dc2fc08388cd60da8"
+          ]
+        },
+        {
+          "sha": "30312aae0f9b077ac58ff47dc2fc08388cd60da8",
+          "date": "2026-10-20T10:31:22Z",
+          "subject": "feat(granada): stage isolated Foundation14 VOF analogue and audit actual volume time series",
+          "parents": [
+            "a6c86773ce50a7380f431c90b6de49b203bff9e5"
+          ]
+        }
+      ],
+      "unresolved_parents": [],
+      "coverage_complete": true
+    },
+    {
+      "name": "research/granada-bfs-bsh-foundation14-feasibility-20261020",
+      "sha": "11cf5f43658da5bb325c34a586f8bab40ebb0a8b",
+      "main_reachable": false,
+      "commits": [
+        {
+          "sha": "11cf5f43658da5bb325c34a586f8bab40ebb0a8b",
+          "date": "2026-10-20T09:35:07Z",
+          "subject": "research(granada): Foundation14 free surface VOF solidification and density-driven shrinkage feasibility with verified sources",
+          "parents": [
+            "653c302e746fe609ab21dac8eceee162ae0ca48e"
+          ]
+        }
+      ],
+      "unresolved_parents": [],
+      "coverage_complete": true
+    },
+    {
+      "name": "research/granada-boundary-spatial-integrity-20261020",
+      "sha": "16f778d37a96dc0e1a80cfc07fc366d831a538d3",
+      "main_reachable": false,
+      "commits": [
+        {
+          "sha": "16f778d37a96dc0e1a80cfc07fc366d831a538d3",
+          "date": "2026-10-20T08:43:14Z",
+          "subject": "ci(granada): fail on real-source alerts with strict science evidence gate",
+          "parents": [
+            "8e532fc324a36280908948ffc0ac97730d2f724b"
+          ]
+        },
+        {
+          "sha": "8e532fc324a36280908948ffc0ac97730d2f724b",
+          "date": "2026-10-20T08:43:06Z",
+          "subject": "test(granada): verify complete relative SHA256 provenance for all source files",
+          "parents": [
+            "fe23b2faa4b5f23972d5bb1a65d659f82c876f21"
+          ]
+        },
+        {
+          "sha": "fe23b2faa4b5f23972d5bb1a65d659f82c876f21",
+          "date": "2026-10-20T08:42:51Z",
+          "subject": "feat(granada): expose source relative paths and SHA256 in auditable evidence manifest",
+          "parents": [
+            "7c579d83d4d5b91a51ae183f8e14ee6e4fdb5ac3"
+          ]
+        },
+        {
+          "sha": "7c579d83d4d5b91a51ae183f8e14ee6e4fdb5ac3",
+          "date": "2026-10-20T08:41:58Z",
+          "subject": "research(granada): preserve source-backed boundary and spatial phase observations with limits",
+          "parents": [
+            "b87e2d3aedfae06254c923a786d5f7f60205d4ff"
+          ]
+        },
+        {
+          "sha": "b87e2d3aedfae06254c923a786d5f7f60205d4ff",
+          "date": "2026-10-20T08:40:10Z",
+          "subject": "data(granada): archive source-derived 2D line mushy screening across B/C V14-V16",
+          "parents": [
+            "971a2a91550e99f2e00fe46d9718c0ff27585a29"
+          ]
+        },
+        {
+          "sha": "971a2a91550e99f2e00fe46d9718c0ff27585a29",
+          "date": "2026-10-20T08:36:52Z",
+          "subject": "docs(granada): source-backed face flux, metal interface and spatial phase scientific handoff",
+          "parents": [
+            "28db8f87d04ef8807fedbb840654170535d6bee2"
+          ]
+        },
+        {
+          "sha": "28db8f87d04ef8807fedbb840654170535d6bee2",
+          "date": "2026-10-20T08:35:13Z",
+          "subject": "ci(granada): source-backed face flux/interface/spatial evidence without CFD",
+          "parents": [
+            "20fce5476220e9f663ec6d42be4715bb62f4bc1c"
+          ]
+        },
+        {
+          "sha": "20fce5476220e9f663ec6d42be4715bb62f4bc1c",
+          "date": "2026-10-20T08:34:51Z",
+          "subject": "test(granada): nine no-CFD face-interface-and-phase source regression cases",
+          "parents": [
+            "1924412f50c390e79ebc077eb53e5cc7f9ef39f3"
+          ]
+        },
+        {
+          "sha": "1924412f50c390e79ebc077eb53e5cc7f9ef39f3",
+          "date": "2026-10-20T08:33:58Z",
+          "subject": "feat(granada): original per-face top, metal interface and spatial phase evidence gate",
+          "parents": [
+            "9577c4ecf83f65694bc017d257c85834e439d188"
+          ]
+        }
+      ],
+      "unresolved_parents": [],
+      "coverage_complete": true
+    },
+    {
+      "name": "research/granada-c3d-science-gates-20261019",
+      "sha": "9f2ced732c43b8fc3632096e7d3d972caa3e07cf",
+      "main_reachable": false,
+      "commits": [
+        {
+          "sha": "9f2ced732c43b8fc3632096e7d3d972caa3e07cf",
+          "date": "2026-10-20T01:01:39Z",
+          "subject": "fix(docs): render fenced commands and inline code correctly in Granada notes",
+          "parents": [
+            "9126cb654d14addc4ecf8a85abf4052df9265425"
+          ]
+        },
+        {
+          "sha": "9126cb654d14addc4ecf8a85abf4052df9265425",
+          "date": "2026-10-20T01:01:36Z",
+          "subject": "fix(docs): render fenced commands and inline code correctly in Granada notes",
+          "parents": [
+            "f2dda089364a4ba072f59bdc3770340b6cfed42e"
+          ]
+        },
+        {
+          "sha": "f2dda089364a4ba072f59bdc3770340b6cfed42e",
+          "date": "2026-10-20T01:01:33Z",
+          "subject": "fix(docs): render fenced commands and inline code correctly in Granada notes",
+          "parents": [
+            "d4042eea6ccecfa8c824572b08c6299cce34f5d9"
+          ]
+        },
+        {
+          "sha": "d4042eea6ccecfa8c824572b08c6299cce34f5d9",
+          "date": "2026-10-20T01:01:29Z",
+          "subject": "fix(docs): render fenced commands and inline code correctly in Granada notes",
+          "parents": [
+            "f225b7c2119d8f8c8310168b98f9f56001e938a4"
+          ]
+        },
+        {
+          "sha": "f225b7c2119d8f8c8310168b98f9f56001e938a4",
+          "date": "2026-10-20T01:00:55Z",
+          "subject": "docs(granada): link the independent C3D scientific QA and provenance block from repo main",
+          "parents": [
+            "7e3fefa5ae3665a489e0c230c15becc39071a636"
+          ]
+        },
+        {
+          "sha": "7e3fefa5ae3665a489e0c230c15becc39071a636",
+          "date": "2026-10-20T01:00:33Z",
+          "subject": "ci(granada): check research provenance metadata and trigger only static documentation QA",
+          "parents": [
+            "6c2ba2d987ffd1d065914a6323b4d5a77920d2e1"
+          ]
+        },
+        {
+          "sha": "6c2ba2d987ffd1d065914a6323b4d5a77920d2e1",
+          "date": "2026-10-20T01:00:14Z",
+          "subject": "test(granada): fail closed on unverified chemistry, unrun mesh and active PR isolation",
+          "parents": [
+            "6eb1aad5ff2bafde412e09e29138e0f5742e37d7"
+          ]
+        },
+        {
+          "sha": "6eb1aad5ff2bafde412e09e29138e0f5742e37d7",
+          "date": "2026-10-20T00:59:46Z",
+          "subject": "docs(granada): add auditable C3D provenance gates and isolated handoff log",
+          "parents": [
+            "ec89524b6322c9724b433244861776c8dc35355d"
+          ]
+        },
+        {
+          "sha": "ec89524b6322c9724b433244861776c8dc35355d",
+          "date": "2026-10-20T00:59:43Z",
+          "subject": "docs(granada): add auditable C3D provenance gates and isolated handoff log",
+          "parents": [
+            "19cc558aaa96a483863990820bba3165a284d3f1"
+          ]
+        },
+        {
+          "sha": "19cc558aaa96a483863990820bba3165a284d3f1",
+          "date": "2026-10-20T00:58:33Z",
+          "subject": "docs(granada): document both WSL hosts, MPI dependencies and non-destructive checks",
+          "parents": [
+            "a0c8155728360e9ae2e01a0c3353ce00de95f3ff"
+          ]
+        },
+        {
+          "sha": "a0c8155728360e9ae2e01a0c3353ce00de95f3ff",
+          "date": "2026-10-20T00:57:42Z",
+          "subject": "docs(granada): separate measured chemistry from DOE factors and inherited CFD constants",
+          "parents": [
+            "adf6ca9debc34ecc27843796b240dafd52c6e286"
+          ]
+        },
+        {
+          "sha": "adf6ca9debc34ecc27843796b240dafd52c6e286",
+          "date": "2026-10-20T00:56:59Z",
+          "subject": "docs(granada): establish dendritic mushy-zone and C3D mesh validation gates",
+          "parents": [
+            "1f684ba01fa7e02aaeda9c27b4b9e0e8138dbc22"
+          ]
+        }
+      ],
+      "unresolved_parents": [],
+      "coverage_complete": true
+    },
+    {
+      "name": "research/granada-energy-phase-evidence-20261020",
+      "sha": "baa59e75d3cf6c5d5d64bef415f0c5fb1f423ad1",
+      "main_reachable": false,
+      "commits": [
+        {
+          "sha": "baa59e75d3cf6c5d5d64bef415f0c5fb1f423ad1",
+          "date": "2026-10-20T08:22:39Z",
+          "subject": "research(granada): archive six-case energy-phase numerical screening with physical caveats",
+          "parents": [
+            "24b49605718ed62acc6eafa7c9974b701711abff"
+          ]
+        },
+        {
+          "sha": "24b49605718ed62acc6eafa7c9974b701711abff",
+          "date": "2026-10-20T08:21:27Z",
+          "subject": "data(granada): preserve CI-derived numerical energy/phase case metrics",
+          "parents": [
+            "058c9ceb1bf9fb0f2c57e3ba4b0375a534153b01"
+          ]
+        },
+        {
+          "sha": "058c9ceb1bf9fb0f2c57e3ba4b0375a534153b01",
+          "date": "2026-10-20T08:17:16Z",
+          "subject": "docs(granada): scientific handoff, evidence schema, test gates and limits",
+          "parents": [
+            "dbb432d002e42a5b78da88d062f64578a393f801"
+          ]
+        },
+        {
+          "sha": "dbb432d002e42a5b78da88d062f64578a393f801",
+          "date": "2026-10-20T08:15:43Z",
+          "subject": "ci(granada): read-only actual energy/phase data screen and synthetic regression gate",
+          "parents": [
+            "9498e48cb989feae3b2cd6b1436e4cfdaf915216"
+          ]
+        },
+        {
+          "sha": "9498e48cb989feae3b2cd6b1436e4cfdaf915216",
+          "date": "2026-10-20T08:15:17Z",
+          "subject": "test(granada): nine synthetic phase/energy integrity and no-overwrite regressions",
+          "parents": [
+            "cb567ca264399fa21367bedb84eee86363300d47"
+          ]
+        },
+        {
+          "sha": "cb567ca264399fa21367bedb84eee86363300d47",
+          "date": "2026-10-20T08:14:48Z",
+          "subject": "feat(granada): read-only V14–V16 energy/phase evidence and conditional closure screen",
+          "parents": [
+            "2a947c136c4f8dbe3a2a60373e4b49ee1dceac8b"
+          ]
+        }
+      ],
+      "unresolved_parents": [],
+      "coverage_complete": true
+    },
+    {
+      "name": "research/granada-mold-bilateral-readiness-20261020",
+      "sha": "dd27c60155f6381cb45fdc0672d15bc4ed0b5cf1",
+      "main_reachable": false,
+      "commits": [
+        {
+          "sha": "dd27c60155f6381cb45fdc0672d15bc4ed0b5cf1",
+          "date": "2026-10-20T09:04:02Z",
+          "subject": "ci(granada): validate archived six-case scientific evidence on exact PR head",
+          "parents": [
+            "f1436314c62841dfa166546266aee76e4d3de7e7"
+          ]
+        },
+        {
+          "sha": "f1436314c62841dfa166546266aee76e4d3de7e7",
+          "date": "2026-10-20T09:03:40Z",
+          "subject": "research(granada): record true six-case metal contact and missing mold evidence",
+          "parents": [
+            "64dbda354df139c22de3e7cf87b157503075b58f"
+          ]
+        },
+        {
+          "sha": "64dbda354df139c22de3e7cf87b157503075b58f",
+          "date": "2026-10-20T09:02:20Z",
+          "subject": "research(granada): record source-backed six-case mold contact area and energy readiness",
+          "parents": [
+            "ae0431d07a4575f44c1079b4d1154e205491501f"
+          ]
+        },
+        {
+          "sha": "ae0431d07a4575f44c1079b4d1154e205491501f",
+          "date": "2026-10-20T09:00:22Z",
+          "subject": "test(granada): reject six-case bilateral success if one measured source checksum fails",
+          "parents": [
+            "dac04ecb11787e4f083b259cb4ea19000bd57dfb"
+          ]
+        },
+        {
+          "sha": "dac04ecb11787e4f083b259cb4ea19000bd57dfb",
+          "date": "2026-10-20T09:00:07Z",
+          "subject": "fix(granada): fail bilateral-required gate for invalid as well as missing mold evidence",
+          "parents": [
+            "5f1585a96634e7b61bcc851623797f64de5e0caf"
+          ]
+        },
+        {
+          "sha": "5f1585a96634e7b61bcc851623797f64de5e0caf",
+          "date": "2026-10-20T08:58:17Z",
+          "subject": "docs(granada): bilateral interface measurement contract, scientific limitations and pending physical gates",
+          "parents": [
+            "09c34e3cf26fd9e19474854f02d5848937b863aa"
+          ]
+        },
+        {
+          "sha": "09c34e3cf26fd9e19474854f02d5848937b863aa",
+          "date": "2026-10-20T08:56:11Z",
+          "subject": "ci(granada): test source-backed metal/mold preflight and safeguarded bilateral contract",
+          "parents": [
+            "c40604a4534860158a7be911838f3807a45b6ae6"
+          ]
+        },
+        {
+          "sha": "c40604a4534860158a7be911838f3807a45b6ae6",
+          "date": "2026-10-20T08:55:46Z",
+          "subject": "test(granada): twelve scientific-contract, provenance, geometry and fail-closed bilateral regressions",
+          "parents": [
+            "a044585454dbaf7a9c3affcecbbaeb06997a2d11"
+          ]
+        },
+        {
+          "sha": "a044585454dbaf7a9c3affcecbbaeb06997a2d11",
+          "date": "2026-10-20T08:54:51Z",
+          "subject": "fix(granada): escape delimiter in source dictionary structural parser",
+          "parents": [
+            "abf679f3b19059f1974ad35aa0c5bc8de1947e44"
+          ]
+        },
+        {
+          "sha": "abf679f3b19059f1974ad35aa0c5bc8de1947e44",
+          "date": "2026-10-20T08:54:30Z",
+          "subject": "feat(granada): source-backed bilateral mold readiness, nominal geometry and guarded optional evidence",
+          "parents": [
+            "af6fee1cfa19d7b6dd7a498ee0e997d3739e5b08"
+          ]
+        }
+      ],
+      "unresolved_parents": [],
+      "coverage_complete": true
+    },
+    {
+      "name": "research/granada-mold-face-power-contract-20261020",
+      "sha": "653c302e746fe609ab21dac8eceee162ae0ca48e",
+      "main_reachable": true,
+      "commits": [],
+      "unresolved_parents": [],
+      "coverage_complete": true
+    },
+    {
+      "name": "research/granada-plan-d-case3d01-mesh-evidence-20261021",
+      "sha": "f4579137f614d76d1fe4fa92cb970f40644ca207",
+      "main_reachable": false,
+      "commits": [
+        {
+          "sha": "f4579137f614d76d1fe4fa92cb970f40644ca207",
+          "date": "2026-10-21T12:06:20Z",
+          "subject": "fix(test): compare nominal 2 mm mesh spacing with floating-point tolerance",
+          "parents": [
+            "a462cdbd81c856013d9d19f884a7c3db1740beee"
+          ]
+        },
+        {
+          "sha": "a462cdbd81c856013d9d19f884a7c3db1740beee",
+          "date": "2026-10-21T12:05:46Z",
+          "subject": "ci(plan-d): include canonical 3D case index in static audit trigger",
+          "parents": [
+            "3a294b916d176a4d3d7c36b88a14327a07145d22"
+          ]
+        },
+        {
+          "sha": "3a294b916d176a4d3d7c36b88a14327a07145d22",
+          "date": "2026-10-21T12:05:37Z",
+          "subject": "docs(plan-d): canonicalize case3d-01 name in three-dimensional case index without breaking open PRs",
+          "parents": [
+            "7deeae67681428b1ff2e564376bbfadda79245f2"
+          ]
+        },
+        {
+          "sha": "7deeae67681428b1ff2e564376bbfadda79245f2",
+          "date": "2026-10-21T12:03:49Z",
+          "subject": "ci(plan-d): test 20 regressions and syntactically check safe case3d-01 staging script",
+          "parents": [
+            "380276e08aa9e8f10c9329f8f0cfaf1d47fda925"
+          ]
+        },
+        {
+          "sha": "380276e08aa9e8f10c9329f8f0cfaf1d47fda925",
+          "date": "2026-10-21T12:03:33Z",
+          "subject": "research(plan-d): retain measured source parameters and strictly labeled 3D mesh estimates",
+          "parents": [
+            "980afdd7219f6f661d7e7fec697a7ff0a2f5d230"
+          ]
+        },
+        {
+          "sha": "980afdd7219f6f661d7e7fec697a7ff0a2f5d230",
+          "date": "2026-10-21T12:02:47Z",
+          "subject": "docs(plan-d): physical rationale, canonical case name, source log gates and future multi-region validation",
+          "parents": [
+            "99fac80d533d7549ae5ef0d4956a84aa45c01952"
+          ]
+        },
+        {
+          "sha": "99fac80d533d7549ae5ef0d4956a84aa45c01952",
+          "date": "2026-10-21T12:01:47Z",
+          "subject": "docs(plan-d): establish case3d-01 canonical case identity and safe local staging workflow",
+          "parents": [
+            "c5f5ae26e8a8ffc5e94a2775eb15658d011bbeaf"
+          ]
+        },
+        {
+          "sha": "c5f5ae26e8a8ffc5e94a2775eb15658d011bbeaf",
+          "date": "2026-10-21T12:00:54Z",
+          "subject": "test(plan-d): validate canonical local stage syntax and missing-STL failure without writes",
+          "parents": [
+            "3ca4c5577b7a7d205d4b336f61e9f0626ed25400"
+          ]
+        },
+        {
+          "sha": "3ca4c5577b7a7d205d4b336f61e9f0626ed25400",
+          "date": "2026-10-21T12:00:26Z",
+          "subject": "feat(plan-d): stage canonical case3d-01 mesh-only copy with verified original STL bytes",
+          "parents": [
+            "54d29c572f00a80d5c479a850f923762dbcee796"
+          ]
+        },
+        {
+          "sha": "54d29c572f00a80d5c479a850f923762dbcee796",
+          "date": "2026-10-21T11:58:26Z",
+          "subject": "ci(plan-d): evaluate canonical case3d-01 source and meshing evidence without CFD",
+          "parents": [
+            "a6dfd736fb3fa2a7c85694e8da026c790c41baf2"
+          ]
+        },
+        {
+          "sha": "a6dfd736fb3fa2a7c85694e8da026c790c41baf2",
+          "date": "2026-10-21T11:58:00Z",
+          "subject": "test(plan-d): 18 regression gates for 3D source, STL hashes, mesh logs, and claims",
+          "parents": [
+            "f901630e085d4f9ba04de97c640626e4f979f81d"
+          ]
+        },
+        {
+          "sha": "f901630e085d4f9ba04de97c640626e4f979f81d",
+          "date": "2026-10-21T11:56:48Z",
+          "subject": "feat(plan-d): source-backed case3d-01 3D geometry, optional STL SHA and mesh log screening",
+          "parents": [
+            "811e7c4b7fb7154b97d7ec3cb559ddafc9ca7a05"
+          ]
+        }
+      ],
+      "unresolved_parents": [],
+      "coverage_complete": true
+    },
+    {
+      "name": "research/granada-v15v16-postrun-evidence-20261020",
+      "sha": "47c6dcd04c725bce97232b430dd0b0ddfaa54cfe",
+      "main_reachable": false,
+      "commits": [
+        {
+          "sha": "47c6dcd04c725bce97232b430dd0b0ddfaa54cfe",
+          "date": "2026-10-20T08:02:45Z",
+          "subject": "ci(granada): fail closed on absent original evidence and print measured V15/V16 diagnostics",
+          "parents": [
+            "c36e6203c9f34022e7e69d9c2c8f33402c711f99"
+          ]
+        },
+        {
+          "sha": "c36e6203c9f34022e7e69d9c2c8f33402c711f99",
+          "date": "2026-10-20T08:01:38Z",
+          "subject": "docs(granada): log real foamLog parser finding and six-test regression",
+          "parents": [
+            "d2e6aa5ece23466b1579908e4235cfd487549378"
+          ]
+        },
+        {
+          "sha": "d2e6aa5ece23466b1579908e4235cfd487549378",
+          "date": "2026-10-20T08:01:15Z",
+          "subject": "test(granada): original foamLog startup zero marker with strict malformed-row regression",
+          "parents": [
+            "6d2ef63bb09ef58b610d5250a3d0d24354421cdc"
+          ]
+        },
+        {
+          "sha": "6d2ef63bb09ef58b610d5250a3d0d24354421cdc",
+          "date": "2026-10-20T08:00:59Z",
+          "subject": "fix(granada): parse original foamLog Courant startup marker without hiding malformed rows",
+          "parents": [
+            "41be81bbf7c466422b2311b48e67f5f5cb3369ef"
+          ]
+        },
+        {
+          "sha": "41be81bbf7c466422b2311b48e67f5f5cb3369ef",
+          "date": "2026-10-20T07:56:08Z",
+          "subject": "docs(granada): record V15/V16 three-deliverable evidence package and scientific limits",
+          "parents": [
+            "7369084b2cdbf40c65e4a2ac418d2cca21c7ccdf"
+          ]
+        },
+        {
+          "sha": "7369084b2cdbf40c65e4a2ac418d2cca21c7ccdf",
+          "date": "2026-10-20T07:55:11Z",
+          "subject": "fix(ci): point artifact upload to the actual isolated runner output",
+          "parents": [
+            "bdcba8ed8d89a82c701d00d03b6bc594da12d0d1"
+          ]
+        },
+        {
+          "sha": "bdcba8ed8d89a82c701d00d03b6bc594da12d0d1",
+          "date": "2026-10-20T07:54:51Z",
+          "subject": "ci(granada): independent read-only V15/V16 evidence and synthetic regression gate",
+          "parents": [
+            "888c0a872d1b611cda5dbdaf80390a8edfe85959"
+          ]
+        },
+        {
+          "sha": "888c0a872d1b611cda5dbdaf80390a8edfe85959",
+          "date": "2026-10-20T07:53:38Z",
+          "subject": "test(granada): synthetic no-extrapolation provenance and numerical evidence gates",
+          "parents": [
+            "091a17061b2311b1f3ad98e897d89563e74963b9"
+          ]
+        },
+        {
+          "sha": "091a17061b2311b1f3ad98e897d89563e74963b9",
+          "date": "2026-10-20T07:53:05Z",
+          "subject": "feat(granada): source-backed paired V15/V16 postrun evidence metrics",
+          "parents": [
+            "183e897c66574302993ee148155c32a91533f3db"
+          ]
+        }
+      ],
+      "unresolved_parents": [],
+      "coverage_complete": true
+    },
+    {
+      "name": "results/c3d05-b-c14-20261124-160234",
+      "sha": "2257ac295981c081391a23b318ee9f766bd32145",
+      "main_reachable": false,
+      "commits": [
+        {
+          "sha": "2257ac295981c081391a23b318ee9f766bd32145",
+          "date": "2026-11-24T22:06:03Z",
+          "subject": "results: publish C3D05-B C14 3D scientific outputs",
+          "parents": [
+            "97463be126518f7664aefae8ef83282b6e7fe4f2"
+          ]
+        }
+      ],
+      "unresolved_parents": [],
+      "coverage_complete": true
+    },
+    {
+      "name": "results/c3d05-b-c14-corrected-20261124-162048",
+      "sha": "8f8135876275434363f8cd37a32f73190417f578",
+      "main_reachable": false,
+      "commits": [
+        {
+          "sha": "8f8135876275434363f8cd37a32f73190417f578",
+          "date": "2026-11-24T22:23:37Z",
+          "subject": "results: recovered geometry-correct B C14 sampling",
+          "parents": [
+            "2257ac295981c081391a23b318ee9f766bd32145"
+          ]
+        },
+        {
+          "sha": "2257ac295981c081391a23b318ee9f766bd32145",
+          "date": "2026-11-24T22:06:03Z",
+          "subject": "results: publish C3D05-B C14 3D scientific outputs",
+          "parents": [
+            "97463be126518f7664aefae8ef83282b6e7fe4f2"
+          ]
+        }
+      ],
+      "unresolved_parents": [],
+      "coverage_complete": true
+    },
+    {
+      "name": "results/campaign-200s-adaptive-mpi-r8-Co025-dt0p025-v1/C14-2D-200s",
+      "sha": "3dbcbee41095d42b38b7b4c3dab46ea7bfee3da6",
+      "main_reachable": false,
+      "commits": [
+        {
+          "sha": "3dbcbee41095d42b38b7b4c3dab46ea7bfee3da6",
+          "date": "2026-11-27T08:32:38Z",
+          "subject": "Complete archive SHA256 manifest",
+          "parents": [
+            "81291a771d6a01299220c2e614f3cbf1cadfb068"
+          ]
+        },
+        {
+          "sha": "81291a771d6a01299220c2e614f3cbf1cadfb068",
+          "date": "2026-11-27T08:30:31Z",
+          "subject": "Archive chunks 1-4 / 4",
+          "parents": []
+        }
+      ],
+      "unresolved_parents": [],
+      "coverage_complete": true
+    },
+    {
+      "name": "results/campaign-200s-adaptive-mpi-r8-Co025-dt0p025-v1/C14-3DB-200s",
+      "sha": "e763cdd5debb16177071be4016b66049266bdc79",
+      "main_reachable": false,
+      "commits": [
+        {
+          "sha": "e763cdd5debb16177071be4016b66049266bdc79",
+          "date": "2026-11-25T21:16:31Z",
+          "subject": "Complete archive SHA256 manifest",
+          "parents": [
+            "3141303dafc6ab73d7802cc486684f791e7c9a3d"
+          ]
+        },
+        {
+          "sha": "3141303dafc6ab73d7802cc486684f791e7c9a3d",
+          "date": "2026-11-25T21:15:30Z",
+          "subject": "Archive chunks 21-22 / 22",
+          "parents": [
+            "556ca7bfcb01f051e84b3940fd0342c8c6fe98f5"
+          ]
+        },
+        {
+          "sha": "556ca7bfcb01f051e84b3940fd0342c8c6fe98f5",
+          "date": "2026-11-25T21:11:38Z",
+          "subject": "Archive chunks 11-20 / 22",
+          "parents": [
+            "de807dd5e12a8cab0b58617369ee0ca381bf5e45"
+          ]
+        },
+        {
+          "sha": "de807dd5e12a8cab0b58617369ee0ca381bf5e45",
+          "date": "2026-11-25T21:05:43Z",
+          "subject": "Archive chunks 1-10 / 22",
+          "parents": []
+        }
+      ],
+      "unresolved_parents": [],
+      "coverage_complete": true
+    }
+  ]
+}
