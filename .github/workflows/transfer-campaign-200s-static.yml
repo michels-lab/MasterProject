@@ -3,9 +3,16 @@ on:
   push:
     branches: [main]
     paths:
-      - tools/transfer_campaign_200s.py
-      - tools/test_transfer_campaign_200s.py
-      - .github/workflows/transfer-campaign-200s-static.yml
+      - 'tools/transfer_campaign_200s.py'
+      - 'tools/test_transfer_campaign_200s.py'
+      - '.github/workflows/transfer-campaign-200s-static.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'tools/transfer_campaign_200s.py'
+      - 'tools/test_transfer_campaign_200s.py'
+      - '.github/workflows/transfer-campaign-200s-static.yml'
+  workflow_dispatch:
 permissions:
   contents: read
 jobs:
