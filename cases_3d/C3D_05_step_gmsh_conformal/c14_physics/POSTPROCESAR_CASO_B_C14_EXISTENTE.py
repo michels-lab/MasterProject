@@ -165,16 +165,36 @@ def probe_block(source,fields):
     return txt[:left+1]+"\n        "+"\n        ".join(fields)+"\n    "+txt[right:]
 
 
-def stage(source,work,saved):
-    need(not work.exists() and not work.is_symlink(),"no sobreescribir postproceso previo")
+def checked_paths(source,work):
+    """Reject aliases and overlapping trees before staging OR resuming."""
+    source=source.expanduser().absolute()
+    work=work.expanduser().absolute()
+    need(not source.is_symlink() and not work.is_symlink(),
+         "origen o salida es enlace simbolico")
+    source=source.resolve(strict=True)
+    work=work.resolve()
     need(work!=source and work not in source.parents and source not in work.parents,
          "prohibido postprocesar dentro del CFD original")
-    for sub in ("0","constant","system"):
-        need(not any(p.is_symlink() for p in (source/sub).rglob("*")),
-             "origen contiene symlinks; no arriesgar escritura contra CFD")
+    return source,work
+
+
+def reject_links(root):
+    need(root.is_dir() and not root.is_symlink(),
+         "directorio ausente o enlazado: "+str(root))
+    need(not any(p.is_symlink() for p in root.rglob("*")),
+         "directorio contiene symlinks: "+str(root))
+
+
+def stage(source,work,saved):
+    source,work=checked_paths(source,work)
+    need(not work.exists() and not work.is_symlink(),"no sobreescribir postproceso previo")
+    for sub in ("constant","system",*(name for _,name in saved)):
+        reject_links(source/sub)
+    need(not (source/SOLVERLOG).is_symlink(),"log original enlazado")
     work.parent.mkdir(parents=True,exist_ok=True)
     temp=work.parent/("."+work.name+".INCOMPLETE")
-    need(not temp.exists(),"ya existe trabajo anterior INCOMPLETE: "+str(temp))
+    need(not temp.exists() and not temp.is_symlink(),
+         "ya existe trabajo anterior INCOMPLETE: "+str(temp))
     temp.mkdir()
     try:
         for name in ("constant","system"):
@@ -262,6 +282,7 @@ def native(work,stage_name,dict_name,time_label,fields):
     log=work/("log.C14B."+stage_name)
     done=work/("log.C14B."+stage_name+".DONE")
     if done.is_file():
+        need(log.is_file() and log.stat().st_size>0,"marca DONE sin log: "+stage_name)
         return {"name":stage_name,"result":"PREVIOUSLY_COMPLETED",
                 "exit_code":0,"log":str(log)}
     if log.exists():
@@ -292,6 +313,7 @@ def run_foam_log(work):
     log=work/"log.C14B.foamLog"
     done=work/"log.C14B.foamLog.DONE"
     if done.is_file():
+        need(log.is_file() and log.stat().st_size>0,"marca DONE sin log foamLog")
         return {"name":"foamLog","result":"PREVIOUSLY_COMPLETED"}
     if log.exists():
         return {"name":"foamLog","result":"INCOMPLETE_LOG_PRESERVED",
@@ -366,8 +388,7 @@ def main():
                         help="continuar etapas no ejecutadas en copia existente")
     args=parser.parse_args()
     try:
-        source=args.case.expanduser().absolute()
-        work=args.out.expanduser().absolute()
+        source,work=checked_paths(args.case,args.out)
         saved,_=existing_states(source)
         need(os.environ.get("WM_PROJECT_VERSION")=="14",
              "activa OpenFOAM Foundation14 antes de ejecutar")
@@ -387,9 +408,15 @@ def main():
         if args.resume:
             need(work.is_dir() and (work/REPORT).is_file(),
                  "no existe copia previa para reanudar")
+            reject_links(work)
             doc=json.loads((work/REPORT).read_text())
             need(doc.get("original_CFD_readonly")==str(source) and
-                 doc.get("status")==STATE,"copia no corresponde a este CFD")
+                 doc.get("status")==STATE and doc.get("output")==str(work),
+                 "copia no corresponde a este CFD o salida")
+            for key,original in (("source_controlDict_SHA256",source/"system/controlDict"),
+                                 ("source_solver_log_SHA256",source/SOLVERLOG),
+                                 ("source_10_metal_T_SHA256",source/"10/metal/T")):
+                need(doc.get(key)==sha(original),"fuente original cambio: "+key)
         else:
             doc=stage(source,work,saved)
         steps=[]
@@ -431,7 +458,7 @@ def main():
             steps.extend(({"name":"13_energy_optional","result":"UNAVAILABLE_RHO_PHI"},
                           {"name":"14_momentum_optional","result":"UNAVAILABLE_RHO_PHI"}))
         steps.append(run_foam_log(work))
-        finish(work,doc,steps)
+        doc=finish(work,doc,steps)
         if not args.no_open:
             executable=shutil.which("paraview")
             if executable:
@@ -440,7 +467,7 @@ def main():
                     check=False)
             else:
                 print("Abre el .foam impreso en la salida desde ParaView.",flush=True)
-        return 0
+        return 0 if doc["all_recoverable_stages_native_success"] else 1
     except (OSError,ValueError,KeyError,TypeError,UnicodeError) as e:
         print("CASO_B_C14_POSTPROCESS_ERROR: "+str(e),file=sys.stderr)
         return 2
