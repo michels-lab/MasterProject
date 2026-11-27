@@ -31,7 +31,7 @@
     "UNKNOWN_PURPOSE": 1
   },
   "finding_total": 10,
-  "inventory_fingerprint": "de867ce62465d72033d9a4ef5dd8ee7f7e467c9a19bdcf4a4c621b571c64ee4e",
+  "inventory_fingerprint": "cceede2d9bfc8cdeb8ef2afbe4451dca4de86a51e0576f130746cbd180ef322a",
   "evidence_fingerprint": "e78dec67b78486cd6da0a515fe66033ac8626e5a7165216c1f612ad5013a5c58",
   "files": [
     {
@@ -299093,7 +299093,7 @@
       "role": "config",
       "purpose": "machine-readable configuration",
       "certainty": "rule",
-      "blob": "a5294eba7be5304acf921d74001c052f9026ee66"
+      "blob": "0c97455cea57163c485fb0f1d623a14beaa16854"
     },
     {
       "path": "docs/MASTERPROJECT_IDENTITY_ES.md",
@@ -299576,7 +299576,7 @@
       "role": "unknown",
       "purpose": "function unknown: owner classification required",
       "certainty": "unknown",
-      "blob": "e9079a898006495cdc603d3e42dbe347fedeeb10"
+      "blob": "0328a4e87244becd22c52e408a0fe02625f36ad1"
     },
     {
       "path": "docs/review/GENERAL_REGISTRY_AUDIT_20261127_ES.md",
