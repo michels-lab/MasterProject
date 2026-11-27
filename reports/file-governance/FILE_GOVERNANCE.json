@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
   "audit_kind": "deterministic_full_tracked_tree",
-  "tracked_files_total": 42912,
-  "classified_files_total": 42907,
-  "docs_content_inspected": 240,
+  "tracked_files_total": 42914,
+  "classified_files_total": 42909,
+  "docs_content_inspected": 241,
   "large_docs_skipped": 1,
   "excluded_reports": 5,
   "roles": {
@@ -12,14 +12,14 @@
     "bitacora": 5,
     "config": 33,
     "data": 37,
-    "document": 200,
+    "document": 201,
     "index": 36,
     "license": 1,
     "simulation_case_file": 141,
     "simulation_input": 2683,
     "simulation_log": 3264,
     "simulation_output": 36203,
-    "source": 176,
+    "source": 177,
     "test": 79,
     "unknown": 1,
     "web_ui": 1,
@@ -31,8 +31,8 @@
     "UNKNOWN_PURPOSE": 1
   },
   "finding_total": 10,
-  "inventory_fingerprint": "219409206e5b6699cf68d807352a99b7b4ba8362996d1068582b582689e0106b",
-  "evidence_fingerprint": "dfeb1efcbe498fdb7979244f57adbd77dd684021f3ce6d8221f316f2d7fe2409",
+  "inventory_fingerprint": "89e7bfb46193d4acd6102de47d533a1b0fb2a38d10878ee0d9746e2b8dc0b21d",
+  "evidence_fingerprint": "6b025e95ffa88ca73f73aed5af307a719b0d7bade6b2abf5beea580881051e39",
   "files": [
     {
       "path": ".github/agents/openfoam-solidification.agent.md",
@@ -27710,7 +27710,7 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "8f4b4525e38fc42d5e85f94bdb00b77b78dd9a05"
+      "blob": "7ec154ef1c28974be68c9556eca6c046f2a01d7a"
     },
     {
       "path": "cases_3d/C3D_04_rounded_multiblock_pilot/c14_physics/C14_3D_PHYSICS_CONTRACT.json",
@@ -28375,7 +28375,7 @@
       "role": "source",
       "purpose": "code/test implementation",
       "certainty": "rule",
-      "blob": "e550217b42973be37d74d73ef659ea017a4572c8"
+      "blob": "45a303fb615ace3f611f41b615f882dde0ab00c5"
     },
     {
       "path": "cases_3d/C3D_05_step_gmsh_conformal/c14_physics/analyze_existing_case_b_c14_native_flux.py",
@@ -299478,7 +299478,7 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "29c4519715b1cafbd4e3d98b111d399bd2fb5f63"
+      "blob": "75398b0cf698896d73742c762379ec8dbfef6ce2"
     },
     {
       "path": "docs/granada/OPENFOAM_HUB_READ_ACCESS_20261021.md",
@@ -299544,11 +299544,18 @@
       "blob": "da9b009e8933f96aac2e04e907cde2f85c2e7859"
     },
     {
+      "path": "docs/review/C3D04_A_FIDELITY_AUDIT_20261127_ES.md",
+      "role": "document",
+      "purpose": "manual/decision/report/historical note",
+      "certainty": "inferred",
+      "blob": "44d159b94a4391f9abe89a174c9bb62604fed7cb"
+    },
+    {
       "path": "docs/review/FILE_REVIEW_LEDGER.jsonl",
       "role": "unknown",
       "purpose": "function unknown: owner classification required",
       "certainty": "unknown",
-      "blob": "29bc63cd75a1f14c97a5e8155b4cecc2b05757e4"
+      "blob": "9084320346e5dc167fa4c4ad098df692fc24e5b6"
     },
     {
       "path": "docs/review/GENERAL_REGISTRY_AUDIT_20261127_ES.md",
@@ -300251,6 +300258,13 @@
       "blob": "e0bb1bedef3df3c930fca09ba4abc43babd59b13"
     },
     {
+      "path": "tools/publish_lab_fixed_recovered_20261127.py",
+      "role": "source",
+      "purpose": "code/test implementation",
+      "certainty": "rule",
+      "blob": "8aaaf6521061aa02a46e77af521e1eac704465bf"
+    },
+    {
       "path": "tools/recover_lab_mpi_reference.py",
       "role": "source",
       "purpose": "code/test implementation",
@@ -300449,20 +300463,20 @@
       "state": "REVIEW_REQUIRED"
     },
     {
-      "id": "9a86528d24c825e3",
+      "id": "e60defb42022db4f",
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_EN.md",
-      "observation": "6 implementation/config paths changed since this log's last commit; examples: analysis_tools/check_run_registry.py, docs/C3D04_CASE_A_STATUS.json, docs/MAESTRIA_STATUS.json, docs/PROJECT_STAGE_STATUS.json, tools/file_review_queue.py, tools/tests/test_file_review_queue.py",
+      "observation": "8 implementation/config paths changed since this log's last commit; examples: analysis_tools/check_run_registry.py, cases_3d/C3D_05_step_gmsh_conformal/c14_physics/analyze_existing_case_b_c14_metal_mass_phi.py, docs/C3D04_CASE_A_STATUS.json, docs/MAESTRIA_STATUS.json, docs/PROJECT_STAGE_STATUS.json, tools/file_review_queue.py",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     },
     {
-      "id": "1142809ac417d6b9",
+      "id": "1be9eb83798fcaaa",
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_ES.md",
-      "observation": "6 implementation/config paths changed since this log's last commit; examples: analysis_tools/check_run_registry.py, docs/C3D04_CASE_A_STATUS.json, docs/MAESTRIA_STATUS.json, docs/PROJECT_STAGE_STATUS.json, tools/file_review_queue.py, tools/tests/test_file_review_queue.py",
+      "observation": "8 implementation/config paths changed since this log's last commit; examples: analysis_tools/check_run_registry.py, cases_3d/C3D_05_step_gmsh_conformal/c14_physics/analyze_existing_case_b_c14_metal_mass_phi.py, docs/C3D04_CASE_A_STATUS.json, docs/MAESTRIA_STATUS.json, docs/PROJECT_STAGE_STATUS.json, tools/file_review_queue.py",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     },
