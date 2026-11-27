@@ -5,6 +5,10 @@ on:
       - 'cases_3d/C3D_05_step_gmsh_conformal/c14_physics/**.py'
       - 'analysis_tools/compare_c14_three_models.py'
       - 'analysis_tools/test_compare_c14_three_models.py'
+      - 'analysis_tools/audit_recovered_200s_log.py'
+      - 'analysis_tools/test_audit_recovered_200s_log.py'
+      - 'analysis_tools/audit_pushed_results.py'
+      - 'analysis_tools/test_audit_log_markers.py'
       - '.github/workflows/uva-diagnostic-integrity.yml'
   workflow_dispatch:
 permissions:
@@ -21,4 +25,6 @@ jobs:
       - name: Synthetic tests only
         run: |
           python3 -B -m unittest discover -s analysis_tools -p test_compare_c14_three_models.py -v
+          python3 -B -m unittest discover -s analysis_tools -p test_audit_recovered_200s_log.py -v
+          python3 -B -m unittest discover -s analysis_tools -p test_audit_log_markers.py -v
           python3 -B -m unittest discover -s cases_3d/C3D_05_step_gmsh_conformal/c14_physics/ -p test_uva_case_b_diagnostic_integrity.py -v
