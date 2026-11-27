@@ -7,6 +7,33 @@
   "total": 7,
   "percent_hitos": 29,
   "percentage_scope": "SOLO_HITOS_TECNICOS_DEL_CASO_NO_TESIS_NO_CFD",
+  "current_campaign_state": {
+    "date": "2026-11-27",
+    "scope": "Current documented B state; does not close scientific gates",
+    "authority": "campaign_200s_update_20261127",
+    "historical_sections": [
+      "planned_200s_campaign",
+      "adaptive_200s_campaign",
+      "integrated_sync_20261125"
+    ],
+    "historical_note": "Preparation, interrupted serial run and 3 s pilot are retained as dated observations, not current 200 s completion status.",
+    "adaptive_mpi_capped": {
+      "solver_completed": true,
+      "final_time_s": 200,
+      "solver_steps": 15013,
+      "manifest_verified": true,
+      "branch": "results/campaign-200s-adaptive-mpi-r8-Co025-dt0p025-v1/C14-3DB-200s"
+    },
+    "adaptive_mpi_uncapped": {
+      "solver_completed": true,
+      "final_time_s": 200,
+      "solver_steps": 15012,
+      "manifest_verified": true,
+      "branch": "results/campaign-200s-adaptive-mpi-r8-Co025-dtuncapped-v1/C14-3DB-200s"
+    },
+    "fixed_lab_200s_completion_verified": false,
+    "scientific_gates_changed": false
+  },
   "gates": [
     {
       "id": "G1",
