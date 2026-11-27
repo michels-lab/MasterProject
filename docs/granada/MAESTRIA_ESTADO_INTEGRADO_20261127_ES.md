@@ -1,3 +1,5 @@
+> **27-11-2026 — A:** contraste nativo con referencia fija de 10 s, 7 tiempos y 3 sondas; enfriamiento progresivo fijo vs oscilación adaptativa en las mismas coordenadas. Sin causa raíz probada ni nueva CFD. A 8/10, campaña 6/8. [Evidencia](https://github.com/michels-lab/MasterProject/blob/main/docs/granada/C3D04_A_NATIVE_THERMAL_OBSERVED_20261127_ES.md).
+
 > **27-11-2026 — A:** checkMesh nativo metal y molde `Mesh OK`, 276/232 caras >70°. No defecto local demostrado, no nueva CFD ni cambio de controles. A 8/10, campaña 6/8. [Evidencia](https://github.com/michels-lab/MasterProject/blob/main/docs/granada/C3D04_A_NATIVE_THERMAL_OBSERVED_20261127_ES.md).
 
 > **27-11-2026 — Auditoría incremental:** registro por ruta/blob y alcance, siete inspecciones iniciales (dos completas documentales y cinco parciales); seis publicaciones adaptativas contrastadas por pasos con el índice de manifiestos. Sin cambios de física ni validación nueva. [Protocolo](../review/README.md).
