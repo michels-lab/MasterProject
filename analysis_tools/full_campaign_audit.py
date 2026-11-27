@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 from __future__ import annotations
 
+import argparse
 import csv
 import math
 import re
@@ -8,8 +9,9 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 BASE = ROOT / "cases_controlled_buoyancy"
-OUT = ROOT / "analysis_results" / "full_campaign_audit"
-OUT.mkdir(parents=True, exist_ok=True)
+# The October 8 archive is immutable. Reproduction must use a new destination.
+ARCHIVE = ROOT / "analysis_results" / "full_campaign_audit"
+OUT = None
 
 CASES = [
     "B3_reference",
@@ -351,174 +353,192 @@ def profile_compare(a, b, idx):
     }
 
 
-case_rows = []
-series = {}
-profile_inventory = []
-status_map = campaign_status()
+def main():
+    global OUT
+    parser = argparse.ArgumentParser(description="Reproduce legacy metrics in a new directory; not a corrected scientific consolidation.")
+    parser.add_argument("--out", type=Path, required=True)
+    args = parser.parse_args()
+    raw = args.out.expanduser().absolute()
+    OUT = raw.resolve()
+    protected = (ARCHIVE.resolve(), BASE.resolve(), (ROOT / ".git").resolve())
+    if raw.is_symlink() or OUT.exists() or any(
+        OUT == p or p in OUT.parents or OUT in p.parents for p in protected
+    ):
+        parser.error("choose a new destination outside original cases, archive and git metadata")
+    OUT.mkdir(parents=True, exist_ok=False)
+    print("LEGACY REPRODUCTION ONLY: adaptive pairs may compare unequal saved times or sparse exact intersections.")
+    case_rows = []
+    series = {}
+    profile_inventory = []
+    status_map = campaign_status()
 
-for name in CASES:
-    case = BASE / name
-    T, A, R = center_probe(case)
-    AM = mean_alpha(case)
-    latest = latest_probe_time(case)
+    for name in CASES:
+        case = BASE / name
+        T, A, R = center_probe(case)
+        AM = mean_alpha(case)
+        latest = latest_probe_time(case)
 
-    row = {
-        "case": name,
-        "family": name[0],
-        "latest_probe_time_s": latest,
-        "log_available": log_available(case),
-        "log_has_End": log_end(case),
-        "log_has_fatal": log_has_fatal(case),
-        "campaign_status": status_map.get(name, "UNKNOWN"),
-        "run_complete_10s": finite(latest) and latest >= 9.999
-                            and not log_has_fatal(case)
-                            and (
-                                status_map.get(name) == "COMPLETED"
-                                or (status_map.get(name, "UNKNOWN") == "UNKNOWN" and log_end(case))
-                            ),
-        "T_center_final_K": T[max(T)] if T else float("nan"),
-        "alphaL_center_final": A[max(A)] if A else float("nan"),
-        "rho_center_final_kg_m3": R[max(R)] if R else float("nan"),
-        "alphaL_mean_final": AM[max(AM)] if AM else float("nan"),
-    }
-    row.update(phi_metrics(case))
-    row.update(energy_metrics(case))
-    row.update(continuity_metrics(case))
-    row.update(courant_metrics(case))
-    row.update(pressure_metrics(case))
-    case_rows.append(row)
-    series[name] = {"T": T, "A": A, "AM": AM}
-
-    for profile, (folder, filename) in PROFILE_SPECS.items():
-        t, data = profile_at(case, folder, filename)
-        profile_inventory.append({
+        row = {
             "case": name,
-            "profile": profile,
-            "available": bool(data),
-            "latest_time_s": t,
-            "points": len(data),
-        })
+            "family": name[0],
+            "latest_probe_time_s": latest,
+            "log_available": log_available(case),
+            "log_has_End": log_end(case),
+            "log_has_fatal": log_has_fatal(case),
+            "campaign_status": status_map.get(name, "UNKNOWN"),
+            "run_complete_10s": finite(latest) and latest >= 9.999
+                                and not log_has_fatal(case)
+                                and (
+                                    status_map.get(name) == "COMPLETED"
+                                    or (status_map.get(name, "UNKNOWN") == "UNKNOWN" and log_end(case))
+                                ),
+            "T_center_final_K": T[max(T)] if T else float("nan"),
+            "alphaL_center_final": A[max(A)] if A else float("nan"),
+            "rho_center_final_kg_m3": R[max(R)] if R else float("nan"),
+            "alphaL_mean_final": AM[max(AM)] if AM else float("nan"),
+        }
+        row.update(phi_metrics(case))
+        row.update(energy_metrics(case))
+        row.update(continuity_metrics(case))
+        row.update(courant_metrics(case))
+        row.update(pressure_metrics(case))
+        case_rows.append(row)
+        series[name] = {"T": T, "A": A, "AM": AM}
 
-case_fields = sorted({k for r in case_rows for k in r})
-with (OUT / "case_metrics.csv").open("w", newline="", encoding="utf-8") as f:
-    w = csv.DictWriter(f, fieldnames=case_fields)
-    w.writeheader()
-    w.writerows(case_rows)
+        for profile, (folder, filename) in PROFILE_SPECS.items():
+            t, data = profile_at(case, folder, filename)
+            profile_inventory.append({
+                "case": name,
+                "profile": profile,
+                "available": bool(data),
+                "latest_time_s": t,
+                "points": len(data),
+            })
 
-with (OUT / "profile_inventory.csv").open("w", newline="", encoding="utf-8") as f:
-    w = csv.DictWriter(f, fieldnames=["case", "profile", "available", "latest_time_s", "points"])
-    w.writeheader()
-    w.writerows(profile_inventory)
-
-pair_rows = []
-profile_rows = []
-for label, bname, cname in BC_PAIRS:
-    rec = {"comparison": label, "B_case": bname, "C_case": cname}
-    for key, prefix in (("T", "T"), ("A", "alphaL_center"), ("AM", "alphaL_mean")):
-        m = compare_series(series[bname][key], series[cname][key])
-        for k, v in m.items():
-            rec[f"{prefix}_{k}"] = v
-    pair_rows.append(rec)
-
-    for profile, (folder, filename) in PROFILE_SPECS.items():
-        tb, pb = profile_at(BASE / bname, folder, filename)
-        tc, pc = profile_at(BASE / cname, folder, filename, tb if finite(tb) else None)
-        for var, idx in PROFILE_COLS.items():
-            m = profile_compare(pb, pc, idx)
-            if m:
-                profile_rows.append({
-                    "comparison": label,
-                    "profile": profile,
-                    "variable": var,
-                    "B_time_s": tb,
-                    "C_time_s": tc,
-                    **m,
-                })
-
-if pair_rows:
-    fields = sorted({k for r in pair_rows for k in r})
-    with (OUT / "bc_pair_metrics.csv").open("w", newline="", encoding="utf-8") as f:
-        w = csv.DictWriter(f, fieldnames=fields)
+    case_fields = sorted({k for r in case_rows for k in r})
+    with (OUT / "case_metrics.csv").open("w", newline="", encoding="utf-8") as f:
+        w = csv.DictWriter(f, fieldnames=case_fields)
         w.writeheader()
-        w.writerows(pair_rows)
+        w.writerows(case_rows)
 
-if profile_rows:
-    fields = sorted({k for r in profile_rows for k in r})
-    with (OUT / "bc_profile_metrics.csv").open("w", newline="", encoding="utf-8") as f:
-        w = csv.DictWriter(f, fieldnames=fields)
+    with (OUT / "profile_inventory.csv").open("w", newline="", encoding="utf-8") as f:
+        w = csv.DictWriter(f, fieldnames=["case", "profile", "available", "latest_time_s", "points"])
         w.writeheader()
-        w.writerows(profile_rows)
+        w.writerows(profile_inventory)
 
-by_case = {r["case"]: r for r in case_rows}
-complete = [r["case"] for r in case_rows if r["run_complete_10s"]]
-incomplete = [r["case"] for r in case_rows if not r["run_complete_10s"]]
-missing_profiles = [r for r in profile_inventory if not r["available"]]
+    pair_rows = []
+    profile_rows = []
+    for label, bname, cname in BC_PAIRS:
+        rec = {"comparison": label, "B_case": bname, "C_case": cname}
+        for key, prefix in (("T", "T"), ("A", "alphaL_center"), ("AM", "alphaL_mean")):
+            m = compare_series(series[bname][key], series[cname][key])
+            for k, v in m.items():
+                rec[f"{prefix}_{k}"] = v
+        pair_rows.append(rec)
 
-lines = [
-    "# Full controlled-buoyancy campaign audit",
-    "",
-    "**Read-only analysis of the completed 26-case campaign. No solver execution is performed.**",
-    "",
-    "## Completion",
-    "",
-    f"- Complete to target time with runner confirmation and no fatal marker: **{len(complete)}/{len(CASES)}**.",
-    f"- Incomplete/invalid: **{len(incomplete)}**.",
-]
-if incomplete:
-    lines.append("- Cases requiring inspection: " + ", ".join(incomplete) + ".")
-else:
-    lines.append("- All 26 cases satisfy the campaign completion criterion.")
+        for profile, (folder, filename) in PROFILE_SPECS.items():
+            tb, pb = profile_at(BASE / bname, folder, filename)
+            tc, pc = profile_at(BASE / cname, folder, filename, tb if finite(tb) else None)
+            for var, idx in PROFILE_COLS.items():
+                m = profile_compare(pb, pc, idx)
+                if m:
+                    profile_rows.append({
+                        "comparison": label,
+                        "profile": profile,
+                        "variable": var,
+                        "B_time_s": tb,
+                        "C_time_s": tc,
+                        **m,
+                    })
 
-lines += [
-    "",
-    "## Canonical profile availability",
-    "",
-    f"- Missing profile products: **{len(missing_profiles)}** across y=10, 20, 30 mm and x=20 mm.",
-]
-if missing_profiles:
-    lines.append("- Missing: " + ", ".join(f"{r['case']}:{r['profile']}" for r in missing_profiles) + ".")
+    if pair_rows:
+        fields = sorted({k for r in pair_rows for k in r})
+        with (OUT / "bc_pair_metrics.csv").open("w", newline="", encoding="utf-8") as f:
+            w = csv.DictWriter(f, fieldnames=fields)
+            w.writeheader()
+            w.writerows(pair_rows)
 
-lines += [
-    "",
-    "## Case-level diagnostics",
-    "",
-    "| case | status.tsv | probe last s | log file | log End | fatal | complete | T final K | mean alphaL final | max Co | cumulative continuity | max abs phi_top kg/s | Eadv top J |",
-    "|---|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|",
-]
-for name in CASES:
-    r = by_case[name]
-    lines.append(
-        f"| {name} | {r['campaign_status']} | {fmt(r['latest_probe_time_s'])} | {r['log_available']} | "
-        f"{r['log_has_End']} | {r['log_has_fatal']} | {r['run_complete_10s']} | {fmt(r['T_center_final_K'])} | "
-        f"{fmt(r['alphaL_mean_final'])} | {fmt(r['max_Co'])} | {fmt(r['cont_cumulative_final'])} | "
-        f"{fmt(r['top_phi_max_abs_kg_s'])} | {fmt(r.get('E_top_adv_J'))} |"
-    )
+    if profile_rows:
+        fields = sorted({k for r in profile_rows for k in r})
+        with (OUT / "bc_profile_metrics.csv").open("w", newline="", encoding="utf-8") as f:
+            w = csv.DictWriter(f, fieldnames=fields)
+            w.writeheader()
+            w.writerows(profile_rows)
 
-lines += [
-    "",
-    "## B/C controlled comparisons",
-    "",
-    "| generation | T RMSE K | T final C-B K | alphaL mean RMSE | alphaL mean final C-B |",
-    "|---|---:|---:|---:|---:|",
-]
-for rec in pair_rows:
-    lines.append(
-        f"| {rec['comparison']} | {fmt(rec.get('T_rmse'))} | {fmt(rec.get('T_final_diff'))} | "
-        f"{fmt(rec.get('alphaL_mean_rmse'))} | {fmt(rec.get('alphaL_mean_final_diff'))} |"
-    )
+    by_case = {r["case"]: r for r in case_rows}
+    complete = [r["case"] for r in case_rows if r["run_complete_10s"]]
+    incomplete = [r["case"] for r in case_rows if not r["run_complete_10s"]]
+    missing_profiles = [r for r in profile_inventory if not r["available"]]
 
-lines += [
-    "",
-    "## Interpretation guardrails",
-    "",
-    "- For runner-managed campaigns, completion means the stored temperature probe reaches at least 9.999 s, status.tsv reports COMPLETED, and no fatal marker is detected in log.foamMultiRun when that log exists.",
-    "- A missing log.foamMultiRun is reported separately and is not treated as a fatal solver error. If status.tsv is unavailable, log End is used only as a fallback completion signal.",
-    "- sum(phi) is a net top-patch mass flux; a near-zero net value does not by itself prove face-wise impermeability.",
-    "- The y=10 mm profile is audited explicitly together with y=20 mm, y=30 mm and x=20 mm.",
-    "- Numerical agreement is verification evidence, not experimental validation.",
-    "- This script does not run blockMesh, foamMultiRun or foamPostProcess.",
-    "",
-]
+    lines = [
+        "# Full controlled-buoyancy campaign audit",
+        "",
+        "**Read-only analysis of the completed 26-case campaign. No solver execution is performed.**",
+        "",
+        "## Completion",
+        "",
+        f"- Complete to target time with runner confirmation and no fatal marker: **{len(complete)}/{len(CASES)}**.",
+        f"- Incomplete/invalid: **{len(incomplete)}**.",
+    ]
+    if incomplete:
+        lines.append("- Cases requiring inspection: " + ", ".join(incomplete) + ".")
+    else:
+        lines.append("- All 26 cases satisfy the campaign completion criterion.")
 
-(OUT / "summary.md").write_text("\n".join(lines), encoding="utf-8")
-print((OUT / "summary.md").read_text())
+    lines += [
+        "",
+        "## Canonical profile availability",
+        "",
+        f"- Missing profile products: **{len(missing_profiles)}** across y=10, 20, 30 mm and x=20 mm.",
+    ]
+    if missing_profiles:
+        lines.append("- Missing: " + ", ".join(f"{r['case']}:{r['profile']}" for r in missing_profiles) + ".")
+
+    lines += [
+        "",
+        "## Case-level diagnostics",
+        "",
+        "| case | status.tsv | probe last s | log file | log End | fatal | complete | T final K | mean alphaL final | max Co | cumulative continuity | max abs phi_top kg/s | Eadv top J |",
+        "|---|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|",
+    ]
+    for name in CASES:
+        r = by_case[name]
+        lines.append(
+            f"| {name} | {r['campaign_status']} | {fmt(r['latest_probe_time_s'])} | {r['log_available']} | "
+            f"{r['log_has_End']} | {r['log_has_fatal']} | {r['run_complete_10s']} | {fmt(r['T_center_final_K'])} | "
+            f"{fmt(r['alphaL_mean_final'])} | {fmt(r['max_Co'])} | {fmt(r['cont_cumulative_final'])} | "
+            f"{fmt(r['top_phi_max_abs_kg_s'])} | {fmt(r.get('E_top_adv_J'))} |"
+        )
+
+    lines += [
+        "",
+        "## B/C controlled comparisons",
+        "",
+        "| generation | T RMSE K | T final C-B K | alphaL mean RMSE | alphaL mean final C-B |",
+        "|---|---:|---:|---:|---:|",
+    ]
+    for rec in pair_rows:
+        lines.append(
+            f"| {rec['comparison']} | {fmt(rec.get('T_rmse'))} | {fmt(rec.get('T_final_diff'))} | "
+            f"{fmt(rec.get('alphaL_mean_rmse'))} | {fmt(rec.get('alphaL_mean_final_diff'))} |"
+        )
+
+    lines += [
+        "",
+        "## Interpretation guardrails",
+        "",
+        "- For runner-managed campaigns, completion means the stored temperature probe reaches at least 9.999 s, status.tsv reports COMPLETED, and no fatal marker is detected in log.foamMultiRun when that log exists.",
+        "- A missing log.foamMultiRun is reported separately and is not treated as a fatal solver error. If status.tsv is unavailable, log End is used only as a fallback completion signal.",
+        "- sum(phi) is a net top-patch mass flux; a near-zero net value does not by itself prove face-wise impermeability.",
+        "- The y=10 mm profile is audited explicitly together with y=20 mm, y=30 mm and x=20 mm.",
+        "- Numerical agreement is verification evidence, not experimental validation.",
+        "- This script does not run blockMesh, foamMultiRun or foamPostProcess.",
+        "",
+    ]
+
+    (OUT / "summary.md").write_text("\n".join(lines), encoding="utf-8")
+    print((OUT / "summary.md").read_text())
+
+
+if __name__ == "__main__":
+    main()
