@@ -146,5 +146,14 @@
     "all_34_controlled_case_tree_scans_complete": true,
     "scope": "metadata and provenance index; not line-by-line review or raw CFD binary validation",
     "branch_history_dir": "docs/history"
+  },
+  "native_thermal_diagnostic_candidate": {
+    "source": "tools/run_case_a_native_thermal_diagnostics.sh",
+    "report": "docs/granada/C3D04_A_NATIVE_THERMAL_DIAGNOSTICS_20261127_ES.md",
+    "source_prepared": true,
+    "wsl_verified": false,
+    "solver_rerun": false,
+    "physical_validation": false,
+    "original_controls_preserved": true
   }
 }
