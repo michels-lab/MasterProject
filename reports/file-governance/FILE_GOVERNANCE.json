@@ -31,7 +31,7 @@
     "UNKNOWN_PURPOSE": 1
   },
   "finding_total": 10,
-  "inventory_fingerprint": "ac8f8ae641cf2dec0458803fcf6045f98d8fc719f0ee3adf25256e9243f9e0e1",
+  "inventory_fingerprint": "995e68f55c01f41a21c9a12082345b7ac9e9a75c2abf0c8b36d65c42c85a4631",
   "evidence_fingerprint": "a624aadd6b26e828ad8117afd31d624258d56a67d70878142a22d45db5d0f6f0",
   "files": [
     {
@@ -459,7 +459,7 @@
       "role": "data",
       "purpose": "structured/research data (semantics not validated)",
       "certainty": "rule",
-      "blob": "4c18b28d53b4805c24fd9aacf7410398fe6daae7"
+      "blob": "9ebacf7e5c9c864b6e10dbe7ba31713fcafdacf6"
     },
     {
       "path": "RUN_MASTER_PROTOCOL.md",
@@ -40786,7 +40786,7 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "af80a4dfebdd08835b9244694ce125d37e0c803b"
+      "blob": "265ae48f30dab911b942b9f144638b07631ceee0"
     },
     {
       "path": "cases_controlled_buoyancy/B11_energy2_test/CASE_VARIANT.md",
@@ -83311,7 +83311,7 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "4eee0e988e83c9faac6f71950c1d3ab6211aa30c"
+      "blob": "8be80f2e2f0294aa54d91cd26f73e6aba5b1b765"
     },
     {
       "path": "cases_controlled_buoyancy/B15_adaptiveDt_fromB14/CASE_VARIANT.md",
@@ -92369,7 +92369,7 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "4b0fafcff0a48640176f37127c1129a02c7e2f05"
+      "blob": "adec42d84042e3e7942d9df70127ef0761209cbf"
     },
     {
       "path": "cases_controlled_buoyancy/B16_phaseRelax025_fromB14/CASE_VARIANT.md",
@@ -217340,7 +217340,7 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "afbbe9e1652b1971a2928f4a2ff1953e84bcc655"
+      "blob": "ec28e7d7764974398fc45c3c536da0a28b96b109"
     },
     {
       "path": "cases_controlled_buoyancy/C15_adaptiveDt_fromC14/CASE_VARIANT.md",
@@ -299121,7 +299121,7 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "082f16c3d43068e5b862dc3c5d1edeb6e8d3b23c"
+      "blob": "653a6d5fc3721f919a45800c15fd47da94166c0b"
     },
     {
       "path": "docs/PROJECT_STAGE_STATUS.json",
@@ -299548,7 +299548,7 @@
       "role": "unknown",
       "purpose": "function unknown: owner classification required",
       "certainty": "unknown",
-      "blob": "9dcc31e0843b595c06c6c9bc362277bac09e919f"
+      "blob": "ef9ba03c26c7ee03c70e73f3c0385a7b9590ec81"
     },
     {
       "path": "docs/review/README.md",
