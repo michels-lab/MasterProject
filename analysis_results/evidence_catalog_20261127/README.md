@@ -1,3 +1,5 @@
+> **Actualización vigente 27-11-2026 — conciliación Uva:** diez manifiestos completos en el índice y CSV (seis adaptativos + cuatro fijos), 128 fragmentos declarados y 4140582991 bytes. A fijo laboratorio: serial, 200000 pasos, 200 s, commit ba0d4d29a434fa0576372bbdd14385b1663498d7. Se sincroniza RUN_CASE_REGISTRY y el catálogo general; no se agregan métricas físicas de A ni se reescriben comparaciones históricas de nueve publicaciones. Los textos que indican A pendiente corresponden a cortes anteriores. Sin descarga binaria ni CFD.
+
 # Catálogo de evidencia de MasterProject — 27-11-2026 (Uva + Granada)
 
 51 filas de RUN_CASE_REGISTRY.csv (blob 9ebacf7e5c9c864b6e10dbe7ba31713fcafdacf6), 31 con alguna métrica importada: las 26 históricas más B14, C14, C11-energy2, A y B. 20 filas conservan estado y referencia sin importar métricas todavía; celdas vacías no son ceros ni ausencia de resultados. Este catálogo NO modifica el consolidado histórico ni el registro ni equivale a 51 casos validados. No fusionar campañas de 10 y 200 s, contracción ni sustitutos térmicos.
