@@ -1854,12 +1854,1074 @@
           "parents": [
             "409ffec19fb82e01d4ff5bc6b68e53fc1c6205d5"
           ]
+        },
+        {
+          "sha": "409ffec19fb82e01d4ff5bc6b68e53fc1c6205d5",
+          "date": "2026-11-18T21:29:47Z",
+          "subject": "feat(fs-c04): safely stage 34368-cell alpha.metal with 2368 verified liquid-metal cells on isolated native mesh copy, no CFD",
+          "parents": [
+            "e1adea4c83f269b983b8aa0b4f3e620c23ce9b0a"
+          ]
+        },
+        {
+          "sha": "e1adea4c83f269b983b8aa0b4f3e620c23ce9b0a",
+          "date": "2026-11-18T21:11:55Z",
+          "subject": "docs(fs-c04): add rigorous read-only split-fluid 8-vertex cell map, native metal volume gate and exact case-specific command",
+          "parents": [
+            "d6022c3b14ae126a2befce8ca9f308f8c7378faf"
+          ]
+        },
+        {
+          "sha": "d6022c3b14ae126a2befce8ca9f308f8c7378faf",
+          "date": "2026-11-18T21:11:02Z",
+          "subject": "fix(fs-c04): accept valid zero internal faces in single-cell synthetic solid mesh",
+          "parents": [
+            "da2f50191a4ab4c2d0225b9762cae29c5062b0d4"
+          ]
+        },
+        {
+          "sha": "da2f50191a4ab4c2d0225b9762cae29c5062b0d4",
+          "date": "2026-11-18T21:10:49Z",
+          "subject": "ci(fs-c04): require 9 native hexa split-region cell mapping and volume regressions, read-only",
+          "parents": [
+            "e148607c299e74db5cda577c1457adfef9e2070e"
+          ]
+        },
+        {
+          "sha": "e148607c299e74db5cda577c1457adfef9e2070e",
+          "date": "2026-11-18T21:10:29Z",
+          "subject": "test(fs-c04): nine synthetic hexa native-mesh split ID remapping, geometric metal volume and strict corruption gates",
+          "parents": [
+            "558524de76d8141a2a65bfd80ed60acbe0db5612"
+          ]
+        },
+        {
+          "sha": "558524de76d8141a2a65bfd80ed60acbe0db5612",
+          "date": "2026-11-18T21:09:22Z",
+          "subject": "feat(fs-c04): prove parent-to-split fluid/mold cell geometry bijection and 2368-cell native metal volume, read only",
+          "parents": [
+            "314452607dd6caeb0bc068e51c9a1953804b49c4"
+          ]
+        },
+        {
+          "sha": "314452607dd6caeb0bc068e51c9a1953804b49c4",
+          "date": "2026-11-18T21:07:06Z",
+          "subject": "docs(fs-c04): record 2368 native parent metal labels, identical FS-C03/C04 parent meshes and pending split-fluid mapping",
+          "parents": [
+            "dfc5973bd3f5181d28e6c1d727ce9c1233abe09b"
+          ]
+        },
+        {
+          "sha": "dfc5973bd3f5181d28e6c1d727ce9c1233abe09b",
+          "date": "2026-11-18T20:59:34Z",
+          "subject": "docs(fs-c04): prepare exact read-only cross-run parent mesh cell-id proof with known FS-C03/FS-C04 native folders",
+          "parents": [
+            "948bb207147e4583d6fe0e40ec06e895703024f1"
+          ]
+        },
+        {
+          "sha": "948bb207147e4583d6fe0e40ec06e895703024f1",
+          "date": "2026-11-18T20:58:56Z",
+          "subject": "ci(fs-c04): strict 42048-label FS-C03 vs FS-C04 native parent mesh identity proof before alpha initialization",
+          "parents": [
+            "a975084eeafc898c839025064db03dee99718e2d"
+          ]
+        },
+        {
+          "sha": "a975084eeafc898c839025064db03dee99718e2d",
+          "date": "2026-11-18T20:58:45Z",
+          "subject": "test(fs-c04): synthetic full 42048-label cross-run metal/mold/air identity, fail-closed mesh/zone/status checks",
+          "parents": [
+            "26b58f5e8aff5b586dd858a2038b1503532c852b"
+          ]
+        },
+        {
+          "sha": "26b58f5e8aff5b586dd858a2038b1503532c852b",
+          "date": "2026-11-18T20:57:57Z",
+          "subject": "feat(fs-c04): read-only cross-case native parent cellZones provenance, exact 2368 metal cell labels from FS-C03 to FS-C04",
+          "parents": [
+            "4a58ba4081ad9f2c36f16b94d52af5bc569bf6c3"
+          ]
+        },
+        {
+          "sha": "4a58ba4081ad9f2c36f16b94d52af5bc569bf6c3",
+          "date": "2026-11-18T20:55:43Z",
+          "subject": "docs(fs-c04): record analytic metal seed 2368 cells, 48011.91628 mm³ vs CAD, enforce native cell mapping before alpha field",
+          "parents": [
+            "f1387adcfcbf70af23e03dc81b0f332277c444f3"
+          ]
+        },
+        {
+          "sha": "f1387adcfcbf70af23e03dc81b0f332277c444f3",
+          "date": "2026-11-18T20:54:42Z",
+          "subject": "ci(fs-c04): require analytic 2368-cell metal-seed volume gate before any VOF initial field",
+          "parents": [
+            "a83e34323ff3b94fd4f40ce398d102fe85d6aded"
+          ]
+        },
+        {
+          "sha": "a83e34323ff3b94fd4f40ce398d102fe85d6aded",
+          "date": "2026-11-18T20:54:23Z",
+          "subject": "test(fs-c04): six static 2368-cell tapered iron seed/volume tests, CAD delta guard and never claim field initialized",
+          "parents": [
+            "6cd7a8e4b119f0598141b2c9f92aa74ba9a7ccf2"
+          ]
+        },
+        {
+          "sha": "6cd7a8e4b119f0598141b2c9f92aa74ba9a7ccf2",
+          "date": "2026-11-18T20:53:49Z",
+          "subject": "feat(fs-c04): exact static tapered metal seed geometry, 2368 of 34368 fluid cells, pilot-vs-CAD volume check without CFD or field edits",
+          "parents": [
+            "b142c0773a57b6911a743e33287b641c7065592b"
+          ]
+        },
+        {
+          "sha": "b142c0773a57b6911a743e33287b641c7065592b",
+          "date": "2026-11-18T20:50:18Z",
+          "subject": "docs(fs-c04): register researcher-confirmed native Foundation14 2-region PASS, 11 tests and isolated run provenance",
+          "parents": [
+            "8b4adaf19a54331147d76c1c79ae4d737f03f92f"
+          ]
+        },
+        {
+          "sha": "8b4adaf19a54331147d76c1c79ae4d737f03f92f",
+          "date": "2026-11-18T20:40:59Z",
+          "subject": "docs(fs-c04): register real FS-C03 native PASS and next 2-zone fluid+air mold mesh gate, no CFD",
+          "parents": [
+            "cda5162b669aedb6baa1b4620a94f7b9c82b5dc7"
+          ]
+        },
+        {
+          "sha": "cda5162b669aedb6baa1b4620a94f7b9c82b5dc7",
+          "date": "2026-11-18T20:40:04Z",
+          "subject": "docs(fs-c04): record native 2-zone iron-air fluid / mold mesh-only plan and 3136 contact face acceptance",
+          "parents": [
+            "eb53090259ef8f7bbcf878de56ab6068299c2fe7"
+          ]
+        },
+        {
+          "sha": "eb53090259ef8f7bbcf878de56ab6068299c2fe7",
+          "date": "2026-11-18T20:39:17Z",
+          "subject": "ci(fs-c04): audit merged 2-zone iron-air fluid mesh vs mold, immutable FS-C03 geometry, no CFD",
+          "parents": [
+            "200e37aacbe84c08fb39b2916d8d750772b59331"
+          ]
+        },
+        {
+          "sha": "200e37aacbe84c08fb39b2916d8d750772b59331",
+          "date": "2026-11-18T20:38:27Z",
+          "subject": "test(fs-c04): standalone native 2-zone staging, preserve FS-C03 and immutable prior CFD, enforce no fake VOF initialization",
+          "parents": [
+            "4add2c9468613aa9d462d0dc4da71bb475b1b2ab"
+          ]
+        },
+        {
+          "sha": "4add2c9468613aa9d462d0dc4da71bb475b1b2ab",
+          "date": "2026-11-18T20:38:06Z",
+          "subject": "test(fs-c04): ensure one contiguous VOF-ready fluid mesh zone, intact mold interfaces and no artificial metal-air wall",
+          "parents": [
+            "ae73fdac17d6908f0ee770971556d83e475d1393"
+          ]
+        },
+        {
+          "sha": "ae73fdac17d6908f0ee770971556d83e475d1393",
+          "date": "2026-11-18T20:37:26Z",
+          "subject": "feat(fs-c04): safe isolated Foundation14 native 2-zone fluid/mold blockMesh/checkMesh/split gate, no CFD",
+          "parents": [
+            "d9b34049a680ab21cccec814327da9b543948c59"
+          ]
+        },
+        {
+          "sha": "d9b34049a680ab21cccec814327da9b543948c59",
+          "date": "2026-11-18T20:36:29Z",
+          "subject": "feat(fs-c04): exact-zone-only 2-region audit, connected fluid from metal+air, preserve all sand-air boundaries",
+          "parents": [
+            "1d3f93c1e9a90b3dc4ff8b8e49dd8b4f879c7994"
+          ]
+        },
+        {
+          "sha": "1d3f93c1e9a90b3dc4ff8b8e49dd8b4f879c7994",
+          "date": "2026-11-18T20:35:35Z",
+          "subject": "feat(fs-c04): mesh-only 2-region controlDict with no CFD fields or solver",
+          "parents": [
+            "7ea26060f9986b1cbb7aee2bdbefef7de4491711"
+          ]
+        },
+        {
+          "sha": "7ea26060f9986b1cbb7aee2bdbefef7de4491711",
+          "date": "2026-11-18T20:35:07Z",
+          "subject": "feat(fs-c04): preserve passed FS-C03 geometry; merge three metal and 29 air blocks into connected fluid zone surrounding solid mold",
+          "parents": [
+            "5977529ab8cf9bd3de90f5b33bcea112afdef605"
+          ]
+        },
+        {
+          "sha": "5977529ab8cf9bd3de90f5b33bcea112afdef605",
+          "date": "2026-11-18T20:33:45Z",
+          "subject": "docs(fs-c03): register researcher-confirmed 15/15 regressions and native 3-region checkMesh/split PASS, no CFD",
+          "parents": [
+            "b96f863e2cfa128c4f5286291f6a89e99af37eb7"
+          ]
+        },
+        {
+          "sha": "b96f863e2cfa128c4f5286291f6a89e99af37eb7",
+          "date": "2026-11-18T20:19:13Z",
+          "subject": "test(fs-c03): reject grid-incompatible shared faces and inverse hexa orientation without CFD",
+          "parents": [
+            "03e2789f957773a9ed1aeecb0936fd61d87624e8"
+          ]
+        },
+        {
+          "sha": "03e2789f957773a9ed1aeecb0936fd61d87624e8",
+          "date": "2026-11-18T20:18:37Z",
+          "subject": "fix(fs-c03): account for shared-face grid dimensions in owner tuple unpack",
+          "parents": [
+            "dcb702f0090a16ccc3c66538a2fa11f6038dc7a6"
+          ]
+        },
+        {
+          "sha": "dcb702f0090a16ccc3c66538a2fa11f6038dc7a6",
+          "date": "2026-11-18T20:18:24Z",
+          "subject": "feat(fs-c03): static positive hex Jacobian and matching shared-face grid checks before native OpenFOAM",
+          "parents": [
+            "2e38af27453acc23e4309bea685cd353e52c647e"
+          ]
+        },
+        {
+          "sha": "2e38af27453acc23e4309bea685cd353e52c647e",
+          "date": "2026-11-18T20:16:34Z",
+          "subject": "docs(fs-c02): link real FS-C03 three-material exterior air mesh-only pilot, separate final VOF+CHT and 3-zone diagnostics",
+          "parents": [
+            "ba72a4645ef1a50108719360c0442ab677b25691"
+          ]
+        },
+        {
+          "sha": "ba72a4645ef1a50108719360c0442ab677b25691",
+          "date": "2026-11-18T20:15:40Z",
+          "subject": "docs(fs-c03): tie 3D top-and-four-side air mesh pilot to exterior sand physics design; distinguish topology vs solver",
+          "parents": [
+            "5b5d9fd88524810016b2b90c1d48231f9360e0eb"
+          ]
+        },
+        {
+          "sha": "5b5d9fd88524810016b2b90c1d48231f9360e0eb",
+          "date": "2026-11-18T20:14:10Z",
+          "subject": "docs(fs-c03): detailed CAD-grounded 3-region exterior-air mesh-only pilot and native validation gates",
+          "parents": [
+            "f38e285926b4892e72bd7fc1044b1cc615145873"
+          ]
+        },
+        {
+          "sha": "f38e285926b4892e72bd7fc1044b1cc615145873",
+          "date": "2026-11-18T20:13:00Z",
+          "subject": "ci(fs-c03): gate 3D exterior air above iron/sand and four sides, frozen C3D03 blocks, isolated native staging",
+          "parents": [
+            "8f32996d939d3ded19e322326af8fc1e0dcf3c42"
+          ]
+        },
+        {
+          "sha": "8f32996d939d3ded19e322326af8fc1e0dcf3c42",
+          "date": "2026-11-18T20:12:46Z",
+          "subject": "test(fs-c03): isolate staging, never overwrite, require Foundation14, preserve old files and parse native interface metadata",
+          "parents": [
+            "7f3206f364f11c86efccef0c3ad38e940790601d"
+          ]
+        },
+        {
+          "sha": "7f3206f364f11c86efccef0c3ad38e940790601d",
+          "date": "2026-11-18T20:12:25Z",
+          "subject": "feat(fs-c03): native mesh-only OpenFOAM 14 controlDict, no thermophysical solver",
+          "parents": [
+            "8e23d384ed628dedb975fce2579392d1e5763aa3"
+          ]
+        },
+        {
+          "sha": "8e23d384ed628dedb975fce2579392d1e5763aa3",
+          "date": "2026-11-18T20:12:06Z",
+          "subject": "feat(fs-c03): read-only source, isolated stage/native Foundation14 3-zone topology gate without CFD",
+          "parents": [
+            "fb735ce79394fb8a90a4fdb2390cfc706729636d"
+          ]
+        },
+        {
+          "sha": "fb735ce79394fb8a90a4fdb2390cfc706729636d",
+          "date": "2026-11-18T20:08:41Z",
+          "subject": "test(fs-c03): 3-region 53-block topological connectivity, C3D03 source preservation and no false atmospheric ceiling",
+          "parents": [
+            "86a15220a3a487beabd0bc5967c142afef8e2f99"
+          ]
+        },
+        {
+          "sha": "86a15220a3a487beabd0bc5967c142afef8e2f99",
+          "date": "2026-11-18T20:08:08Z",
+          "subject": "docs(fs-c03): freeze approved C3D03 24-block CAD-approximation provenance for exterior air topological comparison",
+          "parents": [
+            "9a7294d0f935bb6730aad754fb5d0720a5c8b9ad"
+          ]
+        },
+        {
+          "sha": "9a7294d0f935bb6730aad754fb5d0720a5c8b9ad",
+          "date": "2026-11-18T20:07:47Z",
+          "subject": "feat(fs-c03): static 53-block face-owner and connected atmospheric air over sand and four sides verifier",
+          "parents": [
+            "153c665e252ecca6b99b909719b72ecf0e6d1988"
+          ]
+        },
+        {
+          "sha": "153c665e252ecca6b99b909719b72ecf0e6d1988",
+          "date": "2026-11-18T20:05:30Z",
+          "subject": "feat(fs-c03): 53-block conformal 3D metal-sand-exterior air topology around top and 4 sidewalls, no CFD",
+          "parents": [
+            "f3dff1e5fa2444f13d57c8ecf8c82b0156264abc"
+          ]
+        },
+        {
+          "sha": "f3dff1e5fa2444f13d57c8ecf8c82b0156264abc",
+          "date": "2026-11-18T19:54:22Z",
+          "subject": "docs(fs-c02): formalize connected exterior air around four sand sidewalls; maintain CFD block on fake chimney",
+          "parents": [
+            "9d93ed3a7e9f1bd4aae8eaf241c55dd0a229dfb3"
+          ]
+        },
+        {
+          "sha": "9d93ed3a7e9f1bd4aae8eaf241c55dd0a229dfb3",
+          "date": "2026-11-18T19:54:02Z",
+          "subject": "docs(fs-c02): require exterior air on all exposed sand sidewalls, continuous to open top, with real solid-air CHT interfaces",
+          "parents": [
+            "99171949ec2849d49c00a7c325b67972098fff3f"
+          ]
+        },
+        {
+          "sha": "99171949ec2849d49c00a7c325b67972098fff3f",
+          "date": "2026-11-18T19:52:11Z",
+          "subject": "docs(fs-c02): supersede vertical-only air run; require atmosphere over sand and metal top CAD with 3D lateral extent",
+          "parents": [
+            "6ab22c97fd6a234df5bf93a088e10cfe0cd02a1f"
+          ]
+        },
+        {
+          "sha": "6ab22c97fd6a234df5bf93a088e10cfe0cd02a1f",
+          "date": "2026-11-18T19:51:49Z",
+          "subject": "docs(fs-c02): specify CAD-grounded exterior air above entire QuickCup sand and metal; no 40mm fake air chimney",
+          "parents": [
+            "8d733e94fd6d53ed17c304e40034f1b7b6578317"
+          ]
+        },
+        {
+          "sha": "8d733e94fd6d53ed17c304e40034f1b7b6578317",
+          "date": "2026-11-18T19:51:00Z",
+          "subject": "test(fs-c02): refuse physically incomplete air-column CFD before creating new run",
+          "parents": [
+            "ced69ff8254e58a753acd292734588be4a202863"
+          ]
+        },
+        {
+          "sha": "ced69ff8254e58a753acd292734588be4a202863",
+          "date": "2026-11-18T19:50:47Z",
+          "subject": "fix(fs-c02): block misleading 40mm-column CFD until external air spans QuickCup sand top",
+          "parents": [
+            "71b29ada6a6fb2cf4c3df65b4725177ac7b279a0"
+          ]
+        },
+        {
+          "sha": "71b29ada6a6fb2cf4c3df65b4725177ac7b279a0",
+          "date": "2026-11-18T19:40:28Z",
+          "subject": "test(fs-c02): compare extended 19200-cell volume at floating point tolerance",
+          "parents": [
+            "307ceec8384bd38900fe75771f2301acb96b65aa"
+          ]
+        },
+        {
+          "sha": "307ceec8384bd38900fe75771f2301acb96b65aa",
+          "date": "2026-11-18T19:37:49Z",
+          "subject": "docs(fs-c02): honor larger exterior air plenum and open atmospheric top; preserve turbulent reference and instrument boundary flux",
+          "parents": [
+            "1ba76b54c5da79a2f7849f3b022b91d3521995d3"
+          ]
+        },
+        {
+          "sha": "1ba76b54c5da79a2f7849f3b022b91d3521995d3",
+          "date": "2026-11-18T19:36:58Z",
+          "subject": "test(fs-c02): align open-top negative regression assertion to actual diagnostic capitalization",
+          "parents": [
+            "a1ffa02bc048d490934722876bc094126e1e3188"
+          ]
+        },
+        {
+          "sha": "a1ffa02bc048d490934722876bc094126e1e3188",
+          "date": "2026-11-18T19:36:28Z",
+          "subject": "ci(fs-c02): reject artificial top wall and regress 120mm open-atmosphere high-headspace RAS stage",
+          "parents": [
+            "d5f4a7f24d7e3971ba261fad4f37247754157f5e"
+          ]
+        },
+        {
+          "sha": "d5f4a7f24d7e3971ba261fad4f37247754157f5e",
+          "date": "2026-11-18T19:36:03Z",
+          "subject": "test(fs-c02): 120mm air plenum preserves 0.5mm lower grid, open top, RAS and inputs; parses signed patch phi",
+          "parents": [
+            "a5ee495dbc54c9a9d48b758b6c0bec6e9703f195"
+          ]
+        },
+        {
+          "sha": "a5ee495dbc54c9a9d48b758b6c0bec6e9703f195",
+          "date": "2026-11-18T19:35:29Z",
+          "subject": "feat(fs-c02): recognize 120mm high-air geometry while preserving strict 60mm reference top checks",
+          "parents": [
+            "e9935c71a92628ef3abfb669a5355fffbb46d014"
+          ]
+        },
+        {
+          "sha": "e9935c71a92628ef3abfb669a5355fffbb46d014",
+          "date": "2026-11-18T19:35:03Z",
+          "subject": "feat(fs-c02): isolated 120mm open-top atmospheric plenum, unchanged 40mm metal and cell pitch, top phi flux tracking",
+          "parents": [
+            "7945eadbc814d264bee757ea0545ae4c7884fd9c"
+          ]
+        },
+        {
+          "sha": "7945eadbc814d264bee757ea0545ae4c7884fd9c",
+          "date": "2026-11-18T19:33:26Z",
+          "subject": "refactor(fs-c02): permit explicit high-headspace 19200-cell alpha/T parsing without changing 9600-cell legacy audits",
+          "parents": [
+            "996186708d3edc914b36d5ac072c129d96812ed2"
+          ]
+        },
+        {
+          "sha": "996186708d3edc914b36d5ac072c129d96812ed2",
+          "date": "2026-11-18T19:31:16Z",
+          "subject": "ci(fs-c02): enforce atmospheric top patch, pressure/thermal backflow and no artificial roof regressions",
+          "parents": [
+            "2ce4b8056ad65b1c520383e276b609a6e258d191"
+          ]
+        },
+        {
+          "sha": "2ce4b8056ad65b1c520383e276b609a6e258d191",
+          "date": "2026-11-18T19:31:05Z",
+          "subject": "test(fs-c02): prevent fake roof, blocked outflow, hot gas backflow and unexpected patch conversion",
+          "parents": [
+            "3b0e7fe6e832231d10d9596a48634cd1bc04b835"
+          ]
+        },
+        {
+          "sha": "3b0e7fe6e832231d10d9596a48634cd1bc04b835",
+          "date": "2026-11-18T19:30:42Z",
+          "subject": "refactor(fs-c02): remove redundant placeholder from atmospheric boundary verifier",
+          "parents": [
+            "8dd70cab46cf06702cbf47fa1324f62b86c0401d"
+          ]
+        },
+        {
+          "sha": "8dd70cab46cf06702cbf47fa1324f62b86c0401d",
+          "date": "2026-11-18T19:30:22Z",
+          "subject": "feat(fs-c02): immutable top-atmosphere boundary audit, distinguish open patch from measured gas escape",
+          "parents": [
+            "1c3f9d9a6dee6ca6b714fabee2f6ac9f9d45c3ce"
+          ]
+        },
+        {
+          "sha": "1c3f9d9a6dee6ca6b714fabee2f6ac9f9d45c3ce",
+          "date": "2026-11-18T19:27:13Z",
+          "subject": "docs(fs-c02): honor investigator decision to archive laminar ablation and prioritize turbulent iron-air model verification",
+          "parents": [
+            "b87d70fc498639ba4692794dabf485eaa3bf71b5"
+          ]
+        },
+        {
+          "sha": "b87d70fc498639ba4692794dabf485eaa3bf71b5",
+          "date": "2026-11-18T19:20:31Z",
+          "subject": "docs(fs-c02): record verified 10-time A/B pair and flag possible laminar alpha stagnation; add exact shared-gas-cell audit",
+          "parents": [
+            "9774e2fdf8c4f33e1f516fb8d30b2aa8383f5c33"
+          ]
+        },
+        {
+          "sha": "9774e2fdf8c4f33e1f516fb8d30b2aa8383f5c33",
+          "date": "2026-11-18T19:19:50Z",
+          "subject": "ci(fs-c02): require shared-cell RAS-laminar temperature and alpha-field dynamics regressions",
+          "parents": [
+            "973cbb5986763c752c3703be8e9056e8169e52f1"
+          ]
+        },
+        {
+          "sha": "973cbb5986763c752c3703be8e9056e8169e52f1",
+          "date": "2026-11-18T19:19:30Z",
+          "subject": "test(fs-c02): common gas-cell mask and interface motion between paired RAS/laminar archived snapshots",
+          "parents": [
+            "4d8d0406eeb9308da4e0085bb57e762de82fccad"
+          ]
+        },
+        {
+          "sha": "4d8d0406eeb9308da4e0085bb57e762de82fccad",
+          "date": "2026-11-18T19:18:50Z",
+          "subject": "feat(fs-c02): compare identical gas cell indices and VOF alpha motion across RAS/laminar saved fields",
+          "parents": [
+            "1c0a37f0c19204dd557158956183c461fb4bf8bd"
+          ]
+        },
+        {
+          "sha": "1c0a37f0c19204dd557158956183c461fb4bf8bd",
+          "date": "2026-11-18T19:14:34Z",
+          "subject": "docs(fs-c02): record Foundation14 laminar 0.01s Co pass and >350K gas-temperature A/B shift; prescribe read-only pair audit",
+          "parents": [
+            "9fd9a88488ecdd2c8cdfedb19ee1778af76a10f9"
+          ]
+        },
+        {
+          "sha": "9fd9a88488ecdd2c8cdfedb19ee1778af76a10f9",
+          "date": "2026-11-18T19:13:51Z",
+          "subject": "ci(fs-c02): require seven read-only paired RAS vs laminar archived-result checks",
+          "parents": [
+            "ba10975758686fa0f059d8b27c664d8bf26d5131"
+          ]
+        },
+        {
+          "sha": "ba10975758686fa0f059d8b27c664d8bf26d5131",
+          "date": "2026-11-18T19:13:37Z",
+          "subject": "test(fs-c02): paired RAS-laminar time traces, exact two-input ablation and fail-closed provenance gates",
+          "parents": [
+            "63150ac7c1e3f47864a5d56d8489a081d63d2315"
+          ]
+        },
+        {
+          "sha": "63150ac7c1e3f47864a5d56d8489a081d63d2315",
+          "date": "2026-11-18T19:12:50Z",
+          "subject": "feat(fs-c02): read-only matched-time thermal A/B audit of completed RAS and laminar isolated iron-air runs",
+          "parents": [
+            "562bb462433ac96d966761945fb8fc38ed41018f"
+          ]
+        },
+        {
+          "sha": "562bb462433ac96d966761945fb8fc38ed41018f",
+          "date": "2026-11-18T18:59:53Z",
+          "subject": "docs(fs-c02): record near-pure gas state and implement isolated RAS-to-laminar thermal falsification experiment",
+          "parents": [
+            "4e6b0fd242d3832cb5a8301c070683486e3291ca"
+          ]
+        },
+        {
+          "sha": "4e6b0fd242d3832cb5a8301c070683486e3291ca",
+          "date": "2026-11-18T18:59:05Z",
+          "subject": "ci(fs-c02): add five laminar ablation staging and thermal snapshot regressions without running solver",
+          "parents": [
+            "8b9beb2bbd271a9ead5e378ae525eaf646e5fbd0"
+          ]
+        },
+        {
+          "sha": "8b9beb2bbd271a9ead5e378ae525eaf646e5fbd0",
+          "date": "2026-11-18T18:58:47Z",
+          "subject": "test(fs-c02): five no-CFD laminar-vs-RAS ablation provenance, isolation and thermal snapshot gates",
+          "parents": [
+            "61b351e326f447e037832c2879cd915f509a7017"
+          ]
+        },
+        {
+          "sha": "61b351e326f447e037832c2879cd915f509a7017",
+          "date": "2026-11-18T18:58:10Z",
+          "subject": "feat(fs-c02): isolated 0.01s laminar ablation of inherited kEpsilon/damping for hot-air thermal comparison",
+          "parents": [
+            "56d63c14ea64728df8bf4f45e7d7d3389f36c380"
+          ]
+        },
+        {
+          "sha": "56d63c14ea64728df8bf4f45e7d7d3389f36c380",
+          "date": "2026-11-18T18:49:20Z",
+          "subject": "docs(fs-c02): record real 10-snapshot 747K gas-like heating, hot-cell counts and p/rho/U diagnostic next gate",
+          "parents": [
+            "51ac3c09cedc0a29eef6cccf5dc86d5b02ddd292"
+          ]
+        },
+        {
+          "sha": "51ac3c09cedc0a29eef6cccf5dc86d5b02ddd292",
+          "date": "2026-11-18T18:48:41Z",
+          "subject": "ci(fs-c02): verify archived gas pressure-density-velocity postprocessing with no CFD",
+          "parents": [
+            "508199ad449b89a6b9bd0799f6f234dad4b9b3c0"
+          ]
+        },
+        {
+          "sha": "508199ad449b89a6b9bd0799f6f234dad4b9b3c0",
+          "date": "2026-11-18T18:48:26Z",
+          "subject": "test(fs-c02): archived p-rho-U gas proxy diagnostics detect high T, absent fields, bad pressure, tampering",
+          "parents": [
+            "1ebe6849f440c4e442b11a9672342ed79437dd48"
+          ]
+        },
+        {
+          "sha": "1ebe6849f440c4e442b11a9672342ed79437dd48",
+          "date": "2026-11-18T18:47:40Z",
+          "subject": "feat(fs-c02): read-only gas pressure/rho/velocity thermal consistency trace in archived metal-air VOF",
+          "parents": [
+            "9ff0865ec7bba6663ed9d549bff6614e9e2da430"
+          ]
+        },
+        {
+          "sha": "9ff0865ec7bba6663ed9d549bff6614e9e2da430",
+          "date": "2026-11-18T18:41:04Z",
+          "subject": "docs(fs-c02): document brief thermal spatial trace stdout for existing extended run",
+          "parents": [
+            "f8bd43f4fc1a1f3490b4ed9b7b6d1528700d6929"
+          ]
+        },
+        {
+          "sha": "f8bd43f4fc1a1f3490b4ed9b7b6d1528700d6929",
+          "date": "2026-11-18T18:40:44Z",
+          "subject": "feat(fs-c02): brief three-time stdout for saved gas/mixed/metal T trace without writing results",
+          "parents": [
+            "10a21999476988314be3e44af9ed01108c0b9755"
+          ]
+        },
+        {
+          "sha": "10a21999476988314be3e44af9ed01108c0b9755",
+          "date": "2026-11-18T18:40:05Z",
+          "subject": "docs(fs-c02): prescribe read-only thermal time-series grouping to assess 757 K gas-weighted output",
+          "parents": [
+            "ba0633d3d1b6736e0ba3b34b256cee6b2a49d981"
+          ]
+        },
+        {
+          "sha": "ba0633d3d1b6736e0ba3b34b256cee6b2a49d981",
+          "date": "2026-11-18T18:39:44Z",
+          "subject": "ci(fs-c02): gate thermal-alpha spatial diagnostics against synthetic archived time fields",
+          "parents": [
+            "ebfaf9202a696a4f0d43244739aa8d60df0f6567"
+          ]
+        },
+        {
+          "sha": "ebfaf9202a696a4f0d43244739aa8d60df0f6567",
+          "date": "2026-11-18T18:39:32Z",
+          "subject": "test(fs-c02): synthetic time-series hot-air, interfacial bins and read-only source integrity screens",
+          "parents": [
+            "c41a126e73932b0b6526a1917cb7b8dab69dde25"
+          ]
+        },
+        {
+          "sha": "c41a126e73932b0b6526a1917cb7b8dab69dde25",
+          "date": "2026-11-18T18:38:59Z",
+          "subject": "feat(fs-c02): read-only thermal/VOF time-series classify gas-like, mixed and metal-like regions in 0.01s run",
+          "parents": [
+            "1c8fd50762a0967e06b7c08bad2f8a7225d13a2c"
+          ]
+        },
+        {
+          "sha": "1c8fd50762a0967e06b7c08bad2f8a7225d13a2c",
+          "date": "2026-11-18T18:37:57Z",
+          "subject": "docs(fs-c02): register real 0.01s numerical PASS, zero recorded drift, Co=.163617 and gas-temperature review",
+          "parents": [
+            "aa358ea6748cd7fe91927b7b04ca52e75ca4b6f0"
+          ]
+        },
+        {
+          "sha": "aa358ea6748cd7fe91927b7b04ca52e75ca4b6f0",
+          "date": "2026-11-18T18:25:06Z",
+          "subject": "docs(fs-c02): document read-only 0.01s extended alpha, volume and saved temperature postrun checks",
+          "parents": [
+            "9698b82c8ec1a4bb7460ce84fdb44dc4006436cb"
+          ]
+        },
+        {
+          "sha": "9698b82c8ec1a4bb7460ce84fdb44dc4006436cb",
+          "date": "2026-11-18T18:24:43Z",
+          "subject": "test(fs-c02): synthetic 0.01s field/T audit acceptance and missing-field, tampering, Courant negative gates",
+          "parents": [
+            "0836441c8cac6343c2211826d15cfd5337a6c864"
+          ]
+        },
+        {
+          "sha": "0836441c8cac6343c2211826d15cfd5337a6c864",
+          "date": "2026-11-18T18:23:59Z",
+          "subject": "feat(fs-c02): audit extended 0.01s VOF run with strict profile/Co identity, alpha volume and saved T statistics",
+          "parents": [
+            "c14405b20227146975ba5b68c43fd73c2a1c7808"
+          ]
+        },
+        {
+          "sha": "c14405b20227146975ba5b68c43fd73c2a1c7808",
+          "date": "2026-11-18T18:22:55Z",
+          "subject": "docs(fs-c02): register researcher-confirmed 0.01s extended Co pass 0.163617 with zero >0.20, physics gates open",
+          "parents": [
+            "f3ab50a7b1ec7d0c7e4e870c255a1cdc77081f35"
+          ]
+        },
+        {
+          "sha": "f3ab50a7b1ec7d0c7e4e870c255a1cdc77081f35",
+          "date": "2026-11-18T17:40:41Z",
+          "subject": "docs(fs-c02): define 0.01s extended isolated run, fixed .20 screening and no metallurgy validation claims",
+          "parents": [
+            "5787b962ad61cd03bbf5d3aa3797136bb2a1e813"
+          ]
+        },
+        {
+          "sha": "5787b962ad61cd03bbf5d3aa3797136bb2a1e813",
+          "date": "2026-11-18T17:40:16Z",
+          "subject": "test(fs-c02): check 0.01s extended trial isolation, dt/Co control and unrelaxed acceptance threshold",
+          "parents": [
+            "424850f75eedd46275b1890061a098e00523aca8"
+          ]
+        },
+        {
+          "sha": "424850f75eedd46275b1890061a098e00523aca8",
+          "date": "2026-11-18T17:39:56Z",
+          "subject": "feat(fs-c02): separate 0.01s extended VOF trial with Co target .15 and unchanged .20 acceptance screen",
+          "parents": [
+            "2ae9fd102efccf0f728a53a6f308a2779508cf1a"
+          ]
+        },
+        {
+          "sha": "2ae9fd102efccf0f728a53a6f308a2779508cf1a",
+          "date": "2026-11-18T17:39:07Z",
+          "subject": "docs(fs-c02): record 2072-step Courant chronology and 45 mild startup excursions; define conservative 0.01s next gate",
+          "parents": [
+            "3ce498dde70d5137f318d60cd0b19aefe0ddfbc2"
+          ]
+        },
+        {
+          "sha": "3ce498dde70d5137f318d60cd0b19aefe0ddfbc2",
+          "date": "2026-11-18T03:55:40Z",
+          "subject": "docs(fs-c02): log researcher-run 0.002s startup review, Co peak 0.212768 and 45 crossings; preserve scientific limits",
+          "parents": [
+            "992b97e9de9ddcf7bb50d3d5e18b18a4bf74086f"
+          ]
+        },
+        {
+          "sha": "992b97e9de9ddcf7bb50d3d5e18b18a4bf74086f",
+          "date": "2026-11-18T03:31:32Z",
+          "subject": "docs(fs-c02): record Co=9.418 startup onset, 1347 threshold crossings and 0.002s isolated conservative probe",
+          "parents": [
+            "c1199f5b9d4753a158ee6784ce942bd186f6c180"
+          ]
+        },
+        {
+          "sha": "c1199f5b9d4753a158ee6784ce942bd186f6c180",
+          "date": "2026-11-18T03:30:45Z",
+          "subject": "test(fs-c02): isolated conservative startup probe time controls and SHA manifest without CFD",
+          "parents": [
+            "4648a71e79de00db5b4b9a5172cf2262fc2ad8a4"
+          ]
+        },
+        {
+          "sha": "4648a71e79de00db5b4b9a5172cf2262fc2ad8a4",
+          "date": "2026-11-18T03:30:30Z",
+          "subject": "refine(fs-c02): cap startup probe at 1 microsecond dt and write 0.2 ms snapshots for interface checks",
+          "parents": [
+            "805062c5d7edf9c799e52dd06a15f258ae5fca29"
+          ]
+        },
+        {
+          "sha": "805062c5d7edf9c799e52dd06a15f258ae5fca29",
+          "date": "2026-11-18T03:29:57Z",
+          "subject": "feat(fs-c02): 0.002s conservative isolated startup probe, SHA-tracked dt controls and entire-log Courant gate",
+          "parents": [
+            "fc7d091fdc116fe7634f4aad2e11d29a0107008e"
+          ]
+        },
+        {
+          "sha": "fc7d091fdc116fe7634f4aad2e11d29a0107008e",
+          "date": "2026-11-18T03:29:17Z",
+          "subject": "test(fs-c02): cover Foundation14 time marker seconds suffix in Courant diagnostic",
+          "parents": [
+            "83686121b7b3cd90f9cd405a25fe532f4b57bd8f"
+          ]
+        },
+        {
+          "sha": "83686121b7b3cd90f9cd405a25fe532f4b57bd8f",
+          "date": "2026-11-18T03:29:09Z",
+          "subject": "fix(fs-c02): parse Foundation14 Time = 0.000122208s markers in Courant hotspot diagnostic",
+          "parents": [
+            "d44c92ab3773e72b573083f84710c825afc5921c"
+          ]
+        },
+        {
+          "sha": "d44c92ab3773e72b573083f84710c825afc5921c",
+          "date": "2026-11-18T03:19:13Z",
+          "subject": "docs(fs-c02): provide existing-run Courant hotspot diagnosis and prohibit masking Co spike",
+          "parents": [
+            "cb72409067f2a341bcf6e409a230048be89c0bc0"
+          ]
+        },
+        {
+          "sha": "cb72409067f2a341bcf6e409a230048be89c0bc0",
+          "date": "2026-11-18T03:19:02Z",
+          "subject": "ci(fs-c02): require read-only Courant hotspot chronology regressions",
+          "parents": [
+            "a9e1f5052bd7f690aaa2d77396bbe78922016105"
+          ]
+        },
+        {
+          "sha": "a9e1f5052bd7f690aaa2d77396bbe78922016105",
+          "date": "2026-11-18T03:18:52Z",
+          "subject": "test(fs-c02): hot-spot line/time brackets, peak counts and read-only case isolation",
+          "parents": [
+            "fdf3b59a67ef40ac096ce5babde2d86ccc65b28d"
+          ]
+        },
+        {
+          "sha": "fdf3b59a67ef40ac096ce5babde2d86ccc65b28d",
+          "date": "2026-11-18T03:18:29Z",
+          "subject": "feat(fs-c02): read-only time-bracketed Courant spike diagnosis from completed metal-air foamRun log",
+          "parents": [
+            "fa454673ddf3f4b7cb314d361e340b2f11bbcc5d"
+          ]
+        },
+        {
+          "sha": "fa454673ddf3f4b7cb314d361e340b2f11bbcc5d",
+          "date": "2026-11-18T03:17:39Z",
+          "subject": "docs(fs-c02): log observed volume/alpha/mass-derived and serious Co=9.41807 REVIEW without claiming validation",
+          "parents": [
+            "8c1282a5dc7551ba4a0612fb674f26ffbc29cde0"
+          ]
+        },
+        {
+          "sha": "8c1282a5dc7551ba4a0612fb674f26ffbc29cde0",
+          "date": "2026-11-18T02:12:19Z",
+          "subject": "docs(fs-c02): record real local solver completion and non-destructive existing-run numerical audit",
+          "parents": [
+            "9f34c3c3370ca124cd73628d8e855105c125c396"
+          ]
+        },
+        {
+          "sha": "9f34c3c3370ca124cd73628d8e855105c125c396",
+          "date": "2026-11-18T02:12:16Z",
+          "subject": "docs(fs-c02): record real local solver completion and non-destructive existing-run numerical audit",
+          "parents": [
+            "0ce27c80ec4689dd3dbd3a0894c233fb899dc65b"
+          ]
+        },
+        {
+          "sha": "0ce27c80ec4689dd3dbd3a0894c233fb899dc65b",
+          "date": "2026-11-18T02:11:30Z",
+          "subject": "ci(fs-c02): verify postrun audit conservativeness and failing negative cases without CFD",
+          "parents": [
+            "3610df4ff6a342c0f8a9933a4c3abcff94fa7a39"
+          ]
+        },
+        {
+          "sha": "3610df4ff6a342c0f8a9933a4c3abcff94fa7a39",
+          "date": "2026-11-18T02:11:17Z",
+          "subject": "test(fs-c02): synthetic postrun volume/alpha/Courant screens and strict identity gates",
+          "parents": [
+            "18a5d5695a4204d180845944f2b308e52ef3ec7b"
+          ]
+        },
+        {
+          "sha": "18a5d5695a4204d180845944f2b308e52ef3ec7b",
+          "date": "2026-11-18T02:10:31Z",
+          "subject": "feat(fs-c02): add read-only metal-air VOF volume, derived mass, alpha and Courant postrun screen",
+          "parents": [
+            "f226913da75bf504139939e4f174da07196bd374"
+          ]
+        },
+        {
+          "sha": "f226913da75bf504139939e4f174da07196bd374",
+          "date": "2026-11-18T00:48:41Z",
+          "subject": "docs(freesurface): index FS-C02 metal-air branch as provisional continuation of B14",
+          "parents": [
+            "6dc585a1f59024149b7229b9f7a21ef30775adc6"
+          ]
+        },
+        {
+          "sha": "6dc585a1f59024149b7229b9f7a21ef30775adc6",
+          "date": "2026-11-18T00:48:31Z",
+          "subject": "docs(fs-c02): define provisional metal-air model, provenance and isolated WSL instructions",
+          "parents": [
+            "9bbd467a17e38bef405dec8968c91a1027c833a2"
+          ]
+        },
+        {
+          "sha": "9bbd467a17e38bef405dec8968c91a1027c833a2",
+          "date": "2026-11-18T00:47:15Z",
+          "subject": "ci(fs-c02): synthetic staging, source provenance and no CFD execution gates",
+          "parents": [
+            "dfa27d8396c7daa675dee93a6c3db3937113ae59"
+          ]
+        },
+        {
+          "sha": "dfa27d8396c7daa675dee93a6c3db3937113ae59",
+          "date": "2026-11-18T00:46:57Z",
+          "subject": "fix(fs-c02): robust volume float test and forbid staging within active MasterProject checkout",
+          "parents": [
+            "307f0b7f554c6e4d16b3533862dc2423fe6a395c"
+          ]
+        },
+        {
+          "sha": "307f0b7f554c6e4d16b3533862dc2423fe6a395c",
+          "date": "2026-11-18T00:46:54Z",
+          "subject": "fix(fs-c02): robust volume float test and forbid staging within active MasterProject checkout",
+          "parents": [
+            "15ccd0d798477a8b2fb50cef20aebe4d44693a53"
+          ]
+        },
+        {
+          "sha": "15ccd0d798477a8b2fb50cef20aebe4d44693a53",
+          "date": "2026-11-18T00:46:41Z",
+          "subject": "test(fs-c02): 8 isolated synthetic tests for iron-air staging, provenance and separation from 3D",
+          "parents": [
+            "92090e1d98698e84eccbc8ec2d8639047f61cc5e"
+          ]
+        },
+        {
+          "sha": "92090e1d98698e84eccbc8ec2d8639047f61cc5e",
+          "date": "2026-11-18T00:45:54Z",
+          "subject": "feat(fs-c02): create isolated provisional molten-iron-air Foundation14 VOF case from frozen FS-C01 plus read-only B14 properties",
+          "parents": [
+            "57c747a9cbf8115deb5ca62612c6ea7bac2c706c"
+          ]
+        },
+        {
+          "sha": "57c747a9cbf8115deb5ca62612c6ea7bac2c706c",
+          "date": "2026-11-18T00:43:29Z",
+          "subject": "docs(fs-c01): record observed 11-point 0.0 volume drift and final Co evidence with explicit limits",
+          "parents": [
+            "12e67296fcebe8748d7b6efd391e722dd584152b"
+          ]
+        },
+        {
+          "sha": "12e67296fcebe8748d7b6efd391e722dd584152b",
+          "date": "2026-11-18T00:35:35Z",
+          "subject": "docs(fs-c01): register researcher-reported successful water-air local run and volume screen; keep mass and shrinkage gates open",
+          "parents": [
+            "e72b9b518dfae6eb3654a7061c5b1805e33a136d"
+          ]
+        },
+        {
+          "sha": "e72b9b518dfae6eb3654a7061c5b1805e33a136d",
+          "date": "2026-11-18T00:35:32Z",
+          "subject": "docs(fs-c01): register researcher-reported successful water-air local run and volume screen; keep mass and shrinkage gates open",
+          "parents": [
+            "16fa1498f0b638d615922c4d69807c6eae129e62"
+          ]
+        },
+        {
+          "sha": "16fa1498f0b638d615922c4d69807c6eae129e62",
+          "date": "2026-11-18T00:31:44Z",
+          "subject": "docs(freesurface): distinguish local meshing evidence from failed FS-C01 solver initialization",
+          "parents": [
+            "601a135f30bd38f2060052bbd569a540633d806d"
+          ]
+        },
+        {
+          "sha": "601a135f30bd38f2060052bbd569a540633d806d",
+          "date": "2026-11-18T00:30:21Z",
+          "subject": "docs(fs-c01): preserve real failed run evidence and safe dedicated worktree retry instructions",
+          "parents": [
+            "cb3820819ee785124c2334cb9bfa4aedec91c81d"
+          ]
+        },
+        {
+          "sha": "cb3820819ee785124c2334cb9bfa4aedec91c81d",
+          "date": "2026-11-18T00:30:18Z",
+          "subject": "docs(fs-c01): preserve real failed run evidence and safe dedicated worktree retry instructions",
+          "parents": [
+            "7e8ee62e62aae6dd8418e9b7ba42020cd7dfd99a"
+          ]
+        },
+        {
+          "sha": "7e8ee62e62aae6dd8418e9b7ba42020cd7dfd99a",
+          "date": "2026-11-18T00:29:46Z",
+          "subject": "test(fs-c01): permanently catch missing writeFields in generated and frozen OpenFOAM14 cases",
+          "parents": [
+            "9fe41c0470667c5c6b4cb90e7bb18b25ab5c5605"
+          ]
+        },
+        {
+          "sha": "9fe41c0470667c5c6b4cb90e7bb18b25ab5c5605",
+          "date": "2026-11-18T00:29:44Z",
+          "subject": "test(fs-c01): permanently catch missing writeFields in generated and frozen OpenFOAM14 cases",
+          "parents": [
+            "ef2e9d2ca9d180c7cc7cae61a5e409f96a26efb8"
+          ]
+        },
+        {
+          "sha": "ef2e9d2ca9d180c7cc7cae61a5e409f96a26efb8",
+          "date": "2026-11-18T00:29:42Z",
+          "subject": "test(fs-c01): permanently catch missing writeFields in generated and frozen OpenFOAM14 cases",
+          "parents": [
+            "e64a3b71631f1c4c15f2d1e749e3efaa547cac8f"
+          ]
+        },
+        {
+          "sha": "e64a3b71631f1c4c15f2d1e749e3efaa547cac8f",
+          "date": "2026-11-18T00:29:27Z",
+          "subject": "fix(fs-c01): fail preflight for missing Foundation14 writeFields keyword even with matching hashes",
+          "parents": [
+            "1c6d9dde457bc802281aa77e926e3fc658559075"
+          ]
+        },
+        {
+          "sha": "1c6d9dde457bc802281aa77e926e3fc658559075",
+          "date": "2026-11-18T00:29:05Z",
+          "subject": "fix(bfs01): generated Foundation14 volFieldValue always includes required writeFields false",
+          "parents": [
+            "027ce7745590d5d6df4ed83ee580136f5082b924"
+          ]
+        },
+        {
+          "sha": "027ce7745590d5d6df4ed83ee580136f5082b924",
+          "date": "2026-11-18T00:28:50Z",
+          "subject": "chore(fs-c01): rebaseline only waterVolume controlDict SHA256 in 20-input manifest",
+          "parents": [
+            "fa70c2c27827b463bdb2157900fe05071bc7ecbf"
+          ]
+        },
+        {
+          "sha": "fa70c2c27827b463bdb2157900fe05071bc7ecbf",
+          "date": "2026-11-18T00:28:48Z",
+          "subject": "fix(fs-c01): specify required OpenFOAM14 waterVolume writeFields flag",
+          "parents": [
+            "f5be57ec20522593fa7fdda18d4a81ab6611c555"
+          ]
+        },
+        {
+          "sha": "f5be57ec20522593fa7fdda18d4a81ab6611c555",
+          "date": "2026-11-18T00:06:19Z",
+          "subject": "docs(fs-c01): separate runnable FS-C01 from active C3D-02 work",
+          "parents": [
+            "d47323ece352327f39f5429fd21f73ba8ddedea4"
+          ]
+        },
+        {
+          "sha": "d47323ece352327f39f5429fd21f73ba8ddedea4",
+          "date": "2026-11-18T00:06:17Z",
+          "subject": "docs(fs-c01): separate runnable FS-C01 from active C3D-02 work",
+          "parents": [
+            "484ecb60a9bfca42bfc7008a6891f37934872132"
+          ]
+        },
+        {
+          "sha": "484ecb60a9bfca42bfc7008a6891f37934872132",
+          "date": "2026-11-18T00:06:02Z",
+          "subject": "docs(fs-c01): exact-case WSL worktree procedure separated from C3D-02",
+          "parents": [
+            "de7bf5cf7cfc1ccfe91688e1e9559eb39e4dc17c"
+          ]
+        },
+        {
+          "sha": "de7bf5cf7cfc1ccfe91688e1e9559eb39e4dc17c",
+          "date": "2026-11-18T00:04:56Z",
+          "subject": "ci(fs-c01): verify isolated runner without CFD execution",
+          "parents": [
+            "c80d2015cb8984301dbb7729416310e4f253a444"
+          ]
+        },
+        {
+          "sha": "c80d2015cb8984301dbb7729416310e4f253a444",
+          "date": "2026-11-18T00:04:42Z",
+          "subject": "test(fs-c01): synthetic isolation provenance and mesh gate regressions",
+          "parents": [
+            "ef4af809382e91ba7e10dd3d36f717eb9c1129f2"
+          ]
+        },
+        {
+          "sha": "ef4af809382e91ba7e10dd3d36f717eb9c1129f2",
+          "date": "2026-11-18T00:04:06Z",
+          "subject": "feat(fs-c01): isolated Foundation 14 runner with case-specific logs and fail-closed quality gates",
+          "parents": [
+            "3f6a26dc9490f1387652ffb23c6202a1da033d55"
+          ]
         }
       ],
-      "unresolved_parents": [
-        "409ffec19fb82e01d4ff5bc6b68e53fc1c6205d5"
-      ],
-      "coverage_complete": false
+      "unresolved_parents": [],
+      "coverage_complete": true
     },
     {
       "name": "main",
