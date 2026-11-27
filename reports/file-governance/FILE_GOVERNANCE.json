@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
   "audit_kind": "deterministic_full_tracked_tree",
-  "tracked_files_total": 42945,
-  "classified_files_total": 42940,
-  "docs_content_inspected": 254,
+  "tracked_files_total": 42950,
+  "classified_files_total": 42945,
+  "docs_content_inspected": 256,
   "large_docs_skipped": 1,
   "excluded_reports": 5,
   "roles": {
@@ -12,27 +12,26 @@
     "bitacora": 5,
     "config": 33,
     "data": 43,
-    "document": 213,
+    "document": 215,
     "index": 37,
     "license": 1,
     "simulation_case_file": 141,
     "simulation_input": 2683,
     "simulation_log": 3264,
     "simulation_output": 36203,
-    "source": 181,
-    "test": 85,
+    "source": 182,
+    "test": 86,
     "unknown": 1,
     "web_ui": 1,
-    "workflow": 39
+    "workflow": 40
   },
   "finding_counts": {
     "BROKEN_RELATIVE_LINK": 7,
-    "POTENTIAL_UNLOGGED_CHANGES": 2,
     "UNKNOWN_PURPOSE": 1
   },
-  "finding_total": 10,
-  "inventory_fingerprint": "e972d2a952a9ae9db732d8c2278a6d156aebbf98f354a576c378cc3d18d8eb45",
-  "evidence_fingerprint": "81916edf23aaa9f5a0b592f7a47e6a4596c899859d39ed70b48e08a03ffdf093",
+  "finding_total": 8,
+  "inventory_fingerprint": "95dee79d40ba7b809147efdd58336750d8e33a1241dc5b3ec7fef50f033324d5",
+  "evidence_fingerprint": "e7b9f0156261d19bdf73668ed1141a71accec906e79e9524ca8939ff09069206",
   "files": [
     {
       "path": ".github/agents/openfoam-solidification.agent.md",
@@ -270,7 +269,7 @@
       "role": "workflow",
       "purpose": "GitHub Actions automation",
       "certainty": "rule",
-      "blob": "8e9d5efdfc757292ab1973859f8dc9f62bd48eb1"
+      "blob": "9f4064db5f2bb2a27de111aaea3142d472eb6e22"
     },
     {
       "path": ".github/workflows/quickcup-research-audit.yml",
@@ -292,6 +291,13 @@
       "purpose": "GitHub Actions automation",
       "certainty": "rule",
       "blob": "cdbc77a466a0d3cc59b79d9a3ddfbdf62eea752e"
+    },
+    {
+      "path": ".github/workflows/uva-diagnostic-integrity.yml",
+      "role": "workflow",
+      "purpose": "GitHub Actions automation",
+      "certainty": "rule",
+      "blob": "370ed361b1c73e309431d75278732fef2c4e7c25"
     },
     {
       "path": ".github/workflows/uy-temporal-analysis.yml",
@@ -452,21 +458,21 @@
       "role": "bitacora",
       "purpose": "technical/audit change history",
       "certainty": "rule",
-      "blob": "a515ceb1a82ae86a57f658001af84c1afe25fe8a"
+      "blob": "0a32db94f36e281ef00298aee2a7ebda01b7f317"
     },
     {
       "path": "PROJECT_AUDIT_LOG_ES.md",
       "role": "bitacora",
       "purpose": "technical/audit change history",
       "certainty": "rule",
-      "blob": "eba6d86b52c6228ffe9ed0d06aa9411c590055a9"
+      "blob": "49e637d99d62da498856cbd96aac9407efbb081d"
     },
     {
       "path": "README.md",
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "e8b5a46f44b070dbbc893b2d1b2bc3af2a45d44b"
+      "blob": "52f8730e39dcbd09ddac993d9ecbd0d6c3453b69"
     },
     {
       "path": "RUN_CASE_REGISTRY.csv",
@@ -886,7 +892,7 @@
       "role": "source",
       "purpose": "code/test implementation",
       "certainty": "rule",
-      "blob": "996954e5e86b7d6152c4c0096af734db759d23af"
+      "blob": "9de5578ef5635eede31e817b3d36c77730ea174c"
     },
     {
       "path": "analysis_tools/coupling_analysis.py",
@@ -1033,7 +1039,7 @@
       "role": "test",
       "purpose": "code/test implementation",
       "certainty": "rule",
-      "blob": "da626cc844a43b842fff9fb0d75e202db840f6e8"
+      "blob": "b53b9e954dc4ff205c4e703518f1bb51d2ec9a55"
     },
     {
       "path": "analysis_tools/test_freesurface_fs_c01.py",
@@ -28466,7 +28472,7 @@
       "role": "source",
       "purpose": "code/test implementation",
       "certainty": "rule",
-      "blob": "45a303fb615ace3f611f41b615f882dde0ab00c5"
+      "blob": "8527f32f672a6213737d34a9ab527e4fa631acc4"
     },
     {
       "path": "cases_3d/C3D_05_step_gmsh_conformal/c14_physics/analyze_existing_case_b_c14_native_flux.py",
@@ -28480,7 +28486,7 @@
       "role": "source",
       "purpose": "code/test implementation",
       "certainty": "rule",
-      "blob": "fc97202a3a78838fd199b6132521cc4b3b34e1e0"
+      "blob": "2c4aa25dda9293d3efe1fd81931ce444c86a29a9"
     },
     {
       "path": "cases_3d/C3D_05_step_gmsh_conformal/c14_physics/compare_existing_case_b_c14_native_q_and_storage.py",
@@ -28565,6 +28571,13 @@
       "purpose": "code/test implementation",
       "certainty": "rule",
       "blob": "89f7a6bf3f630a75e2ec445df37bfaaac4e214d8"
+    },
+    {
+      "path": "cases_3d/C3D_05_step_gmsh_conformal/c14_physics/test_uva_case_b_diagnostic_integrity.py",
+      "role": "test",
+      "purpose": "code/test implementation",
+      "certainty": "rule",
+      "blob": "556b78d2e60e23539d85e023b0b24898dd818ff3"
     },
     {
       "path": "cases_3d/C3D_05_step_gmsh_conformal/c14_physics/test_uva_case_b_offline_integrity.py",
@@ -299191,7 +299204,7 @@
       "role": "config",
       "purpose": "machine-readable configuration",
       "certainty": "rule",
-      "blob": "ba50987e36019fbff0547aafb292733a8d03fedd"
+      "blob": "d3969696a8decc24937cca8f37f7c3e297028c54"
     },
     {
       "path": "docs/MASTERPROJECT_IDENTITY_ES.md",
@@ -299276,6 +299289,13 @@
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
       "blob": "393b029ea89239d24ed4c1e30e1fec596fedc22c"
+    },
+    {
+      "path": "docs/granada/C14_2D_AUDITORIA_MESETA_SOLIDUS_20261127_ES.md",
+      "role": "document",
+      "purpose": "manual/decision/report/historical note",
+      "certainty": "inferred",
+      "blob": "f632569ba26803252d633223c1b0a5ed9785cfef"
     },
     {
       "path": "docs/granada/C14_COMPARATIVO_2D_3DA_3DB_SONDAS_20261124_ES.md",
@@ -299590,7 +299610,7 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "d1d2a6ae827cde844df51ed3e707e96f17d7e8b6"
+      "blob": "48e5edaa027a9e7050262ec062453bd641ee8a15"
     },
     {
       "path": "docs/granada/OPENFOAM_HUB_READ_ACCESS_20261021.md",
@@ -299688,7 +299708,7 @@
       "role": "unknown",
       "purpose": "function unknown: owner classification required",
       "certainty": "unknown",
-      "blob": "9ba5b735eee0801f9a36c73f4c35a46dba0dd795"
+      "blob": "48e7de63eeee5fd74313cdc2f61822be555c4fee"
     },
     {
       "path": "docs/review/GENERAL_REGISTRY_AUDIT_20261127_ES.md",
@@ -299710,6 +299730,13 @@
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
       "blob": "c42975bd4a2f5d53dc72963287394b19b4c89abc"
+    },
+    {
+      "path": "docs/review/UVA_C14_DIAGNOSTIC_INTEGRITY_20261127_ES.md",
+      "role": "document",
+      "purpose": "manual/decision/report/historical note",
+      "certainty": "inferred",
+      "blob": "997ef7078623b890bdc75649fd2bb863d910a106"
     },
     {
       "path": "docs/review/UVA_CAMPAIGN_CI_TRIGGERS_20261127_ES.md",
@@ -300398,6 +300425,13 @@
       "blob": "f03da5aaa222c30b173349a589a6bca9c8c0c2db"
     },
     {
+      "path": "tools/check_lab_manifest_consistency.py",
+      "role": "source",
+      "purpose": "code/test implementation",
+      "certainty": "rule",
+      "blob": "d27115cdad8dd67c8695b1013f614665288bfe85"
+    },
+    {
       "path": "tools/check_project_delivery_contract.py",
       "role": "source",
       "purpose": "code/test implementation",
@@ -300677,24 +300711,6 @@
       "path": "docs/granada/C3D05_T0_README_HISTORICAL_BEFORE_SINGLE_FLOW_20261120.md",
       "observation": "Missing: outside-repo",
       "recommendation": "Fix link or restore target",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "f6fdf8268ec27344",
-      "code": "POTENTIAL_UNLOGGED_CHANGES",
-      "severity": "review",
-      "path": "PROJECT_AUDIT_LOG_EN.md",
-      "observation": "4 implementation/config paths changed since this log's last commit; examples: docs/C3D04_CASE_A_STATUS.json, docs/MAESTRIA_RESULT_MANIFEST_INDEX_20261127.json, docs/MAESTRIA_STATUS.json, docs/PROJECT_STAGE_STATUS.json",
-      "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
-      "state": "REVIEW_REQUIRED"
-    },
-    {
-      "id": "2e27a9a324104f7d",
-      "code": "POTENTIAL_UNLOGGED_CHANGES",
-      "severity": "review",
-      "path": "PROJECT_AUDIT_LOG_ES.md",
-      "observation": "4 implementation/config paths changed since this log's last commit; examples: docs/C3D04_CASE_A_STATUS.json, docs/MAESTRIA_RESULT_MANIFEST_INDEX_20261127.json, docs/MAESTRIA_STATUS.json, docs/PROJECT_STAGE_STATUS.json",
-      "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     },
     {
