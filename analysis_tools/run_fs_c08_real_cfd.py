@@ -314,6 +314,48 @@ def numeric_time_dirs(case: Path) -> list[tuple[float, Path]]:
     return sorted(times)
 
 
+def comparison_ready_times(log: str, snapshots: list[tuple[float, Path]],
+                           dt: float | None, strict_energy: bool = False) -> list[float]:
+    """Saved times with fields and native acceptance markers, even on failed runs.
+
+    This is an eligibility filter for comparisons, not independent CFD validation.
+    """
+    markers = {
+        "mass": "FS_C08_NATIVE_METAL_AND_GAS_CONSERVATION_GATES_PASSED",
+        "pressure": "FS_C08_NATIVE_PRESSURE_WITH_MASS_DENSITY",
+    }
+    if strict_energy:
+        markers["energy"] = "FS_C08_FINAL_COUPLED_ENERGY_AUDIT_PASS"
+    times = {key: [] for key in markers}
+    for line in log.splitlines():
+        for key, marker in markers.items():
+            if marker not in line:
+                continue
+            if key == "pressure" and not re.search(
+                    r"\bpressureVolumeEnergyIterationConverged=1(?:\s|$)", line):
+                continue
+            match = re.search(r"\btime_s=([^\s]+)", line)
+            if match:
+                try:
+                    t = float(match.group(1))
+                except ValueError:
+                    continue
+                if math.isfinite(t) and t > 0:
+                    times[key].append(t)
+    ready = []
+    for t, directory in snapshots:
+        tol = max(1e-14, 1e-6 * (dt if dt is not None else abs(t)))
+        if any(sum(abs(x-t) <= tol for x in values) != 1
+               for values in times.values()):
+            continue
+        if any(not ((directory/"fluid"/field).is_file()
+                    or (directory/"fluid"/(field+".gz")).is_file())
+               for field in REQUIRED_FINAL_FIELDS):
+            continue
+        ready.append(t)
+    return ready
+
+
 def inspect_fixed_probe_schedule(log: str, snapshots: list[tuple[float, Path]],
                                  dt: float, steps: int) -> dict:
     """Require every requested positive step, not merely the final marker."""
@@ -538,6 +580,8 @@ def execute(source: Path, material: Path, output: Path,
             "pressureVolumeEnergyIterationConverged=1")
         snapshots = numeric_time_dirs(output)
         report["saved_positive_times_s"] = [t for t,_ in snapshots]
+        report["comparison_ready_times_s"] = comparison_ready_times(
+            log, snapshots, startup_probe_dt, energy_linear_tolerance > 0)
         if snapshots:
             report["latest_saved_time_s"] = snapshots[-1][0]
         if run["exit_code"] != 0:
