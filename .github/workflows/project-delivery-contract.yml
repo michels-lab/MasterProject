@@ -15,6 +15,10 @@ on:
       - "docs/**"
       - "tools/check_project_delivery_contract.py"
       - "tools/check_lab_manifest_consistency.py"
+      - "tools/recover_published_200s.py"
+      - "tools/test_recover_published_200s.py"
+      - "tools/transfer_campaign_200s.py"
+      - "analysis_results/evidence_catalog_20261127/**"
       - ".github/workflows/project-delivery-contract.yml"
   pull_request:
     paths:
@@ -30,6 +34,10 @@ on:
       - "docs/**"
       - "tools/check_project_delivery_contract.py"
       - "tools/check_lab_manifest_consistency.py"
+      - "tools/recover_published_200s.py"
+      - "tools/test_recover_published_200s.py"
+      - "tools/transfer_campaign_200s.py"
+      - "analysis_results/evidence_catalog_20261127/**"
       - ".github/workflows/project-delivery-contract.yml"
   workflow_dispatch:
 
@@ -45,5 +53,7 @@ jobs:
         run: python3 tools/check_project_delivery_contract.py --check
       - name: Check fixed lab manifest and state consistency
         run: python3 -B tools/check_lab_manifest_consistency.py -v
+      - name: Verify selective archive recovery contracts
+        run: python3 -B tools/test_recover_published_200s.py -v
       - name: Report current case stage
         run: python3 tools/check_project_delivery_contract.py --status
