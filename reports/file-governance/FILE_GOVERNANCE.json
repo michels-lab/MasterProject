@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
   "audit_kind": "deterministic_full_tracked_tree",
-  "tracked_files_total": 42917,
-  "classified_files_total": 42912,
-  "docs_content_inspected": 243,
+  "tracked_files_total": 42921,
+  "classified_files_total": 42916,
+  "docs_content_inspected": 244,
   "large_docs_skipped": 1,
   "excluded_reports": 5,
   "roles": {
@@ -12,18 +12,18 @@
     "bitacora": 5,
     "config": 33,
     "data": 37,
-    "document": 203,
+    "document": 204,
     "index": 36,
     "license": 1,
     "simulation_case_file": 141,
     "simulation_input": 2683,
     "simulation_log": 3264,
     "simulation_output": 36203,
-    "source": 177,
-    "test": 80,
+    "source": 178,
+    "test": 81,
     "unknown": 1,
     "web_ui": 1,
-    "workflow": 37
+    "workflow": 38
   },
   "finding_counts": {
     "BROKEN_RELATIVE_LINK": 7,
@@ -31,8 +31,8 @@
     "UNKNOWN_PURPOSE": 1
   },
   "finding_total": 10,
-  "inventory_fingerprint": "cceede2d9bfc8cdeb8ef2afbe4451dca4de86a51e0576f130746cbd180ef322a",
-  "evidence_fingerprint": "e78dec67b78486cd6da0a515fe66033ac8626e5a7165216c1f612ad5013a5c58",
+  "inventory_fingerprint": "fbe2bd4301959f001be49e0a55b9b24f1747fe439a0e21ad346e03ced393711c",
+  "evidence_fingerprint": "cc1144cbc52a1a6dcf5c5f9471638d0e36fcc4f8928acde656312682cd443369",
   "files": [
     {
       "path": ".github/agents/openfoam-solidification.agent.md",
@@ -75,6 +75,13 @@
       "purpose": "GitHub Actions automation",
       "certainty": "rule",
       "blob": "5c4749d32faad72811b34473f6cfde535d16829f"
+    },
+    {
+      "path": ".github/workflows/c14-three-model-comparison.yml",
+      "role": "workflow",
+      "purpose": "GitHub Actions automation",
+      "certainty": "rule",
+      "blob": "fa388b9467ac8cb35e8b23ac8541906ca25cec87"
     },
     {
       "path": ".github/workflows/c3d02-static.yml",
@@ -452,7 +459,7 @@
       "role": "index",
       "purpose": "navigation/onboarding",
       "certainty": "rule",
-      "blob": "a9a7eedca1f67e203c93c144a7718c50aee0092a"
+      "blob": "4b41471fcdd9e5390e9d35805df35f6089804cd9"
     },
     {
       "path": "RUN_CASE_REGISTRY.csv",
@@ -812,6 +819,13 @@
       "blob": "47cc7fadf37131b73ac4c99f73414e655ff4e38e"
     },
     {
+      "path": "analysis_tools/compare_c14_three_models.py",
+      "role": "source",
+      "purpose": "code/test implementation",
+      "certainty": "rule",
+      "blob": "996954e5e86b7d6152c4c0096af734db759d23af"
+    },
+    {
       "path": "analysis_tools/coupling_analysis.py",
       "role": "source",
       "purpose": "code/test implementation",
@@ -943,6 +957,13 @@
       "purpose": "code/test implementation",
       "certainty": "rule",
       "blob": "328ac5a5d0d1884f299193760ce6ce03150dcff8"
+    },
+    {
+      "path": "analysis_tools/test_compare_c14_three_models.py",
+      "role": "test",
+      "purpose": "code/test implementation",
+      "certainty": "rule",
+      "blob": "da626cc844a43b842fff9fb0d75e202db840f6e8"
     },
     {
       "path": "analysis_tools/test_freesurface_fs_c01.py",
@@ -299086,7 +299107,7 @@
       "role": "config",
       "purpose": "machine-readable configuration",
       "certainty": "rule",
-      "blob": "94622ae978420d985b94eda3069d805d1209098e"
+      "blob": "d8d6a0383051ab7a29213119c3c0a9207b7eccaa"
     },
     {
       "path": "docs/MAESTRIA_STATUS.json",
@@ -299485,7 +299506,7 @@
       "role": "document",
       "purpose": "manual/decision/report/historical note",
       "certainty": "inferred",
-      "blob": "75398b0cf698896d73742c762379ec8dbfef6ce2"
+      "blob": "da8a7ca5dfd9473fe1115b07ba126846a448621c"
     },
     {
       "path": "docs/granada/OPENFOAM_HUB_READ_ACCESS_20261021.md",
@@ -299558,6 +299579,13 @@
       "blob": "7acd599aca809a92d30413e764107a6471a917ba"
     },
     {
+      "path": "docs/review/C14_A_2D_NATIVE_PROBES_20261127_ES.md",
+      "role": "document",
+      "purpose": "manual/decision/report/historical note",
+      "certainty": "inferred",
+      "blob": "e6fbbb6b5e54f938d6616352076fe2ed3fec9330"
+    },
+    {
       "path": "docs/review/C3D04_A_FIDELITY_AUDIT_20261127_ES.md",
       "role": "document",
       "purpose": "manual/decision/report/historical note",
@@ -299576,7 +299604,7 @@
       "role": "unknown",
       "purpose": "function unknown: owner classification required",
       "certainty": "unknown",
-      "blob": "0328a4e87244becd22c52e408a0fe02625f36ad1"
+      "blob": "44f3748d2714c0adf964efc583183e089fce958b"
     },
     {
       "path": "docs/review/GENERAL_REGISTRY_AUDIT_20261127_ES.md",
@@ -300484,20 +300512,20 @@
       "state": "REVIEW_REQUIRED"
     },
     {
-      "id": "4357dbf24b69245a",
+      "id": "6f11945b1d77b041",
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_EN.md",
-      "observation": "11 implementation/config paths changed since this log's last commit; examples: analysis_tools/check_run_registry.py, cases_3d/C3D_05_step_gmsh_conformal/c14_physics/analyze_existing_case_b_c14_metal_mass_phi.py, cases_3d/C3D_05_step_gmsh_conformal/c14_physics/stage_c14_3d_case_b.py, cases_3d/C3D_05_step_gmsh_conformal/c14_physics/tests/test_mass_screening_contiguous.py, cases_3d/C3D_05_step_gmsh_conformal/c14_physics/tests/test_stage_c14_3d_case_b.py, docs/C3D04_CASE_A_STATUS.json",
+      "observation": "15 implementation/config paths changed since this log's last commit; examples: .github/workflows/c14-three-model-comparison.yml, analysis_tools/check_run_registry.py, analysis_tools/compare_c14_three_models.py, analysis_tools/test_compare_c14_three_models.py, cases_3d/C3D_05_step_gmsh_conformal/c14_physics/analyze_existing_case_b_c14_metal_mass_phi.py, cases_3d/C3D_05_step_gmsh_conformal/c14_physics/stage_c14_3d_case_b.py",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     },
     {
-      "id": "3c46cae7e027c436",
+      "id": "1beff0a058c2a563",
       "code": "POTENTIAL_UNLOGGED_CHANGES",
       "severity": "review",
       "path": "PROJECT_AUDIT_LOG_ES.md",
-      "observation": "11 implementation/config paths changed since this log's last commit; examples: analysis_tools/check_run_registry.py, cases_3d/C3D_05_step_gmsh_conformal/c14_physics/analyze_existing_case_b_c14_metal_mass_phi.py, cases_3d/C3D_05_step_gmsh_conformal/c14_physics/stage_c14_3d_case_b.py, cases_3d/C3D_05_step_gmsh_conformal/c14_physics/tests/test_mass_screening_contiguous.py, cases_3d/C3D_05_step_gmsh_conformal/c14_physics/tests/test_stage_c14_3d_case_b.py, docs/C3D04_CASE_A_STATUS.json",
+      "observation": "15 implementation/config paths changed since this log's last commit; examples: .github/workflows/c14-three-model-comparison.yml, analysis_tools/check_run_registry.py, analysis_tools/compare_c14_three_models.py, analysis_tools/test_compare_c14_three_models.py, cases_3d/C3D_05_step_gmsh_conformal/c14_physics/analyze_existing_case_b_c14_metal_mass_phi.py, cases_3d/C3D_05_step_gmsh_conformal/c14_physics/stage_c14_3d_case_b.py",
       "recommendation": "Inspect diffs and reconcile only meaningful decisions/results in the canonical log",
       "state": "REVIEW_REQUIRED"
     },
