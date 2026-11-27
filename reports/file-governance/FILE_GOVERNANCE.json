@@ -31,7 +31,7 @@
     "UNKNOWN_PURPOSE": 1
   },
   "finding_total": 10,
-  "inventory_fingerprint": "4e4cc3459abf51272d2c4199050d9d7b2b4b4091f7f3f9cb102d9ed3dca2bf8f",
+  "inventory_fingerprint": "077ffb24950a43d07a9b27bd3fbf164651670d14638d26412882b5e1ccfda1ce",
   "evidence_fingerprint": "cf84e64558f6a9572a341a7dbcde46b1809d80c6e10f5fda02461fde781f9c10",
   "files": [
     {
@@ -299674,7 +299674,7 @@
       "role": "unknown",
       "purpose": "function unknown: owner classification required",
       "certainty": "unknown",
-      "blob": "aff9217580e6277ca31e26963577d5983d4bf285"
+      "blob": "aa5e05a1cb690fc5b00dac4729b2a0fd5cdd4a05"
     },
     {
       "path": "docs/review/GENERAL_REGISTRY_AUDIT_20261127_ES.md",
