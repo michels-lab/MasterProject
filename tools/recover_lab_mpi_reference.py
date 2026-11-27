@@ -19,7 +19,8 @@ NUM=r"[-+]?(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][-+]?\d+)?"
 POINT=re.compile(r"(?m)^[ \t]*pRefPoint[ \t]+\(([^)]+)\)[ \t]*;")
 
 def ref_failure(case):
-    log=case/"log.foamMultiRun"
+    if not case.exists() and not case.is_symlink():return False
+    log=q.transfer.checked_relative(case,"log.foamMultiRun")
     if not log.is_file(): return False
     fatal=False
     with log.open(errors="replace") as f:
@@ -29,6 +30,7 @@ def ref_failure(case):
     return fatal
 
 def nearest_cell(case, original, evidence):
+    q.need(len(original)==3 and all(math.isfinite(x) for x in original),"invalid reference coordinate")
     # Use the native serial mesh on a private copy; no change to initial fields.
     with tempfile.TemporaryDirectory(prefix="reference-mesh-",dir=q.HOME) as d:
         tmp=Path(d)
@@ -56,6 +58,8 @@ def nearest_cell(case, original, evidence):
         return i,points[i],math.dist(points[i],original)
 
 def retry(name,case,summary):
+    q.need(name in q.NAMES and case==q.DST/name,"invalid reference recovery case")
+    q.transfer.checked_relative(q.DST,name)
     q.need(ref_failure(case),"not a zero-step reference failure")
     backup=Path(tempfile.mkdtemp(prefix=name+"-reference-failure-",dir=q.HOME))
     case.rename(backup/name)
@@ -88,8 +92,9 @@ def retry(name,case,summary):
 def main():
     q.need(os.environ.get("WM_PROJECT_VERSION")=="14","load Foundation14")
     q.need((q.DST/".queue.lock").is_file(),"original queue missing")
+    q.need(not AUDIT.is_symlink() and not q.DST.is_symlink(),"unsafe recovery root")
     AUDIT.mkdir(exist_ok=True)
-    with (AUDIT/".finalize.lock").open("a") as audit, (q.DST/".queue.lock").open("a") as lock:
+    with q.transfer.checked_relative(AUDIT,".finalize.lock").open("a") as audit, q.transfer.checked_relative(q.DST,".queue.lock").open("a") as lock:
         print("WAITING_FOR_ACTIVE_CFD_QUEUE_WITHOUT_INTERRUPTING",flush=True)
         fcntl.flock(audit,fcntl.LOCK_EX)
         fcntl.flock(lock,fcntl.LOCK_EX)
