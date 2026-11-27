@@ -10,12 +10,31 @@ ORIGINAL="$REPO/cases_controlled_buoyancy/C14_topFixedFlux_explicitRef"
 TOP="$REPO/analysis_tools/topSurfaceFlowPostProcessing"
 LOG="log.foamMultiRun.C14_FULL_FUNCTIONS_10S"
 
-if [[ $# -ne 0 && "$1" != "--post-only" ]]; then
+if [[ $# -gt 1 || ( $# -eq 1 && "$1" != "--post-only" ) ]]; then
   printf 'Uso: bash %s [--post-only]\n' "$0" >&2
   exit 2
 fi
 POST_ONLY=false
 if [[ $# -eq 1 ]]; then POST_ONLY=true; fi
+
+# Serialize cooperating invocations (solver and post-only) outside the CFD.
+# Reject aliases before resolving paths; do not write through symlinks.
+[[ ! -L "$SRC" && ! -L "$OUT" ]] || { echo "Origen/salida enlazados." >&2; exit 2; }
+SRC="$(realpath -m -- "$SRC")"
+OUT="$(realpath -m -- "$OUT")"
+if [[ "$SRC" == "$OUT" || "$SRC" == "$OUT/"* || "$OUT" == "$SRC/"* ]]; then
+  echo "Origen y salida se solapan." >&2; exit 2
+fi
+command -v flock >/dev/null || { echo "Falta flock; no ejecutar." >&2; exit 2; }
+LOCK="$OUT.UVA.lock"
+[[ ! -L "$LOCK" ]] || { echo "Lock enlazado." >&2; exit 2; }
+exec 9>>"$LOCK"
+flock -n 9 || { echo "Otra ejecucion posee el lock: $LOCK" >&2; exit 3; }
+if [[ "$POST_ONLY" == true ]]; then
+  [[ -d "$OUT" && ! -L "$OUT" ]] || { echo "Salida no disponible." >&2; exit 2; }
+  output_link="$(find "$OUT" -type l -print -quit)"
+  [[ -z "$output_link" ]] || { echo "Salida contiene enlace: $output_link" >&2; exit 2; }
+fi
 
 # Foundation14 native function objects load directly from system/functions.
 if [[ "$POST_ONLY" == false ]]; then
@@ -109,7 +128,8 @@ EOF
     echo "Otro proceso creo el destino; etapa preservada: $STAGE" >&2
     exit 3
   fi
-  mv -T "$STAGE" "$OUT"
+  mv -T --no-clobber "$STAGE" "$OUT"
+  [[ ! -e "$STAGE" ]] || { echo "Destino ocupado; etapa preservada: $STAGE" >&2; exit 3; }
   echo "LANZANDO foamMultiRun 0..10s; dt=0.001; guardado cada 100 pasos."
   echo "La sonda temperatureProbe original escribe cada 1 paso (0.001s)."
   echo "Log: $OUT/$LOG"
@@ -143,11 +163,14 @@ cd "$OUT"
 post_once() {
   local logfile="$1"; shift
   if [[ -f "$logfile.DONE" ]]; then
+    [[ -s "$logfile" ]] || { echo "Marca DONE sin log: $logfile" >&2; return 4; }
     echo "Etapa completada: $logfile"
     return 0
   fi
   if [[ -e "$logfile" ]]; then
-    mv -- "$logfile" "$logfile.INCOMPLETE_$(date +%Y%m%d_%H%M%S)"
+    local preserved
+    preserved="$(mktemp -- "$logfile.INCOMPLETE_XXXXXXXX")"
+    mv -- "$logfile" "$preserved"
   fi
   "$@" 2>&1 | tee "$logfile"
   touch "$logfile.DONE"
