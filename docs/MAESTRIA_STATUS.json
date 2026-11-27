@@ -13,10 +13,11 @@
     "percent": 80,
     "fixed_laptop_200s_observed": true,
     "fixed_lab_200s_reported_audited": true,
-    "fixed_lab_manifest_verified": false,
+    "fixed_lab_manifest_verified": true,
     "adaptive_capped_failure_s": 0.68,
     "adaptive_uncapped_failure_s": 0.7,
-    "physical_validation": false
+    "physical_validation": false,
+    "fixed_lab_manifest_commit": "ba0d4d29a434fa0576372bbdd14385b1663498d7"
   },
   "case_B": {
     "stage": 3,
@@ -25,7 +26,9 @@
     "percent": 29,
     "original_10s_saved_states": 101,
     "adaptive_200s_publications": 2,
-    "physical_validation": false
+    "physical_validation": false,
+    "fixed_lab_manifest_verified": true,
+    "fixed_lab_manifest_commit": "6b012725c860c16cbe3a72cfe7c4a57a6824685c"
   },
   "adaptive_laptop": {
     "planned_combinations": 8,
@@ -181,6 +184,16 @@
         "A serial vs B MPI8, different geometries; no controlled scaling inference.",
         "C14-2D anomaly remains unresolved; near equality of ExecutionTime and ClockTime is not evidence of aggregate MPI CPU utilization or absence of contention. Inspect TIMING_STEPS.csv, TIMING_MPI_RANKS.csv and logs."
       ]
+    },
+    "manifest_reconciliation_20261127": {
+      "scope": "Remote manifest metadata and analysis_preview report content; binary chunks not downloaded; no physical validation",
+      "commits": {
+        "C14-3DA-200s": "ba0d4d29a434fa0576372bbdd14385b1663498d7",
+        "C14-3DB-200s": "6b012725c860c16cbe3a72cfe7c4a57a6824685c",
+        "B14-2D-200s": "18262a16a19d96decd0b54b39775dd98f28f9a79",
+        "C14-2D-200s": "f2b4b1901bcde5f22f6625e3554244235b137ea7"
+      },
+      "case_A_recovery_index_pin_restored": true
     }
   },
   "FS_C08": {

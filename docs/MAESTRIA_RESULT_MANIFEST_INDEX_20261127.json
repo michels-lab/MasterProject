@@ -149,7 +149,8 @@
       "archive_format": "tar.gz split into ordered binary chunks",
       "complete": true,
       "part_count": 24,
-      "manifest_blob_sha": "1631f7f1a205374b34da12a5def805e7677d0338"
+      "manifest_blob_sha": "1631f7f1a205374b34da12a5def805e7677d0338",
+      "sha": "ba0d4d29a434fa0576372bbdd14385b1663498d7"
     },
     {
       "branch": "results/campaign-200s-fixed-lab-v2/C14-3DB-200s",

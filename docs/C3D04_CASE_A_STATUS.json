@@ -1621,7 +1621,14 @@
     },
     "fixed_lab": {
       "reported_audited": true,
-      "manifest_verified": false
+      "manifest_verified": true,
+      "manifest_commit": "ba0d4d29a434fa0576372bbdd14385b1663498d7",
+      "manifest_blob_sha": "1631f7f1a205374b34da12a5def805e7677d0338",
+      "final_time_s": 200,
+      "solver_steps": 200000,
+      "execution_mode": "serial",
+      "physical_validation": false,
+      "binary_archive_verified": false
     },
     "adaptive_mpi_capped": {
       "solver_completed": false,

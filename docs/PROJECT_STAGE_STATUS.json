@@ -31,8 +31,19 @@
       "manifest_verified": true,
       "branch": "results/campaign-200s-adaptive-mpi-r8-Co025-dtuncapped-v1/C14-3DB-200s"
     },
-    "fixed_lab_200s_completion_verified": false,
-    "scientific_gates_changed": false
+    "fixed_lab_200s_completion_verified": true,
+    "scientific_gates_changed": false,
+    "fixed_lab": {
+      "manifest_verified": true,
+      "manifest_commit": "6b012725c860c16cbe3a72cfe7c4a57a6824685c",
+      "manifest_blob_sha": "58a509cfaafcc6f82694029a4c96dd721f2a2fb9",
+      "solver_steps": 200000,
+      "final_time_s": 200,
+      "mpi_ranks": 8,
+      "physical_validation": false,
+      "binary_archive_verified": false,
+      "scope": "manifest and report content; not independent binary or numerical validation"
+    }
   },
   "gates": [
     {
@@ -941,7 +952,18 @@
       "manifest_verified": true,
       "branch": "results/campaign-200s-adaptive-mpi-r8-Co025-dtuncapped-v1/C14-3DB-200s"
     },
-    "fixed_lab_200s_completion_verified": false,
-    "scientific_gates_changed": false
+    "fixed_lab_200s_completion_verified": true,
+    "scientific_gates_changed": false,
+    "fixed_lab": {
+      "manifest_verified": true,
+      "manifest_commit": "6b012725c860c16cbe3a72cfe7c4a57a6824685c",
+      "manifest_blob_sha": "58a509cfaafcc6f82694029a4c96dd721f2a2fb9",
+      "solver_steps": 200000,
+      "final_time_s": 200,
+      "mpi_ranks": 8,
+      "physical_validation": false,
+      "binary_archive_verified": false,
+      "scope": "manifest and report content; not independent binary or numerical validation"
+    }
   }
 }
