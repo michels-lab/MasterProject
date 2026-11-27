@@ -77,11 +77,33 @@ def sha(path:Path)->str:
     return h.hexdigest()
 
 
+def independent_output(out:Path, sources)->Path:
+    """Resolve ancestor aliases before permitting any output creation."""
+    raw=out.expanduser().absolute()
+    require(not raw.is_symlink(),"destination is a symlink")
+    out=raw.resolve()
+    roots=[p.expanduser().resolve(strict=True) for p in sources]
+    require(not out.exists() and all(
+        out!=p and out not in p.parents and p not in out.parents for p in roots),
+        "new results must be fully separate from source CFD and old analyses")
+    return out
+
+
+def validate_saved_axis(times):
+    require(len(times)==101 and all(
+        math.isfinite(t) and math.isclose(t,i*.1,rel_tol=0,abs_tol=1e-8)
+        for i,(t,label) in enumerate(times)),
+        "original saved 101-time CFD axis absent or unordered")
+    require(len({label for _,label in times})==101 and all(
+        Path(label).name==label and label not in (".","..") and
+        math.isclose(float(label),t,rel_tol=0,abs_tol=1e-8)
+        for t,label in times), "invalid or duplicate native time labels")
+
+
 def field_coverage(case:Path,times:list[tuple[float,str]])->dict:
     """Counts ORIGINAL time/region paths; never invents missing h/e/phi fields."""
     require(case.is_dir() and not case.is_symlink(),"original CFD source absent")
-    require(len(times)==101 and times[0][0]==0 and times[-1][0]==10,
-            "original saved 101-time CFD axis absent")
+    validate_saved_axis(times)
     data={}
     for name,rel in FIELDS.items():
         present=[]
@@ -271,12 +293,7 @@ def verify_archives(join:Path,q:Path,storage:Path,case:Path)->tuple[list[dict],d
 
 def run(join:Path,q:Path,storage:Path,case:Path,out:Path)->dict:
     paths=[p.expanduser().absolute() for p in (join,q,storage,case)]
-    out=out.expanduser().absolute()
-    require(not out.exists() and not out.is_symlink(),
-            "destination already exists; never overwrite a source or evidence archive")
-    require(all(out!=p and out not in p.parents and p not in out.parents
-                for p in paths),
-            "new results must be fully separate from source CFD and old analyses")
+    out=independent_output(out,paths)
     records,provenance=verify_archives(*paths)
     source_case=paths[-1]
     original,_=native.validated_mesh_and_stage(source_case)
