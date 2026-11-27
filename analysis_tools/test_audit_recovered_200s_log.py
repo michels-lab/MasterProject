@@ -4,9 +4,9 @@ import io
 import unittest
 from audit_recovered_200s_log import parse_log
 
-def parse(s):
-    files={k:io.StringIO() for k in ("continuity","linear_solves","courant")}
-    result=parse_log(io.StringIO(s),{k:csv.writer(v) for k,v in files.items()})
+def parse(s,**kwargs):
+    files={k:io.StringIO() for k in ("continuity","linear_solves","courant","steps")}
+    result=parse_log(io.StringIO(s),{k:csv.writer(v) for k,v in files.items()},**kwargs)
     return result,{k:list(csv.reader(io.StringIO(v.getvalue()))) for k,v in files.items()}
 
 CONT="time step continuity errors : sum local = 2e-5, global = -1e-6, cumulative = -2e-6\n"
@@ -52,6 +52,33 @@ class LogAudit(unittest.TestCase):
             "Time = 2\n"+PRESS+EXEC+EXEC+"End\n")
         self.assertEqual(r["steps_with_exactly_one_execution_time"],1)
         self.assertEqual(rows["linear_solves"][-1][3],"")
+
+    def test_step_timeline_and_fixed_cadence(self):
+        r,rows=parse("nProcs : 8\nTime = .001s\n"+EXEC+"Time = .003s\n"+EXEC+"End\n",fixed_dt=.001)
+        self.assertEqual(r["cadence_errors"],1)
+        self.assertEqual(r["observed_native_ranks"],[8])
+        self.assertEqual(len(rows["steps"]),2)
+        self.assertAlmostEqual(float(rows["steps"][1][3]),.002)
+        self.assertEqual(rows["steps"][0][4],"1.0")
+
+    def test_cap_and_zero_time(self):
+        r,_=parse("Time = 0\n"+EXEC+"Time = .03\n"+EXEC+"End\n",max_dt=.025)
+        self.assertEqual(r["cadence_errors"],2)
+
+    def test_malformed_and_decreasing_timing(self):
+        r,_=parse("Time = 1\nExecutionTime = nonsense\nTime = 2\n"+EXEC+
+                  "Time = 3\nExecutionTime = .5 s ClockTime = .5 s\nEnd\n")
+        self.assertEqual(r["timing_errors"],2)
+        self.assertEqual(r["steps_with_exactly_one_execution_time"],2)
+
+    def test_events_after_end_and_execution(self):
+        r,_=parse("Time = 1\n"+EXEC+PRESS+"End\n"+CONT)
+        self.assertEqual(r["diagnostics_after_end"],1)
+        self.assertEqual(r["solves_or_continuity_after_execution"],2)
+
+    def test_missing_rank_not_invented(self):
+        r,_=parse("Time = 1\n"+EXEC+"End\n")
+        self.assertEqual(r["observed_native_ranks"],[])
 
 if __name__=="__main__":
     unittest.main()
