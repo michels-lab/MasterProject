@@ -10,5 +10,5 @@ B14-2D-200s__fixed_lab,fixed,8,,0.001,200,manifest_complete,200000,0.001,2889015
 C14-2D-200s__fixed_lab,fixed,8,,0.001,200,manifest_complete,200000,0.001,267401563,8,true,false,not_downloaded,f2b4b1901bcde5f22f6625e3554244235b137ea7,5336090a406e8cc2178ca716be8f5737940635ec,results/campaign-200s-fixed-lab-v2/C14-2D-200s,1c05fc4f8ab29de11d206d7cc5a7e4cb8cd5827ebeb952782174a4d693eeebaf,9bc0f7aa3e4ef7abcefc490053539aa76bec36933dc19541ed92addc17d0a207
 C14-3DA-200s__mpi8_cap,adaptive_capped,8,0.025,,0.68,failed_at_attempted_time,,,,,false,,not_available,,,,,
 C14-3DA-200s__mpi8_uncapped,adaptive_uncapped,8,,,0.7,failed_at_attempted_time,,,,,false,,not_available,,,,,
-C14-3DA-200s__fixed_lab,fixed,,,0.001,200,reported_complete_audited_manifest_pending,200000,0.001,,,,,not_available,,,results/campaign-200s-fixed-lab-v2/C14-3DA-200s,,
+C14-3DA-200s__fixed_lab,fixed,1,,0.001,200,manifest_complete,200000,0.001,778685468,24,true,false,not_downloaded,ba0d4d29a434fa0576372bbdd14385b1663498d7,1631f7f1a205374b34da12a5def805e7677d0338,results/campaign-200s-fixed-lab-v2/C14-3DA-200s,14c0e0dcd866e81a4b993aee24f3698603b97383dd534f7d4f879e289b89b06e,d20b95d83e21ac1c8d8b9c7f830de72a8611238fd5ba65fe95db6405c1e419f5
 C14-3DA-200s__fixed_laptop,fixed,,,0.001,200,reported_complete_audit_pending,,,,,,,not_available,,,,,
