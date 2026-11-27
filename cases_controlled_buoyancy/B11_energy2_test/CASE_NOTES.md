@@ -1,6 +1,8 @@
+> **27-11-2026 — Operación Uva, estado vigente:** EVIDENCE_PUSHED / PRELIMINARY_COMPARISON. Series publicadas en el commit `25e7cf8cb4a30fb0fe5ece5bd9a2e451815ab232` leídas completas: 10000 pasos, sonda hasta 10 s (T=1470.07 K), Co máximo reportado 0.0673434. [Recálculo y límites](../../analysis_results/v15_v16_postpush_20261015/README.md). No se confirmó End/retorno del runner ni cierre físico; no RUN_VERIFIED/ANALYSIS_VERIFIED. No repetir CFD automáticamente. Las notas de preparación siguientes son históricas.
+
 # CASE_NOTES — B11_energy2_test
 
-**Estado:** PREPARED — NOT YET LOCALLY RUN-VERIFIED  
+**Estado histórico de preparación:** PREPARED — NOT YET LOCALLY RUN-VERIFIED  
 **Caso padre:** `B11_topFixedFlux_airGapOF14`
 
 ## Objetivo
