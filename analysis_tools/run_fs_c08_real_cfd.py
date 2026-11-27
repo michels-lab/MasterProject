@@ -25,7 +25,7 @@ import shutil
 import subprocess
 import sys
 
-from stage_fs_c08_coupled import BASE_MODULE, stage
+from stage_fs_c08_coupled import BASE_MODULE, ROOT, isolated_new_directory, stage
 from fs_c08_transient_ledger import write_transient_ledger
 
 REQUIRED_FINAL_FIELDS = (
@@ -381,8 +381,8 @@ def execute(source: Path, material: Path, output: Path,
     require(timeout_minutes >= 1, "timeout-minutes must be >=1")
     source = source.expanduser().resolve()
     material = material.expanduser().resolve()
-    output = output.expanduser().absolute()
-    diagnostics = diagnostics.expanduser().absolute()
+    output = isolated_new_directory(output, source, ROOT)
+    diagnostics = isolated_new_directory(diagnostics, source, ROOT, output)
     require(source.is_dir() and source.name.startswith("FS_C07_THERMAL_"),
             "an untouched accepted FS_C07_THERMAL_* source is required")
     require(material.is_file(), "a sourced alloy fsC08Material dictionary is required")
