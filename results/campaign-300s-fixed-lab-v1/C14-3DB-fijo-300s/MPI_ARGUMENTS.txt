@@ -1,0 +1,1 @@
+--host localhost:8 --map-by slot --bind-to none -np 8

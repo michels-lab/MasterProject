@@ -1,0 +1,6625 @@
+/*---------------------------------------------------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  14
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+Build  : 14-a4867fc914c1
+Exec   : reconstructPar -allRegions -newTimes
+Date   : Nov 28 2026
+Time   : 04:06:26
+Host   : "DESKTOP-I00527M"
+PID    : 1946886
+I/O    : uncollated
+Case   : /home/michel_duarte/OpenFOAM/CAMPAIGN_EXTENSION_300S_20261127_195400/C14-3DB-fijo-300s
+nProcs : 1
+sigFpe : Enabling floating point exception trapping (FOAM_SIGFPE).
+fileModificationChecking : Monitoring run-time modified files using timeStampMaster (fileModificationSkew 10)
+allowSystemOperations : Allowing user-supplied system call operations
+
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+Create time
+
+      Time = 201s
+      
+metal Reconstructing FV fields
+metal 
+metal     Reconstructing volScalarFields
+metal 
+metal         phaseChangeSource:alpha1
+metal         CoCell
+metal         dAlphaLdt
+metal         phaseChangeModelDeltaT
+metal         phaseChangeSolidFraction
+metal         magPRghAcceleration
+metal         magPhaseChangeBuoyancyAcceleration
+metal         latentHeatRateVol
+metal         phaseChangeDragToBuoyancy
+metal         p
+metal         T
+metal         solidificationRate
+metal         magPhaseChangeDarcyAcceleration
+metal         dTdt
+metal         phaseChangeDarcyCoeff
+metal         rho
+metal         latentHeat
+metal         magGradRho
+metal         magSqrDevGradU
+metal         coolingRate
+metal         magGradT
+metal         phaseChangeDragToPressure
+metal         flowType
+metal         p_rgh
+metal         phaseChangeDarcySp
+metal 
+metal     Reconstructing volVectorFields
+metal 
+metal         pRghAcceleration
+metal         gradT
+metal         phaseChangeBuoyancySu
+metal         phaseChangeBuoyancyAcceleration
+metal         U
+metal         phaseChangeDarcyAcceleration
+metal         gradRho
+metal         vorticity
+metal 
+metal     Reconstructing surfaceScalarFields
+metal 
+metal         phi
+metal         energyFlux
+metal         energyAdvectiveFlux
+metal         heatFlux
+metal 
+metal Reconstructing point fields
+metal 
+metal     (no point fields)
+      
+mold  Reconstructing FV fields
+mold  
+mold      Reconstructing volScalarFields
+mold  
+mold          T
+mold  
+mold  Reconstructing point fields
+mold  
+mold      (no point fields)
+      
+      Collecting uniform files
+      
+      Time = 202s
+      
+metal Reconstructing FV fields
+metal 
+metal     Reconstructing volScalarFields
+metal 
+metal         phaseChangeSource:alpha1
+metal         CoCell
+metal         dAlphaLdt
+metal         phaseChangeModelDeltaT
+metal         phaseChangeSolidFraction
+metal         magPRghAcceleration
+metal         magPhaseChangeBuoyancyAcceleration
+metal         latentHeatRateVol
+metal         phaseChangeDragToBuoyancy
+metal         p
+metal         T
+metal         solidificationRate
+metal         magPhaseChangeDarcyAcceleration
+metal         dTdt
+metal         phaseChangeDarcyCoeff
+metal         rho
+metal         latentHeat
+metal         magGradRho
+metal         magSqrDevGradU
+metal         coolingRate
+metal         magGradT
+metal         phaseChangeDragToPressure
+metal         flowType
+metal         p_rgh
+metal         phaseChangeDarcySp
+metal 
+metal     Reconstructing volVectorFields
+metal 
+metal         pRghAcceleration
+metal         gradT
+metal         phaseChangeBuoyancySu
+metal         phaseChangeBuoyancyAcceleration
+metal         U
+metal         phaseChangeDarcyAcceleration
+metal         gradRho
+metal         vorticity
+metal 
+metal     Reconstructing surfaceScalarFields
+metal 
+metal         phi
+metal         energyFlux
+metal         energyAdvectiveFlux
+metal         heatFlux
+metal 
+metal Reconstructing point fields
+metal 
+metal     (no point fields)
+      
+mold  Reconstructing FV fields
+mold  
+mold      Reconstructing volScalarFields
+mold  
+mold          T
+mold  
+mold  Reconstructing point fields
+mold  
+mold      (no point fields)
+      
+      Collecting uniform files
+      
+      Time = 203s
+      
+metal Reconstructing FV fields
+metal 
+metal     Reconstructing volScalarFields
+metal 
+metal         phaseChangeSource:alpha1
+metal         CoCell
+metal         dAlphaLdt
+metal         phaseChangeModelDeltaT
+metal         phaseChangeSolidFraction
+metal         magPRghAcceleration
+metal         magPhaseChangeBuoyancyAcceleration
+metal         latentHeatRateVol
+metal         phaseChangeDragToBuoyancy
+metal         p
+metal         T
+metal         solidificationRate
+metal         magPhaseChangeDarcyAcceleration
+metal         dTdt
+metal         phaseChangeDarcyCoeff
+metal         rho
+metal         latentHeat
+metal         magGradRho
+metal         magSqrDevGradU
+metal         coolingRate
+metal         magGradT
+metal         phaseChangeDragToPressure
+metal         flowType
+metal         p_rgh
+metal         phaseChangeDarcySp
+metal 
+metal     Reconstructing volVectorFields
+metal 
+metal         pRghAcceleration
+metal         gradT
+metal         phaseChangeBuoyancySu
+metal         phaseChangeBuoyancyAcceleration
+metal         U
+metal         phaseChangeDarcyAcceleration
+metal         gradRho
+metal         vorticity
+metal 
+metal     Reconstructing surfaceScalarFields
+metal 
+metal         phi
+metal         energyFlux
+metal         energyAdvectiveFlux
+metal         heatFlux
+metal 
+metal Reconstructing point fields
+metal 
+metal     (no point fields)
+      
+mold  Reconstructing FV fields
+mold  
+mold      Reconstructing volScalarFields
+mold  
+mold          T
+mold  
+mold  Reconstructing point fields
+mold  
+mold      (no point fields)
+      
+      Collecting uniform files
+      
+      Time = 204s
+      
+metal Reconstructing FV fields
+metal 
+metal     Reconstructing volScalarFields
+metal 
+metal         phaseChangeSource:alpha1
+metal         CoCell
+metal         dAlphaLdt
+metal         phaseChangeModelDeltaT
+metal         phaseChangeSolidFraction
+metal         magPRghAcceleration
+metal         magPhaseChangeBuoyancyAcceleration
+metal         latentHeatRateVol
+metal         phaseChangeDragToBuoyancy
+metal         p
+metal         T
+metal         solidificationRate
+metal         magPhaseChangeDarcyAcceleration
+metal         dTdt
+metal         phaseChangeDarcyCoeff
+metal         rho
+metal         latentHeat
+metal         magGradRho
+metal         magSqrDevGradU
+metal         coolingRate
+metal         magGradT
+metal         phaseChangeDragToPressure
+metal         flowType
+metal         p_rgh
+metal         phaseChangeDarcySp
+metal 
+metal     Reconstructing volVectorFields
+metal 
+metal         pRghAcceleration
+metal         gradT
+metal         phaseChangeBuoyancySu
+metal         phaseChangeBuoyancyAcceleration
+metal         U
+metal         phaseChangeDarcyAcceleration
+metal         gradRho
+metal         vorticity
+metal 
+metal     Reconstructing surfaceScalarFields
+metal 
+metal         phi
+metal         energyFlux
+metal         energyAdvectiveFlux
+metal         heatFlux
+metal 
+metal Reconstructing point fields
+metal 
+metal     (no point fields)
+      
+mold  Reconstructing FV fields
+mold  
+mold      Reconstructing volScalarFields
+mold  
+mold          T
+mold  
+mold  Reconstructing point fields
+mold  
+mold      (no point fields)
+      
+      Collecting uniform files
+      
+      Time = 205s
+      
+metal Reconstructing FV fields
+metal 
+metal     Reconstructing volScalarFields
+metal 
+metal         phaseChangeSource:alpha1
+metal         CoCell
+metal         dAlphaLdt
+metal         phaseChangeModelDeltaT
+metal         phaseChangeSolidFraction
+metal         magPRghAcceleration
+metal         magPhaseChangeBuoyancyAcceleration
+metal         latentHeatRateVol
+metal         phaseChangeDragToBuoyancy
+metal         p
+metal         T
+metal         solidificationRate
+metal         magPhaseChangeDarcyAcceleration
+metal         dTdt
+metal         phaseChangeDarcyCoeff
+metal         rho
+metal         latentHeat
+metal         magGradRho
+metal         magSqrDevGradU
+metal         coolingRate
+metal         magGradT
+metal         phaseChangeDragToPressure
+metal         flowType
+metal         p_rgh
+metal         phaseChangeDarcySp
+metal 
+metal     Reconstructing volVectorFields
+metal 
+metal         pRghAcceleration
+metal         gradT
+metal         phaseChangeBuoyancySu
+metal         phaseChangeBuoyancyAcceleration
+metal         U
+metal         phaseChangeDarcyAcceleration
+metal         gradRho
+metal         vorticity
+metal 
+metal     Reconstructing surfaceScalarFields
+metal 
+metal         phi
+metal         energyFlux
+metal         energyAdvectiveFlux
+metal         heatFlux
+metal 
+metal Reconstructing point fields
+metal 
+metal     (no point fields)
+      
+mold  Reconstructing FV fields
+mold  
+mold      Reconstructing volScalarFields
+mold  
+mold          T
+mold  
+mold  Reconstructing point fields
+mold  
+mold      (no point fields)
+      
+      Collecting uniform files
+      
+      Time = 206s
+      
+metal Reconstructing FV fields
+metal 
+metal     Reconstructing volScalarFields
+metal 
+metal         phaseChangeSource:alpha1
+metal         CoCell
+metal         dAlphaLdt
+metal         phaseChangeModelDeltaT
+metal         phaseChangeSolidFraction
+metal         magPRghAcceleration
+metal         magPhaseChangeBuoyancyAcceleration
+metal         latentHeatRateVol
+metal         phaseChangeDragToBuoyancy
+metal         p
+metal         T
+metal         solidificationRate
+metal         magPhaseChangeDarcyAcceleration
+metal         dTdt
+metal         phaseChangeDarcyCoeff
+metal         rho
+metal         latentHeat
+metal         magGradRho
+metal         magSqrDevGradU
+metal         coolingRate
+metal         magGradT
+metal         phaseChangeDragToPressure
+metal         flowType
+metal         p_rgh
+metal         phaseChangeDarcySp
+metal 
+metal     Reconstructing volVectorFields
+metal 
+metal         pRghAcceleration
+metal         gradT
+metal         phaseChangeBuoyancySu
+metal         phaseChangeBuoyancyAcceleration
+metal         U
+metal         phaseChangeDarcyAcceleration
+metal         gradRho
+metal         vorticity
+metal 
+metal     Reconstructing surfaceScalarFields
+metal 
+metal         phi
+metal         energyFlux
+metal         energyAdvectiveFlux
+metal         heatFlux
+metal 
+metal Reconstructing point fields
+metal 
+metal     (no point fields)
+      
+mold  Reconstructing FV fields
+mold  
+mold      Reconstructing volScalarFields
+mold  
+mold          T
+mold  
+mold  Reconstructing point fields
+mold  
+mold      (no point fields)
+      
+      Collecting uniform files
+      
+      Time = 207s
+      
+metal Reconstructing FV fields
+metal 
+metal     Reconstructing volScalarFields
+metal 
+metal         phaseChangeSource:alpha1
+metal         CoCell
+metal         dAlphaLdt
+metal         phaseChangeModelDeltaT
+metal         phaseChangeSolidFraction
+metal         magPRghAcceleration
+metal         magPhaseChangeBuoyancyAcceleration
+metal         latentHeatRateVol
+metal         phaseChangeDragToBuoyancy
+metal         p
+metal         T
+metal         solidificationRate
+metal         magPhaseChangeDarcyAcceleration
+metal         dTdt
+metal         phaseChangeDarcyCoeff
+metal         rho
+metal         latentHeat
+metal         magGradRho
+metal         magSqrDevGradU
+metal         coolingRate
+metal         magGradT
+metal         phaseChangeDragToPressure
+metal         flowType
+metal         p_rgh
+metal         phaseChangeDarcySp
+metal 
+metal     Reconstructing volVectorFields
+metal 
+metal         pRghAcceleration
+metal         gradT
+metal         phaseChangeBuoyancySu
+metal         phaseChangeBuoyancyAcceleration
+metal         U
+metal         phaseChangeDarcyAcceleration
+metal         gradRho
+metal         vorticity
+metal 
+metal     Reconstructing surfaceScalarFields
+metal 
+metal         phi
+metal         energyFlux
+metal         energyAdvectiveFlux
+metal         heatFlux
+metal 
+metal Reconstructing point fields
+metal 
+metal     (no point fields)
+      
+mold  Reconstructing FV fields
+mold  
+mold      Reconstructing volScalarFields
+mold  
+mold          T
+mold  
+mold  Reconstructing point fields
+mold  
+mold      (no point fields)
+      
+      Collecting uniform files
+      
+      Time = 208s
+      
+metal Reconstructing FV fields
+metal 
+metal     Reconstructing volScalarFields
+metal 
+metal         phaseChangeSource:alpha1
+metal         CoCell
+metal         dAlphaLdt
+metal         phaseChangeModelDeltaT
+metal         phaseChangeSolidFraction
+metal         magPRghAcceleration
+metal         magPhaseChangeBuoyancyAcceleration
+metal         latentHeatRateVol
+metal         phaseChangeDragToBuoyancy
+metal         p
+metal         T
+metal         solidificationRate
+metal         magPhaseChangeDarcyAcceleration
+metal         dTdt
+metal         phaseChangeDarcyCoeff
+metal         rho
+metal         latentHeat
+metal         magGradRho
+metal         magSqrDevGradU
+metal         coolingRate
+metal         magGradT
+metal         phaseChangeDragToPressure
+metal         flowType
+metal         p_rgh
+metal         phaseChangeDarcySp
+metal 
+metal     Reconstructing volVectorFields
+metal 
+metal         pRghAcceleration
+metal         gradT
+metal         phaseChangeBuoyancySu
+metal         phaseChangeBuoyancyAcceleration
+metal         U
+metal         phaseChangeDarcyAcceleration
+metal         gradRho
+metal         vorticity
+metal 
+metal     Reconstructing surfaceScalarFields
+metal 
+metal         phi
+metal         energyFlux
+metal         energyAdvectiveFlux
+metal         heatFlux
+metal 
+metal Reconstructing point fields
+metal 
+metal     (no point fields)
+      
+mold  Reconstructing FV fields
+mold  
+mold      Reconstructing volScalarFields
+mold  
+mold          T
+mold  
+mold  Reconstructing point fields
+mold  
+mold      (no point fields)
+      
+      Collecting uniform files
+      
+      Time = 209s
+      
+metal Reconstructing FV fields
+metal 
+metal     Reconstructing volScalarFields
+metal 
+metal         phaseChangeSource:alpha1
+metal         CoCell
+metal         dAlphaLdt
+metal         phaseChangeModelDeltaT
+metal         phaseChangeSolidFraction
+metal         magPRghAcceleration
+metal         magPhaseChangeBuoyancyAcceleration
+metal         latentHeatRateVol
+metal         phaseChangeDragToBuoyancy
+metal         p
+metal         T
+metal         solidificationRate
+metal         magPhaseChangeDarcyAcceleration
+metal         dTdt
+metal         phaseChangeDarcyCoeff
+metal         rho
+metal         latentHeat
+metal         magGradRho
+metal         magSqrDevGradU
+metal         coolingRate
+metal         magGradT
+metal         phaseChangeDragToPressure
+metal         flowType
+metal         p_rgh
+metal         phaseChangeDarcySp
+metal 
+metal     Reconstructing volVectorFields
+metal 
+metal         pRghAcceleration
+metal         gradT
+metal         phaseChangeBuoyancySu
+metal         phaseChangeBuoyancyAcceleration
+metal         U
+metal         phaseChangeDarcyAcceleration
+metal         gradRho
+metal         vorticity
+metal 
+metal     Reconstructing surfaceScalarFields
+metal 
+metal         phi
+metal         energyFlux
+metal         energyAdvectiveFlux
+metal         heatFlux
+metal 
+metal Reconstructing point fields
+metal 
+metal     (no point fields)
+      
+mold  Reconstructing FV fields
+mold  
+mold      Reconstructing volScalarFields
+mold  
+mold          T
+mold  
+mold  Reconstructing point fields
+mold  
+mold      (no point fields)
+      
+      Collecting uniform files
+      
+      Time = 210s
+      
+metal Reconstructing FV fields
+metal 
+metal     Reconstructing volScalarFields
+metal 
+metal         phaseChangeSource:alpha1
+metal         CoCell
+metal         dAlphaLdt
+metal         phaseChangeModelDeltaT
+metal         phaseChangeSolidFraction
+metal         magPRghAcceleration
+metal         magPhaseChangeBuoyancyAcceleration
+metal         latentHeatRateVol
+metal         phaseChangeDragToBuoyancy
+metal         p
+metal         T
+metal         solidificationRate
+metal         magPhaseChangeDarcyAcceleration
+metal         dTdt
+metal         phaseChangeDarcyCoeff
+metal         rho
+metal         latentHeat
+metal         magGradRho
+metal         magSqrDevGradU
+metal         coolingRate
+metal         magGradT
+metal         phaseChangeDragToPressure
+metal         flowType
+metal         p_rgh
+metal         phaseChangeDarcySp
+metal 
+metal     Reconstructing volVectorFields
+metal 
+metal         pRghAcceleration
+metal         gradT
+metal         phaseChangeBuoyancySu
+metal         phaseChangeBuoyancyAcceleration
+metal         U
+metal         phaseChangeDarcyAcceleration
+metal         gradRho
+metal         vorticity
+metal 
+metal     Reconstructing surfaceScalarFields
+metal 
+metal         phi
+metal         energyFlux
+metal         energyAdvectiveFlux
+metal         heatFlux
+metal 
+metal Reconstructing point fields
+metal 
+metal     (no point fields)
+      
+mold  Reconstructing FV fields
+mold  
+mold      Reconstructing volScalarFields
+mold  
+mold          T
+mold  
+mold  Reconstructing point fields
+mold  
+mold      (no point fields)
+      
+      Collecting uniform files
+      
+      Time = 211s
+      
+metal Reconstructing FV fields
+metal 
+metal     Reconstructing volScalarFields
+metal 
+metal         phaseChangeSource:alpha1
+metal         CoCell
+metal         dAlphaLdt
+metal         phaseChangeModelDeltaT
+metal         phaseChangeSolidFraction
+metal         magPRghAcceleration
+metal         magPhaseChangeBuoyancyAcceleration
+metal         latentHeatRateVol
+metal         phaseChangeDragToBuoyancy
+metal         p
+metal         T
+metal         solidificationRate
+metal         magPhaseChangeDarcyAcceleration
+metal         dTdt
+metal         phaseChangeDarcyCoeff
+metal         rho
+metal         latentHeat
+metal         magGradRho
+metal         magSqrDevGradU
+metal         coolingRate
+metal         magGradT
+metal         phaseChangeDragToPressure
+metal         flowType
+metal         p_rgh
+metal         phaseChangeDarcySp
+metal 
+metal     Reconstructing volVectorFields
+metal 
+metal         pRghAcceleration
+metal         gradT
+metal         phaseChangeBuoyancySu
+metal         phaseChangeBuoyancyAcceleration
+metal         U
+metal         phaseChangeDarcyAcceleration
+metal         gradRho
+metal         vorticity
+metal 
+metal     Reconstructing surfaceScalarFields
+metal 
+metal         phi
+metal         energyFlux
+metal         energyAdvectiveFlux
+metal         heatFlux
+metal 
+metal Reconstructing point fields
+metal 
+metal     (no point fields)
+      
+mold  Reconstructing FV fields
+mold  
+mold      Reconstructing volScalarFields
+mold  
+mold          T
+mold  
+mold  Reconstructing point fields
+mold  
+mold      (no point fields)
+      
+      Collecting uniform files
+      
+      Time = 212s
+      
+metal Reconstructing FV fields
+metal 
+metal     Reconstructing volScalarFields
+metal 
+metal         phaseChangeSource:alpha1
+metal         CoCell
+metal         dAlphaLdt
+metal         phaseChangeModelDeltaT
+metal         phaseChangeSolidFraction
+metal         magPRghAcceleration
+metal         magPhaseChangeBuoyancyAcceleration
+metal         latentHeatRateVol
+metal         phaseChangeDragToBuoyancy
+metal         p
+metal         T
+metal         solidificationRate
+metal         magPhaseChangeDarcyAcceleration
+metal         dTdt
+metal         phaseChangeDarcyCoeff
+metal         rho
+metal         latentHeat
+metal         magGradRho
+metal         magSqrDevGradU
+metal         coolingRate
+metal         magGradT
+metal         phaseChangeDragToPressure
+metal         flowType
+metal         p_rgh
+metal         phaseChangeDarcySp
+metal 
+metal     Reconstructing volVectorFields
+metal 
+metal         pRghAcceleration
+metal         gradT
+metal         phaseChangeBuoyancySu
+metal         phaseChangeBuoyancyAcceleration
+metal         U
+metal         phaseChangeDarcyAcceleration
+metal         gradRho
+metal         vorticity
+metal 
+metal     Reconstructing surfaceScalarFields
+metal 
+metal         phi
+metal         energyFlux
+metal         energyAdvectiveFlux
+metal         heatFlux
+metal 
+metal Reconstructing point fields
+metal 
+metal     (no point fields)
+      
+mold  Reconstructing FV fields
+mold  
+mold      Reconstructing volScalarFields
+mold  
+mold          T
+mold  
+mold  Reconstructing point fields
+mold  
+mold      (no point fields)
+      
+      Collecting uniform files
+      
+      Time = 213s
+      
+metal Reconstructing FV fields
+metal 
+metal     Reconstructing volScalarFields
+metal 
+metal         phaseChangeSource:alpha1
+metal         CoCell
+metal         dAlphaLdt
+metal         phaseChangeModelDeltaT
+metal         phaseChangeSolidFraction
+metal         magPRghAcceleration
+metal         magPhaseChangeBuoyancyAcceleration
+metal         latentHeatRateVol
+metal         phaseChangeDragToBuoyancy
+metal         p
+metal         T
+metal         solidificationRate
+metal         magPhaseChangeDarcyAcceleration
+metal         dTdt
+metal         phaseChangeDarcyCoeff
+metal         rho
+metal         latentHeat
+metal         magGradRho
+metal         magSqrDevGradU
+metal         coolingRate
+metal         magGradT
+metal         phaseChangeDragToPressure
+metal         flowType
+metal         p_rgh
+metal         phaseChangeDarcySp
+metal 
+metal     Reconstructing volVectorFields
+metal 
+metal         pRghAcceleration
+metal         gradT
+metal         phaseChangeBuoyancySu
+metal         phaseChangeBuoyancyAcceleration
+metal         U
+metal         phaseChangeDarcyAcceleration
+metal         gradRho
+metal         vorticity
+metal 
+metal     Reconstructing surfaceScalarFields
+metal 
+metal         phi
+metal         energyFlux
+metal         energyAdvectiveFlux
+metal         heatFlux
+metal 
+metal Reconstructing point fields
+metal 
+metal     (no point fields)
+      
+mold  Reconstructing FV fields
+mold  
+mold      Reconstructing volScalarFields
+mold  
+mold          T
+mold  
+mold  Reconstructing point fields
+mold  
+mold      (no point fields)
+      
+      Collecting uniform files
+      
+      Time = 214s
+      
+metal Reconstructing FV fields
+metal 
+metal     Reconstructing volScalarFields
+metal 
+metal         phaseChangeSource:alpha1
+metal         CoCell
+metal         dAlphaLdt
+metal         phaseChangeModelDeltaT
+metal         phaseChangeSolidFraction
+metal         magPRghAcceleration
+metal         magPhaseChangeBuoyancyAcceleration
+metal         latentHeatRateVol
+metal         phaseChangeDragToBuoyancy
+metal         p
+metal         T
+metal         solidificationRate
+metal         magPhaseChangeDarcyAcceleration
+metal         dTdt
+metal         phaseChangeDarcyCoeff
+metal         rho
+metal         latentHeat
+metal         magGradRho
+metal         magSqrDevGradU
+metal         coolingRate
+metal         magGradT
+metal         phaseChangeDragToPressure
+metal         flowType
+metal         p_rgh
+metal         phaseChangeDarcySp
+metal 
+metal     Reconstructing volVectorFields
+metal 
+metal         pRghAcceleration
+metal         gradT
+metal         phaseChangeBuoyancySu
+metal         phaseChangeBuoyancyAcceleration
+metal         U
+metal         phaseChangeDarcyAcceleration
+metal         gradRho
+metal         vorticity
+metal 
+metal     Reconstructing surfaceScalarFields
+metal 
+metal         phi
+metal         energyFlux
+metal         energyAdvectiveFlux
+metal         heatFlux
+metal 
+metal Reconstructing point fields
+metal 
+metal     (no point fields)
+      
+mold  Reconstructing FV fields
+mold  
+mold      Reconstructing volScalarFields
+mold  
+mold          T
+mold  
+mold  Reconstructing point fields
+mold  
+mold      (no point fields)
+      
+      Collecting uniform files
+      
+      Time = 215s
+      
+metal Reconstructing FV fields
+metal 
+metal     Reconstructing volScalarFields
+metal 
+metal         phaseChangeSource:alpha1
+metal         CoCell
+metal         dAlphaLdt
+metal         phaseChangeModelDeltaT
+metal         phaseChangeSolidFraction
+metal         magPRghAcceleration
+metal         magPhaseChangeBuoyancyAcceleration
+metal         latentHeatRateVol
+metal         phaseChangeDragToBuoyancy
+metal         p
+metal         T
+metal         solidificationRate
+metal         magPhaseChangeDarcyAcceleration
+metal         dTdt
+metal         phaseChangeDarcyCoeff
+metal         rho
+metal         latentHeat
+metal         magGradRho
+metal         magSqrDevGradU
+metal         coolingRate
+metal         magGradT
+metal         phaseChangeDragToPressure
+metal         flowType
+metal         p_rgh
+metal         phaseChangeDarcySp
+metal 
+metal     Reconstructing volVectorFields
+metal 
+metal         pRghAcceleration
+metal         gradT
+metal         phaseChangeBuoyancySu
+metal         phaseChangeBuoyancyAcceleration
+metal         U
+metal         phaseChangeDarcyAcceleration
+metal         gradRho
+metal         vorticity
+metal 
+metal     Reconstructing surfaceScalarFields
+metal 
+metal         phi
+metal         energyFlux
+metal         energyAdvectiveFlux
+metal         heatFlux
+metal 
+metal Reconstructing point fields
+metal 
+metal     (no point fields)
+      
+mold  Reconstructing FV fields
+mold  
+mold      Reconstructing volScalarFields
+mold  
+mold          T
+mold  
+mold  Reconstructing point fields
+mold  
+mold      (no point fields)
+      
+      Collecting uniform files
+      
+      Time = 216s
+      
+metal Reconstructing FV fields
+metal 
+metal     Reconstructing volScalarFields
+metal 
+metal         phaseChangeSource:alpha1
+metal         CoCell
+metal         dAlphaLdt
+metal         phaseChangeModelDeltaT
+metal         phaseChangeSolidFraction
+metal         magPRghAcceleration
+metal         magPhaseChangeBuoyancyAcceleration
+metal         latentHeatRateVol
+metal         phaseChangeDragToBuoyancy
+metal         p
+metal         T
+metal         solidificationRate
+metal         magPhaseChangeDarcyAcceleration
+metal         dTdt
+metal         phaseChangeDarcyCoeff
+metal         rho
+metal         latentHeat
+metal         magGradRho
+metal         magSqrDevGradU
+metal         coolingRate
+metal         magGradT
+metal         phaseChangeDragToPressure
+metal         flowType
+metal         p_rgh
+metal         phaseChangeDarcySp
+metal 
+metal     Reconstructing volVectorFields
+metal 
+metal         pRghAcceleration
+metal         gradT
+metal         phaseChangeBuoyancySu
+metal         phaseChangeBuoyancyAcceleration
+metal         U
+metal         phaseChangeDarcyAcceleration
+metal         gradRho
+metal         vorticity
+metal 
+metal     Reconstructing surfaceScalarFields
+metal 
+metal         phi
+metal         energyFlux
+metal         energyAdvectiveFlux
+metal         heatFlux
+metal 
+metal Reconstructing point fields
+metal 
+metal     (no point fields)
+      
+mold  Reconstructing FV fields
+mold  
+mold      Reconstructing volScalarFields
+mold  
+mold          T
+mold  
+mold  Reconstructing point fields
+mold  
+mold      (no point fields)
+      
+      Collecting uniform files
+      
+      Time = 217s
+      
+metal Reconstructing FV fields
+metal 
+metal     Reconstructing volScalarFields
+metal 
+metal         phaseChangeSource:alpha1
+metal         CoCell
+metal         dAlphaLdt
+metal         phaseChangeModelDeltaT
+metal         phaseChangeSolidFraction
+metal         magPRghAcceleration
+metal         magPhaseChangeBuoyancyAcceleration
+metal         latentHeatRateVol
+metal         phaseChangeDragToBuoyancy
+metal         p
+metal         T
+metal         solidificationRate
+metal         magPhaseChangeDarcyAcceleration
+metal         dTdt
+metal         phaseChangeDarcyCoeff
+metal         rho
+metal         latentHeat
+metal         magGradRho
+metal         magSqrDevGradU
+metal         coolingRate
+metal         magGradT
+metal         phaseChangeDragToPressure
+metal         flowType
+metal         p_rgh
+metal         phaseChangeDarcySp
+metal 
+metal     Reconstructing volVectorFields
+metal 
+metal         pRghAcceleration
+metal         gradT
+metal         phaseChangeBuoyancySu
+metal         phaseChangeBuoyancyAcceleration
+metal         U
+metal         phaseChangeDarcyAcceleration
+metal         gradRho
+metal         vorticity
+metal 
+metal     Reconstructing surfaceScalarFields
+metal 
+metal         phi
+metal         energyFlux
+metal         energyAdvectiveFlux
+metal         heatFlux
+metal 
+metal Reconstructing point fields
+metal 
+metal     (no point fields)
+      
+mold  Reconstructing FV fields
+mold  
+mold      Reconstructing volScalarFields
+mold  
+mold          T
+mold  
+mold  Reconstructing point fields
+mold  
+mold      (no point fields)
+      
+      Collecting uniform files
+      
+      Time = 218s
+      
+metal Reconstructing FV fields
+metal 
+metal     Reconstructing volScalarFields
+metal 
+metal         phaseChangeSource:alpha1
+metal         CoCell
+metal         dAlphaLdt
+metal         phaseChangeModelDeltaT
+metal         phaseChangeSolidFraction
+metal         magPRghAcceleration
+metal         magPhaseChangeBuoyancyAcceleration
+metal         latentHeatRateVol
+metal         phaseChangeDragToBuoyancy
+metal         p
+metal         T
+metal         solidificationRate
+metal         magPhaseChangeDarcyAcceleration
+metal         dTdt
+metal         phaseChangeDarcyCoeff
+metal         rho
+metal         latentHeat
+metal         magGradRho
+metal         magSqrDevGradU
+metal         coolingRate
+metal         magGradT
+metal         phaseChangeDragToPressure
+metal         flowType
+metal         p_rgh
+metal         phaseChangeDarcySp
+metal 
+metal     Reconstructing volVectorFields
+metal 
+metal         pRghAcceleration
+metal         gradT
+metal         phaseChangeBuoyancySu
+metal         phaseChangeBuoyancyAcceleration
+metal         U
+metal         phaseChangeDarcyAcceleration
+metal         gradRho
+metal         vorticity
+metal 
+metal     Reconstructing surfaceScalarFields
+metal 
+metal         phi
+metal         energyFlux
+metal         energyAdvectiveFlux
+metal         heatFlux
+metal 
+metal Reconstructing point fields
+metal 
+metal     (no point fields)
+      
+mold  Reconstructing FV fields
+mold  
+mold      Reconstructing volScalarFields
+mold  
+mold          T
+mold  
+mold  Reconstructing point fields
+mold  
+mold      (no point fields)
+      
+      Collecting uniform files
+      
+      Time = 219s
+      
+metal Reconstructing FV fields
+metal 
+metal     Reconstructing volScalarFields
+metal 
+metal         phaseChangeSource:alpha1
+metal         CoCell
+metal         dAlphaLdt
+metal         phaseChangeModelDeltaT
+metal         phaseChangeSolidFraction
+metal         magPRghAcceleration
+metal         magPhaseChangeBuoyancyAcceleration
+metal         latentHeatRateVol
+metal         phaseChangeDragToBuoyancy
+metal         p
+metal         T
+metal         solidificationRate
+metal         magPhaseChangeDarcyAcceleration
+metal         dTdt
+metal         phaseChangeDarcyCoeff
+metal         rho
+metal         latentHeat
+metal         magGradRho
+metal         magSqrDevGradU
+metal         coolingRate
+metal         magGradT
+metal         phaseChangeDragToPressure
+metal         flowType
+metal         p_rgh
+metal         phaseChangeDarcySp
+metal 
+metal     Reconstructing volVectorFields
+metal 
+metal         pRghAcceleration
+metal         gradT
+metal         phaseChangeBuoyancySu
+metal         phaseChangeBuoyancyAcceleration
+metal         U
+metal         phaseChangeDarcyAcceleration
+metal         gradRho
+metal         vorticity
+metal 
+metal     Reconstructing surfaceScalarFields
+metal 
+metal         phi
+metal         energyFlux
+metal         energyAdvectiveFlux
+metal         heatFlux
+metal 
+metal Reconstructing point fields
+metal 
+metal     (no point fields)
+      
+mold  Reconstructing FV fields
+mold  
+mold      Reconstructing volScalarFields
+mold  
+mold          T
+mold  
+mold  Reconstructing point fields
+mold  
+mold      (no point fields)
+      
+      Collecting uniform files
+      
+      Time = 220s
+      
+metal Reconstructing FV fields
+metal 
+metal     Reconstructing volScalarFields
+metal 
+metal         phaseChangeSource:alpha1
+metal         CoCell
+metal         dAlphaLdt
+metal         phaseChangeModelDeltaT
+metal         phaseChangeSolidFraction
+metal         magPRghAcceleration
+metal         magPhaseChangeBuoyancyAcceleration
+metal         latentHeatRateVol
+metal         phaseChangeDragToBuoyancy
+metal         p
+metal         T
+metal         solidificationRate
+metal         magPhaseChangeDarcyAcceleration
+metal         dTdt
+metal         phaseChangeDarcyCoeff
+metal         rho
+metal         latentHeat
+metal         magGradRho
+metal         magSqrDevGradU
+metal         coolingRate
+metal         magGradT
+metal         phaseChangeDragToPressure
+metal         flowType
+metal         p_rgh
+metal         phaseChangeDarcySp
+metal 
+metal     Reconstructing volVectorFields
+metal 
+metal         pRghAcceleration
+metal         gradT
+metal         phaseChangeBuoyancySu
+metal         phaseChangeBuoyancyAcceleration
+metal         U
+metal         phaseChangeDarcyAcceleration
+metal         gradRho
+metal         vorticity
+metal 
+metal     Reconstructing surfaceScalarFields
+metal 
+metal         phi
+metal         energyFlux
+metal         energyAdvectiveFlux
+metal         heatFlux
+metal 
+metal Reconstructing point fields
+metal 
+metal     (no point fields)
+      
+mold  Reconstructing FV fields
+mold  
+mold      Reconstructing volScalarFields
+mold  
+mold          T
+mold  
+mold  Reconstructing point fields
+mold  
+mold      (no point fields)
+      
+      Collecting uniform files
+      
+      Time = 221s
+      
+metal Reconstructing FV fields
+metal 
+metal     Reconstructing volScalarFields
+metal 
+metal         phaseChangeSource:alpha1
+metal         CoCell
+metal         dAlphaLdt
+metal         phaseChangeModelDeltaT
+metal         phaseChangeSolidFraction
+metal         magPRghAcceleration
+metal         magPhaseChangeBuoyancyAcceleration
+metal         latentHeatRateVol
+metal         phaseChangeDragToBuoyancy
+metal         p
+metal         T
+metal         solidificationRate
+metal         magPhaseChangeDarcyAcceleration
+metal         dTdt
+metal         phaseChangeDarcyCoeff
+metal         rho
+metal         latentHeat
+metal         magGradRho
+metal         magSqrDevGradU
+metal         coolingRate
+metal         magGradT
+metal         phaseChangeDragToPressure
+metal         flowType
+metal         p_rgh
+metal         phaseChangeDarcySp
+metal 
+metal     Reconstructing volVectorFields
+metal 
+metal         pRghAcceleration
+metal         gradT
+metal         phaseChangeBuoyancySu
+metal         phaseChangeBuoyancyAcceleration
+metal         U
+metal         phaseChangeDarcyAcceleration
+metal         gradRho
+metal         vorticity
+metal 
+metal     Reconstructing surfaceScalarFields
+metal 
+metal         phi
+metal         energyFlux
+metal         energyAdvectiveFlux
+metal         heatFlux
+metal 
+metal Reconstructing point fields
+metal 
+metal     (no point fields)
+      
+mold  Reconstructing FV fields
+mold  
+mold      Reconstructing volScalarFields
+mold  
+mold          T
+mold  
+mold  Reconstructing point fields
+mold  
+mold      (no point fields)
+      
+      Collecting uniform files
+      
+      Time = 222s
+      
+metal Reconstructing FV fields
+metal 
+metal     Reconstructing volScalarFields
+metal 
+metal         phaseChangeSource:alpha1
+metal         CoCell
+metal         dAlphaLdt
+metal         phaseChangeModelDeltaT
+metal         phaseChangeSolidFraction
+metal         magPRghAcceleration
+metal         magPhaseChangeBuoyancyAcceleration
+metal         latentHeatRateVol
+metal         phaseChangeDragToBuoyancy
+metal         p
+metal         T
+metal         solidificationRate
+metal         magPhaseChangeDarcyAcceleration
+metal         dTdt
+metal         phaseChangeDarcyCoeff
+metal         rho
+metal         latentHeat
+metal         magGradRho
+metal         magSqrDevGradU
+metal         coolingRate
+metal         magGradT
+metal         phaseChangeDragToPressure
+metal         flowType
+metal         p_rgh
+metal         phaseChangeDarcySp
+metal 
+metal     Reconstructing volVectorFields
+metal 
+metal         pRghAcceleration
+metal         gradT
+metal         phaseChangeBuoyancySu
+metal         phaseChangeBuoyancyAcceleration
+metal         U
+metal         phaseChangeDarcyAcceleration
+metal         gradRho
+metal         vorticity
+metal 
+metal     Reconstructing surfaceScalarFields
+metal 
+metal         phi
+metal         energyFlux
+metal         energyAdvectiveFlux
+metal         heatFlux
+metal 
+metal Reconstructing point fields
+metal 
+metal     (no point fields)
+      
+mold  Reconstructing FV fields
+mold  
+mold      Reconstructing volScalarFields
+mold  
+mold          T
+mold  
+mold  Reconstructing point fields
+mold  
+mold      (no point fields)
+      
+      Collecting uniform files
+      
+      Time = 223s
+      
+metal Reconstructing FV fields
+metal 
+metal     Reconstructing volScalarFields
+metal 
+metal         phaseChangeSource:alpha1
+metal         CoCell
+metal         dAlphaLdt
+metal         phaseChangeModelDeltaT
+metal         phaseChangeSolidFraction
+metal         magPRghAcceleration
+metal         magPhaseChangeBuoyancyAcceleration
+metal         latentHeatRateVol
+metal         phaseChangeDragToBuoyancy
+metal         p
+metal         T
+metal         solidificationRate
+metal         magPhaseChangeDarcyAcceleration
+metal         dTdt
+metal         phaseChangeDarcyCoeff
+metal         rho
+metal         latentHeat
+metal         magGradRho
+metal         magSqrDevGradU
+metal         coolingRate
+metal         magGradT
+metal         phaseChangeDragToPressure
+metal         flowType
+metal         p_rgh
+metal         phaseChangeDarcySp
+metal 
+metal     Reconstructing volVectorFields
+metal 
+metal         pRghAcceleration
+metal         gradT
+metal         phaseChangeBuoyancySu
+metal         phaseChangeBuoyancyAcceleration
+metal         U
+metal         phaseChangeDarcyAcceleration
+metal         gradRho
+metal         vorticity
+metal 
+metal     Reconstructing surfaceScalarFields
+metal 
+metal         phi
+metal         energyFlux
+metal         energyAdvectiveFlux
+metal         heatFlux
+metal 
+metal Reconstructing point fields
+metal 
+metal     (no point fields)
+      
+mold  Reconstructing FV fields
+mold  
+mold      Reconstructing volScalarFields
+mold  
+mold          T
+mold  
+mold  Reconstructing point fields
+mold  
+mold      (no point fields)
+      
+      Collecting uniform files
+      
+      Time = 224s
+      
+metal Reconstructing FV fields
+metal 
+metal     Reconstructing volScalarFields
+metal 
+metal         phaseChangeSource:alpha1
+metal         CoCell
+metal         dAlphaLdt
+metal         phaseChangeModelDeltaT
+metal         phaseChangeSolidFraction
+metal         magPRghAcceleration
+metal         magPhaseChangeBuoyancyAcceleration
+metal         latentHeatRateVol
+metal         phaseChangeDragToBuoyancy
+metal         p
+metal         T
+metal         solidificationRate
+metal         magPhaseChangeDarcyAcceleration
+metal         dTdt
+metal         phaseChangeDarcyCoeff
+metal         rho
+metal         latentHeat
+metal         magGradRho
+metal         magSqrDevGradU
+metal         coolingRate
+metal         magGradT
+metal         phaseChangeDragToPressure
+metal         flowType
+metal         p_rgh
+metal         phaseChangeDarcySp
+metal 
+metal     Reconstructing volVectorFields
+metal 
+metal         pRghAcceleration
+metal         gradT
+metal         phaseChangeBuoyancySu
+metal         phaseChangeBuoyancyAcceleration
+metal         U
+metal         phaseChangeDarcyAcceleration
+metal         gradRho
+metal         vorticity
+metal 
+metal     Reconstructing surfaceScalarFields
+metal 
+metal         phi
+metal         energyFlux
+metal         energyAdvectiveFlux
+metal         heatFlux
+metal 
+metal Reconstructing point fields
+metal 
+metal     (no point fields)
+      
+mold  Reconstructing FV fields
+mold  
+mold      Reconstructing volScalarFields
+mold  
+mold          T
+mold  
+mold  Reconstructing point fields
+mold  
+mold      (no point fields)
+      
+      Collecting uniform files
+      
+      Time = 225s
+      
+metal Reconstructing FV fields
+metal 
+metal     Reconstructing volScalarFields
+metal 
+metal         phaseChangeSource:alpha1
+metal         CoCell
+metal         dAlphaLdt
+metal         phaseChangeModelDeltaT
+metal         phaseChangeSolidFraction
+metal         magPRghAcceleration
+metal         magPhaseChangeBuoyancyAcceleration
+metal         latentHeatRateVol
+metal         phaseChangeDragToBuoyancy
+metal         p
+metal         T
+metal         solidificationRate
+metal         magPhaseChangeDarcyAcceleration
+metal         dTdt
+metal         phaseChangeDarcyCoeff
+metal         rho
+metal         latentHeat
+metal         magGradRho
+metal         magSqrDevGradU
+metal         coolingRate
+metal         magGradT
+metal         phaseChangeDragToPressure
+metal         flowType
+metal         p_rgh
+metal         phaseChangeDarcySp
+metal 
+metal     Reconstructing volVectorFields
+metal 
+metal         pRghAcceleration
+metal         gradT
+metal         phaseChangeBuoyancySu
+metal         phaseChangeBuoyancyAcceleration
+metal         U
+metal         phaseChangeDarcyAcceleration
+metal         gradRho
+metal         vorticity
+metal 
+metal     Reconstructing surfaceScalarFields
+metal 
+metal         phi
+metal         energyFlux
+metal         energyAdvectiveFlux
+metal         heatFlux
+metal 
+metal Reconstructing point fields
+metal 
+metal     (no point fields)
+      
+mold  Reconstructing FV fields
+mold  
+mold      Reconstructing volScalarFields
+mold  
+mold          T
+mold  
+mold  Reconstructing point fields
+mold  
+mold      (no point fields)
+      
+      Collecting uniform files
+      
+      Time = 226s
+      
+metal Reconstructing FV fields
+metal 
+metal     Reconstructing volScalarFields
+metal 
+metal         phaseChangeSource:alpha1
+metal         CoCell
+metal         dAlphaLdt
+metal         phaseChangeModelDeltaT
+metal         phaseChangeSolidFraction
+metal         magPRghAcceleration
+metal         magPhaseChangeBuoyancyAcceleration
+metal         latentHeatRateVol
+metal         phaseChangeDragToBuoyancy
+metal         p
+metal         T
+metal         solidificationRate
+metal         magPhaseChangeDarcyAcceleration
+metal         dTdt
+metal         phaseChangeDarcyCoeff
+metal         rho
+metal         latentHeat
+metal         magGradRho
+metal         magSqrDevGradU
+metal         coolingRate
+metal         magGradT
+metal         phaseChangeDragToPressure
+metal         flowType
+metal         p_rgh
+metal         phaseChangeDarcySp
+metal 
+metal     Reconstructing volVectorFields
+metal 
+metal         pRghAcceleration
+metal         gradT
+metal         phaseChangeBuoyancySu
+metal         phaseChangeBuoyancyAcceleration
+metal         U
+metal         phaseChangeDarcyAcceleration
+metal         gradRho
+metal         vorticity
+metal 
+metal     Reconstructing surfaceScalarFields
+metal 
+metal         phi
+metal         energyFlux
+metal         energyAdvectiveFlux
+metal         heatFlux
+metal 
+metal Reconstructing point fields
+metal 
+metal     (no point fields)
+      
+mold  Reconstructing FV fields
+mold  
+mold      Reconstructing volScalarFields
+mold  
+mold          T
+mold  
+mold  Reconstructing point fields
+mold  
+mold      (no point fields)
+      
+      Collecting uniform files
+      
+      Time = 227s
+      
+metal Reconstructing FV fields
+metal 
+metal     Reconstructing volScalarFields
+metal 
+metal         phaseChangeSource:alpha1
+metal         CoCell
+metal         dAlphaLdt
+metal         phaseChangeModelDeltaT
+metal         phaseChangeSolidFraction
+metal         magPRghAcceleration
+metal         magPhaseChangeBuoyancyAcceleration
+metal         latentHeatRateVol
+metal         phaseChangeDragToBuoyancy
+metal         p
+metal         T
+metal         solidificationRate
+metal         magPhaseChangeDarcyAcceleration
+metal         dTdt
+metal         phaseChangeDarcyCoeff
+metal         rho
+metal         latentHeat
+metal         magGradRho
+metal         magSqrDevGradU
+metal         coolingRate
+metal         magGradT
+metal         phaseChangeDragToPressure
+metal         flowType
+metal         p_rgh
+metal         phaseChangeDarcySp
+metal 
+metal     Reconstructing volVectorFields
+metal 
+metal         pRghAcceleration
+metal         gradT
+metal         phaseChangeBuoyancySu
+metal         phaseChangeBuoyancyAcceleration
+metal         U
+metal         phaseChangeDarcyAcceleration
+metal         gradRho
+metal         vorticity
+metal 
+metal     Reconstructing surfaceScalarFields
+metal 
+metal         phi
+metal         energyFlux
+metal         energyAdvectiveFlux
+metal         heatFlux
+metal 
+metal Reconstructing point fields
+metal 
+metal     (no point fields)
+      
+mold  Reconstructing FV fields
+mold  
+mold      Reconstructing volScalarFields
+mold  
+mold          T
+mold  
+mold  Reconstructing point fields
+mold  
+mold      (no point fields)
+      
+      Collecting uniform files
+      
+      Time = 228s
+      
+metal Reconstructing FV fields
+metal 
+metal     Reconstructing volScalarFields
+metal 
+metal         phaseChangeSource:alpha1
+metal         CoCell
+metal         dAlphaLdt
+metal         phaseChangeModelDeltaT
+metal         phaseChangeSolidFraction
+metal         magPRghAcceleration
+metal         magPhaseChangeBuoyancyAcceleration
+metal         latentHeatRateVol
+metal         phaseChangeDragToBuoyancy
+metal         p
+metal         T
+metal         solidificationRate
+metal         magPhaseChangeDarcyAcceleration
+metal         dTdt
+metal         phaseChangeDarcyCoeff
+metal         rho
+metal         latentHeat
+metal         magGradRho
+metal         magSqrDevGradU
+metal         coolingRate
+metal         magGradT
+metal         phaseChangeDragToPressure
+metal         flowType
+metal         p_rgh
+metal         phaseChangeDarcySp
+metal 
+metal     Reconstructing volVectorFields
+metal 
+metal         pRghAcceleration
+metal         gradT
+metal         phaseChangeBuoyancySu
+metal         phaseChangeBuoyancyAcceleration
+metal         U
+metal         phaseChangeDarcyAcceleration
+metal         gradRho
+metal         vorticity
+metal 
+metal     Reconstructing surfaceScalarFields
+metal 
+metal         phi
+metal         energyFlux
+metal         energyAdvectiveFlux
+metal         heatFlux
+metal 
+metal Reconstructing point fields
+metal 
+metal     (no point fields)
+      
+mold  Reconstructing FV fields
+mold  
+mold      Reconstructing volScalarFields
+mold  
+mold          T
+mold  
+mold  Reconstructing point fields
+mold  
+mold      (no point fields)
+      
+      Collecting uniform files
+      
+      Time = 229s
+      
+metal Reconstructing FV fields
+metal 
+metal     Reconstructing volScalarFields
+metal 
+metal         phaseChangeSource:alpha1
+metal         CoCell
+metal         dAlphaLdt
+metal         phaseChangeModelDeltaT
+metal         phaseChangeSolidFraction
+metal         magPRghAcceleration
+metal         magPhaseChangeBuoyancyAcceleration
+metal         latentHeatRateVol
+metal         phaseChangeDragToBuoyancy
+metal         p
+metal         T
+metal         solidificationRate
+metal         magPhaseChangeDarcyAcceleration
+metal         dTdt
+metal         phaseChangeDarcyCoeff
+metal         rho
+metal         latentHeat
+metal         magGradRho
+metal         magSqrDevGradU
+metal         coolingRate
+metal         magGradT
+metal         phaseChangeDragToPressure
+metal         flowType
+metal         p_rgh
+metal         phaseChangeDarcySp
+metal 
+metal     Reconstructing volVectorFields
+metal 
+metal         pRghAcceleration
+metal         gradT
+metal         phaseChangeBuoyancySu
+metal         phaseChangeBuoyancyAcceleration
+metal         U
+metal         phaseChangeDarcyAcceleration
+metal         gradRho
+metal         vorticity
+metal 
+metal     Reconstructing surfaceScalarFields
+metal 
+metal         phi
+metal         energyFlux
+metal         energyAdvectiveFlux
+metal         heatFlux
+metal 
+metal Reconstructing point fields
+metal 
+metal     (no point fields)
+      
+mold  Reconstructing FV fields
+mold  
+mold      Reconstructing volScalarFields
+mold  
+mold          T
+mold  
+mold  Reconstructing point fields
+mold  
+mold      (no point fields)
+      
+      Collecting uniform files
+      
+      Time = 230s
+      
+metal Reconstructing FV fields
+metal 
+metal     Reconstructing volScalarFields
+metal 
+metal         phaseChangeSource:alpha1
+metal         CoCell
+metal         dAlphaLdt
+metal         phaseChangeModelDeltaT
+metal         phaseChangeSolidFraction
+metal         magPRghAcceleration
+metal         magPhaseChangeBuoyancyAcceleration
+metal         latentHeatRateVol
+metal         phaseChangeDragToBuoyancy
+metal         p
+metal         T
+metal         solidificationRate
+metal         magPhaseChangeDarcyAcceleration
+metal         dTdt
+metal         phaseChangeDarcyCoeff
+metal         rho
+metal         latentHeat
+metal         magGradRho
+metal         magSqrDevGradU
+metal         coolingRate
+metal         magGradT
+metal         phaseChangeDragToPressure
+metal         flowType
+metal         p_rgh
+metal         phaseChangeDarcySp
+metal 
+metal     Reconstructing volVectorFields
+metal 
+metal         pRghAcceleration
+metal         gradT
+metal         phaseChangeBuoyancySu
+metal         phaseChangeBuoyancyAcceleration
+metal         U
+metal         phaseChangeDarcyAcceleration
+metal         gradRho
+metal         vorticity
+metal 
+metal     Reconstructing surfaceScalarFields
+metal 
+metal         phi
+metal         energyFlux
+metal         energyAdvectiveFlux
+metal         heatFlux
+metal 
+metal Reconstructing point fields
+metal 
+metal     (no point fields)
+      
+mold  Reconstructing FV fields
+mold  
+mold      Reconstructing volScalarFields
+mold  
+mold          T
+mold  
+mold  Reconstructing point fields
+mold  
+mold      (no point fields)
+      
+      Collecting uniform files
+      
+      Time = 231s
+      
+metal Reconstructing FV fields
+metal 
+metal     Reconstructing volScalarFields
+metal 
+metal         phaseChangeSource:alpha1
+metal         CoCell
+metal         dAlphaLdt
+metal         phaseChangeModelDeltaT
+metal         phaseChangeSolidFraction
+metal         magPRghAcceleration
+metal         magPhaseChangeBuoyancyAcceleration
+metal         latentHeatRateVol
+metal         phaseChangeDragToBuoyancy
+metal         p
+metal         T
+metal         solidificationRate
+metal         magPhaseChangeDarcyAcceleration
+metal         dTdt
+metal         phaseChangeDarcyCoeff
+metal         rho
+metal         latentHeat
+metal         magGradRho
+metal         magSqrDevGradU
+metal         coolingRate
+metal         magGradT
+metal         phaseChangeDragToPressure
+metal         flowType
+metal         p_rgh
+metal         phaseChangeDarcySp
+metal 
+metal     Reconstructing volVectorFields
+metal 
+metal         pRghAcceleration
+metal         gradT
+metal         phaseChangeBuoyancySu
+metal         phaseChangeBuoyancyAcceleration
+metal         U
+metal         phaseChangeDarcyAcceleration
+metal         gradRho
+metal         vorticity
+metal 
+metal     Reconstructing surfaceScalarFields
+metal 
+metal         phi
+metal         energyFlux
+metal         energyAdvectiveFlux
+metal         heatFlux
+metal 
+metal Reconstructing point fields
+metal 
+metal     (no point fields)
+      
+mold  Reconstructing FV fields
+mold  
+mold      Reconstructing volScalarFields
+mold  
+mold          T
+mold  
+mold  Reconstructing point fields
+mold  
+mold      (no point fields)
+      
+      Collecting uniform files
+      
+      Time = 232s
+      
+metal Reconstructing FV fields
+metal 
+metal     Reconstructing volScalarFields
+metal 
+metal         phaseChangeSource:alpha1
+metal         CoCell
+metal         dAlphaLdt
+metal         phaseChangeModelDeltaT
+metal         phaseChangeSolidFraction
+metal         magPRghAcceleration
+metal         magPhaseChangeBuoyancyAcceleration
+metal         latentHeatRateVol
+metal         phaseChangeDragToBuoyancy
+metal         p
+metal         T
+metal         solidificationRate
+metal         magPhaseChangeDarcyAcceleration
+metal         dTdt
+metal         phaseChangeDarcyCoeff
+metal         rho
+metal         latentHeat
+metal         magGradRho
+metal         magSqrDevGradU
+metal         coolingRate
+metal         magGradT
+metal         phaseChangeDragToPressure
+metal         flowType
+metal         p_rgh
+metal         phaseChangeDarcySp
+metal 
+metal     Reconstructing volVectorFields
+metal 
+metal         pRghAcceleration
+metal         gradT
+metal         phaseChangeBuoyancySu
+metal         phaseChangeBuoyancyAcceleration
+metal         U
+metal         phaseChangeDarcyAcceleration
+metal         gradRho
+metal         vorticity
+metal 
+metal     Reconstructing surfaceScalarFields
+metal 
+metal         phi
+metal         energyFlux
+metal         energyAdvectiveFlux
+metal         heatFlux
+metal 
+metal Reconstructing point fields
+metal 
+metal     (no point fields)
+      
+mold  Reconstructing FV fields
+mold  
+mold      Reconstructing volScalarFields
+mold  
+mold          T
+mold  
+mold  Reconstructing point fields
+mold  
+mold      (no point fields)
+      
+      Collecting uniform files
+      
+      Time = 233s
+      
+metal Reconstructing FV fields
+metal 
+metal     Reconstructing volScalarFields
+metal 
+metal         phaseChangeSource:alpha1
+metal         CoCell
+metal         dAlphaLdt
+metal         phaseChangeModelDeltaT
+metal         phaseChangeSolidFraction
+metal         magPRghAcceleration
+metal         magPhaseChangeBuoyancyAcceleration
+metal         latentHeatRateVol
+metal         phaseChangeDragToBuoyancy
+metal         p
+metal         T
+metal         solidificationRate
+metal         magPhaseChangeDarcyAcceleration
+metal         dTdt
+metal         phaseChangeDarcyCoeff
+metal         rho
+metal         latentHeat
+metal         magGradRho
+metal         magSqrDevGradU
+metal         coolingRate
+metal         magGradT
+metal         phaseChangeDragToPressure
+metal         flowType
+metal         p_rgh
+metal         phaseChangeDarcySp
+metal 
+metal     Reconstructing volVectorFields
+metal 
+metal         pRghAcceleration
+metal         gradT
+metal         phaseChangeBuoyancySu
+metal         phaseChangeBuoyancyAcceleration
+metal         U
+metal         phaseChangeDarcyAcceleration
+metal         gradRho
+metal         vorticity
+metal 
+metal     Reconstructing surfaceScalarFields
+metal 
+metal         phi
+metal         energyFlux
+metal         energyAdvectiveFlux
+metal         heatFlux
+metal 
+metal Reconstructing point fields
+metal 
+metal     (no point fields)
+      
+mold  Reconstructing FV fields
+mold  
+mold      Reconstructing volScalarFields
+mold  
+mold          T
+mold  
+mold  Reconstructing point fields
+mold  
+mold      (no point fields)
+      
+      Collecting uniform files
+      
+      Time = 234s
+      
+metal Reconstructing FV fields
+metal 
+metal     Reconstructing volScalarFields
+metal 
+metal         phaseChangeSource:alpha1
+metal         CoCell
+metal         dAlphaLdt
+metal         phaseChangeModelDeltaT
+metal         phaseChangeSolidFraction
+metal         magPRghAcceleration
+metal         magPhaseChangeBuoyancyAcceleration
+metal         latentHeatRateVol
+metal         phaseChangeDragToBuoyancy
+metal         p
+metal         T
+metal         solidificationRate
+metal         magPhaseChangeDarcyAcceleration
+metal         dTdt
+metal         phaseChangeDarcyCoeff
+metal         rho
+metal         latentHeat
+metal         magGradRho
+metal         magSqrDevGradU
+metal         coolingRate
+metal         magGradT
+metal         phaseChangeDragToPressure
+metal         flowType
+metal         p_rgh
+metal         phaseChangeDarcySp
+metal 
+metal     Reconstructing volVectorFields
+metal 
+metal         pRghAcceleration
+metal         gradT
+metal         phaseChangeBuoyancySu
+metal         phaseChangeBuoyancyAcceleration
+metal         U
+metal         phaseChangeDarcyAcceleration
+metal         gradRho
+metal         vorticity
+metal 
+metal     Reconstructing surfaceScalarFields
+metal 
+metal         phi
+metal         energyFlux
+metal         energyAdvectiveFlux
+metal         heatFlux
+metal 
+metal Reconstructing point fields
+metal 
+metal     (no point fields)
+      
+mold  Reconstructing FV fields
+mold  
+mold      Reconstructing volScalarFields
+mold  
+mold          T
+mold  
+mold  Reconstructing point fields
+mold  
+mold      (no point fields)
+      
+      Collecting uniform files
+      
+      Time = 235s
+      
+metal Reconstructing FV fields
+metal 
+metal     Reconstructing volScalarFields
+metal 
+metal         phaseChangeSource:alpha1
+metal         CoCell
+metal         dAlphaLdt
+metal         phaseChangeModelDeltaT
+metal         phaseChangeSolidFraction
+metal         magPRghAcceleration
+metal         magPhaseChangeBuoyancyAcceleration
+metal         latentHeatRateVol
+metal         phaseChangeDragToBuoyancy
+metal         p
+metal         T
+metal         solidificationRate
+metal         magPhaseChangeDarcyAcceleration
+metal         dTdt
+metal         phaseChangeDarcyCoeff
+metal         rho
+metal         latentHeat
+metal         magGradRho
+metal         magSqrDevGradU
+metal         coolingRate
+metal         magGradT
+metal         phaseChangeDragToPressure
+metal         flowType
+metal         p_rgh
+metal         phaseChangeDarcySp
+metal 
+metal     Reconstructing volVectorFields
+metal 
+metal         pRghAcceleration
+metal         gradT
+metal         phaseChangeBuoyancySu
+metal         phaseChangeBuoyancyAcceleration
+metal         U
+metal         phaseChangeDarcyAcceleration
+metal         gradRho
+metal         vorticity
+metal 
+metal     Reconstructing surfaceScalarFields
+metal 
+metal         phi
+metal         energyFlux
+metal         energyAdvectiveFlux
+metal         heatFlux
+metal 
+metal Reconstructing point fields
+metal 
+metal     (no point fields)
+      
+mold  Reconstructing FV fields
+mold  
+mold      Reconstructing volScalarFields
+mold  
+mold          T
+mold  
+mold  Reconstructing point fields
+mold  
+mold      (no point fields)
+      
+      Collecting uniform files
+      
+      Time = 236s
+      
+metal Reconstructing FV fields
+metal 
+metal     Reconstructing volScalarFields
+metal 
+metal         phaseChangeSource:alpha1
+metal         CoCell
+metal         dAlphaLdt
+metal         phaseChangeModelDeltaT
+metal         phaseChangeSolidFraction
+metal         magPRghAcceleration
+metal         magPhaseChangeBuoyancyAcceleration
+metal         latentHeatRateVol
+metal         phaseChangeDragToBuoyancy
+metal         p
+metal         T
+metal         solidificationRate
+metal         magPhaseChangeDarcyAcceleration
+metal         dTdt
+metal         phaseChangeDarcyCoeff
+metal         rho
+metal         latentHeat
+metal         magGradRho
+metal         magSqrDevGradU
+metal         coolingRate
+metal         magGradT
+metal         phaseChangeDragToPressure
+metal         flowType
+metal         p_rgh
+metal         phaseChangeDarcySp
+metal 
+metal     Reconstructing volVectorFields
+metal 
+metal         pRghAcceleration
+metal         gradT
+metal         phaseChangeBuoyancySu
+metal         phaseChangeBuoyancyAcceleration
+metal         U
+metal         phaseChangeDarcyAcceleration
+metal         gradRho
+metal         vorticity
+metal 
+metal     Reconstructing surfaceScalarFields
+metal 
+metal         phi
+metal         energyFlux
+metal         energyAdvectiveFlux
+metal         heatFlux
+metal 
+metal Reconstructing point fields
+metal 
+metal     (no point fields)
+      
+mold  Reconstructing FV fields
+mold  
+mold      Reconstructing volScalarFields
+mold  
+mold          T
+mold  
+mold  Reconstructing point fields
+mold  
+mold      (no point fields)
+      
+      Collecting uniform files
+      
+      Time = 237s
+      
+metal Reconstructing FV fields
+metal 
+metal     Reconstructing volScalarFields
+metal 
+metal         phaseChangeSource:alpha1
+metal         CoCell
+metal         dAlphaLdt
+metal         phaseChangeModelDeltaT
+metal         phaseChangeSolidFraction
+metal         magPRghAcceleration
+metal         magPhaseChangeBuoyancyAcceleration
+metal         latentHeatRateVol
+metal         phaseChangeDragToBuoyancy
+metal         p
+metal         T
+metal         solidificationRate
+metal         magPhaseChangeDarcyAcceleration
+metal         dTdt
+metal         phaseChangeDarcyCoeff
+metal         rho
+metal         latentHeat
+metal         magGradRho
+metal         magSqrDevGradU
+metal         coolingRate
+metal         magGradT
+metal         phaseChangeDragToPressure
+metal         flowType
+metal         p_rgh
+metal         phaseChangeDarcySp
+metal 
+metal     Reconstructing volVectorFields
+metal 
+metal         pRghAcceleration
+metal         gradT
+metal         phaseChangeBuoyancySu
+metal         phaseChangeBuoyancyAcceleration
+metal         U
+metal         phaseChangeDarcyAcceleration
+metal         gradRho
+metal         vorticity
+metal 
+metal     Reconstructing surfaceScalarFields
+metal 
+metal         phi
+metal         energyFlux
+metal         energyAdvectiveFlux
+metal         heatFlux
+metal 
+metal Reconstructing point fields
+metal 
+metal     (no point fields)
+      
+mold  Reconstructing FV fields
+mold  
+mold      Reconstructing volScalarFields
+mold  
+mold          T
+mold  
+mold  Reconstructing point fields
+mold  
+mold      (no point fields)
+      
+      Collecting uniform files
+      
+      Time = 238s
+      
+metal Reconstructing FV fields
+metal 
+metal     Reconstructing volScalarFields
+metal 
+metal         phaseChangeSource:alpha1
+metal         CoCell
+metal         dAlphaLdt
+metal         phaseChangeModelDeltaT
+metal         phaseChangeSolidFraction
+metal         magPRghAcceleration
+metal         magPhaseChangeBuoyancyAcceleration
+metal         latentHeatRateVol
+metal         phaseChangeDragToBuoyancy
+metal         p
+metal         T
+metal         solidificationRate
+metal         magPhaseChangeDarcyAcceleration
+metal         dTdt
+metal         phaseChangeDarcyCoeff
+metal         rho
+metal         latentHeat
+metal         magGradRho
+metal         magSqrDevGradU
+metal         coolingRate
+metal         magGradT
+metal         phaseChangeDragToPressure
+metal         flowType
+metal         p_rgh
+metal         phaseChangeDarcySp
+metal 
+metal     Reconstructing volVectorFields
+metal 
+metal         pRghAcceleration
+metal         gradT
+metal         phaseChangeBuoyancySu
+metal         phaseChangeBuoyancyAcceleration
+metal         U
+metal         phaseChangeDarcyAcceleration
+metal         gradRho
+metal         vorticity
+metal 
+metal     Reconstructing surfaceScalarFields
+metal 
+metal         phi
+metal         energyFlux
+metal         energyAdvectiveFlux
+metal         heatFlux
+metal 
+metal Reconstructing point fields
+metal 
+metal     (no point fields)
+      
+mold  Reconstructing FV fields
+mold  
+mold      Reconstructing volScalarFields
+mold  
+mold          T
+mold  
+mold  Reconstructing point fields
+mold  
+mold      (no point fields)
+      
+      Collecting uniform files
+      
+      Time = 239s
+      
+metal Reconstructing FV fields
+metal 
+metal     Reconstructing volScalarFields
+metal 
+metal         phaseChangeSource:alpha1
+metal         CoCell
+metal         dAlphaLdt
+metal         phaseChangeModelDeltaT
+metal         phaseChangeSolidFraction
+metal         magPRghAcceleration
+metal         magPhaseChangeBuoyancyAcceleration
+metal         latentHeatRateVol
+metal         phaseChangeDragToBuoyancy
+metal         p
+metal         T
+metal         solidificationRate
+metal         magPhaseChangeDarcyAcceleration
+metal         dTdt
+metal         phaseChangeDarcyCoeff
+metal         rho
+metal         latentHeat
+metal         magGradRho
+metal         magSqrDevGradU
+metal         coolingRate
+metal         magGradT
+metal         phaseChangeDragToPressure
+metal         flowType
+metal         p_rgh
+metal         phaseChangeDarcySp
+metal 
+metal     Reconstructing volVectorFields
+metal 
+metal         pRghAcceleration
+metal         gradT
+metal         phaseChangeBuoyancySu
+metal         phaseChangeBuoyancyAcceleration
+metal         U
+metal         phaseChangeDarcyAcceleration
+metal         gradRho
+metal         vorticity
+metal 
+metal     Reconstructing surfaceScalarFields
+metal 
+metal         phi
+metal         energyFlux
+metal         energyAdvectiveFlux
+metal         heatFlux
+metal 
+metal Reconstructing point fields
+metal 
+metal     (no point fields)
+      
+mold  Reconstructing FV fields
+mold  
+mold      Reconstructing volScalarFields
+mold  
+mold          T
+mold  
+mold  Reconstructing point fields
+mold  
+mold      (no point fields)
+      
+      Collecting uniform files
+      
+      Time = 240s
+      
+metal Reconstructing FV fields
+metal 
+metal     Reconstructing volScalarFields
+metal 
+metal         phaseChangeSource:alpha1
+metal         CoCell
+metal         dAlphaLdt
+metal         phaseChangeModelDeltaT
+metal         phaseChangeSolidFraction
+metal         magPRghAcceleration
+metal         magPhaseChangeBuoyancyAcceleration
+metal         latentHeatRateVol
+metal         phaseChangeDragToBuoyancy
+metal         p
+metal         T
+metal         solidificationRate
+metal         magPhaseChangeDarcyAcceleration
+metal         dTdt
+metal         phaseChangeDarcyCoeff
+metal         rho
+metal         latentHeat
+metal         magGradRho
+metal         magSqrDevGradU
+metal         coolingRate
+metal         magGradT
+metal         phaseChangeDragToPressure
+metal         flowType
+metal         p_rgh
+metal         phaseChangeDarcySp
+metal 
+metal     Reconstructing volVectorFields
+metal 
+metal         pRghAcceleration
+metal         gradT
+metal         phaseChangeBuoyancySu
+metal         phaseChangeBuoyancyAcceleration
+metal         U
+metal         phaseChangeDarcyAcceleration
+metal         gradRho
+metal         vorticity
+metal 
+metal     Reconstructing surfaceScalarFields
+metal 
+metal         phi
+metal         energyFlux
+metal         energyAdvectiveFlux
+metal         heatFlux
+metal 
+metal Reconstructing point fields
+metal 
+metal     (no point fields)
+      
+mold  Reconstructing FV fields
+mold  
+mold      Reconstructing volScalarFields
+mold  
+mold          T
+mold  
+mold  Reconstructing point fields
+mold  
+mold      (no point fields)
+      
+      Collecting uniform files
+      
+      Time = 241s
+      
+metal Reconstructing FV fields
+metal 
+metal     Reconstructing volScalarFields
+metal 
+metal         phaseChangeSource:alpha1
+metal         CoCell
+metal         dAlphaLdt
+metal         phaseChangeModelDeltaT
+metal         phaseChangeSolidFraction
+metal         magPRghAcceleration
+metal         magPhaseChangeBuoyancyAcceleration
+metal         latentHeatRateVol
+metal         phaseChangeDragToBuoyancy
+metal         p
+metal         T
+metal         solidificationRate
+metal         magPhaseChangeDarcyAcceleration
+metal         dTdt
+metal         phaseChangeDarcyCoeff
+metal         rho
+metal         latentHeat
+metal         magGradRho
+metal         magSqrDevGradU
+metal         coolingRate
+metal         magGradT
+metal         phaseChangeDragToPressure
+metal         flowType
+metal         p_rgh
+metal         phaseChangeDarcySp
+metal 
+metal     Reconstructing volVectorFields
+metal 
+metal         pRghAcceleration
+metal         gradT
+metal         phaseChangeBuoyancySu
+metal         phaseChangeBuoyancyAcceleration
+metal         U
+metal         phaseChangeDarcyAcceleration
+metal         gradRho
+metal         vorticity
+metal 
+metal     Reconstructing surfaceScalarFields
+metal 
+metal         phi
+metal         energyFlux
+metal         energyAdvectiveFlux
+metal         heatFlux
+metal 
+metal Reconstructing point fields
+metal 
+metal     (no point fields)
+      
+mold  Reconstructing FV fields
+mold  
+mold      Reconstructing volScalarFields
+mold  
+mold          T
+mold  
+mold  Reconstructing point fields
+mold  
+mold      (no point fields)
+      
+      Collecting uniform files
+      
+      Time = 242s
+      
+metal Reconstructing FV fields
+metal 
+metal     Reconstructing volScalarFields
+metal 
+metal         phaseChangeSource:alpha1
+metal         CoCell
+metal         dAlphaLdt
+metal         phaseChangeModelDeltaT
+metal         phaseChangeSolidFraction
+metal         magPRghAcceleration
+metal         magPhaseChangeBuoyancyAcceleration
+metal         latentHeatRateVol
+metal         phaseChangeDragToBuoyancy
+metal         p
+metal         T
+metal         solidificationRate
+metal         magPhaseChangeDarcyAcceleration
+metal         dTdt
+metal         phaseChangeDarcyCoeff
+metal         rho
+metal         latentHeat
+metal         magGradRho
+metal         magSqrDevGradU
+metal         coolingRate
+metal         magGradT
+metal         phaseChangeDragToPressure
+metal         flowType
+metal         p_rgh
+metal         phaseChangeDarcySp
+metal 
+metal     Reconstructing volVectorFields
+metal 
+metal         pRghAcceleration
+metal         gradT
+metal         phaseChangeBuoyancySu
+metal         phaseChangeBuoyancyAcceleration
+metal         U
+metal         phaseChangeDarcyAcceleration
+metal         gradRho
+metal         vorticity
+metal 
+metal     Reconstructing surfaceScalarFields
+metal 
+metal         phi
+metal         energyFlux
+metal         energyAdvectiveFlux
+metal         heatFlux
+metal 
+metal Reconstructing point fields
+metal 
+metal     (no point fields)
+      
+mold  Reconstructing FV fields
+mold  
+mold      Reconstructing volScalarFields
+mold  
+mold          T
+mold  
+mold  Reconstructing point fields
+mold  
+mold      (no point fields)
+      
+      Collecting uniform files
+      
+      Time = 243s
+      
+metal Reconstructing FV fields
+metal 
+metal     Reconstructing volScalarFields
+metal 
+metal         phaseChangeSource:alpha1
+metal         CoCell
+metal         dAlphaLdt
+metal         phaseChangeModelDeltaT
+metal         phaseChangeSolidFraction
+metal         magPRghAcceleration
+metal         magPhaseChangeBuoyancyAcceleration
+metal         latentHeatRateVol
+metal         phaseChangeDragToBuoyancy
+metal         p
+metal         T
+metal         solidificationRate
+metal         magPhaseChangeDarcyAcceleration
+metal         dTdt
+metal         phaseChangeDarcyCoeff
+metal         rho
+metal         latentHeat
+metal         magGradRho
+metal         magSqrDevGradU
+metal         coolingRate
+metal         magGradT
+metal         phaseChangeDragToPressure
+metal         flowType
+metal         p_rgh
+metal         phaseChangeDarcySp
+metal 
+metal     Reconstructing volVectorFields
+metal 
+metal         pRghAcceleration
+metal         gradT
+metal         phaseChangeBuoyancySu
+metal         phaseChangeBuoyancyAcceleration
+metal         U
+metal         phaseChangeDarcyAcceleration
+metal         gradRho
+metal         vorticity
+metal 
+metal     Reconstructing surfaceScalarFields
+metal 
+metal         phi
+metal         energyFlux
+metal         energyAdvectiveFlux
+metal         heatFlux
+metal 
+metal Reconstructing point fields
+metal 
+metal     (no point fields)
+      
+mold  Reconstructing FV fields
+mold  
+mold      Reconstructing volScalarFields
+mold  
+mold          T
+mold  
+mold  Reconstructing point fields
+mold  
+mold      (no point fields)
+      
+      Collecting uniform files
+      
+      Time = 244s
+      
+metal Reconstructing FV fields
+metal 
+metal     Reconstructing volScalarFields
+metal 
+metal         phaseChangeSource:alpha1
+metal         CoCell
+metal         dAlphaLdt
+metal         phaseChangeModelDeltaT
+metal         phaseChangeSolidFraction
+metal         magPRghAcceleration
+metal         magPhaseChangeBuoyancyAcceleration
+metal         latentHeatRateVol
+metal         phaseChangeDragToBuoyancy
+metal         p
+metal         T
+metal         solidificationRate
+metal         magPhaseChangeDarcyAcceleration
+metal         dTdt
+metal         phaseChangeDarcyCoeff
+metal         rho
+metal         latentHeat
+metal         magGradRho
+metal         magSqrDevGradU
+metal         coolingRate
+metal         magGradT
+metal         phaseChangeDragToPressure
+metal         flowType
+metal         p_rgh
+metal         phaseChangeDarcySp
+metal 
+metal     Reconstructing volVectorFields
+metal 
+metal         pRghAcceleration
+metal         gradT
+metal         phaseChangeBuoyancySu
+metal         phaseChangeBuoyancyAcceleration
+metal         U
+metal         phaseChangeDarcyAcceleration
+metal         gradRho
+metal         vorticity
+metal 
+metal     Reconstructing surfaceScalarFields
+metal 
+metal         phi
+metal         energyFlux
+metal         energyAdvectiveFlux
+metal         heatFlux
+metal 
+metal Reconstructing point fields
+metal 
+metal     (no point fields)
+      
+mold  Reconstructing FV fields
+mold  
+mold      Reconstructing volScalarFields
+mold  
+mold          T
+mold  
+mold  Reconstructing point fields
+mold  
+mold      (no point fields)
+      
+      Collecting uniform files
+      
+      Time = 245s
+      
+metal Reconstructing FV fields
+metal 
+metal     Reconstructing volScalarFields
+metal 
+metal         phaseChangeSource:alpha1
+metal         CoCell
+metal         dAlphaLdt
+metal         phaseChangeModelDeltaT
+metal         phaseChangeSolidFraction
+metal         magPRghAcceleration
+metal         magPhaseChangeBuoyancyAcceleration
+metal         latentHeatRateVol
+metal         phaseChangeDragToBuoyancy
+metal         p
+metal         T
+metal         solidificationRate
+metal         magPhaseChangeDarcyAcceleration
+metal         dTdt
+metal         phaseChangeDarcyCoeff
+metal         rho
+metal         latentHeat
+metal         magGradRho
+metal         magSqrDevGradU
+metal         coolingRate
+metal         magGradT
+metal         phaseChangeDragToPressure
+metal         flowType
+metal         p_rgh
+metal         phaseChangeDarcySp
+metal 
+metal     Reconstructing volVectorFields
+metal 
+metal         pRghAcceleration
+metal         gradT
+metal         phaseChangeBuoyancySu
+metal         phaseChangeBuoyancyAcceleration
+metal         U
+metal         phaseChangeDarcyAcceleration
+metal         gradRho
+metal         vorticity
+metal 
+metal     Reconstructing surfaceScalarFields
+metal 
+metal         phi
+metal         energyFlux
+metal         energyAdvectiveFlux
+metal         heatFlux
+metal 
+metal Reconstructing point fields
+metal 
+metal     (no point fields)
+      
+mold  Reconstructing FV fields
+mold  
+mold      Reconstructing volScalarFields
+mold  
+mold          T
+mold  
+mold  Reconstructing point fields
+mold  
+mold      (no point fields)
+      
+      Collecting uniform files
+      
+      Time = 246s
+      
+metal Reconstructing FV fields
+metal 
+metal     Reconstructing volScalarFields
+metal 
+metal         phaseChangeSource:alpha1
+metal         CoCell
+metal         dAlphaLdt
+metal         phaseChangeModelDeltaT
+metal         phaseChangeSolidFraction
+metal         magPRghAcceleration
+metal         magPhaseChangeBuoyancyAcceleration
+metal         latentHeatRateVol
+metal         phaseChangeDragToBuoyancy
+metal         p
+metal         T
+metal         solidificationRate
+metal         magPhaseChangeDarcyAcceleration
+metal         dTdt
+metal         phaseChangeDarcyCoeff
+metal         rho
+metal         latentHeat
+metal         magGradRho
+metal         magSqrDevGradU
+metal         coolingRate
+metal         magGradT
+metal         phaseChangeDragToPressure
+metal         flowType
+metal         p_rgh
+metal         phaseChangeDarcySp
+metal 
+metal     Reconstructing volVectorFields
+metal 
+metal         pRghAcceleration
+metal         gradT
+metal         phaseChangeBuoyancySu
+metal         phaseChangeBuoyancyAcceleration
+metal         U
+metal         phaseChangeDarcyAcceleration
+metal         gradRho
+metal         vorticity
+metal 
+metal     Reconstructing surfaceScalarFields
+metal 
+metal         phi
+metal         energyFlux
+metal         energyAdvectiveFlux
+metal         heatFlux
+metal 
+metal Reconstructing point fields
+metal 
+metal     (no point fields)
+      
+mold  Reconstructing FV fields
+mold  
+mold      Reconstructing volScalarFields
+mold  
+mold          T
+mold  
+mold  Reconstructing point fields
+mold  
+mold      (no point fields)
+      
+      Collecting uniform files
+      
+      Time = 247s
+      
+metal Reconstructing FV fields
+metal 
+metal     Reconstructing volScalarFields
+metal 
+metal         phaseChangeSource:alpha1
+metal         CoCell
+metal         dAlphaLdt
+metal         phaseChangeModelDeltaT
+metal         phaseChangeSolidFraction
+metal         magPRghAcceleration
+metal         magPhaseChangeBuoyancyAcceleration
+metal         latentHeatRateVol
+metal         phaseChangeDragToBuoyancy
+metal         p
+metal         T
+metal         solidificationRate
+metal         magPhaseChangeDarcyAcceleration
+metal         dTdt
+metal         phaseChangeDarcyCoeff
+metal         rho
+metal         latentHeat
+metal         magGradRho
+metal         magSqrDevGradU
+metal         coolingRate
+metal         magGradT
+metal         phaseChangeDragToPressure
+metal         flowType
+metal         p_rgh
+metal         phaseChangeDarcySp
+metal 
+metal     Reconstructing volVectorFields
+metal 
+metal         pRghAcceleration
+metal         gradT
+metal         phaseChangeBuoyancySu
+metal         phaseChangeBuoyancyAcceleration
+metal         U
+metal         phaseChangeDarcyAcceleration
+metal         gradRho
+metal         vorticity
+metal 
+metal     Reconstructing surfaceScalarFields
+metal 
+metal         phi
+metal         energyFlux
+metal         energyAdvectiveFlux
+metal         heatFlux
+metal 
+metal Reconstructing point fields
+metal 
+metal     (no point fields)
+      
+mold  Reconstructing FV fields
+mold  
+mold      Reconstructing volScalarFields
+mold  
+mold          T
+mold  
+mold  Reconstructing point fields
+mold  
+mold      (no point fields)
+      
+      Collecting uniform files
+      
+      Time = 248s
+      
+metal Reconstructing FV fields
+metal 
+metal     Reconstructing volScalarFields
+metal 
+metal         phaseChangeSource:alpha1
+metal         CoCell
+metal         dAlphaLdt
+metal         phaseChangeModelDeltaT
+metal         phaseChangeSolidFraction
+metal         magPRghAcceleration
+metal         magPhaseChangeBuoyancyAcceleration
+metal         latentHeatRateVol
+metal         phaseChangeDragToBuoyancy
+metal         p
+metal         T
+metal         solidificationRate
+metal         magPhaseChangeDarcyAcceleration
+metal         dTdt
+metal         phaseChangeDarcyCoeff
+metal         rho
+metal         latentHeat
+metal         magGradRho
+metal         magSqrDevGradU
+metal         coolingRate
+metal         magGradT
+metal         phaseChangeDragToPressure
+metal         flowType
+metal         p_rgh
+metal         phaseChangeDarcySp
+metal 
+metal     Reconstructing volVectorFields
+metal 
+metal         pRghAcceleration
+metal         gradT
+metal         phaseChangeBuoyancySu
+metal         phaseChangeBuoyancyAcceleration
+metal         U
+metal         phaseChangeDarcyAcceleration
+metal         gradRho
+metal         vorticity
+metal 
+metal     Reconstructing surfaceScalarFields
+metal 
+metal         phi
+metal         energyFlux
+metal         energyAdvectiveFlux
+metal         heatFlux
+metal 
+metal Reconstructing point fields
+metal 
+metal     (no point fields)
+      
+mold  Reconstructing FV fields
+mold  
+mold      Reconstructing volScalarFields
+mold  
+mold          T
+mold  
+mold  Reconstructing point fields
+mold  
+mold      (no point fields)
+      
+      Collecting uniform files
+      
+      Time = 249s
+      
+metal Reconstructing FV fields
+metal 
+metal     Reconstructing volScalarFields
+metal 
+metal         phaseChangeSource:alpha1
+metal         CoCell
+metal         dAlphaLdt
+metal         phaseChangeModelDeltaT
+metal         phaseChangeSolidFraction
+metal         magPRghAcceleration
+metal         magPhaseChangeBuoyancyAcceleration
+metal         latentHeatRateVol
+metal         phaseChangeDragToBuoyancy
+metal         p
+metal         T
+metal         solidificationRate
+metal         magPhaseChangeDarcyAcceleration
+metal         dTdt
+metal         phaseChangeDarcyCoeff
+metal         rho
+metal         latentHeat
+metal         magGradRho
+metal         magSqrDevGradU
+metal         coolingRate
+metal         magGradT
+metal         phaseChangeDragToPressure
+metal         flowType
+metal         p_rgh
+metal         phaseChangeDarcySp
+metal 
+metal     Reconstructing volVectorFields
+metal 
+metal         pRghAcceleration
+metal         gradT
+metal         phaseChangeBuoyancySu
+metal         phaseChangeBuoyancyAcceleration
+metal         U
+metal         phaseChangeDarcyAcceleration
+metal         gradRho
+metal         vorticity
+metal 
+metal     Reconstructing surfaceScalarFields
+metal 
+metal         phi
+metal         energyFlux
+metal         energyAdvectiveFlux
+metal         heatFlux
+metal 
+metal Reconstructing point fields
+metal 
+metal     (no point fields)
+      
+mold  Reconstructing FV fields
+mold  
+mold      Reconstructing volScalarFields
+mold  
+mold          T
+mold  
+mold  Reconstructing point fields
+mold  
+mold      (no point fields)
+      
+      Collecting uniform files
+      
+      Time = 250s
+      
+metal Reconstructing FV fields
+metal 
+metal     Reconstructing volScalarFields
+metal 
+metal         phaseChangeSource:alpha1
+metal         CoCell
+metal         dAlphaLdt
+metal         phaseChangeModelDeltaT
+metal         phaseChangeSolidFraction
+metal         magPRghAcceleration
+metal         magPhaseChangeBuoyancyAcceleration
+metal         latentHeatRateVol
+metal         phaseChangeDragToBuoyancy
+metal         p
+metal         T
+metal         solidificationRate
+metal         magPhaseChangeDarcyAcceleration
+metal         dTdt
+metal         phaseChangeDarcyCoeff
+metal         rho
+metal         latentHeat
+metal         magGradRho
+metal         magSqrDevGradU
+metal         coolingRate
+metal         magGradT
+metal         phaseChangeDragToPressure
+metal         flowType
+metal         p_rgh
+metal         phaseChangeDarcySp
+metal 
+metal     Reconstructing volVectorFields
+metal 
+metal         pRghAcceleration
+metal         gradT
+metal         phaseChangeBuoyancySu
+metal         phaseChangeBuoyancyAcceleration
+metal         U
+metal         phaseChangeDarcyAcceleration
+metal         gradRho
+metal         vorticity
+metal 
+metal     Reconstructing surfaceScalarFields
+metal 
+metal         phi
+metal         energyFlux
+metal         energyAdvectiveFlux
+metal         heatFlux
+metal 
+metal Reconstructing point fields
+metal 
+metal     (no point fields)
+      
+mold  Reconstructing FV fields
+mold  
+mold      Reconstructing volScalarFields
+mold  
+mold          T
+mold  
+mold  Reconstructing point fields
+mold  
+mold      (no point fields)
+      
+      Collecting uniform files
+      
+      Time = 251s
+      
+metal Reconstructing FV fields
+metal 
+metal     Reconstructing volScalarFields
+metal 
+metal         phaseChangeSource:alpha1
+metal         CoCell
+metal         dAlphaLdt
+metal         phaseChangeModelDeltaT
+metal         phaseChangeSolidFraction
+metal         magPRghAcceleration
+metal         magPhaseChangeBuoyancyAcceleration
+metal         latentHeatRateVol
+metal         phaseChangeDragToBuoyancy
+metal         p
+metal         T
+metal         solidificationRate
+metal         magPhaseChangeDarcyAcceleration
+metal         dTdt
+metal         phaseChangeDarcyCoeff
+metal         rho
+metal         latentHeat
+metal         magGradRho
+metal         magSqrDevGradU
+metal         coolingRate
+metal         magGradT
+metal         phaseChangeDragToPressure
+metal         flowType
+metal         p_rgh
+metal         phaseChangeDarcySp
+metal 
+metal     Reconstructing volVectorFields
+metal 
+metal         pRghAcceleration
+metal         gradT
+metal         phaseChangeBuoyancySu
+metal         phaseChangeBuoyancyAcceleration
+metal         U
+metal         phaseChangeDarcyAcceleration
+metal         gradRho
+metal         vorticity
+metal 
+metal     Reconstructing surfaceScalarFields
+metal 
+metal         phi
+metal         energyFlux
+metal         energyAdvectiveFlux
+metal         heatFlux
+metal 
+metal Reconstructing point fields
+metal 
+metal     (no point fields)
+      
+mold  Reconstructing FV fields
+mold  
+mold      Reconstructing volScalarFields
+mold  
+mold          T
+mold  
+mold  Reconstructing point fields
+mold  
+mold      (no point fields)
+      
+      Collecting uniform files
+      
+      Time = 252s
+      
+metal Reconstructing FV fields
+metal 
+metal     Reconstructing volScalarFields
+metal 
+metal         phaseChangeSource:alpha1
+metal         CoCell
+metal         dAlphaLdt
+metal         phaseChangeModelDeltaT
+metal         phaseChangeSolidFraction
+metal         magPRghAcceleration
+metal         magPhaseChangeBuoyancyAcceleration
+metal         latentHeatRateVol
+metal         phaseChangeDragToBuoyancy
+metal         p
+metal         T
+metal         solidificationRate
+metal         magPhaseChangeDarcyAcceleration
+metal         dTdt
+metal         phaseChangeDarcyCoeff
+metal         rho
+metal         latentHeat
+metal         magGradRho
+metal         magSqrDevGradU
+metal         coolingRate
+metal         magGradT
+metal         phaseChangeDragToPressure
+metal         flowType
+metal         p_rgh
+metal         phaseChangeDarcySp
+metal 
+metal     Reconstructing volVectorFields
+metal 
+metal         pRghAcceleration
+metal         gradT
+metal         phaseChangeBuoyancySu
+metal         phaseChangeBuoyancyAcceleration
+metal         U
+metal         phaseChangeDarcyAcceleration
+metal         gradRho
+metal         vorticity
+metal 
+metal     Reconstructing surfaceScalarFields
+metal 
+metal         phi
+metal         energyFlux
+metal         energyAdvectiveFlux
+metal         heatFlux
+metal 
+metal Reconstructing point fields
+metal 
+metal     (no point fields)
+      
+mold  Reconstructing FV fields
+mold  
+mold      Reconstructing volScalarFields
+mold  
+mold          T
+mold  
+mold  Reconstructing point fields
+mold  
+mold      (no point fields)
+      
+      Collecting uniform files
+      
+      Time = 253s
+      
+metal Reconstructing FV fields
+metal 
+metal     Reconstructing volScalarFields
+metal 
+metal         phaseChangeSource:alpha1
+metal         CoCell
+metal         dAlphaLdt
+metal         phaseChangeModelDeltaT
+metal         phaseChangeSolidFraction
+metal         magPRghAcceleration
+metal         magPhaseChangeBuoyancyAcceleration
+metal         latentHeatRateVol
+metal         phaseChangeDragToBuoyancy
+metal         p
+metal         T
+metal         solidificationRate
+metal         magPhaseChangeDarcyAcceleration
+metal         dTdt
+metal         phaseChangeDarcyCoeff
+metal         rho
+metal         latentHeat
+metal         magGradRho
+metal         magSqrDevGradU
+metal         coolingRate
+metal         magGradT
+metal         phaseChangeDragToPressure
+metal         flowType
+metal         p_rgh
+metal         phaseChangeDarcySp
+metal 
+metal     Reconstructing volVectorFields
+metal 
+metal         pRghAcceleration
+metal         gradT
+metal         phaseChangeBuoyancySu
+metal         phaseChangeBuoyancyAcceleration
+metal         U
+metal         phaseChangeDarcyAcceleration
+metal         gradRho
+metal         vorticity
+metal 
+metal     Reconstructing surfaceScalarFields
+metal 
+metal         phi
+metal         energyFlux
+metal         energyAdvectiveFlux
+metal         heatFlux
+metal 
+metal Reconstructing point fields
+metal 
+metal     (no point fields)
+      
+mold  Reconstructing FV fields
+mold  
+mold      Reconstructing volScalarFields
+mold  
+mold          T
+mold  
+mold  Reconstructing point fields
+mold  
+mold      (no point fields)
+      
+      Collecting uniform files
+      
+      Time = 254s
+      
+metal Reconstructing FV fields
+metal 
+metal     Reconstructing volScalarFields
+metal 
+metal         phaseChangeSource:alpha1
+metal         CoCell
+metal         dAlphaLdt
+metal         phaseChangeModelDeltaT
+metal         phaseChangeSolidFraction
+metal         magPRghAcceleration
+metal         magPhaseChangeBuoyancyAcceleration
+metal         latentHeatRateVol
+metal         phaseChangeDragToBuoyancy
+metal         p
+metal         T
+metal         solidificationRate
+metal         magPhaseChangeDarcyAcceleration
+metal         dTdt
+metal         phaseChangeDarcyCoeff
+metal         rho
+metal         latentHeat
+metal         magGradRho
+metal         magSqrDevGradU
+metal         coolingRate
+metal         magGradT
+metal         phaseChangeDragToPressure
+metal         flowType
+metal         p_rgh
+metal         phaseChangeDarcySp
+metal 
+metal     Reconstructing volVectorFields
+metal 
+metal         pRghAcceleration
+metal         gradT
+metal         phaseChangeBuoyancySu
+metal         phaseChangeBuoyancyAcceleration
+metal         U
+metal         phaseChangeDarcyAcceleration
+metal         gradRho
+metal         vorticity
+metal 
+metal     Reconstructing surfaceScalarFields
+metal 
+metal         phi
+metal         energyFlux
+metal         energyAdvectiveFlux
+metal         heatFlux
+metal 
+metal Reconstructing point fields
+metal 
+metal     (no point fields)
+      
+mold  Reconstructing FV fields
+mold  
+mold      Reconstructing volScalarFields
+mold  
+mold          T
+mold  
+mold  Reconstructing point fields
+mold  
+mold      (no point fields)
+      
+      Collecting uniform files
+      
+      Time = 255s
+      
+metal Reconstructing FV fields
+metal 
+metal     Reconstructing volScalarFields
+metal 
+metal         phaseChangeSource:alpha1
+metal         CoCell
+metal         dAlphaLdt
+metal         phaseChangeModelDeltaT
+metal         phaseChangeSolidFraction
+metal         magPRghAcceleration
+metal         magPhaseChangeBuoyancyAcceleration
+metal         latentHeatRateVol
+metal         phaseChangeDragToBuoyancy
+metal         p
+metal         T
+metal         solidificationRate
+metal         magPhaseChangeDarcyAcceleration
+metal         dTdt
+metal         phaseChangeDarcyCoeff
+metal         rho
+metal         latentHeat
+metal         magGradRho
+metal         magSqrDevGradU
+metal         coolingRate
+metal         magGradT
+metal         phaseChangeDragToPressure
+metal         flowType
+metal         p_rgh
+metal         phaseChangeDarcySp
+metal 
+metal     Reconstructing volVectorFields
+metal 
+metal         pRghAcceleration
+metal         gradT
+metal         phaseChangeBuoyancySu
+metal         phaseChangeBuoyancyAcceleration
+metal         U
+metal         phaseChangeDarcyAcceleration
+metal         gradRho
+metal         vorticity
+metal 
+metal     Reconstructing surfaceScalarFields
+metal 
+metal         phi
+metal         energyFlux
+metal         energyAdvectiveFlux
+metal         heatFlux
+metal 
+metal Reconstructing point fields
+metal 
+metal     (no point fields)
+      
+mold  Reconstructing FV fields
+mold  
+mold      Reconstructing volScalarFields
+mold  
+mold          T
+mold  
+mold  Reconstructing point fields
+mold  
+mold      (no point fields)
+      
+      Collecting uniform files
+      
+      Time = 256s
+      
+metal Reconstructing FV fields
+metal 
+metal     Reconstructing volScalarFields
+metal 
+metal         phaseChangeSource:alpha1
+metal         CoCell
+metal         dAlphaLdt
+metal         phaseChangeModelDeltaT
+metal         phaseChangeSolidFraction
+metal         magPRghAcceleration
+metal         magPhaseChangeBuoyancyAcceleration
+metal         latentHeatRateVol
+metal         phaseChangeDragToBuoyancy
+metal         p
+metal         T
+metal         solidificationRate
+metal         magPhaseChangeDarcyAcceleration
+metal         dTdt
+metal         phaseChangeDarcyCoeff
+metal         rho
+metal         latentHeat
+metal         magGradRho
+metal         magSqrDevGradU
+metal         coolingRate
+metal         magGradT
+metal         phaseChangeDragToPressure
+metal         flowType
+metal         p_rgh
+metal         phaseChangeDarcySp
+metal 
+metal     Reconstructing volVectorFields
+metal 
+metal         pRghAcceleration
+metal         gradT
+metal         phaseChangeBuoyancySu
+metal         phaseChangeBuoyancyAcceleration
+metal         U
+metal         phaseChangeDarcyAcceleration
+metal         gradRho
+metal         vorticity
+metal 
+metal     Reconstructing surfaceScalarFields
+metal 
+metal         phi
+metal         energyFlux
+metal         energyAdvectiveFlux
+metal         heatFlux
+metal 
+metal Reconstructing point fields
+metal 
+metal     (no point fields)
+      
+mold  Reconstructing FV fields
+mold  
+mold      Reconstructing volScalarFields
+mold  
+mold          T
+mold  
+mold  Reconstructing point fields
+mold  
+mold      (no point fields)
+      
+      Collecting uniform files
+      
+      Time = 257s
+      
+metal Reconstructing FV fields
+metal 
+metal     Reconstructing volScalarFields
+metal 
+metal         phaseChangeSource:alpha1
+metal         CoCell
+metal         dAlphaLdt
+metal         phaseChangeModelDeltaT
+metal         phaseChangeSolidFraction
+metal         magPRghAcceleration
+metal         magPhaseChangeBuoyancyAcceleration
+metal         latentHeatRateVol
+metal         phaseChangeDragToBuoyancy
+metal         p
+metal         T
+metal         solidificationRate
+metal         magPhaseChangeDarcyAcceleration
+metal         dTdt
+metal         phaseChangeDarcyCoeff
+metal         rho
+metal         latentHeat
+metal         magGradRho
+metal         magSqrDevGradU
+metal         coolingRate
+metal         magGradT
+metal         phaseChangeDragToPressure
+metal         flowType
+metal         p_rgh
+metal         phaseChangeDarcySp
+metal 
+metal     Reconstructing volVectorFields
+metal 
+metal         pRghAcceleration
+metal         gradT
+metal         phaseChangeBuoyancySu
+metal         phaseChangeBuoyancyAcceleration
+metal         U
+metal         phaseChangeDarcyAcceleration
+metal         gradRho
+metal         vorticity
+metal 
+metal     Reconstructing surfaceScalarFields
+metal 
+metal         phi
+metal         energyFlux
+metal         energyAdvectiveFlux
+metal         heatFlux
+metal 
+metal Reconstructing point fields
+metal 
+metal     (no point fields)
+      
+mold  Reconstructing FV fields
+mold  
+mold      Reconstructing volScalarFields
+mold  
+mold          T
+mold  
+mold  Reconstructing point fields
+mold  
+mold      (no point fields)
+      
+      Collecting uniform files
+      
+      Time = 258s
+      
+metal Reconstructing FV fields
+metal 
+metal     Reconstructing volScalarFields
+metal 
+metal         phaseChangeSource:alpha1
+metal         CoCell
+metal         dAlphaLdt
+metal         phaseChangeModelDeltaT
+metal         phaseChangeSolidFraction
+metal         magPRghAcceleration
+metal         magPhaseChangeBuoyancyAcceleration
+metal         latentHeatRateVol
+metal         phaseChangeDragToBuoyancy
+metal         p
+metal         T
+metal         solidificationRate
+metal         magPhaseChangeDarcyAcceleration
+metal         dTdt
+metal         phaseChangeDarcyCoeff
+metal         rho
+metal         latentHeat
+metal         magGradRho
+metal         magSqrDevGradU
+metal         coolingRate
+metal         magGradT
+metal         phaseChangeDragToPressure
+metal         flowType
+metal         p_rgh
+metal         phaseChangeDarcySp
+metal 
+metal     Reconstructing volVectorFields
+metal 
+metal         pRghAcceleration
+metal         gradT
+metal         phaseChangeBuoyancySu
+metal         phaseChangeBuoyancyAcceleration
+metal         U
+metal         phaseChangeDarcyAcceleration
+metal         gradRho
+metal         vorticity
+metal 
+metal     Reconstructing surfaceScalarFields
+metal 
+metal         phi
+metal         energyFlux
+metal         energyAdvectiveFlux
+metal         heatFlux
+metal 
+metal Reconstructing point fields
+metal 
+metal     (no point fields)
+      
+mold  Reconstructing FV fields
+mold  
+mold      Reconstructing volScalarFields
+mold  
+mold          T
+mold  
+mold  Reconstructing point fields
+mold  
+mold      (no point fields)
+      
+      Collecting uniform files
+      
+      Time = 259s
+      
+metal Reconstructing FV fields
+metal 
+metal     Reconstructing volScalarFields
+metal 
+metal         phaseChangeSource:alpha1
+metal         CoCell
+metal         dAlphaLdt
+metal         phaseChangeModelDeltaT
+metal         phaseChangeSolidFraction
+metal         magPRghAcceleration
+metal         magPhaseChangeBuoyancyAcceleration
+metal         latentHeatRateVol
+metal         phaseChangeDragToBuoyancy
+metal         p
+metal         T
+metal         solidificationRate
+metal         magPhaseChangeDarcyAcceleration
+metal         dTdt
+metal         phaseChangeDarcyCoeff
+metal         rho
+metal         latentHeat
+metal         magGradRho
+metal         magSqrDevGradU
+metal         coolingRate
+metal         magGradT
+metal         phaseChangeDragToPressure
+metal         flowType
+metal         p_rgh
+metal         phaseChangeDarcySp
+metal 
+metal     Reconstructing volVectorFields
+metal 
+metal         pRghAcceleration
+metal         gradT
+metal         phaseChangeBuoyancySu
+metal         phaseChangeBuoyancyAcceleration
+metal         U
+metal         phaseChangeDarcyAcceleration
+metal         gradRho
+metal         vorticity
+metal 
+metal     Reconstructing surfaceScalarFields
+metal 
+metal         phi
+metal         energyFlux
+metal         energyAdvectiveFlux
+metal         heatFlux
+metal 
+metal Reconstructing point fields
+metal 
+metal     (no point fields)
+      
+mold  Reconstructing FV fields
+mold  
+mold      Reconstructing volScalarFields
+mold  
+mold          T
+mold  
+mold  Reconstructing point fields
+mold  
+mold      (no point fields)
+      
+      Collecting uniform files
+      
+      Time = 260s
+      
+metal Reconstructing FV fields
+metal 
+metal     Reconstructing volScalarFields
+metal 
+metal         phaseChangeSource:alpha1
+metal         CoCell
+metal         dAlphaLdt
+metal         phaseChangeModelDeltaT
+metal         phaseChangeSolidFraction
+metal         magPRghAcceleration
+metal         magPhaseChangeBuoyancyAcceleration
+metal         latentHeatRateVol
+metal         phaseChangeDragToBuoyancy
+metal         p
+metal         T
+metal         solidificationRate
+metal         magPhaseChangeDarcyAcceleration
+metal         dTdt
+metal         phaseChangeDarcyCoeff
+metal         rho
+metal         latentHeat
+metal         magGradRho
+metal         magSqrDevGradU
+metal         coolingRate
+metal         magGradT
+metal         phaseChangeDragToPressure
+metal         flowType
+metal         p_rgh
+metal         phaseChangeDarcySp
+metal 
+metal     Reconstructing volVectorFields
+metal 
+metal         pRghAcceleration
+metal         gradT
+metal         phaseChangeBuoyancySu
+metal         phaseChangeBuoyancyAcceleration
+metal         U
+metal         phaseChangeDarcyAcceleration
+metal         gradRho
+metal         vorticity
+metal 
+metal     Reconstructing surfaceScalarFields
+metal 
+metal         phi
+metal         energyFlux
+metal         energyAdvectiveFlux
+metal         heatFlux
+metal 
+metal Reconstructing point fields
+metal 
+metal     (no point fields)
+      
+mold  Reconstructing FV fields
+mold  
+mold      Reconstructing volScalarFields
+mold  
+mold          T
+mold  
+mold  Reconstructing point fields
+mold  
+mold      (no point fields)
+      
+      Collecting uniform files
+      
+      Time = 261s
+      
+metal Reconstructing FV fields
+metal 
+metal     Reconstructing volScalarFields
+metal 
+metal         phaseChangeSource:alpha1
+metal         CoCell
+metal         dAlphaLdt
+metal         phaseChangeModelDeltaT
+metal         phaseChangeSolidFraction
+metal         magPRghAcceleration
+metal         magPhaseChangeBuoyancyAcceleration
+metal         latentHeatRateVol
+metal         phaseChangeDragToBuoyancy
+metal         p
+metal         T
+metal         solidificationRate
+metal         magPhaseChangeDarcyAcceleration
+metal         dTdt
+metal         phaseChangeDarcyCoeff
+metal         rho
+metal         latentHeat
+metal         magGradRho
+metal         magSqrDevGradU
+metal         coolingRate
+metal         magGradT
+metal         phaseChangeDragToPressure
+metal         flowType
+metal         p_rgh
+metal         phaseChangeDarcySp
+metal 
+metal     Reconstructing volVectorFields
+metal 
+metal         pRghAcceleration
+metal         gradT
+metal         phaseChangeBuoyancySu
+metal         phaseChangeBuoyancyAcceleration
+metal         U
+metal         phaseChangeDarcyAcceleration
+metal         gradRho
+metal         vorticity
+metal 
+metal     Reconstructing surfaceScalarFields
+metal 
+metal         phi
+metal         energyFlux
+metal         energyAdvectiveFlux
+metal         heatFlux
+metal 
+metal Reconstructing point fields
+metal 
+metal     (no point fields)
+      
+mold  Reconstructing FV fields
+mold  
+mold      Reconstructing volScalarFields
+mold  
+mold          T
+mold  
+mold  Reconstructing point fields
+mold  
+mold      (no point fields)
+      
+      Collecting uniform files
+      
+      Time = 262s
+      
+metal Reconstructing FV fields
+metal 
+metal     Reconstructing volScalarFields
+metal 
+metal         phaseChangeSource:alpha1
+metal         CoCell
+metal         dAlphaLdt
+metal         phaseChangeModelDeltaT
+metal         phaseChangeSolidFraction
+metal         magPRghAcceleration
+metal         magPhaseChangeBuoyancyAcceleration
+metal         latentHeatRateVol
+metal         phaseChangeDragToBuoyancy
+metal         p
+metal         T
+metal         solidificationRate
+metal         magPhaseChangeDarcyAcceleration
+metal         dTdt
+metal         phaseChangeDarcyCoeff
+metal         rho
+metal         latentHeat
+metal         magGradRho
+metal         magSqrDevGradU
+metal         coolingRate
+metal         magGradT
+metal         phaseChangeDragToPressure
+metal         flowType
+metal         p_rgh
+metal         phaseChangeDarcySp
+metal 
+metal     Reconstructing volVectorFields
+metal 
+metal         pRghAcceleration
+metal         gradT
+metal         phaseChangeBuoyancySu
+metal         phaseChangeBuoyancyAcceleration
+metal         U
+metal         phaseChangeDarcyAcceleration
+metal         gradRho
+metal         vorticity
+metal 
+metal     Reconstructing surfaceScalarFields
+metal 
+metal         phi
+metal         energyFlux
+metal         energyAdvectiveFlux
+metal         heatFlux
+metal 
+metal Reconstructing point fields
+metal 
+metal     (no point fields)
+      
+mold  Reconstructing FV fields
+mold  
+mold      Reconstructing volScalarFields
+mold  
+mold          T
+mold  
+mold  Reconstructing point fields
+mold  
+mold      (no point fields)
+      
+      Collecting uniform files
+      
+      Time = 263s
+      
+metal Reconstructing FV fields
+metal 
+metal     Reconstructing volScalarFields
+metal 
+metal         phaseChangeSource:alpha1
+metal         CoCell
+metal         dAlphaLdt
+metal         phaseChangeModelDeltaT
+metal         phaseChangeSolidFraction
+metal         magPRghAcceleration
+metal         magPhaseChangeBuoyancyAcceleration
+metal         latentHeatRateVol
+metal         phaseChangeDragToBuoyancy
+metal         p
+metal         T
+metal         solidificationRate
+metal         magPhaseChangeDarcyAcceleration
+metal         dTdt
+metal         phaseChangeDarcyCoeff
+metal         rho
+metal         latentHeat
+metal         magGradRho
+metal         magSqrDevGradU
+metal         coolingRate
+metal         magGradT
+metal         phaseChangeDragToPressure
+metal         flowType
+metal         p_rgh
+metal         phaseChangeDarcySp
+metal 
+metal     Reconstructing volVectorFields
+metal 
+metal         pRghAcceleration
+metal         gradT
+metal         phaseChangeBuoyancySu
+metal         phaseChangeBuoyancyAcceleration
+metal         U
+metal         phaseChangeDarcyAcceleration
+metal         gradRho
+metal         vorticity
+metal 
+metal     Reconstructing surfaceScalarFields
+metal 
+metal         phi
+metal         energyFlux
+metal         energyAdvectiveFlux
+metal         heatFlux
+metal 
+metal Reconstructing point fields
+metal 
+metal     (no point fields)
+      
+mold  Reconstructing FV fields
+mold  
+mold      Reconstructing volScalarFields
+mold  
+mold          T
+mold  
+mold  Reconstructing point fields
+mold  
+mold      (no point fields)
+      
+      Collecting uniform files
+      
+      Time = 264s
+      
+metal Reconstructing FV fields
+metal 
+metal     Reconstructing volScalarFields
+metal 
+metal         phaseChangeSource:alpha1
+metal         CoCell
+metal         dAlphaLdt
+metal         phaseChangeModelDeltaT
+metal         phaseChangeSolidFraction
+metal         magPRghAcceleration
+metal         magPhaseChangeBuoyancyAcceleration
+metal         latentHeatRateVol
+metal         phaseChangeDragToBuoyancy
+metal         p
+metal         T
+metal         solidificationRate
+metal         magPhaseChangeDarcyAcceleration
+metal         dTdt
+metal         phaseChangeDarcyCoeff
+metal         rho
+metal         latentHeat
+metal         magGradRho
+metal         magSqrDevGradU
+metal         coolingRate
+metal         magGradT
+metal         phaseChangeDragToPressure
+metal         flowType
+metal         p_rgh
+metal         phaseChangeDarcySp
+metal 
+metal     Reconstructing volVectorFields
+metal 
+metal         pRghAcceleration
+metal         gradT
+metal         phaseChangeBuoyancySu
+metal         phaseChangeBuoyancyAcceleration
+metal         U
+metal         phaseChangeDarcyAcceleration
+metal         gradRho
+metal         vorticity
+metal 
+metal     Reconstructing surfaceScalarFields
+metal 
+metal         phi
+metal         energyFlux
+metal         energyAdvectiveFlux
+metal         heatFlux
+metal 
+metal Reconstructing point fields
+metal 
+metal     (no point fields)
+      
+mold  Reconstructing FV fields
+mold  
+mold      Reconstructing volScalarFields
+mold  
+mold          T
+mold  
+mold  Reconstructing point fields
+mold  
+mold      (no point fields)
+      
+      Collecting uniform files
+      
+      Time = 265s
+      
+metal Reconstructing FV fields
+metal 
+metal     Reconstructing volScalarFields
+metal 
+metal         phaseChangeSource:alpha1
+metal         CoCell
+metal         dAlphaLdt
+metal         phaseChangeModelDeltaT
+metal         phaseChangeSolidFraction
+metal         magPRghAcceleration
+metal         magPhaseChangeBuoyancyAcceleration
+metal         latentHeatRateVol
+metal         phaseChangeDragToBuoyancy
+metal         p
+metal         T
+metal         solidificationRate
+metal         magPhaseChangeDarcyAcceleration
+metal         dTdt
+metal         phaseChangeDarcyCoeff
+metal         rho
+metal         latentHeat
+metal         magGradRho
+metal         magSqrDevGradU
+metal         coolingRate
+metal         magGradT
+metal         phaseChangeDragToPressure
+metal         flowType
+metal         p_rgh
+metal         phaseChangeDarcySp
+metal 
+metal     Reconstructing volVectorFields
+metal 
+metal         pRghAcceleration
+metal         gradT
+metal         phaseChangeBuoyancySu
+metal         phaseChangeBuoyancyAcceleration
+metal         U
+metal         phaseChangeDarcyAcceleration
+metal         gradRho
+metal         vorticity
+metal 
+metal     Reconstructing surfaceScalarFields
+metal 
+metal         phi
+metal         energyFlux
+metal         energyAdvectiveFlux
+metal         heatFlux
+metal 
+metal Reconstructing point fields
+metal 
+metal     (no point fields)
+      
+mold  Reconstructing FV fields
+mold  
+mold      Reconstructing volScalarFields
+mold  
+mold          T
+mold  
+mold  Reconstructing point fields
+mold  
+mold      (no point fields)
+      
+      Collecting uniform files
+      
+      Time = 266s
+      
+metal Reconstructing FV fields
+metal 
+metal     Reconstructing volScalarFields
+metal 
+metal         phaseChangeSource:alpha1
+metal         CoCell
+metal         dAlphaLdt
+metal         phaseChangeModelDeltaT
+metal         phaseChangeSolidFraction
+metal         magPRghAcceleration
+metal         magPhaseChangeBuoyancyAcceleration
+metal         latentHeatRateVol
+metal         phaseChangeDragToBuoyancy
+metal         p
+metal         T
+metal         solidificationRate
+metal         magPhaseChangeDarcyAcceleration
+metal         dTdt
+metal         phaseChangeDarcyCoeff
+metal         rho
+metal         latentHeat
+metal         magGradRho
+metal         magSqrDevGradU
+metal         coolingRate
+metal         magGradT
+metal         phaseChangeDragToPressure
+metal         flowType
+metal         p_rgh
+metal         phaseChangeDarcySp
+metal 
+metal     Reconstructing volVectorFields
+metal 
+metal         pRghAcceleration
+metal         gradT
+metal         phaseChangeBuoyancySu
+metal         phaseChangeBuoyancyAcceleration
+metal         U
+metal         phaseChangeDarcyAcceleration
+metal         gradRho
+metal         vorticity
+metal 
+metal     Reconstructing surfaceScalarFields
+metal 
+metal         phi
+metal         energyFlux
+metal         energyAdvectiveFlux
+metal         heatFlux
+metal 
+metal Reconstructing point fields
+metal 
+metal     (no point fields)
+      
+mold  Reconstructing FV fields
+mold  
+mold      Reconstructing volScalarFields
+mold  
+mold          T
+mold  
+mold  Reconstructing point fields
+mold  
+mold      (no point fields)
+      
+      Collecting uniform files
+      
+      Time = 267s
+      
+metal Reconstructing FV fields
+metal 
+metal     Reconstructing volScalarFields
+metal 
+metal         phaseChangeSource:alpha1
+metal         CoCell
+metal         dAlphaLdt
+metal         phaseChangeModelDeltaT
+metal         phaseChangeSolidFraction
+metal         magPRghAcceleration
+metal         magPhaseChangeBuoyancyAcceleration
+metal         latentHeatRateVol
+metal         phaseChangeDragToBuoyancy
+metal         p
+metal         T
+metal         solidificationRate
+metal         magPhaseChangeDarcyAcceleration
+metal         dTdt
+metal         phaseChangeDarcyCoeff
+metal         rho
+metal         latentHeat
+metal         magGradRho
+metal         magSqrDevGradU
+metal         coolingRate
+metal         magGradT
+metal         phaseChangeDragToPressure
+metal         flowType
+metal         p_rgh
+metal         phaseChangeDarcySp
+metal 
+metal     Reconstructing volVectorFields
+metal 
+metal         pRghAcceleration
+metal         gradT
+metal         phaseChangeBuoyancySu
+metal         phaseChangeBuoyancyAcceleration
+metal         U
+metal         phaseChangeDarcyAcceleration
+metal         gradRho
+metal         vorticity
+metal 
+metal     Reconstructing surfaceScalarFields
+metal 
+metal         phi
+metal         energyFlux
+metal         energyAdvectiveFlux
+metal         heatFlux
+metal 
+metal Reconstructing point fields
+metal 
+metal     (no point fields)
+      
+mold  Reconstructing FV fields
+mold  
+mold      Reconstructing volScalarFields
+mold  
+mold          T
+mold  
+mold  Reconstructing point fields
+mold  
+mold      (no point fields)
+      
+      Collecting uniform files
+      
+      Time = 268s
+      
+metal Reconstructing FV fields
+metal 
+metal     Reconstructing volScalarFields
+metal 
+metal         phaseChangeSource:alpha1
+metal         CoCell
+metal         dAlphaLdt
+metal         phaseChangeModelDeltaT
+metal         phaseChangeSolidFraction
+metal         magPRghAcceleration
+metal         magPhaseChangeBuoyancyAcceleration
+metal         latentHeatRateVol
+metal         phaseChangeDragToBuoyancy
+metal         p
+metal         T
+metal         solidificationRate
+metal         magPhaseChangeDarcyAcceleration
+metal         dTdt
+metal         phaseChangeDarcyCoeff
+metal         rho
+metal         latentHeat
+metal         magGradRho
+metal         magSqrDevGradU
+metal         coolingRate
+metal         magGradT
+metal         phaseChangeDragToPressure
+metal         flowType
+metal         p_rgh
+metal         phaseChangeDarcySp
+metal 
+metal     Reconstructing volVectorFields
+metal 
+metal         pRghAcceleration
+metal         gradT
+metal         phaseChangeBuoyancySu
+metal         phaseChangeBuoyancyAcceleration
+metal         U
+metal         phaseChangeDarcyAcceleration
+metal         gradRho
+metal         vorticity
+metal 
+metal     Reconstructing surfaceScalarFields
+metal 
+metal         phi
+metal         energyFlux
+metal         energyAdvectiveFlux
+metal         heatFlux
+metal 
+metal Reconstructing point fields
+metal 
+metal     (no point fields)
+      
+mold  Reconstructing FV fields
+mold  
+mold      Reconstructing volScalarFields
+mold  
+mold          T
+mold  
+mold  Reconstructing point fields
+mold  
+mold      (no point fields)
+      
+      Collecting uniform files
+      
+      Time = 269s
+      
+metal Reconstructing FV fields
+metal 
+metal     Reconstructing volScalarFields
+metal 
+metal         phaseChangeSource:alpha1
+metal         CoCell
+metal         dAlphaLdt
+metal         phaseChangeModelDeltaT
+metal         phaseChangeSolidFraction
+metal         magPRghAcceleration
+metal         magPhaseChangeBuoyancyAcceleration
+metal         latentHeatRateVol
+metal         phaseChangeDragToBuoyancy
+metal         p
+metal         T
+metal         solidificationRate
+metal         magPhaseChangeDarcyAcceleration
+metal         dTdt
+metal         phaseChangeDarcyCoeff
+metal         rho
+metal         latentHeat
+metal         magGradRho
+metal         magSqrDevGradU
+metal         coolingRate
+metal         magGradT
+metal         phaseChangeDragToPressure
+metal         flowType
+metal         p_rgh
+metal         phaseChangeDarcySp
+metal 
+metal     Reconstructing volVectorFields
+metal 
+metal         pRghAcceleration
+metal         gradT
+metal         phaseChangeBuoyancySu
+metal         phaseChangeBuoyancyAcceleration
+metal         U
+metal         phaseChangeDarcyAcceleration
+metal         gradRho
+metal         vorticity
+metal 
+metal     Reconstructing surfaceScalarFields
+metal 
+metal         phi
+metal         energyFlux
+metal         energyAdvectiveFlux
+metal         heatFlux
+metal 
+metal Reconstructing point fields
+metal 
+metal     (no point fields)
+      
+mold  Reconstructing FV fields
+mold  
+mold      Reconstructing volScalarFields
+mold  
+mold          T
+mold  
+mold  Reconstructing point fields
+mold  
+mold      (no point fields)
+      
+      Collecting uniform files
+      
+      Time = 270s
+      
+metal Reconstructing FV fields
+metal 
+metal     Reconstructing volScalarFields
+metal 
+metal         phaseChangeSource:alpha1
+metal         CoCell
+metal         dAlphaLdt
+metal         phaseChangeModelDeltaT
+metal         phaseChangeSolidFraction
+metal         magPRghAcceleration
+metal         magPhaseChangeBuoyancyAcceleration
+metal         latentHeatRateVol
+metal         phaseChangeDragToBuoyancy
+metal         p
+metal         T
+metal         solidificationRate
+metal         magPhaseChangeDarcyAcceleration
+metal         dTdt
+metal         phaseChangeDarcyCoeff
+metal         rho
+metal         latentHeat
+metal         magGradRho
+metal         magSqrDevGradU
+metal         coolingRate
+metal         magGradT
+metal         phaseChangeDragToPressure
+metal         flowType
+metal         p_rgh
+metal         phaseChangeDarcySp
+metal 
+metal     Reconstructing volVectorFields
+metal 
+metal         pRghAcceleration
+metal         gradT
+metal         phaseChangeBuoyancySu
+metal         phaseChangeBuoyancyAcceleration
+metal         U
+metal         phaseChangeDarcyAcceleration
+metal         gradRho
+metal         vorticity
+metal 
+metal     Reconstructing surfaceScalarFields
+metal 
+metal         phi
+metal         energyFlux
+metal         energyAdvectiveFlux
+metal         heatFlux
+metal 
+metal Reconstructing point fields
+metal 
+metal     (no point fields)
+      
+mold  Reconstructing FV fields
+mold  
+mold      Reconstructing volScalarFields
+mold  
+mold          T
+mold  
+mold  Reconstructing point fields
+mold  
+mold      (no point fields)
+      
+      Collecting uniform files
+      
+      Time = 271s
+      
+metal Reconstructing FV fields
+metal 
+metal     Reconstructing volScalarFields
+metal 
+metal         phaseChangeSource:alpha1
+metal         CoCell
+metal         dAlphaLdt
+metal         phaseChangeModelDeltaT
+metal         phaseChangeSolidFraction
+metal         magPRghAcceleration
+metal         magPhaseChangeBuoyancyAcceleration
+metal         latentHeatRateVol
+metal         phaseChangeDragToBuoyancy
+metal         p
+metal         T
+metal         solidificationRate
+metal         magPhaseChangeDarcyAcceleration
+metal         dTdt
+metal         phaseChangeDarcyCoeff
+metal         rho
+metal         latentHeat
+metal         magGradRho
+metal         magSqrDevGradU
+metal         coolingRate
+metal         magGradT
+metal         phaseChangeDragToPressure
+metal         flowType
+metal         p_rgh
+metal         phaseChangeDarcySp
+metal 
+metal     Reconstructing volVectorFields
+metal 
+metal         pRghAcceleration
+metal         gradT
+metal         phaseChangeBuoyancySu
+metal         phaseChangeBuoyancyAcceleration
+metal         U
+metal         phaseChangeDarcyAcceleration
+metal         gradRho
+metal         vorticity
+metal 
+metal     Reconstructing surfaceScalarFields
+metal 
+metal         phi
+metal         energyFlux
+metal         energyAdvectiveFlux
+metal         heatFlux
+metal 
+metal Reconstructing point fields
+metal 
+metal     (no point fields)
+      
+mold  Reconstructing FV fields
+mold  
+mold      Reconstructing volScalarFields
+mold  
+mold          T
+mold  
+mold  Reconstructing point fields
+mold  
+mold      (no point fields)
+      
+      Collecting uniform files
+      
+      Time = 272s
+      
+metal Reconstructing FV fields
+metal 
+metal     Reconstructing volScalarFields
+metal 
+metal         phaseChangeSource:alpha1
+metal         CoCell
+metal         dAlphaLdt
+metal         phaseChangeModelDeltaT
+metal         phaseChangeSolidFraction
+metal         magPRghAcceleration
+metal         magPhaseChangeBuoyancyAcceleration
+metal         latentHeatRateVol
+metal         phaseChangeDragToBuoyancy
+metal         p
+metal         T
+metal         solidificationRate
+metal         magPhaseChangeDarcyAcceleration
+metal         dTdt
+metal         phaseChangeDarcyCoeff
+metal         rho
+metal         latentHeat
+metal         magGradRho
+metal         magSqrDevGradU
+metal         coolingRate
+metal         magGradT
+metal         phaseChangeDragToPressure
+metal         flowType
+metal         p_rgh
+metal         phaseChangeDarcySp
+metal 
+metal     Reconstructing volVectorFields
+metal 
+metal         pRghAcceleration
+metal         gradT
+metal         phaseChangeBuoyancySu
+metal         phaseChangeBuoyancyAcceleration
+metal         U
+metal         phaseChangeDarcyAcceleration
+metal         gradRho
+metal         vorticity
+metal 
+metal     Reconstructing surfaceScalarFields
+metal 
+metal         phi
+metal         energyFlux
+metal         energyAdvectiveFlux
+metal         heatFlux
+metal 
+metal Reconstructing point fields
+metal 
+metal     (no point fields)
+      
+mold  Reconstructing FV fields
+mold  
+mold      Reconstructing volScalarFields
+mold  
+mold          T
+mold  
+mold  Reconstructing point fields
+mold  
+mold      (no point fields)
+      
+      Collecting uniform files
+      
+      Time = 273s
+      
+metal Reconstructing FV fields
+metal 
+metal     Reconstructing volScalarFields
+metal 
+metal         phaseChangeSource:alpha1
+metal         CoCell
+metal         dAlphaLdt
+metal         phaseChangeModelDeltaT
+metal         phaseChangeSolidFraction
+metal         magPRghAcceleration
+metal         magPhaseChangeBuoyancyAcceleration
+metal         latentHeatRateVol
+metal         phaseChangeDragToBuoyancy
+metal         p
+metal         T
+metal         solidificationRate
+metal         magPhaseChangeDarcyAcceleration
+metal         dTdt
+metal         phaseChangeDarcyCoeff
+metal         rho
+metal         latentHeat
+metal         magGradRho
+metal         magSqrDevGradU
+metal         coolingRate
+metal         magGradT
+metal         phaseChangeDragToPressure
+metal         flowType
+metal         p_rgh
+metal         phaseChangeDarcySp
+metal 
+metal     Reconstructing volVectorFields
+metal 
+metal         pRghAcceleration
+metal         gradT
+metal         phaseChangeBuoyancySu
+metal         phaseChangeBuoyancyAcceleration
+metal         U
+metal         phaseChangeDarcyAcceleration
+metal         gradRho
+metal         vorticity
+metal 
+metal     Reconstructing surfaceScalarFields
+metal 
+metal         phi
+metal         energyFlux
+metal         energyAdvectiveFlux
+metal         heatFlux
+metal 
+metal Reconstructing point fields
+metal 
+metal     (no point fields)
+      
+mold  Reconstructing FV fields
+mold  
+mold      Reconstructing volScalarFields
+mold  
+mold          T
+mold  
+mold  Reconstructing point fields
+mold  
+mold      (no point fields)
+      
+      Collecting uniform files
+      
+      Time = 274s
+      
+metal Reconstructing FV fields
+metal 
+metal     Reconstructing volScalarFields
+metal 
+metal         phaseChangeSource:alpha1
+metal         CoCell
+metal         dAlphaLdt
+metal         phaseChangeModelDeltaT
+metal         phaseChangeSolidFraction
+metal         magPRghAcceleration
+metal         magPhaseChangeBuoyancyAcceleration
+metal         latentHeatRateVol
+metal         phaseChangeDragToBuoyancy
+metal         p
+metal         T
+metal         solidificationRate
+metal         magPhaseChangeDarcyAcceleration
+metal         dTdt
+metal         phaseChangeDarcyCoeff
+metal         rho
+metal         latentHeat
+metal         magGradRho
+metal         magSqrDevGradU
+metal         coolingRate
+metal         magGradT
+metal         phaseChangeDragToPressure
+metal         flowType
+metal         p_rgh
+metal         phaseChangeDarcySp
+metal 
+metal     Reconstructing volVectorFields
+metal 
+metal         pRghAcceleration
+metal         gradT
+metal         phaseChangeBuoyancySu
+metal         phaseChangeBuoyancyAcceleration
+metal         U
+metal         phaseChangeDarcyAcceleration
+metal         gradRho
+metal         vorticity
+metal 
+metal     Reconstructing surfaceScalarFields
+metal 
+metal         phi
+metal         energyFlux
+metal         energyAdvectiveFlux
+metal         heatFlux
+metal 
+metal Reconstructing point fields
+metal 
+metal     (no point fields)
+      
+mold  Reconstructing FV fields
+mold  
+mold      Reconstructing volScalarFields
+mold  
+mold          T
+mold  
+mold  Reconstructing point fields
+mold  
+mold      (no point fields)
+      
+      Collecting uniform files
+      
+      Time = 275s
+      
+metal Reconstructing FV fields
+metal 
+metal     Reconstructing volScalarFields
+metal 
+metal         phaseChangeSource:alpha1
+metal         CoCell
+metal         dAlphaLdt
+metal         phaseChangeModelDeltaT
+metal         phaseChangeSolidFraction
+metal         magPRghAcceleration
+metal         magPhaseChangeBuoyancyAcceleration
+metal         latentHeatRateVol
+metal         phaseChangeDragToBuoyancy
+metal         p
+metal         T
+metal         solidificationRate
+metal         magPhaseChangeDarcyAcceleration
+metal         dTdt
+metal         phaseChangeDarcyCoeff
+metal         rho
+metal         latentHeat
+metal         magGradRho
+metal         magSqrDevGradU
+metal         coolingRate
+metal         magGradT
+metal         phaseChangeDragToPressure
+metal         flowType
+metal         p_rgh
+metal         phaseChangeDarcySp
+metal 
+metal     Reconstructing volVectorFields
+metal 
+metal         pRghAcceleration
+metal         gradT
+metal         phaseChangeBuoyancySu
+metal         phaseChangeBuoyancyAcceleration
+metal         U
+metal         phaseChangeDarcyAcceleration
+metal         gradRho
+metal         vorticity
+metal 
+metal     Reconstructing surfaceScalarFields
+metal 
+metal         phi
+metal         energyFlux
+metal         energyAdvectiveFlux
+metal         heatFlux
+metal 
+metal Reconstructing point fields
+metal 
+metal     (no point fields)
+      
+mold  Reconstructing FV fields
+mold  
+mold      Reconstructing volScalarFields
+mold  
+mold          T
+mold  
+mold  Reconstructing point fields
+mold  
+mold      (no point fields)
+      
+      Collecting uniform files
+      
+      Time = 276s
+      
+metal Reconstructing FV fields
+metal 
+metal     Reconstructing volScalarFields
+metal 
+metal         phaseChangeSource:alpha1
+metal         CoCell
+metal         dAlphaLdt
+metal         phaseChangeModelDeltaT
+metal         phaseChangeSolidFraction
+metal         magPRghAcceleration
+metal         magPhaseChangeBuoyancyAcceleration
+metal         latentHeatRateVol
+metal         phaseChangeDragToBuoyancy
+metal         p
+metal         T
+metal         solidificationRate
+metal         magPhaseChangeDarcyAcceleration
+metal         dTdt
+metal         phaseChangeDarcyCoeff
+metal         rho
+metal         latentHeat
+metal         magGradRho
+metal         magSqrDevGradU
+metal         coolingRate
+metal         magGradT
+metal         phaseChangeDragToPressure
+metal         flowType
+metal         p_rgh
+metal         phaseChangeDarcySp
+metal 
+metal     Reconstructing volVectorFields
+metal 
+metal         pRghAcceleration
+metal         gradT
+metal         phaseChangeBuoyancySu
+metal         phaseChangeBuoyancyAcceleration
+metal         U
+metal         phaseChangeDarcyAcceleration
+metal         gradRho
+metal         vorticity
+metal 
+metal     Reconstructing surfaceScalarFields
+metal 
+metal         phi
+metal         energyFlux
+metal         energyAdvectiveFlux
+metal         heatFlux
+metal 
+metal Reconstructing point fields
+metal 
+metal     (no point fields)
+      
+mold  Reconstructing FV fields
+mold  
+mold      Reconstructing volScalarFields
+mold  
+mold          T
+mold  
+mold  Reconstructing point fields
+mold  
+mold      (no point fields)
+      
+      Collecting uniform files
+      
+      Time = 277s
+      
+metal Reconstructing FV fields
+metal 
+metal     Reconstructing volScalarFields
+metal 
+metal         phaseChangeSource:alpha1
+metal         CoCell
+metal         dAlphaLdt
+metal         phaseChangeModelDeltaT
+metal         phaseChangeSolidFraction
+metal         magPRghAcceleration
+metal         magPhaseChangeBuoyancyAcceleration
+metal         latentHeatRateVol
+metal         phaseChangeDragToBuoyancy
+metal         p
+metal         T
+metal         solidificationRate
+metal         magPhaseChangeDarcyAcceleration
+metal         dTdt
+metal         phaseChangeDarcyCoeff
+metal         rho
+metal         latentHeat
+metal         magGradRho
+metal         magSqrDevGradU
+metal         coolingRate
+metal         magGradT
+metal         phaseChangeDragToPressure
+metal         flowType
+metal         p_rgh
+metal         phaseChangeDarcySp
+metal 
+metal     Reconstructing volVectorFields
+metal 
+metal         pRghAcceleration
+metal         gradT
+metal         phaseChangeBuoyancySu
+metal         phaseChangeBuoyancyAcceleration
+metal         U
+metal         phaseChangeDarcyAcceleration
+metal         gradRho
+metal         vorticity
+metal 
+metal     Reconstructing surfaceScalarFields
+metal 
+metal         phi
+metal         energyFlux
+metal         energyAdvectiveFlux
+metal         heatFlux
+metal 
+metal Reconstructing point fields
+metal 
+metal     (no point fields)
+      
+mold  Reconstructing FV fields
+mold  
+mold      Reconstructing volScalarFields
+mold  
+mold          T
+mold  
+mold  Reconstructing point fields
+mold  
+mold      (no point fields)
+      
+      Collecting uniform files
+      
+      Time = 278s
+      
+metal Reconstructing FV fields
+metal 
+metal     Reconstructing volScalarFields
+metal 
+metal         phaseChangeSource:alpha1
+metal         CoCell
+metal         dAlphaLdt
+metal         phaseChangeModelDeltaT
+metal         phaseChangeSolidFraction
+metal         magPRghAcceleration
+metal         magPhaseChangeBuoyancyAcceleration
+metal         latentHeatRateVol
+metal         phaseChangeDragToBuoyancy
+metal         p
+metal         T
+metal         solidificationRate
+metal         magPhaseChangeDarcyAcceleration
+metal         dTdt
+metal         phaseChangeDarcyCoeff
+metal         rho
+metal         latentHeat
+metal         magGradRho
+metal         magSqrDevGradU
+metal         coolingRate
+metal         magGradT
+metal         phaseChangeDragToPressure
+metal         flowType
+metal         p_rgh
+metal         phaseChangeDarcySp
+metal 
+metal     Reconstructing volVectorFields
+metal 
+metal         pRghAcceleration
+metal         gradT
+metal         phaseChangeBuoyancySu
+metal         phaseChangeBuoyancyAcceleration
+metal         U
+metal         phaseChangeDarcyAcceleration
+metal         gradRho
+metal         vorticity
+metal 
+metal     Reconstructing surfaceScalarFields
+metal 
+metal         phi
+metal         energyFlux
+metal         energyAdvectiveFlux
+metal         heatFlux
+metal 
+metal Reconstructing point fields
+metal 
+metal     (no point fields)
+      
+mold  Reconstructing FV fields
+mold  
+mold      Reconstructing volScalarFields
+mold  
+mold          T
+mold  
+mold  Reconstructing point fields
+mold  
+mold      (no point fields)
+      
+      Collecting uniform files
+      
+      Time = 279s
+      
+metal Reconstructing FV fields
+metal 
+metal     Reconstructing volScalarFields
+metal 
+metal         phaseChangeSource:alpha1
+metal         CoCell
+metal         dAlphaLdt
+metal         phaseChangeModelDeltaT
+metal         phaseChangeSolidFraction
+metal         magPRghAcceleration
+metal         magPhaseChangeBuoyancyAcceleration
+metal         latentHeatRateVol
+metal         phaseChangeDragToBuoyancy
+metal         p
+metal         T
+metal         solidificationRate
+metal         magPhaseChangeDarcyAcceleration
+metal         dTdt
+metal         phaseChangeDarcyCoeff
+metal         rho
+metal         latentHeat
+metal         magGradRho
+metal         magSqrDevGradU
+metal         coolingRate
+metal         magGradT
+metal         phaseChangeDragToPressure
+metal         flowType
+metal         p_rgh
+metal         phaseChangeDarcySp
+metal 
+metal     Reconstructing volVectorFields
+metal 
+metal         pRghAcceleration
+metal         gradT
+metal         phaseChangeBuoyancySu
+metal         phaseChangeBuoyancyAcceleration
+metal         U
+metal         phaseChangeDarcyAcceleration
+metal         gradRho
+metal         vorticity
+metal 
+metal     Reconstructing surfaceScalarFields
+metal 
+metal         phi
+metal         energyFlux
+metal         energyAdvectiveFlux
+metal         heatFlux
+metal 
+metal Reconstructing point fields
+metal 
+metal     (no point fields)
+      
+mold  Reconstructing FV fields
+mold  
+mold      Reconstructing volScalarFields
+mold  
+mold          T
+mold  
+mold  Reconstructing point fields
+mold  
+mold      (no point fields)
+      
+      Collecting uniform files
+      
+      Time = 280s
+      
+metal Reconstructing FV fields
+metal 
+metal     Reconstructing volScalarFields
+metal 
+metal         phaseChangeSource:alpha1
+metal         CoCell
+metal         dAlphaLdt
+metal         phaseChangeModelDeltaT
+metal         phaseChangeSolidFraction
+metal         magPRghAcceleration
+metal         magPhaseChangeBuoyancyAcceleration
+metal         latentHeatRateVol
+metal         phaseChangeDragToBuoyancy
+metal         p
+metal         T
+metal         solidificationRate
+metal         magPhaseChangeDarcyAcceleration
+metal         dTdt
+metal         phaseChangeDarcyCoeff
+metal         rho
+metal         latentHeat
+metal         magGradRho
+metal         magSqrDevGradU
+metal         coolingRate
+metal         magGradT
+metal         phaseChangeDragToPressure
+metal         flowType
+metal         p_rgh
+metal         phaseChangeDarcySp
+metal 
+metal     Reconstructing volVectorFields
+metal 
+metal         pRghAcceleration
+metal         gradT
+metal         phaseChangeBuoyancySu
+metal         phaseChangeBuoyancyAcceleration
+metal         U
+metal         phaseChangeDarcyAcceleration
+metal         gradRho
+metal         vorticity
+metal 
+metal     Reconstructing surfaceScalarFields
+metal 
+metal         phi
+metal         energyFlux
+metal         energyAdvectiveFlux
+metal         heatFlux
+metal 
+metal Reconstructing point fields
+metal 
+metal     (no point fields)
+      
+mold  Reconstructing FV fields
+mold  
+mold      Reconstructing volScalarFields
+mold  
+mold          T
+mold  
+mold  Reconstructing point fields
+mold  
+mold      (no point fields)
+      
+      Collecting uniform files
+      
+      Time = 281s
+      
+metal Reconstructing FV fields
+metal 
+metal     Reconstructing volScalarFields
+metal 
+metal         phaseChangeSource:alpha1
+metal         CoCell
+metal         dAlphaLdt
+metal         phaseChangeModelDeltaT
+metal         phaseChangeSolidFraction
+metal         magPRghAcceleration
+metal         magPhaseChangeBuoyancyAcceleration
+metal         latentHeatRateVol
+metal         phaseChangeDragToBuoyancy
+metal         p
+metal         T
+metal         solidificationRate
+metal         magPhaseChangeDarcyAcceleration
+metal         dTdt
+metal         phaseChangeDarcyCoeff
+metal         rho
+metal         latentHeat
+metal         magGradRho
+metal         magSqrDevGradU
+metal         coolingRate
+metal         magGradT
+metal         phaseChangeDragToPressure
+metal         flowType
+metal         p_rgh
+metal         phaseChangeDarcySp
+metal 
+metal     Reconstructing volVectorFields
+metal 
+metal         pRghAcceleration
+metal         gradT
+metal         phaseChangeBuoyancySu
+metal         phaseChangeBuoyancyAcceleration
+metal         U
+metal         phaseChangeDarcyAcceleration
+metal         gradRho
+metal         vorticity
+metal 
+metal     Reconstructing surfaceScalarFields
+metal 
+metal         phi
+metal         energyFlux
+metal         energyAdvectiveFlux
+metal         heatFlux
+metal 
+metal Reconstructing point fields
+metal 
+metal     (no point fields)
+      
+mold  Reconstructing FV fields
+mold  
+mold      Reconstructing volScalarFields
+mold  
+mold          T
+mold  
+mold  Reconstructing point fields
+mold  
+mold      (no point fields)
+      
+      Collecting uniform files
+      
+      Time = 282s
+      
+metal Reconstructing FV fields
+metal 
+metal     Reconstructing volScalarFields
+metal 
+metal         phaseChangeSource:alpha1
+metal         CoCell
+metal         dAlphaLdt
+metal         phaseChangeModelDeltaT
+metal         phaseChangeSolidFraction
+metal         magPRghAcceleration
+metal         magPhaseChangeBuoyancyAcceleration
+metal         latentHeatRateVol
+metal         phaseChangeDragToBuoyancy
+metal         p
+metal         T
+metal         solidificationRate
+metal         magPhaseChangeDarcyAcceleration
+metal         dTdt
+metal         phaseChangeDarcyCoeff
+metal         rho
+metal         latentHeat
+metal         magGradRho
+metal         magSqrDevGradU
+metal         coolingRate
+metal         magGradT
+metal         phaseChangeDragToPressure
+metal         flowType
+metal         p_rgh
+metal         phaseChangeDarcySp
+metal 
+metal     Reconstructing volVectorFields
+metal 
+metal         pRghAcceleration
+metal         gradT
+metal         phaseChangeBuoyancySu
+metal         phaseChangeBuoyancyAcceleration
+metal         U
+metal         phaseChangeDarcyAcceleration
+metal         gradRho
+metal         vorticity
+metal 
+metal     Reconstructing surfaceScalarFields
+metal 
+metal         phi
+metal         energyFlux
+metal         energyAdvectiveFlux
+metal         heatFlux
+metal 
+metal Reconstructing point fields
+metal 
+metal     (no point fields)
+      
+mold  Reconstructing FV fields
+mold  
+mold      Reconstructing volScalarFields
+mold  
+mold          T
+mold  
+mold  Reconstructing point fields
+mold  
+mold      (no point fields)
+      
+      Collecting uniform files
+      
+      Time = 283s
+      
+metal Reconstructing FV fields
+metal 
+metal     Reconstructing volScalarFields
+metal 
+metal         phaseChangeSource:alpha1
+metal         CoCell
+metal         dAlphaLdt
+metal         phaseChangeModelDeltaT
+metal         phaseChangeSolidFraction
+metal         magPRghAcceleration
+metal         magPhaseChangeBuoyancyAcceleration
+metal         latentHeatRateVol
+metal         phaseChangeDragToBuoyancy
+metal         p
+metal         T
+metal         solidificationRate
+metal         magPhaseChangeDarcyAcceleration
+metal         dTdt
+metal         phaseChangeDarcyCoeff
+metal         rho
+metal         latentHeat
+metal         magGradRho
+metal         magSqrDevGradU
+metal         coolingRate
+metal         magGradT
+metal         phaseChangeDragToPressure
+metal         flowType
+metal         p_rgh
+metal         phaseChangeDarcySp
+metal 
+metal     Reconstructing volVectorFields
+metal 
+metal         pRghAcceleration
+metal         gradT
+metal         phaseChangeBuoyancySu
+metal         phaseChangeBuoyancyAcceleration
+metal         U
+metal         phaseChangeDarcyAcceleration
+metal         gradRho
+metal         vorticity
+metal 
+metal     Reconstructing surfaceScalarFields
+metal 
+metal         phi
+metal         energyFlux
+metal         energyAdvectiveFlux
+metal         heatFlux
+metal 
+metal Reconstructing point fields
+metal 
+metal     (no point fields)
+      
+mold  Reconstructing FV fields
+mold  
+mold      Reconstructing volScalarFields
+mold  
+mold          T
+mold  
+mold  Reconstructing point fields
+mold  
+mold      (no point fields)
+      
+      Collecting uniform files
+      
+      Time = 284s
+      
+metal Reconstructing FV fields
+metal 
+metal     Reconstructing volScalarFields
+metal 
+metal         phaseChangeSource:alpha1
+metal         CoCell
+metal         dAlphaLdt
+metal         phaseChangeModelDeltaT
+metal         phaseChangeSolidFraction
+metal         magPRghAcceleration
+metal         magPhaseChangeBuoyancyAcceleration
+metal         latentHeatRateVol
+metal         phaseChangeDragToBuoyancy
+metal         p
+metal         T
+metal         solidificationRate
+metal         magPhaseChangeDarcyAcceleration
+metal         dTdt
+metal         phaseChangeDarcyCoeff
+metal         rho
+metal         latentHeat
+metal         magGradRho
+metal         magSqrDevGradU
+metal         coolingRate
+metal         magGradT
+metal         phaseChangeDragToPressure
+metal         flowType
+metal         p_rgh
+metal         phaseChangeDarcySp
+metal 
+metal     Reconstructing volVectorFields
+metal 
+metal         pRghAcceleration
+metal         gradT
+metal         phaseChangeBuoyancySu
+metal         phaseChangeBuoyancyAcceleration
+metal         U
+metal         phaseChangeDarcyAcceleration
+metal         gradRho
+metal         vorticity
+metal 
+metal     Reconstructing surfaceScalarFields
+metal 
+metal         phi
+metal         energyFlux
+metal         energyAdvectiveFlux
+metal         heatFlux
+metal 
+metal Reconstructing point fields
+metal 
+metal     (no point fields)
+      
+mold  Reconstructing FV fields
+mold  
+mold      Reconstructing volScalarFields
+mold  
+mold          T
+mold  
+mold  Reconstructing point fields
+mold  
+mold      (no point fields)
+      
+      Collecting uniform files
+      
+      Time = 285s
+      
+metal Reconstructing FV fields
+metal 
+metal     Reconstructing volScalarFields
+metal 
+metal         phaseChangeSource:alpha1
+metal         CoCell
+metal         dAlphaLdt
+metal         phaseChangeModelDeltaT
+metal         phaseChangeSolidFraction
+metal         magPRghAcceleration
+metal         magPhaseChangeBuoyancyAcceleration
+metal         latentHeatRateVol
+metal         phaseChangeDragToBuoyancy
+metal         p
+metal         T
+metal         solidificationRate
+metal         magPhaseChangeDarcyAcceleration
+metal         dTdt
+metal         phaseChangeDarcyCoeff
+metal         rho
+metal         latentHeat
+metal         magGradRho
+metal         magSqrDevGradU
+metal         coolingRate
+metal         magGradT
+metal         phaseChangeDragToPressure
+metal         flowType
+metal         p_rgh
+metal         phaseChangeDarcySp
+metal 
+metal     Reconstructing volVectorFields
+metal 
+metal         pRghAcceleration
+metal         gradT
+metal         phaseChangeBuoyancySu
+metal         phaseChangeBuoyancyAcceleration
+metal         U
+metal         phaseChangeDarcyAcceleration
+metal         gradRho
+metal         vorticity
+metal 
+metal     Reconstructing surfaceScalarFields
+metal 
+metal         phi
+metal         energyFlux
+metal         energyAdvectiveFlux
+metal         heatFlux
+metal 
+metal Reconstructing point fields
+metal 
+metal     (no point fields)
+      
+mold  Reconstructing FV fields
+mold  
+mold      Reconstructing volScalarFields
+mold  
+mold          T
+mold  
+mold  Reconstructing point fields
+mold  
+mold      (no point fields)
+      
+      Collecting uniform files
+      
+      Time = 286s
+      
+metal Reconstructing FV fields
+metal 
+metal     Reconstructing volScalarFields
+metal 
+metal         phaseChangeSource:alpha1
+metal         CoCell
+metal         dAlphaLdt
+metal         phaseChangeModelDeltaT
+metal         phaseChangeSolidFraction
+metal         magPRghAcceleration
+metal         magPhaseChangeBuoyancyAcceleration
+metal         latentHeatRateVol
+metal         phaseChangeDragToBuoyancy
+metal         p
+metal         T
+metal         solidificationRate
+metal         magPhaseChangeDarcyAcceleration
+metal         dTdt
+metal         phaseChangeDarcyCoeff
+metal         rho
+metal         latentHeat
+metal         magGradRho
+metal         magSqrDevGradU
+metal         coolingRate
+metal         magGradT
+metal         phaseChangeDragToPressure
+metal         flowType
+metal         p_rgh
+metal         phaseChangeDarcySp
+metal 
+metal     Reconstructing volVectorFields
+metal 
+metal         pRghAcceleration
+metal         gradT
+metal         phaseChangeBuoyancySu
+metal         phaseChangeBuoyancyAcceleration
+metal         U
+metal         phaseChangeDarcyAcceleration
+metal         gradRho
+metal         vorticity
+metal 
+metal     Reconstructing surfaceScalarFields
+metal 
+metal         phi
+metal         energyFlux
+metal         energyAdvectiveFlux
+metal         heatFlux
+metal 
+metal Reconstructing point fields
+metal 
+metal     (no point fields)
+      
+mold  Reconstructing FV fields
+mold  
+mold      Reconstructing volScalarFields
+mold  
+mold          T
+mold  
+mold  Reconstructing point fields
+mold  
+mold      (no point fields)
+      
+      Collecting uniform files
+      
+      Time = 287s
+      
+metal Reconstructing FV fields
+metal 
+metal     Reconstructing volScalarFields
+metal 
+metal         phaseChangeSource:alpha1
+metal         CoCell
+metal         dAlphaLdt
+metal         phaseChangeModelDeltaT
+metal         phaseChangeSolidFraction
+metal         magPRghAcceleration
+metal         magPhaseChangeBuoyancyAcceleration
+metal         latentHeatRateVol
+metal         phaseChangeDragToBuoyancy
+metal         p
+metal         T
+metal         solidificationRate
+metal         magPhaseChangeDarcyAcceleration
+metal         dTdt
+metal         phaseChangeDarcyCoeff
+metal         rho
+metal         latentHeat
+metal         magGradRho
+metal         magSqrDevGradU
+metal         coolingRate
+metal         magGradT
+metal         phaseChangeDragToPressure
+metal         flowType
+metal         p_rgh
+metal         phaseChangeDarcySp
+metal 
+metal     Reconstructing volVectorFields
+metal 
+metal         pRghAcceleration
+metal         gradT
+metal         phaseChangeBuoyancySu
+metal         phaseChangeBuoyancyAcceleration
+metal         U
+metal         phaseChangeDarcyAcceleration
+metal         gradRho
+metal         vorticity
+metal 
+metal     Reconstructing surfaceScalarFields
+metal 
+metal         phi
+metal         energyFlux
+metal         energyAdvectiveFlux
+metal         heatFlux
+metal 
+metal Reconstructing point fields
+metal 
+metal     (no point fields)
+      
+mold  Reconstructing FV fields
+mold  
+mold      Reconstructing volScalarFields
+mold  
+mold          T
+mold  
+mold  Reconstructing point fields
+mold  
+mold      (no point fields)
+      
+      Collecting uniform files
+      
+      Time = 288s
+      
+metal Reconstructing FV fields
+metal 
+metal     Reconstructing volScalarFields
+metal 
+metal         phaseChangeSource:alpha1
+metal         CoCell
+metal         dAlphaLdt
+metal         phaseChangeModelDeltaT
+metal         phaseChangeSolidFraction
+metal         magPRghAcceleration
+metal         magPhaseChangeBuoyancyAcceleration
+metal         latentHeatRateVol
+metal         phaseChangeDragToBuoyancy
+metal         p
+metal         T
+metal         solidificationRate
+metal         magPhaseChangeDarcyAcceleration
+metal         dTdt
+metal         phaseChangeDarcyCoeff
+metal         rho
+metal         latentHeat
+metal         magGradRho
+metal         magSqrDevGradU
+metal         coolingRate
+metal         magGradT
+metal         phaseChangeDragToPressure
+metal         flowType
+metal         p_rgh
+metal         phaseChangeDarcySp
+metal 
+metal     Reconstructing volVectorFields
+metal 
+metal         pRghAcceleration
+metal         gradT
+metal         phaseChangeBuoyancySu
+metal         phaseChangeBuoyancyAcceleration
+metal         U
+metal         phaseChangeDarcyAcceleration
+metal         gradRho
+metal         vorticity
+metal 
+metal     Reconstructing surfaceScalarFields
+metal 
+metal         phi
+metal         energyFlux
+metal         energyAdvectiveFlux
+metal         heatFlux
+metal 
+metal Reconstructing point fields
+metal 
+metal     (no point fields)
+      
+mold  Reconstructing FV fields
+mold  
+mold      Reconstructing volScalarFields
+mold  
+mold          T
+mold  
+mold  Reconstructing point fields
+mold  
+mold      (no point fields)
+      
+      Collecting uniform files
+      
+      Time = 289s
+      
+metal Reconstructing FV fields
+metal 
+metal     Reconstructing volScalarFields
+metal 
+metal         phaseChangeSource:alpha1
+metal         CoCell
+metal         dAlphaLdt
+metal         phaseChangeModelDeltaT
+metal         phaseChangeSolidFraction
+metal         magPRghAcceleration
+metal         magPhaseChangeBuoyancyAcceleration
+metal         latentHeatRateVol
+metal         phaseChangeDragToBuoyancy
+metal         p
+metal         T
+metal         solidificationRate
+metal         magPhaseChangeDarcyAcceleration
+metal         dTdt
+metal         phaseChangeDarcyCoeff
+metal         rho
+metal         latentHeat
+metal         magGradRho
+metal         magSqrDevGradU
+metal         coolingRate
+metal         magGradT
+metal         phaseChangeDragToPressure
+metal         flowType
+metal         p_rgh
+metal         phaseChangeDarcySp
+metal 
+metal     Reconstructing volVectorFields
+metal 
+metal         pRghAcceleration
+metal         gradT
+metal         phaseChangeBuoyancySu
+metal         phaseChangeBuoyancyAcceleration
+metal         U
+metal         phaseChangeDarcyAcceleration
+metal         gradRho
+metal         vorticity
+metal 
+metal     Reconstructing surfaceScalarFields
+metal 
+metal         phi
+metal         energyFlux
+metal         energyAdvectiveFlux
+metal         heatFlux
+metal 
+metal Reconstructing point fields
+metal 
+metal     (no point fields)
+      
+mold  Reconstructing FV fields
+mold  
+mold      Reconstructing volScalarFields
+mold  
+mold          T
+mold  
+mold  Reconstructing point fields
+mold  
+mold      (no point fields)
+      
+      Collecting uniform files
+      
+      Time = 290s
+      
+metal Reconstructing FV fields
+metal 
+metal     Reconstructing volScalarFields
+metal 
+metal         phaseChangeSource:alpha1
+metal         CoCell
+metal         dAlphaLdt
+metal         phaseChangeModelDeltaT
+metal         phaseChangeSolidFraction
+metal         magPRghAcceleration
+metal         magPhaseChangeBuoyancyAcceleration
+metal         latentHeatRateVol
+metal         phaseChangeDragToBuoyancy
+metal         p
+metal         T
+metal         solidificationRate
+metal         magPhaseChangeDarcyAcceleration
+metal         dTdt
+metal         phaseChangeDarcyCoeff
+metal         rho
+metal         latentHeat
+metal         magGradRho
+metal         magSqrDevGradU
+metal         coolingRate
+metal         magGradT
+metal         phaseChangeDragToPressure
+metal         flowType
+metal         p_rgh
+metal         phaseChangeDarcySp
+metal 
+metal     Reconstructing volVectorFields
+metal 
+metal         pRghAcceleration
+metal         gradT
+metal         phaseChangeBuoyancySu
+metal         phaseChangeBuoyancyAcceleration
+metal         U
+metal         phaseChangeDarcyAcceleration
+metal         gradRho
+metal         vorticity
+metal 
+metal     Reconstructing surfaceScalarFields
+metal 
+metal         phi
+metal         energyFlux
+metal         energyAdvectiveFlux
+metal         heatFlux
+metal 
+metal Reconstructing point fields
+metal 
+metal     (no point fields)
+      
+mold  Reconstructing FV fields
+mold  
+mold      Reconstructing volScalarFields
+mold  
+mold          T
+mold  
+mold  Reconstructing point fields
+mold  
+mold      (no point fields)
+      
+      Collecting uniform files
+      
+      Time = 291s
+      
+metal Reconstructing FV fields
+metal 
+metal     Reconstructing volScalarFields
+metal 
+metal         phaseChangeSource:alpha1
+metal         CoCell
+metal         dAlphaLdt
+metal         phaseChangeModelDeltaT
+metal         phaseChangeSolidFraction
+metal         magPRghAcceleration
+metal         magPhaseChangeBuoyancyAcceleration
+metal         latentHeatRateVol
+metal         phaseChangeDragToBuoyancy
+metal         p
+metal         T
+metal         solidificationRate
+metal         magPhaseChangeDarcyAcceleration
+metal         dTdt
+metal         phaseChangeDarcyCoeff
+metal         rho
+metal         latentHeat
+metal         magGradRho
+metal         magSqrDevGradU
+metal         coolingRate
+metal         magGradT
+metal         phaseChangeDragToPressure
+metal         flowType
+metal         p_rgh
+metal         phaseChangeDarcySp
+metal 
+metal     Reconstructing volVectorFields
+metal 
+metal         pRghAcceleration
+metal         gradT
+metal         phaseChangeBuoyancySu
+metal         phaseChangeBuoyancyAcceleration
+metal         U
+metal         phaseChangeDarcyAcceleration
+metal         gradRho
+metal         vorticity
+metal 
+metal     Reconstructing surfaceScalarFields
+metal 
+metal         phi
+metal         energyFlux
+metal         energyAdvectiveFlux
+metal         heatFlux
+metal 
+metal Reconstructing point fields
+metal 
+metal     (no point fields)
+      
+mold  Reconstructing FV fields
+mold  
+mold      Reconstructing volScalarFields
+mold  
+mold          T
+mold  
+mold  Reconstructing point fields
+mold  
+mold      (no point fields)
+      
+      Collecting uniform files
+      
+      Time = 292s
+      
+metal Reconstructing FV fields
+metal 
+metal     Reconstructing volScalarFields
+metal 
+metal         phaseChangeSource:alpha1
+metal         CoCell
+metal         dAlphaLdt
+metal         phaseChangeModelDeltaT
+metal         phaseChangeSolidFraction
+metal         magPRghAcceleration
+metal         magPhaseChangeBuoyancyAcceleration
+metal         latentHeatRateVol
+metal         phaseChangeDragToBuoyancy
+metal         p
+metal         T
+metal         solidificationRate
+metal         magPhaseChangeDarcyAcceleration
+metal         dTdt
+metal         phaseChangeDarcyCoeff
+metal         rho
+metal         latentHeat
+metal         magGradRho
+metal         magSqrDevGradU
+metal         coolingRate
+metal         magGradT
+metal         phaseChangeDragToPressure
+metal         flowType
+metal         p_rgh
+metal         phaseChangeDarcySp
+metal 
+metal     Reconstructing volVectorFields
+metal 
+metal         pRghAcceleration
+metal         gradT
+metal         phaseChangeBuoyancySu
+metal         phaseChangeBuoyancyAcceleration
+metal         U
+metal         phaseChangeDarcyAcceleration
+metal         gradRho
+metal         vorticity
+metal 
+metal     Reconstructing surfaceScalarFields
+metal 
+metal         phi
+metal         energyFlux
+metal         energyAdvectiveFlux
+metal         heatFlux
+metal 
+metal Reconstructing point fields
+metal 
+metal     (no point fields)
+      
+mold  Reconstructing FV fields
+mold  
+mold      Reconstructing volScalarFields
+mold  
+mold          T
+mold  
+mold  Reconstructing point fields
+mold  
+mold      (no point fields)
+      
+      Collecting uniform files
+      
+      Time = 293s
+      
+metal Reconstructing FV fields
+metal 
+metal     Reconstructing volScalarFields
+metal 
+metal         phaseChangeSource:alpha1
+metal         CoCell
+metal         dAlphaLdt
+metal         phaseChangeModelDeltaT
+metal         phaseChangeSolidFraction
+metal         magPRghAcceleration
+metal         magPhaseChangeBuoyancyAcceleration
+metal         latentHeatRateVol
+metal         phaseChangeDragToBuoyancy
+metal         p
+metal         T
+metal         solidificationRate
+metal         magPhaseChangeDarcyAcceleration
+metal         dTdt
+metal         phaseChangeDarcyCoeff
+metal         rho
+metal         latentHeat
+metal         magGradRho
+metal         magSqrDevGradU
+metal         coolingRate
+metal         magGradT
+metal         phaseChangeDragToPressure
+metal         flowType
+metal         p_rgh
+metal         phaseChangeDarcySp
+metal 
+metal     Reconstructing volVectorFields
+metal 
+metal         pRghAcceleration
+metal         gradT
+metal         phaseChangeBuoyancySu
+metal         phaseChangeBuoyancyAcceleration
+metal         U
+metal         phaseChangeDarcyAcceleration
+metal         gradRho
+metal         vorticity
+metal 
+metal     Reconstructing surfaceScalarFields
+metal 
+metal         phi
+metal         energyFlux
+metal         energyAdvectiveFlux
+metal         heatFlux
+metal 
+metal Reconstructing point fields
+metal 
+metal     (no point fields)
+      
+mold  Reconstructing FV fields
+mold  
+mold      Reconstructing volScalarFields
+mold  
+mold          T
+mold  
+mold  Reconstructing point fields
+mold  
+mold      (no point fields)
+      
+      Collecting uniform files
+      
+      Time = 294s
+      
+metal Reconstructing FV fields
+metal 
+metal     Reconstructing volScalarFields
+metal 
+metal         phaseChangeSource:alpha1
+metal         CoCell
+metal         dAlphaLdt
+metal         phaseChangeModelDeltaT
+metal         phaseChangeSolidFraction
+metal         magPRghAcceleration
+metal         magPhaseChangeBuoyancyAcceleration
+metal         latentHeatRateVol
+metal         phaseChangeDragToBuoyancy
+metal         p
+metal         T
+metal         solidificationRate
+metal         magPhaseChangeDarcyAcceleration
+metal         dTdt
+metal         phaseChangeDarcyCoeff
+metal         rho
+metal         latentHeat
+metal         magGradRho
+metal         magSqrDevGradU
+metal         coolingRate
+metal         magGradT
+metal         phaseChangeDragToPressure
+metal         flowType
+metal         p_rgh
+metal         phaseChangeDarcySp
+metal 
+metal     Reconstructing volVectorFields
+metal 
+metal         pRghAcceleration
+metal         gradT
+metal         phaseChangeBuoyancySu
+metal         phaseChangeBuoyancyAcceleration
+metal         U
+metal         phaseChangeDarcyAcceleration
+metal         gradRho
+metal         vorticity
+metal 
+metal     Reconstructing surfaceScalarFields
+metal 
+metal         phi
+metal         energyFlux
+metal         energyAdvectiveFlux
+metal         heatFlux
+metal 
+metal Reconstructing point fields
+metal 
+metal     (no point fields)
+      
+mold  Reconstructing FV fields
+mold  
+mold      Reconstructing volScalarFields
+mold  
+mold          T
+mold  
+mold  Reconstructing point fields
+mold  
+mold      (no point fields)
+      
+      Collecting uniform files
+      
+      Time = 295s
+      
+metal Reconstructing FV fields
+metal 
+metal     Reconstructing volScalarFields
+metal 
+metal         phaseChangeSource:alpha1
+metal         CoCell
+metal         dAlphaLdt
+metal         phaseChangeModelDeltaT
+metal         phaseChangeSolidFraction
+metal         magPRghAcceleration
+metal         magPhaseChangeBuoyancyAcceleration
+metal         latentHeatRateVol
+metal         phaseChangeDragToBuoyancy
+metal         p
+metal         T
+metal         solidificationRate
+metal         magPhaseChangeDarcyAcceleration
+metal         dTdt
+metal         phaseChangeDarcyCoeff
+metal         rho
+metal         latentHeat
+metal         magGradRho
+metal         magSqrDevGradU
+metal         coolingRate
+metal         magGradT
+metal         phaseChangeDragToPressure
+metal         flowType
+metal         p_rgh
+metal         phaseChangeDarcySp
+metal 
+metal     Reconstructing volVectorFields
+metal 
+metal         pRghAcceleration
+metal         gradT
+metal         phaseChangeBuoyancySu
+metal         phaseChangeBuoyancyAcceleration
+metal         U
+metal         phaseChangeDarcyAcceleration
+metal         gradRho
+metal         vorticity
+metal 
+metal     Reconstructing surfaceScalarFields
+metal 
+metal         phi
+metal         energyFlux
+metal         energyAdvectiveFlux
+metal         heatFlux
+metal 
+metal Reconstructing point fields
+metal 
+metal     (no point fields)
+      
+mold  Reconstructing FV fields
+mold  
+mold      Reconstructing volScalarFields
+mold  
+mold          T
+mold  
+mold  Reconstructing point fields
+mold  
+mold      (no point fields)
+      
+      Collecting uniform files
+      
+      Time = 296s
+      
+metal Reconstructing FV fields
+metal 
+metal     Reconstructing volScalarFields
+metal 
+metal         phaseChangeSource:alpha1
+metal         CoCell
+metal         dAlphaLdt
+metal         phaseChangeModelDeltaT
+metal         phaseChangeSolidFraction
+metal         magPRghAcceleration
+metal         magPhaseChangeBuoyancyAcceleration
+metal         latentHeatRateVol
+metal         phaseChangeDragToBuoyancy
+metal         p
+metal         T
+metal         solidificationRate
+metal         magPhaseChangeDarcyAcceleration
+metal         dTdt
+metal         phaseChangeDarcyCoeff
+metal         rho
+metal         latentHeat
+metal         magGradRho
+metal         magSqrDevGradU
+metal         coolingRate
+metal         magGradT
+metal         phaseChangeDragToPressure
+metal         flowType
+metal         p_rgh
+metal         phaseChangeDarcySp
+metal 
+metal     Reconstructing volVectorFields
+metal 
+metal         pRghAcceleration
+metal         gradT
+metal         phaseChangeBuoyancySu
+metal         phaseChangeBuoyancyAcceleration
+metal         U
+metal         phaseChangeDarcyAcceleration
+metal         gradRho
+metal         vorticity
+metal 
+metal     Reconstructing surfaceScalarFields
+metal 
+metal         phi
+metal         energyFlux
+metal         energyAdvectiveFlux
+metal         heatFlux
+metal 
+metal Reconstructing point fields
+metal 
+metal     (no point fields)
+      
+mold  Reconstructing FV fields
+mold  
+mold      Reconstructing volScalarFields
+mold  
+mold          T
+mold  
+mold  Reconstructing point fields
+mold  
+mold      (no point fields)
+      
+      Collecting uniform files
+      
+      Time = 297s
+      
+metal Reconstructing FV fields
+metal 
+metal     Reconstructing volScalarFields
+metal 
+metal         phaseChangeSource:alpha1
+metal         CoCell
+metal         dAlphaLdt
+metal         phaseChangeModelDeltaT
+metal         phaseChangeSolidFraction
+metal         magPRghAcceleration
+metal         magPhaseChangeBuoyancyAcceleration
+metal         latentHeatRateVol
+metal         phaseChangeDragToBuoyancy
+metal         p
+metal         T
+metal         solidificationRate
+metal         magPhaseChangeDarcyAcceleration
+metal         dTdt
+metal         phaseChangeDarcyCoeff
+metal         rho
+metal         latentHeat
+metal         magGradRho
+metal         magSqrDevGradU
+metal         coolingRate
+metal         magGradT
+metal         phaseChangeDragToPressure
+metal         flowType
+metal         p_rgh
+metal         phaseChangeDarcySp
+metal 
+metal     Reconstructing volVectorFields
+metal 
+metal         pRghAcceleration
+metal         gradT
+metal         phaseChangeBuoyancySu
+metal         phaseChangeBuoyancyAcceleration
+metal         U
+metal         phaseChangeDarcyAcceleration
+metal         gradRho
+metal         vorticity
+metal 
+metal     Reconstructing surfaceScalarFields
+metal 
+metal         phi
+metal         energyFlux
+metal         energyAdvectiveFlux
+metal         heatFlux
+metal 
+metal Reconstructing point fields
+metal 
+metal     (no point fields)
+      
+mold  Reconstructing FV fields
+mold  
+mold      Reconstructing volScalarFields
+mold  
+mold          T
+mold  
+mold  Reconstructing point fields
+mold  
+mold      (no point fields)
+      
+      Collecting uniform files
+      
+      Time = 298s
+      
+metal Reconstructing FV fields
+metal 
+metal     Reconstructing volScalarFields
+metal 
+metal         phaseChangeSource:alpha1
+metal         CoCell
+metal         dAlphaLdt
+metal         phaseChangeModelDeltaT
+metal         phaseChangeSolidFraction
+metal         magPRghAcceleration
+metal         magPhaseChangeBuoyancyAcceleration
+metal         latentHeatRateVol
+metal         phaseChangeDragToBuoyancy
+metal         p
+metal         T
+metal         solidificationRate
+metal         magPhaseChangeDarcyAcceleration
+metal         dTdt
+metal         phaseChangeDarcyCoeff
+metal         rho
+metal         latentHeat
+metal         magGradRho
+metal         magSqrDevGradU
+metal         coolingRate
+metal         magGradT
+metal         phaseChangeDragToPressure
+metal         flowType
+metal         p_rgh
+metal         phaseChangeDarcySp
+metal 
+metal     Reconstructing volVectorFields
+metal 
+metal         pRghAcceleration
+metal         gradT
+metal         phaseChangeBuoyancySu
+metal         phaseChangeBuoyancyAcceleration
+metal         U
+metal         phaseChangeDarcyAcceleration
+metal         gradRho
+metal         vorticity
+metal 
+metal     Reconstructing surfaceScalarFields
+metal 
+metal         phi
+metal         energyFlux
+metal         energyAdvectiveFlux
+metal         heatFlux
+metal 
+metal Reconstructing point fields
+metal 
+metal     (no point fields)
+      
+mold  Reconstructing FV fields
+mold  
+mold      Reconstructing volScalarFields
+mold  
+mold          T
+mold  
+mold  Reconstructing point fields
+mold  
+mold      (no point fields)
+      
+      Collecting uniform files
+      
+      Time = 299s
+      
+metal Reconstructing FV fields
+metal 
+metal     Reconstructing volScalarFields
+metal 
+metal         phaseChangeSource:alpha1
+metal         CoCell
+metal         dAlphaLdt
+metal         phaseChangeModelDeltaT
+metal         phaseChangeSolidFraction
+metal         magPRghAcceleration
+metal         magPhaseChangeBuoyancyAcceleration
+metal         latentHeatRateVol
+metal         phaseChangeDragToBuoyancy
+metal         p
+metal         T
+metal         solidificationRate
+metal         magPhaseChangeDarcyAcceleration
+metal         dTdt
+metal         phaseChangeDarcyCoeff
+metal         rho
+metal         latentHeat
+metal         magGradRho
+metal         magSqrDevGradU
+metal         coolingRate
+metal         magGradT
+metal         phaseChangeDragToPressure
+metal         flowType
+metal         p_rgh
+metal         phaseChangeDarcySp
+metal 
+metal     Reconstructing volVectorFields
+metal 
+metal         pRghAcceleration
+metal         gradT
+metal         phaseChangeBuoyancySu
+metal         phaseChangeBuoyancyAcceleration
+metal         U
+metal         phaseChangeDarcyAcceleration
+metal         gradRho
+metal         vorticity
+metal 
+metal     Reconstructing surfaceScalarFields
+metal 
+metal         phi
+metal         energyFlux
+metal         energyAdvectiveFlux
+metal         heatFlux
+metal 
+metal Reconstructing point fields
+metal 
+metal     (no point fields)
+      
+mold  Reconstructing FV fields
+mold  
+mold      Reconstructing volScalarFields
+mold  
+mold          T
+mold  
+mold  Reconstructing point fields
+mold  
+mold      (no point fields)
+      
+      Collecting uniform files
+      
+      Time = 300s
+      
+metal Reconstructing FV fields
+metal 
+metal     Reconstructing volScalarFields
+metal 
+metal         phaseChangeSource:alpha1
+metal         CoCell
+metal         dAlphaLdt
+metal         phaseChangeModelDeltaT
+metal         phaseChangeSolidFraction
+metal         magPRghAcceleration
+metal         magPhaseChangeBuoyancyAcceleration
+metal         latentHeatRateVol
+metal         phaseChangeDragToBuoyancy
+metal         p
+metal         T
+metal         solidificationRate
+metal         magPhaseChangeDarcyAcceleration
+metal         dTdt
+metal         phaseChangeDarcyCoeff
+metal         rho
+metal         latentHeat
+metal         magGradRho
+metal         magSqrDevGradU
+metal         coolingRate
+metal         magGradT
+metal         phaseChangeDragToPressure
+metal         flowType
+metal         p_rgh
+metal         phaseChangeDarcySp
+metal 
+metal     Reconstructing volVectorFields
+metal 
+metal         pRghAcceleration
+metal         gradT
+metal         phaseChangeBuoyancySu
+metal         phaseChangeBuoyancyAcceleration
+metal         U
+metal         phaseChangeDarcyAcceleration
+metal         gradRho
+metal         vorticity
+metal 
+metal     Reconstructing surfaceScalarFields
+metal 
+metal         phi
+metal         energyFlux
+metal         energyAdvectiveFlux
+metal         heatFlux
+metal 
+metal Reconstructing point fields
+metal 
+metal     (no point fields)
+      
+mold  Reconstructing FV fields
+mold  
+mold      Reconstructing volScalarFields
+mold  
+mold          T
+mold  
+mold  Reconstructing point fields
+mold  
+mold      (no point fields)
+      
+      Collecting uniform files
+      
+      End
+      

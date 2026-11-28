@@ -1,0 +1,10 @@
+CASO COMPLETADO
+Modelo: C14-3DB-fijo-300s
+Tiempo fisico final: 300 s
+Pasos adicionales: 100000
+Tiempo computacional adicional:
+real 28524.41
+user 226453.64
+sys 3107.63
+Directorio: /home/michel_duarte/OpenFOAM/CAMPAIGN_EXTENSION_300S_20261127_195400/C14-3DB-fijo-300s
+Fin: Sat Nov 28 04:11:24 CST 2026
